@@ -1,0 +1,71 @@
+{
+  "name": "three-vrm",
+  "version": "0.0.1",
+  "description": "VRM file loader for three.js.",
+  "license": "MIT",
+  "author": "pixiv",
+  "files": [
+    "lib",
+    "LICENSE"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pixiv/three-vrm.git"
+  },
+  "scripts": {
+    "build": "rm -rf lib && webpack && tsc --emitDeclarationOnly",
+    "test": "yarn lint",
+    "prepack": "yarn lint && yarn build"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx}": [
+      "tslint --fix",
+      "git add"
+    ]
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/jpeg-js": "^0.3.0",
+    "@types/ua-parser-js": "^0.7.32",
+    "@types/upng-js": "^2.1.1",
+    "@types/webpack": "^4.4.19",
+    "@types/webpack-dev-server": "^3.1.1",
+    "ansi-colors": "^3.2.1",
+    "fork-ts-checker-webpack-plugin": "^0.5.0",
+    "husky": "^1.2.0",
+    "imagemin-lint-staged": "^0.3.0",
+    "imports-loader": "^0.8.0",
+    "jsonlint": "^1.6.3",
+    "lint-staged": "8.1.0",
+    "prettier": "^1.15.2",
+    "quicktype": "^15.0.167",
+    "raw-loader": "^0.5.1",
+    "rimraf": "^2.6.3",
+    "simple-git": "^1.107.0",
+    "thread-loader": "^1.2.0",
+    "three": "^0.103.0",
+    "ts-loader": "^5.3.0",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.17.0",
+    "tslint-loader": "^3.5.4",
+    "tslint-plugin-prettier": "^2.0.1",
+    "typescript": "^3.1.6",
+    "ua-parser-js": "^0.7.19",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0",
+    "webpack-dev-server": "^3.2.1",
+    "worker-loader": "^2.0.0",
+    "copy-webpack-plugin": "^5.0.3"
+  },
+  "peerDependencies": {
+    "three": "^0.103.0"
+  }
+}
