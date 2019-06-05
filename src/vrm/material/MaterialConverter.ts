@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { GLTF } from '../types';
-import { MToon, MToonOutlineWidthMode, MToonRenderMode } from './mtoon';
-import { Unlit, UnlitRenderType } from './unlit';
+import { MToon, MToonOutlineWidthMode, MToonRenderMode } from './MToon';
+import { Unlit, UnlitRenderType } from './Unlit';
 
 export class MaterialConverter {
 
