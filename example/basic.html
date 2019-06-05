@@ -22,8 +22,8 @@
 
 	<body>
 		<script src="../node_modules/three/build/three.min.js"></script>
-		<script src="../node_modules/three/examples/js/loaders/GLTFLoader.js"></script>
 		<script src="../node_modules/three/examples/js/controls/OrbitControls.js"></script>
+		<script src="../lib/GLTFLoader.js"></script>
 		<script src="../lib/index.js"></script>
 		<script>
 			// renderer
@@ -42,6 +42,11 @@
 			// scene
 			const scene = new THREE.Scene();
 
+			// light
+			const light = new THREE.DirectionalLight( 0xffffff );
+			light.position.set( 1.0, 1.0, 1.0 ).normalize();
+			scene.add( light );
+
 			// gltf and vrm
 			const loader = new THREE.GLTFLoader();
 			loader.crossOrigin = 'anonymous';
@@ -51,7 +56,11 @@
 
 					scene.add( gltf.scene );
 
-					// insert VRM stuff here
+					new vrm.VRMImporter().load( gltf ).then( ( vrm ) => {
+
+						console.log( vrm );
+
+					} );
 
 				},
 				( progress ) => console.log( 'Loading model...', 100.0 * ( progress.loaded / progress.total ), '%' ),
