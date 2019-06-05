@@ -49,34 +49,24 @@
 			// gltf and vrm
 			let currentVrm = undefined;
 			const loader = new THREE.GLTFLoader();
+			loader.crossOrigin = 'anonymous';
+			loader.load(
+				'./models/shino.vrm',
+				( gltf ) => {
 
-			function loadVRM( url ) {
+					scene.add( gltf.scene );
 
-				loader.crossOrigin = 'anonymous';
-				loader.load(
-					url,
-					( gltf ) => {
+					new vrm.VRMImporter().load( gltf ).then( ( vrm ) => {
 
-						new vrm.VRMImporter().load( gltf ).then( ( vrm ) => {
+						currentVrm = vrm;
+						console.log( vrm );
 
-							if ( currentVrm ) { scene.remove( currentVrm.scene ); }
-							// currentVrm.dispose(); // not implemented
+					} );
 
-							currentVrm = vrm;
-							scene.add( gltf.scene );
-
-							console.log( vrm );
-
-						} );
-
-					},
-					( progress ) => console.log( 'Loading model...', 100.0 * ( progress.loaded / progress.total ), '%' ),
-					( error ) => console.error( error )
-				);
-
-			}
-
-			loadVRM( './models/shino.vrm' );
+				},
+				( progress ) => console.log( 'Loading model...', 100.0 * ( progress.loaded / progress.total ), '%' ),
+				( error ) => console.error( error )
+			);
 
 			// helpers
 			const gridHelper = new THREE.GridHelper( 10, 10 );
@@ -115,28 +105,6 @@
 					currentVrm.scene.position.set( px, py, 0.0 );
 
 				}
-
-			} );
-
-			// dnd handler
-			window.addEventListener( 'dragover', function( event ) {
-
-				event.preventDefault();
-
-			} );
-
-			window.addEventListener( 'drop', function( event ) {
-
-				event.preventDefault();
-
-				// read given file then convert it to blob url
-				const files = event.dataTransfer.files;
-				if ( !files ) { return; }
-				const file = files[0];
-				if ( !file ) { return; }
-				const blob = new Blob( [ file ], { type: "application/octet-stream" } );
-				const url = URL.createObjectURL( blob );
-				loadVRM( url );
 
 			} );
 		</script>
