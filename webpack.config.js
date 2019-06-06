@@ -12,7 +12,12 @@ const base = {
     globalObject: 'this',
   },
   externals: {
-    three: 'three'
+    'three': {
+      commonjs: 'three',
+      commonjs2: 'three',
+      amd: 'three',
+      root: 'THREE'
+    }
   },
   module: {
     rules: [
