@@ -40,10 +40,10 @@ export class VRM {
     return new VRMBuilder().build(gltf)
   }
 
-  public readonly restPose: VRMPose
+  public readonly restPose: VRMPose = {}
   public readonly humanBones: VRMHumanBones
   public readonly blendShapeProxy: VRMBlendShapeProxy
-  public readonly firstPerson: VRMFirstPerson
+  public readonly firstPerson: VRMFirstPerson | null
   public readonly lookAt: VRMLookAtHead
   public readonly meta: RawVrmMeta
   public readonly animationMixer: THREE.AnimationMixer
@@ -85,16 +85,24 @@ export class VRM {
     reduceBones(gltf.scene)
 
     this.nodesMap = this._partsBuilder.getNodesMap(gltf)
-    this.humanBones = this._partsBuilder.loadHumanoid(gltf, this.nodesMap)
+    const humanBones = this._partsBuilder.loadHumanoid(gltf, this.nodesMap)
+    if(!humanBones) {
+      throw new Error("no humans bones found. confirm your vrm file")
+    }
+    this.humanBones = humanBones
+
     this.firstPerson = this._partsBuilder.loadFirstPerson(vrmExt.firstPerson, this.nodesMap, this.humanBones, gltf)
 
     this.animationMixer = new THREE.AnimationMixer(gltf.scene)
-    this.blendShapeProxy = this._partsBuilder.loadBlendShapeMaster(this.animationMixer, gltf)
+    const blendShapeProxy = this._partsBuilder.loadBlendShapeMaster(this.animationMixer, gltf)
+    if(!blendShapeProxy) {
+      throw new Error("failed to create blendShape. confirm your vrm file")
+    }
+    this.blendShapeProxy = blendShapeProxy
     this.springBoneManager = this._partsBuilder.loadSecondary(gltf, this.nodesMap)
     this.lookAt = this._partsBuilder.loadLookAt(vrmExt.firstPerson, this.blendShapeProxy, this.humanBones)
 
     // 破壊的な変更後もrestposeにリセットできるように初期状態ポーズを保存。
-    this.restPose = {}
     Object.keys(this.humanBones).forEach((vrmBoneName) => {
       const bone = this.humanBones[vrmBoneName]!
       this.restPose[vrmBoneName] = {
@@ -126,9 +134,9 @@ export class VRM {
       if (state.position) {
         // 元の状態に戻してから、移動分を追加
         targetBone.position.set(
-          restState.position[0] + state.position[0],
-          restState.position[1] + state.position[1],
-          restState.position[2] + state.position[2],
+          restState.position![0] + state.position[0],
+          restState.position![1] + state.position[1],
+          restState.position![2] + state.position[2],
         )
       }
       if (state.rotation) {

@@ -19,7 +19,7 @@ export interface DebugOption {
 
 export class VRMBuilderDebug extends VRMBuilder {
 
-  private _option: DebugOption
+  private _option?: DebugOption
 
   constructor() {
     super()

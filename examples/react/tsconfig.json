@@ -12,6 +12,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": false,
     "removeComments": true,
+    "strict": true,
     "sourceMap": true
   },
   "include": ["src/**/*"],

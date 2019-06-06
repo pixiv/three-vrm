@@ -23,18 +23,18 @@ export class VRMLookAtHead {
   public givingUpThreshold? : number = undefined // this is the value of cos(theta)
   public dumpingFactor : number = 0.5
 
-  public leftEyeWorldPosition: THREE.Vector3
-  public rightEyeWorldPosition: THREE.Vector3
+  public leftEyeWorldPosition?: THREE.Vector3
+  public rightEyeWorldPosition?: THREE.Vector3
 
   private readonly _leftEye?: GLTFNode
   private readonly _rightEye?: GLTFNode
 
   private readonly _applyer?: VRMLookAtApplyer
 
-  private _target: THREE.Object3D
-  private _lastTargetPosition : THREE.Vector3 = new THREE.Vector3()
-  private _lookAtTargetTo : THREE.Vector3
-  private _lookAtTarget : THREE.Vector3
+  private _target?: THREE.Object3D
+  private _lastTargetPosition: THREE.Vector3 = new THREE.Vector3()
+  private _lookAtTargetTo?: THREE.Vector3
+  private _lookAtTarget?: THREE.Vector3
 
   constructor(humanBones: VRMHumanBones, applyer?: VRMLookAtApplyer) {
     this._applyer = applyer
@@ -111,8 +111,10 @@ export class VRMLookAtHead {
 
   public update (): void {
 
-    if(this._target && this.head && this.autoUpdate) {
-      this.setCurrentTargetPosition()
+    if(this._target && this.head && this.autoUpdate && this._lookAtTarget && this._lookAtTargetTo) {
+
+      this.setCurrentTargetPosition(this._target, this._lookAtTargetTo)
+
       const result = new THREE.Vector3().set(
         this._lookAtTargetTo.x - this._lookAtTarget.x,
         this._lookAtTargetTo.y - this._lookAtTarget.y,
@@ -131,14 +133,14 @@ export class VRMLookAtHead {
     }
   }
 
-  private setCurrentTargetPosition() {
+  private setCurrentTargetPosition(target:THREE.Object3D, lookAtTargetTo: THREE.Vector3) {
 
-    if(!this._lastTargetPosition.equals(this._target.position)) {
-      this.setTarget(this._target)
+    if(!this._lastTargetPosition.equals(target.position)) {
+      this.setTarget(target)
 
       const headPosition = new THREE.Vector3().fromArray(this.getHeadPosition());
       const faceDirection = new THREE.Vector3().fromArray(this.getFaceDirection());
-      const targetPosition = new THREE.Vector3(this._target.position.x, this._target.position.y, this._target.position.z)
+      const targetPosition = new THREE.Vector3(target.position.x, target.position.y, target.position.z)
 
       // VRMモデルから見た対象の方向（world座標）
       const lookAtDirection = targetPosition.sub(headPosition).normalize();
@@ -146,13 +148,13 @@ export class VRMLookAtHead {
       // 顔の正面からの角度がきつい場合、lookAtを諦める
       if (this.givingUpThreshold !== undefined && lookAtDirection.dot(faceDirection) < this.givingUpThreshold) {
         targetPosition.copy(headPosition).add(faceDirection.multiplyScalar(3.0));
-        this._lookAtTargetTo.copy(targetPosition);
+        lookAtTargetTo.copy(targetPosition);
         return;
       }
 
       const distance = targetPosition.distanceTo(headPosition);
       const modifiedLookAtDirection = lookAtDirection.multiplyScalar(distance).add(headPosition);
-      this._lookAtTargetTo.set(modifiedLookAtDirection.x, modifiedLookAtDirection.y, modifiedLookAtDirection.z);
+      lookAtTargetTo.set(modifiedLookAtDirection.x, modifiedLookAtDirection.y, modifiedLookAtDirection.z);
     }
   }
 }

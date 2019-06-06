@@ -7,7 +7,7 @@ import * as Action from './components'
 
 class App extends React.Component<{}, { loaded: boolean }> {
 
-  private canvas?: HTMLCanvasElement
+  private canvas?: HTMLCanvasElement | null
   private vrm?: VRM
   private clock: THREE.Clock = new THREE.Clock()
   private scene: THREE.Scene = new THREE.Scene()
@@ -24,7 +24,7 @@ class App extends React.Component<{}, { loaded: boolean }> {
   }
 
   public componentDidMount () {
-    new Promise((resolve,reject) => {
+    new Promise<GLTF>((resolve,reject) => {
       const loader = new THREE.GLTFLoader()
       loader.load("/models/shino.vrm", resolve, () => {} , reject)
     }).then( (gltf: GLTF) => {
@@ -49,14 +49,14 @@ class App extends React.Component<{}, { loaded: boolean }> {
         rightUpperArm: {rotation: [0,0, -0.4537776, 0.891115]}
       })
 
-      this.renderer = new THREE.WebGLRenderer({canvas: this.canvas, antialias: true});
+      this.renderer = new THREE.WebGLRenderer({canvas: this.canvas!, antialias: true});
       this.renderer.setPixelRatio(window.devicePixelRatio);
       this.renderer.setSize(window.innerWidth, window.innerHeight);
       this.renderer.setClearColor(0xFFFFFF,1.0);
 
       this.camera.position.set(0,1, -3)
       this.camera.rotation.set(0, Math.PI, 0)
-      console.log(this.camera)
+      console.log(this.vrm)
 
       this.directionalLight.position.set(0, 20, 0);
 
@@ -68,8 +68,8 @@ class App extends React.Component<{}, { loaded: boolean }> {
       this.vrm.lookAt.setTarget(this.camera)
 
       window.addEventListener('resize', () => {
-        this.renderer.setPixelRatio(window.devicePixelRatio);
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.renderer!.setPixelRatio(window.devicePixelRatio);
+        this.renderer!.setSize(window.innerWidth, window.innerHeight);
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
       })
@@ -84,8 +84,8 @@ class App extends React.Component<{}, { loaded: boolean }> {
   public animate(){
     requestAnimationFrame(this.animate)
 
-    this.vrm.update(this.clock.getDelta())
-    this.renderer.render(this.scene, this.camera);
+    if(this.vrm) this.vrm.update(this.clock.getDelta())
+    if(this.renderer) this.renderer.render(this.scene, this.camera);
   }
 
   public render () {
@@ -94,11 +94,11 @@ class App extends React.Component<{}, { loaded: boolean }> {
     return (
       <div>
         <div style={{position:'absolute', width: 240, height: window.innerHeight, right: 0, overflowY:'scroll'}}>
-          {loaded && <Action.Transform vrm={this.vrm} camera={this.camera}/>}
-          {loaded && <Action.Meta vrm={this.vrm} camera={this.camera}/>}
-          {loaded && <Action.BlendShape vrm={this.vrm} camera={this.camera}/>}
-          {loaded && <Action.FirstPerson vrm={this.vrm} camera={this.camera}/>}
-          {loaded && <Action.LookAt vrm={this.vrm} camera={this.camera}/>}
+          {loaded && <Action.Transform vrm={this.vrm!} camera={this.camera}/>}
+          {loaded && <Action.Meta vrm={this.vrm!} camera={this.camera}/>}
+          {loaded && <Action.BlendShape vrm={this.vrm!} camera={this.camera}/>}
+          {loaded && <Action.FirstPerson vrm={this.vrm!} camera={this.camera}/>}
+          {loaded && <Action.LookAt vrm={this.vrm!} camera={this.camera}/>}
         </div>
         <canvas ref={ref => this.canvas = ref} />
       </div>

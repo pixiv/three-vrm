@@ -164,7 +164,7 @@ export class VRMPartsBuilder {
    * @param {GLTF} gltf
    * @returns {VRMBlendShapeProxy}
    */
-  public loadBlendShapeMaster (animationMixer: THREE.AnimationMixer, gltf: GLTF): VRMBlendShapeProxy {
+  public loadBlendShapeMaster (animationMixer: THREE.AnimationMixer, gltf: GLTF): VRMBlendShapeProxy | null {
 
     const meshes = this.getMeshesMap(gltf)
     if (!meshes) {

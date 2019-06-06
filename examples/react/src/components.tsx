@@ -170,6 +170,8 @@ export const LookAt = (props: Props) => {
   const applyer = lookAt.getApplyer()
   const lookAtTypeName = applyer && applyer.name()
 
+  const target = lookAt.getTarget()
+
   return (
     <Panel title={"VRM Look At Head"}>
       <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
@@ -177,8 +179,10 @@ export const LookAt = (props: Props) => {
         <div style={{display: 'flex', alignItems: 'center', marginRight: 10}}>{lookAt.head.name}</div>
       </div>
       <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
-        <h2 style={{display: 'flex', alignItems: 'center', marginRight: 10, width: 60}}>Target</h2>
-        <div style={{display: 'flex', alignItems: 'center', marginRight: 10}}>{lookAt.getTarget().name}</div>
+        <ItemName value="Target"/>
+        <div style={{display: 'flex', alignItems: 'center', marginRight: 10}}>
+          {target && (target.name || target.uuid)}
+          </div>
       </div>
       <div style={{marginBottom: 10}}><span>position</span>
         <ul>
@@ -223,15 +227,17 @@ export const LookAt = (props: Props) => {
 
 export const FirstPerson = (props: Props) => {
 
-  const firstPerson: VRM.VRMFirstPerson = props.vrm.firstPerson
+  const firstPerson = props.vrm.firstPerson
 
   const onClickFirstPerson = () => {
+    if(!firstPerson) return
     firstPerson.setup()
     props.camera.layers.disable(firstPerson.getThirdPersonOnlyLayer())
     props.camera.layers.enable(firstPerson.getFirstPersonOnlyLayer())
   }
 
   const onClickThirdPerson = () => {
+    if(!firstPerson) return
     firstPerson.setup()
     props.camera.layers.enable(firstPerson.getThirdPersonOnlyLayer())
     props.camera.layers.disable(firstPerson.getFirstPersonOnlyLayer())
@@ -241,20 +247,22 @@ export const FirstPerson = (props: Props) => {
       <div>
         <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
           <ItemName value="Bone"/>
-          <div style={{display: 'flex', alignItems: 'center', marginRight: 10}}>{firstPerson.getFirstPersonBone().name}</div>
+          <div style={{display: 'flex', alignItems: 'center', marginRight: 10}}>{firstPerson && firstPerson.getFirstPersonBone().name}</div>
         </div>
         <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
           <ItemName value="Offset"/>
           <div style={{display: 'flex', alignItems: 'center', marginRight: 10}}>X:
-            <span>{firstPerson.getFirstPersonBoneOffset().x}</span></div>
+            <span>{firstPerson && firstPerson.getFirstPersonBoneOffset().x}</span></div>
           <div style={{display: 'flex', alignItems: 'center', marginRight: 10}}>Y:
-            <span>{firstPerson.getFirstPersonBoneOffset().y}</span></div>
+            <span>{firstPerson && firstPerson.getFirstPersonBoneOffset().y}</span></div>
           <div style={{display: 'flex', alignItems: 'center'}}>Z:
-            <span>{firstPerson.getFirstPersonBoneOffset().z}</span></div>
+            <span>{firstPerson && firstPerson.getFirstPersonBoneOffset().z}</span></div>
         </div>
-        <ItemName value="Mesh Annotation"/>
-        <ul>
-          {firstPerson.getMeshAnnotations().map( mesh => <li key={mesh.node.uuid}>{mesh.node.name}</li>)}
+        <ItemName value="MeshAnnotation"/>
+        <ul >
+          {firstPerson && firstPerson.getMeshAnnotations().map( mesh =>
+            <li style={{paddingLeft:100}} key={mesh.node.uuid}>{mesh.node.name}</li>
+          )}
         </ul>
         <ul>
           <li>
