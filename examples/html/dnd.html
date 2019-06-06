@@ -21,10 +21,10 @@
 	</head>
 
 	<body>
-		<script src="../node_modules/three/build/three.min.js"></script>
-		<script src="../node_modules/three/examples/js/controls/OrbitControls.js"></script>
-		<script src="../lib/GLTFLoader.js"></script>
-		<script src="../lib/index.js"></script>
+		<script src="../../node_modules/three/build/three.min.js"></script>
+		<script src="../../node_modules/three/examples/js/controls/OrbitControls.js"></script>
+		<script src="../../lib/GLTFLoader.js"></script>
+		<script src="../../lib/index.js"></script>
 		<script>
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
@@ -77,7 +77,7 @@
 
 			}
 
-			loadVRM( './models/shino.vrm' );
+			loadVRM( '../react/models/shino.vrm' );
 
 			// helpers
 			const gridHelper = new THREE.GridHelper( 10, 10 );

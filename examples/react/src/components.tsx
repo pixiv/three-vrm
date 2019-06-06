@@ -11,6 +11,9 @@ interface PanelProps {
   title: string,
 }
 
+const ItemName:  React.FunctionComponent<{value:string}> = ({value}) =>
+  <h2 style={{fontSize: 10, display: 'flex', alignItems: 'center', marginRight: 10, width: 60}}>{value}</h2>
+
 const Panel: React.FunctionComponent<PanelProps> = ({title, children}) => {
   return (
     <section>
@@ -46,7 +49,7 @@ export const Transform = (props: Props) => {
     <Panel title={'Transform'}>
       <div>
         <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
-          <h2 style={{display: 'flex', alignItems: 'center', marginRight: 10, width: 60}}>Position</h2>
+          <ItemName value="Position"/>
           <div style={{display: 'flex', alignItems: 'center', marginRight: 10}}>X
             <input style={{width: 30}} defaultValue={position.x.toString()}
                    onChange={(e) => position.x = nvl(e.target.value, position.x)}/></div>
@@ -58,7 +61,7 @@ export const Transform = (props: Props) => {
                    onChange={(e) => position.z = nvl(e.target.value, position.z)}/></div>
         </div>
         <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
-          <h2 style={{display: 'flex', alignItems: 'center', marginRight: 10, width: 60}}>Rotation</h2>
+          <ItemName value="Rotation"/>
           <div style={{display: 'flex', alignItems: 'center', marginRight: 10}}>X
             <input style={{width: 30}} defaultValue={rotation.x.toString()}
                    onChange={(e) => rotation.x = nvl(e.target.value, rotation.x)}/></div>
@@ -70,7 +73,7 @@ export const Transform = (props: Props) => {
                    onChange={(e) => rotation.z = nvl(e.target.value, rotation.z)}/></div>
         </div>
         <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
-          <h2 style={{display: 'flex', alignItems: 'center', marginRight: 10, width: 60}}>Scale</h2>
+          <ItemName value="Scale"/>
           <div style={{display: 'flex', alignItems: 'center', marginRight: 10}}>X
             <input style={{width: 30}} defaultValue={scale.x.toString()}
                    onChange={(e) => scale.x = nvl(e.target.value, scale.x)}/></div>
@@ -170,7 +173,7 @@ export const LookAt = (props: Props) => {
   return (
     <Panel title={"VRM Look At Head"}>
       <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
-        <h2 style={{display: 'flex', alignItems: 'center', marginRight: 10, width: 60}}>Head</h2>
+        <ItemName value="Head"/>
         <div style={{display: 'flex', alignItems: 'center', marginRight: 10}}>{lookAt.head.name}</div>
       </div>
       <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
@@ -237,11 +240,11 @@ export const FirstPerson = (props: Props) => {
     <Panel title={"VRMFirstPerson"}>
       <div>
         <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
-          <h2 style={{display: 'flex', alignItems: 'center', marginRight: 10, width: 60}}>Bone</h2>
+          <ItemName value="Bone"/>
           <div style={{display: 'flex', alignItems: 'center', marginRight: 10}}>{firstPerson.getFirstPersonBone().name}</div>
         </div>
         <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
-          <h2 style={{display: 'flex', alignItems: 'center', marginRight: 10, width: 60}}>Offset</h2>
+          <ItemName value="Offset"/>
           <div style={{display: 'flex', alignItems: 'center', marginRight: 10}}>X:
             <span>{firstPerson.getFirstPersonBoneOffset().x}</span></div>
           <div style={{display: 'flex', alignItems: 'center', marginRight: 10}}>Y:
@@ -249,7 +252,7 @@ export const FirstPerson = (props: Props) => {
           <div style={{display: 'flex', alignItems: 'center'}}>Z:
             <span>{firstPerson.getFirstPersonBoneOffset().z}</span></div>
         </div>
-        <h2 style={{display: 'flex', alignItems: 'center', marginRight: 10, width: 60}}>Mesh Annotation</h2>
+        <ItemName value="Mesh Annotation"/>
         <ul>
           {firstPerson.getMeshAnnotations().map( mesh => <li key={mesh.node.uuid}>{mesh.node.name}</li>)}
         </ul>

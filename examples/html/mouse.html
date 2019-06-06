@@ -21,10 +21,10 @@
 	</head>
 
 	<body>
-		<script src="../node_modules/three/build/three.min.js"></script>
-		<script src="../node_modules/three/examples/js/controls/OrbitControls.js"></script>
-		<script src="../lib/GLTFLoader.js"></script>
-		<script src="../lib/index.js"></script>
+		<script src="../../node_modules/three/build/three.min.js"></script>
+		<script src="../../node_modules/three/examples/js/controls/OrbitControls.js"></script>
+		<script src="../../lib/GLTFLoader.js"></script>
+		<script src="../../lib/index.js"></script>
 		<script>
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
@@ -51,7 +51,7 @@
 			const loader = new THREE.GLTFLoader();
 			loader.crossOrigin = 'anonymous';
 			loader.load(
-				'./models/shino.vrm',
+				'../react/models/shino.vrm',
 				( gltf ) => {
 
 					scene.add( gltf.scene );

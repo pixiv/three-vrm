@@ -5,14 +5,6 @@ import * as THREE from 'three'
 import { GLTF, VRM, VRMImporter } from 'three-vrm';
 import * as Action from './components'
 
-function Box() {
-  const geo = new THREE.BoxGeometry(0.1,0.1,0.1)
-  const mat= new THREE.MeshLambertMaterial({color: 0x6699ff})
-  const mesh = new THREE.Mesh(geo,mat)
-  mesh.position.set(2,0.7,-4)
-  return mesh
-}
-
 class App extends React.Component<{}, { loaded: boolean }> {
 
   private canvas?: HTMLCanvasElement
@@ -58,11 +50,9 @@ class App extends React.Component<{}, { loaded: boolean }> {
 
       this.directionalLight.position.set(0, 20, 0);
 
-      const box = Box()
       this.scene.add(new THREE.AxesHelper(3));
       this.scene.add(new THREE.GridHelper(10, 10))
       this.scene.add(this.directionalLight);
-      this.scene.add(box)
       this.scene.add(this.vrm.scene)
 
       this.vrm.lookAt.setTarget(this.camera)

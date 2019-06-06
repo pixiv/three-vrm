@@ -1,20 +1,41 @@
 # three-vrm
 
-## How To Use
+## Examples
 
-see [example](./example)
+### Load from Html
 
-```typescript
+```
+three-vrm$ yarn build
+three-vrm$ yarn global add http-server && http-server
+```
+
+* <http://localhost:8080/examples/html/basic.html>
+* <http://localhost:8080/examples/html/dnd.html>
+* <http://localhost:8080/exmaples/html/mouse.html>
+
+### Use with React
+
+```
+three-vrm$ yarn build
+three-vrm/examples/react$ yarn
+three-vrm/examples/react$ yarn dev
+```
+
+* <http://localhost:4000>
+
+## Usage
+
+```javascript
 import 'imports-loader?THREE=three!three-vrm-loader/lib/GLTFLoader.js';
 import * as THREE from 'three'
-import { GLTF, VRM, VRMImporter } from 'three-vrm'
+import { VRM, VRMImporter } from 'three-vrm'
 
 new Promise((resolve,reject) => {
   const loader = new THREE.GLTFLoader()
   loader.load("/models/shino.vrm", resolve, () => {} , reject)
-}).then( (gltf: GLTF) =>
+}).then( (gltf ) =>
    new VRMImporter().load(gltf)
-).then ( (vrm: VRM) => {
+).then ( vrm => {
    this.vrm = vrm
 })
 ```

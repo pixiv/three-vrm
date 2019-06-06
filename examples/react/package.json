@@ -13,7 +13,7 @@
     "url": "https://github.com/pixiv/three-vrm.git"
   },
   "scripts": {
-    "postinstall": "mkdir -p node_modules/three-vrm && rm -rf node_modules/three-vrm/* && cp ../package.json node_modules/three-vrm && cp -R ../lib node_modules/three-vrm",
+    "postinstall": "mkdir -p node_modules/three-vrm && rm -rf node_modules/three-vrm/* && cp ../../package.json node_modules/three-vrm && cp -R ../../lib node_modules/three-vrm",
     "dev": "yarn dev:module",
     "dev:module": "webpack-dev-server --config webpack.config.js"
   },
