@@ -15,9 +15,13 @@
     "url": "https://github.com/pixiv/three-vrm.git"
   },
   "scripts": {
-    "build": "rimraf lib && webpack && tsc --emitDeclarationOnly",
-    "test": "yarn lint",
-    "prepack": "yarn lint && yarn build"
+    "version": "yarn all",
+    "all": "yarn clean && yarn build",
+    "clean": "rimraf dist types",
+    "build": "yarn build-dev && yarn build-prod && yarn build-types",
+    "build-dev": "webpack --mode development",
+    "build-prod": "webpack --mode production",
+    "build-types": "tsc --emitDeclarationOnly"
   },
   "husky": {
     "hooks": {
