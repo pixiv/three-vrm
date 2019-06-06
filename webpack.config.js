@@ -1,5 +1,4 @@
 const path = require("path");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
 const webpackMerge = require("webpack-merge");
 
 const base = (mode) => {
@@ -38,11 +37,6 @@ const base = (mode) => {
       extensions: [".js", ".ts"],
       modules: ["node_modules"]
     },
-    plugins: [
-      new CopyWebpackPlugin([
-        { from: "src/three" }
-      ])
-    ]
   };
 };
 
