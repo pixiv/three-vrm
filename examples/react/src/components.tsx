@@ -1,10 +1,12 @@
+import CameraControls from "camera-controls";
 import * as React from 'react'
 import * as THREE from 'three'
 import * as VRM from 'three-vrm'
 
 interface Props {
   vrm: VRM.VRM,
-  camera: THREE.Camera
+  camera: THREE.Camera,
+  cameraControls: CameraControls
 }
 
 interface PanelProps {
@@ -116,6 +118,7 @@ export const LookAt = (props: Props) => {
   const humanBones: VRM.VRMHumanBones = props.vrm.humanBones
   const lookAt: VRM.VRMLookAtHead = props.vrm.lookAt
   const camera: THREE.Camera = props.camera
+  const cameraControls = props.cameraControls
 
   const pX = () => document.getElementById('x') as HTMLInputElement
   const pY = () => document.getElementById('y') as HTMLInputElement
@@ -124,19 +127,20 @@ export const LookAt = (props: Props) => {
   const rY = () => document.getElementById('ry') as HTMLInputElement
   const rZ = () => document.getElementById('rz') as HTMLInputElement
 
-  let autoRotate = false
   const focusHead = () => {
-    autoRotate = false
+    cameraControls.enabled = true
     const __head = lookAt.getHeadPosition()
-    camera.position.set(__head[0], __head[1], __head[2])
-    camera.rotation.set(0, Math.PI, 0)
-    camera.position.z -= 0.5
+    cameraControls.rotateTo(180 * THREE.Math.DEG2RAD, 90 * THREE.Math.DEG2RAD, false);
+    cameraControls.moveTo(__head[0], __head[1], __head[2], false);
+    cameraControls.dollyTo(0.8, false);
   }
 
   const resetCamera = () => {
-    autoRotate = false
-    camera.position.set(0, 1, -3)
-    camera.rotation.set(0, Math.PI, 0)
+    cameraControls.enabled = true
+    const hip = humanBones.hips.position
+    cameraControls.rotateTo(180 * THREE.Math.DEG2RAD, 90 * THREE.Math.DEG2RAD, false);
+    cameraControls.moveTo(hip.x, hip.y, hip.z, false);
+    cameraControls.dollyTo(1.5, false);
   }
 
   let theta = 0
@@ -148,7 +152,7 @@ export const LookAt = (props: Props) => {
   const head = new THREE.Vector3(_head[0], _head[1], _head[2])
 
   const looper = (r: number) => {
-    if (!autoRotate) return
+    if (cameraControls.enabled) return
     camera.lookAt(head)
     theta += v
     fi += vy
@@ -161,8 +165,8 @@ export const LookAt = (props: Props) => {
   }
 
   const onClickAuto = () => {
-    if (autoRotate) return
-    autoRotate = true
+    if (!cameraControls.enabled) return
+    cameraControls.enabled = false
     const r = camera.position.distanceTo(head)
     looper(r)
   }

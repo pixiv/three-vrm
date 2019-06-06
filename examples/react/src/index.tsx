@@ -1,9 +1,12 @@
-import 'imports-loader?THREE=three!three-vrm/lib/GLTFLoader.js';
-import * as React from 'react';
-import { render } from 'react-dom';
-import * as THREE from 'three'
-import { GLTF, MaterialConverter, VRM, VRMDebug } from 'three-vrm';
-import * as Action from './components'
+import CameraControls from "camera-controls";
+import "imports-loader?THREE=three!three-vrm/lib/GLTFLoader.js";
+import * as React from "react";
+import { render } from "react-dom";
+import * as THREE from "three";
+import { GLTF, MaterialConverter, VRM, VRMDebug } from "three-vrm";
+import * as Action from "./components";
+
+CameraControls.install( { THREE } );
 
 class App extends React.Component<{}, { loaded: boolean }> {
 
@@ -14,6 +17,7 @@ class App extends React.Component<{}, { loaded: boolean }> {
   private renderer?: THREE.WebGLRenderer
   private camera: THREE.PerspectiveCamera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.25, 1000);
   private directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1.0);
+  private cameraControls?: CameraControls
 
   constructor (props: {}) {
     super(props);
@@ -54,9 +58,13 @@ class App extends React.Component<{}, { loaded: boolean }> {
       this.renderer.setSize(window.innerWidth, window.innerHeight);
       this.renderer.setClearColor(0xFFFFFF,1.0);
 
-      this.camera.position.set(0,1, -3)
-      this.camera.rotation.set(0, Math.PI, 0)
       console.log(this.vrm)
+
+      this.cameraControls = new CameraControls(this.camera, this.renderer.domElement)
+      const hip = this.vrm.humanBones.hips.position
+      this.cameraControls.rotateTo(180 * THREE.Math.DEG2RAD, 90 * THREE.Math.DEG2RAD, false);
+      this.cameraControls.moveTo(hip.x, hip.y, hip.z, false);
+      this.cameraControls.dollyTo(1.5, false);
 
       this.directionalLight.position.set(0, 20, 0);
 
@@ -83,8 +91,9 @@ class App extends React.Component<{}, { loaded: boolean }> {
 
   public animate(){
     requestAnimationFrame(this.animate)
-
-    if(this.vrm) this.vrm.update(this.clock.getDelta())
+    const delta = this.clock.getDelta()
+    if(this.cameraControls!.enabled) this.cameraControls!.update( delta );
+    if(this.vrm) this.vrm.update(delta)
     if(this.renderer) this.renderer.render(this.scene, this.camera);
   }
 
@@ -94,11 +103,11 @@ class App extends React.Component<{}, { loaded: boolean }> {
     return (
       <div>
         <div style={{position:'absolute', width: 240, height: window.innerHeight, right: 0, overflowY:'scroll'}}>
-          {loaded && <Action.Transform vrm={this.vrm!} camera={this.camera}/>}
-          {loaded && <Action.Meta vrm={this.vrm!} camera={this.camera}/>}
-          {loaded && <Action.BlendShape vrm={this.vrm!} camera={this.camera}/>}
-          {loaded && <Action.FirstPerson vrm={this.vrm!} camera={this.camera}/>}
-          {loaded && <Action.LookAt vrm={this.vrm!} camera={this.camera}/>}
+          {loaded && <Action.Transform vrm={this.vrm!} camera={this.camera} cameraControls={this.cameraControls!}/>}
+          {loaded && <Action.Meta vrm={this.vrm!} camera={this.camera} cameraControls={this.cameraControls!}/>}
+          {loaded && <Action.BlendShape vrm={this.vrm!} camera={this.camera} cameraControls={this.cameraControls!}/>}
+          {loaded && <Action.FirstPerson vrm={this.vrm!} camera={this.camera} cameraControls={this.cameraControls!}/>}
+          {loaded && <Action.LookAt vrm={this.vrm!} camera={this.camera} cameraControls={this.cameraControls!}/>}
         </div>
         <canvas ref={ref => this.canvas = ref} />
       </div>
