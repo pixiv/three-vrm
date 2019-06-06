@@ -7,6 +7,7 @@ interface Props {
   vrm: VRM.VRM,
   camera: THREE.Camera,
   cameraControls: CameraControls
+  toggleDebug?: () => void
 }
 
 interface PanelProps {
@@ -40,6 +41,7 @@ export const Transform = (props: Props) => {
   const position = vrm.humanBones.hips.position
   const rotation = vrm.humanBones.hips.rotation
   const scale = vrm.scene.scale
+  const toggleDebug = props.toggleDebug!
 
   const nvl = (value: string, defVal: number) => {
     if (value === undefined || value === null || !value.length) return defVal
@@ -85,6 +87,9 @@ export const Transform = (props: Props) => {
           <div style={{display: 'flex', alignItems: 'center'}}>Z
             <input style={{width: 30}} defaultValue={scale.z.toString()}
                    onChange={(e) => scale.z = nvl(e.target.value, scale.z)}/></div>
+        </div>
+        <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
+          <button onClick={() => toggleDebug()} >デバッグ切り替え</button>
         </div>
       </div>
     </Panel>
@@ -209,7 +214,7 @@ export const LookAt = (props: Props) => {
         </ul>
       </div>
       <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
-        <h2 style={{display: 'flex', alignItems: 'center', marginRight: 10, width: 160}}>look At Type Name</h2>
+        <ItemName value="Type" />
         <div style={{display: 'flex', alignItems: 'center', marginRight: 10}}>{lookAtTypeName}</div>
       </div>
       <div style={{marginBottom: 10}}> Camera Operation

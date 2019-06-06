@@ -6,6 +6,7 @@ import { VRMLookAtHead } from './lookat'
 import { MaterialConverter } from "./material";
 import { VRMSpringBoneManager } from './springbone'
 import { GLTF, GLTFNode, RawVrmMeta,VRMPose } from './types'
+import { deepDispose } from "./utils/disposer";
 import { VRMPartsBuilder } from './VRMPartsBuilder'
 
 export class VRMBuilder {
@@ -156,6 +157,15 @@ export class VRM {
     this.blendShapeProxy.update()
     this.springBoneManager.lateUpdate(delta)
 
+  }
+
+  public dispose() : void {
+    const scene = this.scene
+    while (scene.children.length > 0) {
+      const object = scene.children[scene.children.length - 1];
+      deepDispose(object);
+      scene.remove(object);
+    }
   }
 }
 
