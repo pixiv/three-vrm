@@ -76,7 +76,7 @@ export class VRMPartsBuilder {
 
     const isFirstPersonBoneNotSet = firstPerson.firstPersonBone === undefined || firstPerson.firstPersonBone === -1
     const firstPersonBone = isFirstPersonBoneNotSet
-      ? nodesMap.find((node) => node.name === humanBones[Raw.Bone.Head].name)
+      ? nodesMap.find((node) => node.name === humanBones[Raw.HumanBone.Head].name)
       : nodesMap[firstPerson.firstPersonBone!]
 
     if (!firstPersonBone) {

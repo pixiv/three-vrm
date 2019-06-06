@@ -37,7 +37,7 @@ export interface VRMPose {
 }
 
 export interface AnimationClipKeyframe {
-  name: VRMExtension.Bone | VRMExtension.BlendShapePresetName;
+  name: VRMExtension.HumanBone | VRMExtension.BlendShapePresetName;
   type: 'morph' | 'rotation' | 'position';
   times: number[];
   values: number[];

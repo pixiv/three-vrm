@@ -5,7 +5,6 @@
   "license": "MIT",
   "author": "pixiv",
   "files": [
-    "lib",
     "LICENSE"
   ],
   "repository": {
@@ -13,9 +12,10 @@
     "url": "https://github.com/pixiv/three-vrm.git"
   },
   "scripts": {
-    "postinstall": "mkdir -p node_modules/three-vrm && rm -rf node_modules/three-vrm/* && cp ../../package.json node_modules/three-vrm && cp -R ../../lib node_modules/three-vrm",
-    "dev": "yarn dev:module",
-    "dev:module": "webpack-dev-server --config webpack.config.js"
+    "postinstall": "mkdir -p node_modules/three-vrm && rimraf node_modules/three-vrm/* && cp ../../package.json node_modules/three-vrm && cp -R ../../lib node_modules/three-vrm",
+    "build": "npm run clean && webpack --mode production",
+    "dev": "webpack-dev-server --config webpack.config.js",
+    "clean": "rimraf ./dist"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": [
@@ -53,6 +53,7 @@
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
     "webpack-dev-server": "^3.2.1",
-    "webpack-merge": "^4.2.1"
+    "webpack-merge": "^4.2.1",
+    "cross-env": "^5.2.0"
   }
 }

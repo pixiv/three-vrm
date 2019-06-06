@@ -190,7 +190,7 @@ export interface RawVrmHumanoidBone {
   /**
    * Human bone name.
    */
-  bone?: Bone;
+  bone?: HumanBone;
   /**
    * Unity's HumanLimit.center
    */
@@ -216,7 +216,7 @@ export interface RawVrmHumanoidBone {
 /**
  * Human bone name.
  */
-export enum Bone {
+export enum HumanBone {
   Chest = 'chest',
   Head = 'head',
   Hips = 'hips',

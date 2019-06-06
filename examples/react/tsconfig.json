@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
-    "outDir": "lib",
     "target": "es5",
     "module": "commonjs",
-    "lib": ["es2018", "es2017","dom"],
+    "lib": ["es2018", "dom"],
     "jsx": "react",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,

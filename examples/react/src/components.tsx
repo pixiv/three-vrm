@@ -35,8 +35,8 @@ const Panel: React.FunctionComponent<PanelProps> = ({title, children}) => {
 
 export const Transform = (props: Props) => {
   const vrm = props.vrm
-  const position = vrm.scene.position
-  const rotation = vrm.scene.rotation
+  const position = vrm.humanBones.hips.position
+  const rotation = vrm.humanBones.hips.rotation
   const scale = vrm.scene.scale
 
   const nvl = (value: string, defVal: number) => {

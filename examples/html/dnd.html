@@ -26,6 +26,7 @@
 		<script src="../../lib/GLTFLoader.js"></script>
 		<script src="../../lib/index.js"></script>
 		<script>
+			console.log(THREE)
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
 			renderer.setSize( window.innerWidth, window.innerHeight );
@@ -58,7 +59,7 @@
 					url,
 					( gltf ) => {
 
-						vrm.VRM.from( gltf ).then( ( vrm ) => {
+						THREE.VRM.from( gltf ).then( ( vrm ) => {
 
 							if ( currentVrm ) { scene.remove( currentVrm.scene ); }
 							// currentVrm.dispose(); // not implemented

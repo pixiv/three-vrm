@@ -8,7 +8,7 @@
     "lib",
     "LICENSE"
   ],
-  "main": "lib/index.js",
+  "main": "lib/index.module.js",
   "types": "lib/index.d.ts",
   "repository": {
     "type": "git",
@@ -66,6 +66,7 @@
     "ua-parser-js": "^0.7.19",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
+    "webpack-merge": "^4.2.1",
     "webpack-dev-server": "^3.2.1",
     "worker-loader": "^2.0.0"
   },
