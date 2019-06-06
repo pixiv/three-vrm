@@ -58,7 +58,7 @@
 					url,
 					( gltf ) => {
 
-						new vrm.VRMImporter().load( gltf ).then( ( vrm ) => {
+						new vrm.VRM.from( gltf ).then( ( vrm ) => {
 
 							if ( currentVrm ) { scene.remove( currentVrm.scene ); }
 							// currentVrm.dispose(); // not implemented

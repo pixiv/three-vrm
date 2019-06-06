@@ -2,7 +2,7 @@ import 'imports-loader?THREE=three!three-vrm/lib/GLTFLoader.js';
 import * as React from 'react';
 import { render } from 'react-dom';
 import * as THREE from 'three'
-import { GLTF, VRM, VRMImporter } from 'three-vrm';
+import { GLTF, MaterialConverter, VRM, VRMDebug } from 'three-vrm';
 import * as Action from './components'
 
 class App extends React.Component<{}, { loaded: boolean }> {
@@ -27,10 +27,20 @@ class App extends React.Component<{}, { loaded: boolean }> {
     new Promise((resolve,reject) => {
       const loader = new THREE.GLTFLoader()
       loader.load("/models/shino.vrm", resolve, () => {} , reject)
-    }).then( (gltf: GLTF) =>
-      new VRMImporter().load(gltf)
-    ).then ( (vrm: VRM) => {
-
+    }).then( (gltf: GLTF) => {
+      const materialConverter = new MaterialConverter(true)
+      const debugOption = {
+        disableBoxHelper: true,
+        disableSkeletonHelper: true,
+        disableFaceDirectionHelper: true,
+        disableLeftEyeDirectionHelper: true,
+        disableRightEyeDirectionHelper: true
+      }
+      return VRMDebug.Builder
+        .option(debugOption)
+        .materialConverter(materialConverter)
+        .build(gltf)
+    }).then ( (vrm: VRM) => {
       this.vrm = vrm
       this.vrm.setPose({
         leftUpperLeg: {rotation: [0, 0, -0.4537776, 0.891115]},

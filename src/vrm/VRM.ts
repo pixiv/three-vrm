@@ -3,11 +3,42 @@ import { VRMBlendShapeProxy } from './blendshape'
 import { VRMFirstPerson } from './firstperson'
 import { VRMHumanBones } from './humanoid'
 import { VRMLookAtHead } from './lookat'
+import { MaterialConverter } from "./material";
 import { VRMSpringBoneManager } from './springbone'
 import { GLTF, GLTFNode, RawVrmMeta,VRMPose } from './types'
-import { VRMImporterContext } from './VRMImporterContext'
+import { VRMPartsBuilder } from './VRMPartsBuilder'
+
+export class VRMBuilder {
+
+  protected _materialConverter = new MaterialConverter(true)
+
+  protected _partsBuilder = new VRMPartsBuilder()
+
+  public materialConverter(materialConverter: MaterialConverter) : VRMBuilder{
+    this._materialConverter = materialConverter;
+    return this;
+  }
+
+  public partsBuilder(partsBuilder: VRMPartsBuilder){
+    this._partsBuilder = partsBuilder;
+    return this;
+  }
+
+  public build(gltf: GLTF,) : Promise<VRM> {
+    return this._materialConverter.convertGLTFMaterials(gltf)
+      .then( (converted: GLTF) => new VRM(converted, this._partsBuilder))
+  }
+}
 
 export class VRM {
+
+  public static get Builder() : VRMBuilder {
+    return new VRMBuilder()
+  }
+
+  public static from(gltf:GLTF) : Promise<VRM> {
+    return new VRMBuilder().build(gltf)
+  }
 
   public readonly restPose: VRMPose
   public readonly humanBones: VRMHumanBones
@@ -22,14 +53,14 @@ export class VRM {
 
   private readonly _gltf: GLTF
 
-  private readonly _importerContext: VRMImporterContext
+  private readonly _partsBuilder: VRMPartsBuilder
 
-  constructor (gltf: GLTF, importerContext?: VRMImporterContext) {
+  constructor (gltf: GLTF, _builder?: VRMPartsBuilder) {
 
-    if(importerContext) {
-      this._importerContext = importerContext
+    if(_builder) {
+      this._partsBuilder = _builder
     }else {
-      this._importerContext = new VRMImporterContext()
+      this._partsBuilder = new VRMPartsBuilder()
     }
 
     this._gltf = gltf
@@ -53,14 +84,14 @@ export class VRM {
 
     reduceBones(gltf.scene)
 
-    this.nodesMap = this._importerContext.getNodesMap(gltf)
-    this.humanBones = this._importerContext.loadHumanoid(gltf, this.nodesMap)
-    this.firstPerson = this._importerContext.loadFirstPerson(vrmExt.firstPerson, this.nodesMap, this.humanBones, gltf)
+    this.nodesMap = this._partsBuilder.getNodesMap(gltf)
+    this.humanBones = this._partsBuilder.loadHumanoid(gltf, this.nodesMap)
+    this.firstPerson = this._partsBuilder.loadFirstPerson(vrmExt.firstPerson, this.nodesMap, this.humanBones, gltf)
 
     this.animationMixer = new THREE.AnimationMixer(gltf.scene)
-    this.blendShapeProxy = this._importerContext.loadBlendShapeMaster(this.animationMixer, gltf)
-    this.springBoneManager = this._importerContext.loadSecondary(gltf, this.nodesMap)
-    this.lookAt = this._importerContext.loadLookAt(vrmExt.firstPerson, this.blendShapeProxy, this.humanBones)
+    this.blendShapeProxy = this._partsBuilder.loadBlendShapeMaster(this.animationMixer, gltf)
+    this.springBoneManager = this._partsBuilder.loadSecondary(gltf, this.nodesMap)
+    this.lookAt = this._partsBuilder.loadLookAt(vrmExt.firstPerson, this.blendShapeProxy, this.humanBones)
 
     // 破壊的な変更後もrestposeにリセットできるように初期状態ポーズを保存。
     this.restPose = {}

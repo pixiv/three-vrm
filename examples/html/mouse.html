@@ -56,7 +56,7 @@
 
 					scene.add( gltf.scene );
 
-					new vrm.VRMImporter().load( gltf ).then( ( vrm ) => {
+					new vrm.VRM.from( gltf ).then( ( vrm ) => {
 
 						currentVrm = vrm;
 						console.log( vrm );

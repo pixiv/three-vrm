@@ -1,6 +1,5 @@
 export * from './VRM'
-export * from './VRMImporter'
-export * from './VRMImporterContext'
+export * from './VRMPartsBuilder'
 export * from './blendshape'
 export * from './debug'
 export * from './firstperson'

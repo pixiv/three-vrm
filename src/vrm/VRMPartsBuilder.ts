@@ -9,7 +9,7 @@ import { VRMSpringBoneManager } from './springbone'
 import { GLTF, GLTFNode, GLTFPrimitive, RawVrmHumanoidBone } from './types'
 import * as Raw from './types/VRM'
 
-export class VRMImporterContext {
+export class VRMPartsBuilder {
 
   /**
    * @param {GLTF} gltf

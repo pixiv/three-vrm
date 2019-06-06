@@ -1,9 +1,9 @@
 import * as THREE from 'three'
 import { GLTF } from '../types'
 import { getWorldQuaternionLite } from '../utils/math'
-import { VRM } from '../VRM'
-import { VRMImporterContext } from '../VRMImporterContext'
-import { VRMImporterContextDebug } from './VRMImporterContext'
+import { VRM , VRMBuilder } from '../VRM'
+import { VRMPartsBuilder } from '../VRMPartsBuilder'
+import { VRMPartsBuilderDebug } from "./VRMPastsBuilderDebug";
 
 const _v3B = new THREE.Vector3()
 const _quatA = new THREE.Quaternion()
@@ -17,14 +17,42 @@ export interface DebugOption {
   disableSpringBoneHelper?: boolean,
 }
 
+export class VRMBuilderDebug extends VRMBuilder {
+
+  private _option: DebugOption
+
+  constructor() {
+    super()
+    this._partsBuilder = new VRMPartsBuilderDebug()
+  }
+
+  public option(option: DebugOption):VRMBuilderDebug{
+    this._option = option
+    return this
+  }
+
+  public build(gltf: GLTF,) : Promise<VRM> {
+    return this._materialConverter.convertGLTFMaterials(gltf)
+      .then( (converted: GLTF) => new VRMDebug(converted, this._partsBuilder, this._option))
+  }
+}
+
 export class VRMDebug extends VRM {
+
+  public static get Builder() : VRMBuilderDebug {
+    return new VRMBuilderDebug()
+  }
+
+  public static from(gltf:GLTF) : Promise<VRM> {
+    return new VRMBuilderDebug().build(gltf)
+  }
 
   private readonly _faceDirectionHelper?: THREE.ArrowHelper
   private readonly _leftEyeDirectionHelper?: THREE.ArrowHelper
   private readonly _rightEyeDirectionHelper?: THREE.ArrowHelper
 
-  constructor (gltf: GLTF, importerContext?: VRMImporterContext, debugOption?: DebugOption) {
-    super(gltf, importerContext ? importerContext : new VRMImporterContextDebug() )
+  constructor (gltf: GLTF, partsBuilder?: VRMPartsBuilder, debugOption?: DebugOption) {
+    super(gltf, partsBuilder)
 
     const opt: DebugOption = debugOption || {}
     // Gizmoを展開
