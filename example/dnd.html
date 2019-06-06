@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>three-vrm example</title>
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+		/>
+		<style>
+			html,
+			body {
+				overflow: hidden;
+				width: 100vw;
+				height: 100vh;
+				margin: 0;
+				padding: 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<script src="../node_modules/three/build/three.min.js"></script>
+		<script src="../node_modules/three/examples/js/controls/OrbitControls.js"></script>
+		<script src="../lib/GLTFLoader.js"></script>
+		<script src="../lib/index.js"></script>
+		<script>
+			// renderer
+			const renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+			// camera
+			const camera = new THREE.PerspectiveCamera( 30.0, window.innerWidth / window.innerHeight, 0.1, 20.0 );
+			camera.position.set( 0.0, 0.0, -5.0 );
+
+			// camera controls
+			const controls = new THREE.OrbitControls( camera, renderer.domElement );
+			controls.screenSpacePanning = true;
+
+			// scene
+			const scene = new THREE.Scene();
+
+			// light
+			const light = new THREE.DirectionalLight( 0xffffff );
+			light.position.set( 1.0, 1.0, 1.0 ).normalize();
+			scene.add( light );
+
+			// gltf and vrm
+			let currentVrm = undefined;
+			const loader = new THREE.GLTFLoader();
+
+			function loadVRM( url ) {
+
+				loader.crossOrigin = 'anonymous';
+				loader.load(
+					url,
+					( gltf ) => {
+
+						new vrm.VRMImporter().load( gltf ).then( ( vrm ) => {
+
+							if ( currentVrm ) { scene.remove( currentVrm.scene ); }
+							// currentVrm.dispose(); // not implemented
+
+							currentVrm = vrm;
+							scene.add( gltf.scene );
+
+							console.log( vrm );
+
+						} );
+
+					},
+					( progress ) => console.log( 'Loading model...', 100.0 * ( progress.loaded / progress.total ), '%' ),
+					( error ) => console.error( error )
+				);
+
+			}
+
+			loadVRM( './models/shino.vrm' );
+
+			// helpers
+			const gridHelper = new THREE.GridHelper( 10, 10 );
+			scene.add( gridHelper );
+
+			const axesHelper = new THREE.AxesHelper( 5 );
+			scene.add( axesHelper );
+
+			// animate
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				renderer.render( scene, camera );
+
+			}
+
+			animate();
+
+			// dnd handler
+			window.addEventListener( 'dragover', function( event ) {
+
+				event.preventDefault();
+
+			} );
+
+			window.addEventListener( 'drop', function( event ) {
+
+				event.preventDefault();
+
+				// read given file then convert it to blob url
+				const files = event.dataTransfer.files;
+				if ( !files ) { return; }
+				const file = files[0];
+				if ( !file ) { return; }
+				const blob = new Blob( [ file ], { type: "application/octet-stream" } );
+				const url = URL.createObjectURL( blob );
+				loadVRM( url );
+
+			} );
+		</script>
+	</body>
+</html>
