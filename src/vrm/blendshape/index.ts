@@ -1,3 +1,3 @@
-export * from './VRMBlendShapeProxy'
-export * from './BlendShapeController'
-export * from './BlendShapeMaster'
+export * from './VRMBlendShapeProxy';
+export * from './BlendShapeController';
+export * from './BlendShapeMaster';

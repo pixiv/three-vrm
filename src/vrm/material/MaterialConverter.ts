@@ -4,21 +4,18 @@ import { MToon, MToonOutlineWidthMode, MToonRenderMode } from './MToon';
 import { Unlit, UnlitRenderType } from './Unlit';
 
 export class MaterialConverter {
-
-  private readonly _colorSpaceGamma : boolean
+  private readonly _colorSpaceGamma: boolean;
 
   private readonly _options: {
     requestEnvMap?: () => Promise<THREE.Texture | null>;
+  };
+
+  constructor(colorSpaceGamma: boolean, options: { requestEnvMap?: () => Promise<THREE.Texture | null> } = {}) {
+    this._colorSpaceGamma = colorSpaceGamma;
+    this._options = options;
   }
 
-  constructor(colorSpaceGamma:boolean, options: {requestEnvMap?: () => Promise<THREE.Texture | null>} = {}){
-    this._colorSpaceGamma = colorSpaceGamma
-    this._options = options
-  }
-
-  public convertGLTFMaterials(
-    gltf: GLTF,
-  ): Promise<GLTF> {
+  public convertGLTFMaterials(gltf: GLTF): Promise<GLTF> {
     return new Promise((resolve) => {
       const taskList: Array<Promise<any>> = [];
 
@@ -102,9 +99,9 @@ export class MaterialConverter {
         resolve(gltf);
       });
     });
-  };
+  }
 
-  public convertMaterialLegacy(material: THREE.MeshStandardMaterial, gltf: GLTF): Promise<THREE.Material>{
+  public convertMaterialLegacy(material: THREE.MeshStandardMaterial, gltf: GLTF): Promise<THREE.Material> {
     return new Promise((resolve) => {
       const unlitAlt = new THREE.MeshBasicMaterial();
       THREE.Material.prototype.copy.call(unlitAlt, material);
@@ -116,9 +113,9 @@ export class MaterialConverter {
       unlitAlt.morphTargets = material.morphTargets;
       resolve(unlitAlt);
     });
-  };
+  }
 
-  public convertMaterial(material: THREE.Material, gltf: GLTF): Promise<THREE.Material>{
+  public convertMaterial(material: THREE.Material, gltf: GLTF): Promise<THREE.Material> {
     const materialProperties = gltf.userData.gltfExtensions.VRM.materialProperties;
     const vrmProps =
       material.userData.gltfIndex &&
@@ -194,7 +191,7 @@ export class MaterialConverter {
       newMaterial.userData.vrmMaterialProperties = vrmProps;
       return newMaterial;
     });
-  };
+  }
 
   private renameMaterialProperty(name: string): string {
     if (name[0] !== '_') {
@@ -208,9 +205,9 @@ export class MaterialConverter {
       return name;
     }
     return name[0].toLowerCase() + name.substring(1);
-  };
+  }
 
-  private convertGLTFMaterial (material: THREE.Material): THREE.Material {
+  private convertGLTFMaterial(material: THREE.Material): THREE.Material {
     if ((material as any).isMeshStandardMaterial) {
       const mtl = material as THREE.MeshStandardMaterial;
 
@@ -240,9 +237,9 @@ export class MaterialConverter {
     }
 
     return material;
-  };
+  }
 
-  private extractMaterialProperties (material: THREE.Material, vrmProps: any, gltf: GLTF): Promise<any> {
+  private extractMaterialProperties(material: THREE.Material, vrmProps: any, gltf: GLTF): Promise<any> {
     const taskList: Array<Promise<any>> = [];
     const params: any = {};
 
@@ -304,5 +301,5 @@ export class MaterialConverter {
     params.morphNormals = (material as any).morphNormals || false;
 
     return Promise.all(taskList).then(() => params);
-  };
+  }
 }
