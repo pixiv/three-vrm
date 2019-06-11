@@ -3,7 +3,7 @@ import * as React from "react";
 import { render } from "react-dom";
 import * as THREE from "three";
 import { GLTF, VRM, VRMDebug } from "three-vrm";
-import { GLTFLoader } from "three-vrm/lib/three/jsm/GLTFLoader";
+import { GLTFLoader} from "three-vrm/lib/three/jsm/GLTFLoader";
 import * as Action from "./components";
 
 CameraControls.install( { THREE } );
