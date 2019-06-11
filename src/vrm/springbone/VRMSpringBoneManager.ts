@@ -4,14 +4,11 @@ import * as Raw from '../types/VRM'
 import { GIZMO_RENDER_ORDER, VRMSpringBone } from './VRMSpringBone'
 import { ColliderMesh, VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup'
 
-type SpringBoneGroup = VRMSpringBone[];
+export type VRMSpringBoneGroup = VRMSpringBone[];
 
-/**
- * VRMSpringUtility
- */
 export class VRMSpringBoneManager {
 
-  private _springBoneGroupList: SpringBoneGroup[] = []
+  public readonly springBoneGroupList: VRMSpringBoneGroup[] = []
 
   constructor (gltf: GLTF, nodesMap: GLTFNode[]) {
     const springBoneGroups: Raw.RawVrmSecondaryanimationSpring[] | undefined =
@@ -60,7 +57,7 @@ export class VRMSpringBoneManager {
         colliders.push(...colliderMeshGroups[colliderIndex].colliders)
       })
 
-      const springBoneGroup: SpringBoneGroup = []
+      const springBoneGroup: VRMSpringBoneGroup = []
       vrmBoneGroup.bones.forEach((nodeIndex) => {
         // VRMの情報から「揺れモノ」ボーンのルートが取れる
         const springRootBone = nodesMap[nodeIndex]
@@ -85,12 +82,12 @@ export class VRMSpringBoneManager {
         })
       })
 
-      this._springBoneGroupList.push(springBoneGroup)
+      this.springBoneGroupList.push(springBoneGroup)
     })
   }
 
   public lateUpdate (delta: number): void {
-    this._springBoneGroupList.forEach((springBoneGroup) => {
+    this.springBoneGroupList.forEach((springBoneGroup) => {
       springBoneGroup.forEach((springBone) => {
         springBone.update(delta)
       })
@@ -98,7 +95,7 @@ export class VRMSpringBoneManager {
   }
 
   public reset (): void {
-    this._springBoneGroupList.forEach((springBoneGroup) => {
+    this.springBoneGroupList.forEach((springBoneGroup) => {
       springBoneGroup.forEach((springBone) => {
         springBone.reset()
       })

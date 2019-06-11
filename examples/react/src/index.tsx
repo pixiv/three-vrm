@@ -2,7 +2,7 @@ import CameraControls from "camera-controls";
 import * as React from "react";
 import { render } from "react-dom";
 import * as THREE from "three";
-import { GLTF, VRM, VRMDebug } from "three-vrm";
+import { DebugOption, GLTF, VRM, VRMDebug} from "three-vrm";
 import { GLTFLoader} from "three-vrm/lib/three/jsm/GLTFLoader";
 import * as Action from "./components";
 
@@ -20,6 +20,14 @@ class App extends React.Component<{}, { vrmId: string | null }> {
   private directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1.0);
   private cameraControls?: CameraControls
   private debug: boolean = false
+  private debugOption : DebugOption = {
+    disableRightEyeDirectionHelper: false,
+    disableLeftEyeDirectionHelper: false,
+    disableFaceDirectionHelper: false,
+    disableSkeletonHelper: false,
+    disableBoxHelper: false,
+    disableSpringBoneHelper: false
+  }
 
   constructor (props: {}) {
     super(props);
@@ -96,15 +104,22 @@ class App extends React.Component<{}, { vrmId: string | null }> {
           {vrmId && <Action.BlendShape key={`2${vrmId}`} vrm={this.vrm!} camera={this.camera} cameraControls={this.cameraControls!}/>}
           {vrmId && <Action.FirstPerson key={`3${vrmId}`} vrm={this.vrm!} camera={this.camera} cameraControls={this.cameraControls!}/>}
           {vrmId && <Action.LookAt key={`4${vrmId}`} vrm={this.vrm!} camera={this.camera} cameraControls={this.cameraControls!}/>}
+          {vrmId && <Action.SpringBone key={`5${vrmId}`} vrm={this.vrm!} camera={this.camera} cameraControls={this.cameraControls!}/>}
         </div>
         <canvas ref={ref => this.canvas = ref} />
       </div>
     )
   }
 
-  private toggleDebug() {
+  private toggleDebug(key?:string) {
     if(this.vrmPath) {
-      this.debug = !this.debug
+      // @tslint:disable-next-line
+      if(key) {
+        if(!this.debug) return
+        (this.debugOption as any)[key] = !(this.debugOption as any)[key]
+      }else {
+        this.debug = !this.debug
+      }
       this.loadVRM(this.vrmPath)
     }
   }
@@ -122,7 +137,9 @@ class App extends React.Component<{}, { vrmId: string | null }> {
       loader.load(path, resolve, () => {
       }, reject)
     }).then((gltf: GLTF) => {
-      return this.debug ? VRMDebug.from(gltf) : VRM.from(gltf)
+      return this.debug
+        ? VRMDebug.Builder.option(this.debugOption).build(gltf)
+        : VRM.from(gltf)
     }).then((vrm:VRM) => {
       this.vrm = vrm
       this.vrmPath = path

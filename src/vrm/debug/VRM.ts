@@ -3,19 +3,11 @@ import { GLTF } from '../types'
 import { getWorldQuaternionLite } from '../utils/math'
 import { VRM , VRMBuilder } from '../VRM'
 import { VRMPartsBuilder } from '../VRMPartsBuilder'
-import { VRMPartsBuilderDebug } from "./VRMPastsBuilderDebug";
+import { DebugOption } from './DebugOption';
+import { VRMPartsBuilderDebugProxy } from './VRMPastsBuilder';
 
 const _v3B = new THREE.Vector3()
 const _quatA = new THREE.Quaternion()
-
-export interface DebugOption {
-  disableBoxHelper?: boolean,
-  disableSkeletonHelper?: boolean,
-  disableFaceDirectionHelper?: boolean,
-  disableLeftEyeDirectionHelper?: boolean,
-  disableRightEyeDirectionHelper?: boolean,
-  disableSpringBoneHelper?: boolean,
-}
 
 export class VRMBuilderDebug extends VRMBuilder {
 
@@ -23,7 +15,6 @@ export class VRMBuilderDebug extends VRMBuilder {
 
   constructor() {
     super()
-    this._partsBuilder = new VRMPartsBuilderDebug()
   }
 
   public option(option: DebugOption):VRMBuilderDebug{
@@ -32,8 +23,9 @@ export class VRMBuilderDebug extends VRMBuilder {
   }
 
   public build(gltf: GLTF,) : Promise<VRM> {
+    const partsBuilder = new VRMPartsBuilderDebugProxy(this._partsBuilder, this._option)
     return this._materialConverter.convertGLTFMaterials(gltf)
-      .then( (converted: GLTF) => new VRMDebug(converted, this._partsBuilder, this._option))
+      .then( (converted: GLTF) => new VRMDebug(converted, partsBuilder, this._option))
   }
 }
 

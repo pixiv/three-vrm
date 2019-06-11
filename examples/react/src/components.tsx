@@ -7,7 +7,7 @@ interface Props {
   vrm: VRM.VRM,
   camera: THREE.Camera,
   cameraControls: CameraControls
-  toggleDebug?: () => void
+  toggleDebug?: (key?:string) => void
 }
 
 interface PanelProps {
@@ -89,7 +89,25 @@ export const Transform = (props: Props) => {
                    onChange={(e) => scale.z = nvl(e.target.value, scale.z)}/></div>
         </div>
         <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
-          <button onClick={() => toggleDebug()} >デバッグ切り替え</button>
+          <div><button onClick={() => toggleDebug()}>Toggle Debug</button></div>
+        </div>
+        <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
+          <div><button onClick={() => toggleDebug('disableRightEyeDirectionHelper')} >Toggle RightEyeDirectionHelper</button></div>
+        </div>
+        <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
+          <div><button onClick={() => toggleDebug('disableLeftEyeDirectionHelper')} >Toggle LeftEyeDirectionHelper</button></div>
+        </div>
+        <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
+          <div><button onClick={() => toggleDebug('disableFaceDirectionHelper')} >Toggle FaceDirectionHelper</button></div>
+        </div>
+        <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
+          <div><button onClick={() => toggleDebug('disableSkeletonHelper')} >Toggle SkeletonHelper</button></div>
+        </div>
+        <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
+          <div><button onClick={() => toggleDebug('disableBoxHelper')} >Toggle BoxHelper</button></div>
+        </div>
+        <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
+          <div><button onClick={() => toggleDebug('disableSpringBoneHelper')} >Toggle SpringBoneHelper</button></div>
         </div>
       </div>
     </Panel>
@@ -332,3 +350,25 @@ export const BlendShape = (props: Props) => {
   )
 }
 
+export const SpringBone = (props: Props) => {
+
+  const springBoneManager: VRM.VRMSpringBoneManager = props.vrm.springBoneManager
+  const springBoneGroups = springBoneManager.springBoneGroupList
+
+  const groups = springBoneGroups.map( (group,index) => {
+    const groupArea  = group.map( (bone,j) => {
+      const style = {fontSize: 10, marginLeft: 10}
+      const name = bone.bone.name
+      return (
+        <ul key={j}>
+          <li style={style}><span style={{fontWeight:'bold'}}>Bone: </span><span>{name}</span></li>
+          <li style={style}><span style={{fontWeight:'bold'}}>Colliders: </span>{bone.colliders.length}</li>
+        </ul>
+      )
+    })
+
+    return (<div key={index}><div>{index}</div>{groupArea}</div>)
+  })
+
+  return <Panel title={"VRMSpringBoneGroups"}>{groups}</Panel>
+}

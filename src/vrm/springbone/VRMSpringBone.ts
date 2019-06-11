@@ -19,7 +19,24 @@ const _matB = new THREE.Matrix4()
 export class VRMSpringBone {
 
   // 衝突判定用のボーンの半径
-  protected radius: number
+  public readonly radius: number
+
+  // バネが戻る力: 柔らかさ(少なくするほど揺れた際に原型の形に戻りにくくなる)
+  public readonly stiffnessForce: number
+
+  public readonly gravityPower: number
+
+  // 重力、あるいは風方
+  public readonly gravityDir: THREE.Vector3
+
+  // 力の減衰力: (増やすと空気抵抗が増える)
+  public readonly dragForce: number
+
+  // 自ボーン（Head）
+  public readonly bone: THREE.Object3D
+
+  // 揺れモノ当たり判定球
+  public readonly colliders: THREE.Mesh[]
 
   /**
    * Current position of child tail, in world unit. Will be used for verlet integration.
@@ -51,28 +68,12 @@ export class VRMSpringBone {
   // three.js 保存用
   protected worldPosition: THREE.Vector3
 
-  // バネが戻る力: 柔らかさ(少なくするほど揺れた際に原型の形に戻りにくくなる)
-  private _stiffnessForce: number
-
-  private _gravityPower: number
-
-  // 重力、あるいは風方
-  private _gravityDir: THREE.Vector3
-
-  // 力の減衰力: (増やすと空気抵抗が増える)
-  private _dragForce: number
-
-  // 自ボーン（Head）
-  private _bone: THREE.Object3D
-
   /**
    * Rotation of parent bone, in world unit.
    * We should update this constantly in {@link VRMSpringBone#update}.
    */
   private _parentWorldRotation: THREE.Quaternion
 
-  // 揺れモノ当たり判定球
-  private _colliders: THREE.Mesh[]
 
   // 状態リセット時に参照する
   private _initialLocalMatrix: THREE.Matrix4
@@ -88,58 +89,58 @@ export class VRMSpringBone {
     dragForce: number,
     colliders: THREE.Mesh[] = [],
   ) {
-    this._bone = bone // uniVRMでの parent
-    this._bone.matrixAutoUpdate = false // updateにより計算されるのでthree.js内での自動処理は不要
+    this.bone = bone // uniVRMでの parent
+    this.bone.matrixAutoUpdate = false // updateにより計算されるのでthree.js内での自動処理は不要
 
     this.radius = radius
-    this._stiffnessForce = stiffiness
-    this._gravityDir = gravityDir
-    this._gravityPower = gravityPower
-    this._dragForce = dragForce
-    this._colliders = colliders
+    this.stiffnessForce = stiffiness
+    this.gravityDir = gravityDir
+    this.gravityPower = gravityPower
+    this.dragForce = dragForce
+    this.colliders = colliders
 
-    this.worldPosition = new THREE.Vector3().setFromMatrixPosition(this._bone.matrixWorld)
+    this.worldPosition = new THREE.Vector3().setFromMatrixPosition(this.bone.matrixWorld)
 
     this._parentWorldRotation = new THREE.Quaternion()
 
-    this._initialLocalMatrix = this._bone.matrix.clone()
-    this._initialLocalRotation = this._bone.quaternion.clone()
+    this._initialLocalMatrix = this.bone.matrix.clone()
+    this._initialLocalRotation = this.bone.quaternion.clone()
     this._initialLocalChildPosition = (() => {
-      if (this._bone.children.length === 0) {
+      if (this.bone.children.length === 0) {
         // 末端のボーン。子ボーンがいないため「自分の少し先」が子ボーンということにする
         // https://github.com/dwango/UniVRM/blob/master/Assets/VRM/UniVRM/Scripts/SpringBone/VRMSpringBone.cs#L246
-        return this._bone.position
+        return this.bone.position
           .clone()
           .normalize()
           .multiplyScalar(0.07) // magic number! derives from original source
       } else {
-        const firstChild = this._bone.children[0]
+        const firstChild = this.bone.children[0]
         return firstChild.position.clone()
       }
     })()
 
-    this.currentTail = this._bone.localToWorld(this._initialLocalChildPosition.clone())
+    this.currentTail = this.bone.localToWorld(this._initialLocalChildPosition.clone())
     this.prevTail = this.currentTail.clone()
     this.nextTail = this.currentTail.clone()
 
     this.boneAxis = this._initialLocalChildPosition.clone().normalize()
-    this.worldBoneLength = this._bone
+    this.worldBoneLength = this.bone
       .localToWorld(_v3A.copy(this._initialLocalChildPosition))
       .sub(this.worldPosition)
       .length()
   }
 
   public reset (): void {
-    this._bone.matrix.copy(this._initialLocalMatrix)
+    this.bone.matrix.copy(this._initialLocalMatrix)
 
-    this._bone.localToWorld(this.currentTail.copy(this._initialLocalChildPosition))
+    this.bone.localToWorld(this.currentTail.copy(this._initialLocalChildPosition))
     this.prevTail.copy(this.currentTail)
     this.nextTail.copy(this.currentTail)
 
     // ボーンの姿勢を手動で操作したので、matrixWorldも更新しておく
-    this._bone.updateMatrix()
-    this._bone.matrixWorld.multiplyMatrices(this.getParentMatrixWorld(), this._bone.matrix)
-    this.worldPosition.setFromMatrixPosition(this._bone.matrixWorld)
+    this.bone.updateMatrix()
+    this.bone.matrixWorld.multiplyMatrices(this.getParentMatrixWorld(), this.bone.matrix)
+    this.worldPosition.setFromMatrixPosition(this.bone.matrixWorld)
   }
 
   public update (delta: number): void {
@@ -147,22 +148,22 @@ export class VRMSpringBone {
 
     // 親スプリングボーンの姿勢は常に変化している。
     // それに基づいて処理直前に自分のworldMatrixを更新しておく
-    this._bone.matrixWorld.multiplyMatrices(this.getParentMatrixWorld(), this._bone.matrix)
+    this.bone.matrixWorld.multiplyMatrices(this.getParentMatrixWorld(), this.bone.matrix)
 
-    if (!!this._bone.parent) {
+    if (!!this.bone.parent) {
       // SpringBoneは親から順に処理されていくため、
       // 親のmatrixWorldは最新状態の前提でworldMatrixからquaternionを取り出す。
       // 制限はあるけれど、計算は少ないのでgetWorldQuaternionではなくこの方法を取る。
-      getWorldQuaternionLite(this._bone.parent, this._parentWorldRotation)
+      getWorldQuaternionLite(this.bone.parent, this._parentWorldRotation)
     } else {
       this._parentWorldRotation.copy(IDENTITY_QUATERNION)
     }
 
     // 更新済みのworldMatrixからworldPositionを取り出す。
     // `getWorldPosition()` は負荷が高いので利用しない。
-    this.worldPosition.setFromMatrixPosition(this._bone.matrixWorld)
-    const stiffness = this._stiffnessForce * delta
-    const external = _v3B.copy(this._gravityDir).multiplyScalar(this._gravityPower * delta)
+    this.worldPosition.setFromMatrixPosition(this.bone.matrixWorld)
+    const stiffness = this.stiffnessForce * delta
+    const external = _v3B.copy(this.gravityDir).multiplyScalar(this.gravityPower * delta)
 
     // verlet積分で次の位置を計算
     this.nextTail
@@ -171,7 +172,7 @@ export class VRMSpringBone {
         _v3A
           .copy(this.currentTail)
           .sub(this.prevTail)
-          .multiplyScalar(1 - this._dragForce),
+          .multiplyScalar(1 - this.dragForce),
       ) // 前フレームの移動を継続する(減衰もあるよ)
       .add(
         _v3A
@@ -211,16 +212,16 @@ export class VRMSpringBone {
         .normalize(),
     )
 
-    this._bone.quaternion.copy(this._initialLocalRotation).multiply(applyRotation)
+    this.bone.quaternion.copy(this._initialLocalRotation).multiply(applyRotation)
 
     // We need to update its matrixWorld manually, since we tweaked the bone by our hand
-    this._bone.updateMatrix()
-    this._bone.matrixWorld.multiplyMatrices(this.getParentMatrixWorld(), this._bone.matrix)
+    this.bone.updateMatrix()
+    this.bone.matrixWorld.multiplyMatrices(this.getParentMatrixWorld(), this.bone.matrix)
 
   }
 
   private collision (tail: THREE.Vector3): void {
-    this._colliders.forEach((collider) => {
+    this.colliders.forEach((collider) => {
       const colliderWorldPosition = _v3A.setFromMatrixPosition(collider.matrixWorld)
       const colliderRadius = collider.geometry.boundingSphere.radius
       const r = this.radius + colliderRadius
@@ -243,7 +244,7 @@ export class VRMSpringBone {
   }
 
   private getParentMatrixWorld (): THREE.Matrix4 {
-    return this._bone.parent ? this._bone.parent.matrixWorld : IDENTITY_MATRIX4
+    return this.bone.parent ? this.bone.parent.matrixWorld : IDENTITY_MATRIX4
   }
 
 }
