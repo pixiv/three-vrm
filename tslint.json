@@ -1,5 +1,5 @@
 {
-  "extends": ["tslint:recommended", "tslint-config-prettier"],
+  "extends": ["tslint:recommended",  "tslint-plugin-prettier", "tslint-config-prettier"],
   "rules": {
     "curly": [true, "ignore-same-line"],
     "interface-name": [true, "never-prefix"],
@@ -10,6 +10,8 @@
     "object-literal-sort-keys": false,
     "max-classes-per-file": false,
     "variable-name": false,
-    "array-type": false
-  }
+    "array-type": false,
+    "prettier": true
+  },
+  "rulesDirectory": ["tslint-plugin-prettier"]
 }
