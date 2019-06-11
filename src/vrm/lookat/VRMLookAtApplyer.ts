@@ -1,27 +1,22 @@
-import * as THREE from 'three'
-import { LookAtTypeName, RawVrmFirstPersonDegreemap } from '../types'
+import * as THREE from 'three';
+import { LookAtTypeName, RawVrmFirstPersonDegreemap } from '../types';
 
 export abstract class VRMLookAtApplyer {
+  public lookAtHorizontalOuter: RawVrmFirstPersonDegreemap;
+  public lookAtVerticalDown: RawVrmFirstPersonDegreemap;
+  public lookAtVerticalUp: RawVrmFirstPersonDegreemap;
 
-  public lookAtHorizontalOuter: RawVrmFirstPersonDegreemap
-  public lookAtVerticalDown: RawVrmFirstPersonDegreemap
-  public lookAtVerticalUp: RawVrmFirstPersonDegreemap
-
-  protected constructor (
+  protected constructor(
     lookAtHorizontalOuter: RawVrmFirstPersonDegreemap,
     lookAtVerticalDown: RawVrmFirstPersonDegreemap,
     lookAtVerticalUp: RawVrmFirstPersonDegreemap,
   ) {
-    this.lookAtHorizontalOuter = lookAtHorizontalOuter
-    this.lookAtVerticalDown = lookAtVerticalDown
-    this.lookAtVerticalUp = lookAtVerticalUp
+    this.lookAtHorizontalOuter = lookAtHorizontalOuter;
+    this.lookAtVerticalDown = lookAtVerticalDown;
+    this.lookAtVerticalUp = lookAtVerticalUp;
   }
 
-  public abstract name() : LookAtTypeName
+  public abstract name(): LookAtTypeName;
 
-  public abstract lookAt (euler: THREE.Euler): void;
-
+  public abstract lookAt(euler: THREE.Euler): void;
 }
-
-
-

@@ -1,1 +1,1 @@
-export * from './VRMHumanBones'
+export * from './VRMHumanBones';

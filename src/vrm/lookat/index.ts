@@ -1,2 +1,2 @@
-export * from './VRMLookAtHead'
-export * from './VRMLookAtApplyer'
+export * from './VRMLookAtHead';
+export * from './VRMLookAtApplyer';

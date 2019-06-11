@@ -1,4 +1,4 @@
-import * as THREE from "three";
+import * as THREE from 'three';
 
 export function deepDispose(object3D: THREE.Object3D): void {
   object3D.traverse(dispose);

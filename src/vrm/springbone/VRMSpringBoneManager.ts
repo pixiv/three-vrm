@@ -1,28 +1,27 @@
-import * as THREE from 'three'
-import { GLTF, GLTFNode } from '../types'
-import * as Raw from '../types/VRM'
-import { GIZMO_RENDER_ORDER, VRMSpringBone } from './VRMSpringBone'
-import { ColliderMesh, VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup'
+import * as THREE from 'three';
+import { GLTF, GLTFNode } from '../types';
+import * as Raw from '../types/VRM';
+import { GIZMO_RENDER_ORDER, VRMSpringBone } from './VRMSpringBone';
+import { ColliderMesh, VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';
 
 export type VRMSpringBoneGroup = VRMSpringBone[];
 
 export class VRMSpringBoneManager {
+  public readonly springBoneGroupList: VRMSpringBoneGroup[] = [];
 
-  public readonly springBoneGroupList: VRMSpringBoneGroup[] = []
-
-  constructor (gltf: GLTF, nodesMap: GLTFNode[]) {
+  constructor(gltf: GLTF, nodesMap: GLTFNode[]) {
     const springBoneGroups: Raw.RawVrmSecondaryanimationSpring[] | undefined =
       gltf.parser.json.extensions &&
       gltf.parser.json.extensions.VRM &&
       gltf.parser.json.extensions.VRM.secondaryAnimation &&
-      gltf.parser.json.extensions.VRM.secondaryAnimation.boneGroups
+      gltf.parser.json.extensions.VRM.secondaryAnimation.boneGroups;
     if (springBoneGroups === undefined) {
-      return
+      return;
     }
 
     // 衝突判定球体メッシュ。
-    const colliderMeshGroups = this.getColliderMeshGroups(gltf, nodesMap)
-    colliderMeshGroups.forEach((group) => gltf.scene.add(...group.colliders))
+    const colliderMeshGroups = this.getColliderMeshGroups(gltf, nodesMap);
+    colliderMeshGroups.forEach((group) => gltf.scene.add(...group.colliders));
 
     // 同じ属性（stiffinessやdragForceが同じ）のボーンはboneGroupにまとめられている。
     // 一列だけではないことに注意。
@@ -39,32 +38,32 @@ export class VRMSpringBoneManager {
         vrmBoneGroup.colliderGroups === undefined ||
         vrmBoneGroup.bones === undefined
       ) {
-        return
+        return;
       }
 
-      const stiffiness = vrmBoneGroup.stiffiness
+      const stiffiness = vrmBoneGroup.stiffiness;
       const gravityDir = new THREE.Vector3(
         vrmBoneGroup.gravityDir.x,
         vrmBoneGroup.gravityDir.y,
         vrmBoneGroup.gravityDir.z,
-      )
-      const gravityPower = vrmBoneGroup.gravityPower
-      const dragForce = vrmBoneGroup.dragForce
-      const hitRadius = vrmBoneGroup.hitRadius
+      );
+      const gravityPower = vrmBoneGroup.gravityPower;
+      const dragForce = vrmBoneGroup.dragForce;
+      const hitRadius = vrmBoneGroup.hitRadius;
 
-      const colliders: ColliderMesh[] = []
+      const colliders: ColliderMesh[] = [];
       vrmBoneGroup.colliderGroups.forEach((colliderIndex) => {
-        colliders.push(...colliderMeshGroups[colliderIndex].colliders)
-      })
+        colliders.push(...colliderMeshGroups[colliderIndex].colliders);
+      });
 
-      const springBoneGroup: VRMSpringBoneGroup = []
+      const springBoneGroup: VRMSpringBoneGroup = [];
       vrmBoneGroup.bones.forEach((nodeIndex) => {
         // VRMの情報から「揺れモノ」ボーンのルートが取れる
-        const springRootBone = nodesMap[nodeIndex]
+        const springRootBone = nodesMap[nodeIndex];
 
         // it's weird but there might be cases we can't find the root bone
         if (!springRootBone) {
-          return
+          return;
         }
 
         springRootBone.traverse((bone) => {
@@ -77,36 +76,36 @@ export class VRMSpringBoneManager {
             gravityPower,
             dragForce,
             colliders,
-          )
-          springBoneGroup.push(springBone)
-        })
-      })
+          );
+          springBoneGroup.push(springBone);
+        });
+      });
 
-      this.springBoneGroupList.push(springBoneGroup)
-    })
+      this.springBoneGroupList.push(springBoneGroup);
+    });
   }
 
-  public lateUpdate (delta: number): void {
+  public lateUpdate(delta: number): void {
     this.springBoneGroupList.forEach((springBoneGroup) => {
       springBoneGroup.forEach((springBone) => {
-        springBone.update(delta)
-      })
-    })
+        springBone.update(delta);
+      });
+    });
   }
 
-  public reset (): void {
+  public reset(): void {
     this.springBoneGroupList.forEach((springBoneGroup) => {
       springBoneGroup.forEach((springBone) => {
-        springBone.reset()
-      })
-    })
+        springBone.reset();
+      });
+    });
   }
 
-  protected isColiderMeshVisible (): boolean {
-    return false
+  protected isColiderMeshVisible(): boolean {
+    return false;
   }
 
-  protected createSpringBone (
+  protected createSpringBone(
     gltf: GLTF,
     bone: THREE.Object3D,
     hitRadius: number,
@@ -116,39 +115,31 @@ export class VRMSpringBoneManager {
     dragForce: number,
     colliders: THREE.Mesh[] = [],
   ): VRMSpringBone {
-    return new VRMSpringBone(
-      bone,
-      hitRadius,
-      stiffiness,
-      gravityDir,
-      gravityPower,
-      dragForce,
-      colliders,
-    )
+    return new VRMSpringBone(bone, hitRadius, stiffiness, gravityDir, gravityPower, dragForce, colliders);
   }
 
-  private getColliderMeshGroups (gltf: GLTF, nodesMap: GLTFNode[]): VRMSpringBoneColliderGroup[] {
-    const vrmExt: Raw.RawVrm | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM
+  private getColliderMeshGroups(gltf: GLTF, nodesMap: GLTFNode[]): VRMSpringBoneColliderGroup[] {
+    const vrmExt: Raw.RawVrm | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
     if (vrmExt === undefined) {
-      return []
+      return [];
     }
-    const secondaryAnimation = vrmExt.secondaryAnimation
+    const secondaryAnimation = vrmExt.secondaryAnimation;
     if (secondaryAnimation === undefined) {
-      return []
+      return [];
     }
-    const vrmColliderGroups = secondaryAnimation.colliderGroups
+    const vrmColliderGroups = secondaryAnimation.colliderGroups;
     if (vrmColliderGroups === undefined) {
-      return []
+      return [];
     }
 
-    const colliderGroups: VRMSpringBoneColliderGroup[] = []
+    const colliderGroups: VRMSpringBoneColliderGroup[] = [];
     vrmColliderGroups.forEach((colliderGroup) => {
       if (colliderGroup.node === undefined || colliderGroup.colliders === undefined) {
-        return
+        return;
       }
 
-      const bone = nodesMap[colliderGroup.node]
-      const colliders: ColliderMesh[] = []
+      const bone = nodesMap[colliderGroup.node];
+      const colliders: ColliderMesh[] = [];
       colliderGroup.colliders.forEach((collider) => {
         if (
           collider.offset === undefined ||
@@ -157,15 +148,15 @@ export class VRMSpringBoneManager {
           collider.offset.z === undefined ||
           collider.radius === undefined
         ) {
-          return
+          return;
         }
 
         const offsetMatrix = new THREE.Matrix4().makeTranslation(
           collider.offset.x,
           collider.offset.y,
           -collider.offset.z, // this is pretty weird. See: https://github.com/dwango/UniVRM/issues/65
-        )
-        const visible = this.isColiderMeshVisible()
+        );
+        const visible = this.isColiderMeshVisible();
         const colliderMesh = new THREE.Mesh(
           new THREE.SphereBufferGeometry(collider.radius, 8, 4),
           new THREE.MeshBasicMaterial({
@@ -176,33 +167,32 @@ export class VRMSpringBoneManager {
             depthTest: false,
           }),
         );
-        (colliderMesh.material as any).renderOrder = GIZMO_RENDER_ORDER
+        (colliderMesh.material as any).renderOrder = GIZMO_RENDER_ORDER;
 
         // the name have to be this in order to exclude colliders from bounding box
         // (See Viewer.ts, search for child.name === 'vrmColliderSphere')
-        colliderMesh.name = 'vrmColliderSphere'
+        colliderMesh.name = 'vrmColliderSphere';
 
         // We will use the radius of the sphere for collision vs bones.
         // `boundingSphere` must be created to compute the radius.
-        colliderMesh.geometry.computeBoundingSphere()
+        colliderMesh.geometry.computeBoundingSphere();
 
         // The colliderMesh must sync with the bone.
         // Attaching bone's matrix to the colliderMesh at every update.
         // (colliderMesh will move automecicallty)
         colliderMesh.updateMatrixWorld = () => {
-          colliderMesh.matrixWorld.copy(bone.matrixWorld).multiply(offsetMatrix)
-        }
-        colliders.push(colliderMesh)
-      })
+          colliderMesh.matrixWorld.copy(bone.matrixWorld).multiply(offsetMatrix);
+        };
+        colliders.push(colliderMesh);
+      });
 
       const colliderMeshGroup = {
         node: colliderGroup.node,
         colliders,
-      }
-      colliderGroups.push(colliderMeshGroup)
-    })
+      };
+      colliderGroups.push(colliderMeshGroup);
+    });
 
-    return colliderGroups
+    return colliderGroups;
   }
-
 }

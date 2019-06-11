@@ -1,1 +1,1 @@
-export * from './VRMFirstPerson'
+export * from './VRMFirstPerson';
