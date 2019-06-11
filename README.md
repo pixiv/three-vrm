@@ -1,5 +1,57 @@
 # three-vrm
 
+[VRM](https://vrm.dev/) utilities for [three.js](https://threejs.org/).
+
+## Dependencies
+
+```
+yarn add three
+```
+
+## Usage
+
+```
+yarn add @pixiv/three-vrm
+```
+
+```html
+<script src="js/GLTFLoader.js"></script>
+<script src="js/three-vrm.js"></script>
+<script>
+  const loader = new THREE.GLTFLoader();
+  loader.load('/models/shino.vrm',( gltf ) => { 
+        THREE.VRM.from(gltf).then( ( vrm ) => { 
+            scene.add( vrm.scene );  
+        }); 
+    },
+  	( progress ) => {},
+  	( error ) =>  {}
+  );
+</script>	
+```
+
+or you can import as modules. 
+currently three-vrm/lib/GLTFLoader.js is required.
+
+```javascript
+import { GLTFLoader } from "three-vrm/lib/three/jsm/GLTFLoader";
+import * as THREE from 'three'
+import { VRM } from '@pixiv/three-vrm'
+
+const scene = new THREE.Scene();
+new Promise((resolve,reject) => {
+  const loader = new GLTFLoader()
+  loader.load("/models/shino.vrm", resolve, () => {} , reject)
+}).then( (gltf ) => {
+   const vrm = VRM.from(gltf)
+   scene.add(vrm.scene)
+})
+```
+
+```javascript
+
+```
+
 ## Examples
 
 ### Load from Html
@@ -22,118 +74,3 @@ three-vrm/examples/react$ yarn dev
 ```
 
 * <http://localhost:4000>
-
-## Usage
-
-```javascript
-import 'imports-loader?THREE=three!three-vrm-loader/lib/GLTFLoader.js';
-import * as THREE from 'three'
-import { VRM, VRMImporter } from 'three-vrm'
-
-new Promise((resolve,reject) => {
-  const loader = new THREE.GLTFLoader()
-  loader.load("/models/shino.vrm", resolve, () => {} , reject)
-}).then( (gltf ) =>
-   new VRMImporter().load(gltf)
-).then ( vrm => {
-   this.vrm = vrm
-})
-```
-
-## VRMImporter
-
-## VRM
-
-```
-.humanBones: VRMHumanBones
-```
-
-```
-.blendShapeProxy: VRMBlendShapeProxy
-```
-
-```
-.lookAt: VRMLookAtHead
-```
-
-```
-.firstPerson: VRMFirstPerson
-```
-
-```
-.springBoneManager: VRMSpringBoneManager
-```
-
-```
-.meta: VRMMeta
-```
-
-```
-.update(deltaTime: number)
-```
-
-## VRMBlendShapeProxy 
-
-```
-.setValue(name:string, weight:number)
-```
-
-```
-.getValue(name:string) : number
-```
-
-```
-.getController(name:string) : BlendShapeController
-```
-
-```
-.expressions : AnimationClip[]
-```
-
-## VRMLookAtHead
-
-```
-.head : THREE.Object3D ( default is Bone.Head )
-```
-
-```
-.setTarget( THREE.Object3D )
-```
-
-```
-.getTarget() : THREE.Object3D
-```
-
-```
-.lookAt(x:number, y:number, z:number)
-```
-
-## VRMFirstPersonBone 
-
-```
-.setup(cameraLayer?: {
-  firstPersonOnlyLayer?: number;
-  thirdPersonOnlyLayer?: number;
-}) 
-```
-
-```
-.getFirstPersonBone() : THREE.Object3D (defalut value is Bone.head)
-```
-
-```
-.getFirstPersonBoneOffset() : THREE.Vector3  (default value is [0,0.06,0])
-```
-
-```
-.getFirstBonePosition(v3: THREE.Vector3) : THREE.Vector3
-```
-
-```
-.getFirstPersonOnlyLayer(): number
-```
-
-```
-.getThirdPersonOnlyLayer(): number
-```
-

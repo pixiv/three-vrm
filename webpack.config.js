@@ -40,7 +40,7 @@ const base = (mode) => {
     },
     plugins: [
       new CopyWebpackPlugin([
-        { from: "src/three" }
+        { from: "src/three" , to: "three"}
       ])
     ]
   };
