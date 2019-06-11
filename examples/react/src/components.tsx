@@ -4,14 +4,15 @@ import * as THREE from 'three'
 import * as VRM from 'three-vrm'
 
 interface Props {
-  vrm: VRM.VRM,
-  camera: THREE.Camera,
-  cameraControls: CameraControls
-  toggleDebug?: (key?:string) => void
+  vrm: VRM.VRM;
+  camera: THREE.Camera;
+  cameraControls: CameraControls;
+  toggleDebug?: (key?:string) => void;
+  debug?: boolean;
 }
 
 interface PanelProps {
-  title: string,
+  title: string;
 }
 
 const ItemName:  React.FunctionComponent<{value:string}> = ({value}) =>
@@ -91,24 +92,24 @@ export const Transform = (props: Props) => {
         <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
           <div><button onClick={() => toggleDebug()}>Toggle Debug</button></div>
         </div>
-        <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
+        {props.debug && <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
           <div><button onClick={() => toggleDebug('disableRightEyeDirectionHelper')} >Toggle RightEyeDirectionHelper</button></div>
-        </div>
-        <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
+        </div>}
+        {props.debug && <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
           <div><button onClick={() => toggleDebug('disableLeftEyeDirectionHelper')} >Toggle LeftEyeDirectionHelper</button></div>
-        </div>
-        <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
+        </div>}
+        {props.debug && <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
           <div><button onClick={() => toggleDebug('disableFaceDirectionHelper')} >Toggle FaceDirectionHelper</button></div>
-        </div>
-        <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
+        </div>}
+        {props.debug && <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
           <div><button onClick={() => toggleDebug('disableSkeletonHelper')} >Toggle SkeletonHelper</button></div>
-        </div>
-        <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
+        </div>}
+        {props.debug && <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
           <div><button onClick={() => toggleDebug('disableBoxHelper')} >Toggle BoxHelper</button></div>
-        </div>
-        <div style={{display: 'flex', flexDirection: 'row', marginBottom: 5}}>
-          <div><button onClick={() => toggleDebug('disableSpringBoneHelper')} >Toggle SpringBoneHelper</button></div>
-        </div>
+        </div>}
+        {props.debug && <div style={{ display: 'flex', flexDirection: 'row', marginBottom: 5 }}>
+          <div><button onClick={() => toggleDebug('disableSpringBoneHelper')}>Toggle SpringBoneHelper</button></div>
+        </div>}
       </div>
     </Panel>
   )

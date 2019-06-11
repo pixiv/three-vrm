@@ -11,8 +11,6 @@
     "object-literal-sort-keys": false,
     "max-classes-per-file": false,
     "variable-name": false,
-    "array-type": false,
-    "prettier": true
-  },
-  "rulesDirectory": ["tslint-plugin-prettier"]
+    "array-type": false
+  }
 }

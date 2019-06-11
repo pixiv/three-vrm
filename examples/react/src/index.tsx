@@ -99,7 +99,7 @@ class App extends React.Component<{}, { vrmId: string | null }> {
           You can change the VRM model by drag and drop.
         </div>
         <div style={{position:'absolute', width: 240, height: window.innerHeight, right: 0, overflowY:'scroll'}}>
-          {vrmId && <Action.Transform key={`0${vrmId}`} vrm={this.vrm!} camera={this.camera} cameraControls={this.cameraControls!} toggleDebug={this.toggleDebug}/>}
+          {vrmId && <Action.Transform key={`0${vrmId}`} debug={this.debug} vrm={this.vrm!} camera={this.camera} cameraControls={this.cameraControls!} toggleDebug={this.toggleDebug}/>}
           {vrmId && <Action.Meta key={`1${vrmId}`} vrm={this.vrm!} camera={this.camera} cameraControls={this.cameraControls!}/>}
           {vrmId && <Action.BlendShape key={`2${vrmId}`} vrm={this.vrm!} camera={this.camera} cameraControls={this.cameraControls!}/>}
           {vrmId && <Action.FirstPerson key={`3${vrmId}`} vrm={this.vrm!} camera={this.camera} cameraControls={this.cameraControls!}/>}
@@ -115,7 +115,6 @@ class App extends React.Component<{}, { vrmId: string | null }> {
     if(this.vrmPath) {
       // @tslint:disable-next-line
       if(key) {
-        if(!this.debug) return
         (this.debugOption as any)[key] = !(this.debugOption as any)[key]
       }else {
         this.debug = !this.debug
