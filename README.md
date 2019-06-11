@@ -34,13 +34,13 @@ new Promise((resolve,reject) => {
 <script src="js/three-vrm.js"></script>
 <script>
   const loader = new THREE.GLTFLoader();
-  loader.load('/models/shino.vrm',( gltf ) => { 
-        THREE.VRM.from(gltf).then( ( vrm ) => { 
+  loader.load('/models/shino.vrm', gltf => { 
+        THREE.VRM.from(gltf).then( vrm => { 
             scene.add( vrm.scene );  
         }); 
     },
-  	( progress ) => {},
-  	( error ) =>  {}
+  	progress => {},
+  	error =>  {}
   );
 </script>	
 ```
@@ -78,73 +78,72 @@ three-vrm/examples/react$ yarn dev
 
 ### VRM
 
-## VRM
-
+get the human bones of VRM model.
 ```
-// get the human bones of VRM model
 .humanBones: VRMHumanBones
 ```
 
-get the utility for [blendshape](https://vrm.dev/univrm/components/univrm_blendshape/)
+get the utility for [blendshape](https://vrm.dev/univrm/components/univrm_blendshape/).
 ```
 .blendShapeProxy: VRMBlendShapeProxy
 ```
 
-get the utilifty for [lookAt](https://vrm.dev/univrm/components/univrm_firstperson/)
+get the utilifty for [lookAt](https://vrm.dev/univrm/components/univrm_firstperson/).
 ```
 .lookAt: VRMLookAtHead
 ```
 
-get the utility for [first person](https://vrm.dev/univrm/components/univrm_lookat/)
+get the utility for [first person](https://vrm.dev/univrm/components/univrm_lookat/).
 ```
 .firstPerson: VRMFirstPerson
 ```
 
-get the utility for [spring bone](https://vrm.dev/univrm/components/univrm_secondary/)
+get the utility for [spring bone](https://vrm.dev/univrm/components/univrm_secondary/).
 ```
 .springBoneManager: VRMSpringBoneManager
 ```
 
-get the [information](https://vrm.dev/univrm/components/univrm_meta/) of the VRM model
+get the [information](https://vrm.dev/univrm/components/univrm_meta/) of the VRM model.
 ```
 .meta: RawVrmMeta
 ```
 
+update VRM model.
 ```
 .update(deltaTime: number)
 ```
 
+call when unload VRM model.
 ```
-// call when unload VRM model
 .dispose()
 ```
 
-## VRMBlendShapeProxy 
+### VRMBlendShapeProxy 
 
 
-set the blendshape animation weight
+set the blendshape animation weight.
 ```
 .setValue(name:string, weight:number)
 ```
 
-get the blendshape animation weight
+get the blendshape animation weight.
 ```
 .getValue(name:string) : number
 ```
 
-get the blendshape animation controller
+get the blendshape animation controller.
 ```
 .getController(name:string) : BlendShapeController
 ```
 
-get the blendshape animations
+get the blendshape animations.
 ```
 .expressions : AnimationClip[]
 ```
 
-## VRMLookAtHead
+### VRMLookAtHead
 
-get the head object of VRM. default is HumanBone.Head .
+get the head object of VRM. default is HumanBone.Head.
 ```
 .head : THREE.Object3D 
 ```
@@ -164,10 +163,12 @@ make VRM model look specified position.
 .lookAt(x:number, y:number, z:number)
 ```
 
-## VRMFirstPersonBone 
+### VRMFirstPerson
 
-here is required to use the firstperson. 
-firstPersonOnlyLayer and thirdPersonOnlyLayer is camera layer.
+setup firstperson function.
+* firstperson function is not setup by automatically.
+* if you use firstperson function you must call this method.
+* firstPersonOnlyLayer and thirdPersonOnlyLayer is camera layer.
 
 ```
 .setup(cameraLayer?: {
@@ -181,12 +182,12 @@ get the firstperson bone. default is Bone.head.
 .getFirstPersonBone() : THREE.Object3D
 ```
 
-get the firstperson bone offset. default value is [0,0.06,0].
+get the firstperson bone offset. default is [0,0.06,0].
 ```
 .getFirstPersonBoneOffset() : THREE.Vector3 
 ```
 
-get the firstperson bone position. default is head position.
+get the firstperson bone position. default is head position with offset.
 ```
 .getFirstBonePosition(v3: THREE.Vector3) : THREE.Vector3
 ```
@@ -201,11 +202,14 @@ get the Third Person Camera layer. default is 10.
 .getThirdPersonOnlyLayer(): number
 ```
 
-## VRMSpringBoneManager
+### VRMSpringBoneManager
 
 manually reset the spring bones.
 ```
-.reset() : void
+.reset(): void
 ```
 
-````
+get the spring bones.
+```
+.springBoneGroupList: VRMSpringBoneGroup[]
+```
