@@ -12,10 +12,6 @@ const _quatA = new THREE.Quaternion();
 export class VRMBuilderDebug extends VRMBuilder {
   private _option?: DebugOption;
 
-  constructor() {
-    super();
-  }
-
   public option(option: DebugOption): VRMBuilderDebug {
     this._option = option;
     return this;

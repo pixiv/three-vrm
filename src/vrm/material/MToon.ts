@@ -52,7 +52,7 @@ export class MToon extends THREE.ShaderMaterial {
 
   private _isOutline: boolean = false;
 
-  private readonly _colorSpaceGamma : boolean
+  private readonly _colorSpaceGamma: boolean;
 
   constructor(colorSpaceGamma: boolean, parameters?: MToonParameters) {
     super();

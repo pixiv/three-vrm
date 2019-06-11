@@ -20,8 +20,15 @@
   "lint-staged": {
     "src/**/*.{ts,tsx}": [
       "tslint --fix",
+      "prettier --write",
       "git add"
     ]
+  },
+  "prettier": {
+    "singleQuote": true,
+    "arrowParens": "always",
+    "trailingComma": "all",
+    "printWidth": 120
   },
   "dependencies": {
     "react": "^16.8.6",
