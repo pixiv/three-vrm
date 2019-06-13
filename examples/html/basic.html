@@ -50,7 +50,7 @@
 			// gltf and vrm
 			const loader = new THREE.VRMLoader();
 			loader.crossOrigin = 'anonymous';
-			loader.loadDefault(
+			loader.load(
 				'../react/models/shino.vrm',
 				( vrm ) => {
                   	console.log( vrm );

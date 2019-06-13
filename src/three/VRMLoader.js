@@ -22,7 +22,7 @@ THREE.VRMLoader = ( function () {
 
     crossOrigin: 'anonymous',
 
-    load: function ( url, onLoad, onProgress, onError ) {
+    loadGLTF: function ( url, onLoad, onProgress, onError ) {
 
       var scope = this;
 
@@ -91,8 +91,8 @@ THREE.VRMLoader = ( function () {
 
     },
 
-    loadDefault: function ( url, onLoad, onProgress, onError ) {
-        this.load(url, function(gltf) {
+    load: function ( url, onLoad, onProgress, onError ) {
+        this.loadGLTF(url, function(gltf) {
           THREE.VRM.from(gltf).then(onLoad).catch(onError)
         },onProgress, onError);
     },

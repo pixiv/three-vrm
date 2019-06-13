@@ -16,12 +16,11 @@ yarn add @pixiv/three-vrm
 
 ```javascript
 import * as THREE from 'three'
-import { VRMLoader } from "three-vrm/lib/three/jsm/VRMLoader";
-import { VRM } from '@pixiv/three-vrm'
+import { VRM, VRMLoader } from '@pixiv/three-vrm'
 
 const scene = new THREE.Scene();
 new Promise((resolve,reject) => {
-  new VRMLoader().loadDefault("/models/shino.vrm", resolve, () => {} , reject)
+  new VRMLoader().load("/models/shino.vrm", resolve, () => {} , reject)
 }).then( (vrm) => {
    scene.add(vrm.scene)
 })
@@ -32,7 +31,7 @@ new Promise((resolve,reject) => {
 <script src="js/three-vrm.js"></script>
 <script>
   const loader = new THREE.GLTFLoader();
-  loader.loadDefault('/models/shino.vrm', vrm => { 
+  loader.load('/models/shino.vrm', vrm => { 
         scene.add( vrm.scene );  
     },
   	progress => {},

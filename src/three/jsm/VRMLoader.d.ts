@@ -5,15 +5,15 @@ export class VRMLoader {
   public manager: THREE.LoadingManager;
   public dracoLoader: any;
   constructor(manager?: THREE.LoadingManager, parser?: any);
-  public load(
+  public loadGLTF(
     url: string,
     onLoad: (gltf: GLTF) => void,
     onProgress?: (event: ProgressEvent) => void,
     onError?: (event: ErrorEvent) => void,
   ): void;
-  public loadDefault(
+  public load(
     url: string,
-    onLoad: (vrm: VRM) => void,
+    onLoad: (gltf: VRM) => void,
     onProgress?: (event: ProgressEvent) => void,
     onError?: (event: ErrorEvent) => void,
   ): void;

@@ -5,7 +5,8 @@
  * @author Takahiro / https://github.com/takahirox
  * @author Don McCurdy / https://www.donmccurdy.com
  */
-import * as THREEX from 'three' // here namespace must not be THREE for Loading THREE.DDSLoader
+import * as THREEX from 'three'
+import { VRM } from '../../vrm/VRM'
 
 export const VRMLoader = ( function () {
 
@@ -23,7 +24,7 @@ export const VRMLoader = ( function () {
 
     crossOrigin: 'anonymous',
 
-    load: function ( url, onLoad, onProgress, onError ) {
+    loadGLTF: function ( url, onLoad, onProgress, onError ) {
 
       var scope = this;
 
@@ -92,9 +93,9 @@ export const VRMLoader = ( function () {
 
     },
 
-    loadDefault: function ( url, onLoad, onProgress, onError ) {
-      this.load(url, function(gltf) {
-        __three_vrm__.VRM.from(gltf).then(onLoad).catch(onError)
+    load: function ( url, onLoad, onProgress, onError ) {
+      this.loadGLTF(url, function(gltf) {
+        VRM.from(gltf).then(onLoad).catch(onError)
       },onProgress, onError);
     },
 
@@ -166,7 +167,7 @@ export const VRMLoader = ( function () {
 
       if ( json.asset === undefined || json.asset.version[ 0 ] < 2 ) {
 
-        if ( onError ) onError( new Error( 'THREEX.VRMLoader: Unsupported asset. glTF versions >=2.0 are supported. Use LegacyVRMLoader instead.' ) );
+        if ( onError ) onError( new Error( 'THREE.GLTFLoader: Unsupported asset. glTF versions >=2.0 are supported. Use LegacyVRMLoader instead.' ) );
         return;
 
       }
@@ -208,7 +209,7 @@ export const VRMLoader = ( function () {
 
               if ( extensionsRequired.indexOf( extensionName ) >= 0 ) {
 
-                console.warn( 'THREEX.VRMLoader: Unknown extension "' + extensionName + '".' );
+                console.warn( 'THREE.GLTFLoader: Unknown extension "' + extensionName + '".' );
 
               }
 
@@ -293,7 +294,7 @@ export const VRMLoader = ( function () {
 
     if ( ! THREE.DDSLoader ) {
 
-      throw new Error( 'THREEX.VRMLoader: Attempting to load .dds texture without importing THREEX.DDSLoader' );
+      throw new Error( 'THREE.GLTFLoader: Attempting to load .dds texture without importing THREEX.DDSLoader' );
 
     }
 
@@ -353,7 +354,7 @@ export const VRMLoader = ( function () {
         break;
 
       default:
-        throw new Error( 'THREEX.VRMLoader: Unexpected light type, "' + lightDef.type + '".' );
+        throw new Error( 'THREE.GLTFLoader: Unexpected light type, "' + lightDef.type + '".' );
 
     }
 
@@ -443,11 +444,11 @@ export const VRMLoader = ( function () {
 
     if ( this.header.magic !== BINARY_EXTENSION_HEADER_MAGIC ) {
 
-      throw new Error( 'THREEX.VRMLoader: Unsupported glTF-Binary header.' );
+      throw new Error( 'THREE.GLTFLoader: Unsupported glTF-Binary header.' );
 
     } else if ( this.header.version < 2.0 ) {
 
-      throw new Error( 'THREEX.VRMLoader: Legacy binary file detected. Use LegacyVRMLoader instead.' );
+      throw new Error( 'THREE.GLTFLoader: Legacy binary file detected. Use LegacyVRMLoader instead.' );
 
     }
 
@@ -482,7 +483,7 @@ export const VRMLoader = ( function () {
 
     if ( this.content === null ) {
 
-      throw new Error( 'THREEX.VRMLoader: JSON content not found.' );
+      throw new Error( 'THREE.GLTFLoader: JSON content not found.' );
 
     }
 
@@ -497,7 +498,7 @@ export const VRMLoader = ( function () {
 
     if ( ! dracoLoader ) {
 
-      throw new Error( 'THREEX.VRMLoader: No DRACOLoader instance provided.' );
+      throw new Error( 'THREE.GLTFLoader: No DRACOLoader instance provided.' );
 
     }
 
@@ -601,7 +602,7 @@ export const VRMLoader = ( function () {
 
     if ( transform.texCoord !== undefined ) {
 
-      console.warn( 'THREEX.VRMLoader: Custom UV sets in "' + this.name + '" extension not yet supported.' );
+      console.warn( 'THREE.GLTFLoader: Custom UV sets in "' + this.name + '" extension not yet supported.' );
 
     }
 
@@ -1323,7 +1324,7 @@ export const VRMLoader = ( function () {
         object.userData.gltfExtras = gltfDef.extras;
 
       } else {
-        console.warn( 'THREEX.VRMLoader: Ignoring primitive type .extras, ' + gltfDef.extras );
+        console.warn( 'THREE.GLTFLoader: Ignoring primitive type .extras, ' + gltfDef.extras );
       }
     }
 
@@ -1523,7 +1524,7 @@ export const VRMLoader = ( function () {
 
       } else {
 
-        console.warn( 'THREEX.VRMLoader: Invalid extras.targetNames length. Ignoring names.' );
+        console.warn( 'THREE.GLTFLoader: Invalid extras.targetNames length. Ignoring names.' );
 
       }
 
@@ -1845,7 +1846,7 @@ export const VRMLoader = ( function () {
 
     if ( bufferDef.type && bufferDef.type !== 'arraybuffer' ) {
 
-      throw new Error( 'THREEX.VRMLoader: ' + bufferDef.type + ' buffer type is not supported.' );
+      throw new Error( 'THREE.GLTFLoader: ' + bufferDef.type + ' buffer type is not supported.' );
 
     }
 
@@ -1862,7 +1863,7 @@ export const VRMLoader = ( function () {
 
       loader.load( resolveURL( bufferDef.uri, options.path ), resolve, undefined, function () {
 
-        reject( new Error( 'THREEX.VRMLoader: Failed to load buffer "' + bufferDef.uri + '".' ) );
+        reject( new Error( 'THREE.GLTFLoader: Failed to load buffer "' + bufferDef.uri + '".' ) );
 
       } );
 
@@ -2007,7 +2008,7 @@ export const VRMLoader = ( function () {
           if ( itemSize >= 2 ) bufferAttribute.setY( index, sparseValues[ i * itemSize + 1 ] );
           if ( itemSize >= 3 ) bufferAttribute.setZ( index, sparseValues[ i * itemSize + 2 ] );
           if ( itemSize >= 4 ) bufferAttribute.setW( index, sparseValues[ i * itemSize + 3 ] );
-          if ( itemSize >= 5 ) throw new Error( 'THREEX.VRMLoader: Unsupported itemSize in sparse BufferAttribute.' );
+          if ( itemSize >= 5 ) throw new Error( 'THREE.GLTFLoader: Unsupported itemSize in sparse BufferAttribute.' );
 
         }
 
@@ -2267,7 +2268,7 @@ export const VRMLoader = ( function () {
 
     if ( material.aoMap && geometry.attributes.uv2 === undefined && geometry.attributes.uv !== undefined ) {
 
-      console.log( 'THREEX.VRMLoader: Duplicating UVs to support aoMap.' );
+      console.log( 'THREE.GLTFLoader: Duplicating UVs to support aoMap.' );
       geometry.addAttribute( 'uv2', new THREEX.BufferAttribute( geometry.attributes.uv.array, 2 ) );
 
     }
@@ -2658,7 +2659,7 @@ export const VRMLoader = ( function () {
 
           } else {
 
-            throw new Error( 'THREEX.VRMLoader: Primitive mode unsupported: ' + primitive.mode );
+            throw new Error( 'THREE.GLTFLoader: Primitive mode unsupported: ' + primitive.mode );
 
           }
 
@@ -2717,7 +2718,7 @@ export const VRMLoader = ( function () {
 
     if ( ! params ) {
 
-      console.warn( 'THREEX.VRMLoader: Missing camera parameters.' );
+      console.warn( 'THREE.GLTFLoader: Missing camera parameters.' );
       return;
 
     }
@@ -3127,7 +3128,7 @@ export const VRMLoader = ( function () {
 
               } else {
 
-                console.warn( 'THREEX.VRMLoader: Joint "%s" could not be found.', skinEntry.joints[ j ] );
+                console.warn( 'THREE.GLTFLoader: Joint "%s" could not be found.', skinEntry.joints[ j ] );
 
               }
 

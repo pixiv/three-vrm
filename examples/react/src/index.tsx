@@ -2,8 +2,7 @@ import CameraControls from "camera-controls";
 import * as React from "react";
 import { render } from "react-dom";
 import * as THREE from "three";
-import { DebugOption, GLTF, VRM, VRMDebug} from "three-vrm";
-import { VRMLoader} from "three-vrm/lib/three/jsm/VRMLoader";
+import { DebugOption, GLTF, VRM, VRMDebug, VRMLoader } from "three-vrm";
 import * as Action from "./components";
 
 CameraControls.install( { THREE } );
@@ -133,7 +132,7 @@ class App extends React.Component<{}, { vrmId: string | null }> {
     }
     return new Promise<GLTF>((resolve, reject) => {
       const loader = new VRMLoader()
-      loader.load(path, resolve, () => {
+      loader.loadGLTF(path, resolve, () => {
       }, reject)
     }).then((gltf: GLTF) => {
       return this.debug ? VRMDebug.Builder.option(this.debugOption).build(gltf) : VRM.from(gltf)
