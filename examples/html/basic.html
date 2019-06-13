@@ -23,8 +23,8 @@
 	<body>
 		<script src="../../node_modules/three/build/three.min.js"></script>
 		<script src="../../node_modules/three/examples/js/controls/OrbitControls.js"></script>
-		<script src="../../lib/three/GLTFLoader.js"></script>
 		<script src="../../lib/index.js"></script>
+		<script src="../../lib/three/VRMLoader.js"></script>
 		<script>
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
@@ -48,20 +48,13 @@
 			scene.add( light );
 
 			// gltf and vrm
-			const loader = new THREE.GLTFLoader();
+			const loader = new THREE.VRMLoader();
 			loader.crossOrigin = 'anonymous';
-			loader.load(
+			loader.loadDefault(
 				'../react/models/shino.vrm',
-				( gltf ) => {
-
-					scene.add( gltf.scene );
-
-					THREE.VRM.from(gltf).then( ( vrm ) => {
-
-						console.log( vrm );
-
-					} );
-
+				( vrm ) => {
+                  	console.log( vrm );
+					scene.add( vrm.scene );
 				},
 				( progress ) => console.log( 'Loading model...', 100.0 * ( progress.loaded / progress.total ), '%' ),
 				( error ) => console.error( error )

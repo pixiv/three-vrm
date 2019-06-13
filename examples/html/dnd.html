@@ -23,7 +23,7 @@
 	<body>
 		<script src="../../node_modules/three/build/three.min.js"></script>
 		<script src="../../node_modules/three/examples/js/controls/OrbitControls.js"></script>
-		<script src="../../lib/three/GLTFLoader.js"></script>
+		<script src="../../lib/three/VRMLoader.js"></script>
 		<script src="../../lib/index.js"></script>
 		<script>
 			console.log(THREE)
@@ -50,7 +50,7 @@
 
 			// gltf and vrm
 			let currentVrm = undefined;
-			const loader = new THREE.GLTFLoader();
+			const loader = new THREE.VRMLoader();
 
 			function loadVRM( url ) {
 
