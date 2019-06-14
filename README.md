@@ -15,29 +15,57 @@ yarn add @pixiv/three-vrm
 ```
 
 ```javascript
-import * as THREE from 'three'
-import { VRM, VRMLoader } from '@pixiv/three-vrm'
+import * as THREE from 'three';
+import { VRM, VRMLoader } from '@pixiv/three-vrm';
 
 const scene = new THREE.Scene();
-new Promise((resolve,reject) => {
-  new VRMLoader().load("/models/shino.vrm", resolve, () => {} , reject)
-}).then( (vrm) => {
-   scene.add(vrm.scene)
-})
+
+new Promise( ( resolve, reject ) => {
+
+	new VRMLoader().load( "/models/shino.vrm", resolve, () => {}, reject );
+
+} ).then( ( vrm ) => {
+
+	scene.add( vrm.scene );
+
+} );
 ```
 
 ```html
 <script src="js/VRMLoader.js"></script>
 <script src="js/three-vrm.js"></script>
+
 <script>
-  const loader = new THREE.GLTFLoader();
-  loader.load('/models/shino.vrm', vrm => { 
-        scene.add( vrm.scene );  
-    },
-  	progress => {},
-  	error =>  {}
-  );
-</script>	
+const loader = new THREE.GLTFLoader();
+loader.load(
+
+	// URL of the VRM you want to load
+	'/models/shino.vrm',
+
+	// called when the resource is loaded
+	( vrm ) => {
+
+		scene.add( vrm.scene );
+
+  },
+
+	// called while loading is progressing
+	( progress ) => {
+
+		console.log( ( xhr.loaded / xhr.total * 100.0 ) + '% loaded' );
+
+	},
+
+	// called when loading has errors
+	( error ) => {
+
+		console.error( 'Something went wrong!' );
+		throw error;
+
+	}
+
+);
+</script>
 ```
 
 

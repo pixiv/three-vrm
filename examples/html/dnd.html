@@ -26,7 +26,6 @@
 		<script src="../../lib/three/VRMLoader.js"></script>
 		<script src="../../lib/index.js"></script>
 		<script>
-			console.log(THREE)
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
 			renderer.setSize( window.innerWidth, window.innerHeight );
@@ -56,7 +55,9 @@
 
 				loader.crossOrigin = 'anonymous';
 				loader.load(
+
 					url,
+
 					( gltf ) => {
 
 						THREE.VRM.from( gltf ).then( ( vrm ) => {
@@ -72,8 +73,11 @@
 						} );
 
 					},
+
 					( progress ) => console.log( 'Loading model...', 100.0 * ( progress.loaded / progress.total ), '%' ),
+
 					( error ) => console.error( error )
+
 				);
 
 			}

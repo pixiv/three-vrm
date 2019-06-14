@@ -51,14 +51,21 @@
 			const loader = new THREE.VRMLoader();
 			loader.crossOrigin = 'anonymous';
 			loader.load(
+
 				'../react/models/shino.vrm',
+
 				( vrm ) => {
+
 					scene.add( vrm.scene );
 					currentVrm = vrm;
 					console.log( vrm );
+
 				},
+
 				( progress ) => console.log( 'Loading model...', 100.0 * ( progress.loaded / progress.total ), '%' ),
+
 				( error ) => console.error( error )
+
 			);
 
 			// helpers

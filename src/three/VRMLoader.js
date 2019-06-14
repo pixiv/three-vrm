@@ -8,7 +8,7 @@
 
 THREE.VRMLoader = ( function () {
 
-  function VRMLoader( manager , parser ) {
+  function VRMLoader( manager, parser ) {
 
     this.parser = parser;
     this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
@@ -92,9 +92,13 @@ THREE.VRMLoader = ( function () {
     },
 
     load: function ( url, onLoad, onProgress, onError ) {
-        this.loadGLTF(url, function(gltf) {
-          THREE.VRM.from(gltf).then(onLoad).catch(onError)
-        },onProgress, onError);
+
+      this.loadGLTF( url, function ( gltf ) {
+
+        THREE.VRM.from( gltf ).then( onLoad ).catch( onError );
+
+      }, onProgress, onError );
+
     },
 
     setCrossOrigin: function ( value ) {
@@ -1322,8 +1326,11 @@ THREE.VRMLoader = ( function () {
         object.userData.gltfExtras = gltfDef.extras;
 
       } else {
+
         console.warn( 'THREE.VRMLoader: Ignoring primitive type .extras, ' + gltfDef.extras );
+
       }
+
     }
 
   }
@@ -2943,6 +2950,7 @@ THREE.VRMLoader = ( function () {
     return ( function () {
 
       if ( nodeDef.mesh !== undefined ) {
+
         return parser.getDependency( 'mesh', nodeDef.mesh ).then( function ( mesh ) {
 
           var node;
@@ -2999,10 +3007,11 @@ THREE.VRMLoader = ( function () {
         && nodeDef.extensions[ EXTENSIONS.KHR_LIGHTS_PUNCTUAL ]
         && nodeDef.extensions[ EXTENSIONS.KHR_LIGHTS_PUNCTUAL ].light !== undefined ) {
 
-        return parser.getDependency('light', nodeDef.extensions[EXTENSIONS.KHR_LIGHTS_PUNCTUAL].light);
+        return parser.getDependency( 'light', nodeDef.extensions[ EXTENSIONS.KHR_LIGHTS_PUNCTUAL ].light );
 
         // .isBone isn't in glTF spec. See .markDefs
-      }else  if ( nodeDef.isBone === true ) {
+
+      } else if ( nodeDef.isBone === true ) {
 
         return Promise.resolve( new THREE.Bone() );
 
