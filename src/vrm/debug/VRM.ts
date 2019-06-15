@@ -4,7 +4,7 @@ import { getWorldQuaternionLite } from '../utils/math';
 import { VRM, VRMBuilder } from '../VRM';
 import { VRMPartsBuilder } from '../VRMPartsBuilder';
 import { DebugOption } from './DebugOption';
-import { VRMPartsBuilderDebugProxy } from './VRMPastsBuilder';
+import { VRMPartsBuilderDebugProxy } from './VRMPartsBuilder';
 
 const _v3B = new THREE.Vector3();
 const _quatA = new THREE.Quaternion();

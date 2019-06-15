@@ -1,5 +1,5 @@
 export * from './DebugOption';
-export * from './VRMPastsBuilder';
+export * from './VRMPartsBuilder';
 export * from './VRM';
 export * from './VRMSpringBoneManager';
 export * from './VRMSpringBone';
