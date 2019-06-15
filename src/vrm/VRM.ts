@@ -31,21 +31,71 @@ export class VRMBuilder {
   }
 }
 
+/**
+ * Represents a VRM model.
+ * It has so many feature to deal with your VRM models!
+ * @param gltf A parsed result of GLTF taken from {@link VRMLoader#loadGLTF}
+ * @param _builder A {@link VRMPartsBuilder}. Usually you don't have to care about it
+ */
 export class VRM {
+  /**
+   * Create a {@link VRM} using Builder pattern.
+   * See the reference of {@link VRMBuilder} for further use.
+   */
   public static get Builder(): VRMBuilder {
     return new VRMBuilder();
   }
 
+  /**
+   * Create a {@link VRM} from A parsed result of GLTF taken from {@link VRMLoader#loadGLTF}.
+   * It's probably a thing what you want to get started with VRMs.
+   */
   public static from(gltf: GLTF): Promise<VRM> {
     return new VRMBuilder().build(gltf);
   }
 
+  /**
+   * Contains informations about rest pose of the VRM.
+   * You might want to refer this when you want to reset its pose, along with {@link VRM#setPose}.
+   */
   public readonly restPose: VRMPose = {};
+
+  /**
+   * Contains {@link VRMHumanBones} of the VRM.
+   * You can move or rotate these bones as a `THREE.Object3D`.
+   * Each bones defined in VRM spec are either required or optional.
+   * See also: {@link VRM#setPose}
+   * @TODO Add a link to VRM spec
+   */
   public readonly humanBones: VRMHumanBones;
+
+  /**
+   * Contains {@link VRMBlendShapeProxy} of the VRM.
+   * You might want to control these facial expressions via {@link VRMBlendShapeProxy#setValue}.
+   */
   public readonly blendShapeProxy: VRMBlendShapeProxy;
+
+  /**
+   * Contains {@link VRMFirstPerson} of the VRM.
+   * You can use various feature of the firstPerson field.
+   */
   public readonly firstPerson: VRMFirstPerson | null;
+
+  /**
+   * Contains {@link VRMLookAtHead} of the VRM.
+   * You might want to use {@link VRMLookAtHead#setTarget} to control the eye direction of your VRMs.
+   */
   public readonly lookAt: VRMLookAtHead;
+
+  /**
+   * Contains meta fields of the VRM.
+   * You might want to refer these license fields before use your VRMs.
+   */
   public readonly meta: RawVrmMeta;
+
+  /**
+   * Contains AnimationMixer associated with the {@link VRM#blendShapeProxy}.
+   */
   public readonly animationMixer: THREE.AnimationMixer;
 
   public readonly springBoneManager: VRMSpringBoneManager;
