@@ -26,11 +26,13 @@ new Promise((resolve,reject) => {
 })
 ```
 
+Copy `node_modules/three-vrm/lib/index.min.js` to your public directory.  
+ex) cp `node_modules/three-vrm/lib/index.min.js` `static/js/three-vrm.min.js`
+
 ```html
-<script src="js/VRMLoader.js"></script>
-<script src="js/three-vrm.js"></script>
+<script src="/static/js/three-vrm.min.js"></script>
 <script>
-  const loader = new THREE.GLTFLoader();
+  const loader = new THREE.VRMLoader();
   loader.load('/models/shino.vrm', vrm => { 
         scene.add( vrm.scene );  
     },

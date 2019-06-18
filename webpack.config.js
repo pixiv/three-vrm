@@ -77,6 +77,11 @@ const base = (mode) => {
       extensions: [".js", ".ts"],
       modules: ["node_modules"]
     },
+    plugins: [
+      new CopyWebpackPlugin([
+        { from: "src/three/jsm/VRMLoader.d.ts" , to: "three/jsm"}
+      ])
+    ]
   };
 };
 
@@ -88,7 +93,7 @@ module.exports = (env, argv) => {
   return [
     base(argv.mode),
     withOutLoader(argv.mode),
-    webpackMerge(withOutLoader(argv.mode), {
+    webpackMerge(base(argv.mode), {
       entry: path.resolve(__dirname, "src", "assign.ts"),
       output: {
         filename: isProd ? "index.min.js" : `index.js`,
@@ -96,14 +101,8 @@ module.exports = (env, argv) => {
         libraryTarget: "var"
       },
       externals: {
-        three: "THREE"
+        three: "THREE",
       },
-      plugins: [
-        new CopyWebpackPlugin([
-          { from: "src/three/VRMLoader.js" , to: "three"},
-          { from: "src/three/jsm/VRMLoader.d.ts" , to: "three/jsm"}
-        ])
-      ]
     })
   ];
 }
