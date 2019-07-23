@@ -98,9 +98,20 @@ export class VRM {
    */
   public readonly animationMixer: THREE.AnimationMixer;
 
+  /**
+   * A {@link VRMSpringBoneManager} manipulates all spring bones attached on the VRM.
+   * Usually you don't have to touch this property.
+   */
   public readonly springBoneManager: VRMSpringBoneManager;
+
+  /**
+   * A map of nodes indexed by original gltf node array.
+   */
   protected readonly nodesMap: GLTFNode[];
 
+  /**
+   * A parsed result of GLTF taken from {@link VRMLoader#loadGLTF}.
+   */
   private readonly _gltf: GLTF;
 
   private readonly _partsBuilder: VRMPartsBuilder;
