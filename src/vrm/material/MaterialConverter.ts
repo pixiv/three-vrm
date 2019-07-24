@@ -18,6 +18,7 @@ export class MaterialConverter {
 
   public async convertGLTFMaterials(gltf: GLTF): Promise<GLTF> {
     const meshesMap: GLTFMesh[] = await gltf.parser.getDependencies('mesh');
+    const materialList: { [vrmMaterialIndex: number]: { surface: THREE.Material; outline?: THREE.Material } } = {};
 
     await Promise.all(
       meshesMap.map(async (mesh, meshIndex) => {
@@ -35,10 +36,16 @@ export class MaterialConverter {
               );
             }
 
-            // create vrm materials
-            const materialIndex = gltf.parser.json.meshes![meshIndex].primitives[primitiveIndex].material!;
-            const props = (gltf.parser.json.extensions!.VRM as RawVrm).materialProperties![materialIndex];
-            const vrmMaterials = await this.createVRMMaterials(primitive.material[0], props, gltf);
+            // create / push to cache (or pop from cache) vrm materials
+            const vrmMaterialIndex = gltf.parser.json.meshes![meshIndex].primitives[primitiveIndex].material!;
+            const props = (gltf.parser.json.extensions!.VRM as RawVrm).materialProperties![vrmMaterialIndex];
+            let vrmMaterials: { surface: THREE.Material; outline?: THREE.Material };
+            if (materialList[vrmMaterialIndex]) {
+              vrmMaterials = materialList[vrmMaterialIndex];
+            } else {
+              vrmMaterials = await this.createVRMMaterials(primitive.material[0], props, gltf);
+              materialList[vrmMaterialIndex] = vrmMaterials;
+            }
 
             // surface
             primitive.material[0] = vrmMaterials.surface;

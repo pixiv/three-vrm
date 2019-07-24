@@ -144,8 +144,6 @@ export class VRMPartsBuilder {
     animationMixer: THREE.AnimationMixer,
     gltf: GLTF,
   ): Promise<VRMBlendShapeProxy | null> {
-    const materials = await gltf.parser.getDependencies('material');
-
     const blendShapeGroups: Raw.RawVrmBlendShapeGroup[] | undefined =
       gltf.parser.json.extensions &&
       gltf.parser.json.extensions.VRM &&
@@ -224,15 +222,28 @@ export class VRMPartsBuilder {
             return;
           }
 
-          const material = materials.find((m) => m.name === materialValue.materialName);
-          if (!material) {
-            return;
-          }
+          const materials: THREE.Material[] = [];
+          gltf.scene.traverse((object) => {
+            if ((object as any).material) {
+              const material: THREE.Material[] | THREE.Material = (object as any).material;
+              if (Array.isArray(material)) {
+                materials.push(
+                  ...material.filter(
+                    (mtl) => mtl.name === materialValue.materialName! && materials.indexOf(mtl) === -1,
+                  ),
+                );
+              } else if (material.name === materialValue.materialName && materials.indexOf(material) === -1) {
+                materials.push(material);
+              }
+            }
+          });
 
-          controller.addMaterialValue({
-            material,
-            propertyName: this.renameMaterialProperty(materialValue.propertyName),
-            targetValue: materialValue.targetValue,
+          materials.forEach((material) => {
+            controller.addMaterialValue({
+              material,
+              propertyName: this.renameMaterialProperty(materialValue.propertyName!),
+              targetValue: materialValue.targetValue!,
+            });
           });
         });
       }
