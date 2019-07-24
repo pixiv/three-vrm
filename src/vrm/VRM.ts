@@ -101,7 +101,7 @@ export class VRM {
 
   /**
    * A {@link VRMSpringBoneManager} manipulates all spring bones attached on the VRM.
-   * Usually you don't have to touch this property.
+   * Usually you don't have to care about this property.
    */
   public readonly springBoneManager: VRMSpringBoneManager;
 
