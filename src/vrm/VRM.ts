@@ -5,7 +5,7 @@ import { VRMHumanBones } from './humanoid';
 import { VRMLookAtHead } from './lookat';
 import { MaterialConverter } from './material';
 import { VRMSpringBoneManager } from './springbone';
-import { GLTF, GLTFNode, RawVrmMeta, VRMPose, RawVector4, RawVector3 } from './types';
+import { GLTF, GLTFNode, RawVector3, RawVector4, RawVrmMeta, VRMPose } from './types';
 import { deepDispose } from './utils/disposer';
 import { VRMPartsBuilder } from './VRMPartsBuilder';
 
