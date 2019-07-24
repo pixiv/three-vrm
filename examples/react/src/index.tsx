@@ -1,8 +1,9 @@
 import CameraControls from "camera-controls";
+import 'imports-loader?THREE=three!three/examples/js/loaders/GLTFLoader.js';
 import * as React from "react";
 import { render } from "react-dom";
 import * as THREE from "three";
-import { DebugOption, GLTF, VRM, VRMDebug, VRMLoader } from "three-vrm";
+import { DebugOption, GLTF, VRM, VRMDebug } from "../../..";
 import * as Action from "./components";
 
 CameraControls.install( { THREE } );
@@ -45,12 +46,12 @@ class App extends React.Component<{}, { vrmId: string | null }> {
     this.renderer.setClearColor(0xFFFFFF,1.0);
     this.cameraControls = new CameraControls(this.camera, this.renderer.domElement)
 
-    this.directionalLight.position.set(0, 20, 0);
+    this.directionalLight.position.set(20, 20, -20);
     this.scene.add(new THREE.AxesHelper(3));
     this.scene.add(new THREE.GridHelper(10, 10))
     this.scene.add(this.directionalLight);
 
-    this.loadVRM("/models/shino.vrm").then( (vrm: VRM) => {
+    this.loadVRM("../resources/models/shino.vrm").then( (vrm: VRM) => {
       this.clock.start()
       this.animate()
     }).catch(console.error)
@@ -128,11 +129,11 @@ class App extends React.Component<{}, { vrmId: string | null }> {
       this.vrm = null
       this.vrmPath = null
       vrm.dispose()
-      this.scene.remove(vrm.scene)
+      this.scene.remove(vrm.scene!)
     }
     return new Promise<GLTF>((resolve, reject) => {
-      const loader = new VRMLoader()
-      loader.loadGLTF(path, resolve, () => {
+      const loader = new THREE.GLTFLoader()
+      loader.load(path, resolve, () => {
       }, reject)
     }).then((gltf: GLTF) => {
       return this.debug ? VRMDebug.Builder.option(this.debugOption).build(gltf) : VRM.from(gltf)
@@ -147,16 +148,16 @@ class App extends React.Component<{}, { vrmId: string | null }> {
       })
       console.log(this.vrm)
 
-      this.scene.add(this.vrm.scene)
-      const hip = this.vrm.humanBones.hips.position
+      this.scene.add(this.vrm.scene!)
+      const hip = this.vrm.humanBones!.hips.position
       this.cameraControls!.enabled = true
       this.cameraControls!.rotateTo(180 * THREE.Math.DEG2RAD, 90 * THREE.Math.DEG2RAD, false);
       this.cameraControls!.moveTo(hip.x, hip.y, hip.z, false);
       this.cameraControls!.dollyTo(1.5, false);
-      this.vrm.lookAt.setTarget(this.camera)
+      this.vrm.lookAt!.setTarget(this.camera)
 
       this.setState({
-        vrmId: this.vrm.scene.uuid
+        vrmId: this.vrm.scene!.uuid
       })
       return vrm
     })
