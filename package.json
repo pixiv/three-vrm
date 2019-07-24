@@ -16,13 +16,13 @@
   },
   "scripts": {
     "version": "yarn all",
-    "all": "yarn clean && yarn build",
+    "all": "yarn clean && yarn build && yarn docs",
     "clean": "rimraf dist types",
     "build": "yarn build-dev && yarn build-prod && yarn build-types",
     "build-dev": "webpack --mode development",
     "build-prod": "webpack --mode production",
     "build-types": "tsc --emitDeclarationOnly",
-    "docs": "node docs.js"
+    "docs": "typedoc --out docs"
   },
   "husky": {
     "hooks": {
@@ -70,12 +70,13 @@
     "tslint-config-prettier": "^1.17.0",
     "tslint-loader": "^3.5.4",
     "tslint-plugin-prettier": "^2.0.1",
+    "typedoc": "^0.14.2",
     "typescript": "^3.1.6",
     "ua-parser-js": "^0.7.19",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
-    "webpack-merge": "^4.2.1",
     "webpack-dev-server": "^3.2.1",
+    "webpack-merge": "^4.2.1",
     "worker-loader": "^2.0.0"
   },
   "peerDependencies": {
