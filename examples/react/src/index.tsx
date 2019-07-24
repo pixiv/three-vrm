@@ -51,7 +51,7 @@ class App extends React.Component<{}, { vrmId: string | null }> {
     this.scene.add(new THREE.GridHelper(10, 10))
     this.scene.add(this.directionalLight);
 
-    this.loadVRM("../resources/models/shino.vrm").then( (vrm: VRM) => {
+    this.loadVRM("../models/shino.vrm").then( (vrm: VRM) => {
       this.clock.start()
       this.animate()
     }).catch(console.error)
