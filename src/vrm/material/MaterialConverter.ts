@@ -51,6 +51,9 @@ export class MaterialConverter {
               });
             }
 
+            // render order
+            primitive.renderOrder = props.renderQueue || 2000;
+
             // outline ("2 pass shading using groups" trick here)
             if (vrmMaterials.outline) {
               primitive.material[1] = vrmMaterials.outline;
