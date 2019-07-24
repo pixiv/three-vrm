@@ -5,7 +5,7 @@ import { VRMHumanBones } from './humanoid';
 import { VRMLookAtHead } from './lookat';
 import { MaterialConverter } from './material';
 import { VRMSpringBoneManager } from './springbone';
-import { GLTF, GLTFNode, RawVrmMeta, VRMPose } from './types';
+import { GLTF, GLTFNode, RawVrmMeta, VRMPose, RawVector4, RawVector3 } from './types';
 import { deepDispose } from './utils/disposer';
 import { VRMPartsBuilder } from './VRMPartsBuilder';
 
@@ -34,7 +34,7 @@ export class VRMBuilder {
 /**
  * Represents a VRM model.
  * It has so many feature to deal with your VRM models!
- * @param gltf A parsed result of GLTF taken from {@link VRMLoader#loadGLTF}
+ * @param gltf A parsed result of GLTF taken from GLTFLoader
  * @param _builder A {@link VRMPartsBuilder}. Usually you don't have to care about it
  */
 export class VRM {
@@ -47,8 +47,9 @@ export class VRM {
   }
 
   /**
-   * Create a {@link VRM} from A parsed result of GLTF taken from {@link VRMLoader#loadGLTF}.
+   * Create a {@link VRM} from A parsed result of GLTF taken from GLTFLoader.
    * It's probably a thing what you want to get started with VRMs.
+   * @param gltf A parsed GLTF object taken from GLTFLoader
    */
   public static from(gltf: GLTF): Promise<VRM> {
     return new VRMBuilder().build(gltf);
@@ -56,7 +57,7 @@ export class VRM {
 
   /**
    * Contains informations about rest pose of the VRM.
-   * You might want to refer this when you want to reset its pose, along with {@link VRM#setPose}.
+   * You might want to refer this when you want to reset its pose, along with {@link VRM.setPose}.
    */
   public readonly restPose: VRMPose = {};
 
@@ -64,14 +65,14 @@ export class VRM {
    * Contains {@link VRMHumanBones} of the VRM.
    * You can move or rotate these bones as a `THREE.Object3D`.
    * Each bones defined in VRM spec are either required or optional.
-   * See also: {@link VRM#setPose}
+   * See also: {@link VRM.setPose}
    * @TODO Add a link to VRM spec
    */
   public readonly humanBones: VRMHumanBones;
 
   /**
    * Contains {@link VRMBlendShapeProxy} of the VRM.
-   * You might want to control these facial expressions via {@link VRMBlendShapeProxy#setValue}.
+   * You might want to control these facial expressions via {@link VRMBlendShapeProxy.setValue}.
    */
   public readonly blendShapeProxy: VRMBlendShapeProxy;
 
@@ -83,7 +84,7 @@ export class VRM {
 
   /**
    * Contains {@link VRMLookAtHead} of the VRM.
-   * You might want to use {@link VRMLookAtHead#setTarget} to control the eye direction of your VRMs.
+   * You might want to use {@link VRMLookAtHead.setTarget} to control the eye direction of your VRMs.
    */
   public readonly lookAt: VRMLookAtHead;
 
@@ -94,7 +95,7 @@ export class VRM {
   public readonly meta: RawVrmMeta;
 
   /**
-   * Contains AnimationMixer associated with the {@link VRM#blendShapeProxy}.
+   * Contains AnimationMixer associated with the {@link VRM.blendShapeProxy}.
    */
   public readonly animationMixer: THREE.AnimationMixer;
 
@@ -110,7 +111,7 @@ export class VRM {
   protected readonly nodesMap: GLTFNode[];
 
   /**
-   * A parsed result of GLTF taken from {@link VRMLoader#loadGLTF}.
+   * A parsed result of GLTF taken from GLTFLoader.
    */
   private readonly _gltf: GLTF;
 
@@ -166,12 +167,16 @@ export class VRM {
     Object.keys(this.humanBones).forEach((vrmBoneName) => {
       const bone = this.humanBones[vrmBoneName]!;
       this.restPose[vrmBoneName] = {
-        position: bone.position.toArray(),
-        rotation: bone.quaternion.toArray(),
+        position: bone.position.toArray() as RawVector3,
+        rotation: bone.quaternion.toArray() as RawVector4,
       };
     });
   }
 
+  /**
+   * Let the VRM do a given pose.
+   * @param poseObject {@link VRMPose} represents a pose
+   */
   public setPose(poseObject: VRMPose): void {
     // VRMに定められたboneが足りない場合、正しくposeが取れない可能性がある
 
@@ -205,10 +210,21 @@ export class VRM {
     });
   }
 
+  /**
+   * Contains the scene of the entire VRM.
+   * You might want to do `scene.add( vrm.scene )`.
+   * It is an equivalent of `gltf.scene`.
+   */
   get scene() {
     return this._gltf.scene;
   }
 
+  /**
+   * **You need to call this on your update loop.**
+   *
+   * This function updates every VRM components.
+   * @param delta deltaTime
+   */
   public update(delta: number): void {
     this.lookAt.update();
     this.animationMixer.update(delta);
@@ -216,6 +232,10 @@ export class VRM {
     this.springBoneManager.lateUpdate(delta);
   }
 
+  /**
+   * Dispose the VRM.
+   * You might want to call this when you want to unload the VRM model.
+   */
   public dispose(): void {
     const scene = this.scene;
     while (scene.children.length > 0) {
