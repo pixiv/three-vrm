@@ -253,7 +253,7 @@ function reduceBones(root: THREE.Object3D): void {
     geometry.removeAttribute('skinIndex');
     geometry.addAttribute('skinIndex', new THREE.BufferAttribute(array, 4, false));
     mesh.bind(new THREE.Skeleton(bones, boneInverses), new THREE.Matrix4());
-    //                                                ^^^^^^^^^^^^^^^^^^^ transform of meshes should be ignored
+    //                                                 ^^^^^^^^^^^^^^^^^^^ transform of meshes should be ignored
     // See: https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#skins
   });
 }
