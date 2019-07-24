@@ -54,6 +54,7 @@ export class MToon extends THREE.ShaderMaterial {
 
   private readonly _colorSpaceGamma: boolean;
 
+  // TODO: ここにcolorSpaceGammaあるのダサい
   constructor(colorSpaceGamma: boolean, parameters?: MToonParameters) {
     super();
 

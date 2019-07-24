@@ -5,7 +5,7 @@ import { VRMHumanBones } from './humanoid';
 import { VRMLookAtHead } from './lookat';
 import { MaterialConverter } from './material';
 import { VRMSpringBoneManager } from './springbone';
-import { GLTF, GLTFNode, RawVrmMeta, VRMPose } from './types';
+import { GLTF, RawVrmMeta, VRMPose } from './types';
 import { deepDispose } from './utils/disposer';
 import { VRMPartsBuilder } from './VRMPartsBuilder';
 
@@ -24,10 +24,11 @@ export class VRMBuilder {
     return this;
   }
 
-  public build(gltf: GLTF): Promise<VRM> {
-    return this._materialConverter
-      .convertGLTFMaterials(gltf)
-      .then((converted: GLTF) => new VRM(converted, this._partsBuilder));
+  public async build(gltf: GLTF): Promise<VRM> {
+    const vrm = new VRM(this._partsBuilder);
+    const convertedGltf = await this._materialConverter.convertGLTFMaterials(gltf);
+    await vrm.loadGLTF(convertedGltf);
+    return vrm;
   }
 }
 
@@ -40,36 +41,67 @@ export class VRM {
     return new VRMBuilder().build(gltf);
   }
 
-  public readonly restPose: VRMPose = {};
-  public readonly humanBones: VRMHumanBones;
-  public readonly blendShapeProxy: VRMBlendShapeProxy;
-  public readonly firstPerson: VRMFirstPerson | null;
-  public readonly lookAt: VRMLookAtHead;
-  public readonly meta: RawVrmMeta;
-  public readonly animationMixer: THREE.AnimationMixer;
+  private _restPose?: VRMPose | null;
+  public get restPose() {
+    return this._restPose;
+  }
 
-  public readonly springBoneManager: VRMSpringBoneManager;
-  protected readonly nodesMap: GLTFNode[];
+  private _humanBones?: VRMHumanBones | null;
+  public get humanBones() {
+    return this._humanBones;
+  }
 
-  private readonly _gltf: GLTF;
+  private _blendShapeProxy?: VRMBlendShapeProxy | null;
+  public get blendShapeProxy() {
+    return this._blendShapeProxy;
+  }
+
+  private _firstPerson?: VRMFirstPerson | null;
+  public get firstPerson() {
+    return this._firstPerson;
+  }
+
+  private _lookAt?: VRMLookAtHead | null;
+  public get lookAt() {
+    return this._lookAt;
+  }
+
+  private _meta?: RawVrmMeta;
+  public get meta() {
+    return this._meta;
+  }
+
+  private _animationMixer?: THREE.AnimationMixer;
+  public get animationMixer() {
+    return this._animationMixer;
+  }
+
+  private _springBoneManager?: VRMSpringBoneManager;
+  public get springBoneManager() {
+    return this._springBoneManager;
+  }
+
+  private _gltf?: GLTF;
 
   private readonly _partsBuilder: VRMPartsBuilder;
 
-  constructor(gltf: GLTF, _builder?: VRMPartsBuilder) {
+  constructor(_builder?: VRMPartsBuilder) {
     if (_builder) {
       this._partsBuilder = _builder;
     } else {
       this._partsBuilder = new VRMPartsBuilder();
     }
+  }
 
+  public async loadGLTF(gltf: GLTF): Promise<void> {
     this._gltf = gltf;
 
     if (gltf.parser.json.extensions === undefined || gltf.parser.json.extensions.VRM === undefined) {
-      throw new Error('not a VRM file');
+      throw new Error('Could not find VRM extension on the GLTF');
     }
     const vrmExt = gltf.parser.json.extensions.VRM;
 
-    this.meta = vrmExt.meta;
+    this._meta = vrmExt.meta;
 
     gltf.scene.updateMatrixWorld(false);
 
@@ -83,40 +115,53 @@ export class VRM {
 
     reduceBones(gltf.scene);
 
-    this.nodesMap = this._partsBuilder.getNodesMap(gltf);
-    const humanBones = this._partsBuilder.loadHumanoid(gltf, this.nodesMap);
-    if (!humanBones) {
-      throw new Error('no humans bones found. confirm your vrm file');
-    }
-    this.humanBones = humanBones;
+    const humanBones = await this._partsBuilder.loadHumanoid(gltf);
+    this._humanBones = humanBones;
 
-    this.firstPerson = this._partsBuilder.loadFirstPerson(vrmExt.firstPerson, this.nodesMap, this.humanBones, gltf);
+    this._firstPerson = this.humanBones
+      ? await this._partsBuilder.loadFirstPerson(vrmExt.firstPerson, this.humanBones, gltf)
+      : null;
 
-    this.animationMixer = new THREE.AnimationMixer(gltf.scene);
-    const blendShapeProxy = this._partsBuilder.loadBlendShapeMaster(this.animationMixer, gltf);
+    this._animationMixer = new THREE.AnimationMixer(gltf.scene);
+    const blendShapeProxy = await this._partsBuilder.loadBlendShapeMaster(this.animationMixer!, gltf);
     if (!blendShapeProxy) {
       throw new Error('failed to create blendShape. confirm your vrm file');
     }
-    this.blendShapeProxy = blendShapeProxy;
-    this.springBoneManager = this._partsBuilder.loadSecondary(gltf, this.nodesMap);
-    this.lookAt = this._partsBuilder.loadLookAt(vrmExt.firstPerson, this.blendShapeProxy, this.humanBones);
+    this._blendShapeProxy = blendShapeProxy;
 
-    // 破壊的な変更後もrestposeにリセットできるように初期状態ポーズを保存。
-    Object.keys(this.humanBones).forEach((vrmBoneName) => {
-      const bone = this.humanBones[vrmBoneName]!;
-      this.restPose[vrmBoneName] = {
-        position: bone.position.toArray(),
-        rotation: bone.quaternion.toArray(),
-      };
-    });
+    this._springBoneManager = await this._partsBuilder.loadSecondary(gltf);
+
+    this._lookAt =
+      this.blendShapeProxy && this.humanBones
+        ? this._partsBuilder.loadLookAt(vrmExt.firstPerson, this.blendShapeProxy, this.humanBones)
+        : null;
+
+    // Set current initial pose to restPose field
+    this._restPose = this.humanBones
+      ? Object.keys(this.humanBones).reduce(
+          (restPose, vrmBoneName) => {
+            const bone = this.humanBones![vrmBoneName]!;
+            restPose[vrmBoneName] = {
+              position: bone.position.toArray(),
+              rotation: bone.quaternion.toArray(),
+            };
+            return restPose;
+          },
+          {} as VRMPose,
+        )
+      : null;
   }
 
   public setPose(poseObject: VRMPose): void {
     // VRMに定められたboneが足りない場合、正しくposeが取れない可能性がある
+    if (!this.humanBones) {
+      console.warn('This VRM cannot be posed since humanBones are not properly set');
+      return;
+    }
 
     Object.keys(poseObject).forEach((boneName) => {
       const state = poseObject[boneName]!;
-      const targetBone = this.humanBones[boneName];
+      const targetBone = this.humanBones![boneName];
 
       // VRM標準ボーンを満たしていないVRMファイルが世の中には存在する
       // （少し古いuniVRMは、必須なのにhipsを出力していなさそう）
@@ -125,7 +170,7 @@ export class VRM {
         return;
       }
 
-      const restState = this.restPose[boneName];
+      const restState = this.restPose![boneName];
       if (!restState) {
         return;
       }
@@ -145,22 +190,35 @@ export class VRM {
   }
 
   get scene() {
-    return this._gltf.scene;
+    return this._gltf && this._gltf.scene;
   }
 
   public update(delta: number): void {
-    this.lookAt.update();
-    this.animationMixer.update(delta);
-    this.blendShapeProxy.update();
-    this.springBoneManager.lateUpdate(delta);
+    if (this.lookAt) {
+      this.lookAt.update();
+    }
+
+    if (this.animationMixer) {
+      this.animationMixer.update(delta);
+    }
+
+    if (this.blendShapeProxy) {
+      this.blendShapeProxy.update();
+    }
+
+    if (this.springBoneManager) {
+      this.springBoneManager.lateUpdate(delta);
+    }
   }
 
   public dispose(): void {
     const scene = this.scene;
-    while (scene.children.length > 0) {
-      const object = scene.children[scene.children.length - 1];
-      deepDispose(object);
-      scene.remove(object);
+    if (scene) {
+      while (scene.children.length > 0) {
+        const object = scene.children[scene.children.length - 1];
+        deepDispose(object);
+        scene.remove(object);
+      }
     }
   }
 }

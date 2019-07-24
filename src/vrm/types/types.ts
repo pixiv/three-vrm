@@ -1,6 +1,6 @@
-import * as THREE from 'three'
-import * as GLTFJSON from './GLTF'
-import * as VRMExtension from './VRM'
+import * as THREE from 'three';
+import * as GLTFJSON from './GLTF';
+import * as VRMExtension from './VRM';
 
 export interface GLTF {
   scene: THREE.Scene;
@@ -10,6 +10,8 @@ export interface GLTF {
   asset: GLTFAsset;
   parser: {
     json: GLTFJSON.RawGltf;
+    getDependency: (type: string, index: number) => Promise<any>;
+    getDependencies: (type: string) => Promise<any[]>;
     [key: string]: any;
   };
   userData: any;
@@ -26,13 +28,14 @@ interface GLTFAsset {
 
 export type GLTFNode = THREE.Object3D | THREE.Mesh | THREE.SkinnedMesh | THREE.Bone;
 export type GLTFPrimitive = THREE.Mesh | THREE.SkinnedMesh;
+export type GLTFMesh = THREE.Group | THREE.Mesh | THREE.SkinnedMesh;
 
 export interface VRMPose {
   [name: string]:
     | {
-    position?: number[];
-    rotation?: number[];
-  }
+        position?: number[];
+        rotation?: number[];
+      }
     | undefined;
 }
 

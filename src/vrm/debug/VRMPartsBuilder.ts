@@ -3,7 +3,7 @@ import { VRMFirstPerson } from '../firstperson';
 import { VRMHumanBones } from '../humanoid';
 import { VRMLookAtHead } from '../lookat';
 import { VRMSpringBoneManager } from '../springbone';
-import { GLTF, GLTFNode } from '../types';
+import { GLTF } from '../types';
 import * as Raw from '../types/VRM';
 import { VRMPartsBuilder } from '../VRMPartsBuilder';
 import { DebugOption } from './DebugOption';
@@ -19,21 +19,16 @@ export class VRMPartsBuilderDebugProxy extends VRMPartsBuilder {
     this.debugOption = debugOption;
   }
 
-  public getNodesMap(gltf: GLTF): GLTFNode[] {
-    return this.target.getNodesMap(gltf);
+  public async loadHumanoid(gltf: GLTF): Promise<VRMHumanBones | null> {
+    return await this.target.loadHumanoid(gltf);
   }
 
-  public loadHumanoid(gltf: GLTF, nodesMap: GLTFNode[]): VRMHumanBones | null {
-    return this.target.loadHumanoid(gltf, nodesMap);
-  }
-
-  public loadFirstPerson(
-    firstPerson: Raw.RawVrmFirstPerson | undefined,
-    nodesMap: GLTFNode[],
+  public async loadFirstPerson(
+    firstPerson: Raw.RawVrmFirstPerson,
     humanBones: VRMHumanBones,
     gltf: GLTF,
-  ): VRMFirstPerson | null {
-    return this.target.loadFirstPerson(firstPerson, nodesMap, humanBones, gltf);
+  ): Promise<VRMFirstPerson | null> {
+    return await this.target.loadFirstPerson(firstPerson, humanBones, gltf);
   }
 
   public loadLookAt(
@@ -44,14 +39,20 @@ export class VRMPartsBuilderDebugProxy extends VRMPartsBuilder {
     return this.target.loadLookAt(firstPerson, blendShapeProxy, humanBodyBones);
   }
 
-  public loadBlendShapeMaster(animationMixer: THREE.AnimationMixer, gltf: GLTF): VRMBlendShapeProxy | null {
-    return this.target.loadBlendShapeMaster(animationMixer, gltf);
+  public async loadBlendShapeMaster(
+    animationMixer: THREE.AnimationMixer,
+    gltf: GLTF,
+  ): Promise<VRMBlendShapeProxy | null> {
+    return await this.target.loadBlendShapeMaster(animationMixer, gltf);
   }
 
-  public loadSecondary(gltf: GLTF, nodesMap: GLTFNode[]): VRMSpringBoneManager {
+  public async loadSecondary(gltf: GLTF): Promise<VRMSpringBoneManager> {
     if (this.debugOption && this.debugOption.disableSpringBoneHelper) {
-      return this.target.loadSecondary(gltf, nodesMap);
+      return await this.target.loadSecondary(gltf);
     }
-    return new VRMSpringBoneManagerDebug(gltf, nodesMap);
+
+    const manager = new VRMSpringBoneManagerDebug();
+    await manager.loadGLTF(gltf);
+    return manager;
   }
 }

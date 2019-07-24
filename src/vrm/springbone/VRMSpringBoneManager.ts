@@ -9,18 +9,19 @@ export type VRMSpringBoneGroup = VRMSpringBone[];
 export class VRMSpringBoneManager {
   public readonly springBoneGroupList: VRMSpringBoneGroup[] = [];
 
-  constructor(gltf: GLTF, nodesMap: GLTFNode[]) {
+  public async loadGLTF(gltf: GLTF): Promise<void> {
     const springBoneGroups: Raw.RawVrmSecondaryanimationSpring[] | undefined =
       gltf.parser.json.extensions &&
       gltf.parser.json.extensions.VRM &&
       gltf.parser.json.extensions.VRM.secondaryAnimation &&
       gltf.parser.json.extensions.VRM.secondaryAnimation.boneGroups;
     if (springBoneGroups === undefined) {
+      console.warn('Could not find springBoneGroups in the VRM');
       return;
     }
 
     // 衝突判定球体メッシュ。
-    const colliderMeshGroups = this.getColliderMeshGroups(gltf, nodesMap);
+    const colliderMeshGroups = await this.getColliderMeshGroups(gltf);
     colliderMeshGroups.forEach((group) => gltf.scene.add(...group.colliders));
 
     // 同じ属性（stiffinessやdragForceが同じ）のボーンはboneGroupにまとめられている。
@@ -57,9 +58,9 @@ export class VRMSpringBoneManager {
       });
 
       const springBoneGroup: VRMSpringBoneGroup = [];
-      vrmBoneGroup.bones.forEach((nodeIndex) => {
+      vrmBoneGroup.bones.forEach(async (nodeIndex) => {
         // VRMの情報から「揺れモノ」ボーンのルートが取れる
-        const springRootBone = nodesMap[nodeIndex];
+        const springRootBone: GLTFNode = await gltf.parser.getDependency('node', nodeIndex);
 
         // it's weird but there might be cases we can't find the root bone
         if (!springRootBone) {
@@ -118,7 +119,7 @@ export class VRMSpringBoneManager {
     return new VRMSpringBone(bone, hitRadius, stiffiness, gravityDir, gravityPower, dragForce, colliders);
   }
 
-  private getColliderMeshGroups(gltf: GLTF, nodesMap: GLTFNode[]): VRMSpringBoneColliderGroup[] {
+  private async getColliderMeshGroups(gltf: GLTF): Promise<VRMSpringBoneColliderGroup[]> {
     const vrmExt: Raw.RawVrm | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
     if (vrmExt === undefined) {
       return [];
@@ -133,12 +134,12 @@ export class VRMSpringBoneManager {
     }
 
     const colliderGroups: VRMSpringBoneColliderGroup[] = [];
-    vrmColliderGroups.forEach((colliderGroup) => {
+    vrmColliderGroups.forEach(async (colliderGroup) => {
       if (colliderGroup.node === undefined || colliderGroup.colliders === undefined) {
         return;
       }
 
-      const bone = nodesMap[colliderGroup.node];
+      const bone = await gltf.parser.getDependency('node', colliderGroup.node);
       const colliders: ColliderMesh[] = [];
       colliderGroup.colliders.forEach((collider) => {
         if (
