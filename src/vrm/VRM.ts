@@ -136,7 +136,7 @@ export class VRM {
         ? this._partsBuilder.loadLookAt(vrmExt.firstPerson, this.blendShapeProxy, this.humanBones)
         : null;
 
-    // Set current initial pose to restPose field
+    // Save current initial pose (which is Rest-pose) to restPose field, since pose changing may lose the default transforms. This is useful when resetting the pose or referring default pose.
     this._restPose = this.humanBones
       ? Object.keys(this.humanBones).reduce(
           (restPose, vrmBoneName) => {
