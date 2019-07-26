@@ -4,7 +4,7 @@ import { BlendShapeController } from './BlendShapeController';
 import { BlendShapeMaster } from './BlendShapeMaster';
 
 /**
- * A class represents a blendShapeProxy of a VRM.
+ * A class represents the `blendShapeProxy` field of a VRM.
  * This class has several methods to control expressions of your VRM.
  */
 export class VRMBlendShapeProxy {

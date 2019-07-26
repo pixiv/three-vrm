@@ -2,7 +2,13 @@
 
 import * as THREE from 'three';
 
+/**
+ * This is a material that is an equivalent of "VRM/Unlit***" on VRM spec, those materials are already kinda deprecated though...
+ */
 export class Unlit extends THREE.ShaderMaterial {
+  /**
+   * Static boolean that indicates this is a Unlit material.
+   */
   public isVRMUnlit: boolean = true;
 
   public cutoff: number = 0.5;

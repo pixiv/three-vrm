@@ -9,6 +9,10 @@ enum FirstPersonFlag {
   FirstPersonOnly,
 }
 
+/**
+ * This class represents a single [`meshAnnotation`](https://github.com/vrm-c/UniVRM/blob/master/specification/0.0/schema/vrm.firstperson.meshannotation.schema.json) entry.
+ * Each mesh will be assigned to specified layer when you call [[VRMFirstPerson.setup]].
+ */
 export class RendererFirstPersonFlags {
   private static parseFirstPersonFlag(firstPersonFlag: string | undefined) {
     switch (firstPersonFlag) {
@@ -23,23 +27,62 @@ export class RendererFirstPersonFlags {
     }
   }
 
+  /**
+   * A [[FirstPersonFlag]] of the annotation entry.
+   */
   public firstPersonFlag: FirstPersonFlag;
+
+  /**
+   * A node of the annotation entry.
+   */
   public node: GLTFNode;
 
+  /**
+   * Create a new mesh annotation.
+   *
+   * @param firstPersonFlag A [[FirstPersonFlag]] of the annotation entry
+   * @param node A node of the annotation entry.
+   */
   constructor(firstPersonFlag: string | undefined, node: GLTFNode) {
     this.firstPersonFlag = RendererFirstPersonFlags.parseFirstPersonFlag(firstPersonFlag);
     this.node = node;
   }
 }
 
+/**
+ * This interface specifies which layer will be used for `FirstPersonOnly` / `ThirdPersonOnly`.
+ */
 export interface FirstPersonCameraLayerSetting {
+  /**
+   * A camera layer for `FirstPersonOnly`.
+   */
   firstPersonOnlyLayer?: number;
+
+  /**
+   * A camera layer for `ThirdPersonOnly`.
+   */
   thirdPersonOnlyLayer?: number;
 }
 
+/**
+ * A class represents the `firstPerson` field of a VRM.
+ * This class has several features to utilize first person of your VRM model.
+ *
+ * @see https://vrm.dev/en/univrm/components/univrm_firstperson/
+ */
 export class VRMFirstPerson {
-  /** Camera Layer */
+  /**
+   * A default camera layer for `FirstPersonOnly` layer.
+   *
+   * @see [[getFirstPersonOnlyLayer]]
+   */
   private static readonly DEFAULT_FIRSTPERSON_ONLY_LAYER = 9;
+
+  /**
+   * A default camera layer for `ThirdPersonOnly` layer.
+   *
+   * @see [[getThirdPersonOnlyLayer]]
+   */
   private static readonly DEFAULT_THIRDPERSON_ONLY_LAYER = 10;
 
   private readonly _firstPersonBone: GLTFNode;
@@ -51,6 +94,13 @@ export class VRMFirstPerson {
 
   private _initialized: boolean = false;
 
+  /**
+   * Create a new VRMFirstPerson object.
+   *
+   * @param firstPersonBone A first person bone
+   * @param firstPersonBoneOffset An offset from the specified first person bone
+   * @param meshAnnotations A renderer settings. See the description of [[RendererFirstPersonFlags]] for more info
+   */
   constructor(
     firstPersonBone: GLTFNode,
     firstPersonBoneOffset: THREE.Vector3,
@@ -73,6 +123,18 @@ export class VRMFirstPerson {
     return this._meshAnnotations;
   }
 
+  /**
+   * In this method, it assigns layers for every meshes based on mesh annotations.
+   * You must call this method first before you use the layer feature.
+   *
+   * This is an equivalent of [VRMFirstPerson.Setup](https://github.com/vrm-c/UniVRM/blob/master/Assets/VRM/UniVRM/Scripts/FirstPerson/VRMFirstPerson.cs) of the UniVRM.
+   *
+   * The `cameraLayer` parameter specifies which layer will be assigned for `FirstPersonOnly` / `ThirdPersonOnly`.
+   * In UniVRM, we specified those by naming each desired layer as `FIRSTPERSON_ONLY_LAYER` / `THIRDPERSON_ONLY_LAYER`
+   * but we are going to specify these layers at here since we are unable to name layers in Three.js.
+   *
+   * @param cameraLayer Specify which layer will be for `FirstPersonOnly` / `ThirdPersonOnly`.
+   */
   public setup(cameraLayer?: FirstPersonCameraLayerSetting) {
     if (this._initialized) {
       return;
@@ -100,14 +162,39 @@ export class VRMFirstPerson {
     });
   }
 
+  /**
+   * A camera layer represents `FirstPersonOnly` layer.
+   * Note that **you must call [[setup]] first before you use the layer feature** or it does not work properly.
+   *
+   * The value is [[DEFAULT_FIRSTPERSON_ONLY_LAYER]] by default but you can change the layer by specifying via [[setup]] if you prefer.
+   *
+   * @see https://vrm.dev/en/univrm/api/univrm_use_firstperson/
+   * @see https://threejs.org/docs/#api/en/core/Layers
+   */
   public getFirstPersonOnlyLayer(): number {
     return this._firstPersonOnlyLayer;
   }
 
+  /**
+   * A camera layer represents `ThirdPersonOnly` layer.
+   * Note that **you must call [[setup]] first before you use the layer feature** or it does not work properly.
+   *
+   * The value is [[DEFAULT_THIRDPERSON_ONLY_LAYER]] by default but you can change the layer by specifying via [[setup]] if you prefer.
+   *
+   * @see https://vrm.dev/en/univrm/api/univrm_use_firstperson/
+   * @see https://threejs.org/docs/#api/en/core/Layers
+   */
   public getThirdPersonOnlyLayer(): number {
     return this._thirdPersonOnlyLayer;
   }
 
+  /**
+   * Get current world position of the first person.
+   * The position takes [[FirstPersonBone]] and [[FirstPersonOffset]] into account.
+   *
+   * @param v3 target
+   * @returns Current world position of the first person
+   */
   public getFirstPersonBonePosition(v3: THREE.Vector3): THREE.Vector3 {
     // UniVRM#VRMFirstPersonEditor
     // var worldOffset = head.localToWorldMatrix.MultiplyPoint(component.FirstPersonOffset);
