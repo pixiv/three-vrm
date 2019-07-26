@@ -3,7 +3,7 @@
 import * as THREE from 'three';
 
 export class Unlit extends THREE.ShaderMaterial {
-  public static readonly isVRMUnlit: boolean = true;
+  public readonly isVRMUnlit: boolean = true;
 
   public cutoff: number = 0.5;
   public map: THREE.Texture | null = null; // _MainTex
