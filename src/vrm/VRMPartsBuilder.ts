@@ -51,7 +51,7 @@ export class VRMPartsBuilder {
     gltf: GLTF,
   ): Promise<VRMFirstPerson | null> {
     const isFirstPersonBoneNotSet = firstPerson.firstPersonBone === undefined || firstPerson.firstPersonBone === -1;
-    const firstPersonBone = isFirstPersonBoneNotSet
+    const firstPersonBone: GLTFNode = isFirstPersonBoneNotSet
       ? humanBones[Raw.HumanBone.Head] // fallback
       : await gltf.parser.getDependency('node', firstPerson.firstPersonBone!);
 
