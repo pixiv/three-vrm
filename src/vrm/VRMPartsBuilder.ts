@@ -6,7 +6,7 @@ import { VRMLookAtHead } from './lookat';
 import { VRMLookAtBlendShapeApplyer } from './lookat/VRMLookAtBlendShapeApplyer';
 import { VRMLookAtBoneApplyer } from './lookat/VRMLookAtBoneApplyer';
 import { VRMSpringBoneManager } from './springbone';
-import { GLTF, GLTFMesh, GLTFPrimitive, RawVrmHumanoidBone } from './types';
+import { GLTF, GLTFMesh, GLTFNode, GLTFPrimitive, RawVrmHumanoidBone } from './types';
 import * as Raw from './types/VRM';
 
 export class VRMPartsBuilder {
