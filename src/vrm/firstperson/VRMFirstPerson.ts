@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { BufferGeometry, Group, Object3D, SkinnedMesh } from 'three';
-import { GLTFNode } from '../types';
+import { GLTFMesh, GLTFNode } from '../types';
 
 enum FirstPersonFlag {
   Auto,
@@ -24,11 +24,11 @@ export class RendererFirstPersonFlags {
   }
 
   public firstPersonFlag: FirstPersonFlag;
-  public node: GLTFNode;
+  public mesh: GLTFMesh;
 
-  constructor(firstPersonFlag: string | undefined, node: GLTFNode) {
+  constructor(firstPersonFlag: string | undefined, mesh: GLTFMesh) {
     this.firstPersonFlag = RendererFirstPersonFlags.parseFirstPersonFlag(firstPersonFlag);
-    this.node = node;
+    this.mesh = mesh;
   }
 }
 
@@ -89,13 +89,13 @@ export class VRMFirstPerson {
 
     this._meshAnnotations.forEach((item) => {
       if (item.firstPersonFlag === FirstPersonFlag.FirstPersonOnly) {
-        item.node.layers.set(this._firstPersonOnlyLayer);
-        item.node.traverse((child) => child.layers.set(this._firstPersonOnlyLayer));
+        item.mesh.layers.set(this._firstPersonOnlyLayer);
+        item.mesh.traverse((child) => child.layers.set(this._firstPersonOnlyLayer));
       } else if (item.firstPersonFlag === FirstPersonFlag.ThirdPersonOnly) {
-        item.node.layers.set(this._thirdPersonOnlyLayer);
-        item.node.traverse((child) => child.layers.set(this._thirdPersonOnlyLayer));
+        item.mesh.layers.set(this._thirdPersonOnlyLayer);
+        item.mesh.traverse((child) => child.layers.set(this._thirdPersonOnlyLayer));
       } else if (item.firstPersonFlag === FirstPersonFlag.Auto) {
-        this.createHeadlessModel(item.node);
+        this.createHeadlessModel(item.mesh);
       }
     });
   }

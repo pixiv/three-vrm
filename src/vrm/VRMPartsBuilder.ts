@@ -70,7 +70,7 @@ export class VRMPartsBuilder {
         : new THREE.Vector3(0, 0.06, 0); // fallback
 
     const meshAnnotations: RendererFirstPersonFlags[] = [];
-    const meshes = await gltf.parser.getDependencies('mesh');
+    const meshes: GLTFMesh[] = await gltf.parser.getDependencies('mesh');
     meshes.forEach((mesh, meshIndex) => {
       const flag = firstPerson.meshAnnotations
         ? firstPerson.meshAnnotations.find((annotation) => annotation.mesh === meshIndex)
