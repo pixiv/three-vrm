@@ -32,11 +32,6 @@ export class RendererFirstPersonFlags {
   }
 }
 
-export interface FirstPersonCameraLayerSetting {
-  firstPersonOnlyLayer?: number;
-  thirdPersonOnlyLayer?: number;
-}
-
 export class VRMFirstPerson {
   /** Camera Layer */
   private static readonly DEFAULT_FIRSTPERSON_ONLY_LAYER = 9;
@@ -73,19 +68,24 @@ export class VRMFirstPerson {
     return this._meshAnnotations;
   }
 
-  public setup(cameraLayer?: FirstPersonCameraLayerSetting) {
+  public setup(
+    cameraLayers: {
+      firstPersonOnlyLayer?: number;
+      thirdPersonOnlyLayer?: number;
+    } = {},
+  ) {
     if (this._initialized) {
       return;
     }
     this._initialized = true;
     this._firstPersonOnlyLayer =
-      !cameraLayer || cameraLayer.firstPersonOnlyLayer === undefined
+      cameraLayers.firstPersonOnlyLayer === undefined
         ? VRMFirstPerson.DEFAULT_FIRSTPERSON_ONLY_LAYER
-        : cameraLayer.firstPersonOnlyLayer;
+        : cameraLayers.firstPersonOnlyLayer;
     this._thirdPersonOnlyLayer =
-      !cameraLayer || cameraLayer.thirdPersonOnlyLayer === undefined
+      cameraLayers.thirdPersonOnlyLayer === undefined
         ? VRMFirstPerson.DEFAULT_THIRDPERSON_ONLY_LAYER
-        : cameraLayer.thirdPersonOnlyLayer;
+        : cameraLayers.thirdPersonOnlyLayer;
 
     this._meshAnnotations.forEach((item) => {
       if (item.firstPersonFlag === FirstPersonFlag.FirstPersonOnly) {
