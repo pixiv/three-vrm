@@ -108,7 +108,7 @@ export class VRMFirstPerson {
     return this._thirdPersonOnlyLayer;
   }
 
-  public getFirstPersonBonePosition(v3: THREE.Vector3): THREE.Vector3 {
+  public getFirstPersonWorldPosition(v3: THREE.Vector3): THREE.Vector3 {
     // UniVRM#VRMFirstPersonEditor
     // var worldOffset = head.localToWorldMatrix.MultiplyPoint(component.FirstPersonOffset);
     const offset = this._firstPersonBoneOffset;
