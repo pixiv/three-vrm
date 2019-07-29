@@ -40,10 +40,10 @@ export class MToon extends THREE.ShaderMaterial {
 
   public shouldApplyUniforms: boolean = true; // when this is true, applyUniforms effects
 
-  public debugMode: MToonDebugMode = MToonDebugMode.None; // _DebugMode
+  private _debugMode: MToonDebugMode = MToonDebugMode.None; // _DebugMode
   private _blendMode: MToonRenderMode = MToonRenderMode.Opaque; // _BlendMode
-  public outlineWidthMode: MToonOutlineWidthMode = MToonOutlineWidthMode.None; // _OutlineWidthMode
-  public outlineColorMode: MToonOutlineColorMode = MToonOutlineColorMode.FixedColor; // _OutlineColorMode
+  private _outlineWidthMode: MToonOutlineWidthMode = MToonOutlineWidthMode.None; // _OutlineWidthMode
+  private _outlineColorMode: MToonOutlineColorMode = MToonOutlineColorMode.FixedColor; // _OutlineColorMode
   private _cullMode: MToonCullMode = MToonCullMode.Back; // _CullMode
   private _outlineCullMode: MToonCullMode = MToonCullMode.Front; // _OutlineCullMode
   // public srcBlend: number = 1.0; // _SrcBlend (is not supported)
@@ -63,7 +63,7 @@ export class MToon extends THREE.ShaderMaterial {
       parameters = {};
     }
 
-    // == these parameter has no compatibility with THREE ======================
+    // == these parameter has no compatibility with this implementation ========
     [
       'shadeTexture_ST',
       'bumpMap_ST',
@@ -90,54 +90,38 @@ export class MToon extends THREE.ShaderMaterial {
     parameters.morphTargets = parameters.morphTargets || false;
     parameters.morphNormals = parameters.morphNormals || false;
 
-    // == set shader-related parameters ========================================
-    parameters.uniforms = {
-      // == VRM variables (don't worry, I'll set actual value later) ===========
-      cutoff: { type: 'f' },
-      color: { type: 'c', value: new THREE.Color() },
-      colorAlpha: { type: 'f' },
-      shadeColor: { type: 'c', value: new THREE.Color() },
-      map: { type: 't' },
-      mainTex_ST: { type: 'v4', value: new THREE.Vector4() },
-      shadeTexture: { type: 't' },
-      bumpScale: { type: 'f' },
-      normalMap: { type: 't' },
-      receiveShadowRate: { type: 'f' },
-      receiveShadowTexture: { type: 't' },
-      shadingGradeRate: { type: 'f' },
-      shadingGradeTexture: { type: 't' },
-      shadeShift: { type: 'f' },
-      shadeToony: { type: 'f' },
-      lightColorAttenuation: { type: 'f' },
-      indirectLightIntensity: { type: 'f' },
-      sphereAdd: { type: 't' },
-      emissionColor: { type: 'c', value: new THREE.Color() },
-      emissiveMap: { type: 't' },
-      outlineWidthTexture: { type: 't' },
-      outlineWidth: { type: 'f' },
-      outlineScaledMaxDistance: { type: 'f' },
-      outlineColor: { type: 'c', value: new THREE.Color() },
-      outlineLightingMix: { type: 'f' },
-
-      debugMode: { type: 'i' },
-      outlineWidthMode: { type: 'i' },
-      outlineColorMode: { type: 'i' },
-      transparent: { type: 'i' },
-
-      // == these also are needed to do lighting stuff and THIS REALLY SUCKS ===
-      ambientLightColor: { value: null },
-      directionalLights: { value: null },
-      spotLights: { value: null },
-      rectAreaLights: { value: null },
-      pointLights: { value: null },
-      hemisphereLights: { value: null },
-      directionalShadowMap: { value: null },
-      directionalShadowMatrix: { value: null },
-      spotShadowMap: { value: null },
-      spotShadowMatrix: { value: null },
-      pointShadowMap: { value: null },
-      pointShadowMatrix: { value: null },
-    };
+    // == uniforms =============================================================
+    parameters.uniforms = THREE.UniformsUtils.merge([
+      THREE.UniformsLib.common, // map
+      THREE.UniformsLib.normalmap, // normalMap
+      THREE.UniformsLib.emissivemap, // emissiveMap
+      THREE.UniformsLib.fog,
+      THREE.UniformsLib.lights,
+      {
+        cutoff: { value: 0.5 },
+        color: { value: new THREE.Color(1.0, 1.0, 1.0) },
+        colorAlpha: { value: 1.0 },
+        shadeColor: { value: new THREE.Color(0.97, 0.81, 0.86) },
+        mainTex_ST: { value: new THREE.Vector4(0.0, 0.0, 1.0, 1.0) },
+        shadeTexture: { value: null },
+        bumpScale: { value: 1.0 },
+        receiveShadowRate: { value: 1.0 },
+        receiveShadowTexture: { value: null },
+        shadingGradeRate: { value: 1.0 },
+        shadingGradeTexture: { value: null },
+        shadeShift: { value: 0.0 },
+        shadeToony: { value: 0.9 },
+        lightColorAttenuation: { value: 0.0 },
+        indirectLightIntensity: { value: 0.1 },
+        sphereAdd: { value: null },
+        emissionColor: { value: new THREE.Color(0.0, 0.0, 0.0) },
+        outlineWidthTexture: { value: null },
+        outlineWidth: { value: 0.5 },
+        outlineScaledMaxDistance: { value: 1.0 },
+        outlineColor: { value: new THREE.Color(0.0, 0.0, 0.0) },
+        outlineLightingMix: { value: 1.0 },
+      },
+    ]);
 
     // == finally compile the shader program ===================================
     this.setValues(parameters);
@@ -180,6 +164,36 @@ export class MToon extends THREE.ShaderMaterial {
     this.depthWrite = this._blendMode !== MToonRenderMode.Transparent;
     this.transparent =
       this._blendMode === MToonRenderMode.Transparent || this._blendMode === MToonRenderMode.TransparentWithZWrite;
+    this.updateShaderCode();
+  }
+
+  get debugMode(): MToonDebugMode {
+    return this._debugMode;
+  }
+
+  set debugMode(m: MToonDebugMode) {
+    this._debugMode = m;
+
+    this.updateShaderCode();
+  }
+
+  get outlineWidthMode(): MToonOutlineWidthMode {
+    return this._outlineWidthMode;
+  }
+
+  set outlineWidthMode(m: MToonOutlineWidthMode) {
+    this._outlineWidthMode = m;
+
+    this.updateShaderCode();
+  }
+
+  get outlineColorMode(): MToonOutlineColorMode {
+    return this._outlineColorMode;
+  }
+
+  set outlineColorMode(m: MToonOutlineColorMode) {
+    this._outlineColorMode = m;
+
     this.updateShaderCode();
   }
 
@@ -310,10 +324,6 @@ export class MToon extends THREE.ShaderMaterial {
       this.uniforms.outlineColor.value.convertSRGBToLinear();
     }
     this.uniforms.outlineLightingMix.value = this.outlineLightingMix;
-    this.uniforms.debugMode.value = this.debugMode;
-    this.uniforms.outlineWidthMode.value = this.outlineWidthMode;
-    this.uniforms.outlineColorMode.value = this.outlineColorMode;
-    this.uniforms.transparent.value = this.transparent;
 
     this.updateCullFace();
   }
@@ -330,18 +340,30 @@ export class MToon extends THREE.ShaderMaterial {
       USE_SHADINGGRADETEXTURE: this.shadingGradeTexture !== null,
       USE_SPHEREADD: this.sphereAdd !== null,
       USE_OUTLINEWIDTHTEXTURE: this.outlineWidthTexture !== null,
+      DEBUG_NORMAL: this._debugMode === MToonDebugMode.Normal,
+      DEBUG_LITSHADERATE: this._debugMode === MToonDebugMode.LitShadeRate,
+      DEBUG_UV: this._debugMode === MToonDebugMode.UV,
+      OUTLINE_WIDTH_WORLD: this._outlineWidthMode === MToonOutlineWidthMode.WorldCoordinates,
+      OUTLINE_WIDTH_SCREEN: this._outlineWidthMode === MToonOutlineWidthMode.ScreenCoordinates,
+      OUTLINE_COLOR_FIXED: this._outlineColorMode === MToonOutlineColorMode.FixedColor,
+      OUTLINE_COLOR_MIXED: this._outlineColorMode === MToonOutlineColorMode.MixedLighting,
     };
 
     // == texture encodings ====================================================
     const encodings =
       (this.shadeTexture !== null
-        ? getTexelDecodingFunction('shadeTextureTexelToLinear', this.shadeTexture.encoding)
+        ? getTexelDecodingFunction('shadeTextureTexelToLinear', this.shadeTexture.encoding) + '\n'
         : '') +
-      (this.sphereAdd !== null ? getTexelDecodingFunction('sphereAddTexelToLinear', this.sphereAdd.encoding) : '');
+      (this.sphereAdd !== null
+        ? getTexelDecodingFunction('sphereAddTexelToLinear', this.sphereAdd.encoding) + '\n'
+        : '');
 
     // == generate shader code =================================================
     this.vertexShader = require('./shaders/mtoon.vert');
     this.fragmentShader = encodings + require('./shaders/mtoon.frag');
+
+    // == set needsUpdate flag =================================================
+    this.needsUpdate = true;
   }
 
   private updateCullFace() {
