@@ -75,8 +75,16 @@ export class VRMBlendShapeProxy {
    * Set a weight value of a specified blend shape.
    *
    * Note that you also can animate the blend shape via `THREE.NumberKeyframeTrack`.
+   * See an example of [[getController]] for more info.
    *
-   * See: https://threejs.org/docs/#api/en/animation/tracks/NumberKeyframeTrack
+   * @example Set a weight value to a specific blend shape
+   * ```javascript
+   * // When you want to specify a preset blend shape
+   * vrm.blendShapeProxy.setValue( THREE.BlendShapePresetName.A, 0.83 );
+   *
+   * // When you want to specify a custom blend shape
+   * vrm.blendShapeProxy.setValue( 'Thinking', 1.0 );
+   * ```
    *
    * @param name Name of the blend shape you want to set
    * @param value A new weight value for the specified blend shape, should be a number between `0.0` and `1.0`
@@ -99,13 +107,11 @@ export class VRMBlendShapeProxy {
    * You might want to grab the controller when you want to manipulate its weight manually, or animate using `THREE.NumberKeyframeTrack`.
    *
    * @example How to animate blend shapes using keyframes
-   * ```
+   * ```javascript
    * const track = new THREE.NumberKeyframeTrack(
-   *
    *   vrm.blendShapeProxy.getController( 'Blink' ).name + '.weight', // name
    *   [ 0.0, 0.5, 1.0 ], // times
    *   [ 0.0, 1.0, 0.0 ] // values
-   *
    * );
    * ```
    *

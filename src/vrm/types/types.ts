@@ -54,7 +54,7 @@ export interface VRMPoseTransform {
  * See [[HumanBone]] for complete list of bone names.
  * Note that certain VRM models might not have every bones defined in [[HumanBone]].
  *
- * @example
+ * @example An example of VRMPose interface
  * ```js
  * {
  *   [HumanBone.LeftUpperLeg] : {

@@ -34,21 +34,23 @@ export class VRMBuilder {
 /**
  * Represents a VRM model.
  * It has so many feature to deal with your VRM models!
+ *
  * @param gltf A parsed result of GLTF taken from GLTFLoader
- * @param _builder A {@link VRMPartsBuilder}. Usually you don't have to care about it
+ * @param _builder A [[VRMPartsBuilder]]. Usually you don't have to care about it
  */
 export class VRM {
   /**
-   * Create a {@link VRM} using Builder pattern.
-   * See the reference of {@link VRMBuilder} for further use.
+   * Create a [[VRM]] using Builder pattern.
+   * See the reference of [[VRMBuilder]] for further use.
    */
   public static get Builder(): VRMBuilder {
     return new VRMBuilder();
   }
 
   /**
-   * Create a {@link VRM} from a parsed result of GLTF taken from GLTFLoader.
+   * Create a [[VRM]] from a parsed result of GLTF taken from GLTFLoader.
    * It's probably a thing what you want to get started with VRMs.
+   *
    * @param gltf A parsed GLTF object taken from GLTFLoader
    */
   public static from(gltf: GLTF): Promise<VRM> {
@@ -57,34 +59,35 @@ export class VRM {
 
   /**
    * Contains informations about rest pose of the VRM.
-   * You might want to refer this when you want to reset its pose, along with {@link VRM.setPose}.
+   * You might want to refer this when you want to reset its pose, along with [[VRM.setPose]]}.
    */
   public readonly restPose: VRMPose = {};
 
   /**
-   * Contains {@link VRMHumanBones} of the VRM.
+   * Contains [[VRMHumanBones]] of the VRM.
    * You can move or rotate these bones as a `THREE.Object3D`.
    * Each bones defined in VRM spec are either required or optional.
-   * See also: {@link VRM.setPose}
+   * See also: [[VRM.setPose]]
+   *
    * @TODO Add a link to VRM spec
    */
   public readonly humanBones: VRMHumanBones;
 
   /**
-   * Contains {@link VRMBlendShapeProxy} of the VRM.
-   * You might want to control these facial expressions via {@link VRMBlendShapeProxy.setValue}.
+   * Contains [[VRMBlendShapeProxy]] of the VRM.
+   * You might want to control these facial expressions via [[VRMBlendShapeProxy.setValue]].
    */
   public readonly blendShapeProxy: VRMBlendShapeProxy;
 
   /**
-   * Contains {@link VRMFirstPerson} of the VRM.
+   * Contains [[VRMFirstPerson]] of the VRM.
    * You can use various feature of the firstPerson field.
    */
   public readonly firstPerson: VRMFirstPerson | null;
 
   /**
-   * Contains {@link VRMLookAtHead} of the VRM.
-   * You might want to use {@link VRMLookAtHead.setTarget} to control the eye direction of your VRMs.
+   * Contains [[VRMLookAtHead]] of the VRM.
+   * You might want to use [[VRMLookAtHead.setTarget]] to control the eye direction of your VRMs.
    */
   public readonly lookAt: VRMLookAtHead;
 
@@ -95,12 +98,12 @@ export class VRM {
   public readonly meta: RawVrmMeta;
 
   /**
-   * Contains AnimationMixer associated with the {@link VRM.blendShapeProxy}.
+   * Contains AnimationMixer associated with the [[VRM.blendShapeProxy]].
    */
   public readonly animationMixer: THREE.AnimationMixer;
 
   /**
-   * A {@link VRMSpringBoneManager} manipulates all spring bones attached on the VRM.
+   * A [[VRMSpringBoneManager]] manipulates all spring bones attached on the VRM.
    * Usually you don't have to care about this property.
    */
   public readonly springBoneManager: VRMSpringBoneManager;
@@ -175,7 +178,8 @@ export class VRM {
 
   /**
    * Let the VRM do a given pose.
-   * @param poseObject {@link VRMPose} represents a pose
+   *
+   * @param poseObject [[VRMPose]] represents a pose
    */
   public setPose(poseObject: VRMPose): void {
     // VRMに定められたboneが足りない場合、正しくposeが取れない可能性がある
@@ -223,6 +227,7 @@ export class VRM {
    * **You need to call this on your update loop.**
    *
    * This function updates every VRM components.
+   *
    * @param delta deltaTime
    */
   public update(delta: number): void {
