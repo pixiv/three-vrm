@@ -6,9 +6,16 @@ import { ColliderMesh, VRMSpringBoneColliderGroup } from './VRMSpringBoneCollide
 
 export type VRMSpringBoneGroup = VRMSpringBone[];
 
+/**
+ * A class manages all the spring bones of a VRM.
+ * You usually don't have to care of this class, sometimes you might want to call [[reset]] though.
+ */
 export class VRMSpringBoneManager {
   public readonly springBoneGroupList: VRMSpringBoneGroup[] = [];
 
+  /**
+   * Create a new VRMSpringBoneManager.
+   */
   constructor(gltf: GLTF, nodesMap: GLTFNode[]) {
     const springBoneGroups: Raw.RawVrmSecondaryanimationSpring[] | undefined =
       gltf.parser.json.extensions &&
@@ -85,6 +92,12 @@ export class VRMSpringBoneManager {
     });
   }
 
+  /**
+   * Update all the spring bones belongs to this manager.
+   * Usually this will be called via [[VRM.update]] so you don't have to call this manually.
+   *
+   * @param delta deltaTime
+   */
   public lateUpdate(delta: number): void {
     this.springBoneGroupList.forEach((springBoneGroup) => {
       springBoneGroup.forEach((springBone) => {
@@ -93,6 +106,9 @@ export class VRMSpringBoneManager {
     });
   }
 
+  /**
+   * Reset all the spring bones belongs to this manager.
+   */
   public reset(): void {
     this.springBoneGroupList.forEach((springBoneGroup) => {
       springBoneGroup.forEach((springBone) => {
@@ -118,6 +134,9 @@ export class VRMSpringBoneManager {
     return new VRMSpringBone(bone, hitRadius, stiffiness, gravityDir, gravityPower, dragForce, colliders);
   }
 
+  /**
+   * Create an array of [[VRMSpringBoneColliderGroup]].
+   */
   private getColliderMeshGroups(gltf: GLTF, nodesMap: GLTFNode[]): VRMSpringBoneColliderGroup[] {
     const vrmExt: Raw.RawVrm | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
     if (vrmExt === undefined) {
