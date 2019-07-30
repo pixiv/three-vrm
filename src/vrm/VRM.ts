@@ -47,7 +47,7 @@ export class VRM {
   }
 
   /**
-   * Create a {@link VRM} from A parsed result of GLTF taken from GLTFLoader.
+   * Create a {@link VRM} from a parsed result of GLTF taken from GLTFLoader.
    * It's probably a thing what you want to get started with VRMs.
    * @param gltf A parsed GLTF object taken from GLTFLoader
    */
