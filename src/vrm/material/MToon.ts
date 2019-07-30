@@ -11,7 +11,7 @@ import { getTexelDecodingFunction } from './texel-decoder';
  */
 export class MToon extends THREE.ShaderMaterial {
   /**
-   * Static boolean that indicates this is a MToon material.
+   * Readonly boolean that indicates this is a MToon material.
    */
   public isVRMMToon: boolean = true;
 

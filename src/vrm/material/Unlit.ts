@@ -7,7 +7,7 @@ import * as THREE from 'three';
  */
 export class Unlit extends THREE.ShaderMaterial {
   /**
-   * Static boolean that indicates this is a Unlit material.
+   * Readonly boolean that indicates this is a Unlit material.
    */
   public isVRMUnlit: boolean = true;
 
