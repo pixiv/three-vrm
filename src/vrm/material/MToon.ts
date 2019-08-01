@@ -326,7 +326,7 @@ export class MToon extends THREE.ShaderMaterial {
     this.uniforms.lightColorAttenuation.value = this.lightColorAttenuation;
     this.uniforms.indirectLightIntensity.value = this.indirectLightIntensity;
     this.uniforms.rimTexture.value = this.rimTexture;
-    this.uniforms.rimColor.value.copy(this.rimColor);
+    this.uniforms.rimColor.value.setRGB(this.rimColor.x, this.rimColor.y, this.rimColor.z);
     if (!this._colorSpaceGamma) {
       this.uniforms.rimColor.value.convertSRGBToLinear();
     }
