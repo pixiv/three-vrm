@@ -26,6 +26,14 @@ uniform float shadeToony;
 uniform float lightColorAttenuation;
 uniform float indirectLightIntensity;
 
+#ifdef USE_RIMTEXTURE
+  uniform sampler2D rimTexture;
+#endif
+uniform vec3 rimColor;
+uniform float rimLightingMix;
+uniform float rimFresnelPower;
+uniform float rimLift;
+
 #ifdef USE_SPHEREADD
   uniform sampler2D sphereAdd;
 #endif
@@ -41,7 +49,7 @@ uniform float outlineLightingMix;
 #include <color_pars_fragment>
 
 // #include <uv_pars_fragment>
-#if defined( USE_MAP ) || defined( USE_SHADETEXTURE ) || defined( USE_NORMALMAP ) || defined( USE_RECEIVESHADOWTEXTURE ) || defined( USE_SHADINGGRADETEXTURE ) || defined( USE_EMISSIVEMAP ) || defined( USE_OUTLINEWIDTHTEXTURE )
+#if defined( USE_MAP ) || defined( USE_SHADETEXTURE ) || defined( USE_NORMALMAP ) || defined( USE_RECEIVESHADOWTEXTURE ) || defined( USE_SHADINGGRADETEXTURE ) || defined( USE_RIMTEXTURE ) || defined( USE_EMISSIVEMAP ) || defined( USE_OUTLINEWIDTHTEXTURE )
   varying vec2 vUv;
 #endif
 
@@ -126,12 +134,7 @@ float getLightIntensity(
   return smoothstep( shadeShift, shadeShift + ( 1.0 - shadeToony ), lightIntensity );
 }
 
-vec3 getDiffuse(
-  const in vec3 lit,
-  const in vec3 shade,
-  const in float lightIntensity,
-  const in vec3 lightColor
-) {
+vec3 getLighting( const in vec3 lightColor ) {
   vec3 lighting = lightColor;
   lighting = mix(
     lighting,
@@ -143,6 +146,15 @@ vec3 getDiffuse(
     lighting *= PI;
   #endif
 
+  return lighting;
+}
+
+vec3 getDiffuse(
+  const in vec3 lit,
+  const in vec3 shade,
+  const in float lightIntensity,
+  const in vec3 lighting
+) {
   #ifdef DEBUG_LITSHADERATE
     return vec3( BRDF_Diffuse_Lambert( lightIntensity * lighting ) );
   #endif
@@ -150,13 +162,14 @@ vec3 getDiffuse(
   return lighting * BRDF_Diffuse_Lambert( mix( shade, lit, lightIntensity ) );
 }
 
-void calcDirectDiffuse(
+vec3 calcDirectDiffuse(
   const in vec3 lit,
   const in vec3 shade,
   in GeometricContext geometry,
   inout ReflectedLight reflectedLight
 ) {
   IncidentLight directLight;
+  vec3 lightingSum = vec3( 0.0 );
 
   float shadingGrade = 1.0;
   #ifdef USE_SHADINGGRADETEXTURE
@@ -183,7 +196,9 @@ void calcDirectDiffuse(
 
       float shadow = 1.0 - receiveShadow * ( 1.0 - ( 0.5 + 0.5 * atten ) );
       float lightIntensity = getLightIntensity( directLight, geometry, shadow, shadingGrade );
-      reflectedLight.directDiffuse += getDiffuse( lit, shade, lightIntensity, directLight.color );
+      vec3 lighting = getLighting( directLight.color );
+      reflectedLight.directDiffuse += getDiffuse( lit, shade, lightIntensity, lighting );
+      lightingSum += lighting;
     }
   #endif
 
@@ -202,7 +217,9 @@ void calcDirectDiffuse(
 
       float shadow = 1.0 - receiveShadow * ( 1.0 - ( 0.5 + 0.5 * atten ) );
       float lightIntensity = getLightIntensity( directLight, geometry, shadow, shadingGrade );
-      reflectedLight.directDiffuse += getDiffuse( lit, shade, lightIntensity, directLight.color );
+      vec3 lighting = getLighting( directLight.color );
+      reflectedLight.directDiffuse += getDiffuse( lit, shade, lightIntensity, lighting );
+      lightingSum += lighting;
     }
   #endif
 
@@ -221,9 +238,13 @@ void calcDirectDiffuse(
 
       float shadow = 1.0 - receiveShadow * ( 1.0 - ( 0.5 + 0.5 * atten ) );
       float lightIntensity = getLightIntensity( directLight, geometry, shadow, shadingGrade );
-      reflectedLight.directDiffuse += getDiffuse( lit, shade, lightIntensity, directLight.color );
+      vec3 lighting = getLighting( directLight.color );
+      reflectedLight.directDiffuse += getDiffuse( lit, shade, lightIntensity, lighting );
+      lightingSum += lighting;
     }
   #endif
+
+  return lightingSum;
 }
 
 // == post correction ==========================================================
@@ -241,7 +262,7 @@ void main() {
 
   #ifdef DEBUG_UV
     gl_FragColor = vec4( 0.0, 0.0, 0.0, 1.0 );
-    #if defined( USE_MAP ) || defined( USE_NORMALMAP ) || defined( USE_ALPHAMAP ) || defined( USE_EMISSIVEMAP )
+    #if defined( USE_MAP ) || defined( USE_SHADETEXTURE ) || defined( USE_NORMALMAP ) || defined( USE_RECEIVESHADOWTEXTURE ) || defined( USE_SHADINGGRADETEXTURE ) || defined( USE_RIMTEXTURE ) || defined( USE_EMISSIVEMAP ) || defined( USE_OUTLINEWIDTHTEXTURE )
       gl_FragColor = vec4( vUv, 0.0, 1.0 );
     #endif
     return;
@@ -317,7 +338,7 @@ void main() {
   geometry.normal = normal;
   geometry.viewDir = normalize( vViewPosition );
 
-  calcDirectDiffuse( diffuseColor.rgb, shade, geometry, reflectedLight );
+  vec3 lighting = calcDirectDiffuse( diffuseColor.rgb, shade, geometry, reflectedLight );
 
   vec3 irradiance = getAmbientLightIrradiance( ambientLightColor );
   #if ( NUM_HEMI_LIGHTS > 0 )
@@ -353,15 +374,23 @@ void main() {
     return;
   #endif
 
+  // -- MToon: parametric rim lighting -----------------------------------------
+  vec3 viewDir = normalize( vViewPosition );
+  vec3 rimMix = mix(vec3(1.0), lighting + indirectLightIntensity * irradiance, rimLightingMix);
+  vec3 rim = rimColor * pow( saturate( 1.0 - dot( viewDir, normal ) + rimLift ), rimFresnelPower );
+  #ifdef USE_RIMTEXTURE
+    rim *= texture2D( rimTexture, vUv ).rgb;
+  #endif
+  col += rim;
+
   // -- MToon: additive matcap -------------------------------------------------
   #ifdef USE_SPHEREADD
     {
-      vec3 viewDir = normalize( vViewPosition );
       vec3 x = normalize( vec3( viewDir.z, 0.0, -viewDir.x ) );
       vec3 y = cross( viewDir, x ); // guaranteed to be normalized
       vec2 uv = 0.5 + 0.5 * vec2( dot( x, normal ), -dot( y, normal ) );
-      vec4 rimLighting = sphereAddTexelToLinear( texture2D( sphereAdd, uv ) );
-      col.rgb += rimLighting.rgb;
+      vec3 matcap = sphereAddTexelToLinear( texture2D( sphereAdd, uv ) ).xyz;
+      col += matcap;
     }
   #endif
 
