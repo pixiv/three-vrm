@@ -361,6 +361,7 @@ export class MToon extends THREE.ShaderMaterial {
       USE_SHADETEXTURE: this.shadeTexture !== null,
       USE_RECEIVESHADOWTEXTURE: this.receiveShadowTexture !== null,
       USE_SHADINGGRADETEXTURE: this.shadingGradeTexture !== null,
+      USE_RIMTEXTURE: this.rimTexture !== null,
       USE_SPHEREADD: this.sphereAdd !== null,
       USE_OUTLINEWIDTHTEXTURE: this.outlineWidthTexture !== null,
       DEBUG_NORMAL: this._debugMode === MToonDebugMode.Normal,
