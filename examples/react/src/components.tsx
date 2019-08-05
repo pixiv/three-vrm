@@ -289,7 +289,7 @@ export const FirstPerson = (props: Props) => {
         <ItemName value="MeshAnnotation"/>
         <ul >
           {firstPerson && firstPerson.getMeshAnnotations().map( mesh =>
-            <li style={{paddingLeft:100}} key={mesh.node.uuid}>{mesh.node.name}</li>
+            <li style={{paddingLeft:100}} key={mesh.mesh.uuid}>{mesh.mesh.name}</li>
           )}
         </ul>
         <ul>

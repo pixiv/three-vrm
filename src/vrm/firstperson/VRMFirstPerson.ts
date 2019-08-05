@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { BufferGeometry, Group, Object3D, SkinnedMesh } from 'three';
 import { GLTFMesh, GLTFNode } from '../types';
 
 enum FirstPersonFlag {
@@ -154,13 +153,13 @@ export class VRMFirstPerson {
     return count;
   }
 
-  private createErasedMesh(src: SkinnedMesh, erasingBonesIndex: number[]): SkinnedMesh {
+  private createErasedMesh(src: THREE.SkinnedMesh, erasingBonesIndex: number[]): THREE.SkinnedMesh {
     const dst = new THREE.SkinnedMesh(src.geometry.clone(), src.material);
     dst.name = `${src.name}(erase)`;
     dst.frustumCulled = src.frustumCulled;
     dst.layers.set(this._firstPersonOnlyLayer);
 
-    const geometry = dst.geometry as BufferGeometry;
+    const geometry = dst.geometry as THREE.BufferGeometry;
     const skinIndexAttr = geometry.getAttribute('skinIndex').array;
     const skinIndex = [];
     for (let i = 0; i < skinIndexAttr.length; i += 4) {
@@ -187,7 +186,7 @@ export class VRMFirstPerson {
     return dst;
   }
 
-  private createHeadlessModelForSkinnedMesh(parent: Object3D, mesh: SkinnedMesh) {
+  private createHeadlessModelForSkinnedMesh(parent: THREE.Object3D, mesh: THREE.SkinnedMesh) {
     const eraseBoneIndexes: number[] = [];
     mesh.skeleton.bones.forEach((bone, index) => {
       if (this.isEraseTarget(bone)) eraseBoneIndexes.push(index);
@@ -205,23 +204,23 @@ export class VRMFirstPerson {
   }
 
   private createHeadlessModel(node: GLTFNode) {
-    if (node instanceof Group) {
+    if (node.type === 'Group') {
       node.layers.set(this._thirdPersonOnlyLayer);
       if (this.isEraseTarget(node)) {
         node.traverse((child) => child.layers.set(this._thirdPersonOnlyLayer));
       } else {
-        const parent = new Group();
+        const parent = new THREE.Group();
         parent.name = `_headless_${node.name}`;
         parent.layers.set(this._firstPersonOnlyLayer);
         node.parent!.add(parent);
         node.children
-          .filter((child) => child instanceof SkinnedMesh)
+          .filter((child) => child.type === 'SkinnedMesh')
           .forEach((child) => {
-            this.createHeadlessModelForSkinnedMesh(parent, child as SkinnedMesh);
+            this.createHeadlessModelForSkinnedMesh(parent, child as THREE.SkinnedMesh);
           });
       }
-    } else if (node instanceof SkinnedMesh) {
-      this.createHeadlessModelForSkinnedMesh(node.parent!, node);
+    } else if (node.type === 'SkinnedMesh') {
+      this.createHeadlessModelForSkinnedMesh(node.parent!, node as THREE.SkinnedMesh);
     } else {
       if (this.isEraseTarget(node)) {
         node.layers.set(this._thirdPersonOnlyLayer);
