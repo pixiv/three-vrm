@@ -1,9 +1,9 @@
+import * as THREE from 'three';
 import { VRMBlendShapeProxy } from '../blendshape';
 import { VRMFirstPerson } from '../firstperson';
 import { VRMHumanBones } from '../humanoid';
 import { VRMLookAtHead } from '../lookat';
 import { VRMSpringBoneManager } from '../springbone';
-import { GLTF } from '../types';
 import * as Raw from '../types/VRM';
 import { VRMPartsBuilder } from '../VRMPartsBuilder';
 import { DebugOption } from './DebugOption';
@@ -19,14 +19,14 @@ export class VRMPartsBuilderDebugProxy extends VRMPartsBuilder {
     this.debugOption = debugOption;
   }
 
-  public async loadHumanoid(gltf: GLTF): Promise<VRMHumanBones | null> {
+  public async loadHumanoid(gltf: THREE.GLTF): Promise<VRMHumanBones | null> {
     return await this.target.loadHumanoid(gltf);
   }
 
   public async loadFirstPerson(
     firstPerson: Raw.RawVrmFirstPerson,
     humanBones: VRMHumanBones,
-    gltf: GLTF,
+    gltf: THREE.GLTF,
   ): Promise<VRMFirstPerson | null> {
     return await this.target.loadFirstPerson(firstPerson, humanBones, gltf);
   }
@@ -41,12 +41,12 @@ export class VRMPartsBuilderDebugProxy extends VRMPartsBuilder {
 
   public async loadBlendShapeMaster(
     animationMixer: THREE.AnimationMixer,
-    gltf: GLTF,
+    gltf: THREE.GLTF,
   ): Promise<VRMBlendShapeProxy | null> {
     return await this.target.loadBlendShapeMaster(animationMixer, gltf);
   }
 
-  public async loadSecondary(gltf: GLTF): Promise<VRMSpringBoneManager> {
+  public async loadSecondary(gltf: THREE.GLTF): Promise<VRMSpringBoneManager> {
     if (this.debugOption && this.debugOption.disableSpringBoneHelper) {
       return await this.target.loadSecondary(gltf);
     }

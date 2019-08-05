@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { GLTF } from '../types';
 import { getWorldQuaternionLite } from '../utils/math';
 import { VRM, VRMBuilder } from '../VRM';
 import { VRMPartsBuilder } from '../VRMPartsBuilder';
@@ -17,7 +16,7 @@ export class VRMBuilderDebug extends VRMBuilder {
     return this;
   }
 
-  public async build(gltf: GLTF): Promise<VRM> {
+  public async build(gltf: THREE.GLTF): Promise<VRM> {
     const partsBuilder = new VRMPartsBuilderDebugProxy(this._partsBuilder, this._option);
     const vrm = new VRMDebug(partsBuilder, this._option);
     const convertedGltf = await this._materialConverter.convertGLTFMaterials(gltf);
@@ -31,7 +30,7 @@ export class VRMDebug extends VRM {
     return new VRMBuilderDebug();
   }
 
-  public static from(gltf: GLTF): Promise<VRM> {
+  public static from(gltf: THREE.GLTF): Promise<VRM> {
     return new VRMBuilderDebug().build(gltf);
   }
 
@@ -47,7 +46,7 @@ export class VRMDebug extends VRM {
     this._debugOption = debugOption || {};
   }
 
-  public async loadGLTF(gltf: GLTF): Promise<void> {
+  public async loadGLTF(gltf: THREE.GLTF): Promise<void> {
     await super.loadGLTF(gltf);
 
     // Gizmoを展開

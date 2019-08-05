@@ -1,30 +1,5 @@
 import * as THREE from 'three';
-import * as GLTFJSON from './GLTF';
 import * as VRMExtension from './VRM';
-
-export interface GLTF {
-  scene: THREE.Scene;
-  scenes: THREE.Scene[];
-  cameras: THREE.Camera[];
-  animations: THREE.AnimationClip[];
-  asset: GLTFAsset;
-  parser: {
-    json: GLTFJSON.RawGltf;
-    getDependency: (type: string, index: number) => Promise<any>;
-    getDependencies: (type: string) => Promise<any[]>;
-    [key: string]: any;
-  };
-  userData: any;
-}
-
-interface GLTFAsset {
-  copyright?: string;
-  generator?: string;
-  version: string;
-  minVersion?: string;
-  extensions?: object;
-  extras?: any;
-}
 
 export type GLTFNode = THREE.Object3D | THREE.Mesh | THREE.SkinnedMesh | THREE.Bone;
 export type GLTFPrimitive = THREE.Mesh | THREE.SkinnedMesh;

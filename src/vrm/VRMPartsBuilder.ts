@@ -6,7 +6,7 @@ import { VRMLookAtHead } from './lookat';
 import { VRMLookAtBlendShapeApplyer } from './lookat/VRMLookAtBlendShapeApplyer';
 import { VRMLookAtBoneApplyer } from './lookat/VRMLookAtBoneApplyer';
 import { VRMSpringBoneManager } from './springbone';
-import { GLTF, GLTFMesh, GLTFNode, GLTFPrimitive, RawVrmHumanoidBone } from './types';
+import { GLTFMesh, GLTFNode, GLTFPrimitive, RawVrmHumanoidBone } from './types';
 import * as Raw from './types/VRM';
 
 export class VRMPartsBuilder {
@@ -15,7 +15,7 @@ export class VRMPartsBuilder {
    * @param gltf
    * @returns
    */
-  public async loadHumanoid(gltf: GLTF): Promise<VRMHumanBones | null> {
+  public async loadHumanoid(gltf: THREE.GLTF): Promise<VRMHumanBones | null> {
     const humanBones: RawVrmHumanoidBone[] | undefined =
       gltf.parser.json.extensions &&
       gltf.parser.json.extensions.VRM &&
@@ -48,7 +48,7 @@ export class VRMPartsBuilder {
   public async loadFirstPerson(
     firstPerson: Raw.RawVrmFirstPerson,
     humanBones: VRMHumanBones,
-    gltf: GLTF,
+    gltf: THREE.GLTF,
   ): Promise<VRMFirstPerson | null> {
     const isFirstPersonBoneNotSet = firstPerson.firstPersonBone === undefined || firstPerson.firstPersonBone === -1;
     const firstPersonBone: GLTFNode = isFirstPersonBoneNotSet
@@ -142,7 +142,7 @@ export class VRMPartsBuilder {
    */
   public async loadBlendShapeMaster(
     animationMixer: THREE.AnimationMixer,
-    gltf: GLTF,
+    gltf: THREE.GLTF,
   ): Promise<VRMBlendShapeProxy | null> {
     const blendShapeGroups: Raw.RawVrmBlendShapeGroup[] | undefined =
       gltf.parser.json.extensions &&
@@ -254,7 +254,7 @@ export class VRMPartsBuilder {
     return VRMBlendShapeProxy.create(animationMixer, blendShapeMaster, blendShapePresetMap);
   }
 
-  public async loadSecondary(gltf: GLTF): Promise<VRMSpringBoneManager> {
+  public async loadSecondary(gltf: THREE.GLTF): Promise<VRMSpringBoneManager> {
     const manager = new VRMSpringBoneManager();
     await manager.loadGLTF(gltf);
     return manager;

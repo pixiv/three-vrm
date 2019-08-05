@@ -5,7 +5,7 @@ import { VRMHumanBones } from './humanoid';
 import { VRMLookAtHead } from './lookat';
 import { MaterialConverter } from './material';
 import { VRMSpringBoneManager } from './springbone';
-import { GLTF, RawVrmMeta, VRMPose } from './types';
+import { RawVrmMeta, VRMPose } from './types';
 import { deepDispose } from './utils/disposer';
 import { VRMPartsBuilder } from './VRMPartsBuilder';
 
@@ -24,7 +24,7 @@ export class VRMBuilder {
     return this;
   }
 
-  public async build(gltf: GLTF): Promise<VRM> {
+  public async build(gltf: THREE.GLTF): Promise<VRM> {
     const vrm = new VRM(this._partsBuilder);
     const convertedGltf = await this._materialConverter.convertGLTFMaterials(gltf);
     await vrm.loadGLTF(convertedGltf);
@@ -37,7 +37,7 @@ export class VRM {
     return new VRMBuilder();
   }
 
-  public static from(gltf: GLTF): Promise<VRM> {
+  public static from(gltf: THREE.GLTF): Promise<VRM> {
     return new VRMBuilder().build(gltf);
   }
 
@@ -81,7 +81,7 @@ export class VRM {
     return this._springBoneManager;
   }
 
-  private _gltf?: GLTF;
+  private _gltf?: THREE.GLTF;
 
   private readonly _partsBuilder: VRMPartsBuilder;
 
@@ -93,7 +93,7 @@ export class VRM {
     }
   }
 
-  public async loadGLTF(gltf: GLTF): Promise<void> {
+  public async loadGLTF(gltf: THREE.GLTF): Promise<void> {
     this._gltf = gltf;
 
     if (gltf.parser.json.extensions === undefined || gltf.parser.json.extensions.VRM === undefined) {
