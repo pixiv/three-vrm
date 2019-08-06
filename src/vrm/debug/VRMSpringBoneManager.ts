@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import { VRMSpringBone, VRMSpringBoneManager } from '../springbone';
-import { GLTF } from '../types';
 import { VRMSpringBoneDebug } from './VRMSpringBone';
 
 export class VRMSpringBoneManagerDebug extends VRMSpringBoneManager {
@@ -9,7 +8,7 @@ export class VRMSpringBoneManagerDebug extends VRMSpringBoneManager {
   }
 
   protected createSpringBone(
-    gltf: GLTF,
+    gltf: THREE.GLTF,
     bone: THREE.Object3D,
     hitRadius: number,
     stiffiness: number,

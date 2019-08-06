@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { GLTF, GLTFMesh, GLTFPrimitive, RawVrm, RawVrmMaterial } from '../types';
+import { GLTFMesh, GLTFPrimitive, RawVrm, RawVrmMaterial } from '../types';
 import { MToon, MToonOutlineWidthMode, MToonRenderMode } from './MToon';
 import { Unlit, UnlitRenderType } from './Unlit';
 
@@ -16,7 +16,7 @@ export class MaterialConverter {
     this._options = options;
   }
 
-  public async convertGLTFMaterials(gltf: GLTF): Promise<GLTF> {
+  public async convertGLTFMaterials(gltf: THREE.GLTF): Promise<THREE.GLTF> {
     const meshesMap: GLTFMesh[] = await gltf.parser.getDependencies('mesh');
     const materialList: { [vrmMaterialIndex: number]: { surface: THREE.Material; outline?: THREE.Material } } = {};
 
@@ -90,7 +90,7 @@ export class MaterialConverter {
   public async createVRMMaterials(
     originalMaterial: THREE.Material,
     vrmProps: RawVrmMaterial,
-    gltf: GLTF,
+    gltf: THREE.GLTF,
   ): Promise<{
     surface: THREE.Material;
     outline?: THREE.Material;
@@ -217,7 +217,7 @@ export class MaterialConverter {
   private extractMaterialProperties(
     originalMaterial: THREE.Material,
     vrmProps: RawVrmMaterial,
-    gltf: GLTF,
+    gltf: THREE.GLTF,
   ): Promise<any> {
     const taskList: Array<Promise<any>> = [];
     const params: any = {};
