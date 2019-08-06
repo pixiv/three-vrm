@@ -22,6 +22,7 @@
 
 	<body>
 		<script src="../../node_modules/three/build/three.min.js"></script>
+		<script src="../../node_modules/three/examples/js/loaders/GLTFLoader.js"></script>
 		<script src="../../node_modules/three/examples/js/controls/OrbitControls.js"></script>
 		<script src="../../lib/index.js"></script>
 		<script>
@@ -34,8 +35,7 @@
 			const CAMERA_FOV = 30.0;
 			const CAMERA_Z = 10.0;
 			const camera = new THREE.PerspectiveCamera( CAMERA_FOV, window.innerWidth / window.innerHeight, 0.1, 20.0 );
-			camera.position.set( 0.0, 0.0, -CAMERA_Z );
-			camera.rotateY( Math.PI );
+			camera.position.set( 0.0, 0.0, CAMERA_Z );
 
 			// scene
 			const scene = new THREE.Scene();
@@ -47,17 +47,23 @@
 
 			// gltf and vrm
 			let currentVrm = undefined;
-			const loader = new THREE.VRMLoader();
+			const loader = new THREE.GLTFLoader();
 			loader.crossOrigin = 'anonymous';
 			loader.load(
 
 				'../react/models/shino.vrm',
 
-				( vrm ) => {
+				( gltf ) => {
 
-					scene.add( vrm.scene );
-					currentVrm = vrm;
-					console.log( vrm );
+					THREE.VRM.from( gltf ).then( ( vrm ) => {
+
+						scene.add( vrm.scene );
+						currentVrm = vrm;
+						console.log( vrm );
+
+						vrm.scene.rotation.y = Math.PI;
+
+					} );
 
 				},
 
@@ -98,7 +104,7 @@
 				if ( currentVrm ) {
 
 					const range = CAMERA_Z * Math.tan( CAMERA_FOV / 360.0 * Math.PI );
-					const px = -( 2.0 * event.clientX - window.innerWidth  ) / window.innerHeight * range;
+					const px = ( 2.0 * event.clientX - window.innerWidth  ) / window.innerHeight * range;
 					const py = -( 2.0 * event.clientY - window.innerHeight ) / window.innerHeight * range;
 
 					currentVrm.scene.position.set( px, py, 0.0 );
