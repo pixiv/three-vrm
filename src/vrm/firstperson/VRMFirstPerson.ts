@@ -1,6 +1,5 @@
 import * as THREE from 'three';
-import { BufferGeometry, Group, Object3D, SkinnedMesh } from 'three';
-import { GLTFNode } from '../types';
+import { GLTFMesh, GLTFNode } from '../types';
 
 enum FirstPersonFlag {
   Auto,
@@ -24,11 +23,11 @@ export class RendererFirstPersonFlags {
   }
 
   public firstPersonFlag: FirstPersonFlag;
-  public node: GLTFNode;
+  public mesh: GLTFMesh;
 
-  constructor(firstPersonFlag: string | undefined, node: GLTFNode) {
+  constructor(firstPersonFlag: string | undefined, mesh: GLTFMesh) {
     this.firstPersonFlag = RendererFirstPersonFlags.parseFirstPersonFlag(firstPersonFlag);
-    this.node = node;
+    this.mesh = mesh;
   }
 }
 
@@ -81,13 +80,13 @@ export class VRMFirstPerson {
 
     this._meshAnnotations.forEach((item) => {
       if (item.firstPersonFlag === FirstPersonFlag.FirstPersonOnly) {
-        item.node.layers.set(this._firstPersonOnlyLayer);
-        item.node.traverse((child) => child.layers.set(this._firstPersonOnlyLayer));
+        item.mesh.layers.set(this._firstPersonOnlyLayer);
+        item.mesh.traverse((child) => child.layers.set(this._firstPersonOnlyLayer));
       } else if (item.firstPersonFlag === FirstPersonFlag.ThirdPersonOnly) {
-        item.node.layers.set(this._thirdPersonOnlyLayer);
-        item.node.traverse((child) => child.layers.set(this._thirdPersonOnlyLayer));
+        item.mesh.layers.set(this._thirdPersonOnlyLayer);
+        item.mesh.traverse((child) => child.layers.set(this._thirdPersonOnlyLayer));
       } else if (item.firstPersonFlag === FirstPersonFlag.Auto) {
-        this.createHeadlessModel(item.node);
+        this.createHeadlessModel(item.mesh);
       }
     });
   }
@@ -146,13 +145,13 @@ export class VRMFirstPerson {
     return count;
   }
 
-  private createErasedMesh(src: SkinnedMesh, erasingBonesIndex: number[]): SkinnedMesh {
+  private createErasedMesh(src: THREE.SkinnedMesh, erasingBonesIndex: number[]): THREE.SkinnedMesh {
     const dst = new THREE.SkinnedMesh(src.geometry.clone(), src.material);
     dst.name = `${src.name}(erase)`;
     dst.frustumCulled = src.frustumCulled;
     dst.layers.set(this._firstPersonOnlyLayer);
 
-    const geometry = dst.geometry as BufferGeometry;
+    const geometry = dst.geometry as THREE.BufferGeometry;
     const skinIndexAttr = geometry.getAttribute('skinIndex').array;
     const skinIndex = [];
     for (let i = 0; i < skinIndexAttr.length; i += 4) {
@@ -179,7 +178,7 @@ export class VRMFirstPerson {
     return dst;
   }
 
-  private createHeadlessModelForSkinnedMesh(parent: Object3D, mesh: SkinnedMesh) {
+  private createHeadlessModelForSkinnedMesh(parent: THREE.Object3D, mesh: THREE.SkinnedMesh) {
     const eraseBoneIndexes: number[] = [];
     mesh.skeleton.bones.forEach((bone, index) => {
       if (this.isEraseTarget(bone)) eraseBoneIndexes.push(index);
@@ -197,23 +196,23 @@ export class VRMFirstPerson {
   }
 
   private createHeadlessModel(node: GLTFNode) {
-    if (node instanceof Group) {
+    if (node.type === 'Group') {
       node.layers.set(this._thirdPersonOnlyLayer);
       if (this.isEraseTarget(node)) {
         node.traverse((child) => child.layers.set(this._thirdPersonOnlyLayer));
       } else {
-        const parent = new Group();
+        const parent = new THREE.Group();
         parent.name = `_headless_${node.name}`;
         parent.layers.set(this._firstPersonOnlyLayer);
         node.parent!.add(parent);
         node.children
-          .filter((child) => child instanceof SkinnedMesh)
+          .filter((child) => child.type === 'SkinnedMesh')
           .forEach((child) => {
-            this.createHeadlessModelForSkinnedMesh(parent, child as SkinnedMesh);
+            this.createHeadlessModelForSkinnedMesh(parent, child as THREE.SkinnedMesh);
           });
       }
-    } else if (node instanceof SkinnedMesh) {
-      this.createHeadlessModelForSkinnedMesh(node.parent!, node);
+    } else if (node.type === 'SkinnedMesh') {
+      this.createHeadlessModelForSkinnedMesh(node.parent!, node as THREE.SkinnedMesh);
     } else {
       if (this.isEraseTarget(node)) {
         node.layers.set(this._thirdPersonOnlyLayer);

@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import { getTexelDecodingFunction } from './texel-decoder';
 
 export class MToon extends THREE.ShaderMaterial {
-  public isVRMMToon: boolean = true;
+  public readonly isVRMMToon: boolean = true;
 
   public cutoff: number = 0.5; // _Cutoff
   public color: THREE.Vector4 = new THREE.Vector4(1.0, 1.0, 1.0, 1.0); // _Color
@@ -59,6 +59,7 @@ export class MToon extends THREE.ShaderMaterial {
 
   private readonly _colorSpaceGamma: boolean;
 
+  // TODO: ここにcolorSpaceGammaあるのダサい
   constructor(colorSpaceGamma: boolean, parameters?: MToonParameters) {
     super();
 

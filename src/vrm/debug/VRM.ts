@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { GLTF } from '../types';
 import { getWorldQuaternionLite } from '../utils/math';
 import { VRM, VRMBuilder } from '../VRM';
 import { VRMPartsBuilder } from '../VRMPartsBuilder';
@@ -17,11 +16,12 @@ export class VRMBuilderDebug extends VRMBuilder {
     return this;
   }
 
-  public build(gltf: GLTF): Promise<VRM> {
+  public async build(gltf: THREE.GLTF): Promise<VRM> {
     const partsBuilder = new VRMPartsBuilderDebugProxy(this._partsBuilder, this._option);
-    return this._materialConverter
-      .convertGLTFMaterials(gltf)
-      .then((converted: GLTF) => new VRMDebug(converted, partsBuilder, this._option));
+    const vrm = new VRMDebug(partsBuilder, this._option);
+    const convertedGltf = await this._materialConverter.convertGLTFMaterials(gltf);
+    await vrm.loadGLTF(convertedGltf);
+    return vrm;
   }
 }
 
@@ -30,23 +30,35 @@ export class VRMDebug extends VRM {
     return new VRMBuilderDebug();
   }
 
-  public static from(gltf: GLTF): Promise<VRM> {
+  public static from(gltf: THREE.GLTF): Promise<VRM> {
     return new VRMBuilderDebug().build(gltf);
   }
 
-  private readonly _faceDirectionHelper?: THREE.ArrowHelper;
-  private readonly _leftEyeDirectionHelper?: THREE.ArrowHelper;
-  private readonly _rightEyeDirectionHelper?: THREE.ArrowHelper;
+  private readonly _debugOption: DebugOption;
 
-  constructor(gltf: GLTF, partsBuilder?: VRMPartsBuilder, debugOption?: DebugOption) {
-    super(gltf, partsBuilder);
+  private _faceDirectionHelper?: THREE.ArrowHelper;
+  private _leftEyeDirectionHelper?: THREE.ArrowHelper;
+  private _rightEyeDirectionHelper?: THREE.ArrowHelper;
 
-    const opt: DebugOption = debugOption || {};
+  constructor(partsBuilder?: VRMPartsBuilder, debugOption?: DebugOption) {
+    super(partsBuilder);
+
+    this._debugOption = debugOption || {};
+  }
+
+  public async loadGLTF(gltf: THREE.GLTF): Promise<void> {
+    await super.loadGLTF(gltf);
+
     // Gizmoを展開
-    if (!opt.disableBoxHelper) gltf.scene.add(new THREE.BoxHelper(gltf.scene));
-    if (!opt.disableSkeletonHelper) gltf.scene.add(new THREE.SkeletonHelper(gltf.scene));
+    if (!this._debugOption.disableBoxHelper) {
+      gltf.scene.add(new THREE.BoxHelper(gltf.scene));
+    }
 
-    if (!opt.disableFaceDirectionHelper) {
+    if (!this._debugOption.disableSkeletonHelper) {
+      gltf.scene.add(new THREE.SkeletonHelper(gltf.scene));
+    }
+
+    if (!this._debugOption.disableFaceDirectionHelper) {
       this._faceDirectionHelper = new THREE.ArrowHelper(
         new THREE.Vector3(0, 0, -1),
         new THREE.Vector3(0, 0, 0),
@@ -56,7 +68,7 @@ export class VRMDebug extends VRM {
       gltf.scene.add(this._faceDirectionHelper);
     }
 
-    if (this.humanBones.leftEye && !opt.disableLeftEyeDirectionHelper) {
+    if (this.humanBones && this.humanBones.leftEye && this.lookAt && !this._debugOption.disableLeftEyeDirectionHelper) {
       this._leftEyeDirectionHelper = new THREE.ArrowHelper(
         new THREE.Vector3(0, 0, -1),
         new THREE.Vector3(0, 0, 0),
@@ -67,7 +79,12 @@ export class VRMDebug extends VRM {
       gltf.scene.add(this._leftEyeDirectionHelper);
     }
 
-    if (this.humanBones.rightEye && !opt.disableRightEyeDirectionHelper) {
+    if (
+      this.humanBones &&
+      this.humanBones.rightEye &&
+      this.lookAt &&
+      !this._debugOption.disableRightEyeDirectionHelper
+    ) {
       this._rightEyeDirectionHelper = new THREE.ArrowHelper(
         new THREE.Vector3(0, 0, -1),
         new THREE.Vector3(0, 0, 0),
@@ -85,15 +102,17 @@ export class VRMDebug extends VRM {
   }
 
   private updateGizmos() {
-    if (this._faceDirectionHelper !== undefined) {
+    if (this.lookAt && this._faceDirectionHelper) {
       this._faceDirectionHelper.position.fromArray(this.lookAt.getHeadPosition());
       this._faceDirectionHelper.setDirection(_v3B.fromArray(this.lookAt.getFaceDirection()));
     }
 
     if (
-      this.humanBones.leftEye !== undefined &&
-      this.lookAt.leftEyeWorldPosition !== undefined &&
-      this._leftEyeDirectionHelper !== undefined
+      this.humanBones &&
+      this.humanBones.leftEye &&
+      this.lookAt &&
+      this.lookAt.leftEyeWorldPosition &&
+      this._leftEyeDirectionHelper
     ) {
       const leftEyeWorldRotation = getWorldQuaternionLite(this.humanBones.leftEye, _quatA);
       const direction = _v3B.set(0, 0, -1).applyQuaternion(leftEyeWorldRotation);
@@ -102,9 +121,11 @@ export class VRMDebug extends VRM {
     }
 
     if (
-      this.humanBones.rightEye !== undefined &&
-      this.lookAt.rightEyeWorldPosition !== undefined &&
-      this._rightEyeDirectionHelper !== undefined
+      this.humanBones &&
+      this.humanBones.rightEye &&
+      this.lookAt &&
+      this.lookAt.rightEyeWorldPosition &&
+      this._rightEyeDirectionHelper
     ) {
       const rightEyeWorldRotation = getWorldQuaternionLite(this.humanBones.rightEye, _quatA);
       const direction = _v3B.set(0, 0, -1).applyQuaternion(rightEyeWorldRotation);
