@@ -57,7 +57,7 @@ const base = (mode: 'production' | 'development'): webpack.Configuration => {
   };
 };
 
-module.exports = (env: any, argv: any) => {
+export default (env: any, argv: any) => {
   const isProd = argv.mode === 'production';
 
   return [
