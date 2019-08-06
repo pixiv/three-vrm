@@ -3,7 +3,7 @@
 import * as THREE from 'three';
 
 export class Unlit extends THREE.ShaderMaterial {
-  public isVRMUnlit: boolean = true;
+  public readonly isVRMUnlit: boolean = true;
 
   public cutoff: number = 0.5;
   public map: THREE.Texture | null = null; // _MainTex
@@ -27,13 +27,15 @@ export class Unlit extends THREE.ShaderMaterial {
     parameters.morphTargets = parameters.morphTargets || false;
     parameters.morphNormals = parameters.morphNormals || false;
 
-    // == set shader-related parameters ========================================
-    parameters.uniforms = {
-      // == VRM variables (don't worry, I'll set actual value later) ===========
-      cutoff: { type: 'f' },
-      map: { type: 't' },
-      mainTex_ST: { type: 'v4', value: new THREE.Vector4() },
-    };
+    // == uniforms =============================================================
+    parameters.uniforms = THREE.UniformsUtils.merge([
+      THREE.UniformsLib.common, // map
+      THREE.UniformsLib.fog,
+      {
+        cutoff: { value: 0.5 },
+        mainTex_ST: { value: new THREE.Vector4(0.0, 0.0, 1.0, 1.0) },
+      },
+    ]);
 
     // == finally compile the shader program ===================================
     this.setValues(parameters);
@@ -100,6 +102,9 @@ export class Unlit extends THREE.ShaderMaterial {
 
     this.vertexShader = require('./shaders/unlit.vert');
     this.fragmentShader = require('./shaders/unlit.frag');
+
+    // == set needsUpdate flag =================================================
+    this.needsUpdate = true;
   }
 }
 

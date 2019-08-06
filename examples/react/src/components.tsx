@@ -1,7 +1,7 @@
 import CameraControls from "camera-controls";
 import * as React from 'react'
 import * as THREE from 'three'
-import * as VRM from 'three-vrm'
+import * as VRM from '../../..'
 
 interface Props {
   vrm: VRM.VRM;
@@ -39,9 +39,9 @@ const Panel: React.FunctionComponent<PanelProps> = ({title, children}) => {
 
 export const Transform = (props: Props) => {
   const vrm = props.vrm
-  const position = vrm.humanBones.hips.position
-  const rotation = vrm.humanBones.hips.rotation
-  const scale = vrm.scene.scale
+  const position = vrm.humanBones!.hips.position
+  const rotation = vrm.humanBones!.hips.rotation
+  const scale = vrm.scene!.scale
   const toggleDebug = props.toggleDebug!
 
   const nvl = (value: string, defVal: number) => {
@@ -116,7 +116,7 @@ export const Transform = (props: Props) => {
 }
 
 export const Meta = (props: Props) => {
-  const meta: VRM.RawVrmMeta = props.vrm.meta
+  const meta: VRM.RawVrmMeta = props.vrm.meta!
   const style = {fontSize: 10}
   return (
     <Panel title={'VRMMeta'}>
@@ -139,8 +139,8 @@ export const Meta = (props: Props) => {
 }
 
 export const LookAt = (props: Props) => {
-  const humanBones: VRM.VRMHumanBones = props.vrm.humanBones
-  const lookAt: VRM.VRMLookAtHead = props.vrm.lookAt
+  const humanBones: VRM.VRMHumanBones = props.vrm.humanBones!
+  const lookAt: VRM.VRMLookAtHead = props.vrm.lookAt!
   const camera: THREE.Camera = props.camera
   const cameraControls = props.cameraControls
 
@@ -172,7 +172,7 @@ export const LookAt = (props: Props) => {
   const v = 0.5
   const vy = 1
 
-  const _head = props.vrm.lookAt.getHeadPosition()
+  const _head = props.vrm.lookAt!.getHeadPosition()
   const head = new THREE.Vector3(_head[0], _head[1], _head[2])
 
   const looper = (r: number) => {
@@ -289,7 +289,7 @@ export const FirstPerson = (props: Props) => {
         <ItemName value="MeshAnnotation"/>
         <ul >
           {firstPerson && firstPerson.getMeshAnnotations().map( mesh =>
-            <li style={{paddingLeft:100}} key={mesh.node.uuid}>{mesh.node.name}</li>
+            <li style={{paddingLeft:100}} key={mesh.mesh.uuid}>{mesh.mesh.name}</li>
           )}
         </ul>
         <ul>
@@ -307,7 +307,7 @@ export const FirstPerson = (props: Props) => {
 
 export const BlendShape = (props: Props) => {
 
-  const blendShapeProxy: VRM.VRMBlendShapeProxy = props.vrm.blendShapeProxy
+  const blendShapeProxy: VRM.VRMBlendShapeProxy = props.vrm.blendShapeProxy!
 
   const setValue = (name:VRM.BlendShapePresetName) => {
     Object.keys(blendShapeProxy.expressions).forEach( vname => {
@@ -353,7 +353,7 @@ export const BlendShape = (props: Props) => {
 
 export const SpringBone = (props: Props) => {
 
-  const springBoneManager: VRM.VRMSpringBoneManager = props.vrm.springBoneManager
+  const springBoneManager: VRM.VRMSpringBoneManager = props.vrm.springBoneManager!
   const springBoneGroups = springBoneManager.springBoneGroupList
 
   const groups = springBoneGroups.map( (group,index) => {

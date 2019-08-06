@@ -1,196 +1,171 @@
 import * as THREE from 'three';
-import { GLTF } from '../types';
+import { GLTFMesh, GLTFPrimitive, RawVrm, RawVrmMaterial } from '../types';
 import { MToon, MToonOutlineWidthMode, MToonRenderMode } from './MToon';
 import { Unlit, UnlitRenderType } from './Unlit';
 
+export interface MaterialConverterOptions {
+  requestEnvMap?: () => Promise<THREE.Texture | null>;
+}
+
 export class MaterialConverter {
   private readonly _colorSpaceGamma: boolean;
+  private readonly _options: MaterialConverterOptions;
 
-  private readonly _options: {
-    requestEnvMap?: () => Promise<THREE.Texture | null>;
-  };
-
-  constructor(colorSpaceGamma: boolean, options: { requestEnvMap?: () => Promise<THREE.Texture | null> } = {}) {
+  constructor(colorSpaceGamma: boolean, options: MaterialConverterOptions = {}) {
     this._colorSpaceGamma = colorSpaceGamma;
     this._options = options;
   }
 
-  public convertGLTFMaterials(gltf: GLTF): Promise<GLTF> {
-    return new Promise((resolve) => {
-      const taskList: Array<Promise<any>> = [];
+  public async convertGLTFMaterials(gltf: THREE.GLTF): Promise<THREE.GLTF> {
+    const meshesMap: GLTFMesh[] = await gltf.parser.getDependencies('mesh');
+    const materialList: { [vrmMaterialIndex: number]: { surface: THREE.Material; outline?: THREE.Material } } = {};
 
-      gltf.scene.traverse((object: THREE.Object3D) => {
-        if (!(object as any).isMesh) {
-          return;
-        }
-        const mesh = object as THREE.Mesh;
-
-        // shallow copy 'n' hard copy its groups, since we're gonna tweak mesh.geometry.groups
-        // idk whether the process is required or not
-        const geometry = new THREE.BufferGeometry();
-        Object.assign(geometry, mesh.geometry);
-        geometry.groups = geometry.groups.map((v) => v);
-        mesh.geometry = geometry;
-
-        // attach `material.applyUniforms` to `mesh.onBeforeRender`
-        mesh.onBeforeRender = () => {
-          if (Array.isArray(mesh.material)) {
-            mesh.material.forEach((material) => {
-              if ((material as any).applyUniforms) {
-                (material as any).applyUniforms();
-              }
-            });
-          } else {
-            if ((mesh.material as any).applyUniforms) {
-              (mesh.material as any).applyUniforms();
+    await Promise.all(
+      meshesMap.map(async (mesh, meshIndex) => {
+        const primitives: GLTFPrimitive[] =
+          mesh.type === 'Group' ? (mesh.children as GLTFPrimitive[]) : [mesh as GLTFPrimitive];
+        await Promise.all(
+          primitives.map(async (primitive, primitiveIndex) => {
+            // if primitives material is not an array, make it an array
+            if (!Array.isArray(primitive.material)) {
+              primitive.material = [primitive.material];
+              (primitive.geometry as THREE.BufferGeometry).addGroup(
+                0,
+                (primitive.geometry as THREE.BufferGeometry).index.count,
+                0,
+              );
             }
-          }
-        };
 
-        // convert material into array format, if it already is not
-        if (!Array.isArray(mesh.material)) {
-          mesh.material = [mesh.material];
-          geometry.addGroup(0, geometry.index.count, 0);
+            // create / push to cache (or pop from cache) vrm materials
+            const vrmMaterialIndex = gltf.parser.json.meshes![meshIndex].primitives[primitiveIndex].material!;
+            const props = (gltf.parser.json.extensions!.VRM as RawVrm).materialProperties![vrmMaterialIndex];
+            let vrmMaterials: { surface: THREE.Material; outline?: THREE.Material };
+            if (materialList[vrmMaterialIndex]) {
+              vrmMaterials = materialList[vrmMaterialIndex];
+            } else {
+              vrmMaterials = await this.createVRMMaterials(primitive.material[0], props, gltf);
+              materialList[vrmMaterialIndex] = vrmMaterials;
+            }
+
+            // surface
+            primitive.material[0] = vrmMaterials.surface;
+
+            // envmap
+            if (this._options.requestEnvMap) {
+              this._options.requestEnvMap().then((envMap) => {
+                (vrmMaterials.surface as any).envMap = envMap;
+                vrmMaterials.surface.needsUpdate = true;
+              });
+            }
+
+            // render order
+            primitive.renderOrder = props.renderQueue || 2000;
+
+            // outline ("2 pass shading using groups" trick here)
+            if (vrmMaterials.outline) {
+              primitive.material[1] = vrmMaterials.outline;
+              (primitive.geometry as THREE.BufferGeometry).addGroup(
+                0,
+                (primitive.geometry as THREE.BufferGeometry).index.count,
+                1,
+              );
+            }
+
+            // attach `material.applyUniforms` to `mesh.onBeforeRender`
+            primitive.onBeforeRender = () => {
+              (primitive.material as THREE.Material[]).forEach((mtl) => {
+                if ((mtl as any).applyUniforms) {
+                  (mtl as any).applyUniforms();
+                }
+              });
+            };
+          }),
+        );
+      }),
+    );
+
+    return gltf;
+  }
+
+  public async createVRMMaterials(
+    originalMaterial: THREE.Material,
+    vrmProps: RawVrmMaterial,
+    gltf: THREE.GLTF,
+  ): Promise<{
+    surface: THREE.Material;
+    outline?: THREE.Material;
+  }> {
+    let newSurface: THREE.Material | undefined;
+    let newOutline: THREE.Material | undefined;
+
+    if (vrmProps.shader === 'VRM/MToon') {
+      const params = await this.extractMaterialProperties(originalMaterial, vrmProps, gltf);
+
+      // we need to get rid of these properties
+      ['srcBlend', 'dstBlend', 'isFirstSetup'].forEach((name) => {
+        if (params[name] !== undefined) {
+          delete params[name];
         }
-        const materials = mesh.material;
-
-        materials
-          .map((v) => v) // since we're gonna mutate the array
-          .forEach((material, index) => {
-            taskList.push(
-              this.convertMaterial(material, gltf).then((newMaterial) => {
-                // attach envMap
-                if (this._options.requestEnvMap && (newMaterial as any).isMeshStandardMaterial) {
-                  this._options.requestEnvMap().then((texture) => {
-                    (newMaterial as any).envMap = texture;
-                    newMaterial.needsUpdate = true;
-                  });
-                }
-
-                // register a new material
-                materials[index] = newMaterial;
-
-                // let's do the outline trick
-                const hasOutline =
-                  newMaterial.hasOwnProperty('isVRMMToon') &&
-                  (newMaterial as MToon).outlineWidthMode !== MToonOutlineWidthMode.None;
-
-                if (hasOutline) {
-                  // create a new outline material, then push into material list of the mesh
-                  const outlineMaterial = newMaterial.clone();
-                  outlineMaterial.name += ' (Outline)';
-                  (outlineMaterial as MToon).isOutline = true;
-                  materials.push(outlineMaterial);
-
-                  // register new submeshes corresponds to previous outline material
-                  const outlineMaterialIndex = materials.length - 1;
-                  geometry.groups
-                    .filter((group) => group.materialIndex === index)
-                    .forEach((group) => {
-                      geometry.addGroup(group.start, group.count, outlineMaterialIndex);
-                    });
-                }
-              }),
-            );
-          });
       });
 
-      Promise.all(taskList).then(() => {
-        resolve(gltf);
+      // these textures must be sRGB Encoding, depends on current colorspace
+      ['mainTex', 'shadeTexture', 'emission', 'sphereAdd'].forEach((name) => {
+        if (params[name] !== undefined) {
+          params[name].encoding = this._colorSpaceGamma ? THREE.LinearEncoding : THREE.sRGBEncoding;
+        }
       });
-    });
-  }
 
-  public convertMaterialLegacy(material: THREE.MeshStandardMaterial, gltf: GLTF): Promise<THREE.Material> {
-    return new Promise((resolve) => {
-      const unlitAlt = new THREE.MeshBasicMaterial();
-      THREE.Material.prototype.copy.call(unlitAlt, material);
-      unlitAlt.color.copy(material.color);
-      unlitAlt.map = material.map;
-      unlitAlt.alphaTest = 0.5;
-      unlitAlt.lights = false;
-      unlitAlt.skinning = material.skinning;
-      unlitAlt.morphTargets = material.morphTargets;
-      resolve(unlitAlt);
-    });
-  }
+      // done
+      newSurface = new MToon(this._colorSpaceGamma, params);
 
-  public convertMaterial(material: THREE.Material, gltf: GLTF): Promise<THREE.Material> {
-    const materialProperties = gltf.userData.gltfExtensions.VRM.materialProperties;
-    const vrmProps =
-      material.userData.gltfIndex &&
-      typeof material.userData.gltfIndex.materials === 'number' &&
-      materialProperties[material.userData.gltfIndex.materials];
-    if (!vrmProps) {
-      console.warn('No materialProperty found in VRM, aborted');
-      return Promise.resolve(material);
+      // outline
+      if (params.outlineWidthMode !== MToonOutlineWidthMode.None) {
+        params.isOutline = true;
+        newOutline = new MToon(this._colorSpaceGamma, params);
+      }
+    } else if (vrmProps.shader === 'VRM/UnlitTexture') {
+      // this is very legacy
+      const params = await this.extractMaterialProperties(originalMaterial, vrmProps, gltf);
+      params.renderType = UnlitRenderType.Opaque;
+      newSurface = new Unlit(params);
+    } else if (vrmProps.shader === 'VRM/UnlitCutout') {
+      // this is very legacy
+      const params = await this.extractMaterialProperties(originalMaterial, vrmProps, gltf);
+      params.renderType = UnlitRenderType.Cutout;
+      newSurface = new Unlit(params);
+    } else if (vrmProps.shader === 'VRM/UnlitTransparent') {
+      // this is very legacy
+      const params = await this.extractMaterialProperties(originalMaterial, vrmProps, gltf);
+      params.renderType = UnlitRenderType.Transparent;
+      newSurface = new Unlit(params);
+    } else if (vrmProps.shader === 'VRM/UnlitTransparentZWrite') {
+      // this is very legacy
+      const params = await this.extractMaterialProperties(originalMaterial, vrmProps, gltf);
+      params.renderType = UnlitRenderType.TransparentWithZWrite;
+      newSurface = new Unlit(params);
+    } else {
+      if (vrmProps.shader !== 'VRM_USE_GLTFSHADER') {
+        console.warn(`Unknown shader detected: "${vrmProps.shader}"`);
+        // then presume as VRM_USE_GLTFSHADER
+      }
+
+      newSurface = this.convertGLTFMaterial(originalMaterial.clone());
     }
 
-    return new Promise<THREE.Material>((resolve) => {
-      if (vrmProps.shader === 'VRM/MToon') {
-        this.extractMaterialProperties(material, vrmProps, gltf).then((params) => {
-          // we need to get rid of these properties
-          ['srcBlend', 'dstBlend', 'isFirstSetup'].forEach((name) => {
-            if (params[name] !== undefined) {
-              delete params[name];
-            }
-          });
+    newSurface.name = originalMaterial.name;
+    newSurface.userData = JSON.parse(JSON.stringify(originalMaterial.userData));
+    newSurface.userData.vrmMaterialProperties = vrmProps;
 
-          // these textures must be sRGB Encoding, depends on current colorspace
-          ['mainTex', 'shadeTexture', 'emission', 'sphereAdd'].forEach((name) => {
-            if (params[name] !== undefined) {
-              params[name].encoding = this._colorSpaceGamma ? THREE.LinearEncoding : THREE.sRGBEncoding;
-            }
-          });
+    if (newOutline) {
+      newOutline.name = originalMaterial.name + ' (Outline)';
+      newOutline.userData = JSON.parse(JSON.stringify(originalMaterial.userData));
+      newOutline.userData.vrmMaterialProperties = vrmProps;
+    }
 
-          // done
-          resolve(new MToon(this._colorSpaceGamma, params));
-        });
-      } else if (vrmProps.shader === 'VRM_USE_GLTFSHADER') {
-        const newMaterial = this.convertGLTFMaterial(material.clone());
-        resolve(newMaterial);
-      } else if (vrmProps.shader === 'VRM/UnlitTexture') {
-        // this is very legacy
-        this.extractMaterialProperties(material, vrmProps, gltf).then((params) => {
-          params.renderType = UnlitRenderType.Opaque;
-
-          resolve(new Unlit(params));
-        });
-      } else if (vrmProps.shader === 'VRM/UnlitCutout') {
-        // this is very legacy
-        this.extractMaterialProperties(material, vrmProps, gltf).then((params) => {
-          params.renderType = UnlitRenderType.Cutout;
-
-          resolve(new Unlit(params));
-        });
-      } else if (vrmProps.shader === 'VRM/UnlitTransparent') {
-        // this is very legacy
-        this.extractMaterialProperties(material, vrmProps, gltf).then((params) => {
-          params.renderType = UnlitRenderType.Transparent;
-
-          resolve(new Unlit(params));
-        });
-      } else if (vrmProps.shader === 'VRM/UnlitTransparentZWrite') {
-        // **however this is not legacy**
-        this.extractMaterialProperties(material, vrmProps, gltf).then((params) => {
-          params.renderType = UnlitRenderType.TransparentWithZWrite;
-
-          resolve(new Unlit(params));
-        });
-      } else {
-        // nope (incl. "Standard")
-        console.warn(`Unknown shader detected: "${vrmProps.shader}"`);
-
-        // presume as VRM_USE_GLTFSHADER
-        const newMaterial = this.convertGLTFMaterial(material.clone());
-        resolve(newMaterial);
-      }
-    }).then((newMaterial) => {
-      newMaterial.name = material.name;
-      newMaterial.userData = JSON.parse(JSON.stringify(material.userData));
-      newMaterial.userData.vrmMaterialProperties = vrmProps;
-      return newMaterial;
-    });
+    return {
+      surface: newSurface,
+      outline: newOutline,
+    };
   }
 
   private renameMaterialProperty(name: string): string {
@@ -239,7 +214,11 @@ export class MaterialConverter {
     return material;
   }
 
-  private extractMaterialProperties(material: THREE.Material, vrmProps: any, gltf: GLTF): Promise<any> {
+  private extractMaterialProperties(
+    originalMaterial: THREE.Material,
+    vrmProps: RawVrmMaterial,
+    gltf: THREE.GLTF,
+  ): Promise<any> {
     const taskList: Array<Promise<any>> = [];
     const params: any = {};
 
@@ -291,14 +270,14 @@ export class MaterialConverter {
     }
 
     // TODO: f (https://github.com/dwango/UniVRM/issues/172)
-    if (vrmProps.keywordMap._ALPHATEST_ON && params.blendMode === MToonRenderMode.Opaque) {
+    if (vrmProps.keywordMap!._ALPHATEST_ON && params.blendMode === MToonRenderMode.Opaque) {
       params.blendMode = MToonRenderMode.Cutout;
     }
 
     // set whether it needs skinning and morphing or not
-    params.skinning = (material as any).skinning || false;
-    params.morphTargets = (material as any).morphTargets || false;
-    params.morphNormals = (material as any).morphNormals || false;
+    params.skinning = (originalMaterial as any).skinning || false;
+    params.morphTargets = (originalMaterial as any).morphTargets || false;
+    params.morphNormals = (originalMaterial as any).morphNormals || false;
 
     return Promise.all(taskList).then(() => params);
   }
