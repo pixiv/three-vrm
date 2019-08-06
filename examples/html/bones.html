@@ -22,6 +22,7 @@
 
 	<body>
 		<script src="../../node_modules/three/build/three.min.js"></script>
+		<script src="../../node_modules/three/examples/js/loaders/GLTFLoader.js"></script>
 		<script src="../../node_modules/three/examples/js/controls/OrbitControls.js"></script>
 		<script src="../../lib/index.js"></script>
 		<script>
@@ -48,19 +49,23 @@
 
 			// gltf and vrm
 			let currentVrm = undefined;
-			const loader = new THREE.VRMLoader();
+			const loader = new THREE.GLTFLoader();
 			loader.crossOrigin = 'anonymous';
 			loader.load(
 
 				'../react/models/shino.vrm',
 
-				( vrm ) => {
+				( gltf ) => {
 
-					scene.add( vrm.scene );
-					currentVrm = vrm;
-					vrm.scene.rotation.y = Math.PI;
+					THREE.VRM.from( gltf ).then( ( vrm ) => {
 
-					console.log( vrm );
+						scene.add( vrm.scene );
+						currentVrm = vrm;
+						vrm.scene.rotation.y = Math.PI;
+
+						console.log( vrm );
+
+					} );
 
 				},
 
