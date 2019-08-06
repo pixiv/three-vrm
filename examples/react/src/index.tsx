@@ -135,7 +135,7 @@ class App extends React.Component<{}, { vrmId: string | null }> {
       const loader = new GLTFLoader()
       loader.load(path, resolve, () => {
       }, reject)
-    }).then((gltf: GLTF) => {
+    }).then((gltf: any) => {
       return this.debug ? VRMDebug.Builder.option(this.debugOption).build(gltf) : VRM.from(gltf)
     }).then((vrm:VRM) => {
       this.vrm = vrm
