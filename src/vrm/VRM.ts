@@ -36,6 +36,21 @@ export class VRMBuilder {
  * Represents a VRM model.
  * It has so many feature to deal with your VRM models!
  *
+ * @example Most basic use of VRM
+ * ```
+ * const scene = new THREE.Scene();
+ *
+ * new THREE.GLTFLoader().load( 'models/shino.vrm', ( gltf ) => {
+ *
+ *   THREE.VRM.from( gltf ).then( ( vrm ) => {
+ *
+ *     scene.add( vrm.scene );
+ *
+ *   } );
+ *
+ * } );
+ * ```
+ *
  * @param gltf A parsed result of GLTF taken from GLTFLoader
  * @param _builder A [[VRMPartsBuilder]]. Usually you don't have to care about it
  */
@@ -51,6 +66,21 @@ export class VRM {
   /**
    * Create a [[VRM]] from a parsed result of GLTF taken from GLTFLoader.
    * It's probably a thing what you want to get started with VRMs.
+   *
+   * @example Most basic use of VRM
+   * ```
+   * const scene = new THREE.Scene();
+   *
+   * new THREE.GLTFLoader().load( 'models/shino.vrm', ( gltf ) => {
+   *
+   *   THREE.VRM.from( gltf ).then( ( vrm ) => {
+   *
+   *     scene.add( vrm.scene );
+   *
+   *   } );
+   *
+   * } );
+   * ```
    *
    * @param gltf A parsed GLTF object taken from GLTFLoader
    */
