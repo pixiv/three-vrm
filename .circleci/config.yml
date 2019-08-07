@@ -1,0 +1,47 @@
+version: 2
+
+jobs:
+  fetch:
+    docker: &docker
+      - image: circleci/node:12.7.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - deps-{{ checksum "package.json" }}
+            - deps-
+      - run:
+          name: Node version
+          command: node -v
+      - run:
+          name: Fetch deps
+          command: yarn
+      - save_cache:
+          key: deps-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+
+  build:
+    docker: *docker
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - deps-{{ checksum "package.json" }}
+            - deps-
+      - run:
+          name: Build
+          command: yarn build
+      - store_artifacts:
+          path: lib
+      - store_artifacts:
+          path: examples
+
+workflows:
+  version: 2
+  inspection:
+    jobs:
+      - fetch
+      - build:
+          requires:
+            - fetch
