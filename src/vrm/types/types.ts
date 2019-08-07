@@ -1,25 +1,5 @@
-import * as THREE from 'three'
-import * as GLTFJSON from './GLTF'
-import * as VRMExtension from './VRM'
-
-/**
- * It represents a parsed result of GLTF taken from GLTFLoader.
- * Please note that this is not a complete type definition of that. (We are too lazy to do this...)
- *
- * See: https://threejs.org/docs/#examples/en/loaders/GLTFLoader
- */
-export interface GLTF {
-  scene: THREE.Scene;
-  scenes: THREE.Scene[];
-  cameras: THREE.Camera[];
-  animations: THREE.AnimationClip[];
-  asset: GLTFJSON.RawAsset;
-  parser: {
-    json: GLTFJSON.RawGltf;
-    [key: string]: any;
-  };
-  userData: any;
-}
+import * as THREE from 'three';
+import * as VRMExtension from './VRM';
 
 /**
  * A single node of GLTF, represented as Three.js object.
@@ -30,6 +10,7 @@ export type GLTFNode = THREE.Object3D;
  * A single primitive of GLTF, represented as Three.js object.
  */
 export type GLTFPrimitive = THREE.Mesh | THREE.SkinnedMesh;
+export type GLTFMesh = THREE.Group | THREE.Mesh | THREE.SkinnedMesh;
 
 /**
  * Represents a transform of a single bone of [[VRMPose]].

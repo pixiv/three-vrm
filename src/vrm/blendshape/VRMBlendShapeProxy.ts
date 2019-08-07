@@ -91,7 +91,9 @@ export class VRMBlendShapeProxy {
    */
   public setValue(name: BlendShapePresetName | string, weight: number) {
     const controller = this.getController(name);
-    if (controller) controller.weight = VRMBlendShapeProxy.clamp(weight);
+    if (controller) {
+      controller.weight = VRMBlendShapeProxy.clamp(weight);
+    }
   }
 
   /**

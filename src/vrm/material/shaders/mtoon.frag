@@ -1,13 +1,5 @@
 // #define PHONG
 
-#define DEBUGMODE_NONE 0
-#define DEBUGMODE_NORMAL 1
-#define DEBUGMODE_LITSHADERATE 2
-#define DEBUGMODE_UV 3
-
-#define OUTLINECOLORMODE_FIXEDCOLOR 0
-#define OUTLINECOLORMODE_MIXEDLIGHTING 1
-
 #ifdef BLENDMODE_CUTOUT
   uniform float cutoff;
 #endif
@@ -40,12 +32,8 @@ uniform float indirectLightIntensity;
 
 uniform vec3 emissionColor;
 
-uniform int debugMode;
-uniform bool transparent;
-
 uniform vec3 outlineColor;
 uniform float outlineLightingMix;
-uniform int outlineColorMode;
 
 #include <common>
 #include <packing>
@@ -155,9 +143,9 @@ vec3 getDiffuse(
     lighting *= PI;
   #endif
 
-  if ( debugMode == DEBUGMODE_LITSHADERATE ) {
+  #ifdef DEBUG_LITSHADERATE
     return vec3( BRDF_Diffuse_Lambert( lightIntensity * lighting ) );
-  }
+  #endif
 
   return lighting * BRDF_Diffuse_Lambert( mix( shade, lit, lightIntensity ) );
 }
@@ -251,13 +239,13 @@ void postCorrection() {
 void main() {
   #include <clipping_planes_fragment>
 
-  if ( debugMode == DEBUGMODE_UV ) {
+  #ifdef DEBUG_UV
     gl_FragColor = vec4( 0.0, 0.0, 0.0, 1.0 );
     #if defined( USE_MAP ) || defined( USE_NORMALMAP ) || defined( USE_ALPHAMAP ) || defined( USE_EMISSIVEMAP )
       gl_FragColor = vec4( vUv, 0.0, 1.0 );
     #endif
     return;
-  }
+  #endif
 
   vec4 diffuseColor = vec4( color, colorAlpha );
   ReflectedLight reflectedLight = ReflectedLight( vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ) );
@@ -284,12 +272,10 @@ void main() {
     diffuseColor.a = 1.0;
   #endif
 
-  #ifdef OUTLINE // omitting DebugMode
-    if ( outlineColorMode == OUTLINECOLORMODE_FIXEDCOLOR ) {
-      gl_FragColor = vec4( outlineColor, diffuseColor.a );
-      postCorrection();
-      return;
-    }
+  #if defined( OUTLINE ) && defined( OUTLINE_COLOR_FIXED ) // omitting DebugMode
+    gl_FragColor = vec4( outlineColor, diffuseColor.a );
+    postCorrection();
+    return;
   #endif
 
   // #include <specularmap_fragment>
@@ -310,10 +296,10 @@ void main() {
     normal = -normal;
   }
 
-  if ( debugMode == DEBUGMODE_NORMAL ) {
+  #ifdef DEBUG_NORMAL
     gl_FragColor = vec4( 0.5 + 0.5 * normal, 1.0 );
     return;
-  }
+  #endif
 
   // -- MToon: lighting --------------------------------------------------------
   // accumulation
@@ -358,15 +344,13 @@ void main() {
 
   vec3 col = reflectedLight.directDiffuse + reflectedLight.indirectDiffuse;
 
-  #ifdef OUTLINE
-    if ( outlineColorMode == OUTLINECOLORMODE_MIXEDLIGHTING ) {
-      gl_FragColor = vec4(
-        outlineColor.rgb * mix( vec3( 1.0 ), col, outlineLightingMix ),
-        diffuseColor.a
-      );
-      postCorrection();
-      return;
-    }
+  #if defined( OUTLINE ) && defined( OUTLINE_COLOR_MIXED ) // omitting DebugMode
+    gl_FragColor = vec4(
+      outlineColor.rgb * mix( vec3( 1.0 ), col, outlineLightingMix ),
+      diffuseColor.a
+    );
+    postCorrection();
+    return;
   #endif
 
   // -- MToon: additive matcap -------------------------------------------------

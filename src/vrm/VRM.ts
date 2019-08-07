@@ -5,7 +5,7 @@ import { VRMHumanBones } from './humanoid';
 import { VRMLookAtHead } from './lookat';
 import { MaterialConverter } from './material';
 import { VRMSpringBoneManager } from './springbone';
-import { GLTF, GLTFNode, RawVector3, RawVector4, RawVrmMeta, VRMPose } from './types';
+import { RawVector3, RawVector4, RawVrmMeta, VRMPose } from './types';
 import { deepDispose } from './utils/disposer';
 import { VRMPartsBuilder } from './VRMPartsBuilder';
 
@@ -24,10 +24,11 @@ export class VRMBuilder {
     return this;
   }
 
-  public build(gltf: GLTF): Promise<VRM> {
-    return this._materialConverter
-      .convertGLTFMaterials(gltf)
-      .then((converted: GLTF) => new VRM(converted, this._partsBuilder));
+  public async build(gltf: THREE.GLTF): Promise<VRM> {
+    const vrm = new VRM(this._partsBuilder);
+    const convertedGltf = await this._materialConverter.convertGLTFMaterials(gltf);
+    await vrm.loadGLTF(convertedGltf);
+    return vrm;
   }
 }
 
@@ -53,15 +54,21 @@ export class VRM {
    *
    * @param gltf A parsed GLTF object taken from GLTFLoader
    */
-  public static from(gltf: GLTF): Promise<VRM> {
+  public static from(gltf: THREE.GLTF): Promise<VRM> {
     return new VRMBuilder().build(gltf);
   }
+
+  private _restPose?: VRMPose | null;
 
   /**
    * Contains informations about rest pose of the VRM.
    * You might want to refer this when you want to reset its pose, along with [[VRM.setPose]]}.
    */
-  public readonly restPose: VRMPose = {};
+  public get restPose() {
+    return this._restPose;
+  }
+
+  private _humanBones?: VRMHumanBones | null;
 
   /**
    * Contains [[VRMHumanBones]] of the VRM.
@@ -71,70 +78,93 @@ export class VRM {
    *
    * @TODO Add a link to VRM spec
    */
-  public readonly humanBones: VRMHumanBones;
+  public get humanBones() {
+    return this._humanBones;
+  }
+
+  private _blendShapeProxy?: VRMBlendShapeProxy | null;
 
   /**
    * Contains [[VRMBlendShapeProxy]] of the VRM.
    * You might want to control these facial expressions via [[VRMBlendShapeProxy.setValue]].
    */
-  public readonly blendShapeProxy: VRMBlendShapeProxy;
+  public get blendShapeProxy() {
+    return this._blendShapeProxy;
+  }
+
+  private _firstPerson?: VRMFirstPerson | null;
 
   /**
    * Contains [[VRMFirstPerson]] of the VRM.
    * You can use various feature of the firstPerson field.
    */
-  public readonly firstPerson: VRMFirstPerson | null;
+  public get firstPerson() {
+    return this._firstPerson;
+  }
+
+  private _lookAt?: VRMLookAtHead | null;
 
   /**
    * Contains [[VRMLookAtHead]] of the VRM.
    * You might want to use [[VRMLookAtHead.setTarget]] to control the eye direction of your VRMs.
    */
-  public readonly lookAt: VRMLookAtHead;
+  public get lookAt() {
+    return this._lookAt;
+  }
+
+  private _meta?: RawVrmMeta;
 
   /**
    * Contains meta fields of the VRM.
    * You might want to refer these license fields before use your VRMs.
    */
-  public readonly meta: RawVrmMeta;
+  public get meta() {
+    return this._meta;
+  }
+
+  private _animationMixer?: THREE.AnimationMixer;
 
   /**
    * Contains AnimationMixer associated with the [[VRM.blendShapeProxy]].
    */
-  public readonly animationMixer: THREE.AnimationMixer;
+  public get animationMixer() {
+    return this._animationMixer;
+  }
+
+  private _springBoneManager?: VRMSpringBoneManager;
 
   /**
    * A [[VRMSpringBoneManager]] manipulates all spring bones attached on the VRM.
    * Usually you don't have to care about this property.
    */
-  public readonly springBoneManager: VRMSpringBoneManager;
-
-  /**
-   * A map of nodes indexed by original gltf node array.
-   */
-  protected readonly nodesMap: GLTFNode[];
+  public get springBoneManager() {
+    return this._springBoneManager;
+  }
 
   /**
    * A parsed result of GLTF taken from GLTFLoader.
    */
-  private readonly _gltf: GLTF;
+  private _gltf?: THREE.GLTF;
 
   private readonly _partsBuilder: VRMPartsBuilder;
 
-  constructor(gltf: GLTF, _builder?: VRMPartsBuilder) {
+  constructor(_builder?: VRMPartsBuilder) {
     if (_builder) {
       this._partsBuilder = _builder;
     } else {
       this._partsBuilder = new VRMPartsBuilder();
     }
+  }
 
+  public async loadGLTF(gltf: THREE.GLTF): Promise<void> {
     this._gltf = gltf;
 
     if (gltf.parser.json.extensions === undefined || gltf.parser.json.extensions.VRM === undefined) {
-      throw new Error('not a VRM file');
+      throw new Error('Could not find VRM extension on the GLTF');
     }
     const vrmExt = gltf.parser.json.extensions.VRM;
 
-    this.meta = vrmExt.meta;
+    this._meta = vrmExt.meta;
 
     gltf.scene.updateMatrixWorld(false);
 
@@ -148,32 +178,42 @@ export class VRM {
 
     reduceBones(gltf.scene);
 
-    this.nodesMap = this._partsBuilder.getNodesMap(gltf);
-    const humanBones = this._partsBuilder.loadHumanoid(gltf, this.nodesMap);
-    if (!humanBones) {
-      throw new Error('no humans bones found. confirm your vrm file');
-    }
-    this.humanBones = humanBones;
+    const humanBones = await this._partsBuilder.loadHumanoid(gltf);
+    this._humanBones = humanBones;
 
-    this.firstPerson = this._partsBuilder.loadFirstPerson(vrmExt.firstPerson, this.nodesMap, this.humanBones, gltf);
+    this._firstPerson = this.humanBones
+      ? await this._partsBuilder.loadFirstPerson(vrmExt.firstPerson, this.humanBones, gltf)
+      : null;
 
-    this.animationMixer = new THREE.AnimationMixer(gltf.scene);
-    const blendShapeProxy = this._partsBuilder.loadBlendShapeMaster(this.animationMixer, gltf);
+    this._animationMixer = new THREE.AnimationMixer(gltf.scene);
+    const blendShapeProxy = await this._partsBuilder.loadBlendShapeMaster(this.animationMixer!, gltf);
     if (!blendShapeProxy) {
       throw new Error('failed to create blendShape. confirm your vrm file');
     }
-    this.blendShapeProxy = blendShapeProxy;
-    this.springBoneManager = this._partsBuilder.loadSecondary(gltf, this.nodesMap);
-    this.lookAt = this._partsBuilder.loadLookAt(vrmExt.firstPerson, this.blendShapeProxy, this.humanBones);
 
-    // 破壊的な変更後もrestposeにリセットできるように初期状態ポーズを保存。
-    Object.keys(this.humanBones).forEach((vrmBoneName) => {
-      const bone = this.humanBones[vrmBoneName]!;
-      this.restPose[vrmBoneName] = {
-        position: bone.position.toArray() as RawVector3,
-        rotation: bone.quaternion.toArray() as RawVector4,
-      };
-    });
+    this._blendShapeProxy = blendShapeProxy;
+
+    this._springBoneManager = await this._partsBuilder.loadSecondary(gltf);
+
+    this._lookAt =
+      this.blendShapeProxy && this.humanBones
+        ? this._partsBuilder.loadLookAt(vrmExt.firstPerson, this.blendShapeProxy, this.humanBones)
+        : null;
+
+    // Save current initial pose (which is Rest-pose) to restPose field, since pose changing may lose the default transforms. This is useful when resetting the pose or referring default pose.
+    this._restPose = this.humanBones
+      ? Object.keys(this.humanBones).reduce(
+          (restPose, vrmBoneName) => {
+            const bone = this.humanBones![vrmBoneName]!;
+            restPose[vrmBoneName] = {
+              position: bone.position.toArray() as RawVector3,
+              rotation: bone.quaternion.toArray() as RawVector4,
+            };
+            return restPose;
+          },
+          {} as VRMPose,
+        )
+      : null;
   }
 
   /**
@@ -183,10 +223,14 @@ export class VRM {
    */
   public setPose(poseObject: VRMPose): void {
     // VRMに定められたboneが足りない場合、正しくposeが取れない可能性がある
+    if (!this.humanBones) {
+      console.warn('This VRM cannot be posed since humanBones are not properly set');
+      return;
+    }
 
     Object.keys(poseObject).forEach((boneName) => {
       const state = poseObject[boneName]!;
-      const targetBone = this.humanBones[boneName];
+      const targetBone = this.humanBones![boneName];
 
       // VRM標準ボーンを満たしていないVRMファイルが世の中には存在する
       // （少し古いuniVRMは、必須なのにhipsを出力していなさそう）
@@ -195,7 +239,7 @@ export class VRM {
         return;
       }
 
-      const restState = this.restPose[boneName];
+      const restState = this.restPose![boneName];
       if (!restState) {
         return;
       }
@@ -220,7 +264,7 @@ export class VRM {
    * It is an equivalent of `gltf.scene`.
    */
   get scene() {
-    return this._gltf.scene;
+    return this._gltf && this._gltf.scene;
   }
 
   /**
@@ -231,10 +275,21 @@ export class VRM {
    * @param delta deltaTime
    */
   public update(delta: number): void {
-    this.lookAt.update();
-    this.animationMixer.update(delta);
-    this.blendShapeProxy.update();
-    this.springBoneManager.lateUpdate(delta);
+    if (this.lookAt) {
+      this.lookAt.update();
+    }
+
+    if (this.animationMixer) {
+      this.animationMixer.update(delta);
+    }
+
+    if (this.blendShapeProxy) {
+      this.blendShapeProxy.update();
+    }
+
+    if (this.springBoneManager) {
+      this.springBoneManager.lateUpdate(delta);
+    }
   }
 
   /**
@@ -243,10 +298,12 @@ export class VRM {
    */
   public dispose(): void {
     const scene = this.scene;
-    while (scene.children.length > 0) {
-      const object = scene.children[scene.children.length - 1];
-      deepDispose(object);
-      scene.remove(object);
+    if (scene) {
+      while (scene.children.length > 0) {
+        const object = scene.children[scene.children.length - 1];
+        deepDispose(object);
+        scene.remove(object);
+      }
     }
   }
 }
@@ -281,7 +338,7 @@ function reduceBones(root: THREE.Object3D): void {
     geometry.removeAttribute('skinIndex');
     geometry.addAttribute('skinIndex', new THREE.BufferAttribute(array, 4, false));
     mesh.bind(new THREE.Skeleton(bones, boneInverses), new THREE.Matrix4());
-    //                                                ^^^^^^^^^^^^^^^^^^^ transform of meshes should be ignored
+    //                                                 ^^^^^^^^^^^^^^^^^^^ transform of meshes should be ignored
     // See: https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#skins
   });
 }

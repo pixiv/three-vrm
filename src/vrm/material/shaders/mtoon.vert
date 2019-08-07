@@ -1,9 +1,5 @@
 // #define PHONG
 
-#define OUTLINEWIDTHMODE_NONE 0
-#define OUTLINEWIDTHMODE_WORLDCOORDINATES 1
-#define OUTLINEWIDTHMODE_SCREENCOORDINATES 2
-
 varying vec3 vViewPosition;
 
 #ifndef FLAT_SHADED
@@ -35,7 +31,6 @@ varying vec3 vViewPosition;
 
 uniform float outlineWidth;
 uniform float outlineScaledMaxDistance;
-uniform int outlineWidthMode;
 
 void main() {
 
@@ -69,21 +64,25 @@ void main() {
   vViewPosition = - mvPosition.xyz;
 
   float outlineTex = 1.0;
-  #if defined( OUTLINE ) && defined( USE_OUTLINEWIDTHTEXTURE )
-    outlineTex = texture2D( outlineWidthTexture, vUv ).r;
-  #endif
 
   #ifdef OUTLINE
-    if ( outlineWidthMode == OUTLINEWIDTHMODE_WORLDCOORDINATES ) {
+    #ifdef USE_OUTLINEWIDTHTEXTURE
+      outlineTex = texture2D( outlineWidthTexture, vUv ).r;
+    #endif
+
+    #ifdef OUTLINE_WIDTH_WORLD
       vec3 outlineOffset = 0.01 * outlineWidth * outlineTex * normalize( objectNormal );
       gl_Position += projectionMatrix * modelViewMatrix * vec4( outlineOffset, 0.0 );
-    } else if ( outlineWidthMode == OUTLINEWIDTHMODE_SCREENCOORDINATES ) {
+    #endif
+
+    #ifdef OUTLINE_WIDTH_SCREEN
       vec3 clipNormal = ( projectionMatrix * modelViewMatrix * vec4( normalize( objectNormal ), 0.0 ) ).xyz;
       vec2 projectedNormal = normalize( clipNormal.xy );
       projectedNormal *= min( gl_Position.w, outlineScaledMaxDistance );
       projectedNormal.x *= projectionMatrix[ 0 ].x / projectionMatrix[ 1 ].y;
       gl_Position.xy += 0.01 * outlineWidth * projectedNormal.xy;
-    }
+    #endif
+
     gl_Position.z += 1E-6 * gl_Position.w; // anti-artifact magic
   #endif
 

@@ -32,10 +32,12 @@
 			document.body.appendChild( renderer.domElement );
 
 			// camera
-			const CAMERA_FOV = 30.0;
-			const CAMERA_Z = 10.0;
-			const camera = new THREE.PerspectiveCamera( CAMERA_FOV, window.innerWidth / window.innerHeight, 0.1, 20.0 );
-			camera.position.set( 0.0, 0.0, CAMERA_Z );
+			const camera = new THREE.PerspectiveCamera( 30.0, window.innerWidth / window.innerHeight, 0.1, 20.0 );
+			camera.position.set( 0.0, 0.0, 5.0 );
+
+			// camera controls
+			const controls = new THREE.OrbitControls( camera, renderer.domElement );
+			controls.screenSpacePanning = true;
 
 			// scene
 			const scene = new THREE.Scene();
@@ -47,6 +49,7 @@
 
 			// gltf and vrm
 			let currentVrm = undefined;
+			let currentMixer = undefined;
 			const loader = new THREE.GLTFLoader();
 			loader.crossOrigin = 'anonymous';
 			loader.load(
@@ -59,9 +62,11 @@
 
 						scene.add( vrm.scene );
 						currentVrm = vrm;
-						console.log( vrm );
-
 						vrm.scene.rotation.y = Math.PI;
+
+						prepareAnimation( vrm );
+
+						console.log( vrm );
 
 					} );
 
@@ -73,6 +78,33 @@
 
 			);
 
+			// animation
+			function prepareAnimation( vrm ) {
+
+				currentMixer = new THREE.AnimationMixer( vrm.scene );
+
+				const quatA = new THREE.Quaternion( 0.0, 0.0, 0.0, 1.0 );
+				const quatB = new THREE.Quaternion( 0.0, 0.0, 0.0, 1.0 );
+				quatB.setFromEuler( new THREE.Euler( 0.0, 0.0, 0.25 * Math.PI ) );
+
+				const armTrack = new THREE.QuaternionKeyframeTrack(
+					vrm.humanBones[ 'leftUpperArm' ].name + '.quaternion', // name
+					[ 0.0, 0.5, 1.0 ], // times
+					[ ...quatA.toArray(), ...quatB.toArray(), ...quatA.toArray() ] // values
+				);
+
+				const blinkTrack = new THREE.NumberKeyframeTrack(
+					vrm.blendShapeProxy.getController( 'Blink' ).name + '.weight', // name
+					[ 0.0, 0.5, 1.0 ], // times
+					[ 0.0, 1.0, 0.0 ] // values
+				);
+
+				const clip = new THREE.AnimationClip( 'blink', 1.0, [ armTrack, blinkTrack ] );
+				const action = currentMixer.clipAction( clip );
+				action.play();
+
+			}
+
 			// helpers
 			const gridHelper = new THREE.GridHelper( 10, 10 );
 			scene.add( gridHelper );
@@ -82,36 +114,30 @@
 
 			// animate
 			const clock = new THREE.Clock();
-			clock.start();
 
 			function animate() {
 
 				requestAnimationFrame( animate );
 
-				if ( currentVrm ) { currentVrm.update( clock.getDelta() ); }
+				const deltaTime = clock.getDelta();
+
+				if ( currentVrm ) {
+
+					currentVrm.update( deltaTime );
+
+				}
+
+				if ( currentMixer ) {
+
+					currentMixer.update( deltaTime );
+
+				}
+
 				renderer.render( scene, camera );
 
 			}
 
 			animate();
-
-			// mouse handler
-			const mouseV2 = new THREE.Vector2();
-			const mouseRaycaster = new THREE.Raycaster();
-
-			window.addEventListener( 'mousemove', function( event ) {
-
-				if ( currentVrm ) {
-
-					const range = CAMERA_Z * Math.tan( CAMERA_FOV / 360.0 * Math.PI );
-					const px = ( 2.0 * event.clientX - window.innerWidth  ) / window.innerHeight * range;
-					const py = -( 2.0 * event.clientY - window.innerHeight ) / window.innerHeight * range;
-
-					currentVrm.scene.position.set( px, py, 0.0 );
-
-				}
-
-			} );
 		</script>
 	</body>
 </html>
