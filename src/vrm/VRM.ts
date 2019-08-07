@@ -50,9 +50,6 @@ export class VRMBuilder {
  *
  * } );
  * ```
- *
- * @param gltf A parsed result of GLTF taken from GLTFLoader
- * @param _builder A [[VRMPartsBuilder]]. Usually you don't have to care about it
  */
 export class VRM {
   /**
@@ -178,6 +175,11 @@ export class VRM {
 
   private readonly _partsBuilder: VRMPartsBuilder;
 
+  /**
+   * Create a new VRM instance.
+   *
+   * @param _builder A [[VRMPartsBuilder]]. Usually you don't have to care about it
+   */
   constructor(_builder?: VRMPartsBuilder) {
     if (_builder) {
       this._partsBuilder = _builder;
@@ -186,6 +188,11 @@ export class VRM {
     }
   }
 
+  /**
+   * Receive a GLTF object retrieved from `THREE.GLTFLoader` and load VRM components.
+   *
+   * @param gltf A parsed result of GLTF taken from GLTFLoader
+   */
   public async loadGLTF(gltf: THREE.GLTF): Promise<void> {
     this._gltf = gltf;
 
