@@ -19,8 +19,7 @@ export class VRMBuilderDebug extends VRMBuilder {
   public async build(gltf: THREE.GLTF): Promise<VRM> {
     const partsBuilder = new VRMPartsBuilderDebugProxy(this._partsBuilder, this._option);
     const vrm = new VRMDebug(partsBuilder, this._option);
-    const convertedGltf = await this._materialConverter.convertGLTFMaterials(gltf);
-    await vrm.loadGLTF(convertedGltf);
+    await vrm.loadGLTF(gltf);
     return vrm;
   }
 }

@@ -3,21 +3,13 @@ import { VRMBlendShapeProxy } from './blendshape';
 import { VRMFirstPerson } from './firstperson';
 import { VRMHumanBones } from './humanoid';
 import { VRMLookAtHead } from './lookat';
-import { MaterialConverter } from './material';
 import { VRMSpringBoneManager } from './springbone';
 import { RawVrmMeta, VRMPose } from './types';
 import { deepDispose } from './utils/disposer';
 import { VRMPartsBuilder } from './VRMPartsBuilder';
 
 export class VRMBuilder {
-  protected _materialConverter = new MaterialConverter(true);
-
   protected _partsBuilder = new VRMPartsBuilder();
-
-  public materialConverter(materialConverter: MaterialConverter): VRMBuilder {
-    this._materialConverter = materialConverter;
-    return this;
-  }
 
   public partsBuilder(partsBuilder: VRMPartsBuilder) {
     this._partsBuilder = partsBuilder;
@@ -26,8 +18,7 @@ export class VRMBuilder {
 
   public async build(gltf: THREE.GLTF): Promise<VRM> {
     const vrm = new VRM(this._partsBuilder);
-    const convertedGltf = await this._materialConverter.convertGLTFMaterials(gltf);
-    await vrm.loadGLTF(convertedGltf);
+    await vrm.loadGLTF(gltf);
     return vrm;
   }
 }
@@ -66,6 +57,11 @@ export class VRM {
     return this._lookAt;
   }
 
+  private _materials?: THREE.Material[] | null;
+  public get materials() {
+    return this._materials;
+  }
+
   private _meta?: RawVrmMeta;
   public get meta() {
     return this._meta;
@@ -101,7 +97,11 @@ export class VRM {
     }
     const vrmExt = gltf.parser.json.extensions.VRM;
 
+    // import meta
     this._meta = vrmExt.meta;
+
+    // import materials
+    this._materials = await this._partsBuilder.loadMaterials(gltf);
 
     gltf.scene.updateMatrixWorld(false);
 
@@ -208,6 +208,14 @@ export class VRM {
 
     if (this.springBoneManager) {
       this.springBoneManager.lateUpdate(delta);
+    }
+
+    if (this.materials) {
+      this.materials.forEach((material: any) => {
+        if (material.updateVRMMaterials) {
+          material.updateVRMMaterials();
+        }
+      });
     }
   }
 

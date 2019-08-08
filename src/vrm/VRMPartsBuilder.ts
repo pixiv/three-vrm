@@ -5,6 +5,7 @@ import { VRMHumanBones } from './humanoid';
 import { VRMLookAtHead } from './lookat';
 import { VRMLookAtBlendShapeApplyer } from './lookat/VRMLookAtBlendShapeApplyer';
 import { VRMLookAtBoneApplyer } from './lookat/VRMLookAtBoneApplyer';
+import { VRMMaterialImporter } from './material';
 import { VRMSpringBoneManager } from './springbone';
 import { GLTFMesh, GLTFNode, GLTFPrimitive, RawVrmHumanoidBone } from './types';
 import * as Raw from './types/VRM';
@@ -258,6 +259,12 @@ export class VRMPartsBuilder {
     const manager = new VRMSpringBoneManager();
     await manager.loadGLTF(gltf);
     return manager;
+  }
+
+  public async loadMaterials(gltf: THREE.GLTF): Promise<THREE.Material[]> {
+    const importer = new VRMMaterialImporter();
+    const materials = await importer.convertGLTFMaterials(gltf);
+    return materials;
   }
 
   private renameMaterialProperty(name: string): string {

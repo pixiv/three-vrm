@@ -3,22 +3,24 @@ import { GLTFMesh, GLTFPrimitive, RawVrm, RawVrmMaterial } from '../types';
 import { MToon, MToonOutlineWidthMode, MToonRenderMode } from './MToon';
 import { Unlit, UnlitRenderType } from './Unlit';
 
-export interface MaterialConverterOptions {
+export interface VRMMaterialImporterOptions {
+  colorSpaceGamma?: boolean;
   requestEnvMap?: () => Promise<THREE.Texture | null>;
 }
 
-export class MaterialConverter {
+export class VRMMaterialImporter {
   private readonly _colorSpaceGamma: boolean;
-  private readonly _options: MaterialConverterOptions;
+  private readonly _requestEnvMap?: () => Promise<THREE.Texture | null>;
 
-  constructor(colorSpaceGamma: boolean, options: MaterialConverterOptions = {}) {
-    this._colorSpaceGamma = colorSpaceGamma;
-    this._options = options;
+  constructor(options: VRMMaterialImporterOptions = {}) {
+    this._colorSpaceGamma = options.colorSpaceGamma || true;
+    this._requestEnvMap = options.requestEnvMap;
   }
 
-  public async convertGLTFMaterials(gltf: THREE.GLTF): Promise<THREE.GLTF> {
+  public async convertGLTFMaterials(gltf: THREE.GLTF): Promise<THREE.Material[]> {
     const meshesMap: GLTFMesh[] = await gltf.parser.getDependencies('mesh');
     const materialList: { [vrmMaterialIndex: number]: { surface: THREE.Material; outline?: THREE.Material } } = {};
+    const materials: THREE.Material[] = []; // result
 
     await Promise.all(
       meshesMap.map(async (mesh, meshIndex) => {
@@ -45,14 +47,19 @@ export class MaterialConverter {
             } else {
               vrmMaterials = await this.createVRMMaterials(primitive.material[0], props, gltf);
               materialList[vrmMaterialIndex] = vrmMaterials;
+
+              materials.push(vrmMaterials.surface);
+              if (vrmMaterials.outline) {
+                materials.push(vrmMaterials.outline);
+              }
             }
 
             // surface
             primitive.material[0] = vrmMaterials.surface;
 
             // envmap
-            if (this._options.requestEnvMap) {
-              this._options.requestEnvMap().then((envMap) => {
+            if (this._requestEnvMap) {
+              this._requestEnvMap().then((envMap) => {
                 (vrmMaterials.surface as any).envMap = envMap;
                 vrmMaterials.surface.needsUpdate = true;
               });
@@ -70,21 +77,12 @@ export class MaterialConverter {
                 1,
               );
             }
-
-            // attach `material.applyUniforms` to `mesh.onBeforeRender`
-            primitive.onBeforeRender = () => {
-              (primitive.material as THREE.Material[]).forEach((mtl) => {
-                if ((mtl as any).applyUniforms) {
-                  (mtl as any).applyUniforms();
-                }
-              });
-            };
           }),
         );
       }),
     );
 
-    return gltf;
+    return materials;
   }
 
   public async createVRMMaterials(
