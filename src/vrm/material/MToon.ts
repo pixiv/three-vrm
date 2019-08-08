@@ -26,6 +26,11 @@ export class MToon extends THREE.ShaderMaterial {
   public shadeToony: number = 0.9; // _ShadeToony
   public lightColorAttenuation: number = 0.0; // _LightColorAttenuation
   public indirectLightIntensity: number = 0.1; // _IndirectLightIntensity
+  public rimTexture: THREE.Texture | null = null; // _RimTexture
+  public rimColor: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 0.0, 1.0); // _RimColor
+  public rimLightingMix: number = 0.0; // _RimLightingMix
+  public rimFresnelPower: number = 1.0; // _RimFresnelPower
+  public rimLift: number = 0.0; // _RimLift
   public sphereAdd: THREE.Texture | null = null; // _SphereAdd
   // public sphereAdd_ST: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _SphereAdd_ST (unused)
   public emissionColor: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 0.0, 1.0); // _EmissionColor
@@ -114,6 +119,11 @@ export class MToon extends THREE.ShaderMaterial {
         shadeToony: { value: 0.9 },
         lightColorAttenuation: { value: 0.0 },
         indirectLightIntensity: { value: 0.1 },
+        rimTexture: { value: null },
+        rimColor: { value: new THREE.Color(0.0, 0.0, 0.0) },
+        rimLightingMix: { value: 0.0 },
+        rimFresnelPower: { value: 1.0 },
+        rimLift: { value: 0.0 },
         sphereAdd: { value: null },
         emissionColor: { value: new THREE.Color(0.0, 0.0, 0.0) },
         outlineWidthTexture: { value: null },
@@ -257,6 +267,11 @@ export class MToon extends THREE.ShaderMaterial {
     this.shadeToony = source.shadeToony;
     this.lightColorAttenuation = source.lightColorAttenuation;
     this.indirectLightIntensity = source.indirectLightIntensity;
+    this.rimTexture = source.rimTexture;
+    this.rimColor.copy(source.rimColor);
+    this.rimLightingMix = source.rimLightingMix;
+    this.rimFresnelPower = source.rimFresnelPower;
+    this.rimLift = source.rimLift;
     this.sphereAdd = source.sphereAdd;
     this.emissionColor.copy(source.emissionColor);
     this.emissiveMap = source.emissiveMap;
@@ -311,6 +326,14 @@ export class MToon extends THREE.ShaderMaterial {
     this.uniforms.shadeToony.value = this.shadeToony;
     this.uniforms.lightColorAttenuation.value = this.lightColorAttenuation;
     this.uniforms.indirectLightIntensity.value = this.indirectLightIntensity;
+    this.uniforms.rimTexture.value = this.rimTexture;
+    this.uniforms.rimColor.value.setRGB(this.rimColor.x, this.rimColor.y, this.rimColor.z);
+    if (!this._colorSpaceGamma) {
+      this.uniforms.rimColor.value.convertSRGBToLinear();
+    }
+    this.uniforms.rimLightingMix.value = this.rimLightingMix;
+    this.uniforms.rimFresnelPower.value = this.rimFresnelPower;
+    this.uniforms.rimLift.value = this.rimLift;
     this.uniforms.sphereAdd.value = this.sphereAdd;
     this.uniforms.emissionColor.value.setRGB(this.emissionColor.x, this.emissionColor.y, this.emissionColor.z);
     if (!this._colorSpaceGamma) {
@@ -339,6 +362,7 @@ export class MToon extends THREE.ShaderMaterial {
       USE_SHADETEXTURE: this.shadeTexture !== null,
       USE_RECEIVESHADOWTEXTURE: this.receiveShadowTexture !== null,
       USE_SHADINGGRADETEXTURE: this.shadingGradeTexture !== null,
+      USE_RIMTEXTURE: this.rimTexture !== null,
       USE_SPHEREADD: this.sphereAdd !== null,
       USE_OUTLINEWIDTHTEXTURE: this.outlineWidthTexture !== null,
       DEBUG_NORMAL: this._debugMode === MToonDebugMode.Normal,
@@ -407,6 +431,11 @@ export interface MToonParameters extends THREE.ShaderMaterialParameters {
   shadeToony?: number; // _ShadeToony
   lightColorAttenuation?: number; // _LightColorAttenuation
   indirectLightIntensity?: number; // _IndirectLightIntensity
+  rimTexture?: THREE.Texture; // _RimTexture
+  rimColor?: THREE.Vector4; // _RimColor
+  rimLightingMix?: number; // _RimLightingMix
+  rimFresnelPower?: number; // _RimFresnelPower
+  rimLift?: number; // _RimLift
   sphereAdd?: THREE.Texture; // _SphereAdd
   emissionColor?: THREE.Vector4; // _EmissionColor
   emissiveMap?: THREE.Texture; // _EmissionMap
