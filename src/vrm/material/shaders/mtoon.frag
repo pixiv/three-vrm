@@ -43,6 +43,10 @@ uniform vec3 emissionColor;
 uniform vec3 outlineColor;
 uniform float outlineLightingMix;
 
+uniform float uvAnimOffsetX;
+uniform float uvAnimOffsetY;
+uniform float uvAnimTheta;
+
 #include <common>
 #include <packing>
 #include <dithering_pars_fragment>
@@ -87,12 +91,12 @@ varying vec3 vViewPosition;
 
   // Per-Pixel Tangent Space Normal Mapping
   // http://hacksoflife.blogspot.ch/2009/11/per-pixel-tangent-space-normal-mapping.html
-  vec3 perturbNormal2Arb( vec3 eye_pos, vec3 surf_norm ) {
+  vec3 perturbNormal2Arb( vec2 uv, vec3 eye_pos, vec3 surf_norm ) {
     // Workaround for Adreno 3XX dFd*( vec3 ) bug. See #9988
     vec3 q0 = vec3( dFdx( eye_pos.x ), dFdx( eye_pos.y ), dFdx( eye_pos.z ) );
     vec3 q1 = vec3( dFdy( eye_pos.x ), dFdy( eye_pos.y ), dFdy( eye_pos.z ) );
-    vec2 st0 = dFdx( vUv.st );
-    vec2 st1 = dFdy( vUv.st );
+    vec2 st0 = dFdx( uv.st );
+    vec2 st1 = dFdy( uv.st );
 
     float scale = sign( st1.t * st0.s - st0.t * st1.s ); // we do not care about the magnitude
     vec3 S = ( q0 * st1.t - q1 * st0.t ) * scale;
@@ -108,7 +112,7 @@ varying vec3 vViewPosition;
 
     vec3 N = normalize( surf_norm );
     mat3 tsn = mat3( S, T, N );
-    vec3 mapN = texture2D( normalMap, vUv ).xyz * 2.0 - 1.0;
+    vec3 mapN = texture2D( normalMap, uv ).xyz * 2.0 - 1.0;
     mapN.xy *= bumpScale;
     mapN.xy *= ( float( gl_FrontFacing ) * 2.0 - 1.0 );
     return normalize( tsn * mapN );
@@ -163,6 +167,7 @@ vec3 getDiffuse(
 }
 
 vec3 calcDirectDiffuse(
+  const in vec2 uv,
   const in vec3 lit,
   const in vec3 shade,
   in GeometricContext geometry,
@@ -173,12 +178,12 @@ vec3 calcDirectDiffuse(
 
   float shadingGrade = 1.0;
   #ifdef USE_SHADINGGRADETEXTURE
-    shadingGrade = 1.0 - shadingGradeRate * ( 1.0 - texture2D( shadingGradeTexture, vUv ).r );
+    shadingGrade = 1.0 - shadingGradeRate * ( 1.0 - texture2D( shadingGradeTexture, uv ).r );
   #endif
 
   float receiveShadow = receiveShadowRate;
   #ifdef USE_RECEIVESHADOWTEXTURE
-    receiveShadow *= texture2D( receiveShadowTexture, vUv ).a;
+    receiveShadow *= texture2D( receiveShadowTexture, uv ).a;
   #endif
 
   #if ( NUM_POINT_LIGHTS > 0 )
@@ -260,10 +265,17 @@ void postCorrection() {
 void main() {
   #include <clipping_planes_fragment>
 
+  vec2 uv = vUv;
+  float uvAnimMask = 1.0; // texture2D( uvAnimMaskTexture, uv ).x;
+  float uvRotCos = cos( uvAnimTheta * uvAnimMask );
+  float uvRotSin = sin( uvAnimTheta * uvAnimMask );
+  uv = mat2( uvRotCos, uvRotSin, -uvRotSin, uvRotCos ) * ( uv - 0.5 ) + 0.5;
+  uv = fract( uv + vec2( uvAnimOffsetX, uvAnimOffsetY ) * uvAnimMask );
+
   #ifdef DEBUG_UV
     gl_FragColor = vec4( 0.0, 0.0, 0.0, 1.0 );
     #if defined( USE_MAP ) || defined( USE_SHADETEXTURE ) || defined( USE_NORMALMAP ) || defined( USE_RECEIVESHADOWTEXTURE ) || defined( USE_SHADINGGRADETEXTURE ) || defined( USE_RIMTEXTURE ) || defined( USE_EMISSIVEMAP ) || defined( USE_OUTLINEWIDTHTEXTURE )
-      gl_FragColor = vec4( vUv, 0.0, 1.0 );
+      gl_FragColor = vec4( uv, 0.0, 1.0 );
     #endif
     return;
   #endif
@@ -276,7 +288,7 @@ void main() {
 
   // #include <map_fragment>
   #ifdef USE_MAP
-    diffuseColor *= mapTexelToLinear( texture2D( map, vUv ) );
+    diffuseColor *= mapTexelToLinear( texture2D( map, uv ) );
   #endif
 
   #include <color_fragment>
@@ -306,11 +318,12 @@ void main() {
     normal *= -1.0;
   #endif
 
-  #include <normal_fragment_maps>
+  // #include <normal_fragment_maps>
+  normal = perturbNormal2Arb( uv, -vViewPosition, normal );
 
   // #include <emissivemap_fragment>
   #ifdef USE_EMISSIVEMAP
-    totalEmissiveRadiance *= emissiveMapTexelToLinear( texture2D( emissiveMap, vUv ) ).rgb;
+    totalEmissiveRadiance *= emissiveMapTexelToLinear( texture2D( emissiveMap, uv ) ).rgb;
   #endif
 
   if (normal.z < 0.0) { // TODO: temporary treatment against Snapdragon issue
@@ -329,7 +342,7 @@ void main() {
   vec3 lit = diffuseColor.rgb;
   vec3 shade = shadeColor;
   #ifdef USE_SHADETEXTURE
-    shade *= shadeTextureTexelToLinear( texture2D( shadeTexture, vUv ) ).rgb;
+    shade *= shadeTextureTexelToLinear( texture2D( shadeTexture, uv ) ).rgb;
   #endif
 
   GeometricContext geometry;
@@ -338,7 +351,7 @@ void main() {
   geometry.normal = normal;
   geometry.viewDir = normalize( vViewPosition );
 
-  vec3 lighting = calcDirectDiffuse( diffuseColor.rgb, shade, geometry, reflectedLight );
+  vec3 lighting = calcDirectDiffuse( uv, diffuseColor.rgb, shade, geometry, reflectedLight );
 
   vec3 irradiance = getAmbientLightIrradiance( ambientLightColor );
   #if ( NUM_HEMI_LIGHTS > 0 )
@@ -379,7 +392,7 @@ void main() {
   vec3 rimMix = mix(vec3(1.0), lighting + indirectLightIntensity * irradiance, rimLightingMix);
   vec3 rim = rimColor * pow( saturate( 1.0 - dot( viewDir, normal ) + rimLift ), rimFresnelPower );
   #ifdef USE_RIMTEXTURE
-    rim *= texture2D( rimTexture, vUv ).rgb;
+    rim *= texture2D( rimTexture, uv ).rgb;
   #endif
   col += rim;
 
@@ -388,8 +401,8 @@ void main() {
     {
       vec3 x = normalize( vec3( viewDir.z, 0.0, -viewDir.x ) );
       vec3 y = cross( viewDir, x ); // guaranteed to be normalized
-      vec2 uv = 0.5 + 0.5 * vec2( dot( x, normal ), -dot( y, normal ) );
-      vec3 matcap = sphereAddTexelToLinear( texture2D( sphereAdd, uv ) ).xyz;
+      vec2 sphereUv = 0.5 + 0.5 * vec2( dot( x, normal ), -dot( y, normal ) );
+      vec3 matcap = sphereAddTexelToLinear( texture2D( sphereAdd, sphereUv ) ).xyz;
       col += matcap;
     }
   #endif

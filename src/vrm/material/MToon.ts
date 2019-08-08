@@ -3,6 +3,9 @@
 import * as THREE from 'three';
 import { getTexelDecodingFunction } from './texel-decoder';
 
+const TAU = 2.0 * Math.PI;
+const frac = (x: number) => x - Math.floor(x);
+
 export class MToon extends THREE.ShaderMaterial {
   public readonly isVRMMToon: boolean = true;
 
@@ -62,6 +65,10 @@ export class MToon extends THREE.ShaderMaterial {
   private _isOutline: boolean = false;
 
   private readonly _colorSpaceGamma: boolean;
+
+  private _uvAnimOffsetX: number = 0.0;
+  private _uvAnimOffsetY: number = 0.0;
+  private _uvAnimPhase: number = 0.0;
 
   // TODO: ここにcolorSpaceGammaあるのダサい
   constructor(colorSpaceGamma: boolean, parameters?: MToonParameters) {
@@ -136,9 +143,9 @@ export class MToon extends THREE.ShaderMaterial {
         outlineColor: { value: new THREE.Color(0.0, 0.0, 0.0) },
         outlineLightingMix: { value: 1.0 },
         uvAnimMaskTexture: { value: null },
-        uvAnimScrollX: 0.0,
-        uvAnimScrollY: 0.0,
-        uvAnimRotation: 0.0,
+        uvAnimOffsetX: { value: 0.0 },
+        uvAnimOffsetY: { value: 0.0 },
+        uvAnimTheta: { value: 0.0 },
       },
     ]);
 
@@ -260,6 +267,10 @@ export class MToon extends THREE.ShaderMaterial {
    * Usually this will be called via [[VRM.update]] so you don't have to call this manually.
    */
   public updateVRMMaterials(delta: number): void {
+    this._uvAnimOffsetX = frac(this._uvAnimOffsetX + delta * this.uvAnimScrollX);
+    this._uvAnimOffsetY = frac(this._uvAnimOffsetY + delta * this.uvAnimScrollY);
+    this._uvAnimPhase = frac(this._uvAnimPhase + delta * this.uvAnimRotation);
+
     this._applyUniforms();
   }
 
@@ -318,6 +329,10 @@ export class MToon extends THREE.ShaderMaterial {
    * Strongly recommended to call this in `Object3D.onBeforeRender` .
    */
   private _applyUniforms() {
+    this.uniforms.uvAnimOffsetX.value = this._uvAnimOffsetX;
+    this.uniforms.uvAnimOffsetY.value = this._uvAnimOffsetY;
+    this.uniforms.uvAnimTheta.value = TAU * this._uvAnimPhase;
+
     if (!this.shouldApplyUniforms) {
       return;
     }
@@ -369,9 +384,6 @@ export class MToon extends THREE.ShaderMaterial {
     }
     this.uniforms.outlineLightingMix.value = this.outlineLightingMix;
     this.uniforms.uvAnimMaskTexture.value = this.uvAnimMaskTexture;
-    this.uniforms.uvAnimScrollX.value = this.uvAnimScrollX;
-    this.uniforms.uvAnimScrollY.value = this.uvAnimScrollY;
-    this.uniforms.uvAnimRotation.value = this.uvAnimRotation;
 
     this.updateCullFace();
   }
