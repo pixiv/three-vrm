@@ -213,7 +213,7 @@ export class VRM {
     if (this.materials) {
       this.materials.forEach((material: any) => {
         if (material.updateVRMMaterials) {
-          material.updateVRMMaterials();
+          material.updateVRMMaterials(delta);
         }
       });
     }
