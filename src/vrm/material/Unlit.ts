@@ -3,7 +3,7 @@
 import * as THREE from 'three';
 
 export class Unlit extends THREE.ShaderMaterial {
-  public isVRMUnlit: boolean = true;
+  public readonly isVRMUnlit: boolean = true;
 
   public cutoff: number = 0.5;
   public map: THREE.Texture | null = null; // _MainTex
@@ -65,6 +65,14 @@ export class Unlit extends THREE.ShaderMaterial {
     this.updateShaderCode();
   }
 
+  /**
+   * Update this material.
+   * Usually this will be called via [[VRM.update]] so you don't have to call this manually.
+   */
+  public updateVRMMaterials(delta: number): void {
+    this._applyUniforms();
+  }
+
   public copy(source: this): this {
     super.copy(source);
 
@@ -81,7 +89,7 @@ export class Unlit extends THREE.ShaderMaterial {
    * Apply updated uniform variables.
    * Strongly recommended to call this in `Object3D.onBeforeRender` .
    */
-  public applyUniforms() {
+  private _applyUniforms() {
     if (!this.shouldApplyUniforms) {
       return;
     }
