@@ -32,10 +32,12 @@
 			document.body.appendChild( renderer.domElement );
 
 			// camera
-			const CAMERA_FOV = 30.0;
-			const CAMERA_Z = 10.0;
-			const camera = new THREE.PerspectiveCamera( CAMERA_FOV, window.innerWidth / window.innerHeight, 0.1, 20.0 );
-			camera.position.set( 0.0, 0.0, CAMERA_Z );
+			const camera = new THREE.PerspectiveCamera( 30.0, window.innerWidth / window.innerHeight, 0.1, 20.0 );
+			camera.position.set( 0.0, 0.0, 5.0 );
+
+			// camera controls
+			const controls = new THREE.OrbitControls( camera, renderer.domElement );
+			controls.screenSpacePanning = true;
 
 			// scene
 			const scene = new THREE.Scene();
@@ -59,9 +61,9 @@
 
 						scene.add( vrm.scene );
 						currentVrm = vrm;
-						console.log( vrm );
-
 						vrm.scene.rotation.y = Math.PI;
+
+						console.log( vrm );
 
 					} );
 
@@ -82,36 +84,31 @@
 
 			// animate
 			const clock = new THREE.Clock();
-			clock.start();
 
 			function animate() {
 
 				requestAnimationFrame( animate );
 
-				if ( currentVrm ) { currentVrm.update( clock.getDelta() ); }
+				const deltaTime = clock.getDelta();
+
+				if ( currentVrm ) {
+
+					// tweak bones
+					const s = 0.25 * Math.PI * Math.sin( Math.PI * clock.elapsedTime );
+					currentVrm.humanBones.neck.rotation.y = s;
+					currentVrm.humanBones.leftUpperArm.rotation.z = s;
+					currentVrm.humanBones.rightUpperArm.rotation.x = s;
+
+					// update vrm
+					currentVrm.update( deltaTime );
+
+				}
+
 				renderer.render( scene, camera );
 
 			}
 
 			animate();
-
-			// mouse handler
-			const mouseV2 = new THREE.Vector2();
-			const mouseRaycaster = new THREE.Raycaster();
-
-			window.addEventListener( 'mousemove', function( event ) {
-
-				if ( currentVrm ) {
-
-					const range = CAMERA_Z * Math.tan( CAMERA_FOV / 360.0 * Math.PI );
-					const px = ( 2.0 * event.clientX - window.innerWidth  ) / window.innerHeight * range;
-					const py = -( 2.0 * event.clientY - window.innerHeight ) / window.innerHeight * range;
-
-					currentVrm.scene.position.set( px, py, 0.0 );
-
-				}
-
-			} );
 		</script>
 	</body>
 </html>
