@@ -319,7 +319,9 @@ void main() {
   #endif
 
   // #include <normal_fragment_maps>
-  normal = perturbNormal2Arb( uv, -vViewPosition, normal );
+  #ifdef USE_NORMALMAP
+    normal = perturbNormal2Arb( uv, -vViewPosition, normal );
+  #endif
 
   // #include <emissivemap_fragment>
   #ifdef USE_EMISSIVEMAP
