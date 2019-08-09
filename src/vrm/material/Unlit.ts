@@ -42,6 +42,7 @@ export class Unlit extends THREE.ShaderMaterial {
 
     // == update shader stuff ==================================================
     this.updateShaderCode();
+    this._applyUniforms();
   }
 
   get mainTex(): THREE.Texture | null {
