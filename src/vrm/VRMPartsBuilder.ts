@@ -6,8 +6,7 @@ import { VRMLookAtHead } from './lookat';
 import { VRMLookAtBlendShapeApplyer } from './lookat/VRMLookAtBlendShapeApplyer';
 import { VRMLookAtBoneApplyer } from './lookat/VRMLookAtBoneApplyer';
 import { VRMSpringBoneManager } from './springbone';
-import { GLTFMesh, GLTFNode, GLTFPrimitive, RawVrmHumanoidBone } from './types';
-import * as Raw from './types/VRM';
+import { GLTFMesh, GLTFNode, GLTFPrimitive, VRMSchema } from './types';
 
 export class VRMPartsBuilder {
   /**
@@ -16,7 +15,7 @@ export class VRMPartsBuilder {
    * @returns
    */
   public async loadHumanoid(gltf: THREE.GLTF): Promise<VRMHumanBones | null> {
-    const humanBones: RawVrmHumanoidBone[] | undefined =
+    const humanBones: VRMSchema.HumanoidBone[] | undefined =
       gltf.parser.json.extensions &&
       gltf.parser.json.extensions.VRM &&
       gltf.parser.json.extensions.VRM.humanoid &&
@@ -46,13 +45,13 @@ export class VRMPartsBuilder {
    * @returns
    */
   public async loadFirstPerson(
-    firstPerson: Raw.RawVrmFirstPerson,
+    firstPerson: VRMSchema.FirstPerson,
     humanBones: VRMHumanBones,
     gltf: THREE.GLTF,
   ): Promise<VRMFirstPerson | null> {
     const isFirstPersonBoneNotSet = firstPerson.firstPersonBone === undefined || firstPerson.firstPersonBone === -1;
     const firstPersonBone: GLTFNode = isFirstPersonBoneNotSet
-      ? humanBones[Raw.HumanBone.Head] // fallback
+      ? humanBones[VRMSchema.HumanoidBoneName.Head] // fallback
       : await gltf.parser.getDependency('node', firstPerson.firstPersonBone!);
 
     if (!firstPersonBone) {
@@ -82,7 +81,7 @@ export class VRMPartsBuilder {
   }
 
   public loadLookAt(
-    firstPerson: Raw.RawVrmFirstPerson,
+    firstPerson: VRMSchema.FirstPerson,
     blendShapeProxy: VRMBlendShapeProxy,
     humanBodyBones: VRMHumanBones,
   ): VRMLookAtHead {
@@ -92,7 +91,7 @@ export class VRMPartsBuilder {
     const lookAtVerticalUp = firstPerson.lookAtVerticalUp;
 
     switch (firstPerson.lookAtTypeName) {
-      case Raw.LookAtTypeName.Bone: {
+      case VRMSchema.FirstPersonLookAtTypeName.Bone: {
         if (
           lookAtHorizontalInner === undefined ||
           lookAtHorizontalOuter === undefined ||
@@ -113,7 +112,7 @@ export class VRMPartsBuilder {
           );
         }
       }
-      case Raw.LookAtTypeName.BlendShape: {
+      case VRMSchema.FirstPersonLookAtTypeName.BlendShape: {
         if (lookAtHorizontalOuter === undefined || lookAtVerticalDown === undefined || lookAtVerticalUp === undefined) {
           return new VRMLookAtHead(humanBodyBones);
         } else {
@@ -144,7 +143,7 @@ export class VRMPartsBuilder {
     animationMixer: THREE.AnimationMixer,
     gltf: THREE.GLTF,
   ): Promise<VRMBlendShapeProxy | null> {
-    const blendShapeGroups: Raw.RawVrmBlendShapeGroup[] | undefined =
+    const blendShapeGroups: VRMSchema.BlendShapeGroup[] | undefined =
       gltf.parser.json.extensions &&
       gltf.parser.json.extensions.VRM &&
       gltf.parser.json.extensions.VRM.blendShapeMaster &&
@@ -154,7 +153,7 @@ export class VRMPartsBuilder {
     }
 
     const blendShapeMaster = new BlendShapeMaster();
-    const blendShapePresetMap: { [presetName in Raw.BlendShapePresetName]?: string } = {};
+    const blendShapePresetMap: { [presetName in VRMSchema.BlendShapePresetName]?: string } = {};
 
     blendShapeGroups.forEach(async (group) => {
       const name = group.name;
@@ -165,7 +164,7 @@ export class VRMPartsBuilder {
 
       if (
         group.presetName &&
-        group.presetName !== Raw.BlendShapePresetName.Unknown &&
+        group.presetName !== VRMSchema.BlendShapePresetName.Unknown &&
         !blendShapePresetMap[group.presetName]
       ) {
         blendShapePresetMap[group.presetName] = group.name;

@@ -1,22 +1,21 @@
 import * as THREE from 'three';
 import { VRMHumanBones } from '../humanoid';
-import { GLTFNode } from '../types';
-import { LookAtTypeName, RawVrmFirstPersonDegreemap } from '../types';
+import { GLTFNode, VRMSchema } from '../types';
 import { CurveMapper, DEG2RAD } from './CurveMapper';
 import { VRMLookAtApplyer } from './VRMLookAtApplyer';
 
 export class VRMLookAtBoneApplyer extends VRMLookAtApplyer {
-  private readonly lookAtHorizontalInner: RawVrmFirstPersonDegreemap;
+  private readonly lookAtHorizontalInner: VRMSchema.FirstPersonDegreeMap;
 
   private readonly _leftEye?: GLTFNode;
   private readonly _rightEye?: GLTFNode;
 
   constructor(
     humanBodyBones: VRMHumanBones,
-    lookAtHorizontalInner: RawVrmFirstPersonDegreemap,
-    lookAtHorizontalOuter: RawVrmFirstPersonDegreemap,
-    lookAtVerticalDown: RawVrmFirstPersonDegreemap,
-    lookAtVerticalUp: RawVrmFirstPersonDegreemap,
+    lookAtHorizontalInner: VRMSchema.FirstPersonDegreeMap,
+    lookAtHorizontalOuter: VRMSchema.FirstPersonDegreeMap,
+    lookAtVerticalDown: VRMSchema.FirstPersonDegreeMap,
+    lookAtVerticalUp: VRMSchema.FirstPersonDegreeMap,
   ) {
     super(lookAtHorizontalOuter, lookAtVerticalDown, lookAtVerticalUp);
     this._leftEye = humanBodyBones.leftEye;
@@ -24,8 +23,8 @@ export class VRMLookAtBoneApplyer extends VRMLookAtApplyer {
     this.lookAtHorizontalInner = lookAtHorizontalInner;
   }
 
-  public name(): LookAtTypeName {
-    return LookAtTypeName.Bone;
+  public name(): VRMSchema.FirstPersonLookAtTypeName {
+    return VRMSchema.FirstPersonLookAtTypeName.Bone;
   }
 
   public lookAt(euler: THREE.Euler) {
@@ -69,7 +68,7 @@ export class VRMLookAtBoneApplyer extends VRMLookAtApplyer {
   }
 }
 
-function deg2rad(map: RawVrmFirstPersonDegreemap): RawVrmFirstPersonDegreemap {
+function deg2rad(map: VRMSchema.FirstPersonDegreeMap): VRMSchema.FirstPersonDegreeMap {
   return {
     xRange: typeof map.xRange === 'number' ? DEG2RAD * map.xRange : undefined,
     yRange: typeof map.yRange === 'number' ? DEG2RAD * map.yRange : undefined,

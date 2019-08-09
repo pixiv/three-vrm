@@ -5,7 +5,7 @@ import { VRMHumanBones } from './humanoid';
 import { VRMLookAtHead } from './lookat';
 import { MaterialConverter } from './material';
 import { VRMSpringBoneManager } from './springbone';
-import { RawVector3, RawVector4, RawVrmMeta, VRMPose } from './types';
+import { RawVector3, RawVector4, VRMPose, VRMSchema } from './types';
 import { deepDispose } from './utils/disposer';
 import { VRMPartsBuilder } from './VRMPartsBuilder';
 
@@ -139,7 +139,7 @@ export class VRM {
     return this._lookAt;
   }
 
-  private _meta?: RawVrmMeta;
+  private _meta?: VRMSchema.Meta;
 
   /**
    * Contains meta fields of the VRM.

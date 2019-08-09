@@ -4,7 +4,7 @@ import { VRMFirstPerson } from '../firstperson';
 import { VRMHumanBones } from '../humanoid';
 import { VRMLookAtHead } from '../lookat';
 import { VRMSpringBoneManager } from '../springbone';
-import * as Raw from '../types/VRM';
+import { VRMSchema } from '../types';
 import { VRMPartsBuilder } from '../VRMPartsBuilder';
 import { DebugOption } from './DebugOption';
 import { VRMSpringBoneManagerDebug } from './VRMSpringBoneManager';
@@ -24,7 +24,7 @@ export class VRMPartsBuilderDebugProxy extends VRMPartsBuilder {
   }
 
   public async loadFirstPerson(
-    firstPerson: Raw.RawVrmFirstPerson,
+    firstPerson: VRMSchema.FirstPerson,
     humanBones: VRMHumanBones,
     gltf: THREE.GLTF,
   ): Promise<VRMFirstPerson | null> {
@@ -32,7 +32,7 @@ export class VRMPartsBuilderDebugProxy extends VRMPartsBuilder {
   }
 
   public loadLookAt(
-    firstPerson: Raw.RawVrmFirstPerson,
+    firstPerson: VRMSchema.FirstPerson,
     blendShapeProxy: VRMBlendShapeProxy,
     humanBodyBones: VRMHumanBones,
   ): VRMLookAtHead {

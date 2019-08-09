@@ -1,31 +1,31 @@
 /**
  * The root object for a glTF asset.
  */
-export interface RawGltf {
+export interface GLTF {
   /**
    * An array of accessors.
    */
-  accessors?: RawAccessor[];
+  accessors?: Accessor[];
   /**
    * An array of keyframe animations.
    */
-  animations?: RawAnimation[];
+  animations?: Animation[];
   /**
    * Metadata about the glTF asset.
    */
-  asset: RawAsset;
+  asset: Asset;
   /**
    * An array of buffers.
    */
-  buffers?: RawBuffer[];
+  buffers?: Buffer[];
   /**
    * An array of bufferViews.
    */
-  bufferViews?: RawBufferView[];
+  bufferViews?: BufferView[];
   /**
    * An array of cameras.
    */
-  cameras?: RawCamera[];
+  cameras?: Camera[];
   extensions?: { [key: string]: { [key: string]: any } };
   /**
    * Names of glTF extensions required to properly load this asset.
@@ -39,23 +39,23 @@ export interface RawGltf {
   /**
    * An array of images.
    */
-  images?: RawImage[];
+  images?: Image[];
   /**
    * An array of materials.
    */
-  materials?: RawMaterial[];
+  materials?: Material[];
   /**
    * An array of meshes.
    */
-  meshes?: RawMesh[];
+  meshes?: Mesh[];
   /**
    * An array of nodes.
    */
-  nodes?: RawNode[];
+  nodes?: Node[];
   /**
    * An array of samplers.
    */
-  samplers?: RawSampler[];
+  samplers?: Sampler[];
   /**
    * The index of the default scene.
    */
@@ -63,15 +63,15 @@ export interface RawGltf {
   /**
    * An array of scenes.
    */
-  scenes?: RawScene[];
+  scenes?: Scene[];
   /**
    * An array of skins.
    */
-  skins?: RawSkin[];
+  skins?: Skin[];
   /**
    * An array of textures.
    */
-  textures?: RawTexture[];
+  textures?: Texture[];
 }
 
 /**
@@ -79,7 +79,7 @@ export interface RawGltf {
  * provides a typed view into a bufferView or a subset of a bufferView similar to how
  * WebGL's `vertexAttribPointer()` defines an attribute in a buffer.
  */
-export interface RawAccessor {
+export interface Accessor {
   /**
    * The index of the bufferView.
    */
@@ -117,7 +117,7 @@ export interface RawAccessor {
   /**
    * Sparse storage of attributes that deviate from their initialization value.
    */
-  sparse?: RawAccessorSparse;
+  sparse?: AccessorSparse;
   /**
    * Specifies if the attribute is a scalar, vector, or matrix.
    */
@@ -127,7 +127,7 @@ export interface RawAccessor {
 /**
  * Sparse storage of attributes that deviate from their initialization value.
  */
-export interface RawAccessorSparse {
+export interface AccessorSparse {
   /**
    * Number of entries stored in the sparse array.
    */
@@ -138,13 +138,13 @@ export interface RawAccessorSparse {
    * Index array of size `count` that points to those accessor attributes that deviate from
    * their initialization value. Indices must strictly increase.
    */
-  indices: RawAccessorSparseIndices;
+  indices: AccessorSparseIndices;
   /**
    * Array of size `count` times number of components, storing the displaced accessor
    * attributes pointed by `indices`. Substituted values must have the same `componentType`
    * and number of components as the base accessor.
    */
-  values: RawAccessorSparseValues;
+  values: AccessorSparseValues;
 }
 
 /**
@@ -153,7 +153,7 @@ export interface RawAccessorSparse {
  *
  * Indices of those attributes that deviate from their initialization value.
  */
-export interface RawAccessorSparseIndices {
+export interface AccessorSparseIndices {
   /**
    * The index of the bufferView with sparse indices. Referenced bufferView can't have
    * ARRAY_BUFFER or ELEMENT_ARRAY_BUFFER target.
@@ -179,7 +179,7 @@ export interface RawAccessorSparseIndices {
  * Array of size `accessor.sparse.count` times number of components storing the displaced
  * accessor attributes pointed by `accessor.sparse.indices`.
  */
-export interface RawAccessorSparseValues {
+export interface AccessorSparseValues {
   /**
    * The index of the bufferView with sparse values. Referenced bufferView can't have
    * ARRAY_BUFFER or ELEMENT_ARRAY_BUFFER target.
@@ -196,12 +196,12 @@ export interface RawAccessorSparseValues {
 /**
  * A keyframe animation.
  */
-export interface RawAnimation {
+export interface Animation {
   /**
    * An array of channels, each of which targets an animation's sampler at a node's property.
    * Different channels of the same animation can't have equal targets.
    */
-  channels: RawAnimationChannel[];
+  channels: AnimationChannel[];
   extensions?: { [key: string]: { [key: string]: any } };
   extras?: any;
   /**
@@ -212,13 +212,13 @@ export interface RawAnimation {
    * An array of samplers that combines input and output accessors with an interpolation
    * algorithm to define a keyframe graph (but not its target).
    */
-  samplers: RawAnimationSampler[];
+  samplers: AnimationSampler[];
 }
 
 /**
  * Targets an animation's sampler at a node's property.
  */
-export interface RawAnimationChannel {
+export interface AnimationChannel {
   extensions?: { [key: string]: { [key: string]: any } };
   extras?: any;
   /**
@@ -228,7 +228,7 @@ export interface RawAnimationChannel {
   /**
    * The index of the node and TRS property to target.
    */
-  target: RawAnimationChannelTarget;
+  target: AnimationChannelTarget;
 }
 
 /**
@@ -236,7 +236,7 @@ export interface RawAnimationChannel {
  *
  * The index of the node and TRS property that an animation channel targets.
  */
-export interface RawAnimationChannelTarget {
+export interface AnimationChannelTarget {
   extensions?: { [key: string]: { [key: string]: any } };
   extras?: any;
   /**
@@ -257,7 +257,7 @@ export interface RawAnimationChannelTarget {
  * Combines input and output accessors with an interpolation algorithm to define a keyframe
  * graph (but not its target).
  */
-export interface RawAnimationSampler {
+export interface AnimationSampler {
   extensions?: { [key: string]: { [key: string]: any } };
   extras?: any;
   /**
@@ -277,7 +277,7 @@ export interface RawAnimationSampler {
 /**
  * Metadata about the glTF asset.
  */
-export interface RawAsset {
+export interface Asset {
   /**
    * A copyright message suitable for display to credit the content creator.
    */
@@ -301,7 +301,7 @@ export interface RawAsset {
 /**
  * A view into a buffer generally representing a subset of the buffer.
  */
-export interface RawBufferView {
+export interface BufferView {
   /**
    * The index of the buffer.
    */
@@ -333,7 +333,7 @@ export interface RawBufferView {
 /**
  * A buffer points to binary geometry, animation, or skins.
  */
-export interface RawBuffer {
+export interface Buffer {
   /**
    * The length of the buffer in bytes.
    */
@@ -354,7 +354,7 @@ export interface RawBuffer {
  * A camera's projection.  A node can reference a camera to apply a transform to place the
  * camera in the scene.
  */
-export interface RawCamera {
+export interface Camera {
   extensions?: { [key: string]: { [key: string]: any } };
   extras?: any;
   /**
@@ -364,11 +364,11 @@ export interface RawCamera {
   /**
    * An orthographic camera containing properties to create an orthographic projection matrix.
    */
-  orthographic?: RawCameraOrthographic;
+  orthographic?: CameraOrthographic;
   /**
    * A perspective camera containing properties to create a perspective projection matrix.
    */
-  perspective?: RawCameraPerspective;
+  perspective?: CameraPerspective;
   /**
    * Specifies if the camera uses a perspective or orthographic projection.
    */
@@ -378,7 +378,7 @@ export interface RawCamera {
 /**
  * An orthographic camera containing properties to create an orthographic projection matrix.
  */
-export interface RawCameraOrthographic {
+export interface CameraOrthographic {
   extensions?: { [key: string]: { [key: string]: any } };
   extras?: any;
   /**
@@ -403,7 +403,7 @@ export interface RawCameraOrthographic {
 /**
  * A perspective camera containing properties to create a perspective projection matrix.
  */
-export interface RawCameraPerspective {
+export interface CameraPerspective {
   /**
    * The floating-point aspect ratio of the field of view.
    */
@@ -428,7 +428,7 @@ export interface RawCameraPerspective {
  * Image data used to create a texture. Image can be referenced by URI or `bufferView`
  * index. `mimeType` is required in the latter case.
  */
-export interface RawImage {
+export interface Image {
   /**
    * The index of the bufferView that contains the image. Use this instead of the image's uri
    * property.
@@ -453,7 +453,7 @@ export interface RawImage {
 /**
  * The material appearance of a primitive.
  */
-export interface RawMaterial {
+export interface Material {
   /**
    * The alpha cutoff value of the material.
    */
@@ -473,7 +473,7 @@ export interface RawMaterial {
   /**
    * The emissive map texture.
    */
-  emissiveTexture?: RawTextureInfo;
+  emissiveTexture?: TextureInfo;
   extensions?: { [key: string]: { [key: string]: any } };
   extras?: any;
   /**
@@ -483,17 +483,17 @@ export interface RawMaterial {
   /**
    * The normal map texture.
    */
-  normalTexture?: RawMaterialNormalTextureInfoObject;
+  normalTexture?: MaterialNormalTextureInfoObject;
   /**
    * The occlusion map texture.
    */
-  occlusionTexture?: RawMaterialOcclusionTextureInfoObject;
+  occlusionTexture?: MaterialOcclusionTextureInfoObject;
   /**
    * A set of parameter values that are used to define the metallic-roughness material model
    * from Physically-Based Rendering (PBR) methodology. When not specified, all the default
    * values of `pbrMetallicRoughness` apply.
    */
-  pbrMetallicRoughness?: RawMaterialPBRMetallicRoughness;
+  pbrMetallicRoughness?: MaterialPBRMetallicRoughness;
 }
 
 /**
@@ -505,7 +505,7 @@ export interface RawMaterial {
  *
  * Reference to a texture.
  */
-export interface RawTextureInfo {
+export interface TextureInfo {
   extensions?: { [key: string]: { [key: string]: any } };
   extras?: any;
   /**
@@ -523,7 +523,7 @@ export interface RawTextureInfo {
  *
  * Reference to a texture.
  */
-export interface RawMaterialNormalTextureInfoObject {
+export interface MaterialNormalTextureInfoObject {
   extensions?: { [key: string]: { [key: string]: any } };
   extras?: any;
   /**
@@ -545,7 +545,7 @@ export interface RawMaterialNormalTextureInfoObject {
  *
  * Reference to a texture.
  */
-export interface RawMaterialOcclusionTextureInfoObject {
+export interface MaterialOcclusionTextureInfoObject {
   extensions?: { [key: string]: { [key: string]: any } };
   extras?: any;
   /**
@@ -570,7 +570,7 @@ export interface RawMaterialOcclusionTextureInfoObject {
  * A set of parameter values that are used to define the metallic-roughness material model
  * from Physically-Based Rendering (PBR) methodology.
  */
-export interface RawMaterialPBRMetallicRoughness {
+export interface MaterialPBRMetallicRoughness {
   /**
    * The material's base color factor.
    */
@@ -578,7 +578,7 @@ export interface RawMaterialPBRMetallicRoughness {
   /**
    * The base color texture.
    */
-  baseColorTexture?: RawTextureInfo;
+  baseColorTexture?: TextureInfo;
   extensions?: { [key: string]: { [key: string]: any } };
   extras?: any;
   /**
@@ -588,7 +588,7 @@ export interface RawMaterialPBRMetallicRoughness {
   /**
    * The metallic-roughness texture.
    */
-  metallicRoughnessTexture?: RawTextureInfo;
+  metallicRoughnessTexture?: TextureInfo;
   /**
    * The roughness of the material.
    */
@@ -599,7 +599,7 @@ export interface RawMaterialPBRMetallicRoughness {
  * A set of primitives to be rendered.  A node can contain one mesh.  A node's transform
  * places the mesh in the scene.
  */
-export interface RawMesh {
+export interface Mesh {
   extensions?: { [key: string]: { [key: string]: any } };
   extras?: any;
   /**
@@ -609,7 +609,7 @@ export interface RawMesh {
   /**
    * An array of primitives, each defining geometry to be rendered with a material.
    */
-  primitives: RawMeshPrimitive[];
+  primitives: MeshPrimitive[];
   /**
    * Array of weights to be applied to the Morph Targets.
    */
@@ -619,7 +619,7 @@ export interface RawMesh {
 /**
  * Geometry to be rendered with the given material.
  */
-export interface RawMeshPrimitive {
+export interface MeshPrimitive {
   /**
    * A dictionary object, where each key corresponds to mesh attribute semantic and each value
    * is the index of the accessor containing attribute's data.
@@ -643,7 +643,7 @@ export interface RawMeshPrimitive {
    * An array of Morph Targets, each  Morph Target is a dictionary mapping attributes (only
    * `POSITION`, `NORMAL`, and `TANGENT` supported) to their deviations in the Morph Target.
    */
-  targets?: Array<{ [key: string]: number }>;
+  targets?: { [key: string]: number }[];
 }
 
 /**
@@ -656,7 +656,7 @@ export interface RawMeshPrimitive {
  * targeted for animation (referenced by an animation.channel.target), only TRS properties
  * may be present; `matrix` will not be present.
  */
-export interface RawNode {
+export interface Node {
   /**
    * The index of the camera referenced by this node.
    */
@@ -705,7 +705,7 @@ export interface RawNode {
 /**
  * Texture sampler properties for filtering and wrapping modes.
  */
-export interface RawSampler {
+export interface Sampler {
   extensions?: { [key: string]: { [key: string]: any } };
   extras?: any;
   /**
@@ -733,7 +733,7 @@ export interface RawSampler {
 /**
  * The root nodes of a scene.
  */
-export interface RawScene {
+export interface Scene {
   extensions?: { [key: string]: { [key: string]: any } };
   extras?: any;
   /**
@@ -749,7 +749,7 @@ export interface RawScene {
 /**
  * Joints and matrices defining a skin.
  */
-export interface RawSkin {
+export interface Skin {
   extensions?: { [key: string]: { [key: string]: any } };
   extras?: any;
   /**
@@ -767,8 +767,7 @@ export interface RawSkin {
    */
   name?: string;
   /**
-   * The index of the node used as a skeleton root. When undefined, joints transforms resolve
-   * to scene root.
+   * The index of the node used as a skeleton root.
    */
   skeleton?: number;
 }
@@ -776,7 +775,7 @@ export interface RawSkin {
 /**
  * A texture and its sampler.
  */
-export interface RawTexture {
+export interface Texture {
   extensions?: { [key: string]: { [key: string]: any } };
   extras?: any;
   /**
@@ -789,7 +788,9 @@ export interface RawTexture {
    */
   sampler?: number;
   /**
-   * The index of the image used by this texture.
+   * The index of the image used by this texture. When undefined, it is expected that an
+   * extension or other mechanism will supply an alternate texture source, otherwise behavior
+   * is undefined.
    */
   source?: number;
 }

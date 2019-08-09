@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { GLTFMesh, GLTFPrimitive, RawVrm, RawVrmMaterial } from '../types';
+import { GLTFMesh, GLTFPrimitive, VRMSchema } from '../types';
 import { MToon, MToonOutlineWidthMode, MToonRenderMode } from './MToon';
 import { Unlit, UnlitRenderType } from './Unlit';
 
@@ -38,7 +38,7 @@ export class MaterialConverter {
 
             // create / push to cache (or pop from cache) vrm materials
             const vrmMaterialIndex = gltf.parser.json.meshes![meshIndex].primitives[primitiveIndex].material!;
-            const props = (gltf.parser.json.extensions!.VRM as RawVrm).materialProperties![vrmMaterialIndex];
+            const props = (gltf.parser.json.extensions!.VRM as VRMSchema.VRM).materialProperties![vrmMaterialIndex];
             let vrmMaterials: { surface: THREE.Material; outline?: THREE.Material };
             if (materialList[vrmMaterialIndex]) {
               vrmMaterials = materialList[vrmMaterialIndex];
@@ -89,7 +89,7 @@ export class MaterialConverter {
 
   public async createVRMMaterials(
     originalMaterial: THREE.Material,
-    vrmProps: RawVrmMaterial,
+    vrmProps: VRMSchema.Material,
     gltf: THREE.GLTF,
   ): Promise<{
     surface: THREE.Material;
@@ -216,7 +216,7 @@ export class MaterialConverter {
 
   private extractMaterialProperties(
     originalMaterial: THREE.Material,
-    vrmProps: RawVrmMaterial,
+    vrmProps: VRMSchema.Material,
     gltf: THREE.GLTF,
   ): Promise<any> {
     const taskList: Array<Promise<any>> = [];

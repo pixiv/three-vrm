@@ -1,28 +1,35 @@
 /**
- * VRM.ts extension is for 3d humanoid avatars (and models) in VR applications.
+ * VRM extension is for 3d humanoid avatars (and models) in VR applications.
  */
-export interface RawVrm {
-  BlendShapeMaster?: RawVrmBlendShape;
+export interface VRM {
+  blendShapeMaster?: BlendShape;
   /**
-   * Version of exporter that vrm created. UniVRM-0.46
+   * Version of exporter that vrm created. UniVRM-0.53.0
    */
   exporterVersion?: string;
-  firstPerson?: RawVrmFirstPerson;
-  humanoid?: RawVrmHumanoid;
-  materialProperties?: RawVrmMaterial[];
-  meta?: RawVrmMeta;
-  secondaryAnimation?: RawVrmSecondaryanimation;
-}
-
-export interface RawVrmBlendShape {
-  BlendShapeGroups?: RawVrmBlendShapeGroup[];
-}
-
-export interface RawVrmBlendShapeGroup {
+  firstPerson?: FirstPerson;
+  humanoid?: Humanoid;
+  materialProperties?: Material[];
+  meta?: Meta;
+  secondaryAnimation?: SecondaryAnimation;
   /**
-   * Low level BlendShape references.
+   * Version of VRM specification. 0.0
    */
-  binds?: RawVrmBlendShapeBind[];
+  specVersion?: string;
+}
+
+/**
+ * BlendShapeAvatar of UniVRM
+ */
+export interface BlendShape {
+  blendShapeGroups?: BlendShapeGroup[];
+}
+
+export interface BlendShapeGroup {
+  /**
+   * Low level blendshape references.
+   */
+  binds?: BlendShapeBind[];
   /**
    * 0 or 1. Do not allow an intermediate value. Value should rounded
    */
@@ -30,7 +37,7 @@ export interface RawVrmBlendShapeGroup {
   /**
    * Material animation references.
    */
-  materialValues?: RawVrmBlendShapeMaterialbind[];
+  materialValues?: BlendShapeMaterialbind[];
   /**
    * Expression name
    */
@@ -41,7 +48,7 @@ export interface RawVrmBlendShapeGroup {
   presetName?: BlendShapePresetName;
 }
 
-export interface RawVrmBlendShapeBind {
+export interface BlendShapeBind {
   index?: number;
   mesh?: number;
   /**
@@ -50,7 +57,7 @@ export interface RawVrmBlendShapeBind {
   weight?: number;
 }
 
-export interface RawVrmBlendShapeMaterialbind {
+export interface BlendShapeMaterialbind {
   materialName?: string;
   propertyName?: string;
   targetValue?: number[];
@@ -80,7 +87,7 @@ export enum BlendShapePresetName {
   Unknown = 'unknown',
 }
 
-export interface RawVrmFirstPerson {
+export interface FirstPerson {
   /**
    * The bone whose rendering should be turned off in first-person view. Usually Head is
    * specified.
@@ -90,35 +97,25 @@ export interface RawVrmFirstPerson {
    * The target position of the VR headset in first-person view. It is assumed that an offset
    * from the head bone to the VR headset is added.
    */
-  firstPersonBoneOffset?: RawFirstPersonBoneOffset;
-  lookAtHorizontalInner?: RawVrmFirstPersonDegreemap;
-  lookAtHorizontalOuter?: RawVrmFirstPersonDegreemap;
+  firstPersonBoneOffset?: Vector3;
+  lookAtHorizontalInner?: FirstPersonDegreeMap;
+  lookAtHorizontalOuter?: FirstPersonDegreeMap;
   /**
    * Eye controller mode.
    */
-  lookAtTypeName?: LookAtTypeName;
-  lookAtVerticalDown?: RawVrmFirstPersonDegreemap;
-  lookAtVerticalUp?: RawVrmFirstPersonDegreemap;
+  lookAtTypeName?: FirstPersonLookAtTypeName;
+  lookAtVerticalDown?: FirstPersonDegreeMap;
+  lookAtVerticalUp?: FirstPersonDegreeMap;
   /**
    * Switch display / undisplay for each mesh in first-person view or the others.
    */
-  meshAnnotations?: RawVrmFirstPersonMeshannotation[];
-}
-
-/**
- * The target position of the VR headset in first-person view. It is assumed that an offset
- * from the head bone to the VR headset is added.
- */
-export interface RawFirstPersonBoneOffset {
-  x?: number;
-  y?: number;
-  z?: number;
+  meshAnnotations?: FirstPersonMeshannotation[];
 }
 
 /**
  * Eye controller setting.
  */
-export interface RawVrmFirstPersonDegreemap {
+export interface FirstPersonDegreeMap {
   /**
    * None linear mapping params. time, value, inTangent, outTangent
    */
@@ -136,17 +133,17 @@ export interface RawVrmFirstPersonDegreemap {
 /**
  * Eye controller mode.
  */
-export enum LookAtTypeName {
+export enum FirstPersonLookAtTypeName {
   BlendShape = 'BlendShape',
   Bone = 'Bone',
 }
 
-export interface RawVrmFirstPersonMeshannotation {
+export interface FirstPersonMeshannotation {
   firstPersonFlag?: string;
   mesh?: number;
 }
 
-export interface RawVrmHumanoid {
+export interface Humanoid {
   /**
    * Unity's HumanDescription.armStretch
    */
@@ -159,7 +156,7 @@ export interface RawVrmHumanoid {
    * Unity's HumanDescription.hasTranslationDoF
    */
   hasTranslationDoF?: boolean;
-  humanBones?: RawVrmHumanoidBone[];
+  humanBones?: HumanoidBone[];
   /**
    * Unity's HumanDescription.legStretch
    */
@@ -182,7 +179,7 @@ export interface RawVrmHumanoid {
   upperLegTwist?: number;
 }
 
-export interface RawVrmHumanoidBone {
+export interface HumanoidBone {
   /**
    * Unity's HumanLimit.axisLength
    */
@@ -190,19 +187,19 @@ export interface RawVrmHumanoidBone {
   /**
    * Human bone name.
    */
-  bone?: HumanBone;
+  bone?: HumanoidBoneName;
   /**
    * Unity's HumanLimit.center
    */
-  center?: RawCenter;
+  center?: Vector3;
   /**
    * Unity's HumanLimit.max
    */
-  max?: RawMax;
+  max?: Vector3;
   /**
    * Unity's HumanLimit.min
    */
-  min?: RawMin;
+  min?: Vector3;
   /**
    * Reference node index
    */
@@ -216,7 +213,7 @@ export interface RawVrmHumanoidBone {
 /**
  * Human bone name.
  */
-export enum HumanBone {
+export enum HumanoidBoneName {
   Chest = 'chest',
   Head = 'head',
   Hips = 'hips',
@@ -274,34 +271,7 @@ export enum HumanBone {
   UpperChest = 'upperChest',
 }
 
-/**
- * Unity's HumanLimit.center
- */
-export interface RawCenter {
-  x?: number;
-  y?: number;
-  z?: number;
-}
-
-/**
- * Unity's HumanLimit.max
- */
-export interface RawMax {
-  x?: number;
-  y?: number;
-  z?: number;
-}
-
-/**
- * Unity's HumanLimit.min
- */
-export interface RawMin {
-  x?: number;
-  y?: number;
-  z?: number;
-}
-
-export interface RawVrmMaterial {
+export interface Material {
   floatProperties?: { [key: string]: any };
   keywordMap?: { [key: string]: any };
   name?: string;
@@ -312,27 +282,27 @@ export interface RawVrmMaterial {
   vectorProperties?: { [key: string]: any };
 }
 
-export interface RawVrmMeta {
+export interface Meta {
   /**
    * A person who can perform with this avatar
    */
-  allowedUserName?: AllowedUserName;
+  allowedUserName?: MetaAllowedUserName;
   /**
-   * Author of VRM.ts model
+   * Author of VRM model
    */
   author?: string;
   /**
    * For commercial use
    */
-  commercialUssageName?: UssageName;
+  commercialUssageName?: MetaUssageName;
   /**
-   * Contact Information of VRM.ts model author
+   * Contact Information of VRM model author
    */
   contactInformation?: string;
   /**
    * License type
    */
-  licenseName?: LicenseName;
+  licenseName?: MetaLicenseName;
   /**
    * If “Other” is selected, put the URL link of the license document here.
    */
@@ -343,35 +313,35 @@ export interface RawVrmMeta {
    */
   otherPermissionUrl?: string;
   /**
-   * Reference of VRM.ts model
+   * Reference of VRM model
    */
   reference?: string;
   /**
    * Permission to perform sexual acts with this avatar
    */
-  sexualUssageName?: UssageName;
+  sexualUssageName?: MetaUssageName;
   /**
-   * Thumbnail of VRM.ts model
+   * Thumbnail of VRM model
    */
   texture?: number;
   /**
-   * Title of VRM.ts model
+   * Title of VRM model
    */
   title?: string;
   /**
-   * Version of VRM.ts model
+   * Version of VRM model
    */
   version?: string;
   /**
    * Permission to perform violent acts with this avatar
    */
-  violentUssageName?: UssageName;
+  violentUssageName?: MetaUssageName;
 }
 
 /**
  * A person who can perform with this avatar
  */
-export enum AllowedUserName {
+export enum MetaAllowedUserName {
   Everyone = 'Everyone',
   ExplicitlyLicensedPerson = 'ExplicitlyLicensedPerson',
   OnlyAuthor = 'OnlyAuthor',
@@ -384,7 +354,7 @@ export enum AllowedUserName {
  *
  * Permission to perform violent acts with this avatar
  */
-export enum UssageName {
+export enum MetaUssageName {
   Allow = 'Allow',
   Disallow = 'Disallow',
 }
@@ -392,7 +362,7 @@ export enum UssageName {
 /**
  * License type
  */
-export enum LicenseName {
+export enum MetaLicenseName {
   Cc0 = 'CC0',
   CcBy = 'CC_BY',
   CcByNc = 'CC_BY_NC',
@@ -404,12 +374,15 @@ export enum LicenseName {
   RedistributionProhibited = 'Redistribution_Prohibited',
 }
 
-export interface RawVrmSecondaryanimation {
-  boneGroups?: RawVrmSecondaryanimationSpring[];
-  colliderGroups?: RawVrmSecondaryanimationCollidergroup[];
+/**
+ * The setting of automatic animation of string-like objects such as tails and hairs.
+ */
+export interface SecondaryAnimation {
+  boneGroups?: SecondaryAnimationSpring[];
+  colliderGroups?: SecondaryAnimationCollidergroup[];
 }
 
-export interface RawVrmSecondaryanimationSpring {
+export interface SecondaryAnimationSpring {
   /**
    * Specify the node index of the root bone of the swaying object.
    */
@@ -436,7 +409,7 @@ export interface RawVrmSecondaryanimationSpring {
    * The direction of gravity. Set (0, -1, 0) for simulating the gravity. Set (1, 0, 0) for
    * simulating the wind.
    */
-  gravityDir?: RawGravityDir;
+  gravityDir?: Vector3;
   /**
    * The strength of gravity.
    */
@@ -451,39 +424,26 @@ export interface RawVrmSecondaryanimationSpring {
   stiffiness?: number;
 }
 
-/**
- * The direction of gravity. Set (0, -1, 0) for simulating the gravity. Set (1, 0, 0) for
- * simulating the wind.
- */
-export interface RawGravityDir {
-  x?: number;
-  y?: number;
-  z?: number;
-}
-
-export interface RawVrmSecondaryanimationCollidergroup {
-  colliders?: RawCollider[];
+export interface SecondaryAnimationCollidergroup {
+  colliders?: SecondaryAnimationCollider[];
   /**
    * The node of the collider group for setting up collision detections.
    */
   node?: number;
 }
 
-export interface RawCollider {
+export interface SecondaryAnimationCollider {
   /**
    * The local coordinate from the node of the collider group.
    */
-  offset?: RawOffset;
+  offset?: Vector3;
   /**
    * The radius of the collider.
    */
   radius?: number;
 }
 
-/**
- * The local coordinate from the node of the collider group.
- */
-export interface RawOffset {
+export interface Vector3 {
   x?: number;
   y?: number;
   z?: number;

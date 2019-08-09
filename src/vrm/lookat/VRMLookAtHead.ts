@@ -37,7 +37,7 @@ export class VRMLookAtHead {
 
   constructor(humanBones: VRMHumanBones, applyer?: VRMLookAtApplyer) {
     this._applyer = applyer;
-    this.head = humanBones.head;
+    this.head = humanBones.head!;
 
     // 目のボーンはVRM仕様ではオプショナル。
     this._leftEye = humanBones.leftEye;
