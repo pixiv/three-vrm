@@ -265,12 +265,16 @@ void postCorrection() {
 void main() {
   #include <clipping_planes_fragment>
 
-  vec2 uv = vUv;
-  float uvAnimMask = 1.0; // texture2D( uvAnimMaskTexture, uv ).x;
-  float uvRotCos = cos( uvAnimTheta * uvAnimMask );
-  float uvRotSin = sin( uvAnimTheta * uvAnimMask );
-  uv = mat2( uvRotCos, uvRotSin, -uvRotSin, uvRotCos ) * ( uv - 0.5 ) + 0.5;
-  uv = fract( uv + vec2( uvAnimOffsetX, uvAnimOffsetY ) * uvAnimMask );
+  vec2 uv = vec2(0.5, 0.5);
+
+  #if defined( USE_MAP ) || defined( USE_SHADETEXTURE ) || defined( USE_NORMALMAP ) || defined( USE_RECEIVESHADOWTEXTURE ) || defined( USE_SHADINGGRADETEXTURE ) || defined( USE_RIMTEXTURE ) || defined( USE_EMISSIVEMAP ) || defined( USE_OUTLINEWIDTHTEXTURE )
+    uv = vUv;
+    float uvAnimMask = 1.0; // texture2D( uvAnimMaskTexture, uv ).x;
+    float uvRotCos = cos( uvAnimTheta * uvAnimMask );
+    float uvRotSin = sin( uvAnimTheta * uvAnimMask );
+    uv = mat2( uvRotCos, uvRotSin, -uvRotSin, uvRotCos ) * ( uv - 0.5 ) + 0.5;
+    uv = fract( uv + vec2( uvAnimOffsetX, uvAnimOffsetY ) * uvAnimMask );
+  #endif
 
   #ifdef DEBUG_UV
     gl_FragColor = vec4( 0.0, 0.0, 0.0, 1.0 );
