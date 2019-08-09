@@ -40,7 +40,15 @@ export class VRMMaterialImporter {
 
             // create / push to cache (or pop from cache) vrm materials
             const vrmMaterialIndex = gltf.parser.json.meshes![meshIndex].primitives[primitiveIndex].material!;
-            const props = (gltf.parser.json.extensions!.VRM as RawVrm).materialProperties![vrmMaterialIndex];
+
+            let props = (gltf.parser.json.extensions!.VRM as RawVrm).materialProperties![vrmMaterialIndex];
+            if (!props) {
+              console.warn(
+                `VRMMaterialImporter: There are no material definition for material #${vrmMaterialIndex} on VRM extension.`,
+              );
+              props = { shader: 'VRM_USE_GLTFSHADER' }; // fallback
+            }
+
             let vrmMaterials: { surface: THREE.Material; outline?: THREE.Material };
             if (materialList[vrmMaterialIndex]) {
               vrmMaterials = materialList[vrmMaterialIndex];
