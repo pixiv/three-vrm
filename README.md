@@ -58,8 +58,6 @@ loader.load(
 </script>
 ```
 
-
-
 ```javascript
 
 ```
@@ -226,3 +224,9 @@ get the spring bones.
 ```
 .springBoneGroupList: VRMSpringBoneGroup[]
 ```
+
+## `typedefgen.js`
+
+`typedefgen.js` ( can be run via `yarn typedefgen` ) is a script that generates type definitions of GLTF and VRM schema automatically using [quicktype](https://quicktype.io/).
+However, names of each interfaces/enums are not good so you have to rename these names by your own hand.
+We usually don't have to generate these frequently.
