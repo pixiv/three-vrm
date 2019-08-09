@@ -273,7 +273,7 @@ void main() {
     float uvRotCos = cos( uvAnimTheta * uvAnimMask );
     float uvRotSin = sin( uvAnimTheta * uvAnimMask );
     uv = mat2( uvRotCos, uvRotSin, -uvRotSin, uvRotCos ) * ( uv - 0.5 ) + 0.5;
-    uv = fract( uv + vec2( uvAnimOffsetX, uvAnimOffsetY ) * uvAnimMask );
+    uv = uv + vec2( uvAnimOffsetX, uvAnimOffsetY ) * uvAnimMask;
   #endif
 
   #ifdef DEBUG_UV
