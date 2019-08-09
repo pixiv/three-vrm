@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { reduceBones } from '../reduceBones';
 import { VRMImporter, VRMImporterOptions } from '../VRMImporter';
+import { DebugOption } from './DebugOption';
 import { VRMDebug } from './VRMDebug';
 import { VRMSpringBoneImporterDebug } from './VRMSpringBoneImporterDebug';
 
@@ -10,7 +11,7 @@ export class VRMImporterDebug extends VRMImporter {
     super(options);
   }
 
-  public async import(gltf: THREE.GLTF): Promise<VRMDebug> {
+  public async import(gltf: THREE.GLTF, debugOption: DebugOption = {}): Promise<VRMDebug> {
     if (gltf.parser.json.extensions === undefined || gltf.parser.json.extensions.VRM === undefined) {
       throw new Error('Could not find VRM extension on the GLTF');
     }
@@ -47,16 +48,19 @@ export class VRMImporterDebug extends VRMImporter {
 
     const springBoneManager = (await this._springBoneImporter.import(gltf)) || undefined;
 
-    return new VRMDebug({
-      scene: gltf.scene,
-      meta: vrmExt.meta,
-      materials,
-      humanBones,
-      firstPerson,
-      animationMixer,
-      blendShapeProxy,
-      lookAt,
-      springBoneManager,
-    });
+    return new VRMDebug(
+      {
+        scene: gltf.scene,
+        meta: vrmExt.meta,
+        materials,
+        humanBones,
+        firstPerson,
+        animationMixer,
+        blendShapeProxy,
+        lookAt,
+        springBoneManager,
+      },
+      debugOption,
+    );
   }
 }

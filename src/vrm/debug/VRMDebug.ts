@@ -9,7 +9,7 @@ const _v3B = new THREE.Vector3();
 const _quatA = new THREE.Quaternion();
 
 export class VRMDebug extends VRM {
-  public static async from(gltf: THREE.GLTF, options: VRMImporterOptions): Promise<VRM> {
+  public static async from(gltf: THREE.GLTF, options: VRMImporterOptions = {}): Promise<VRM> {
     const importer = new VRMImporterDebug(options);
     return await importer.import(gltf);
   }

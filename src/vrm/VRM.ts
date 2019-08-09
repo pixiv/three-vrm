@@ -21,7 +21,7 @@ export interface VRMParameters {
 }
 
 export class VRM {
-  public static async from(gltf: THREE.GLTF, options: VRMImporterOptions): Promise<VRM> {
+  public static async from(gltf: THREE.GLTF, options: VRMImporterOptions = {}): Promise<VRM> {
     const importer = new VRMImporter(options);
     return await importer.import(gltf);
   }
