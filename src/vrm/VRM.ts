@@ -6,138 +6,51 @@ import { VRMLookAtHead } from './lookat';
 import { VRMSpringBoneManager } from './springbone';
 import { RawVrmMeta, VRMPose } from './types';
 import { deepDispose } from './utils/disposer';
-import { VRMPartsBuilder } from './VRMPartsBuilder';
+import { VRMImporter, VRMImporterOptions } from './VRMImporter';
 
-export class VRMBuilder {
-  protected _partsBuilder = new VRMPartsBuilder();
-
-  public partsBuilder(partsBuilder: VRMPartsBuilder) {
-    this._partsBuilder = partsBuilder;
-    return this;
-  }
-
-  public async build(gltf: THREE.GLTF): Promise<VRM> {
-    const vrm = new VRM(this._partsBuilder);
-    await vrm.loadGLTF(gltf);
-    return vrm;
-  }
+export interface VRMParameters {
+  scene: THREE.Scene;
+  humanBones?: VRMHumanBones;
+  animationMixer?: THREE.AnimationMixer;
+  blendShapeProxy?: VRMBlendShapeProxy;
+  firstPerson?: VRMFirstPerson;
+  lookAt?: VRMLookAtHead;
+  materials?: THREE.Material[];
+  springBoneManager?: VRMSpringBoneManager;
+  meta?: RawVrmMeta;
 }
 
 export class VRM {
-  public static get Builder(): VRMBuilder {
-    return new VRMBuilder();
+  public static async from(gltf: THREE.GLTF, options: VRMImporterOptions = {}): Promise<VRM> {
+    const importer = new VRMImporter(options);
+    return await importer.import(gltf);
   }
 
-  public static from(gltf: THREE.GLTF): Promise<VRM> {
-    return new VRMBuilder().build(gltf);
-  }
+  public readonly scene: THREE.Scene;
+  public readonly humanBones?: VRMHumanBones;
+  public readonly blendShapeProxy?: VRMBlendShapeProxy;
+  public readonly firstPerson?: VRMFirstPerson;
+  public readonly lookAt?: VRMLookAtHead;
+  public readonly materials?: THREE.Material[];
+  public readonly meta?: RawVrmMeta;
+  public readonly animationMixer?: THREE.AnimationMixer;
+  public readonly springBoneManager?: VRMSpringBoneManager;
 
-  private _restPose?: VRMPose | null;
-  public get restPose() {
-    return this._restPose;
-  }
+  public readonly restPose: VRMPose | null;
 
-  private _humanBones?: VRMHumanBones | null;
-  public get humanBones() {
-    return this._humanBones;
-  }
-
-  private _blendShapeProxy?: VRMBlendShapeProxy | null;
-  public get blendShapeProxy() {
-    return this._blendShapeProxy;
-  }
-
-  private _firstPerson?: VRMFirstPerson | null;
-  public get firstPerson() {
-    return this._firstPerson;
-  }
-
-  private _lookAt?: VRMLookAtHead | null;
-  public get lookAt() {
-    return this._lookAt;
-  }
-
-  private _materials?: THREE.Material[] | null;
-  public get materials() {
-    return this._materials;
-  }
-
-  private _meta?: RawVrmMeta;
-  public get meta() {
-    return this._meta;
-  }
-
-  private _animationMixer?: THREE.AnimationMixer;
-  public get animationMixer() {
-    return this._animationMixer;
-  }
-
-  private _springBoneManager?: VRMSpringBoneManager;
-  public get springBoneManager() {
-    return this._springBoneManager;
-  }
-
-  private _gltf?: THREE.GLTF;
-
-  private readonly _partsBuilder: VRMPartsBuilder;
-
-  constructor(_builder?: VRMPartsBuilder) {
-    if (_builder) {
-      this._partsBuilder = _builder;
-    } else {
-      this._partsBuilder = new VRMPartsBuilder();
-    }
-  }
-
-  public async loadGLTF(gltf: THREE.GLTF): Promise<void> {
-    this._gltf = gltf;
-
-    if (gltf.parser.json.extensions === undefined || gltf.parser.json.extensions.VRM === undefined) {
-      throw new Error('Could not find VRM extension on the GLTF');
-    }
-    const vrmExt = gltf.parser.json.extensions.VRM;
-
-    // import meta
-    this._meta = vrmExt.meta;
-
-    // import materials
-    this._materials = await this._partsBuilder.loadMaterials(gltf);
-
-    gltf.scene.updateMatrixWorld(false);
-
-    // Skinned object should not be frustumCulled
-    // Since pre-skinned position might be outside of view
-    gltf.scene.traverse((object3d) => {
-      if ((object3d as any).isMesh) {
-        object3d.frustumCulled = false;
-      }
-    });
-
-    reduceBones(gltf.scene);
-
-    const humanBones = await this._partsBuilder.loadHumanoid(gltf);
-    this._humanBones = humanBones;
-
-    this._firstPerson = this.humanBones
-      ? await this._partsBuilder.loadFirstPerson(vrmExt.firstPerson, this.humanBones, gltf)
-      : null;
-
-    this._animationMixer = new THREE.AnimationMixer(gltf.scene);
-    const blendShapeProxy = await this._partsBuilder.loadBlendShapeMaster(this.animationMixer!, gltf);
-    if (!blendShapeProxy) {
-      throw new Error('failed to create blendShape. confirm your vrm file');
-    }
-    this._blendShapeProxy = blendShapeProxy;
-
-    this._springBoneManager = await this._partsBuilder.loadSecondary(gltf);
-
-    this._lookAt =
-      this.blendShapeProxy && this.humanBones
-        ? this._partsBuilder.loadLookAt(vrmExt.firstPerson, this.blendShapeProxy, this.humanBones)
-        : null;
+  public constructor(params: VRMParameters) {
+    this.scene = params.scene;
+    this.humanBones = params.humanBones;
+    this.animationMixer = params.animationMixer;
+    this.blendShapeProxy = params.blendShapeProxy;
+    this.firstPerson = params.firstPerson;
+    this.lookAt = params.lookAt;
+    this.materials = params.materials;
+    this.springBoneManager = params.springBoneManager;
+    this.meta = params.meta;
 
     // Save current initial pose (which is Rest-pose) to restPose field, since pose changing may lose the default transforms. This is useful when resetting the pose or referring default pose.
-    this._restPose = this.humanBones
+    this.restPose = this.humanBones
       ? Object.keys(this.humanBones).reduce(
           (restPose, vrmBoneName) => {
             const bone = this.humanBones![vrmBoneName]!;
@@ -189,10 +102,6 @@ export class VRM {
     });
   }
 
-  get scene() {
-    return this._gltf && this._gltf.scene;
-  }
-
   public update(delta: number): void {
     if (this.lookAt) {
       this.lookAt.update();
@@ -229,39 +138,4 @@ export class VRM {
       }
     }
   }
-}
-
-function reduceBones(root: THREE.Object3D): void {
-  // Traverse an entire tree
-  root.traverse((obj) => {
-    if (obj.type !== 'SkinnedMesh') {
-      return;
-    }
-
-    const mesh = obj as THREE.SkinnedMesh;
-    const geometry = (mesh.geometry as THREE.BufferGeometry).clone();
-    mesh.geometry = geometry;
-    const attribute = geometry.getAttribute('skinIndex');
-
-    // generate reduced bone list
-    const bones: THREE.Bone[] = []; // new list of bone
-    const boneInverses: THREE.Matrix4[] = []; // new list of boneInverse
-    const boneIndexMap: { [index: number]: number } = {}; // map of old bone index vs. new bone index
-    const array = (attribute.array as any).map((index: number) => {
-      // new skinIndex buffer
-      if (boneIndexMap[index] === undefined) {
-        boneIndexMap[index] = bones.length;
-        bones.push(mesh.skeleton.bones[index]);
-        boneInverses.push(mesh.skeleton.boneInverses[index]);
-      }
-      return boneIndexMap[index];
-    });
-
-    // attach new skinIndex buffer
-    geometry.removeAttribute('skinIndex');
-    geometry.addAttribute('skinIndex', new THREE.BufferAttribute(array, 4, false));
-    mesh.bind(new THREE.Skeleton(bones, boneInverses), new THREE.Matrix4());
-    //                                                 ^^^^^^^^^^^^^^^^^^^ transform of meshes should be ignored
-    // See: https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#skins
-  });
 }
