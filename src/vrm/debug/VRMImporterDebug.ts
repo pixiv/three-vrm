@@ -3,10 +3,13 @@ import { reduceBones } from '../reduceBones';
 import { VRMImporter, VRMImporterOptions } from '../VRMImporter';
 import { DebugOption } from './DebugOption';
 import { VRMDebug } from './VRMDebug';
+import { VRMLookAtHeadDebug } from './VRMLookAtHeadDebug';
+import { VRMLookAtImporterDebug } from './VRMLookAtImporterDebug';
 import { VRMSpringBoneImporterDebug } from './VRMSpringBoneImporterDebug';
 
 export class VRMImporterDebug extends VRMImporter {
   public constructor(options: VRMImporterOptions = {}) {
+    options.lookAtImporter = options.lookAtImporter || new VRMLookAtImporterDebug();
     options.springBoneImporter = options.springBoneImporter || new VRMSpringBoneImporterDebug();
     super(options);
   }
@@ -44,7 +47,12 @@ export class VRMImporterDebug extends VRMImporter {
     const blendShapeProxy = (await this.loadBlendShapeMaster(animationMixer!, gltf)) || undefined;
 
     const lookAt =
-      blendShapeProxy && humanBones ? this.loadLookAt(vrmExt.firstPerson, blendShapeProxy, humanBones) : undefined;
+      blendShapeProxy && humanBones
+        ? await this._lookAtImporter.import(vrmExt.firstPerson, blendShapeProxy, humanBones)
+        : undefined;
+    if ((lookAt as any).setupHelper) {
+      (lookAt as VRMLookAtHeadDebug).setupHelper(scene, debugOption);
+    }
 
     const springBoneManager = (await this._springBoneImporter.import(gltf)) || undefined;
 

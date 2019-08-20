@@ -2,9 +2,7 @@ import * as THREE from 'three';
 import { BlendShapeController, BlendShapeMaster, VRMBlendShapeProxy } from './blendshape';
 import { RendererFirstPersonFlags, VRMFirstPerson } from './firstperson';
 import { VRMHumanBones } from './humanoid';
-import { VRMLookAtHead } from './lookat';
-import { VRMLookAtBlendShapeApplyer } from './lookat/VRMLookAtBlendShapeApplyer';
-import { VRMLookAtBoneApplyer } from './lookat/VRMLookAtBoneApplyer';
+import { VRMLookAtImporter } from './lookat/VRMLookAtImporter';
 import { VRMMaterialImporter } from './material';
 import { reduceBones } from './reduceBones';
 import { VRMSpringBoneImporter } from './springbone/VRMSpringBoneImporter';
@@ -13,11 +11,13 @@ import * as Raw from './types/VRM';
 import { VRM } from './VRM';
 
 export interface VRMImporterOptions {
+  lookAtImporter?: VRMLookAtImporter;
   materialImporter?: VRMMaterialImporter;
   springBoneImporter?: VRMSpringBoneImporter;
 }
 
 export class VRMImporter {
+  protected readonly _lookAtImporter: VRMLookAtImporter;
   protected readonly _materialImporter: VRMMaterialImporter;
   protected readonly _springBoneImporter: VRMSpringBoneImporter;
 
@@ -25,6 +25,7 @@ export class VRMImporter {
    * Create a new VRMImporter.
    */
   public constructor(options: VRMImporterOptions = {}) {
+    this._lookAtImporter = options.lookAtImporter || new VRMLookAtImporter();
     this._materialImporter = options.materialImporter || new VRMMaterialImporter();
     this._springBoneImporter = options.springBoneImporter || new VRMSpringBoneImporter();
   }
@@ -62,7 +63,9 @@ export class VRMImporter {
     const blendShapeProxy = (await this.loadBlendShapeMaster(animationMixer!, gltf)) || undefined;
 
     const lookAt =
-      blendShapeProxy && humanBones ? this.loadLookAt(vrmExt.firstPerson, blendShapeProxy, humanBones) : undefined;
+      blendShapeProxy && humanBones
+        ? await this._lookAtImporter.import(vrmExt.firstPerson, blendShapeProxy, humanBones)
+        : undefined;
 
     const springBoneManager = (await this._springBoneImporter.import(gltf)) || undefined;
 
@@ -148,59 +151,6 @@ export class VRMImporter {
     });
 
     return new VRMFirstPerson(firstPersonBone, firstPersonBoneOffset, meshAnnotations);
-  }
-
-  public loadLookAt(
-    firstPerson: Raw.RawVrmFirstPerson,
-    blendShapeProxy: VRMBlendShapeProxy,
-    humanBodyBones: VRMHumanBones,
-  ): VRMLookAtHead {
-    const lookAtHorizontalInner = firstPerson.lookAtHorizontalInner;
-    const lookAtHorizontalOuter = firstPerson.lookAtHorizontalOuter;
-    const lookAtVerticalDown = firstPerson.lookAtVerticalDown;
-    const lookAtVerticalUp = firstPerson.lookAtVerticalUp;
-
-    switch (firstPerson.lookAtTypeName) {
-      case Raw.LookAtTypeName.Bone: {
-        if (
-          lookAtHorizontalInner === undefined ||
-          lookAtHorizontalOuter === undefined ||
-          lookAtVerticalDown === undefined ||
-          lookAtVerticalUp === undefined
-        ) {
-          return new VRMLookAtHead(humanBodyBones);
-        } else {
-          return new VRMLookAtHead(
-            humanBodyBones,
-            new VRMLookAtBoneApplyer(
-              humanBodyBones,
-              lookAtHorizontalInner,
-              lookAtHorizontalOuter,
-              lookAtVerticalDown,
-              lookAtVerticalUp,
-            ),
-          );
-        }
-      }
-      case Raw.LookAtTypeName.BlendShape: {
-        if (lookAtHorizontalOuter === undefined || lookAtVerticalDown === undefined || lookAtVerticalUp === undefined) {
-          return new VRMLookAtHead(humanBodyBones);
-        } else {
-          return new VRMLookAtHead(
-            humanBodyBones,
-            new VRMLookAtBlendShapeApplyer(
-              blendShapeProxy,
-              lookAtHorizontalOuter,
-              lookAtVerticalDown,
-              lookAtVerticalUp,
-            ),
-          );
-        }
-      }
-      default: {
-        return new VRMLookAtHead(humanBodyBones);
-      }
-    }
   }
 
   /**
