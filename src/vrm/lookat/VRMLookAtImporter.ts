@@ -1,4 +1,5 @@
 import { VRMBlendShapeProxy } from '../blendshape';
+import { VRMFirstPerson } from '../firstperson';
 import { VRMHumanBones } from '../humanoid';
 import * as Raw from '../types/VRM';
 import { VRMLookAtApplyer } from './VRMLookAtApplyer';
@@ -8,25 +9,26 @@ import { VRMLookAtHead } from './VRMLookAtHead';
 
 export class VRMLookAtImporter {
   public import(
-    firstPerson: Raw.RawVrmFirstPerson,
+    schemaFirstPerson: Raw.RawVrmFirstPerson,
+    firstPerson: VRMFirstPerson,
     blendShapeProxy: VRMBlendShapeProxy,
     humanBodyBones: VRMHumanBones,
   ): VRMLookAtHead {
-    const applyer = this._importApplyer(firstPerson, blendShapeProxy, humanBodyBones);
-    return new VRMLookAtHead(humanBodyBones, applyer || undefined);
+    const applyer = this._importApplyer(schemaFirstPerson, blendShapeProxy, humanBodyBones);
+    return new VRMLookAtHead(firstPerson, applyer || undefined);
   }
 
   protected _importApplyer(
-    firstPerson: Raw.RawVrmFirstPerson,
+    schemaFirstPerson: Raw.RawVrmFirstPerson,
     blendShapeProxy: VRMBlendShapeProxy,
     humanBodyBones: VRMHumanBones,
   ): VRMLookAtApplyer | null {
-    const lookAtHorizontalInner = firstPerson.lookAtHorizontalInner;
-    const lookAtHorizontalOuter = firstPerson.lookAtHorizontalOuter;
-    const lookAtVerticalDown = firstPerson.lookAtVerticalDown;
-    const lookAtVerticalUp = firstPerson.lookAtVerticalUp;
+    const lookAtHorizontalInner = schemaFirstPerson.lookAtHorizontalInner;
+    const lookAtHorizontalOuter = schemaFirstPerson.lookAtHorizontalOuter;
+    const lookAtVerticalDown = schemaFirstPerson.lookAtVerticalDown;
+    const lookAtVerticalUp = schemaFirstPerson.lookAtVerticalUp;
 
-    switch (firstPerson.lookAtTypeName) {
+    switch (schemaFirstPerson.lookAtTypeName) {
       case Raw.LookAtTypeName.Bone: {
         if (
           lookAtHorizontalInner === undefined ||

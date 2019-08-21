@@ -47,8 +47,8 @@ export class VRMImporterDebug extends VRMImporter {
     const blendShapeProxy = (await this.loadBlendShapeMaster(animationMixer!, gltf)) || undefined;
 
     const lookAt =
-      blendShapeProxy && humanBones
-        ? await this._lookAtImporter.import(vrmExt.firstPerson, blendShapeProxy, humanBones)
+      firstPerson && blendShapeProxy && humanBones
+        ? await this._lookAtImporter.import(vrmExt.firstPerson, firstPerson, blendShapeProxy, humanBones)
         : undefined;
     if ((lookAt as any).setupHelper) {
       (lookAt as VRMLookAtHeadDebug).setupHelper(scene, debugOption);

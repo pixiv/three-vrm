@@ -63,8 +63,8 @@ export class VRMImporter {
     const blendShapeProxy = (await this.loadBlendShapeMaster(animationMixer!, gltf)) || undefined;
 
     const lookAt =
-      blendShapeProxy && humanBones
-        ? await this._lookAtImporter.import(vrmExt.firstPerson, blendShapeProxy, humanBones)
+      firstPerson && blendShapeProxy && humanBones
+        ? await this._lookAtImporter.import(vrmExt.firstPerson, firstPerson, blendShapeProxy, humanBones)
         : undefined;
 
     const springBoneManager = (await this._springBoneImporter.import(gltf)) || undefined;

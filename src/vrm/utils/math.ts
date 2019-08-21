@@ -9,6 +9,11 @@ export function linstep(x: number, min: number, max: number): number {
   return (x - min) / (max - min);
 }
 
+export function mod(a: number, m: number): number {
+  const b = a / m;
+  return m * (b - Math.floor(b));
+}
+
 const _position = new THREE.Vector3();
 const _scale = new THREE.Vector3();
 const _rotation = new THREE.Quaternion();

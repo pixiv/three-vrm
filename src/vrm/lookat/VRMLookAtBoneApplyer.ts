@@ -4,6 +4,9 @@ import { GLTFNode } from '../types';
 import { LookAtTypeName, RawVrmFirstPersonDegreemap } from '../types';
 import { CurveMapper, DEG2RAD } from './CurveMapper';
 import { VRMLookAtApplyer } from './VRMLookAtApplyer';
+import { VRMLookAtHead } from './VRMLookAtHead';
+
+const _euler = new THREE.Euler(0.0, 0.0, 0.0, VRMLookAtHead.EULER_ORDER);
 
 export class VRMLookAtBoneApplyer extends VRMLookAtApplyer {
   private readonly lookAtHorizontalInner: RawVrmFirstPersonDegreemap;
@@ -40,31 +43,35 @@ export class VRMLookAtBoneApplyer extends VRMLookAtApplyer {
     // left
     if (this._leftEye) {
       if (srcX < 0.0) {
-        this._leftEye.rotation.x = -mapperVerticalDown.map(-srcX);
+        _euler.x = -mapperVerticalDown.map(-srcX);
       } else {
-        this._leftEye.rotation.x = mapperVerticalUp.map(srcX);
+        _euler.x = mapperVerticalUp.map(srcX);
       }
 
       if (srcY < 0.0) {
-        this._leftEye.rotation.y = -mapperHorizontalInner.map(-srcY);
+        _euler.y = -mapperHorizontalInner.map(-srcY);
       } else {
-        this._leftEye.rotation.y = mapperHorizontalOuter.map(srcY);
+        _euler.y = mapperHorizontalOuter.map(srcY);
       }
+
+      this._leftEye.quaternion.setFromEuler(_euler);
     }
 
     // right
     if (this._rightEye) {
       if (srcX < 0.0) {
-        this._rightEye.rotation.x = -mapperVerticalDown.map(-srcX);
+        _euler.x = -mapperVerticalDown.map(-srcX);
       } else {
-        this._rightEye.rotation.x = mapperVerticalUp.map(srcX);
+        _euler.x = mapperVerticalUp.map(srcX);
       }
 
       if (srcY < 0.0) {
-        this._rightEye.rotation.y = -mapperHorizontalOuter.map(-srcY);
+        _euler.y = -mapperHorizontalOuter.map(-srcY);
       } else {
-        this._rightEye.rotation.y = mapperHorizontalInner.map(srcY);
+        _euler.y = mapperHorizontalInner.map(srcY);
       }
+
+      this._rightEye.quaternion.setFromEuler(_euler);
     }
   }
 }
