@@ -47,6 +47,10 @@
 			light.position.set( 1.0, 1.0, 1.0 ).normalize();
 			scene.add( light );
 
+			// lookat target
+			const lookAtTarget = new THREE.Object3D();
+			camera.add( lookAtTarget );
+
 			// gltf and vrm
 			let currentVrm = undefined;
 			const loader = new THREE.GLTFLoader();
@@ -63,7 +67,7 @@
 						currentVrm = vrm;
 						vrm.humanBones[ THREE.HumanBone.Hips ].rotation.y = Math.PI;
 
-						vrm.lookAt.setTarget( camera );
+						vrm.lookAt.setTarget( lookAtTarget );
 
 						console.log( vrm );
 
@@ -105,6 +109,14 @@
 			}
 
 			animate();
+
+			// mouse listener
+			window.addEventListener( 'mousemove', ( event ) => {
+
+				lookAtTarget.position.x = 10.0 * ( ( event.clientX - 0.5 * window.innerWidth ) / window.innerHeight );
+				lookAtTarget.position.y = 10.0 * ( ( event.clientY - 0.5 * window.innerHeight ) / window.innerHeight );
+
+			} );
 		</script>
 	</body>
 </html>

@@ -61,9 +61,11 @@ export class VRMLookAtHead {
 
   public setTarget(target: THREE.Object3D) {
     this._target = target;
-    this._lookAtTarget = target.position.clone();
-    this._lastTargetPosition = target.position.clone();
-    this._lookAtTargetTo = target.position.clone();
+    const worldPosition = new THREE.Vector3();
+    this._target.getWorldPosition(worldPosition);
+    this._lookAtTarget = worldPosition;
+    this._lastTargetPosition = worldPosition.clone();
+    this._lookAtTargetTo = worldPosition.clone();
   }
 
   // 顔の中心座標を取得する
