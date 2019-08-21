@@ -50,7 +50,7 @@ export class VRMLookAtHead {
       .copy(position)
       .sub(headPosition)
       .normalize();
-    const headDir = this.firstPerson.getFirstPersonDirection(_v3B);
+    const headDir = this.firstPerson.getFirstPersonWorldDirection(_v3B);
 
     this._euler.x = Math.atan2(lookAtDir.y, Math.sqrt(lookAtDir.x * lookAtDir.x + lookAtDir.z * lookAtDir.z));
     this._euler.x -= Math.atan2(headDir.y, Math.sqrt(headDir.x * headDir.x + headDir.z * headDir.z));

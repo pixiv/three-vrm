@@ -66,7 +66,7 @@ export class VRMFirstPerson {
     return this._firstPersonBoneOffset;
   }
 
-  public getFirstPersonDirection(target: THREE.Vector3): THREE.Vector3 {
+  public getFirstPersonWorldDirection(target: THREE.Vector3): THREE.Vector3 {
     return target.set(0.0, 0.0, -1.0).applyQuaternion(getWorldQuaternionLite(this._firstPersonBone, _quat));
   }
 
