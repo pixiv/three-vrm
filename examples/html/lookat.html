@@ -60,10 +60,10 @@
 					THREE.VRM.from( gltf ).then( ( vrm ) => {
 
 						scene.add( vrm.scene );
-            currentVrm = vrm;
+						currentVrm = vrm;
 						vrm.humanBones[ THREE.HumanBone.Hips ].rotation.y = Math.PI;
 
-            vrm.lookAt.setTarget(camera);
+						vrm.lookAt.setTarget( camera );
 
 						console.log( vrm );
 
