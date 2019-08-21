@@ -34,7 +34,7 @@ export class VRMLookAtHead {
 
   public getLookAtWorldDirection(target: THREE.Vector3) {
     const rot = getWorldQuaternionLite(this.firstPerson.getFirstPersonBone(), _quat);
-    return _v3A
+    return target
       .set(0.0, 0.0, -1.0)
       .applyEuler(this._euler)
       .applyQuaternion(rot);
