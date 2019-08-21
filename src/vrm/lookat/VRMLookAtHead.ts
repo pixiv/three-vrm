@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { VRMFirstPerson } from '../firstperson/VRMFirstPerson';
-import { getWorldQuaternionLite, mod } from '../utils/math';
+import { getWorldQuaternionLite } from '../utils/math';
 import { VRMLookAtApplyer } from './VRMLookAtApplyer';
 
 const _v3A = new THREE.Vector3();
@@ -46,19 +46,19 @@ export class VRMLookAtHead {
     }
 
     const headPosition = this.firstPerson.getFirstPersonWorldPosition(_v3B);
+
+    // Look at direction in world coordinate
     const lookAtDir = _v3C
       .copy(position)
       .sub(headPosition)
       .normalize();
-    const headDir = this.firstPerson.getFirstPersonWorldDirection(_v3B);
 
+    // Transform the direction into local coordinate from the first person bone
+    lookAtDir.applyQuaternion(getWorldQuaternionLite(this.firstPerson.getFirstPersonBone(), _quat).inverse());
+
+    // convert the direction into euler
     this._euler.x = Math.atan2(lookAtDir.y, Math.sqrt(lookAtDir.x * lookAtDir.x + lookAtDir.z * lookAtDir.z));
-    this._euler.x -= Math.atan2(headDir.y, Math.sqrt(headDir.x * headDir.x + headDir.z * headDir.z));
-    this._euler.x = mod(this._euler.x + Math.PI, Math.PI * 2.0) - Math.PI;
-
-    this._euler.y = Math.atan2(headDir.z, headDir.x);
-    this._euler.y -= Math.atan2(lookAtDir.z, lookAtDir.x);
-    this._euler.y = mod(this._euler.y + Math.PI, Math.PI * 2.0) - Math.PI;
+    this._euler.y = Math.atan2(-lookAtDir.x, -lookAtDir.z);
 
     this.applyer.lookAt(this._euler);
   }
