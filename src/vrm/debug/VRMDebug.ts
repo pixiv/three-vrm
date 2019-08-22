@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { HumanBone } from '../types';
 import { getWorldQuaternionLite } from '../utils/math';
 import { VRM, VRMParameters } from '../VRM';
 import { VRMImporterOptions } from '../VRMImporter';
@@ -44,7 +45,12 @@ export class VRMDebug extends VRM {
       this.scene.add(this._faceDirectionHelper);
     }
 
-    if (this.humanBones && this.humanBones.leftEye && this.lookAt && !debugOption.disableLeftEyeDirectionHelper) {
+    if (
+      this.humanoid &&
+      this.humanoid.humanBones.leftEye &&
+      this.lookAt &&
+      !debugOption.disableLeftEyeDirectionHelper
+    ) {
       this._leftEyeDirectionHelper = new THREE.ArrowHelper(
         new THREE.Vector3(0, 0, -1),
         new THREE.Vector3(0, 0, 0),
@@ -55,7 +61,12 @@ export class VRMDebug extends VRM {
       this.scene.add(this._leftEyeDirectionHelper);
     }
 
-    if (this.humanBones && this.humanBones.rightEye && this.lookAt && !debugOption.disableRightEyeDirectionHelper) {
+    if (
+      this.humanoid &&
+      this.humanoid.humanBones.rightEye &&
+      this.lookAt &&
+      !debugOption.disableRightEyeDirectionHelper
+    ) {
       this._rightEyeDirectionHelper = new THREE.ArrowHelper(
         new THREE.Vector3(0, 0, -1),
         new THREE.Vector3(0, 0, 0),
@@ -79,26 +90,26 @@ export class VRMDebug extends VRM {
     }
 
     if (
-      this.humanBones &&
-      this.humanBones.leftEye &&
+      this.humanoid &&
+      this.humanoid.humanBones.leftEye &&
       this.lookAt &&
       this.lookAt.leftEyeWorldPosition &&
       this._leftEyeDirectionHelper
     ) {
-      const leftEyeWorldRotation = getWorldQuaternionLite(this.humanBones.leftEye, _quatA);
+      const leftEyeWorldRotation = getWorldQuaternionLite(this.humanoid.getBoneNode(HumanBone.LeftEye)!, _quatA);
       const direction = _v3B.set(0, 0, -1).applyQuaternion(leftEyeWorldRotation);
       this._leftEyeDirectionHelper.position.copy(this.lookAt.leftEyeWorldPosition);
       this._leftEyeDirectionHelper.setDirection(direction);
     }
 
     if (
-      this.humanBones &&
-      this.humanBones.rightEye &&
+      this.humanoid &&
+      this.humanoid.humanBones.rightEye &&
       this.lookAt &&
       this.lookAt.rightEyeWorldPosition &&
       this._rightEyeDirectionHelper
     ) {
-      const rightEyeWorldRotation = getWorldQuaternionLite(this.humanBones.rightEye, _quatA);
+      const rightEyeWorldRotation = getWorldQuaternionLite(this.humanoid.getBoneNode(HumanBone.RightEye)!, _quatA);
       const direction = _v3B.set(0, 0, -1).applyQuaternion(rightEyeWorldRotation);
       this._rightEyeDirectionHelper.position.copy(this.lookAt.rightEyeWorldPosition);
       this._rightEyeDirectionHelper.setDirection(direction);

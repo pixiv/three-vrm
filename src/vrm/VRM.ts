@@ -1,16 +1,16 @@
 import * as THREE from 'three';
 import { VRMBlendShapeProxy } from './blendshape';
 import { VRMFirstPerson } from './firstperson';
-import { VRMHumanBones } from './humanoid';
+import { VRMHumanoid } from './humanoid';
 import { VRMLookAtHead } from './lookat';
 import { VRMSpringBoneManager } from './springbone';
-import { RawVrmMeta, VRMPose } from './types';
+import { RawVrmMeta } from './types';
 import { deepDispose } from './utils/disposer';
 import { VRMImporter, VRMImporterOptions } from './VRMImporter';
 
 export interface VRMParameters {
   scene: THREE.Scene;
-  humanBones?: VRMHumanBones;
+  humanoid?: VRMHumanoid;
   animationMixer?: THREE.AnimationMixer;
   blendShapeProxy?: VRMBlendShapeProxy;
   firstPerson?: VRMFirstPerson;
@@ -27,7 +27,7 @@ export class VRM {
   }
 
   public readonly scene: THREE.Scene;
-  public readonly humanBones?: VRMHumanBones;
+  public readonly humanoid?: VRMHumanoid;
   public readonly blendShapeProxy?: VRMBlendShapeProxy;
   public readonly firstPerson?: VRMFirstPerson;
   public readonly lookAt?: VRMLookAtHead;
@@ -36,11 +36,9 @@ export class VRM {
   public readonly animationMixer?: THREE.AnimationMixer;
   public readonly springBoneManager?: VRMSpringBoneManager;
 
-  public readonly restPose: VRMPose | null;
-
   public constructor(params: VRMParameters) {
     this.scene = params.scene;
-    this.humanBones = params.humanBones;
+    this.humanoid = params.humanoid;
     this.animationMixer = params.animationMixer;
     this.blendShapeProxy = params.blendShapeProxy;
     this.firstPerson = params.firstPerson;
@@ -48,58 +46,6 @@ export class VRM {
     this.materials = params.materials;
     this.springBoneManager = params.springBoneManager;
     this.meta = params.meta;
-
-    // Save current initial pose (which is Rest-pose) to restPose field, since pose changing may lose the default transforms. This is useful when resetting the pose or referring default pose.
-    this.restPose = this.humanBones
-      ? Object.keys(this.humanBones).reduce(
-          (restPose, vrmBoneName) => {
-            const bone = this.humanBones![vrmBoneName]!;
-            restPose[vrmBoneName] = {
-              position: bone.position.toArray(),
-              rotation: bone.quaternion.toArray(),
-            };
-            return restPose;
-          },
-          {} as VRMPose,
-        )
-      : null;
-  }
-
-  public setPose(poseObject: VRMPose): void {
-    // VRMに定められたboneが足りない場合、正しくposeが取れない可能性がある
-    if (!this.humanBones) {
-      console.warn('This VRM cannot be posed since humanBones are not properly set');
-      return;
-    }
-
-    Object.keys(poseObject).forEach((boneName) => {
-      const state = poseObject[boneName]!;
-      const targetBone = this.humanBones![boneName];
-
-      // VRM標準ボーンを満たしていないVRMファイルが世の中には存在する
-      // （少し古いuniVRMは、必須なのにhipsを出力していなさそう）
-      // その場合は無視。
-      if (!targetBone) {
-        return;
-      }
-
-      const restState = this.restPose![boneName];
-      if (!restState) {
-        return;
-      }
-
-      if (state.position) {
-        // 元の状態に戻してから、移動分を追加
-        targetBone.position.set(
-          restState.position![0] + state.position[0],
-          restState.position![1] + state.position[1],
-          restState.position![2] + state.position[2],
-        );
-      }
-      if (state.rotation) {
-        targetBone.quaternion.fromArray(state.rotation);
-      }
-    });
   }
 
   public update(delta: number): void {
