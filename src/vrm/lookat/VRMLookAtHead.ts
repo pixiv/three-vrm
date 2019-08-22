@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { VRMHumanoid } from '../humanoid';
-import { GLTFNode, RawVector3, HumanBone } from '../types';
+import { GLTFNode, HumanBone, RawVector3 } from '../types';
 import { getWorldQuaternionLite } from '../utils/math';
 import { VRMLookAtApplyer } from './VRMLookAtApplyer';
 
