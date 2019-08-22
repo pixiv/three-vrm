@@ -5,15 +5,26 @@ import { CurveMapper } from './CurveMapper';
 import { VRMLookAtApplyer } from './VRMLookAtApplyer';
 
 export class VRMLookAtBlendShapeApplyer extends VRMLookAtApplyer {
+  public readonly type = LookAtTypeName.BlendShape;
+
+  private readonly _curveHorizontal: CurveMapper;
+  private readonly _curveVerticalDown: CurveMapper;
+  private readonly _curveVerticalUp: CurveMapper;
+
   private readonly _blendShapeProxy: VRMBlendShapeProxy;
 
   constructor(
     blendShapeProxy: VRMBlendShapeProxy,
-    lookAtHorizontalOuter: CurveMapper,
-    lookAtVerticalDown: CurveMapper,
-    lookAtVerticalUp: CurveMapper,
+    curveHorizontal: CurveMapper,
+    curveVerticalDown: CurveMapper,
+    curveVerticalUp: CurveMapper,
   ) {
-    super(lookAtHorizontalOuter, lookAtVerticalDown, lookAtVerticalUp);
+    super();
+
+    this._curveHorizontal = curveHorizontal;
+    this._curveVerticalDown = curveVerticalDown;
+    this._curveVerticalUp = curveVerticalUp;
+
     this._blendShapeProxy = blendShapeProxy;
   }
 
@@ -27,18 +38,18 @@ export class VRMLookAtBlendShapeApplyer extends VRMLookAtApplyer {
 
     if (srcX < 0.0) {
       this._blendShapeProxy.setValue(BlendShapePresetName.Lookup, 0.0);
-      this._blendShapeProxy.setValue(BlendShapePresetName.Lookdown, this.lookAtVerticalDown.map(-srcX));
+      this._blendShapeProxy.setValue(BlendShapePresetName.Lookdown, this._curveVerticalDown.map(-srcX));
     } else {
       this._blendShapeProxy.setValue(BlendShapePresetName.Lookdown, 0.0);
-      this._blendShapeProxy.setValue(BlendShapePresetName.Lookup, this.lookAtVerticalUp.map(srcX));
+      this._blendShapeProxy.setValue(BlendShapePresetName.Lookup, this._curveVerticalUp.map(srcX));
     }
 
     if (srcY < 0.0) {
       this._blendShapeProxy.setValue(BlendShapePresetName.Lookleft, 0.0);
-      this._blendShapeProxy.setValue(BlendShapePresetName.Lookright, this.lookAtHorizontalOuter.map(-srcY));
+      this._blendShapeProxy.setValue(BlendShapePresetName.Lookright, this._curveHorizontal.map(-srcY));
     } else {
       this._blendShapeProxy.setValue(BlendShapePresetName.Lookright, 0.0);
-      this._blendShapeProxy.setValue(BlendShapePresetName.Lookleft, this.lookAtHorizontalOuter.map(srcY));
+      this._blendShapeProxy.setValue(BlendShapePresetName.Lookleft, this._curveHorizontal.map(srcY));
     }
   }
 }
