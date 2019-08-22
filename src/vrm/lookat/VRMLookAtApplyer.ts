@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { LookAtTypeName, RawVrmFirstPersonDegreemap } from '../types';
 
 export abstract class VRMLookAtApplyer {
-  public lookAtHorizontalOuter: RawVrmFirstPersonDegreemap;
+  public lookAtHorizontalOuter: RawVrmFirstPersonDegreemap; // outer for bone, horizontal for blendshape
   public lookAtVerticalDown: RawVrmFirstPersonDegreemap;
   public lookAtVerticalUp: RawVrmFirstPersonDegreemap;
 

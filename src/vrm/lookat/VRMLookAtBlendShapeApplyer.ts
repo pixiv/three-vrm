@@ -29,19 +29,20 @@ export class VRMLookAtBlendShapeApplyer extends VRMLookAtApplyer {
     const mapperVerticalDown = CurveMapper.apply(deg2rad(this.lookAtVerticalDown));
     const mapperVerticalUp = CurveMapper.apply(deg2rad(this.lookAtVerticalUp));
 
+    if (srcX < 0.0) {
+      this._blendShapeProxy.setValue(BlendShapePresetName.Lookup, 0.0);
+      this._blendShapeProxy.setValue(BlendShapePresetName.Lookdown, mapperVerticalDown.map(-srcX));
+    } else {
+      this._blendShapeProxy.setValue(BlendShapePresetName.Lookdown, 0.0);
+      this._blendShapeProxy.setValue(BlendShapePresetName.Lookup, mapperVerticalUp.map(srcX));
+    }
+
     if (srcY < 0.0) {
       this._blendShapeProxy.setValue(BlendShapePresetName.Lookleft, 0.0);
       this._blendShapeProxy.setValue(BlendShapePresetName.Lookright, mapperHorizontal.map(-srcY));
     } else {
       this._blendShapeProxy.setValue(BlendShapePresetName.Lookright, 0.0);
       this._blendShapeProxy.setValue(BlendShapePresetName.Lookleft, mapperHorizontal.map(srcY));
-    }
-    if (srcX < 0.0) {
-      this._blendShapeProxy.setValue(BlendShapePresetName.Lookdown, 0.0);
-      this._blendShapeProxy.setValue(BlendShapePresetName.Lookup, mapperVerticalUp.map(-srcX));
-    } else {
-      this._blendShapeProxy.setValue(BlendShapePresetName.Lookup, 0.0);
-      this._blendShapeProxy.setValue(BlendShapePresetName.Lookdown, mapperVerticalDown.map(srcX));
     }
   }
 }
