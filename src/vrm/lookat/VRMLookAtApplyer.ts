@@ -1,15 +1,16 @@
 import * as THREE from 'three';
-import { LookAtTypeName, RawVrmFirstPersonDegreemap } from '../types';
+import { LookAtTypeName } from '../types';
+import { CurveMapper } from './CurveMapper';
 
 export abstract class VRMLookAtApplyer {
-  public lookAtHorizontalOuter: RawVrmFirstPersonDegreemap; // outer for bone, horizontal for blendshape
-  public lookAtVerticalDown: RawVrmFirstPersonDegreemap;
-  public lookAtVerticalUp: RawVrmFirstPersonDegreemap;
+  public lookAtHorizontalOuter: CurveMapper; // outer for bone, horizontal for blendshape
+  public lookAtVerticalDown: CurveMapper;
+  public lookAtVerticalUp: CurveMapper;
 
   protected constructor(
-    lookAtHorizontalOuter: RawVrmFirstPersonDegreemap,
-    lookAtVerticalDown: RawVrmFirstPersonDegreemap,
-    lookAtVerticalUp: RawVrmFirstPersonDegreemap,
+    lookAtHorizontalOuter: CurveMapper,
+    lookAtVerticalDown: CurveMapper,
+    lookAtVerticalUp: CurveMapper,
   ) {
     this.lookAtHorizontalOuter = lookAtHorizontalOuter;
     this.lookAtVerticalDown = lookAtVerticalDown;

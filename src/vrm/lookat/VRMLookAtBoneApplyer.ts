@@ -1,25 +1,25 @@
 import * as THREE from 'three';
 import { VRMHumanBones } from '../humanoid';
 import { GLTFNode } from '../types';
-import { LookAtTypeName, RawVrmFirstPersonDegreemap } from '../types';
-import { CurveMapper, DEG2RAD } from './CurveMapper';
+import { LookAtTypeName } from '../types';
+import { CurveMapper } from './CurveMapper';
 import { VRMLookAtApplyer } from './VRMLookAtApplyer';
 import { VRMLookAtHead } from './VRMLookAtHead';
 
 const _euler = new THREE.Euler(0.0, 0.0, 0.0, VRMLookAtHead.EULER_ORDER);
 
 export class VRMLookAtBoneApplyer extends VRMLookAtApplyer {
-  private readonly lookAtHorizontalInner: RawVrmFirstPersonDegreemap;
+  private readonly lookAtHorizontalInner: CurveMapper;
 
   private readonly _leftEye?: GLTFNode;
   private readonly _rightEye?: GLTFNode;
 
   constructor(
     humanBodyBones: VRMHumanBones,
-    lookAtHorizontalInner: RawVrmFirstPersonDegreemap,
-    lookAtHorizontalOuter: RawVrmFirstPersonDegreemap,
-    lookAtVerticalDown: RawVrmFirstPersonDegreemap,
-    lookAtVerticalUp: RawVrmFirstPersonDegreemap,
+    lookAtHorizontalInner: CurveMapper,
+    lookAtHorizontalOuter: CurveMapper,
+    lookAtVerticalDown: CurveMapper,
+    lookAtVerticalUp: CurveMapper,
   ) {
     super(lookAtHorizontalOuter, lookAtVerticalDown, lookAtVerticalUp);
     this._leftEye = humanBodyBones.leftEye;
@@ -35,23 +35,18 @@ export class VRMLookAtBoneApplyer extends VRMLookAtApplyer {
     const srcX = euler.x;
     const srcY = euler.y;
 
-    const mapperHorizontalInner = CurveMapper.apply(deg2rad(this.lookAtHorizontalInner));
-    const mapperHorizontalOuter = CurveMapper.apply(deg2rad(this.lookAtHorizontalOuter));
-    const mapperVerticalDown = CurveMapper.apply(deg2rad(this.lookAtVerticalDown));
-    const mapperVerticalUp = CurveMapper.apply(deg2rad(this.lookAtVerticalUp));
-
     // left
     if (this._leftEye) {
       if (srcX < 0.0) {
-        _euler.x = -mapperVerticalDown.map(-srcX);
+        _euler.x = -this.lookAtVerticalDown.map(-srcX);
       } else {
-        _euler.x = mapperVerticalUp.map(srcX);
+        _euler.x = this.lookAtVerticalUp.map(srcX);
       }
 
       if (srcY < 0.0) {
-        _euler.y = -mapperHorizontalInner.map(-srcY);
+        _euler.y = -this.lookAtHorizontalInner.map(-srcY);
       } else {
-        _euler.y = mapperHorizontalOuter.map(srcY);
+        _euler.y = this.lookAtHorizontalOuter.map(srcY);
       }
 
       this._leftEye.quaternion.setFromEuler(_euler);
@@ -60,26 +55,18 @@ export class VRMLookAtBoneApplyer extends VRMLookAtApplyer {
     // right
     if (this._rightEye) {
       if (srcX < 0.0) {
-        _euler.x = -mapperVerticalDown.map(-srcX);
+        _euler.x = -this.lookAtVerticalDown.map(-srcX);
       } else {
-        _euler.x = mapperVerticalUp.map(srcX);
+        _euler.x = this.lookAtVerticalUp.map(srcX);
       }
 
       if (srcY < 0.0) {
-        _euler.y = -mapperHorizontalOuter.map(-srcY);
+        _euler.y = -this.lookAtHorizontalOuter.map(-srcY);
       } else {
-        _euler.y = mapperHorizontalInner.map(srcY);
+        _euler.y = this.lookAtHorizontalInner.map(srcY);
       }
 
       this._rightEye.quaternion.setFromEuler(_euler);
     }
   }
-}
-
-function deg2rad(map: RawVrmFirstPersonDegreemap): RawVrmFirstPersonDegreemap {
-  return {
-    xRange: typeof map.xRange === 'number' ? DEG2RAD * map.xRange : undefined,
-    yRange: typeof map.yRange === 'number' ? DEG2RAD * map.yRange : undefined,
-    curve: map.curve,
-  };
 }

@@ -2,10 +2,13 @@ import { VRMBlendShapeProxy } from '../blendshape';
 import { VRMFirstPerson } from '../firstperson';
 import { VRMHumanBones } from '../humanoid';
 import * as Raw from '../types/VRM';
+import { CurveMapper } from './CurveMapper';
 import { VRMLookAtApplyer } from './VRMLookAtApplyer';
 import { VRMLookAtBlendShapeApplyer } from './VRMLookAtBlendShapeApplyer';
 import { VRMLookAtBoneApplyer } from './VRMLookAtBoneApplyer';
 import { VRMLookAtHead } from './VRMLookAtHead';
+
+const DEG2RAD = Math.PI / 180.0;
 
 export class VRMLookAtImporter {
   public import(
@@ -40,10 +43,10 @@ export class VRMLookAtImporter {
         } else {
           return new VRMLookAtBoneApplyer(
             humanBodyBones,
-            lookAtHorizontalInner,
-            lookAtHorizontalOuter,
-            lookAtVerticalDown,
-            lookAtVerticalUp,
+            this._importCurveMapperBone(lookAtHorizontalInner),
+            this._importCurveMapperBone(lookAtHorizontalOuter),
+            this._importCurveMapperBone(lookAtVerticalDown),
+            this._importCurveMapperBone(lookAtVerticalUp),
           );
         }
       }
@@ -53,9 +56,9 @@ export class VRMLookAtImporter {
         } else {
           return new VRMLookAtBlendShapeApplyer(
             blendShapeProxy,
-            lookAtHorizontalOuter,
-            lookAtVerticalDown,
-            lookAtVerticalUp,
+            this._importCurveMapperBlendShape(lookAtHorizontalOuter),
+            this._importCurveMapperBlendShape(lookAtVerticalDown),
+            this._importCurveMapperBlendShape(lookAtVerticalUp),
           );
         }
       }
@@ -63,5 +66,17 @@ export class VRMLookAtImporter {
         return null;
       }
     }
+  }
+
+  private _importCurveMapperBone(map: Raw.RawVrmFirstPersonDegreemap): CurveMapper {
+    return new CurveMapper(
+      typeof map.xRange === 'number' ? DEG2RAD * map.xRange : undefined,
+      typeof map.yRange === 'number' ? DEG2RAD * map.yRange : undefined,
+      map.curve,
+    );
+  }
+
+  private _importCurveMapperBlendShape(map: Raw.RawVrmFirstPersonDegreemap): CurveMapper {
+    return new CurveMapper(typeof map.xRange === 'number' ? DEG2RAD * map.xRange : undefined, map.yRange, map.curve);
   }
 }

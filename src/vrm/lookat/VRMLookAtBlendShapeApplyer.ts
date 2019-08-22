@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { VRMBlendShapeProxy } from '../blendshape';
-import { BlendShapePresetName, LookAtTypeName, RawVrmFirstPersonDegreemap } from '../types';
-import { CurveMapper, DEG2RAD } from './CurveMapper';
+import { BlendShapePresetName, LookAtTypeName } from '../types';
+import { CurveMapper } from './CurveMapper';
 import { VRMLookAtApplyer } from './VRMLookAtApplyer';
 
 export class VRMLookAtBlendShapeApplyer extends VRMLookAtApplyer {
@@ -9,9 +9,9 @@ export class VRMLookAtBlendShapeApplyer extends VRMLookAtApplyer {
 
   constructor(
     blendShapeProxy: VRMBlendShapeProxy,
-    lookAtHorizontalOuter: RawVrmFirstPersonDegreemap,
-    lookAtVerticalDown: RawVrmFirstPersonDegreemap,
-    lookAtVerticalUp: RawVrmFirstPersonDegreemap,
+    lookAtHorizontalOuter: CurveMapper,
+    lookAtVerticalDown: CurveMapper,
+    lookAtVerticalUp: CurveMapper,
   ) {
     super(lookAtHorizontalOuter, lookAtVerticalDown, lookAtVerticalUp);
     this._blendShapeProxy = blendShapeProxy;
@@ -25,32 +25,20 @@ export class VRMLookAtBlendShapeApplyer extends VRMLookAtApplyer {
     const srcX = euler.x;
     const srcY = euler.y;
 
-    const mapperHorizontal = CurveMapper.apply(deg2rad(this.lookAtHorizontalOuter));
-    const mapperVerticalDown = CurveMapper.apply(deg2rad(this.lookAtVerticalDown));
-    const mapperVerticalUp = CurveMapper.apply(deg2rad(this.lookAtVerticalUp));
-
     if (srcX < 0.0) {
       this._blendShapeProxy.setValue(BlendShapePresetName.Lookup, 0.0);
-      this._blendShapeProxy.setValue(BlendShapePresetName.Lookdown, mapperVerticalDown.map(-srcX));
+      this._blendShapeProxy.setValue(BlendShapePresetName.Lookdown, this.lookAtVerticalDown.map(-srcX));
     } else {
       this._blendShapeProxy.setValue(BlendShapePresetName.Lookdown, 0.0);
-      this._blendShapeProxy.setValue(BlendShapePresetName.Lookup, mapperVerticalUp.map(srcX));
+      this._blendShapeProxy.setValue(BlendShapePresetName.Lookup, this.lookAtVerticalUp.map(srcX));
     }
 
     if (srcY < 0.0) {
       this._blendShapeProxy.setValue(BlendShapePresetName.Lookleft, 0.0);
-      this._blendShapeProxy.setValue(BlendShapePresetName.Lookright, mapperHorizontal.map(-srcY));
+      this._blendShapeProxy.setValue(BlendShapePresetName.Lookright, this.lookAtHorizontalOuter.map(-srcY));
     } else {
       this._blendShapeProxy.setValue(BlendShapePresetName.Lookright, 0.0);
-      this._blendShapeProxy.setValue(BlendShapePresetName.Lookleft, mapperHorizontal.map(srcY));
+      this._blendShapeProxy.setValue(BlendShapePresetName.Lookleft, this.lookAtHorizontalOuter.map(srcY));
     }
   }
-}
-
-function deg2rad(map: RawVrmFirstPersonDegreemap): RawVrmFirstPersonDegreemap {
-  return {
-    xRange: typeof map.xRange === 'number' ? DEG2RAD * map.xRange : undefined,
-    yRange: map.yRange, // yRange means weight not radian
-    curve: map.curve,
-  };
 }

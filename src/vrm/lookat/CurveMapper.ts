@@ -1,7 +1,3 @@
-import { RawVrmFirstPersonDegreemap } from '../types/VRM';
-
-export const DEG2RAD = Math.PI / 180.0;
-
 const hermiteSpline = (y0: number, y1: number, t0: number, t1: number, x: number): number => {
   const xc = x * x * x;
   const xs = x * x;
@@ -51,10 +47,6 @@ const evaluateCurve = (arr: number[], x: number): number => {
 };
 
 export class CurveMapper {
-  public static apply(map: RawVrmFirstPersonDegreemap): CurveMapper {
-    return new CurveMapper(map.xRange, map.yRange, map.curve);
-  }
-
   public curve: number[] = [0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0];
   public curveXRangeDegree: number = 90.0;
   public curveYRangeDegree: number = 10.0;
