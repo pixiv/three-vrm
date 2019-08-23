@@ -19,6 +19,13 @@ export class VRMBlendShapeMaster {
   public constructor() {}
 
   /**
+   * List of name of registered blend shape group.
+   */
+  public get expressions(): string[] {
+    return Object.keys(this._blendShapeGroups);
+  }
+
+  /**
    * Return registered blend shape group.
    * @param name Name of the blend shape group
    */
