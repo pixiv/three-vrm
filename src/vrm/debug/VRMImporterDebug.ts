@@ -41,10 +41,12 @@ export class VRMImporterDebug extends VRMImporter {
 
     const animationMixer = new THREE.AnimationMixer(gltf.scene);
 
-    const blendShapeProxy = (await this.loadBlendShapeMaster(animationMixer!, gltf)) || undefined;
+    const blendShapeMaster = vrmExt.blendShapeMaster
+      ? (await this._blendShapeImporter.import(gltf, vrmExt.blendShapeMaster)) || undefined
+      : undefined;
 
     const lookAt =
-      blendShapeProxy && humanBones ? this.loadLookAt(vrmExt.firstPerson, blendShapeProxy, humanBones) : undefined;
+      blendShapeMaster && humanBones ? this.loadLookAt(vrmExt.firstPerson, blendShapeMaster, humanBones) : undefined;
 
     const springBoneManager = (await this._springBoneImporter.import(gltf)) || undefined;
 
@@ -56,7 +58,7 @@ export class VRMImporterDebug extends VRMImporter {
         humanBones,
         firstPerson,
         animationMixer,
-        blendShapeProxy,
+        blendShapeMaster,
         lookAt,
         springBoneManager,
       },

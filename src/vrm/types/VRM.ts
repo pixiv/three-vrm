@@ -15,7 +15,7 @@ export interface RawVrm {
 }
 
 export interface RawVrmBlendShape {
-  BlendShapeGroups?: RawVrmBlendShapeGroup[];
+  blendShapeGroups?: RawVrmBlendShapeGroup[];
 }
 
 export interface RawVrmBlendShapeGroup {

@@ -1,14 +1,14 @@
 import * as THREE from 'three';
-import { VRMBlendShapeProxy } from '../blendshape';
+import { VRMBlendShapeMaster } from '../blendshape';
 import { BlendShapePresetName, LookAtTypeName, RawVrmFirstPersonDegreemap } from '../types';
 import { CurveMapper, DEG2RAD } from './CurveMapper';
 import { VRMLookAtApplyer } from './VRMLookAtApplyer';
 
 export class VRMLookAtBlendShapeApplyer extends VRMLookAtApplyer {
-  private readonly _blendShapeProxy: VRMBlendShapeProxy;
+  private readonly _blendShapeProxy: VRMBlendShapeMaster;
 
   constructor(
-    blendShapeProxy: VRMBlendShapeProxy,
+    blendShapeProxy: VRMBlendShapeMaster,
     lookAtHorizontalOuter: RawVrmFirstPersonDegreemap,
     lookAtVerticalDown: RawVrmFirstPersonDegreemap,
     lookAtVerticalUp: RawVrmFirstPersonDegreemap,

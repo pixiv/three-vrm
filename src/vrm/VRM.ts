@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { VRMBlendShapeProxy } from './blendshape';
+import { VRMBlendShapeMaster } from './blendshape';
 import { VRMFirstPerson } from './firstperson';
 import { VRMHumanBones } from './humanoid';
 import { VRMLookAtHead } from './lookat';
@@ -12,7 +12,7 @@ export interface VRMParameters {
   scene: THREE.Scene;
   humanBones?: VRMHumanBones;
   animationMixer?: THREE.AnimationMixer;
-  blendShapeProxy?: VRMBlendShapeProxy;
+  blendShapeMaster?: VRMBlendShapeMaster;
   firstPerson?: VRMFirstPerson;
   lookAt?: VRMLookAtHead;
   materials?: THREE.Material[];
@@ -28,7 +28,7 @@ export class VRM {
 
   public readonly scene: THREE.Scene;
   public readonly humanBones?: VRMHumanBones;
-  public readonly blendShapeProxy?: VRMBlendShapeProxy;
+  public readonly blendShapeMaster?: VRMBlendShapeMaster;
   public readonly firstPerson?: VRMFirstPerson;
   public readonly lookAt?: VRMLookAtHead;
   public readonly materials?: THREE.Material[];
@@ -42,7 +42,7 @@ export class VRM {
     this.scene = params.scene;
     this.humanBones = params.humanBones;
     this.animationMixer = params.animationMixer;
-    this.blendShapeProxy = params.blendShapeProxy;
+    this.blendShapeMaster = params.blendShapeMaster;
     this.firstPerson = params.firstPerson;
     this.lookAt = params.lookAt;
     this.materials = params.materials;
@@ -111,8 +111,8 @@ export class VRM {
       this.animationMixer.update(delta);
     }
 
-    if (this.blendShapeProxy) {
-      this.blendShapeProxy.update();
+    if (this.blendShapeMaster) {
+      this.blendShapeMaster.update();
     }
 
     if (this.springBoneManager) {
