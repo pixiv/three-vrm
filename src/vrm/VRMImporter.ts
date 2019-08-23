@@ -61,8 +61,6 @@ export class VRMImporter {
       ? (await this.loadFirstPerson(vrmExt.firstPerson, humanBones, gltf)) || undefined
       : undefined;
 
-    const animationMixer = new THREE.AnimationMixer(gltf.scene);
-
     const blendShapeMaster = vrmExt.blendShapeMaster
       ? (await this._blendShapeImporter.import(gltf, vrmExt.blendShapeMaster)) || undefined
       : undefined;
@@ -78,7 +76,6 @@ export class VRMImporter {
       materials,
       humanBones,
       firstPerson,
-      animationMixer,
       blendShapeMaster,
       lookAt,
       springBoneManager,

@@ -11,7 +11,6 @@ import { VRMImporter, VRMImporterOptions } from './VRMImporter';
 export interface VRMParameters {
   scene: THREE.Scene;
   humanBones?: VRMHumanBones;
-  animationMixer?: THREE.AnimationMixer;
   blendShapeMaster?: VRMBlendShapeMaster;
   firstPerson?: VRMFirstPerson;
   lookAt?: VRMLookAtHead;
@@ -33,7 +32,6 @@ export class VRM {
   public readonly lookAt?: VRMLookAtHead;
   public readonly materials?: THREE.Material[];
   public readonly meta?: RawVrmMeta;
-  public readonly animationMixer?: THREE.AnimationMixer;
   public readonly springBoneManager?: VRMSpringBoneManager;
 
   public readonly restPose: VRMPose | null;
@@ -41,7 +39,6 @@ export class VRM {
   public constructor(params: VRMParameters) {
     this.scene = params.scene;
     this.humanBones = params.humanBones;
-    this.animationMixer = params.animationMixer;
     this.blendShapeMaster = params.blendShapeMaster;
     this.firstPerson = params.firstPerson;
     this.lookAt = params.lookAt;
@@ -105,10 +102,6 @@ export class VRM {
   public update(delta: number): void {
     if (this.lookAt) {
       this.lookAt.update();
-    }
-
-    if (this.animationMixer) {
-      this.animationMixer.update(delta);
     }
 
     if (this.blendShapeMaster) {
