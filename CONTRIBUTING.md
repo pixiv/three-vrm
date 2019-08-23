@@ -19,6 +19,7 @@ Once you start the `yarn dev`, you can see examples at http://localhost:3000/exa
 - Pull requests should not be toward `master` branch. Use `dev` branch as a base branch unless you have any specific reason.
 - Try to create a pull request per single patch or feature.
 - We are not bound of [Mr.doob's Code Style™](https://github.com/mrdoob/three.js/wiki/Mr.doob%27s-Code-Style%E2%84%A2) inside of `/src`, but you MUST follow the style inside of `/examples`
+- When you modified some API, make sure every examples are working properly.
 
 ## Syntax guidelines
 
