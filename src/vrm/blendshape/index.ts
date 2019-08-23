@@ -1,2 +1,2 @@
-export * from './BlendShapeMaster';
+export * from './VRMBlendShapeMaster';
 export * from './VRMBlendShapeGroup';
