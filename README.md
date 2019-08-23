@@ -87,6 +87,10 @@ three-vrm/examples/react$ yarn dev
 
 * <http://localhost:4000>
 
+## Contributing
+
+See: [CONTRIBUTING.md](CONTRIBUTING.md)
+
 ## Public API 
 
 ### VRM
