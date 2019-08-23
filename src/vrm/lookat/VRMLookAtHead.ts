@@ -16,8 +16,8 @@ export class VRMLookAtHead {
 
   public autoUpdate: boolean = true;
 
-  private _target?: THREE.Object3D;
-  private _euler: THREE.Euler = new THREE.Euler(0.0, 0.0, 0.0, VRMLookAtHead.EULER_ORDER);
+  protected _euler: THREE.Euler = new THREE.Euler(0.0, 0.0, 0.0, VRMLookAtHead.EULER_ORDER);
+  protected _target?: THREE.Object3D;
 
   constructor(firstPerson: VRMFirstPerson, applyer?: VRMLookAtApplyer) {
     this.firstPerson = firstPerson;
@@ -41,10 +41,24 @@ export class VRMLookAtHead {
   }
 
   public lookAt(position: THREE.Vector3): void {
-    if (!this.applyer) {
-      return;
-    }
+    this._calcEuler(this._euler, position);
 
+    if (this.applyer) {
+      this.applyer.lookAt(this._euler);
+    }
+  }
+
+  public update(delta: number): void {
+    if (this._target && this.autoUpdate) {
+      this.lookAt(this._target.getWorldPosition(_v3A));
+
+      if (this.applyer) {
+        this.applyer.lookAt(this._euler);
+      }
+    }
+  }
+
+  protected _calcEuler(target: THREE.Euler, position: THREE.Vector3): THREE.Euler {
     const headPosition = this.firstPerson.getFirstPersonWorldPosition(_v3B);
 
     // Look at direction in world coordinate
@@ -57,15 +71,9 @@ export class VRMLookAtHead {
     lookAtDir.applyQuaternion(getWorldQuaternionLite(this.firstPerson.getFirstPersonBone(), _quat).inverse());
 
     // convert the direction into euler
-    this._euler.x = Math.atan2(lookAtDir.y, Math.sqrt(lookAtDir.x * lookAtDir.x + lookAtDir.z * lookAtDir.z));
-    this._euler.y = Math.atan2(-lookAtDir.x, -lookAtDir.z);
+    target.x = Math.atan2(lookAtDir.y, Math.sqrt(lookAtDir.x * lookAtDir.x + lookAtDir.z * lookAtDir.z));
+    target.y = Math.atan2(-lookAtDir.x, -lookAtDir.z);
 
-    this.applyer.lookAt(this._euler);
-  }
-
-  public update(): void {
-    if (this._target && this.autoUpdate) {
-      this.lookAt(this._target.getWorldPosition(_v3A));
-    }
+    return target;
   }
 }

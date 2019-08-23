@@ -19,8 +19,8 @@ export class VRMLookAtHeadDebug extends VRMLookAtHead {
     }
   }
 
-  public update(): void {
-    super.update();
+  public update(delta: number): void {
+    super.update(delta);
 
     if (this._faceDirectionHelper) {
       this.firstPerson.getFirstPersonWorldPosition(this._faceDirectionHelper.position);
