@@ -39,7 +39,7 @@ class someClass {
     return _counter ++;
   }
 
-  // 😃 preferrable
+  // 😃 preferable
   public get counter(): number {
     return _counter ++;
   }
@@ -62,7 +62,7 @@ function createSomeVector(): THREE.Vector3 {
   return new THREE.Vector3(5.0, 5.0, 5.0);
 }
 
-// 😃 perferrable
+// 😃 perferable
 function createSomeVector(target: THREE.Vector3): THREE.Vector3 {
   return target.set(5.0, 5.0, 5.0);
 }
