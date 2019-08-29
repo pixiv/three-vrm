@@ -55,16 +55,33 @@ export class VRMFirstPerson {
     this._meshAnnotations = meshAnnotations;
   }
 
-  public getFirstPersonBone(): GLTFNode {
+  public get firstPersonBone(): GLTFNode {
     return this._firstPersonBone;
   }
 
-  public getFirstPersonBoneOffset(): THREE.Vector3 {
-    return this._firstPersonBoneOffset;
+  public get meshAnnotations(): RendererFirstPersonFlags[] {
+    return this._meshAnnotations;
   }
 
-  public getMeshAnnotations(): RendererFirstPersonFlags[] {
-    return this._meshAnnotations;
+  public get firstPersonOnlyLayer(): number {
+    return this._firstPersonOnlyLayer;
+  }
+
+  public get thirdPersonOnlyLayer(): number {
+    return this._thirdPersonOnlyLayer;
+  }
+
+  public getFirstPersonBoneOffset(target: THREE.Vector3): THREE.Vector3 {
+    return target.copy(this._firstPersonBoneOffset);
+  }
+
+  public getFirstPersonWorldPosition(v3: THREE.Vector3): THREE.Vector3 {
+    // UniVRM#VRMFirstPersonEditor
+    // var worldOffset = head.localToWorldMatrix.MultiplyPoint(component.FirstPersonOffset);
+    const offset = this._firstPersonBoneOffset;
+    const v4 = new THREE.Vector4(offset.x, offset.y, offset.z, 1.0);
+    v4.applyMatrix4(this._firstPersonBone.matrixWorld);
+    return v3.set(v4.x, v4.y, v4.z);
   }
 
   public setup({
@@ -86,29 +103,12 @@ export class VRMFirstPerson {
         item.mesh.layers.set(this._thirdPersonOnlyLayer);
         item.mesh.traverse((child) => child.layers.set(this._thirdPersonOnlyLayer));
       } else if (item.firstPersonFlag === FirstPersonFlag.Auto) {
-        this.createHeadlessModel(item.mesh);
+        this._createHeadlessModel(item.mesh);
       }
     });
   }
 
-  public getFirstPersonOnlyLayer(): number {
-    return this._firstPersonOnlyLayer;
-  }
-
-  public getThirdPersonOnlyLayer(): number {
-    return this._thirdPersonOnlyLayer;
-  }
-
-  public getFirstPersonWorldPosition(v3: THREE.Vector3): THREE.Vector3 {
-    // UniVRM#VRMFirstPersonEditor
-    // var worldOffset = head.localToWorldMatrix.MultiplyPoint(component.FirstPersonOffset);
-    const offset = this._firstPersonBoneOffset;
-    const v4 = new THREE.Vector4(offset.x, offset.y, offset.z, 1.0);
-    v4.applyMatrix4(this._firstPersonBone.matrixWorld);
-    return v3.set(v4.x, v4.y, v4.z);
-  }
-
-  private excludeTriangles(triangles: number[], bws: number[][], skinIndex: number[][], exclude: number[]) {
+  private _excludeTriangles(triangles: number[], bws: number[][], skinIndex: number[][], exclude: number[]) {
     let count = 0;
     if (bws != null && bws.length > 0) {
       for (let i = 0; i < triangles.length; i += 3) {
@@ -145,7 +145,7 @@ export class VRMFirstPerson {
     return count;
   }
 
-  private createErasedMesh(src: THREE.SkinnedMesh, erasingBonesIndex: number[]): THREE.SkinnedMesh {
+  private _createErasedMesh(src: THREE.SkinnedMesh, erasingBonesIndex: number[]): THREE.SkinnedMesh {
     const dst = new THREE.SkinnedMesh(src.geometry.clone(), src.material);
     dst.name = `${src.name}(erase)`;
     dst.frustumCulled = src.frustumCulled;
@@ -163,7 +163,7 @@ export class VRMFirstPerson {
       skinWeight.push([skinWeightAttr[i], skinWeightAttr[i + 1], skinWeightAttr[i + 2], skinWeightAttr[i + 3]]);
     }
     const oldTriangles = Array.from(geometry.getIndex().array);
-    const count = this.excludeTriangles(oldTriangles, skinWeight, skinIndex, erasingBonesIndex);
+    const count = this._excludeTriangles(oldTriangles, skinWeight, skinIndex, erasingBonesIndex);
     const newTriangle: number[] = [];
     for (let i = 0; i < count; i++) {
       newTriangle[i] = oldTriangles[i];
@@ -178,10 +178,10 @@ export class VRMFirstPerson {
     return dst;
   }
 
-  private createHeadlessModelForSkinnedMesh(parent: THREE.Object3D, mesh: THREE.SkinnedMesh) {
+  private _createHeadlessModelForSkinnedMesh(parent: THREE.Object3D, mesh: THREE.SkinnedMesh) {
     const eraseBoneIndexes: number[] = [];
     mesh.skeleton.bones.forEach((bone, index) => {
-      if (this.isEraseTarget(bone)) eraseBoneIndexes.push(index);
+      if (this._isEraseTarget(bone)) eraseBoneIndexes.push(index);
     });
 
     // Unlike UniVRM we don't copy mesh if no invisible bone was found
@@ -191,14 +191,14 @@ export class VRMFirstPerson {
       return;
     }
     mesh.layers.set(this._thirdPersonOnlyLayer);
-    const newMesh = this.createErasedMesh(mesh, eraseBoneIndexes);
+    const newMesh = this._createErasedMesh(mesh, eraseBoneIndexes);
     parent.add(newMesh);
   }
 
-  private createHeadlessModel(node: GLTFNode) {
+  private _createHeadlessModel(node: GLTFNode) {
     if (node.type === 'Group') {
       node.layers.set(this._thirdPersonOnlyLayer);
-      if (this.isEraseTarget(node)) {
+      if (this._isEraseTarget(node)) {
         node.traverse((child) => child.layers.set(this._thirdPersonOnlyLayer));
       } else {
         const parent = new THREE.Group();
@@ -208,26 +208,26 @@ export class VRMFirstPerson {
         node.children
           .filter((child) => child.type === 'SkinnedMesh')
           .forEach((child) => {
-            this.createHeadlessModelForSkinnedMesh(parent, child as THREE.SkinnedMesh);
+            this._createHeadlessModelForSkinnedMesh(parent, child as THREE.SkinnedMesh);
           });
       }
     } else if (node.type === 'SkinnedMesh') {
-      this.createHeadlessModelForSkinnedMesh(node.parent!, node as THREE.SkinnedMesh);
+      this._createHeadlessModelForSkinnedMesh(node.parent!, node as THREE.SkinnedMesh);
     } else {
-      if (this.isEraseTarget(node)) {
+      if (this._isEraseTarget(node)) {
         node.layers.set(this._thirdPersonOnlyLayer);
         node.traverse((child) => child.layers.set(this._thirdPersonOnlyLayer));
       }
     }
   }
 
-  private isEraseTarget(bone: GLTFNode): boolean {
+  private _isEraseTarget(bone: GLTFNode): boolean {
     if (bone.name === this._firstPersonBone.name) {
       return true;
     } else if (!bone.parent) {
       return false;
     } else {
-      return this.isEraseTarget(bone.parent!);
+      return this._isEraseTarget(bone.parent!);
     }
   }
 }
