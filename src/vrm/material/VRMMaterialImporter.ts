@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { GLTFMesh, GLTFPrimitive, RawVrm, RawVrmMaterial } from '../types';
-import { MToon, MToonOutlineWidthMode, MToonRenderMode } from './MToon';
-import { Unlit, UnlitRenderType } from './Unlit';
+import { MToonMaterial, MToonMaterialOutlineWidthMode, MToonMaterialRenderMode } from './MToonMaterial';
+import { VRMUnlitMaterial, VRMUnlitMaterialRenderType } from './VRMUnlitMaterial';
 
 export interface VRMMaterialImporterOptions {
   colorSpaceGamma?: boolean;
@@ -122,33 +122,33 @@ export class VRMMaterialImporter {
       });
 
       // done
-      newSurface = new MToon(this._colorSpaceGamma, params);
+      newSurface = new MToonMaterial(this._colorSpaceGamma, params);
 
       // outline
-      if (params.outlineWidthMode !== MToonOutlineWidthMode.None) {
+      if (params.outlineWidthMode !== MToonMaterialOutlineWidthMode.None) {
         params.isOutline = true;
-        newOutline = new MToon(this._colorSpaceGamma, params);
+        newOutline = new MToonMaterial(this._colorSpaceGamma, params);
       }
     } else if (vrmProps.shader === 'VRM/UnlitTexture') {
       // this is very legacy
       const params = await this.extractMaterialProperties(originalMaterial, vrmProps, gltf);
-      params.renderType = UnlitRenderType.Opaque;
-      newSurface = new Unlit(params);
+      params.renderType = VRMUnlitMaterialRenderType.Opaque;
+      newSurface = new VRMUnlitMaterial(params);
     } else if (vrmProps.shader === 'VRM/UnlitCutout') {
       // this is very legacy
       const params = await this.extractMaterialProperties(originalMaterial, vrmProps, gltf);
-      params.renderType = UnlitRenderType.Cutout;
-      newSurface = new Unlit(params);
+      params.renderType = VRMUnlitMaterialRenderType.Cutout;
+      newSurface = new VRMUnlitMaterial(params);
     } else if (vrmProps.shader === 'VRM/UnlitTransparent') {
       // this is very legacy
       const params = await this.extractMaterialProperties(originalMaterial, vrmProps, gltf);
-      params.renderType = UnlitRenderType.Transparent;
-      newSurface = new Unlit(params);
+      params.renderType = VRMUnlitMaterialRenderType.Transparent;
+      newSurface = new VRMUnlitMaterial(params);
     } else if (vrmProps.shader === 'VRM/UnlitTransparentZWrite') {
       // this is very legacy
       const params = await this.extractMaterialProperties(originalMaterial, vrmProps, gltf);
-      params.renderType = UnlitRenderType.TransparentWithZWrite;
-      newSurface = new Unlit(params);
+      params.renderType = VRMUnlitMaterialRenderType.TransparentWithZWrite;
+      newSurface = new VRMUnlitMaterial(params);
     } else {
       if (vrmProps.shader !== 'VRM_USE_GLTFSHADER') {
         console.warn(`Unknown shader detected: "${vrmProps.shader}"`);
@@ -276,8 +276,8 @@ export class VRMMaterialImporter {
     }
 
     // TODO: f (https://github.com/dwango/UniVRM/issues/172)
-    if (vrmProps.keywordMap!._ALPHATEST_ON && params.blendMode === MToonRenderMode.Opaque) {
-      params.blendMode = MToonRenderMode.Cutout;
+    if (vrmProps.keywordMap!._ALPHATEST_ON && params.blendMode === MToonMaterialRenderMode.Opaque) {
+      params.blendMode = MToonMaterialRenderMode.Cutout;
     }
 
     // set whether it needs skinning and morphing or not
