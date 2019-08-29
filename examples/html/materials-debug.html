@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>three-vrm example</title>
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+		/>
+		<style>
+			html,
+			body {
+				overflow: hidden;
+				width: 100vw;
+				height: 100vh;
+				margin: 0;
+				padding: 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<script src="https://unpkg.com/three@0.106.2/build/three.js"></script>
+		<script src="https://unpkg.com/three@0.106.2/examples/js/loaders/GLTFLoader.js"></script>
+		<script src="https://unpkg.com/three@0.106.2/examples/js/controls/OrbitControls.js"></script>
+		<script src="../../lib/index.js"></script>
+		<script>
+			// renderer
+			const renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+			// camera
+			const camera = new THREE.PerspectiveCamera( 30.0, window.innerWidth / window.innerHeight, 0.1, 20.0 );
+			camera.position.set( 0.0, 0.0, 5.0 );
+
+			// camera controls
+			const controls = new THREE.OrbitControls( camera, renderer.domElement );
+			controls.screenSpacePanning = true;
+
+			// scene
+			const scene = new THREE.Scene();
+
+			// light
+			const light = new THREE.DirectionalLight( 0xffffff );
+			light.position.set( 1.0, 1.0, 1.0 ).normalize();
+			scene.add( light );
+
+			// gltf and vrm
+			let currentVrm = undefined;
+			const loader = new THREE.GLTFLoader();
+			loader.crossOrigin = 'anonymous';
+			loader.load(
+
+				'../react/models/shino.vrm',
+
+				( gltf ) => {
+
+					THREE.VRM.from( gltf ).then( ( vrm ) => {
+
+						scene.add( vrm.scene );
+						currentVrm = vrm;
+						vrm.humanBones[ THREE.HumanBone.Hips ].rotation.y = Math.PI;
+
+						console.log( vrm );
+
+					} );
+
+				},
+
+				( progress ) => console.log( 'Loading model...', 100.0 * ( progress.loaded / progress.total ), '%' ),
+
+				( error ) => console.error( error )
+
+			);
+
+			// helpers
+			const gridHelper = new THREE.GridHelper( 10, 10 );
+			scene.add( gridHelper );
+
+			const axesHelper = new THREE.AxesHelper( 5 );
+			scene.add( axesHelper );
+
+			// animate
+			const clock = new THREE.Clock();
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				const deltaTime = clock.getDelta();
+
+				if ( currentVrm ) {
+
+					// update vrm
+					currentVrm.update( deltaTime );
+
+				}
+
+				renderer.render( scene, camera );
+
+			}
+
+			animate();
+
+			// keyboard listener
+			function setMToonDebugMode( material, mode ) {
+
+				if ( material.isMToonMaterial ) {
+
+					material.debugMode = mode;
+
+				}
+
+			}
+
+			let debugMode = 0;
+
+			window.addEventListener( 'keydown', () => {
+
+				if ( !currentVrm ) { return; }
+
+				debugMode = ( debugMode + 1 ) % 4;
+
+				currentVrm.scene.traverse( ( object ) => {
+
+					if ( object.material ) {
+
+						if ( Array.isArray( object.material ) ) {
+
+							object.material.forEach( ( material ) => setMToonDebugMode( material, debugMode ) );
+
+						} else {
+
+							setMToonDebugMode( object.material, debugMode );
+
+						}
+
+					}
+
+				} );
+
+			} );
+		</script>
+	</body>
+</html>
