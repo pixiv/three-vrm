@@ -81,3 +81,18 @@ function processSomeVector(v: THREE.Vector3): number {
   //     ^^^ using a temporary vector instead of create a new vector
 }
 ```
+
+## How to release
+
+- 1, Make sure you're on `master` branch, with latest changes from `dev`
+
+- 2, Run the following:
+
+  ```sh
+  npm version <newversion> # will also automatically runs build scripts
+  git push
+  git push --tags
+  npm publish # will also automatically pushes some files into `gh-pages` branch
+  ```
+
+- 3, Add a release note to https://github.com/pixiv/three-vrm/releases
