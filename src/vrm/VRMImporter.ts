@@ -37,7 +37,7 @@ export class VRMImporter {
     if (gltf.parser.json.extensions === undefined || gltf.parser.json.extensions.VRM === undefined) {
       throw new Error('Could not find VRM extension on the GLTF');
     }
-    const vrmExt = gltf.parser.json.extensions.VRM;
+    const vrmExt: Raw.RawVrm = gltf.parser.json.extensions.VRM;
 
     const scene = gltf.scene;
 
@@ -55,18 +55,23 @@ export class VRMImporter {
 
     const materials = await this._materialImporter.convertGLTFMaterials(gltf);
 
-    const humanoid = (await this._humanoidImporter.import(gltf, vrmExt.humanoid)) || undefined;
-
-    const firstPerson = humanoid
-      ? (await this.loadFirstPerson(vrmExt.firstPerson, humanoid, gltf)) || undefined
+    const humanoid = vrmExt.humanoid
+      ? (await this._humanoidImporter.import(gltf, vrmExt.humanoid)) || undefined
       : undefined;
+
+    const firstPerson =
+      vrmExt.firstPerson && humanoid
+        ? (await this.loadFirstPerson(vrmExt.firstPerson, humanoid, gltf)) || undefined
+        : undefined;
 
     const animationMixer = new THREE.AnimationMixer(gltf.scene);
 
     const blendShapeProxy = (await this.loadBlendShapeMaster(animationMixer!, gltf)) || undefined;
 
     const lookAt =
-      blendShapeProxy && humanoid ? this.loadLookAt(vrmExt.firstPerson, blendShapeProxy, humanoid) : undefined;
+      vrmExt.firstPerson && blendShapeProxy && humanoid
+        ? this.loadLookAt(vrmExt.firstPerson, blendShapeProxy, humanoid)
+        : undefined;
 
     const springBoneManager = (await this._springBoneImporter.import(gltf)) || undefined;
 
