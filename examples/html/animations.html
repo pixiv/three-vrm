@@ -62,7 +62,7 @@
 
 						scene.add( vrm.scene );
 						currentVrm = vrm;
-						vrm.scene.rotation.y = Math.PI;
+						vrm.humanBones[ THREE.HumanBone.Hips ].rotation.y = Math.PI;
 
 						prepareAnimation( vrm );
 
