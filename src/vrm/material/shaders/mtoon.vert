@@ -80,7 +80,7 @@ void main() {
       vec2 projectedNormal = normalize( clipNormal.xy );
       projectedNormal *= min( gl_Position.w, outlineScaledMaxDistance );
       projectedNormal.x *= projectionMatrix[ 0 ].x / projectionMatrix[ 1 ].y;
-      gl_Position.xy += 0.01 * outlineWidth * projectedNormal.xy;
+      gl_Position.xy += 0.01 * outlineWidth * outlineTex * projectedNormal.xy;
     #endif
 
     gl_Position.z += 1E-6 * gl_Position.w; // anti-artifact magic
