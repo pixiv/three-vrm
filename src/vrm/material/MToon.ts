@@ -3,7 +3,16 @@
 import * as THREE from 'three';
 import { getTexelDecodingFunction } from './texel-decoder';
 
+/**
+ * MToon is a material specification that has various features.
+ * The spec and implementation are originally founded for Unity engine and this is a port of the material.
+ *
+ * See: https://github.com/Santarh/MToon
+ */
 export class MToon extends THREE.ShaderMaterial {
+  /**
+   * Readonly boolean that indicates this is a MToon material.
+   */
   public readonly isVRMMToon: boolean = true;
 
   public cutoff: number = 0.5; // _Cutoff

@@ -10,6 +10,9 @@ export class VRMSpringBoneImporter {
     return false;
   }
 
+  /**
+   * Import spring bones from a VRM.
+   */
   public async import(gltf: THREE.GLTF): Promise<VRMSpringBoneManager | null> {
     if (
       !gltf.parser.json.extensions ||
@@ -114,6 +117,9 @@ export class VRMSpringBoneImporter {
     return springBoneGroupList;
   }
 
+  /**
+   * Create an array of [[VRMSpringBoneColliderGroup]].
+   */
   private async getColliderMeshGroups(gltf: THREE.GLTF): Promise<VRMSpringBoneColliderGroup[]> {
     const vrmExt: Raw.RawVrm | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
     if (vrmExt === undefined) {
