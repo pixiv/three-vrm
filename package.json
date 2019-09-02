@@ -18,7 +18,7 @@
     "version": "yarn all",
     "all": "yarn clean && yarn build && yarn docs",
     "dev": "webpack-dev-server --mode development",
-    "clean": "rimraf dist types",
+    "clean": "rimraf docs lib",
     "build": "yarn build-dev && yarn build-prod && yarn build-types",
     "build-dev": "webpack --mode development",
     "build-prod": "webpack --mode production",
