@@ -1,5 +1,9 @@
 import { GLTFNode, HumanBone } from '../types';
 
+/**
+ * A class represents the `humanoid.humanBones` array of a VRM.
+ * This is simply a list of bones of your VRM.
+ */
 export class VRMHumanBones {
   public [HumanBone.Hips]: GLTFNode;
   public [HumanBone.LeftUpperLeg]: GLTFNode;

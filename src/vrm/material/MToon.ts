@@ -6,7 +6,16 @@ import { getTexelDecodingFunction } from './texel-decoder';
 const TAU = 2.0 * Math.PI;
 const frac = (x: number) => x - Math.floor(x);
 
+/**
+ * MToon is a material specification that has various features.
+ * The spec and implementation are originally founded for Unity engine and this is a port of the material.
+ *
+ * See: https://github.com/Santarh/MToon
+ */
 export class MToon extends THREE.ShaderMaterial {
+  /**
+   * Readonly boolean that indicates this is a MToon material.
+   */
   public readonly isVRMMToon: boolean = true;
 
   public cutoff: number = 0.5; // _Cutoff
@@ -266,6 +275,8 @@ export class MToon extends THREE.ShaderMaterial {
   /**
    * Update this material.
    * Usually this will be called via [[VRM.update]] so you don't have to call this manually.
+   *
+   * @param delta deltaTime since last update
    */
   public updateVRMMaterials(delta: number): void {
     this._uvAnimOffsetX = frac(this._uvAnimOffsetX + delta * this.uvAnimScrollX);
