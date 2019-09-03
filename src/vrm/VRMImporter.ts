@@ -1,90 +1,106 @@
 import * as THREE from 'three';
 import { BlendShapeController, BlendShapeMaster, VRMBlendShapeProxy } from './blendshape';
-import { RendererFirstPersonFlags, VRMFirstPerson } from './firstperson';
-import { VRMHumanBones } from './humanoid';
+import { VRMFirstPersonImporter } from './firstperson';
+import { VRMHumanoid } from './humanoid';
+import { VRMHumanoidImporter } from './humanoid/VRMHumanoidImporter';
 import { VRMLookAtHead } from './lookat';
 import { VRMLookAtBlendShapeApplyer } from './lookat/VRMLookAtBlendShapeApplyer';
 import { VRMLookAtBoneApplyer } from './lookat/VRMLookAtBoneApplyer';
-import { VRMSpringBoneManager } from './springbone';
-import { GLTFMesh, GLTFNode, GLTFPrimitive, RawVrmHumanoidBone } from './types';
-import * as Raw from './types/VRM';
+import { VRMMaterialImporter } from './material';
+import { reduceBones } from './reduceBones';
+import { VRMSpringBoneImporter } from './springbone/VRMSpringBoneImporter';
+import { GLTFMesh, GLTFPrimitive, VRMSchema } from './types';
+import { VRM } from './VRM';
 
-export class VRMPartsBuilder {
+export interface VRMImporterOptions {
+  humanoidImporter?: VRMHumanoidImporter;
+  firstPersonImporter?: VRMFirstPersonImporter;
+  materialImporter?: VRMMaterialImporter;
+  springBoneImporter?: VRMSpringBoneImporter;
+}
+
+export class VRMImporter {
+  protected readonly _humanoidImporter: VRMHumanoidImporter;
+  protected readonly _firstPersonImporter: VRMFirstPersonImporter;
+  protected readonly _materialImporter: VRMMaterialImporter;
+  protected readonly _springBoneImporter: VRMSpringBoneImporter;
+
   /**
-   * load humanoid
-   * @param gltf
-   * @returns
+   * Create a new VRMImporter.
+   *
+   * @param options [[VRMImporterOptions]], optionally contains importers for each component
    */
-  public async loadHumanoid(gltf: THREE.GLTF): Promise<VRMHumanBones | null> {
-    const humanBones: RawVrmHumanoidBone[] | undefined =
-      gltf.parser.json.extensions &&
-      gltf.parser.json.extensions.VRM &&
-      gltf.parser.json.extensions.VRM.humanoid &&
-      gltf.parser.json.extensions.VRM.humanoid.humanBones;
-    if (!humanBones) {
-      console.warn('Could not find humanBones field on the VRM file');
-      return null;
-    }
-
-    return await humanBones.reduce(async (vrmBonesPromise, bone) => {
-      const vrmBones = await vrmBonesPromise;
-      const nodeIndex = bone.node;
-      const boneName = bone.bone;
-
-      if (nodeIndex !== undefined && boneName !== undefined) {
-        vrmBones[boneName] = await gltf.parser.getDependency('node', nodeIndex);
-      }
-      return vrmBones;
-    }, Promise.resolve({} as VRMHumanBones));
+  public constructor(options: VRMImporterOptions = {}) {
+    this._humanoidImporter = options.humanoidImporter || new VRMHumanoidImporter();
+    this._firstPersonImporter = options.firstPersonImporter || new VRMFirstPersonImporter();
+    this._materialImporter = options.materialImporter || new VRMMaterialImporter();
+    this._springBoneImporter = options.springBoneImporter || new VRMSpringBoneImporter();
   }
 
   /**
-   * load first person
-   * @param firstPerson
-   * @param humanBones
-   * @param gltf
-   * @returns
+   * Receive a GLTF object retrieved from `THREE.GLTFLoader` and create a new [[VRM]] instance.
+   *
+   * @param gltf A parsed result of GLTF taken from GLTFLoader
    */
-  public async loadFirstPerson(
-    firstPerson: Raw.RawVrmFirstPerson,
-    humanBones: VRMHumanBones,
-    gltf: THREE.GLTF,
-  ): Promise<VRMFirstPerson | null> {
-    const isFirstPersonBoneNotSet = firstPerson.firstPersonBone === undefined || firstPerson.firstPersonBone === -1;
-    const firstPersonBone: GLTFNode = isFirstPersonBoneNotSet
-      ? humanBones[Raw.HumanBone.Head] // fallback
-      : await gltf.parser.getDependency('node', firstPerson.firstPersonBone!);
-
-    if (!firstPersonBone) {
-      console.warn('Could not find firstPersonBone of the VRM');
-      return null;
+  public async import(gltf: THREE.GLTF): Promise<VRM> {
+    if (gltf.parser.json.extensions === undefined || gltf.parser.json.extensions.VRM === undefined) {
+      throw new Error('Could not find VRM extension on the GLTF');
     }
+    const vrmExt: VRMSchema.VRM = gltf.parser.json.extensions.VRM;
 
-    const firstPersonBoneOffset =
-      !isFirstPersonBoneNotSet && firstPerson.firstPersonBoneOffset
-        ? new THREE.Vector3(
-            firstPerson.firstPersonBoneOffset!.x,
-            firstPerson.firstPersonBoneOffset!.y,
-            firstPerson.firstPersonBoneOffset!.z,
-          )
-        : new THREE.Vector3(0, 0.06, 0); // fallback
+    const scene = gltf.scene;
 
-    const meshAnnotations: RendererFirstPersonFlags[] = [];
-    const meshes: GLTFMesh[] = await gltf.parser.getDependencies('mesh');
-    meshes.forEach((mesh, meshIndex) => {
-      const flag = firstPerson.meshAnnotations
-        ? firstPerson.meshAnnotations.find((annotation) => annotation.mesh === meshIndex)
-        : undefined;
-      meshAnnotations.push(new RendererFirstPersonFlags(flag && flag.firstPersonFlag, mesh));
+    scene.updateMatrixWorld(false);
+
+    // Skinned object should not be frustumCulled
+    // Since pre-skinned position might be outside of view
+    scene.traverse((object3d) => {
+      if ((object3d as any).isMesh) {
+        object3d.frustumCulled = false;
+      }
     });
 
-    return new VRMFirstPerson(firstPersonBone, firstPersonBoneOffset, meshAnnotations);
+    reduceBones(scene);
+
+    const materials = await this._materialImporter.convertGLTFMaterials(gltf);
+
+    const humanoid = vrmExt.humanoid
+      ? (await this._humanoidImporter.import(gltf, vrmExt.humanoid)) || undefined
+      : undefined;
+
+    const firstPerson =
+      vrmExt.firstPerson && humanoid
+        ? (await this._firstPersonImporter.import(gltf, humanoid, vrmExt.firstPerson)) || undefined
+        : undefined;
+
+    const animationMixer = new THREE.AnimationMixer(gltf.scene);
+
+    const blendShapeProxy = (await this.loadBlendShapeMaster(animationMixer!, gltf)) || undefined;
+
+    const lookAt =
+      vrmExt.firstPerson && blendShapeProxy && humanoid
+        ? this.loadLookAt(vrmExt.firstPerson, blendShapeProxy, humanoid)
+        : undefined;
+
+    const springBoneManager = (await this._springBoneImporter.import(gltf)) || undefined;
+
+    return new VRM({
+      scene: gltf.scene,
+      meta: vrmExt.meta,
+      materials,
+      humanoid,
+      firstPerson,
+      animationMixer,
+      blendShapeProxy,
+      lookAt,
+      springBoneManager,
+    });
   }
 
   public loadLookAt(
-    firstPerson: Raw.RawVrmFirstPerson,
+    firstPerson: VRMSchema.FirstPerson,
     blendShapeProxy: VRMBlendShapeProxy,
-    humanBodyBones: VRMHumanBones,
+    humanoid: VRMHumanoid,
   ): VRMLookAtHead {
     const lookAtHorizontalInner = firstPerson.lookAtHorizontalInner;
     const lookAtHorizontalOuter = firstPerson.lookAtHorizontalOuter;
@@ -92,19 +108,19 @@ export class VRMPartsBuilder {
     const lookAtVerticalUp = firstPerson.lookAtVerticalUp;
 
     switch (firstPerson.lookAtTypeName) {
-      case Raw.LookAtTypeName.Bone: {
+      case VRMSchema.FirstPersonLookAtTypeName.Bone: {
         if (
           lookAtHorizontalInner === undefined ||
           lookAtHorizontalOuter === undefined ||
           lookAtVerticalDown === undefined ||
           lookAtVerticalUp === undefined
         ) {
-          return new VRMLookAtHead(humanBodyBones);
+          return new VRMLookAtHead(humanoid);
         } else {
           return new VRMLookAtHead(
-            humanBodyBones,
+            humanoid,
             new VRMLookAtBoneApplyer(
-              humanBodyBones,
+              humanoid,
               lookAtHorizontalInner,
               lookAtHorizontalOuter,
               lookAtVerticalDown,
@@ -113,12 +129,12 @@ export class VRMPartsBuilder {
           );
         }
       }
-      case Raw.LookAtTypeName.BlendShape: {
+      case VRMSchema.FirstPersonLookAtTypeName.BlendShape: {
         if (lookAtHorizontalOuter === undefined || lookAtVerticalDown === undefined || lookAtVerticalUp === undefined) {
-          return new VRMLookAtHead(humanBodyBones);
+          return new VRMLookAtHead(humanoid);
         } else {
           return new VRMLookAtHead(
-            humanBodyBones,
+            humanoid,
             new VRMLookAtBlendShapeApplyer(
               blendShapeProxy,
               lookAtHorizontalOuter,
@@ -129,7 +145,7 @@ export class VRMPartsBuilder {
         }
       }
       default: {
-        return new VRMLookAtHead(humanBodyBones);
+        return new VRMLookAtHead(humanoid);
       }
     }
   }
@@ -144,7 +160,7 @@ export class VRMPartsBuilder {
     animationMixer: THREE.AnimationMixer,
     gltf: THREE.GLTF,
   ): Promise<VRMBlendShapeProxy | null> {
-    const blendShapeGroups: Raw.RawVrmBlendShapeGroup[] | undefined =
+    const blendShapeGroups: VRMSchema.BlendShapeGroup[] | undefined =
       gltf.parser.json.extensions &&
       gltf.parser.json.extensions.VRM &&
       gltf.parser.json.extensions.VRM.blendShapeMaster &&
@@ -154,7 +170,7 @@ export class VRMPartsBuilder {
     }
 
     const blendShapeMaster = new BlendShapeMaster();
-    const blendShapePresetMap: { [presetName in Raw.BlendShapePresetName]?: string } = {};
+    const blendShapePresetMap: { [presetName in VRMSchema.BlendShapePresetName]?: string } = {};
 
     blendShapeGroups.forEach(async (group) => {
       const name = group.name;
@@ -165,7 +181,7 @@ export class VRMPartsBuilder {
 
       if (
         group.presetName &&
-        group.presetName !== Raw.BlendShapePresetName.Unknown &&
+        group.presetName !== VRMSchema.BlendShapePresetName.Unknown &&
         !blendShapePresetMap[group.presetName]
       ) {
         blendShapePresetMap[group.presetName] = group.name;
@@ -252,12 +268,6 @@ export class VRMPartsBuilder {
     });
 
     return VRMBlendShapeProxy.create(animationMixer, blendShapeMaster, blendShapePresetMap);
-  }
-
-  public async loadSecondary(gltf: THREE.GLTF): Promise<VRMSpringBoneManager> {
-    const manager = new VRMSpringBoneManager();
-    await manager.loadGLTF(gltf);
-    return manager;
   }
 
   private renameMaterialProperty(name: string): string {

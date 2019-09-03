@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import * as VRMExtension from './VRM';
+import { VRMSchema } from '.';
 
 /**
  * A single node of GLTF, represented as Three.js object.
@@ -53,7 +53,7 @@ export interface VRMPose {
 }
 
 export interface AnimationClipKeyframe {
-  name: VRMExtension.HumanBone | VRMExtension.BlendShapePresetName;
+  name: VRMSchema.HumanoidBone | VRMSchema.BlendShapePresetName;
   type: 'morph' | 'rotation' | 'position';
   times: number[];
   values: number[];

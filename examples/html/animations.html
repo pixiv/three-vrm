@@ -62,7 +62,8 @@
 
 						scene.add( vrm.scene );
 						currentVrm = vrm;
-						vrm.humanBones[ THREE.HumanBone.Hips ].rotation.y = Math.PI;
+
+						vrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.Hips ).rotation.y = Math.PI;
 
 						prepareAnimation( vrm );
 
@@ -88,7 +89,7 @@
 				quatB.setFromEuler( new THREE.Euler( 0.0, 0.0, 0.25 * Math.PI ) );
 
 				const armTrack = new THREE.QuaternionKeyframeTrack(
-					vrm.humanBones[ 'leftUpperArm' ].name + '.quaternion', // name
+					vrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.LeftUpperArm ).name + '.quaternion', // name
 					[ 0.0, 0.5, 1.0 ], // times
 					[ ...quatA.toArray(), ...quatB.toArray(), ...quatA.toArray() ] // values
 				);

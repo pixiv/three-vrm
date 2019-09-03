@@ -1,5 +1,6 @@
 export * from './VRM';
-export * from './VRMPartsBuilder';
+export * from './VRMImporter';
+export * from './reduceBones';
 export * from './blendshape';
 export * from './debug';
 export * from './firstperson';

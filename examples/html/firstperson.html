@@ -60,9 +60,15 @@
 					THREE.VRM.from( gltf ).then( ( vrm ) => {
 
 						scene.add( vrm.scene );
-						currentVrm = vrm;
+            currentVrm = vrm;
 
 						vrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.Hips ).rotation.y = Math.PI;
+
+            // generate firstperson mesh
+            vrm.firstPerson.setup();
+
+            // set to first person layer mode
+            toggleLayer( true );
 
 						console.log( vrm );
 
@@ -90,25 +96,52 @@
 
 				requestAnimationFrame( animate );
 
-				const deltaTime = clock.getDelta();
-
-				if ( currentVrm ) {
-
-					// tweak blendshape
-					const s = Math.sin( Math.PI * clock.elapsedTime );
-					currentVrm.blendShapeProxy.setValue( 'A', 0.5 + 0.5 * s );
-					currentVrm.blendShapeProxy.setValue( 'Blink_L', 0.5 - 0.5 * s );
-
-					// update vrm
-					currentVrm.update( deltaTime );
-
-				}
-
 				renderer.render( scene, camera );
 
 			}
 
-			animate();
+      animate();
+
+      // toggle layer
+      let isFirstPerson = false;
+
+      function toggleLayer( set ) {
+
+        if ( typeof set === 'boolean' )  {
+
+          isFirstPerson = set;
+
+        } else {
+
+          isFirstPerson = !isFirstPerson;
+
+        }
+
+        if ( currentVrm ) {
+
+          if ( isFirstPerson ) {
+
+            camera.layers.enable(currentVrm.firstPerson.firstPersonOnlyLayer);
+            camera.layers.disable(currentVrm.firstPerson.thirdPersonOnlyLayer);
+
+          } else {
+
+            camera.layers.disable(currentVrm.firstPerson.firstPersonOnlyLayer);
+            camera.layers.enable(currentVrm.firstPerson.thirdPersonOnlyLayer);
+
+          }
+
+        }
+
+      }
+
+      // mouse listener
+
+      window.addEventListener( 'keydown', () => {
+
+        toggleLayer();
+
+      } );
 		</script>
 	</body>
 </html>

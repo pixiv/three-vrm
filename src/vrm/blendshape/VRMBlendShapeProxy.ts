@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { BlendShapePresetName } from '../types';
+import { VRMSchema } from '../types';
 import { BlendShapeController } from './BlendShapeController';
 import { BlendShapeMaster } from './BlendShapeMaster';
 
@@ -11,7 +11,7 @@ export class VRMBlendShapeProxy {
   public static create(
     animationMixer: THREE.AnimationMixer,
     blendShapeMaster: BlendShapeMaster,
-    blendShapePresetMap: { [presetName in BlendShapePresetName]?: string },
+    blendShapePresetMap: { [presetName in VRMSchema.BlendShapePresetName]?: string },
   ): VRMBlendShapeProxy {
     const expressions: { [key: string]: THREE.AnimationAction | undefined } = {};
     // VRMの各標準表情をclipにしておく
@@ -44,11 +44,11 @@ export class VRMBlendShapeProxy {
   public readonly expressions: { [key: string]: THREE.AnimationAction | undefined } = {};
 
   private readonly _blendShapeMaster: BlendShapeMaster;
-  private readonly _blendShapePresetMap: { [presetName in BlendShapePresetName]?: string };
+  private readonly _blendShapePresetMap: { [presetName in VRMSchema.BlendShapePresetName]?: string };
 
   protected constructor(
     blendShapeMaster: BlendShapeMaster,
-    blendShapePresetMap: { [presetName in BlendShapePresetName]?: string },
+    blendShapePresetMap: { [presetName in VRMSchema.BlendShapePresetName]?: string },
     expressions: { [key: string]: THREE.AnimationAction | undefined },
   ) {
     this._blendShapeMaster = blendShapeMaster;
@@ -66,7 +66,7 @@ export class VRMBlendShapeProxy {
    * @param name Name of the blend shape you want to set
    * @returns The current weight value of the specified blend shape
    */
-  public getValue(name: BlendShapePresetName | string): number | undefined {
+  public getValue(name: VRMSchema.BlendShapePresetName | string): number | undefined {
     const controller = this.getController(name);
     return controller && controller.weight;
   }
@@ -89,7 +89,7 @@ export class VRMBlendShapeProxy {
    * @param name Name of the blend shape you want to set
    * @param value A new weight value for the specified blend shape, should be a number between `0.0` and `1.0`
    */
-  public setValue(name: BlendShapePresetName | string, weight: number) {
+  public setValue(name: VRMSchema.BlendShapePresetName | string, weight: number) {
     const controller = this.getController(name);
     if (controller) {
       controller.weight = VRMBlendShapeProxy.clamp(weight);
@@ -120,8 +120,8 @@ export class VRMBlendShapeProxy {
    * @param name Name of the blend shape you want to get
    * @returns The [[BlendShapeController]] of the specified blend shape
    */
-  public getController(name: BlendShapePresetName | string): BlendShapeController | undefined {
-    const actualName = this._blendShapePresetMap[name as BlendShapePresetName];
+  public getController(name: VRMSchema.BlendShapePresetName | string): BlendShapeController | undefined {
+    const actualName = this._blendShapePresetMap[name as VRMSchema.BlendShapePresetName];
     const controller = this._blendShapeMaster.getBlendShapeGroup(actualName || name);
     if (!controller) {
       console.warn(`no blend shape found by ${name}`);
