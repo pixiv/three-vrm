@@ -43,6 +43,10 @@ uniform vec3 emissionColor;
 uniform vec3 outlineColor;
 uniform float outlineLightingMix;
 
+#ifdef USE_UVANIMMASKTEXTURE
+  uniform sampler2D uvAnimMaskTexture;
+#endif
+
 uniform float uvAnimOffsetX;
 uniform float uvAnimOffsetY;
 uniform float uvAnimTheta;
@@ -53,7 +57,7 @@ uniform float uvAnimTheta;
 #include <color_pars_fragment>
 
 // #include <uv_pars_fragment>
-#if defined( USE_MAP ) || defined( USE_SHADETEXTURE ) || defined( USE_NORMALMAP ) || defined( USE_RECEIVESHADOWTEXTURE ) || defined( USE_SHADINGGRADETEXTURE ) || defined( USE_RIMTEXTURE ) || defined( USE_EMISSIVEMAP ) || defined( USE_OUTLINEWIDTHTEXTURE )
+#if defined( USE_MAP ) || defined( USE_SHADETEXTURE ) || defined( USE_NORMALMAP ) || defined( USE_RECEIVESHADOWTEXTURE ) || defined( USE_SHADINGGRADETEXTURE ) || defined( USE_RIMTEXTURE ) || defined( USE_EMISSIVEMAP ) || defined( USE_OUTLINEWIDTHTEXTURE ) || defined( USE_UVANIMMASKTEXTURE )
   varying vec2 vUv;
 #endif
 
@@ -267,18 +271,23 @@ void main() {
 
   vec2 uv = vec2(0.5, 0.5);
 
-  #if defined( USE_MAP ) || defined( USE_SHADETEXTURE ) || defined( USE_NORMALMAP ) || defined( USE_RECEIVESHADOWTEXTURE ) || defined( USE_SHADINGGRADETEXTURE ) || defined( USE_RIMTEXTURE ) || defined( USE_EMISSIVEMAP ) || defined( USE_OUTLINEWIDTHTEXTURE )
+  #if defined( USE_MAP ) || defined( USE_SHADETEXTURE ) || defined( USE_NORMALMAP ) || defined( USE_RECEIVESHADOWTEXTURE ) || defined( USE_SHADINGGRADETEXTURE ) || defined( USE_RIMTEXTURE ) || defined( USE_EMISSIVEMAP ) || defined( USE_OUTLINEWIDTHTEXTURE ) || defined( USE_UVANIMMASKTEXTURE )
     uv = vUv;
-    float uvAnimMask = 1.0; // texture2D( uvAnimMaskTexture, uv ).x;
+
+    float uvAnimMask = 1.0;
+    #ifdef USE_UVANIMMASKTEXTURE
+      uvAnimMask = texture2D( uvAnimMaskTexture, uv ).x;
+    #endif
+
+    uv = uv + vec2( uvAnimOffsetX, uvAnimOffsetY ) * uvAnimMask;
     float uvRotCos = cos( uvAnimTheta * uvAnimMask );
     float uvRotSin = sin( uvAnimTheta * uvAnimMask );
     uv = mat2( uvRotCos, uvRotSin, -uvRotSin, uvRotCos ) * ( uv - 0.5 ) + 0.5;
-    uv = uv + vec2( uvAnimOffsetX, uvAnimOffsetY ) * uvAnimMask;
   #endif
 
   #ifdef DEBUG_UV
     gl_FragColor = vec4( 0.0, 0.0, 0.0, 1.0 );
-    #if defined( USE_MAP ) || defined( USE_SHADETEXTURE ) || defined( USE_NORMALMAP ) || defined( USE_RECEIVESHADOWTEXTURE ) || defined( USE_SHADINGGRADETEXTURE ) || defined( USE_RIMTEXTURE ) || defined( USE_EMISSIVEMAP ) || defined( USE_OUTLINEWIDTHTEXTURE )
+    #if defined( USE_MAP ) || defined( USE_SHADETEXTURE ) || defined( USE_NORMALMAP ) || defined( USE_RECEIVESHADOWTEXTURE ) || defined( USE_SHADINGGRADETEXTURE ) || defined( USE_RIMTEXTURE ) || defined( USE_EMISSIVEMAP ) || defined( USE_OUTLINEWIDTHTEXTURE ) || defined( USE_UVANIMMASKTEXTURE )
       gl_FragColor = vec4( uv, 0.0, 1.0 );
     #endif
     return;

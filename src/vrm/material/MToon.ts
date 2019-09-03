@@ -4,7 +4,6 @@ import * as THREE from 'three';
 import { getTexelDecodingFunction } from './texel-decoder';
 
 const TAU = 2.0 * Math.PI;
-const frac = (x: number) => x - Math.floor(x);
 
 /**
  * MToon is a material specification that has various features.
@@ -279,9 +278,9 @@ export class MToon extends THREE.ShaderMaterial {
    * @param delta deltaTime since last update
    */
   public updateVRMMaterials(delta: number): void {
-    this._uvAnimOffsetX = frac(this._uvAnimOffsetX + delta * this.uvAnimScrollX);
-    this._uvAnimOffsetY = frac(this._uvAnimOffsetY + delta * this.uvAnimScrollY);
-    this._uvAnimPhase = frac(this._uvAnimPhase + delta * this.uvAnimRotation);
+    this._uvAnimOffsetX = this._uvAnimOffsetX + delta * this.uvAnimScrollX;
+    this._uvAnimOffsetY = this._uvAnimOffsetY + delta * this.uvAnimScrollY;
+    this._uvAnimPhase = this._uvAnimPhase + delta * this.uvAnimRotation;
 
     this._applyUniforms();
   }
