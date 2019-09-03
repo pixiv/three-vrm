@@ -1,1 +1,1 @@
-export * from './MaterialConverter';
+export * from './VRMMaterialImporter';
