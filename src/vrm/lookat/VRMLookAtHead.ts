@@ -33,7 +33,7 @@ export class VRMLookAtHead {
   }
 
   public getLookAtWorldDirection(target: THREE.Vector3) {
-    const rot = getWorldQuaternionLite(this.firstPerson.getFirstPersonBone(), _quat);
+    const rot = getWorldQuaternionLite(this.firstPerson.firstPersonBone, _quat);
     return target
       .set(0.0, 0.0, -1.0)
       .applyEuler(this._euler)
@@ -68,7 +68,7 @@ export class VRMLookAtHead {
       .normalize();
 
     // Transform the direction into local coordinate from the first person bone
-    lookAtDir.applyQuaternion(getWorldQuaternionLite(this.firstPerson.getFirstPersonBone(), _quat).inverse());
+    lookAtDir.applyQuaternion(getWorldQuaternionLite(this.firstPerson.firstPersonBone, _quat).inverse());
 
     // convert the direction into euler
     target.x = Math.atan2(lookAtDir.y, Math.sqrt(lookAtDir.x * lookAtDir.x + lookAtDir.z * lookAtDir.z));

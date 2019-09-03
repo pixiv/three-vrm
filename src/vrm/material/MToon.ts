@@ -3,7 +3,18 @@
 import * as THREE from 'three';
 import { getTexelDecodingFunction } from './texel-decoder';
 
+const TAU = 2.0 * Math.PI;
+
+/**
+ * MToon is a material specification that has various features.
+ * The spec and implementation are originally founded for Unity engine and this is a port of the material.
+ *
+ * See: https://github.com/Santarh/MToon
+ */
 export class MToon extends THREE.ShaderMaterial {
+  /**
+   * Readonly boolean that indicates this is a MToon material.
+   */
   public readonly isVRMMToon: boolean = true;
 
   public cutoff: number = 0.5; // _Cutoff
@@ -26,6 +37,11 @@ export class MToon extends THREE.ShaderMaterial {
   public shadeToony: number = 0.9; // _ShadeToony
   public lightColorAttenuation: number = 0.0; // _LightColorAttenuation
   public indirectLightIntensity: number = 0.1; // _IndirectLightIntensity
+  public rimTexture: THREE.Texture | null = null; // _RimTexture
+  public rimColor: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 0.0, 1.0); // _RimColor
+  public rimLightingMix: number = 0.0; // _RimLightingMix
+  public rimFresnelPower: number = 1.0; // _RimFresnelPower
+  public rimLift: number = 0.0; // _RimLift
   public sphereAdd: THREE.Texture | null = null; // _SphereAdd
   // public sphereAdd_ST: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _SphereAdd_ST (unused)
   public emissionColor: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 0.0, 1.0); // _EmissionColor
@@ -37,6 +53,10 @@ export class MToon extends THREE.ShaderMaterial {
   public outlineScaledMaxDistance: number = 1.0; // _OutlineScaledMaxDistance
   public outlineColor: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 0.0, 1.0); // _OutlineColor
   public outlineLightingMix: number = 1.0; // _OutlineLightingMix
+  public uvAnimMaskTexture: THREE.Texture | null = null; // _UvAnimMaskTexture
+  public uvAnimScrollX: number = 0.0; // _UvAnimScrollX
+  public uvAnimScrollY: number = 0.0; // _UvAnimScrollY
+  public uvAnimRotation: number = 0.0; // _uvAnimRotation
 
   public shouldApplyUniforms: boolean = true; // when this is true, applyUniforms effects
 
@@ -53,6 +73,10 @@ export class MToon extends THREE.ShaderMaterial {
   private _isOutline: boolean = false;
 
   private readonly _colorSpaceGamma: boolean;
+
+  private _uvAnimOffsetX: number = 0.0;
+  private _uvAnimOffsetY: number = 0.0;
+  private _uvAnimPhase: number = 0.0;
 
   // TODO: ここにcolorSpaceGammaあるのダサい
   constructor(colorSpaceGamma: boolean, parameters?: MToonParameters) {
@@ -114,6 +138,11 @@ export class MToon extends THREE.ShaderMaterial {
         shadeToony: { value: 0.9 },
         lightColorAttenuation: { value: 0.0 },
         indirectLightIntensity: { value: 0.1 },
+        rimTexture: { value: null },
+        rimColor: { value: new THREE.Color(0.0, 0.0, 0.0) },
+        rimLightingMix: { value: 0.0 },
+        rimFresnelPower: { value: 1.0 },
+        rimLift: { value: 0.0 },
         sphereAdd: { value: null },
         emissionColor: { value: new THREE.Color(0.0, 0.0, 0.0) },
         outlineWidthTexture: { value: null },
@@ -121,6 +150,10 @@ export class MToon extends THREE.ShaderMaterial {
         outlineScaledMaxDistance: { value: 1.0 },
         outlineColor: { value: new THREE.Color(0.0, 0.0, 0.0) },
         outlineLightingMix: { value: 1.0 },
+        uvAnimMaskTexture: { value: null },
+        uvAnimOffsetX: { value: 0.0 },
+        uvAnimOffsetY: { value: 0.0 },
+        uvAnimTheta: { value: 0.0 },
       },
     ]);
 
@@ -241,8 +274,14 @@ export class MToon extends THREE.ShaderMaterial {
   /**
    * Update this material.
    * Usually this will be called via [[VRM.update]] so you don't have to call this manually.
+   *
+   * @param delta deltaTime since last update
    */
   public updateVRMMaterials(delta: number): void {
+    this._uvAnimOffsetX = this._uvAnimOffsetX + delta * this.uvAnimScrollX;
+    this._uvAnimOffsetY = this._uvAnimOffsetY + delta * this.uvAnimScrollY;
+    this._uvAnimPhase = this._uvAnimPhase + delta * this.uvAnimRotation;
+
     this._applyUniforms();
   }
 
@@ -266,6 +305,11 @@ export class MToon extends THREE.ShaderMaterial {
     this.shadeToony = source.shadeToony;
     this.lightColorAttenuation = source.lightColorAttenuation;
     this.indirectLightIntensity = source.indirectLightIntensity;
+    this.rimTexture = source.rimTexture;
+    this.rimColor.copy(source.rimColor);
+    this.rimLightingMix = source.rimLightingMix;
+    this.rimFresnelPower = source.rimFresnelPower;
+    this.rimLift = source.rimLift;
     this.sphereAdd = source.sphereAdd;
     this.emissionColor.copy(source.emissionColor);
     this.emissiveMap = source.emissiveMap;
@@ -274,6 +318,10 @@ export class MToon extends THREE.ShaderMaterial {
     this.outlineScaledMaxDistance = source.outlineScaledMaxDistance;
     this.outlineColor.copy(source.outlineColor);
     this.outlineLightingMix = source.outlineLightingMix;
+    this.uvAnimMaskTexture = source.uvAnimMaskTexture;
+    this.uvAnimScrollX = source.uvAnimScrollX;
+    this.uvAnimScrollY = source.uvAnimScrollY;
+    this.uvAnimRotation = source.uvAnimRotation;
 
     this.debugMode = source.debugMode;
     this.blendMode = source.blendMode;
@@ -292,6 +340,10 @@ export class MToon extends THREE.ShaderMaterial {
    * Strongly recommended to call this in `Object3D.onBeforeRender` .
    */
   private _applyUniforms() {
+    this.uniforms.uvAnimOffsetX.value = this._uvAnimOffsetX;
+    this.uniforms.uvAnimOffsetY.value = this._uvAnimOffsetY;
+    this.uniforms.uvAnimTheta.value = TAU * this._uvAnimPhase;
+
     if (!this.shouldApplyUniforms) {
       return;
     }
@@ -320,6 +372,14 @@ export class MToon extends THREE.ShaderMaterial {
     this.uniforms.shadeToony.value = this.shadeToony;
     this.uniforms.lightColorAttenuation.value = this.lightColorAttenuation;
     this.uniforms.indirectLightIntensity.value = this.indirectLightIntensity;
+    this.uniforms.rimTexture.value = this.rimTexture;
+    this.uniforms.rimColor.value.setRGB(this.rimColor.x, this.rimColor.y, this.rimColor.z);
+    if (!this._colorSpaceGamma) {
+      this.uniforms.rimColor.value.convertSRGBToLinear();
+    }
+    this.uniforms.rimLightingMix.value = this.rimLightingMix;
+    this.uniforms.rimFresnelPower.value = this.rimFresnelPower;
+    this.uniforms.rimLift.value = this.rimLift;
     this.uniforms.sphereAdd.value = this.sphereAdd;
     this.uniforms.emissionColor.value.setRGB(this.emissionColor.x, this.emissionColor.y, this.emissionColor.z);
     if (!this._colorSpaceGamma) {
@@ -334,6 +394,7 @@ export class MToon extends THREE.ShaderMaterial {
       this.uniforms.outlineColor.value.convertSRGBToLinear();
     }
     this.uniforms.outlineLightingMix.value = this.outlineLightingMix;
+    this.uniforms.uvAnimMaskTexture.value = this.uvAnimMaskTexture;
 
     this.updateCullFace();
   }
@@ -348,8 +409,10 @@ export class MToon extends THREE.ShaderMaterial {
       USE_SHADETEXTURE: this.shadeTexture !== null,
       USE_RECEIVESHADOWTEXTURE: this.receiveShadowTexture !== null,
       USE_SHADINGGRADETEXTURE: this.shadingGradeTexture !== null,
+      USE_RIMTEXTURE: this.rimTexture !== null,
       USE_SPHEREADD: this.sphereAdd !== null,
       USE_OUTLINEWIDTHTEXTURE: this.outlineWidthTexture !== null,
+      USE_UVANIMMASKTEXTURE: this.uvAnimMaskTexture !== null,
       DEBUG_NORMAL: this._debugMode === MToonDebugMode.Normal,
       DEBUG_LITSHADERATE: this._debugMode === MToonDebugMode.LitShadeRate,
       DEBUG_UV: this._debugMode === MToonDebugMode.UV,
@@ -416,6 +479,11 @@ export interface MToonParameters extends THREE.ShaderMaterialParameters {
   shadeToony?: number; // _ShadeToony
   lightColorAttenuation?: number; // _LightColorAttenuation
   indirectLightIntensity?: number; // _IndirectLightIntensity
+  rimTexture?: THREE.Texture; // _RimTexture
+  rimColor?: THREE.Vector4; // _RimColor
+  rimLightingMix?: number; // _RimLightingMix
+  rimFresnelPower?: number; // _RimFresnelPower
+  rimLift?: number; // _RimLift
   sphereAdd?: THREE.Texture; // _SphereAdd
   emissionColor?: THREE.Vector4; // _EmissionColor
   emissiveMap?: THREE.Texture; // _EmissionMap
@@ -425,6 +493,10 @@ export interface MToonParameters extends THREE.ShaderMaterialParameters {
   outlineScaledMaxDistance?: number; // _OutlineScaledMaxDistance
   outlineColor?: THREE.Vector4; // _OutlineColor
   outlineLightingMix?: number; // _OutlineLightingMix
+  uvAnimMaskTexture?: THREE.Texture; // _UvAnimMaskTexture
+  uvAnimScrollX?: number; // _UvAnimScrollX
+  uvAnimScrollY?: number; // _UvAnimScrollY
+  uvAnimRotation?: number; // _uvAnimRotation
 
   debugMode?: MToonDebugMode | number; // _DebugMode
   blendMode?: MToonRenderMode | number; // _BlendMode
