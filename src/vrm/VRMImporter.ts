@@ -1,11 +1,8 @@
 import * as THREE from 'three';
-import { VRMBlendShapeImporter, VRMBlendShapeMaster } from './blendshape';
+import { VRMBlendShapeImporter } from './blendshape';
 import { VRMFirstPersonImporter } from './firstperson';
-import { VRMHumanoid } from './humanoid';
 import { VRMHumanoidImporter } from './humanoid/VRMHumanoidImporter';
-import { VRMLookAtHead } from './lookat';
-import { VRMLookAtBlendShapeApplyer } from './lookat/VRMLookAtBlendShapeApplyer';
-import { VRMLookAtBoneApplyer } from './lookat/VRMLookAtBoneApplyer';
+import { VRMLookAtImporter } from './lookat/VRMLookAtImporter';
 import { VRMMaterialImporter } from './material';
 import { reduceBones } from './reduceBones';
 import { VRMSpringBoneImporter } from './springbone/VRMSpringBoneImporter';
@@ -13,6 +10,7 @@ import { VRMSchema } from './types';
 import { VRM } from './VRM';
 
 export interface VRMImporterOptions {
+  lookAtImporter?: VRMLookAtImporter;
   humanoidImporter?: VRMHumanoidImporter;
   blendShapeImporter?: VRMBlendShapeImporter;
   firstPersonImporter?: VRMFirstPersonImporter;
@@ -22,6 +20,7 @@ export interface VRMImporterOptions {
 
 export class VRMImporter {
   protected readonly _blendShapeImporter: VRMBlendShapeImporter;
+  protected readonly _lookAtImporter: VRMLookAtImporter;
   protected readonly _humanoidImporter: VRMHumanoidImporter;
   protected readonly _firstPersonImporter: VRMFirstPersonImporter;
   protected readonly _materialImporter: VRMMaterialImporter;
@@ -34,6 +33,7 @@ export class VRMImporter {
    */
   public constructor(options: VRMImporterOptions = {}) {
     this._blendShapeImporter = options.blendShapeImporter || new VRMBlendShapeImporter();
+    this._lookAtImporter = options.lookAtImporter || new VRMLookAtImporter();
     this._humanoidImporter = options.humanoidImporter || new VRMHumanoidImporter();
     this._firstPersonImporter = options.firstPersonImporter || new VRMFirstPersonImporter();
     this._materialImporter = options.materialImporter || new VRMMaterialImporter();
@@ -82,7 +82,7 @@ export class VRMImporter {
 
     const lookAt =
       vrmExt.firstPerson && blendShapeMaster && humanoid
-        ? this.loadLookAt(vrmExt.firstPerson, blendShapeMaster, humanoid)
+        ? await this._lookAtImporter.import(vrmExt.firstPerson, blendShapeMaster, humanoid)
         : undefined;
 
     const springBoneManager = (await this._springBoneImporter.import(gltf)) || undefined;
@@ -97,58 +97,5 @@ export class VRMImporter {
       lookAt,
       springBoneManager,
     });
-  }
-
-  public loadLookAt(
-    firstPerson: VRMSchema.FirstPerson,
-    blendShapeMaster: VRMBlendShapeMaster,
-    humanoid: VRMHumanoid,
-  ): VRMLookAtHead {
-    const lookAtHorizontalInner = firstPerson.lookAtHorizontalInner;
-    const lookAtHorizontalOuter = firstPerson.lookAtHorizontalOuter;
-    const lookAtVerticalDown = firstPerson.lookAtVerticalDown;
-    const lookAtVerticalUp = firstPerson.lookAtVerticalUp;
-
-    switch (firstPerson.lookAtTypeName) {
-      case VRMSchema.FirstPersonLookAtTypeName.Bone: {
-        if (
-          lookAtHorizontalInner === undefined ||
-          lookAtHorizontalOuter === undefined ||
-          lookAtVerticalDown === undefined ||
-          lookAtVerticalUp === undefined
-        ) {
-          return new VRMLookAtHead(humanoid);
-        } else {
-          return new VRMLookAtHead(
-            humanoid,
-            new VRMLookAtBoneApplyer(
-              humanoid,
-              lookAtHorizontalInner,
-              lookAtHorizontalOuter,
-              lookAtVerticalDown,
-              lookAtVerticalUp,
-            ),
-          );
-        }
-      }
-      case VRMSchema.FirstPersonLookAtTypeName.BlendShape: {
-        if (lookAtHorizontalOuter === undefined || lookAtVerticalDown === undefined || lookAtVerticalUp === undefined) {
-          return new VRMLookAtHead(humanoid);
-        } else {
-          return new VRMLookAtHead(
-            humanoid,
-            new VRMLookAtBlendShapeApplyer(
-              blendShapeMaster,
-              lookAtHorizontalOuter,
-              lookAtVerticalDown,
-              lookAtVerticalUp,
-            ),
-          );
-        }
-      }
-      default: {
-        return new VRMLookAtHead(humanoid);
-      }
-    }
   }
 }
