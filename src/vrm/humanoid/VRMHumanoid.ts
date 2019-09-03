@@ -1,4 +1,4 @@
-import { GLTFNode, HumanBone, RawVector3, RawVector4, VRMPose } from '../types';
+import { GLTFNode, RawVector3, RawVector4, VRMPose, VRMSchema } from '../types';
 import { VRMHumanBones } from './VRMHumanBones';
 import { VRMHumanDescription } from './VRMHumanDescription';
 
@@ -19,7 +19,7 @@ export class VRMHumanoid {
     const pose: VRMPose = {};
     Object.keys(this.humanBones).forEach(
       (vrmBoneName) => {
-        const node = this.getBoneNode(vrmBoneName as HumanBone)!;
+        const node = this.getBoneNode(vrmBoneName as VRMSchema.HumanoidBoneName)!;
         pose[vrmBoneName] = {
           position: node.position.toArray() as RawVector3,
           rotation: node.quaternion.toArray() as RawVector4,
@@ -33,7 +33,7 @@ export class VRMHumanoid {
   public setPose(poseObject: VRMPose): void {
     Object.keys(poseObject).forEach((boneName) => {
       const state = poseObject[boneName]!;
-      const node = this.getBoneNode(boneName as HumanBone);
+      const node = this.getBoneNode(boneName as VRMSchema.HumanoidBoneName);
 
       // Ignore when there are no bone that is defined in the pose on the VRMHumanoid
       if (!node) {
@@ -59,7 +59,7 @@ export class VRMHumanoid {
     });
   }
 
-  public getBoneNode(name: HumanBone): GLTFNode | null {
+  public getBoneNode(name: VRMSchema.HumanoidBoneName): GLTFNode | null {
     return (this.humanBones && this.humanBones[name] && this.humanBones[name]!.node) || null;
   }
 }

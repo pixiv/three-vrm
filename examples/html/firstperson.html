@@ -62,7 +62,7 @@
 						scene.add( vrm.scene );
             currentVrm = vrm;
 
-            vrm.humanoid.getBoneNode( THREE.HumanBone.Hips ).rotation.y = Math.PI;
+						vrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.Hips ).rotation.y = Math.PI;
 
             // generate firstperson mesh
             vrm.firstPerson.setup();

@@ -4,7 +4,7 @@ import { VRMFirstPerson } from './firstperson';
 import { VRMHumanoid } from './humanoid';
 import { VRMLookAtHead } from './lookat';
 import { VRMSpringBoneManager } from './springbone';
-import { RawVrmMeta } from './types';
+import { VRMSchema } from './types';
 import { deepDispose } from './utils/disposer';
 import { VRMImporter, VRMImporterOptions } from './VRMImporter';
 
@@ -17,7 +17,7 @@ export interface VRMParameters {
   lookAt?: VRMLookAtHead;
   materials?: THREE.Material[];
   springBoneManager?: VRMSpringBoneManager;
-  meta?: RawVrmMeta;
+  meta?: VRMSchema.Meta;
 }
 
 export class VRM {
@@ -83,7 +83,7 @@ export class VRM {
    * Contains meta fields of the VRM.
    * You might want to refer these license fields before use your VRMs.
    */
-  public readonly meta?: RawVrmMeta;
+  public readonly meta?: VRMSchema.Meta;
 
   /**
    * Contains AnimationMixer associated with the [[VRM.blendShapeProxy]].

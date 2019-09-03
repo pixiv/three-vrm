@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { HumanBone } from '../types';
+import { VRMSchema } from '../types';
 import { getWorldQuaternionLite } from '../utils/math';
 import { VRM, VRMParameters } from '../VRM';
 import { VRMImporterOptions } from '../VRMImporter';
@@ -96,7 +96,10 @@ export class VRMDebug extends VRM {
       this.lookAt.leftEyeWorldPosition &&
       this._leftEyeDirectionHelper
     ) {
-      const leftEyeWorldRotation = getWorldQuaternionLite(this.humanoid.getBoneNode(HumanBone.LeftEye)!, _quatA);
+      const leftEyeWorldRotation = getWorldQuaternionLite(
+        this.humanoid.getBoneNode(VRMSchema.HumanoidBoneName.LeftEye)!,
+        _quatA,
+      );
       const direction = _v3B.set(0, 0, -1).applyQuaternion(leftEyeWorldRotation);
       this._leftEyeDirectionHelper.position.copy(this.lookAt.leftEyeWorldPosition);
       this._leftEyeDirectionHelper.setDirection(direction);
@@ -109,7 +112,10 @@ export class VRMDebug extends VRM {
       this.lookAt.rightEyeWorldPosition &&
       this._rightEyeDirectionHelper
     ) {
-      const rightEyeWorldRotation = getWorldQuaternionLite(this.humanoid.getBoneNode(HumanBone.RightEye)!, _quatA);
+      const rightEyeWorldRotation = getWorldQuaternionLite(
+        this.humanoid.getBoneNode(VRMSchema.HumanoidBoneName.RightEye)!,
+        _quatA,
+      );
       const direction = _v3B.set(0, 0, -1).applyQuaternion(rightEyeWorldRotation);
       this._rightEyeDirectionHelper.position.copy(this.lookAt.rightEyeWorldPosition);
       this._rightEyeDirectionHelper.setDirection(direction);

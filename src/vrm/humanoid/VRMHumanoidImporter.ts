@@ -1,12 +1,12 @@
 import * as THREE from 'three';
-import { RawVrmHumanoid } from '../types';
+import { VRMSchema } from '../types';
 import { VRMHumanBone } from './VRMHumanBone';
 import { VRMHumanBones } from './VRMHumanBones';
 import { VRMHumanDescription } from './VRMHumanDescription';
 import { VRMHumanoid } from './VRMHumanoid';
 
 export class VRMHumanoidImporter {
-  public async import(gltf: THREE.GLTF, schemaHumanoid: RawVrmHumanoid): Promise<VRMHumanoid | null> {
+  public async import(gltf: THREE.GLTF, schemaHumanoid: VRMSchema.Humanoid): Promise<VRMHumanoid | null> {
     const humanBones: VRMHumanBones = {};
     if (schemaHumanoid.humanBones) {
       await Promise.all(

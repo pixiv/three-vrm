@@ -3,7 +3,7 @@ import * as React from 'react';
 import { render } from 'react-dom';
 import * as THREE from 'three';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { DebugOption, HumanBone, VRM, VRMDebug, VRMSpringBoneImporter, VRMSpringBoneImporterDebug } from '../../..';
+import { DebugOption, VRM, VRMDebug, VRMSchema, VRMSpringBoneImporter, VRMSpringBoneImporterDebug } from '../../..';
 import * as Action from './components';
 
 CameraControls.install({ THREE });
@@ -205,7 +205,7 @@ class App extends React.Component<{}, { vrmId: string | null }> {
         console.log(this.vrm);
 
         this.scene.add(this.vrm.scene!);
-        const hip = this.vrm.humanoid!.getBoneNode(HumanBone.Hips)!.position;
+        const hip = this.vrm.humanoid!.getBoneNode(VRMSchema.HumanoidBoneName.Hips)!.position;
         this.cameraControls!.enabled = true;
         this.cameraControls!.rotateTo(180 * THREE.Math.DEG2RAD, 90 * THREE.Math.DEG2RAD, false);
         this.cameraControls!.moveTo(hip.x, hip.y, hip.z, false);

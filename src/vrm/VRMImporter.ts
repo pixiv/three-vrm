@@ -9,8 +9,7 @@ import { VRMLookAtBoneApplyer } from './lookat/VRMLookAtBoneApplyer';
 import { VRMMaterialImporter } from './material';
 import { reduceBones } from './reduceBones';
 import { VRMSpringBoneImporter } from './springbone/VRMSpringBoneImporter';
-import { GLTFMesh, GLTFPrimitive } from './types';
-import * as Raw from './types/VRM';
+import { GLTFMesh, GLTFPrimitive, VRMSchema } from './types';
 import { VRM } from './VRM';
 
 export interface VRMImporterOptions {
@@ -47,7 +46,7 @@ export class VRMImporter {
     if (gltf.parser.json.extensions === undefined || gltf.parser.json.extensions.VRM === undefined) {
       throw new Error('Could not find VRM extension on the GLTF');
     }
-    const vrmExt: Raw.RawVrm = gltf.parser.json.extensions.VRM;
+    const vrmExt: VRMSchema.VRM = gltf.parser.json.extensions.VRM;
 
     const scene = gltf.scene;
 
@@ -99,7 +98,7 @@ export class VRMImporter {
   }
 
   public loadLookAt(
-    firstPerson: Raw.RawVrmFirstPerson,
+    firstPerson: VRMSchema.FirstPerson,
     blendShapeProxy: VRMBlendShapeProxy,
     humanoid: VRMHumanoid,
   ): VRMLookAtHead {
@@ -109,7 +108,7 @@ export class VRMImporter {
     const lookAtVerticalUp = firstPerson.lookAtVerticalUp;
 
     switch (firstPerson.lookAtTypeName) {
-      case Raw.LookAtTypeName.Bone: {
+      case VRMSchema.FirstPersonLookAtTypeName.Bone: {
         if (
           lookAtHorizontalInner === undefined ||
           lookAtHorizontalOuter === undefined ||
@@ -130,7 +129,7 @@ export class VRMImporter {
           );
         }
       }
-      case Raw.LookAtTypeName.BlendShape: {
+      case VRMSchema.FirstPersonLookAtTypeName.BlendShape: {
         if (lookAtHorizontalOuter === undefined || lookAtVerticalDown === undefined || lookAtVerticalUp === undefined) {
           return new VRMLookAtHead(humanoid);
         } else {
@@ -161,7 +160,7 @@ export class VRMImporter {
     animationMixer: THREE.AnimationMixer,
     gltf: THREE.GLTF,
   ): Promise<VRMBlendShapeProxy | null> {
-    const blendShapeGroups: Raw.RawVrmBlendShapeGroup[] | undefined =
+    const blendShapeGroups: VRMSchema.BlendShapeGroup[] | undefined =
       gltf.parser.json.extensions &&
       gltf.parser.json.extensions.VRM &&
       gltf.parser.json.extensions.VRM.blendShapeMaster &&
@@ -171,7 +170,7 @@ export class VRMImporter {
     }
 
     const blendShapeMaster = new BlendShapeMaster();
-    const blendShapePresetMap: { [presetName in Raw.BlendShapePresetName]?: string } = {};
+    const blendShapePresetMap: { [presetName in VRMSchema.BlendShapePresetName]?: string } = {};
 
     blendShapeGroups.forEach(async (group) => {
       const name = group.name;
@@ -182,7 +181,7 @@ export class VRMImporter {
 
       if (
         group.presetName &&
-        group.presetName !== Raw.BlendShapePresetName.Unknown &&
+        group.presetName !== VRMSchema.BlendShapePresetName.Unknown &&
         !blendShapePresetMap[group.presetName]
       ) {
         blendShapePresetMap[group.presetName] = group.name;
