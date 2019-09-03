@@ -2,7 +2,13 @@
 
 import * as THREE from 'three';
 
+/**
+ * This is a material that is an equivalent of "VRM/Unlit***" on VRM spec, those materials are already kinda deprecated though...
+ */
 export class VRMUnlitMaterial extends THREE.ShaderMaterial {
+  /**
+   * Readonly boolean that indicates this is a [[VRMUnlitMaterial]].
+   */
   public readonly isVRMUnlitMaterial: boolean = true;
 
   public cutoff: number = 0.5;
@@ -70,6 +76,8 @@ export class VRMUnlitMaterial extends THREE.ShaderMaterial {
   /**
    * Update this material.
    * Usually this will be called via [[VRM.update]] so you don't have to call this manually.
+   *
+   * @param delta deltaTime since last update
    */
   public updateVRMMaterials(delta: number): void {
     this._applyUniforms();

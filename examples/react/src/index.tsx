@@ -3,7 +3,7 @@ import * as React from 'react';
 import { render } from 'react-dom';
 import * as THREE from 'three';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { DebugOption, VRM, VRMDebug } from '../../..';
+import { DebugOption, VRM, VRMDebug, VRMSchema, VRMSpringBoneImporter, VRMSpringBoneImporterDebug } from '../../..';
 import * as Action from './components';
 
 CameraControls.install({ THREE });
@@ -180,12 +180,23 @@ class App extends React.Component<{}, { vrmId: string | null }> {
       loader.load(path, resolve, () => {}, reject);
     })
       .then((gltf: any) => {
-        return this.debug ? VRMDebug.from(gltf, undefined, this.debugOption) : VRM.from(gltf);
+        return this.debug
+          ? VRMDebug.from(
+              gltf,
+              {
+                springBoneImporter: this.debugOption.disableSpringBoneHelper
+                  ? new VRMSpringBoneImporter()
+                  : new VRMSpringBoneImporterDebug(),
+              },
+              this.debugOption,
+            )
+          : VRM.from(gltf);
       })
       .then((vrm: VRM) => {
         this.vrm = vrm;
         this.vrmPath = path;
-        this.vrm.setPose({
+
+        this.vrm.humanoid!.setPose({
           leftUpperLeg: { rotation: [0, 0, -0.4537776, 0.891115] },
           leftLowerLeg: { rotation: [-0.4537776, 0, 0, 0.891115] },
           leftUpperArm: { rotation: [0, 0, -0.4537776, 0.891115] },
@@ -194,7 +205,7 @@ class App extends React.Component<{}, { vrmId: string | null }> {
         console.log(this.vrm);
 
         this.scene.add(this.vrm.scene!);
-        const hip = this.vrm.humanBones!.hips.position;
+        const hip = this.vrm.humanoid!.getBoneNode(VRMSchema.HumanoidBoneName.Hips)!.position;
         this.cameraControls!.enabled = true;
         this.cameraControls!.rotateTo(180 * THREE.Math.DEG2RAD, 90 * THREE.Math.DEG2RAD, false);
         this.cameraControls!.moveTo(hip.x, hip.y, hip.z, false);

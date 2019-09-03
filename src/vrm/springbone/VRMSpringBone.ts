@@ -16,25 +16,48 @@ const _quatA = new THREE.Quaternion();
 const _matA = new THREE.Matrix4();
 const _matB = new THREE.Matrix4();
 
+/**
+ * A class represents a single spring bone of a VRM.
+ * It should be managed by a [[VRMSpringBoneManager]].
+ */
 export class VRMSpringBone {
-  // 衝突判定用のボーンの半径
+  /**
+   * Radius of the bone, will be used for collision.
+   */
   public readonly radius: number;
 
-  // バネが戻る力: 柔らかさ(少なくするほど揺れた際に原型の形に戻りにくくなる)
+  /**
+   * Stiffness force of the bone. Increasing the value = faster convergence (feels "harder").
+   * On UniVRM, its range on GUI is between `0.0` and `4.0` .
+   */
   public readonly stiffnessForce: number;
 
+  /**
+   * Power of the gravity against this bone.
+   * The "power" used in here is very far from scientific physics term...
+   */
   public readonly gravityPower: number;
 
-  // 重力、あるいは風方
+  /**
+   * Direction of the gravity against this bone.
+   * Usually it should be normalized.
+   */
   public readonly gravityDir: THREE.Vector3;
 
-  // 力の減衰力: (増やすと空気抵抗が増える)
+  /**
+   * Drag force of the bone. Increasing the value = less oscillation (feels "heavier").
+   * On UniVRM, its range on GUI is between `0.0` and `1.0` .
+   */
   public readonly dragForce: number;
 
-  // 自ボーン（Head）
+  /**
+   * An Object3D attached to this bone.
+   */
   public readonly bone: THREE.Object3D;
 
-  // 揺れモノ当たり判定球
+  /**
+   * Colliders (as `THREE.Mesh` ) attached to this bone.
+   */
   public readonly colliders: THREE.Mesh[];
 
   /**
@@ -48,8 +71,8 @@ export class VRMSpringBone {
   protected prevTail: THREE.Vector3;
 
   /**
-   * Previous position of child tail, in world unit. Will be used for verlet integration.
-   * Actually used only in {@link VRMSpringBone#update} and it's kind of temporary variable.
+   * Next position of child tail, in world unit. Will be used for verlet integration.
+   * Actually used only in [[update]] and it's kind of temporary variable.
    */
   protected nextTail: THREE.Vector3;
 
@@ -64,20 +87,43 @@ export class VRMSpringBone {
    */
   protected worldBoneLength: number;
 
-  // three.js 保存用
+  /**
+   * World position of this bone, kind of temporary variable.
+   */
   protected worldPosition: THREE.Vector3;
 
   /**
    * Rotation of parent bone, in world unit.
-   * We should update this constantly in {@link VRMSpringBone#update}.
+   * We should update this constantly in [[update]].
    */
   private _parentWorldRotation: THREE.Quaternion;
 
-  // 状態リセット時に参照する
+  /**
+   * Initial state of the local matrix of the bone.
+   */
   private _initialLocalMatrix: THREE.Matrix4;
+
+  /**
+   * Initial state of the rotation of the bone.
+   */
   private _initialLocalRotation: THREE.Quaternion;
+
+  /**
+   * Initial state of the position of its child.
+   */
   private _initialLocalChildPosition: THREE.Vector3;
 
+  /**
+   * Create a new VRMSpringBone.
+   *
+   * @param bone An Object3D that will be attached to this bone
+   * @param radius Radius of the bone
+   * @param stiffness Stiffness force of the bone
+   * @param gravityDir Direction of the gravity against this bone
+   * @param gravityPower Power of the gravity against this bone
+   * @param dragForce Drag force of the bone
+   * @param colliders Colliders that will be attached to this bone
+   */
   constructor(
     bone: THREE.Object3D,
     radius: number,
@@ -128,6 +174,10 @@ export class VRMSpringBone {
       .length();
   }
 
+  /**
+   * Reset the state of this bone.
+   * You might want to call [[VRMSpringBoneManager.reset]] instead.
+   */
   public reset(): void {
     this.bone.matrix.copy(this._initialLocalMatrix);
 
@@ -141,6 +191,12 @@ export class VRMSpringBone {
     this.worldPosition.setFromMatrixPosition(this.bone.matrixWorld);
   }
 
+  /**
+   * Update the state of this bone.
+   * You might want to call [[VRMSpringBoneManager.update]] instead.
+   *
+   * @param delta deltaTime
+   */
   public update(delta: number): void {
     if (delta <= 0) return;
 
@@ -217,6 +273,11 @@ export class VRMSpringBone {
     this.bone.matrixWorld.multiplyMatrices(this.getParentMatrixWorld(), this.bone.matrix);
   }
 
+  /**
+   * Do collision math against every colliders attached to this bone.
+   *
+   * @param tail The tail you want to process
+   */
   private collision(tail: THREE.Vector3): void {
     this.colliders.forEach((collider) => {
       const colliderWorldPosition = _v3A.setFromMatrixPosition(collider.matrixWorld);
@@ -240,6 +301,9 @@ export class VRMSpringBone {
     });
   }
 
+  /**
+   * Returns the world matrix of its parent object.
+   */
   private getParentMatrixWorld(): THREE.Matrix4 {
     return this.bone.parent ? this.bone.parent.matrixWorld : IDENTITY_MATRIX4;
   }
