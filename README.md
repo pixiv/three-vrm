@@ -1,228 +1,111 @@
 # three-vrm
 
-[VRM](https://vrm.dev/) utilities for [three.js](https://threejs.org/).
+Use [VRM](https://vrm.dev/) on [three.js](https://threejs.org/)
 
-## Dependencies
+[Examples](https://pixiv.github.io/three-vrm/examples)
 
-```
-yarn add three
-```
+[Documentation](https://pixiv.github.io/three-vrm/docs)
 
 ## Usage
 
-```
-yarn add @pixiv/three-vrm
-```
+### from HTML
 
-```javascript
-import * as THREE from 'three';
-import { VRM, VRMLoader } from '@pixiv/three-vrm';
+You will need:
 
-const scene = new THREE.Scene();
+- [Three.js build](https://github.com/mrdoob/three.js/blob/master/build/three.js)
+- [GLTFLoader](https://github.com/mrdoob/three.js/blob/master/examples/js/loaders/GLTFLoader.js)
+- [A build of @pixiv/three-vrm](https://github.com/pixiv/three-vrm/releases)
 
-new Promise( ( resolve, reject ) => {
-
-	new VRMLoader().load( "/models/shino.vrm", resolve, () => {}, reject );
-
-} ).then( ( vrm ) => {
-
-	scene.add( vrm.scene );
-
-} );
-```
-
-Copy `node_modules/three-vrm/lib/index.min.js` to your public directory.  
-ex) cp `node_modules/three-vrm/lib/index.min.js` `static/js/three-vrm.min.js`
+Code like this:
 
 ```html
-<script src="/static/js/three-vrm.min.js"></script>
+<script src="three.js"></script>
+<script src="GLTFLoader.js"></script>
+<script src="three-vrm.js"></script>
+
 <script>
-const loader = new THREE.VRMLoader();
+const scene = new THREE.Scene();
+
+const loader = new THREE.GLTFLoader();
 loader.load(
+
 	// URL of the VRM you want to load
 	'/models/shino.vrm',
+
 	// called when the resource is loaded
-	( vrm ) => {
-		scene.add( vrm.scene );
-  },
-	// called while loading is progressing
-	( progress ) => {
-		console.log( ( xhr.loaded / xhr.total * 100.0 ) + '% loaded' );
+	( gltf ) => {
+
+		// generate a VRM instance from gltf
+		THREE.VRM.from( gltf ).then( ( vrm ) => {
+
+			// add the loaded vrm to the scene
+			scene.add( vrm.scene );
+
+			// deal with vrm features
+			console.log( vrm );
+
+		} );
+
 	},
+
+	// called while loading is progressing
+	( progress ) => console.log( 'Loading model...', 100.0 * ( progress.loaded / progress.total ), '%' ),
+
 	// called when loading has errors
-	( error ) => {
-		console.error( 'Something went wrong!' );
-		throw error;
-	}
+	( error ) => console.error( error )
+
 );
 </script>
 ```
 
+### via npm
 
+Install [`three`](https://www.npmjs.com/package/three) and [`@pixiv/three-vrm`](https://www.npmjs.com/package/@pixiv/three-vrm) :
+
+```sh
+npm install three @pixiv/three-vrm
+```
+
+Code like this:
 
 ```javascript
+import * as THREE from 'three';
+import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { VRM, VRMLoader } from '@pixiv/three-vrm';
 
-```
+const scene = new THREE.Scene();
 
-## Examples
+const loader = new THREE.GLTFLoader();
+loader.load(
 
-### Load from Html
+	// URL of the VRM you want to load
+	'/models/shino.vrm',
 
-```
-three-vrm$ yarn build
-three-vrm$ yarn global add http-server && http-server
-```
+	// called when the resource is loaded
+	( gltf ) => {
 
-* <http://localhost:8080/examples/html/basic.html>
-* <http://localhost:8080/examples/html/dnd.html>
-* <http://localhost:8080/exmaples/html/mouse.html>
+		// generate a VRM instance from gltf
+		THREE.VRM.from( gltf ).then( ( vrm ) => {
 
-### Use with React
+			// add the loaded vrm to the scene
+			scene.add( vrm.scene );
 
-```
-three-vrm$ yarn build
-three-vrm/examples/react$ yarn
-three-vrm/examples/react$ yarn dev
-```
+			// deal with vrm features
+			console.log( vrm );
 
-* <http://localhost:4000>
+		} );
 
-## Public API 
+	},
 
-### VRM
+	// called while loading is progressing
+	( progress ) => console.log( 'Loading model...', 100.0 * ( progress.loaded / progress.total ), '%' ),
 
-get the human bones of VRM model.
-```
-.humanBones: VRMHumanBones
-```
+	// called when loading has errors
+	( error ) => console.error( error )
 
-get the utility for [blendshape](https://vrm.dev/univrm/components/univrm_blendshape/).
-```
-.blendShapeProxy: VRMBlendShapeProxy
+);
 ```
 
-get the utilifty for [lookAt](https://vrm.dev/univrm/components/univrm_firstperson/).
-```
-.lookAt: VRMLookAtHead
-```
+## Contributing
 
-get the utility for [first person](https://vrm.dev/univrm/components/univrm_lookat/).
-```
-.firstPerson: VRMFirstPerson
-```
-
-get the utility for [spring bone](https://vrm.dev/univrm/components/univrm_secondary/).
-```
-.springBoneManager: VRMSpringBoneManager
-```
-
-get the [information](https://vrm.dev/univrm/components/univrm_meta/) of the VRM model.
-```
-.meta: RawVrmMeta
-```
-
-update VRM model.
-```
-.update(deltaTime: number)
-```
-
-call when unload VRM model.
-```
-.dispose()
-```
-
-### VRMBlendShapeProxy 
-
-
-set the blendshape animation weight.
-```
-.setValue(name:string, weight:number)
-```
-
-get the blendshape animation weight.
-```
-.getValue(name:string) : number
-```
-
-get the blendshape animation controller.
-```
-.getController(name:string) : BlendShapeController
-```
-
-get the blendshape animations.
-```
-.expressions : AnimationClip[]
-```
-
-### VRMLookAtHead
-
-get the head object of VRM. default is HumanBone.Head.
-```
-.head : THREE.Object3D 
-```
-
-set the look at target.
-```
-.setTarget( THREE.Object3D )
-```
-
-get the look at target.
-```
-.getTarget() : THREE.Object3D
-```
-
-make VRM model look specified position.
-```
-.lookAt(x:number, y:number, z:number)
-```
-
-### VRMFirstPerson
-
-setup firstperson function.
-* firstperson function is not setup by automatically.
-* if you use firstperson function you must call this method.
-* firstPersonOnlyLayer and thirdPersonOnlyLayer is camera layer.
-
-```
-.setup(cameraLayer?: {
-  firstPersonOnlyLayer?: number;
-  thirdPersonOnlyLayer?: number;
-}) 
-```
-
-get the firstperson bone. default is Bone.head.
-```
-.getFirstPersonBone() : THREE.Object3D
-```
-
-get the firstperson bone offset. default is [0,0.06,0].
-```
-.getFirstPersonBoneOffset() : THREE.Vector3 
-```
-
-get the firstperson bone position. default is head position with offset.
-```
-.getFirstBonePosition(v3: THREE.Vector3) : THREE.Vector3
-```
-
-get the First Person Camera layer. default is 9.
-```
-.getFirstPersonOnlyLayer(): number
-```
-
-get the Third Person Camera layer. default is 10.
-```
-.getThirdPersonOnlyLayer(): number
-```
-
-### VRMSpringBoneManager
-
-manually reset the spring bones.
-```
-.reset(): void
-```
-
-get the spring bones.
-```
-.springBoneGroupList: VRMSpringBoneGroup[]
-```
+See: [CONTRIBUTING.md](CONTRIBUTING.md)
