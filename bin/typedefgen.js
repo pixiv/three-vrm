@@ -18,7 +18,7 @@ const traverse = (obj, func) => {
   });
 };
 
-const gen = (toplevel, schemaUrl, outPath, replaces) => {
+const gen = (toplevel, schemaUrl, outPath) => {
   return new Promise((resolve, reject) => {
     cp.exec(
       `quicktype -s schema ${schemaUrl} --just-types -t ${toplevel} -l typescript`,
