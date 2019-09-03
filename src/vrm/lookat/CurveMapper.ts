@@ -1,4 +1,4 @@
-import { RawVrmFirstPersonDegreemap } from '../types/VRM';
+import { VRMSchema } from '../types';
 
 export const DEG2RAD = Math.PI / 180.0;
 
@@ -51,7 +51,7 @@ const evaluateCurve = (arr: number[], x: number): number => {
 };
 
 export class CurveMapper {
-  public static apply(map: RawVrmFirstPersonDegreemap): CurveMapper {
+  public static apply(map: VRMSchema.FirstPersonDegreeMap): CurveMapper {
     return new CurveMapper(map.xRange, map.yRange, map.curve);
   }
 
