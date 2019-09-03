@@ -1,4 +1,4 @@
-import { RawGltf } from './GLTF';
+import { GLTFSchema } from '.';
 
 declare module 'three' {
   export class GLTF {
@@ -15,7 +15,7 @@ declare module 'three' {
       extras?: any;
     };
     public parser: {
-      json: RawGltf;
+      json: GLTFSchema.GLTF;
       getDependency: (type: string, index: number) => Promise<any>;
       getDependencies: (type: string) => Promise<any[]>;
       [key: string]: any;

@@ -1,22 +1,22 @@
 import * as THREE from 'three';
 import { VRMBlendShapeMaster } from './blendshape';
 import { VRMFirstPerson } from './firstperson';
-import { VRMHumanBones } from './humanoid';
+import { VRMHumanoid } from './humanoid';
 import { VRMLookAtHead } from './lookat';
 import { VRMSpringBoneManager } from './springbone';
-import { RawVector3, RawVector4, RawVrmMeta, VRMPose } from './types';
+import { VRMSchema } from './types';
 import { deepDispose } from './utils/disposer';
 import { VRMImporter, VRMImporterOptions } from './VRMImporter';
 
 export interface VRMParameters {
   scene: THREE.Scene;
-  humanBones?: VRMHumanBones;
+  humanoid?: VRMHumanoid;
   blendShapeMaster?: VRMBlendShapeMaster;
   firstPerson?: VRMFirstPerson;
   lookAt?: VRMLookAtHead;
   materials?: THREE.Material[];
   springBoneManager?: VRMSpringBoneManager;
-  meta?: RawVrmMeta;
+  meta?: VRMSchema.Meta;
 }
 
 export class VRM {
@@ -52,14 +52,12 @@ export class VRM {
   public readonly scene: THREE.Scene;
 
   /**
-   * Contains [[VRMHumanBones]] of the VRM.
-   * You can move or rotate these bones as a `THREE.Object3D`.
-   * Each bones defined in VRM spec are either required or optional.
-   * See also: [[VRM.setPose]]
+   * Contains [[VRMHumanoid]] of the VRM.
+   * You can control each bones using [[VRMHumanoid.getBoneNode]].
    *
    * @TODO Add a link to VRM spec
    */
-  public readonly humanBones?: VRMHumanBones;
+  public readonly humanoid?: VRMHumanoid;
 
   /**
    * Contains [[VRMBlendShapeMaster]] of the VRM.
@@ -84,7 +82,7 @@ export class VRM {
    * Contains meta fields of the VRM.
    * You might want to refer these license fields before use your VRMs.
    */
-  public readonly meta?: RawVrmMeta;
+  public readonly meta?: VRMSchema.Meta;
 
   /**
    * A [[VRMSpringBoneManager]] manipulates all spring bones attached on the VRM.
@@ -93,77 +91,19 @@ export class VRM {
   public readonly springBoneManager?: VRMSpringBoneManager;
 
   /**
-   * Contains informations about rest pose of the VRM.
-   * You might want to refer this when you want to reset its pose, along with [[VRM.setPose]]}.
-   */
-  public readonly restPose: VRMPose | null;
-
-  /**
    * Create a new VRM instance.
    *
    * @param params [[VRMParameters]] that represents components of the VRM
    */
   public constructor(params: VRMParameters) {
     this.scene = params.scene;
-    this.humanBones = params.humanBones;
+    this.humanoid = params.humanoid;
     this.blendShapeMaster = params.blendShapeMaster;
     this.firstPerson = params.firstPerson;
     this.lookAt = params.lookAt;
     this.materials = params.materials;
     this.springBoneManager = params.springBoneManager;
     this.meta = params.meta;
-
-    // Save current initial pose (which is Rest-pose) to restPose field, since pose changing may lose the default transforms. This is useful when resetting the pose or referring default pose.
-    this.restPose = this.humanBones
-      ? Object.keys(this.humanBones).reduce(
-          (restPose, vrmBoneName) => {
-            const bone = this.humanBones![vrmBoneName]!;
-            restPose[vrmBoneName] = {
-              position: bone.position.toArray() as RawVector3,
-              rotation: bone.quaternion.toArray() as RawVector4,
-            };
-            return restPose;
-          },
-          {} as VRMPose,
-        )
-      : null;
-  }
-
-  public setPose(poseObject: VRMPose): void {
-    // VRMに定められたboneが足りない場合、正しくposeが取れない可能性がある
-    if (!this.humanBones) {
-      console.warn('This VRM cannot be posed since humanBones are not properly set');
-      return;
-    }
-
-    Object.keys(poseObject).forEach((boneName) => {
-      const state = poseObject[boneName]!;
-      const targetBone = this.humanBones![boneName];
-
-      // VRM標準ボーンを満たしていないVRMファイルが世の中には存在する
-      // （少し古いuniVRMは、必須なのにhipsを出力していなさそう）
-      // その場合は無視。
-      if (!targetBone) {
-        return;
-      }
-
-      const restState = this.restPose![boneName];
-      if (!restState) {
-        return;
-      }
-
-      if (state.position) {
-        // 元の状態に戻してから、移動分を追加
-        targetBone.position.set(
-          restState.position![0] + state.position[0],
-          restState.position![1] + state.position[1],
-          restState.position![2] + state.position[2],
-        );
-      }
-      if (state.rotation) {
-        targetBone.quaternion.fromArray(state.rotation);
-      }
-    });
   }
 
   /**

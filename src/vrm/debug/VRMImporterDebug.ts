@@ -33,11 +33,11 @@ export class VRMImporterDebug extends VRMImporter {
 
     const materials = await this._materialImporter.convertGLTFMaterials(gltf);
 
-    const humanBones = (await this.loadHumanoid(gltf)) || undefined;
+    const humanoid = (await this._humanoidImporter.import(gltf, vrmExt.humanoid)) || undefined;
 
     const firstPerson =
-      vrmExt.firstPerson && humanBones
-        ? (await this._firstPersonImporter.import(gltf, humanBones, vrmExt.firstPerson)) || undefined
+      vrmExt.firstPerson && humanoid
+        ? (await this._firstPersonImporter.import(gltf, humanoid, vrmExt.firstPerson)) || undefined
         : undefined;
 
     const blendShapeMaster = vrmExt.blendShapeMaster
@@ -45,7 +45,9 @@ export class VRMImporterDebug extends VRMImporter {
       : undefined;
 
     const lookAt =
-      blendShapeMaster && humanBones ? this.loadLookAt(vrmExt.firstPerson, blendShapeMaster, humanBones) : undefined;
+      vrmExt.firstPerson && blendShapeMaster && humanoid
+        ? this.loadLookAt(vrmExt.firstPerson, blendShapeMaster, humanoid)
+        : undefined;
 
     const springBoneManager = (await this._springBoneImporter.import(gltf)) || undefined;
 
@@ -54,7 +56,7 @@ export class VRMImporterDebug extends VRMImporter {
         scene: gltf.scene,
         meta: vrmExt.meta,
         materials,
-        humanBones,
+        humanoid,
         firstPerson,
         blendShapeMaster,
         lookAt,

@@ -44,8 +44,8 @@ const Panel: React.FunctionComponent<PanelProps> = ({ title, children }) => {
 
 export const Transform = (props: Props) => {
   const vrm = props.vrm;
-  const position = vrm.humanBones!.hips.position;
-  const rotation = vrm.humanBones!.hips.rotation;
+  const position = vrm.humanoid!.getBoneNode(VRM.HumanBone.Hips)!.position;
+  const rotation = vrm.humanoid!.getBoneNode(VRM.HumanBone.Hips)!.rotation;
   const scale = vrm.scene!.scale;
   const toggleDebug = props.toggleDebug!;
 
@@ -259,7 +259,7 @@ export const Meta = (props: Props) => {
 };
 
 export const LookAt = (props: Props) => {
-  const humanBones: VRM.VRMHumanBones = props.vrm.humanBones!;
+  const humanoid: VRM.VRMHumanoid = props.vrm.humanoid!;
   const lookAt: VRM.VRMLookAtHead = props.vrm.lookAt!;
   const camera: THREE.Camera = props.camera;
   const cameraControls = props.cameraControls;
@@ -281,7 +281,7 @@ export const LookAt = (props: Props) => {
 
   const resetCamera = () => {
     cameraControls.enabled = true;
-    const hip = humanBones.hips.position;
+    const hip = humanoid.getBoneNode(VRM.HumanBone.Hips)!.position;
     cameraControls.rotateTo(180 * THREE.Math.DEG2RAD, 90 * THREE.Math.DEG2RAD, false);
     cameraControls.moveTo(hip.x, hip.y, hip.z, false);
     cameraControls.dollyTo(1.5, false);
@@ -344,7 +344,7 @@ export const LookAt = (props: Props) => {
               max="1"
               step="0.1"
               id="x"
-              onInput={() => (humanBones.hips.position.x = parseFloat(pX().value))}
+              onInput={() => (humanoid.getBoneNode(VRM.HumanBone.Hips)!.position.x = parseFloat(pX().value))}
             />
           </li>
           <li>
@@ -356,7 +356,7 @@ export const LookAt = (props: Props) => {
               max="2"
               step="0.1"
               id="y"
-              onInput={() => (humanBones.hips.position.y = parseFloat(pY().value))}
+              onInput={() => (humanoid.getBoneNode(VRM.HumanBone.Hips)!.position.y = parseFloat(pY().value))}
             />
           </li>
           <li>
@@ -368,7 +368,7 @@ export const LookAt = (props: Props) => {
               max="1"
               step="0.1"
               id="z"
-              onInput={() => (humanBones.hips.position.z = parseFloat(pZ().value))}
+              onInput={() => (humanoid.getBoneNode(VRM.HumanBone.Hips)!.position.z = parseFloat(pZ().value))}
             />
           </li>
         </ul>
@@ -386,7 +386,7 @@ export const LookAt = (props: Props) => {
               max={Math.PI}
               step="0.1"
               id="rx"
-              onInput={() => (humanBones.hips.rotation.x = parseFloat(rX().value))}
+              onInput={() => (humanoid.getBoneNode(VRM.HumanBone.Hips)!.rotation.x = parseFloat(rX().value))}
             />
           </li>
           <li>
@@ -398,7 +398,7 @@ export const LookAt = (props: Props) => {
               max={Math.PI}
               step="0.1"
               id="ry"
-              onInput={() => (humanBones.hips.rotation.y = parseFloat(rY().value))}
+              onInput={() => (humanoid.getBoneNode(VRM.HumanBone.Hips)!.rotation.y = parseFloat(rY().value))}
             />
           </li>
           <li>
@@ -410,7 +410,7 @@ export const LookAt = (props: Props) => {
               max={Math.PI}
               step="0.1"
               id="rz"
-              onInput={() => (humanBones.hips.rotation.z = parseFloat(rZ().value))}
+              onInput={() => (humanoid.getBoneNode(VRM.HumanBone.Hips)!.rotation.z = parseFloat(rZ().value))}
             />
           </li>
         </ul>

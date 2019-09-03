@@ -1,4 +1,4 @@
-import { BlendShapePresetName } from '../types';
+import { VRMSchema } from '../types';
 import { saturate } from '../utils/math';
 import { VRMBlendShapeGroup } from './VRMBlendShapeGroup';
 
@@ -9,9 +9,9 @@ export class VRMBlendShapeMaster {
   public readonly _blendShapeGroups: { [name: string]: VRMBlendShapeGroup } = {};
 
   /**
-   * A map from [[BlendShapePresetName]] to its actual blend shape name.
+   * A map from [[VRMSchema.BlendShapePresetName]] to its actual blend shape name.
    */
-  private readonly _blendShapePresetMap: { [presetName in BlendShapePresetName]?: string } = {};
+  private readonly _blendShapePresetMap: { [presetName in VRMSchema.BlendShapePresetName]?: string } = {};
 
   /**
    * Create a new VRMBlendShape.
@@ -29,8 +29,8 @@ export class VRMBlendShapeMaster {
    * Return registered blend shape group.
    * @param name Name of the blend shape group
    */
-  public getBlendShapeGroup(name: string | BlendShapePresetName): VRMBlendShapeGroup | undefined {
-    const presetName = this._blendShapePresetMap[name as BlendShapePresetName];
+  public getBlendShapeGroup(name: string | VRMSchema.BlendShapePresetName): VRMBlendShapeGroup | undefined {
+    const presetName = this._blendShapePresetMap[name as VRMSchema.BlendShapePresetName];
     const controller = presetName ? this._blendShapeGroups[presetName] : this._blendShapeGroups[name];
     if (!controller) {
       console.warn(`no blend shape found by ${name}`);
@@ -46,7 +46,7 @@ export class VRMBlendShapeMaster {
    */
   public registerBlendShapeGroup(
     name: string,
-    presetName: BlendShapePresetName | undefined,
+    presetName: VRMSchema.BlendShapePresetName | undefined,
     controller: VRMBlendShapeGroup,
   ) {
     this._blendShapeGroups[name] = controller;
@@ -55,12 +55,12 @@ export class VRMBlendShapeMaster {
     }
   }
 
-  public getValue(name: BlendShapePresetName | string): number | undefined {
+  public getValue(name: VRMSchema.BlendShapePresetName | string): number | undefined {
     const controller = this.getBlendShapeGroup(name);
     return controller && controller.weight;
   }
 
-  public setValue(name: BlendShapePresetName | string, weight: number) {
+  public setValue(name: VRMSchema.BlendShapePresetName | string, weight: number) {
     const controller = this.getBlendShapeGroup(name);
     if (controller) {
       controller.weight = saturate(weight);

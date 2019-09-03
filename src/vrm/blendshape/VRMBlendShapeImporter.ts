@@ -1,19 +1,19 @@
 import * as THREE from 'three';
-import { BlendShapePresetName, GLTFMesh, GLTFPrimitive, RawVrmBlendShape, RawVrmBlendShapeGroup } from '../types';
+import { GLTFMesh, GLTFPrimitive, VRMSchema } from '../types';
 import { renameMaterialProperty } from '../utils/renameMaterialProperty';
 import { VRMBlendShapeGroup } from './VRMBlendShapeGroup';
 import { VRMBlendShapeMaster } from './VRMBlendShapeMaster';
 
 export class VRMBlendShapeImporter {
-  public async import(gltf: THREE.GLTF, schemaBlendShape: RawVrmBlendShape): Promise<VRMBlendShapeMaster | null> {
+  public async import(gltf: THREE.GLTF, schemaBlendShape: VRMSchema.BlendShape): Promise<VRMBlendShapeMaster | null> {
     const blendShape = new VRMBlendShapeMaster();
 
-    const blendShapeGroups: RawVrmBlendShapeGroup[] | undefined = schemaBlendShape.blendShapeGroups;
+    const blendShapeGroups: VRMSchema.BlendShapeGroup[] | undefined = schemaBlendShape.blendShapeGroups;
     if (!blendShapeGroups) {
       return blendShape;
     }
 
-    const blendShapePresetMap: { [presetName in BlendShapePresetName]?: string } = {};
+    const blendShapePresetMap: { [presetName in VRMSchema.BlendShapePresetName]?: string } = {};
 
     await Promise.all(
       blendShapeGroups.map(async (schemaGroup) => {
@@ -23,10 +23,10 @@ export class VRMBlendShapeImporter {
           return;
         }
 
-        let presetName: BlendShapePresetName | undefined;
+        let presetName: VRMSchema.BlendShapePresetName | undefined;
         if (
           schemaGroup.presetName &&
-          schemaGroup.presetName !== BlendShapePresetName.Unknown &&
+          schemaGroup.presetName !== VRMSchema.BlendShapePresetName.Unknown &&
           !blendShapePresetMap[schemaGroup.presetName]
         ) {
           presetName = schemaGroup.presetName;
