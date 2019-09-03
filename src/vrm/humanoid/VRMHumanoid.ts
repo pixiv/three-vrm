@@ -1,4 +1,4 @@
-import { GLTFNode, HumanBone, VRMPose } from '../types';
+import { GLTFNode, HumanBone, RawVector3, RawVector4, VRMPose } from '../types';
 import { VRMHumanBones } from './VRMHumanBones';
 import { VRMHumanDescription } from './VRMHumanDescription';
 
@@ -21,8 +21,8 @@ export class VRMHumanoid {
       (vrmBoneName) => {
         const node = this.getBoneNode(vrmBoneName as HumanBone)!;
         pose[vrmBoneName] = {
-          position: node.position.toArray(),
-          rotation: node.quaternion.toArray(),
+          position: node.position.toArray() as RawVector3,
+          rotation: node.quaternion.toArray() as RawVector4,
         };
       },
       {} as VRMPose,
