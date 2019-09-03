@@ -2,6 +2,7 @@ import CameraControls from 'camera-controls';
 import * as React from 'react';
 import * as THREE from 'three';
 import * as VRM from '../..';
+import { VRMSchema } from '../..';
 
 const _v3 = new THREE.Vector3();
 
@@ -44,8 +45,8 @@ const Panel: React.FunctionComponent<PanelProps> = ({ title, children }) => {
 
 export const Transform = (props: Props) => {
   const vrm = props.vrm;
-  const position = vrm.humanBones!.hips.position;
-  const rotation = vrm.humanBones!.hips.rotation;
+  const position = vrm.humanoid!.getBoneNode(VRMSchema.HumanoidBoneName.Hips)!.position;
+  const rotation = vrm.humanoid!.getBoneNode(VRMSchema.HumanoidBoneName.Hips)!.rotation;
   const scale = vrm.scene!.scale;
   const toggleDebug = props.toggleDebug!;
 
@@ -196,7 +197,7 @@ export const Transform = (props: Props) => {
 };
 
 export const Meta = (props: Props) => {
-  const meta: VRM.RawVrmMeta = props.vrm.meta!;
+  const meta: VRMSchema.Meta = props.vrm.meta!;
   const style = { fontSize: 10 };
   return (
     <Panel title={'VRMMeta'}>
@@ -259,7 +260,7 @@ export const Meta = (props: Props) => {
 };
 
 export const LookAt = (props: Props) => {
-  const humanBones: VRM.VRMHumanBones = props.vrm.humanBones!;
+  const humanoid: VRM.VRMHumanoid = props.vrm.humanoid!;
   const lookAt: VRM.VRMLookAtHead = props.vrm.lookAt!;
   const camera: THREE.Camera = props.camera;
   const cameraControls = props.cameraControls;
@@ -281,7 +282,7 @@ export const LookAt = (props: Props) => {
 
   const resetCamera = () => {
     cameraControls.enabled = true;
-    const hip = humanBones.hips.position;
+    const hip = humanoid.getBoneNode(VRMSchema.HumanoidBoneName.Hips)!.position;
     cameraControls.rotateTo(180 * THREE.Math.DEG2RAD, 90 * THREE.Math.DEG2RAD, false);
     cameraControls.moveTo(hip.x, hip.y, hip.z, false);
     cameraControls.dollyTo(1.5, false);
@@ -344,7 +345,9 @@ export const LookAt = (props: Props) => {
               max="1"
               step="0.1"
               id="x"
-              onInput={() => (humanBones.hips.position.x = parseFloat(pX().value))}
+              onInput={() =>
+                (humanoid.getBoneNode(VRMSchema.HumanoidBoneName.Hips)!.position.x = parseFloat(pX().value))
+              }
             />
           </li>
           <li>
@@ -356,7 +359,9 @@ export const LookAt = (props: Props) => {
               max="2"
               step="0.1"
               id="y"
-              onInput={() => (humanBones.hips.position.y = parseFloat(pY().value))}
+              onInput={() =>
+                (humanoid.getBoneNode(VRMSchema.HumanoidBoneName.Hips)!.position.y = parseFloat(pY().value))
+              }
             />
           </li>
           <li>
@@ -368,7 +373,9 @@ export const LookAt = (props: Props) => {
               max="1"
               step="0.1"
               id="z"
-              onInput={() => (humanBones.hips.position.z = parseFloat(pZ().value))}
+              onInput={() =>
+                (humanoid.getBoneNode(VRMSchema.HumanoidBoneName.Hips)!.position.z = parseFloat(pZ().value))
+              }
             />
           </li>
         </ul>
@@ -386,7 +393,9 @@ export const LookAt = (props: Props) => {
               max={Math.PI}
               step="0.1"
               id="rx"
-              onInput={() => (humanBones.hips.rotation.x = parseFloat(rX().value))}
+              onInput={() =>
+                (humanoid.getBoneNode(VRMSchema.HumanoidBoneName.Hips)!.rotation.x = parseFloat(rX().value))
+              }
             />
           </li>
           <li>
@@ -398,7 +407,9 @@ export const LookAt = (props: Props) => {
               max={Math.PI}
               step="0.1"
               id="ry"
-              onInput={() => (humanBones.hips.rotation.y = parseFloat(rY().value))}
+              onInput={() =>
+                (humanoid.getBoneNode(VRMSchema.HumanoidBoneName.Hips)!.rotation.y = parseFloat(rY().value))
+              }
             />
           </li>
           <li>
@@ -410,7 +421,9 @@ export const LookAt = (props: Props) => {
               max={Math.PI}
               step="0.1"
               id="rz"
-              onInput={() => (humanBones.hips.rotation.z = parseFloat(rZ().value))}
+              onInput={() =>
+                (humanoid.getBoneNode(VRMSchema.HumanoidBoneName.Hips)!.rotation.z = parseFloat(rZ().value))
+              }
             />
           </li>
         </ul>
@@ -506,7 +519,7 @@ export const FirstPerson = (props: Props) => {
 export const BlendShape = (props: Props) => {
   const blendShapeProxy: VRM.VRMBlendShapeProxy = props.vrm.blendShapeProxy!;
 
-  const setValue = (name: VRM.BlendShapePresetName) => {
+  const setValue = (name: VRMSchema.BlendShapePresetName) => {
     Object.keys(blendShapeProxy.expressions).forEach((vname) => {
       blendShapeProxy.setValue(vname, 0.0);
     });
@@ -517,31 +530,31 @@ export const BlendShape = (props: Props) => {
     <Panel title={'VRMBlendShapeProxy'}>
       <ul>
         <li>
-          <button onClick={() => setValue(VRM.BlendShapePresetName.Neutral)}>Neutral</button>
+          <button onClick={() => setValue(VRMSchema.BlendShapePresetName.Neutral)}>Neutral</button>
         </li>
         <li>
-          <button onClick={() => setValue(VRM.BlendShapePresetName.A)}>A</button>
-          <button onClick={() => setValue(VRM.BlendShapePresetName.I)}>I</button>
-          <button onClick={() => setValue(VRM.BlendShapePresetName.U)}>U</button>
-          <button onClick={() => setValue(VRM.BlendShapePresetName.E)}>E</button>
-          <button onClick={() => setValue(VRM.BlendShapePresetName.O)}>O</button>
+          <button onClick={() => setValue(VRMSchema.BlendShapePresetName.A)}>A</button>
+          <button onClick={() => setValue(VRMSchema.BlendShapePresetName.I)}>I</button>
+          <button onClick={() => setValue(VRMSchema.BlendShapePresetName.U)}>U</button>
+          <button onClick={() => setValue(VRMSchema.BlendShapePresetName.E)}>E</button>
+          <button onClick={() => setValue(VRMSchema.BlendShapePresetName.O)}>O</button>
         </li>
         <li>
-          <button onClick={() => setValue(VRM.BlendShapePresetName.Fun)}>Fun</button>
-          <button onClick={() => setValue(VRM.BlendShapePresetName.Angry)}>Angry</button>
-          <button onClick={() => setValue(VRM.BlendShapePresetName.Joy)}>Joy</button>
-          <button onClick={() => setValue(VRM.BlendShapePresetName.Sorrow)}>Sorrow</button>
+          <button onClick={() => setValue(VRMSchema.BlendShapePresetName.Fun)}>Fun</button>
+          <button onClick={() => setValue(VRMSchema.BlendShapePresetName.Angry)}>Angry</button>
+          <button onClick={() => setValue(VRMSchema.BlendShapePresetName.Joy)}>Joy</button>
+          <button onClick={() => setValue(VRMSchema.BlendShapePresetName.Sorrow)}>Sorrow</button>
         </li>
         <li>
-          <button onClick={() => setValue(VRM.BlendShapePresetName.Blink)}>Blink</button>
-          <button onClick={() => setValue(VRM.BlendShapePresetName.BlinkL)}>BlinkL</button>
-          <button onClick={() => setValue(VRM.BlendShapePresetName.BlinkR)}>BlinkR</button>
+          <button onClick={() => setValue(VRMSchema.BlendShapePresetName.Blink)}>Blink</button>
+          <button onClick={() => setValue(VRMSchema.BlendShapePresetName.BlinkL)}>BlinkL</button>
+          <button onClick={() => setValue(VRMSchema.BlendShapePresetName.BlinkR)}>BlinkR</button>
         </li>
         <li>
-          <button onClick={() => setValue(VRM.BlendShapePresetName.Lookup)}>Lookup</button>
-          <button onClick={() => setValue(VRM.BlendShapePresetName.Lookdown)}>Lookdown</button>
-          <button onClick={() => setValue(VRM.BlendShapePresetName.Lookright)}>Lookright</button>
-          <button onClick={() => setValue(VRM.BlendShapePresetName.Lookleft)}>Lookleft</button>
+          <button onClick={() => setValue(VRMSchema.BlendShapePresetName.Lookup)}>Lookup</button>
+          <button onClick={() => setValue(VRMSchema.BlendShapePresetName.Lookdown)}>Lookdown</button>
+          <button onClick={() => setValue(VRMSchema.BlendShapePresetName.Lookright)}>Lookright</button>
+          <button onClick={() => setValue(VRMSchema.BlendShapePresetName.Lookleft)}>Lookleft</button>
         </li>
       </ul>
     </Panel>
