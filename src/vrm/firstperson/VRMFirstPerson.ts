@@ -8,6 +8,10 @@ enum FirstPersonFlag {
   FirstPersonOnly,
 }
 
+/**
+ * This class represents a single [`meshAnnotation`](https://github.com/vrm-c/UniVRM/blob/master/specification/0.0/schema/vrm.firstperson.meshannotation.schema.json) entry.
+ * Each mesh will be assigned to specified layer when you call [[VRMFirstPerson.setup]].
+ */
 export class RendererFirstPersonFlags {
   private static parseFirstPersonFlag(firstPersonFlag: string | undefined) {
     switch (firstPersonFlag) {
@@ -22,9 +26,22 @@ export class RendererFirstPersonFlags {
     }
   }
 
+  /**
+   * A [[FirstPersonFlag]] of the annotation entry.
+   */
   public firstPersonFlag: FirstPersonFlag;
+
+  /**
+   * A mesh of the annotation entry.
+   */
   public mesh: GLTFMesh;
 
+  /**
+   * Create a new mesh annotation.
+   *
+   * @param firstPersonFlag A [[FirstPersonFlag]] of the annotation entry
+   * @param node A node of the annotation entry.
+   */
   constructor(firstPersonFlag: string | undefined, mesh: GLTFMesh) {
     this.firstPersonFlag = RendererFirstPersonFlags.parseFirstPersonFlag(firstPersonFlag);
     this.mesh = mesh;
@@ -32,8 +49,18 @@ export class RendererFirstPersonFlags {
 }
 
 export class VRMFirstPerson {
-  /** Camera Layer */
+  /**
+   * A default camera layer for `FirstPersonOnly` layer.
+   *
+   * @see [[getFirstPersonOnlyLayer]]
+   */
   private static readonly DEFAULT_FIRSTPERSON_ONLY_LAYER = 9;
+
+  /**
+   * A default camera layer for `ThirdPersonOnly` layer.
+   *
+   * @see [[getThirdPersonOnlyLayer]]
+   */
   private static readonly DEFAULT_THIRDPERSON_ONLY_LAYER = 10;
 
   private readonly _firstPersonBone: GLTFNode;
@@ -45,6 +72,13 @@ export class VRMFirstPerson {
 
   private _initialized: boolean = false;
 
+  /**
+   * Create a new VRMFirstPerson object.
+   *
+   * @param firstPersonBone A first person bone
+   * @param firstPersonBoneOffset An offset from the specified first person bone
+   * @param meshAnnotations A renderer settings. See the description of [[RendererFirstPersonFlags]] for more info
+   */
   constructor(
     firstPersonBone: GLTFNode,
     firstPersonBoneOffset: THREE.Vector3,
@@ -55,18 +89,72 @@ export class VRMFirstPerson {
     this._meshAnnotations = meshAnnotations;
   }
 
-  public getFirstPersonBone(): GLTFNode {
+  public get firstPersonBone(): GLTFNode {
     return this._firstPersonBone;
   }
 
-  public getFirstPersonBoneOffset(): THREE.Vector3 {
-    return this._firstPersonBoneOffset;
-  }
-
-  public getMeshAnnotations(): RendererFirstPersonFlags[] {
+  public get meshAnnotations(): RendererFirstPersonFlags[] {
     return this._meshAnnotations;
   }
 
+  /**
+   * A camera layer represents `FirstPersonOnly` layer.
+   * Note that **you must call [[setup]] first before you use the layer feature** or it does not work properly.
+   *
+   * The value is [[DEFAULT_FIRSTPERSON_ONLY_LAYER]] by default but you can change the layer by specifying via [[setup]] if you prefer.
+   *
+   * @see https://vrm.dev/en/univrm/api/univrm_use_firstperson/
+   * @see https://threejs.org/docs/#api/en/core/Layers
+   */
+  public get firstPersonOnlyLayer(): number {
+    return this._firstPersonOnlyLayer;
+  }
+
+  /**
+   * A camera layer represents `ThirdPersonOnly` layer.
+   * Note that **you must call [[setup]] first before you use the layer feature** or it does not work properly.
+   *
+   * The value is [[DEFAULT_THIRDPERSON_ONLY_LAYER]] by default but you can change the layer by specifying via [[setup]] if you prefer.
+   *
+   * @see https://vrm.dev/en/univrm/api/univrm_use_firstperson/
+   * @see https://threejs.org/docs/#api/en/core/Layers
+   */
+  public get thirdPersonOnlyLayer(): number {
+    return this._thirdPersonOnlyLayer;
+  }
+
+  public getFirstPersonBoneOffset(target: THREE.Vector3): THREE.Vector3 {
+    return target.copy(this._firstPersonBoneOffset);
+  }
+
+  /**
+   * Get current world position of the first person.
+   * The position takes [[FirstPersonBone]] and [[FirstPersonOffset]] into account.
+   *
+   * @param v3 target
+   * @returns Current world position of the first person
+   */
+  public getFirstPersonWorldPosition(v3: THREE.Vector3): THREE.Vector3 {
+    // UniVRM#VRMFirstPersonEditor
+    // var worldOffset = head.localToWorldMatrix.MultiplyPoint(component.FirstPersonOffset);
+    const offset = this._firstPersonBoneOffset;
+    const v4 = new THREE.Vector4(offset.x, offset.y, offset.z, 1.0);
+    v4.applyMatrix4(this._firstPersonBone.matrixWorld);
+    return v3.set(v4.x, v4.y, v4.z);
+  }
+
+  /**
+   * In this method, it assigns layers for every meshes based on mesh annotations.
+   * You must call this method first before you use the layer feature.
+   *
+   * This is an equivalent of [VRMFirstPerson.Setup](https://github.com/vrm-c/UniVRM/blob/master/Assets/VRM/UniVRM/Scripts/FirstPerson/VRMFirstPerson.cs) of the UniVRM.
+   *
+   * The `cameraLayer` parameter specifies which layer will be assigned for `FirstPersonOnly` / `ThirdPersonOnly`.
+   * In UniVRM, we specified those by naming each desired layer as `FIRSTPERSON_ONLY_LAYER` / `THIRDPERSON_ONLY_LAYER`
+   * but we are going to specify these layers at here since we are unable to name layers in Three.js.
+   *
+   * @param cameraLayer Specify which layer will be for `FirstPersonOnly` / `ThirdPersonOnly`.
+   */
   public setup({
     firstPersonOnlyLayer = VRMFirstPerson.DEFAULT_FIRSTPERSON_ONLY_LAYER,
     thirdPersonOnlyLayer = VRMFirstPerson.DEFAULT_THIRDPERSON_ONLY_LAYER,
@@ -86,29 +174,12 @@ export class VRMFirstPerson {
         item.mesh.layers.set(this._thirdPersonOnlyLayer);
         item.mesh.traverse((child) => child.layers.set(this._thirdPersonOnlyLayer));
       } else if (item.firstPersonFlag === FirstPersonFlag.Auto) {
-        this.createHeadlessModel(item.mesh);
+        this._createHeadlessModel(item.mesh);
       }
     });
   }
 
-  public getFirstPersonOnlyLayer(): number {
-    return this._firstPersonOnlyLayer;
-  }
-
-  public getThirdPersonOnlyLayer(): number {
-    return this._thirdPersonOnlyLayer;
-  }
-
-  public getFirstPersonWorldPosition(v3: THREE.Vector3): THREE.Vector3 {
-    // UniVRM#VRMFirstPersonEditor
-    // var worldOffset = head.localToWorldMatrix.MultiplyPoint(component.FirstPersonOffset);
-    const offset = this._firstPersonBoneOffset;
-    const v4 = new THREE.Vector4(offset.x, offset.y, offset.z, 1.0);
-    v4.applyMatrix4(this._firstPersonBone.matrixWorld);
-    return v3.set(v4.x, v4.y, v4.z);
-  }
-
-  private excludeTriangles(triangles: number[], bws: number[][], skinIndex: number[][], exclude: number[]) {
+  private _excludeTriangles(triangles: number[], bws: number[][], skinIndex: number[][], exclude: number[]) {
     let count = 0;
     if (bws != null && bws.length > 0) {
       for (let i = 0; i < triangles.length; i += 3) {
@@ -145,7 +216,7 @@ export class VRMFirstPerson {
     return count;
   }
 
-  private createErasedMesh(src: THREE.SkinnedMesh, erasingBonesIndex: number[]): THREE.SkinnedMesh {
+  private _createErasedMesh(src: THREE.SkinnedMesh, erasingBonesIndex: number[]): THREE.SkinnedMesh {
     const dst = new THREE.SkinnedMesh(src.geometry.clone(), src.material);
     dst.name = `${src.name}(erase)`;
     dst.frustumCulled = src.frustumCulled;
@@ -163,7 +234,7 @@ export class VRMFirstPerson {
       skinWeight.push([skinWeightAttr[i], skinWeightAttr[i + 1], skinWeightAttr[i + 2], skinWeightAttr[i + 3]]);
     }
     const oldTriangles = Array.from(geometry.getIndex().array);
-    const count = this.excludeTriangles(oldTriangles, skinWeight, skinIndex, erasingBonesIndex);
+    const count = this._excludeTriangles(oldTriangles, skinWeight, skinIndex, erasingBonesIndex);
     const newTriangle: number[] = [];
     for (let i = 0; i < count; i++) {
       newTriangle[i] = oldTriangles[i];
@@ -178,10 +249,10 @@ export class VRMFirstPerson {
     return dst;
   }
 
-  private createHeadlessModelForSkinnedMesh(parent: THREE.Object3D, mesh: THREE.SkinnedMesh) {
+  private _createHeadlessModelForSkinnedMesh(parent: THREE.Object3D, mesh: THREE.SkinnedMesh) {
     const eraseBoneIndexes: number[] = [];
     mesh.skeleton.bones.forEach((bone, index) => {
-      if (this.isEraseTarget(bone)) eraseBoneIndexes.push(index);
+      if (this._isEraseTarget(bone)) eraseBoneIndexes.push(index);
     });
 
     // Unlike UniVRM we don't copy mesh if no invisible bone was found
@@ -191,14 +262,14 @@ export class VRMFirstPerson {
       return;
     }
     mesh.layers.set(this._thirdPersonOnlyLayer);
-    const newMesh = this.createErasedMesh(mesh, eraseBoneIndexes);
+    const newMesh = this._createErasedMesh(mesh, eraseBoneIndexes);
     parent.add(newMesh);
   }
 
-  private createHeadlessModel(node: GLTFNode) {
+  private _createHeadlessModel(node: GLTFNode) {
     if (node.type === 'Group') {
       node.layers.set(this._thirdPersonOnlyLayer);
-      if (this.isEraseTarget(node)) {
+      if (this._isEraseTarget(node)) {
         node.traverse((child) => child.layers.set(this._thirdPersonOnlyLayer));
       } else {
         const parent = new THREE.Group();
@@ -208,26 +279,26 @@ export class VRMFirstPerson {
         node.children
           .filter((child) => child.type === 'SkinnedMesh')
           .forEach((child) => {
-            this.createHeadlessModelForSkinnedMesh(parent, child as THREE.SkinnedMesh);
+            this._createHeadlessModelForSkinnedMesh(parent, child as THREE.SkinnedMesh);
           });
       }
     } else if (node.type === 'SkinnedMesh') {
-      this.createHeadlessModelForSkinnedMesh(node.parent!, node as THREE.SkinnedMesh);
+      this._createHeadlessModelForSkinnedMesh(node.parent!, node as THREE.SkinnedMesh);
     } else {
-      if (this.isEraseTarget(node)) {
+      if (this._isEraseTarget(node)) {
         node.layers.set(this._thirdPersonOnlyLayer);
         node.traverse((child) => child.layers.set(this._thirdPersonOnlyLayer));
       }
     }
   }
 
-  private isEraseTarget(bone: GLTFNode): boolean {
+  private _isEraseTarget(bone: GLTFNode): boolean {
     if (bone.name === this._firstPersonBone.name) {
       return true;
     } else if (!bone.parent) {
       return false;
     } else {
-      return this.isEraseTarget(bone.parent!);
+      return this._isEraseTarget(bone.parent!);
     }
   }
 }

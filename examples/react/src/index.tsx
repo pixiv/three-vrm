@@ -3,7 +3,7 @@ import * as React from 'react';
 import { render } from 'react-dom';
 import * as THREE from 'three';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { DebugOption, VRM, VRMDebug } from '../../..';
+import { DebugOption, VRM, VRMDebug, VRMSpringBoneImporter, VRMSpringBoneImporterDebug } from '../../..';
 import * as Action from './components';
 
 CameraControls.install({ THREE });
@@ -180,7 +180,17 @@ class App extends React.Component<{}, { vrmId: string | null }> {
       loader.load(path, resolve, () => {}, reject);
     })
       .then((gltf: any) => {
-        return this.debug ? VRMDebug.from(gltf, undefined, this.debugOption) : VRM.from(gltf);
+        return this.debug
+          ? VRMDebug.from(
+              gltf,
+              {
+                springBoneImporter: this.debugOption.disableSpringBoneHelper
+                  ? new VRMSpringBoneImporter()
+                  : new VRMSpringBoneImporterDebug(),
+              },
+              this.debugOption,
+            )
+          : VRM.from(gltf);
       })
       .then((vrm: VRM) => {
         this.vrm = vrm;

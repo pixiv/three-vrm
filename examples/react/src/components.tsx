@@ -3,6 +3,8 @@ import * as React from 'react';
 import * as THREE from 'three';
 import * as VRM from '../../..';
 
+const _v3 = new THREE.Vector3();
+
 interface Props {
   vrm: VRM.VRM;
   camera: THREE.Camera;
@@ -442,44 +444,47 @@ export const FirstPerson = (props: Props) => {
   const onClickFirstPerson = () => {
     if (!firstPerson) return;
     firstPerson.setup();
-    props.camera.layers.disable(firstPerson.getThirdPersonOnlyLayer());
-    props.camera.layers.enable(firstPerson.getFirstPersonOnlyLayer());
+    props.camera.layers.disable(firstPerson.thirdPersonOnlyLayer);
+    props.camera.layers.enable(firstPerson.firstPersonOnlyLayer);
   };
 
   const onClickThirdPerson = () => {
     if (!firstPerson) return;
     firstPerson.setup();
-    props.camera.layers.enable(firstPerson.getThirdPersonOnlyLayer());
-    props.camera.layers.disable(firstPerson.getFirstPersonOnlyLayer());
+    props.camera.layers.enable(firstPerson.thirdPersonOnlyLayer);
+    props.camera.layers.disable(firstPerson.firstPersonOnlyLayer);
   };
+
+  const offset = firstPerson ? firstPerson.getFirstPersonBoneOffset(_v3) : _v3.set(0.0, 0.0, 0.0);
+
   return (
     <Panel title={'VRMFirstPerson'}>
       <div>
         <div style={{ display: 'flex', flexDirection: 'row', marginBottom: 5 }}>
           <ItemName value="Bone" />
           <div style={{ display: 'flex', alignItems: 'center', marginRight: 10 }}>
-            {firstPerson && firstPerson.getFirstPersonBone().name}
+            {firstPerson && firstPerson.firstPersonBone.name}
           </div>
         </div>
         <div style={{ display: 'flex', flexDirection: 'row', marginBottom: 5 }}>
           <ItemName value="Offset" />
           <div style={{ display: 'flex', alignItems: 'center', marginRight: 10 }}>
             X:
-            <span>{firstPerson && firstPerson.getFirstPersonBoneOffset().x}</span>
+            <span>{firstPerson && offset.x}</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', marginRight: 10 }}>
             Y:
-            <span>{firstPerson && firstPerson.getFirstPersonBoneOffset().y}</span>
+            <span>{firstPerson && offset.y}</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             Z:
-            <span>{firstPerson && firstPerson.getFirstPersonBoneOffset().z}</span>
+            <span>{firstPerson && offset.z}</span>
           </div>
         </div>
         <ItemName value="MeshAnnotation" />
         <ul>
           {firstPerson &&
-            firstPerson.getMeshAnnotations().map((mesh) => (
+            firstPerson.meshAnnotations.map((mesh) => (
               <li style={{ paddingLeft: 100 }} key={mesh.mesh.uuid}>
                 {mesh.mesh.name}
               </li>
