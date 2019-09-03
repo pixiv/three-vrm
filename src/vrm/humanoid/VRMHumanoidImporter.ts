@@ -6,6 +6,12 @@ import { VRMHumanDescription } from './VRMHumanDescription';
 import { VRMHumanoid } from './VRMHumanoid';
 
 export class VRMHumanoidImporter {
+  /**
+   * Import a [[VRMHumanoid]] from a VRM.
+   *
+   * @param gltf A parsed result of GLTF taken from GLTFLoader
+   * @param schemaHumanoid A raw `humanoid` field taken from VRM extension of the GLTF
+   */
   public async import(gltf: THREE.GLTF, schemaHumanoid: RawVrmHumanoid): Promise<VRMHumanoid | null> {
     const humanBoneArray: VRMHumanBoneArray = [];
     if (schemaHumanoid.humanBones) {

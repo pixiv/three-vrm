@@ -4,12 +4,20 @@ import { VRMHumanBoneArray } from './VRMHumanBoneArray';
 import { VRMHumanBones } from './VRMHumanBones';
 import { VRMHumanDescription } from './VRMHumanDescription';
 
+/**
+ * A class represents humanoid of a VRM.
+ */
 export class VRMHumanoid {
   public readonly humanBones: VRMHumanBones;
   public readonly humanDescription: VRMHumanDescription;
 
   public readonly restPose: VRMPose;
 
+  /**
+   * Create a new [[VRMHumanoid]].
+   * @param boneArray A [[VRMHumanBoneArray]] contains all the bones of the new humanoid
+   * @param humanDescription A [[VRMHumanDescription]] represents the new humanoid
+   */
   public constructor(boneArray: VRMHumanBoneArray, humanDescription: VRMHumanDescription) {
     this.humanBones = this._createHumanBones(boneArray);
     this.humanDescription = humanDescription;
@@ -17,6 +25,9 @@ export class VRMHumanoid {
     this.restPose = this.getPose();
   }
 
+  /**
+   * Return the current pose of this humanoid as a [[VRMPose]].
+   */
   public getPose(): VRMPose {
     const pose: VRMPose = {};
     Object.keys(this.humanBones).forEach(
@@ -43,6 +54,11 @@ export class VRMHumanoid {
     return pose;
   }
 
+  /**
+   * Let the humanoid do a specified pose.
+   *
+   * @param poseObject A [[VRMPose]] that represents a single pose
+   */
   public setPose(poseObject: VRMPose): void {
     Object.keys(poseObject).forEach((boneName) => {
       const state = poseObject[boneName]!;
@@ -69,22 +85,45 @@ export class VRMHumanoid {
     });
   }
 
+  /**
+   * Return a bone bound to a specified [[HumanBone]], as a [[VRMHumanBone]].
+   *
+   * @param name Name of the bone you want
+   */
   public getBone(name: HumanBone): VRMHumanBone | undefined {
     return this.humanBones[name][0] || undefined;
   }
 
+  /**
+   * Return bones bound to a specified [[HumanBone]], as an array of [[VRMHumanBone]].
+   *
+   * @param name Name of the bone you want
+   */
   public getBones(name: HumanBone): VRMHumanBone[] {
     return this.humanBones[name];
   }
 
+  /**
+   * Return a bone bound to a specified [[HumanBone]], as a THREE.Object3D.
+   *
+   * @param name Name of the bone you want
+   */
   public getBoneNode(name: HumanBone): GLTFNode | null {
     return (this.humanBones[name][0] && this.humanBones[name][0].node) || null;
   }
 
+  /**
+   * Return bones bound to a specified [[HumanBone]], as an array of THREE.Object3D.
+   *
+   * @param name Name of the bone you want
+   */
   public getBoneNodes(name: HumanBone): GLTFNode[] {
     return this.humanBones[name].map((bone) => bone.node);
   }
 
+  /**
+   * Prepare a [[VRMHumanBones]] from a [[VRMHumanBoneArray]].
+   */
   private _createHumanBones(boneArray: VRMHumanBoneArray): VRMHumanBones {
     const bones: VRMHumanBones = Object.values(HumanBone).reduce((accum, name) => {
       accum[name] = [];
