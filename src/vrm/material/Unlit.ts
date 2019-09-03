@@ -75,6 +75,8 @@ export class Unlit extends THREE.ShaderMaterial {
   /**
    * Update this material.
    * Usually this will be called via [[VRM.update]] so you don't have to call this manually.
+   *
+   * @param delta deltaTime since last update
    */
   public updateVRMMaterials(delta: number): void {
     this._applyUniforms();
