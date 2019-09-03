@@ -26,6 +26,8 @@ export class VRMImporter {
 
   /**
    * Create a new VRMImporter.
+   *
+   * @param options [[VRMImporterOptions]], optionally contains importers for each component
    */
   public constructor(options: VRMImporterOptions = {}) {
     this._humanoidImporter = options.humanoidImporter || new VRMHumanoidImporter();
@@ -33,6 +35,11 @@ export class VRMImporter {
     this._springBoneImporter = options.springBoneImporter || new VRMSpringBoneImporter();
   }
 
+  /**
+   * Receive a GLTF object retrieved from `THREE.GLTFLoader` and create a new [[VRM]] instance.
+   *
+   * @param gltf A parsed result of GLTF taken from GLTFLoader
+   */
   public async import(gltf: THREE.GLTF): Promise<VRM> {
     if (gltf.parser.json.extensions === undefined || gltf.parser.json.extensions.VRM === undefined) {
       throw new Error('Could not find VRM extension on the GLTF');
