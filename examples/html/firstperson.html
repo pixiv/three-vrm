@@ -60,8 +60,15 @@
 					THREE.VRM.from( gltf ).then( ( vrm ) => {
 
 						scene.add( vrm.scene );
-						currentVrm = vrm;
-						vrm.humanBones[ THREE.HumanBone.Hips ].rotation.y = Math.PI;
+            currentVrm = vrm;
+
+            vrm.humanBones[ THREE.HumanBone.Hips ].rotation.y = Math.PI;
+
+            // generate firstperson mesh
+            vrm.firstPerson.setup();
+
+            // set to first person layer mode
+            toggleLayer( true );
 
 						console.log( vrm );
 
@@ -89,26 +96,52 @@
 
 				requestAnimationFrame( animate );
 
-				const deltaTime = clock.getDelta();
-
-				if ( currentVrm ) {
-
-					// tweak bones
-					const s = 0.25 * Math.PI * Math.sin( Math.PI * clock.elapsedTime );
-					currentVrm.humanBones.neck.rotation.y = s;
-					currentVrm.humanBones.leftUpperArm.rotation.z = s;
-					currentVrm.humanBones.rightUpperArm.rotation.x = s;
-
-					// update vrm
-					currentVrm.update( deltaTime );
-
-				}
-
 				renderer.render( scene, camera );
 
 			}
 
-			animate();
+      animate();
+
+      // toggle layer
+      let isFirstPerson = false;
+
+      function toggleLayer( set ) {
+
+        if ( typeof set === 'boolean' )  {
+
+          isFirstPerson = set;
+
+        } else {
+
+          isFirstPerson = !isFirstPerson;
+
+        }
+
+        if ( currentVrm ) {
+
+          if ( isFirstPerson ) {
+
+            camera.layers.enable(currentVrm.firstPerson.getFirstPersonOnlyLayer());
+            camera.layers.disable(currentVrm.firstPerson.getThirdPersonOnlyLayer());
+
+          } else {
+
+            camera.layers.disable(currentVrm.firstPerson.getFirstPersonOnlyLayer());
+            camera.layers.enable(currentVrm.firstPerson.getThirdPersonOnlyLayer());
+
+          }
+
+        }
+
+      }
+
+      // mouse listener
+
+      window.addEventListener( 'keydown', () => {
+
+        toggleLayer();
+
+      } );
 		</script>
 	</body>
 </html>

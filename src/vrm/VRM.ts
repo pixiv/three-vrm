@@ -4,7 +4,7 @@ import { VRMFirstPerson } from './firstperson';
 import { VRMHumanBones } from './humanoid';
 import { VRMLookAtHead } from './lookat';
 import { VRMSpringBoneManager } from './springbone';
-import { RawVrmMeta, VRMPose } from './types';
+import { RawVector3, RawVector4, RawVrmMeta, VRMPose } from './types';
 import { deepDispose } from './utils/disposer';
 import { VRMImporter, VRMImporterOptions } from './VRMImporter';
 
@@ -21,23 +21,94 @@ export interface VRMParameters {
 }
 
 export class VRM {
+  /**
+   * Create a [[VRM]] from a parsed result of GLTF taken from GLTFLoader.
+   * It's probably a thing what you want to get started with VRMs.
+   *
+   * @example Most basic use of VRM
+   * ```
+   * const scene = new THREE.Scene();
+   *
+   * new THREE.GLTFLoader().load( 'models/shino.vrm', ( gltf ) => {
+   *
+   *   THREE.VRM.from( gltf ).then( ( vrm ) => {
+   *
+   *     scene.add( vrm.scene );
+   *
+   *   } );
+   *
+   * } );
+   * ```
+   *
+   * @param gltf A parsed GLTF object taken from GLTFLoader
+   * @param options Options that will be used in importer
+   */
   public static async from(gltf: THREE.GLTF, options: VRMImporterOptions = {}): Promise<VRM> {
     const importer = new VRMImporter(options);
     return await importer.import(gltf);
   }
-
+  /**
+   * `THREE.Scene` that contains the entire VRM.
+   */
   public readonly scene: THREE.Scene;
+
+  /**
+   * Contains [[VRMHumanBones]] of the VRM.
+   * You can move or rotate these bones as a `THREE.Object3D`.
+   * Each bones defined in VRM spec are either required or optional.
+   * See also: [[VRM.setPose]]
+   *
+   * @TODO Add a link to VRM spec
+   */
   public readonly humanBones?: VRMHumanBones;
+
+  /**
+   * Contains [[VRMBlendShapeProxy]] of the VRM.
+   * You might want to control these facial expressions via [[VRMBlendShapeProxy.setValue]].
+   */
   public readonly blendShapeProxy?: VRMBlendShapeProxy;
+
+  /**
+   * Contains [[VRMFirstPerson]] of the VRM.
+   * You can use various feature of the firstPerson field.
+   */
   public readonly firstPerson?: VRMFirstPerson;
+
+  /**
+   * Contains [[VRMLookAtHead]] of the VRM.
+   * You might want to use [[VRMLookAtHead.setTarget]] to control the eye direction of your VRMs.
+   */
   public readonly lookAt?: VRMLookAtHead;
   public readonly materials?: THREE.Material[];
+
+  /**
+   * Contains meta fields of the VRM.
+   * You might want to refer these license fields before use your VRMs.
+   */
   public readonly meta?: RawVrmMeta;
+
+  /**
+   * Contains AnimationMixer associated with the [[VRM.blendShapeProxy]].
+   */
   public readonly animationMixer?: THREE.AnimationMixer;
+
+  /**
+   * A [[VRMSpringBoneManager]] manipulates all spring bones attached on the VRM.
+   * Usually you don't have to care about this property.
+   */
   public readonly springBoneManager?: VRMSpringBoneManager;
 
+  /**
+   * Contains informations about rest pose of the VRM.
+   * You might want to refer this when you want to reset its pose, along with [[VRM.setPose]]}.
+   */
   public readonly restPose: VRMPose | null;
 
+  /**
+   * Create a new VRM instance.
+   *
+   * @param params [[VRMParameters]] that represents components of the VRM
+   */
   public constructor(params: VRMParameters) {
     this.scene = params.scene;
     this.humanBones = params.humanBones;
@@ -55,8 +126,8 @@ export class VRM {
           (restPose, vrmBoneName) => {
             const bone = this.humanBones![vrmBoneName]!;
             restPose[vrmBoneName] = {
-              position: bone.position.toArray(),
-              rotation: bone.quaternion.toArray(),
+              position: bone.position.toArray() as RawVector3,
+              rotation: bone.quaternion.toArray() as RawVector4,
             };
             return restPose;
           },
@@ -102,6 +173,13 @@ export class VRM {
     });
   }
 
+  /**
+   * **You need to call this on your update loop.**
+   *
+   * This function updates every VRM components.
+   *
+   * @param delta deltaTime
+   */
   public update(delta: number): void {
     if (this.lookAt) {
       this.lookAt.update();
