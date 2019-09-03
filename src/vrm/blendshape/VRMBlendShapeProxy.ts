@@ -1,13 +1,17 @@
 import * as THREE from 'three';
-import { BlendShapePresetName } from '../types';
+import { VRMSchema } from '../types';
 import { BlendShapeController } from './BlendShapeController';
 import { BlendShapeMaster } from './BlendShapeMaster';
 
+/**
+ * A class represents the `blendShapeProxy` field of a VRM.
+ * This class has several methods to control expressions of your VRM.
+ */
 export class VRMBlendShapeProxy {
   public static create(
     animationMixer: THREE.AnimationMixer,
     blendShapeMaster: BlendShapeMaster,
-    blendShapePresetMap: { [presetName in BlendShapePresetName]?: string },
+    blendShapePresetMap: { [presetName in VRMSchema.BlendShapePresetName]?: string },
   ): VRMBlendShapeProxy {
     const expressions: { [key: string]: THREE.AnimationAction | undefined } = {};
     // VRMの各標準表情をclipにしておく
@@ -40,11 +44,11 @@ export class VRMBlendShapeProxy {
   public readonly expressions: { [key: string]: THREE.AnimationAction | undefined } = {};
 
   private readonly _blendShapeMaster: BlendShapeMaster;
-  private readonly _blendShapePresetMap: { [presetName in BlendShapePresetName]?: string };
+  private readonly _blendShapePresetMap: { [presetName in VRMSchema.BlendShapePresetName]?: string };
 
   protected constructor(
     blendShapeMaster: BlendShapeMaster,
-    blendShapePresetMap: { [presetName in BlendShapePresetName]?: string },
+    blendShapePresetMap: { [presetName in VRMSchema.BlendShapePresetName]?: string },
     expressions: { [key: string]: THREE.AnimationAction | undefined },
   ) {
     this._blendShapeMaster = blendShapeMaster;
@@ -56,24 +60,68 @@ export class VRMBlendShapeProxy {
     return this.expressions[name];
   }
 
-  public getValue(name: BlendShapePresetName | string): number | undefined {
+  /**
+   * It returns a current weight value of a specified blend shape.
+   *
+   * @param name Name of the blend shape you want to set
+   * @returns The current weight value of the specified blend shape
+   */
+  public getValue(name: VRMSchema.BlendShapePresetName | string): number | undefined {
     const controller = this.getController(name);
     return controller && controller.weight;
   }
 
-  public setValue(name: BlendShapePresetName | string, weight: number) {
+  /**
+   * Set a weight value of a specified blend shape.
+   *
+   * Note that you also can animate the blend shape via `THREE.NumberKeyframeTrack`.
+   * See an example of [[getController]] for more info.
+   *
+   * @example Set a weight value to a specific blend shape
+   * ```javascript
+   * // When you want to specify a preset blend shape
+   * vrm.blendShapeProxy.setValue( THREE.BlendShapePresetName.A, 0.83 );
+   *
+   * // When you want to specify a custom blend shape
+   * vrm.blendShapeProxy.setValue( 'Thinking', 1.0 );
+   * ```
+   *
+   * @param name Name of the blend shape you want to set
+   * @param value A new weight value for the specified blend shape, should be a number between `0.0` and `1.0`
+   */
+  public setValue(name: VRMSchema.BlendShapePresetName | string, weight: number) {
     const controller = this.getController(name);
     if (controller) {
       controller.weight = VRMBlendShapeProxy.clamp(weight);
     }
   }
 
+  /**
+   * Update every blend shapes of the VRM.
+   * Usually this will be called via [[VRM.update]] so you don't have to call this manually.
+   */
   public update() {
     this._blendShapeMaster.update();
   }
 
-  public getController(name: BlendShapePresetName | string): BlendShapeController | undefined {
-    const actualName = this._blendShapePresetMap[name as BlendShapePresetName];
+  /**
+   * It returns a [[BlendShapeController]] of a specified blend shape.
+   * You might want to grab the controller when you want to manipulate its weight manually, or animate using `THREE.NumberKeyframeTrack`.
+   *
+   * @example How to animate blend shapes using keyframes
+   * ```javascript
+   * const track = new THREE.NumberKeyframeTrack(
+   *   vrm.blendShapeProxy.getController( 'Blink' ).name + '.weight', // name
+   *   [ 0.0, 0.5, 1.0 ], // times
+   *   [ 0.0, 1.0, 0.0 ] // values
+   * );
+   * ```
+   *
+   * @param name Name of the blend shape you want to get
+   * @returns The [[BlendShapeController]] of the specified blend shape
+   */
+  public getController(name: VRMSchema.BlendShapePresetName | string): BlendShapeController | undefined {
+    const actualName = this._blendShapePresetMap[name as VRMSchema.BlendShapePresetName];
     const controller = this._blendShapeMaster.getBlendShapeGroup(actualName || name);
     if (!controller) {
       console.warn(`no blend shape found by ${name}`);

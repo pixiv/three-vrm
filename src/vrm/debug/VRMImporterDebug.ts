@@ -36,19 +36,20 @@ export class VRMImporterDebug extends VRMImporter {
 
     const materials = await this._materialImporter.convertGLTFMaterials(gltf);
 
-    const humanBones = (await this.loadHumanoid(gltf)) || undefined;
+    const humanoid = (await this._humanoidImporter.import(gltf, vrmExt.humanoid)) || undefined;
 
-    const firstPerson = humanBones
-      ? (await this.loadFirstPerson(vrmExt.firstPerson, humanBones, gltf)) || undefined
-      : undefined;
+    const firstPerson =
+      vrmExt.firstPerson && humanoid
+        ? (await this._firstPersonImporter.import(gltf, humanoid, vrmExt.firstPerson)) || undefined
+        : undefined;
 
     const animationMixer = new THREE.AnimationMixer(gltf.scene);
 
     const blendShapeProxy = (await this.loadBlendShapeMaster(animationMixer!, gltf)) || undefined;
 
     const lookAt =
-      firstPerson && blendShapeProxy && humanBones
-        ? await this._lookAtImporter.import(vrmExt.firstPerson, firstPerson, blendShapeProxy, humanBones)
+      firstPerson && blendShapeProxy && humanoid
+        ? await this._lookAtImporter.import(vrmExt.firstPerson, firstPerson, blendShapeProxy, humanoid)
         : undefined;
     if ((lookAt as any).setupHelper) {
       (lookAt as VRMLookAtHeadDebug).setupHelper(scene, debugOption);
@@ -61,7 +62,7 @@ export class VRMImporterDebug extends VRMImporter {
         scene: gltf.scene,
         meta: vrmExt.meta,
         materials,
-        humanBones,
+        humanoid,
         firstPerson,
         animationMixer,
         blendShapeProxy,

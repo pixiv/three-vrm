@@ -61,7 +61,8 @@
 
 						scene.add( vrm.scene );
 						currentVrm = vrm;
-						vrm.scene.rotation.y = Math.PI;
+
+						vrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.Hips ).rotation.y = Math.PI;
 
 						console.log( vrm );
 
@@ -95,9 +96,9 @@
 
 					// tweak bones
 					const s = 0.25 * Math.PI * Math.sin( Math.PI * clock.elapsedTime );
-					currentVrm.humanBones.neck.rotation.y = s;
-					currentVrm.humanBones.leftUpperArm.rotation.z = s;
-					currentVrm.humanBones.rightUpperArm.rotation.x = s;
+					currentVrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.Neck ).rotation.y = s;
+					currentVrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.LeftUpperArm ).rotation.z = s;
+					currentVrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.RightUpperArm ).rotation.x = s;
 
 					// update vrm
 					currentVrm.update( deltaTime );

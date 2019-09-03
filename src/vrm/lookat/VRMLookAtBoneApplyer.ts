@@ -1,7 +1,6 @@
 import * as THREE from 'three';
-import { VRMHumanBones } from '../humanoid';
-import { GLTFNode } from '../types';
-import { LookAtTypeName } from '../types';
+import { VRMHumanoid } from '../humanoid';
+import { GLTFNode, VRMSchema } from '../types';
 import { CurveMapper } from './CurveMapper';
 import { VRMLookAtApplyer } from './VRMLookAtApplyer';
 import { VRMLookAtHead } from './VRMLookAtHead';
@@ -9,18 +8,18 @@ import { VRMLookAtHead } from './VRMLookAtHead';
 const _euler = new THREE.Euler(0.0, 0.0, 0.0, VRMLookAtHead.EULER_ORDER);
 
 export class VRMLookAtBoneApplyer extends VRMLookAtApplyer {
-  public readonly type = LookAtTypeName.Bone;
+  public readonly type = VRMSchema.FirstPersonLookAtTypeName.Bone;
 
   private readonly _curveHorizontalInner: CurveMapper;
   private readonly _curveHorizontalOuter: CurveMapper;
   private readonly _curveVerticalDown: CurveMapper;
   private readonly _curveVerticalUp: CurveMapper;
 
-  private readonly _leftEye?: GLTFNode;
-  private readonly _rightEye?: GLTFNode;
+  private readonly _leftEye: GLTFNode | null;
+  private readonly _rightEye: GLTFNode | null;
 
   constructor(
-    humanBodyBones: VRMHumanBones,
+    humanoid: VRMHumanoid,
     curveHorizontalInner: CurveMapper,
     curveHorizontalOuter: CurveMapper,
     curveVerticalDown: CurveMapper,
@@ -33,8 +32,8 @@ export class VRMLookAtBoneApplyer extends VRMLookAtApplyer {
     this._curveVerticalDown = curveVerticalDown;
     this._curveVerticalUp = curveVerticalUp;
 
-    this._leftEye = humanBodyBones.leftEye;
-    this._rightEye = humanBodyBones.rightEye;
+    this._leftEye = humanoid.getBoneNode(VRMSchema.HumanoidBoneName.LeftEye);
+    this._rightEye = humanoid.getBoneNode(VRMSchema.HumanoidBoneName.RightEye);
   }
 
   public lookAt(euler: THREE.Euler) {

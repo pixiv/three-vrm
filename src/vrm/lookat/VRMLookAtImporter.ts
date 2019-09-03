@@ -1,7 +1,7 @@
 import { VRMBlendShapeProxy } from '../blendshape';
 import { VRMFirstPerson } from '../firstperson';
-import { VRMHumanBones } from '../humanoid';
-import * as Raw from '../types/VRM';
+import { VRMHumanoid } from '../humanoid';
+import { VRMSchema } from '../types';
 import { CurveMapper } from './CurveMapper';
 import { VRMLookAtApplyer } from './VRMLookAtApplyer';
 import { VRMLookAtBlendShapeApplyer } from './VRMLookAtBlendShapeApplyer';
@@ -12,19 +12,19 @@ const DEG2RAD = Math.PI / 180.0;
 
 export class VRMLookAtImporter {
   public import(
-    schemaFirstPerson: Raw.RawVrmFirstPerson,
+    schemaFirstPerson: VRMSchema.FirstPerson,
     firstPerson: VRMFirstPerson,
     blendShapeProxy: VRMBlendShapeProxy,
-    humanBodyBones: VRMHumanBones,
+    humanoid: VRMHumanoid,
   ): VRMLookAtHead {
-    const applyer = this._importApplyer(schemaFirstPerson, blendShapeProxy, humanBodyBones);
+    const applyer = this._importApplyer(schemaFirstPerson, blendShapeProxy, humanoid);
     return new VRMLookAtHead(firstPerson, applyer || undefined);
   }
 
   protected _importApplyer(
-    schemaFirstPerson: Raw.RawVrmFirstPerson,
+    schemaFirstPerson: VRMSchema.FirstPerson,
     blendShapeProxy: VRMBlendShapeProxy,
-    humanBodyBones: VRMHumanBones,
+    humanoid: VRMHumanoid,
   ): VRMLookAtApplyer | null {
     const lookAtHorizontalInner = schemaFirstPerson.lookAtHorizontalInner;
     const lookAtHorizontalOuter = schemaFirstPerson.lookAtHorizontalOuter;
@@ -32,7 +32,7 @@ export class VRMLookAtImporter {
     const lookAtVerticalUp = schemaFirstPerson.lookAtVerticalUp;
 
     switch (schemaFirstPerson.lookAtTypeName) {
-      case Raw.LookAtTypeName.Bone: {
+      case VRMSchema.FirstPersonLookAtTypeName.Bone: {
         if (
           lookAtHorizontalInner === undefined ||
           lookAtHorizontalOuter === undefined ||
@@ -42,7 +42,7 @@ export class VRMLookAtImporter {
           return null;
         } else {
           return new VRMLookAtBoneApplyer(
-            humanBodyBones,
+            humanoid,
             this._importCurveMapperBone(lookAtHorizontalInner),
             this._importCurveMapperBone(lookAtHorizontalOuter),
             this._importCurveMapperBone(lookAtVerticalDown),
@@ -50,7 +50,7 @@ export class VRMLookAtImporter {
           );
         }
       }
-      case Raw.LookAtTypeName.BlendShape: {
+      case VRMSchema.FirstPersonLookAtTypeName.BlendShape: {
         if (lookAtHorizontalOuter === undefined || lookAtVerticalDown === undefined || lookAtVerticalUp === undefined) {
           return null;
         } else {
@@ -68,7 +68,7 @@ export class VRMLookAtImporter {
     }
   }
 
-  private _importCurveMapperBone(map: Raw.RawVrmFirstPersonDegreemap): CurveMapper {
+  private _importCurveMapperBone(map: VRMSchema.FirstPersonDegreeMap): CurveMapper {
     return new CurveMapper(
       typeof map.xRange === 'number' ? DEG2RAD * map.xRange : undefined,
       typeof map.yRange === 'number' ? DEG2RAD * map.yRange : undefined,
@@ -76,7 +76,7 @@ export class VRMLookAtImporter {
     );
   }
 
-  private _importCurveMapperBlendShape(map: Raw.RawVrmFirstPersonDegreemap): CurveMapper {
+  private _importCurveMapperBlendShape(map: VRMSchema.FirstPersonDegreeMap): CurveMapper {
     return new CurveMapper(typeof map.xRange === 'number' ? DEG2RAD * map.xRange : undefined, map.yRange, map.curve);
   }
 }

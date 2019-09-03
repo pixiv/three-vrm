@@ -9,7 +9,7 @@ varying vec3 vViewPosition;
 #include <common>
 
 // #include <uv_pars_vertex>
-#if defined( USE_MAP ) || defined( USE_SHADETEXTURE ) || defined( USE_NORMALMAP ) || defined( USE_RECEIVESHADOWTEXTURE ) || defined( USE_SHADINGGRADETEXTURE ) || defined( USE_EMISSIVEMAP ) || defined( USE_OUTLINEWIDTHTEXTURE )
+#if defined( USE_MAP ) || defined( USE_SHADETEXTURE ) || defined( USE_NORMALMAP ) || defined( USE_RECEIVESHADOWTEXTURE ) || defined( USE_SHADINGGRADETEXTURE ) || defined( USE_RIMTEXTURE ) || defined( USE_EMISSIVEMAP ) || defined( USE_OUTLINEWIDTHTEXTURE ) || defined( USE_UVANIMMASKTEXTURE )
   varying vec2 vUv;
   uniform vec4 mainTex_ST;
 #endif
@@ -35,7 +35,7 @@ uniform float outlineScaledMaxDistance;
 void main() {
 
   // #include <uv_vertex>
-  #if defined( USE_MAP ) || defined( USE_NORMALMAP ) || defined( USE_ALPHAMAP ) || defined( USE_EMISSIVEMAP )
+  #if defined( USE_MAP ) || defined( USE_SHADETEXTURE ) || defined( USE_NORMALMAP ) || defined( USE_RECEIVESHADOWTEXTURE ) || defined( USE_SHADINGGRADETEXTURE ) || defined( USE_RIMTEXTURE ) || defined( USE_EMISSIVEMAP ) || defined( USE_OUTLINEWIDTHTEXTURE ) || defined( USE_UVANIMMASKTEXTURE )
     vUv = vec2( mainTex_ST.p * uv.x + mainTex_ST.s, mainTex_ST.q * uv.y + mainTex_ST.t );
   #endif
 
@@ -80,7 +80,7 @@ void main() {
       vec2 projectedNormal = normalize( clipNormal.xy );
       projectedNormal *= min( gl_Position.w, outlineScaledMaxDistance );
       projectedNormal.x *= projectionMatrix[ 0 ].x / projectionMatrix[ 1 ].y;
-      gl_Position.xy += 0.01 * outlineWidth * projectedNormal.xy;
+      gl_Position.xy += 0.01 * outlineWidth * outlineTex * projectedNormal.xy;
     #endif
 
     gl_Position.z += 1E-6 * gl_Position.w; // anti-artifact magic
