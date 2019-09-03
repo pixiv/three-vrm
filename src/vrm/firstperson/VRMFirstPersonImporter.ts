@@ -1,19 +1,19 @@
 import * as THREE from 'three';
-import { VRMHumanBones } from '../humanoid';
+import { VRMHumanoid } from '../humanoid';
 import { GLTFMesh, GLTFNode, VRMSchema } from '../types';
 import { RendererFirstPersonFlags, VRMFirstPerson } from './VRMFirstPerson';
 
 export class VRMFirstPersonImporter {
   public async import(
     gltf: THREE.GLTF,
-    humanBones: VRMHumanBones,
+    humanoid: VRMHumanoid,
     schemaFirstPerson: VRMSchema.FirstPerson,
   ): Promise<VRMFirstPerson | null> {
     const firstPersonBoneIndex = schemaFirstPerson.firstPersonBone;
 
-    let firstPersonBone: GLTFNode;
+    let firstPersonBone: GLTFNode | null;
     if (firstPersonBoneIndex === undefined || firstPersonBoneIndex === -1) {
-      firstPersonBone = humanBones[VRMSchema.HumanoidBoneName.Head];
+      firstPersonBone = humanoid.getBoneNode(VRMSchema.HumanoidBoneName.Head);
     } else {
       firstPersonBone = await gltf.parser.getDependency('node', firstPersonBoneIndex);
     }

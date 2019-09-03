@@ -61,7 +61,7 @@
 						currentVrm = vrm;
 						console.log( vrm );
 
-						vrm.humanBones[ THREE.VRMSchema.HumanoidBoneName.Hips ].rotation.y = Math.PI;
+						vrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.Hips ).rotation.y = Math.PI;
 
 					} );
 
@@ -104,10 +104,10 @@
 				if ( currentVrm ) {
 
 					const range = CAMERA_Z * Math.tan( CAMERA_FOV / 360.0 * Math.PI );
-					const px = ( 2.0 * event.clientX - window.innerWidth  ) / window.innerHeight * range;
+					const px = ( 2.0 * event.clientX - window.innerWidth ) / window.innerHeight * range;
 					const py = -( 2.0 * event.clientY - window.innerHeight ) / window.innerHeight * range;
 
-					currentVrm.humanBones[ THREE.VRMSchema.HumanoidBoneName.Hips ].position.set( px, py, 0.0 );
+					currentVrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.Hips ).position.set( px, py, 0.0 );
 
 				}
 

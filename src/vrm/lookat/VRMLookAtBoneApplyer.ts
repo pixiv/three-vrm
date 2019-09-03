@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { VRMHumanBones } from '../humanoid';
+import { VRMHumanoid } from '../humanoid';
 import { GLTFNode, VRMSchema } from '../types';
 import { CurveMapper, DEG2RAD } from './CurveMapper';
 import { VRMLookAtApplyer } from './VRMLookAtApplyer';
@@ -7,19 +7,19 @@ import { VRMLookAtApplyer } from './VRMLookAtApplyer';
 export class VRMLookAtBoneApplyer extends VRMLookAtApplyer {
   private readonly lookAtHorizontalInner: VRMSchema.FirstPersonDegreeMap;
 
-  private readonly _leftEye?: GLTFNode;
-  private readonly _rightEye?: GLTFNode;
+  private readonly _leftEye: GLTFNode | null;
+  private readonly _rightEye: GLTFNode | null;
 
   constructor(
-    humanBodyBones: VRMHumanBones,
+    humanoid: VRMHumanoid,
     lookAtHorizontalInner: VRMSchema.FirstPersonDegreeMap,
     lookAtHorizontalOuter: VRMSchema.FirstPersonDegreeMap,
     lookAtVerticalDown: VRMSchema.FirstPersonDegreeMap,
     lookAtVerticalUp: VRMSchema.FirstPersonDegreeMap,
   ) {
     super(lookAtHorizontalOuter, lookAtVerticalDown, lookAtVerticalUp);
-    this._leftEye = humanBodyBones.leftEye;
-    this._rightEye = humanBodyBones.rightEye;
+    this._leftEye = humanoid.getBoneNode(VRMSchema.HumanoidBoneName.LeftEye);
+    this._rightEye = humanoid.getBoneNode(VRMSchema.HumanoidBoneName.RightEye);
     this.lookAtHorizontalInner = lookAtHorizontalInner;
   }
 

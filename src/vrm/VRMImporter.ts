@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import { BlendShapeController, BlendShapeMaster, VRMBlendShapeProxy } from './blendshape';
-import { VRMFirstPersonImporter } from './firstperson/VRMFirstPersonImporter';
-import { VRMHumanBones } from './humanoid';
+import { VRMFirstPersonImporter } from './firstperson';
+import { VRMHumanoid } from './humanoid';
+import { VRMHumanoidImporter } from './humanoid/VRMHumanoidImporter';
 import { VRMLookAtHead } from './lookat';
 import { VRMLookAtBlendShapeApplyer } from './lookat/VRMLookAtBlendShapeApplyer';
 import { VRMLookAtBoneApplyer } from './lookat/VRMLookAtBoneApplyer';
@@ -12,12 +13,14 @@ import { GLTFMesh, GLTFPrimitive, VRMSchema } from './types';
 import { VRM } from './VRM';
 
 export interface VRMImporterOptions {
+  humanoidImporter?: VRMHumanoidImporter;
   firstPersonImporter?: VRMFirstPersonImporter;
   materialImporter?: VRMMaterialImporter;
   springBoneImporter?: VRMSpringBoneImporter;
 }
 
 export class VRMImporter {
+  protected readonly _humanoidImporter: VRMHumanoidImporter;
   protected readonly _firstPersonImporter: VRMFirstPersonImporter;
   protected readonly _materialImporter: VRMMaterialImporter;
   protected readonly _springBoneImporter: VRMSpringBoneImporter;
@@ -28,6 +31,7 @@ export class VRMImporter {
    * @param options [[VRMImporterOptions]], optionally contains importers for each component
    */
   public constructor(options: VRMImporterOptions = {}) {
+    this._humanoidImporter = options.humanoidImporter || new VRMHumanoidImporter();
     this._firstPersonImporter = options.firstPersonImporter || new VRMFirstPersonImporter();
     this._materialImporter = options.materialImporter || new VRMMaterialImporter();
     this._springBoneImporter = options.springBoneImporter || new VRMSpringBoneImporter();
@@ -42,7 +46,7 @@ export class VRMImporter {
     if (gltf.parser.json.extensions === undefined || gltf.parser.json.extensions.VRM === undefined) {
       throw new Error('Could not find VRM extension on the GLTF');
     }
-    const vrmExt = gltf.parser.json.extensions.VRM;
+    const vrmExt: VRMSchema.VRM = gltf.parser.json.extensions.VRM;
 
     const scene = gltf.scene;
 
@@ -60,11 +64,13 @@ export class VRMImporter {
 
     const materials = await this._materialImporter.convertGLTFMaterials(gltf);
 
-    const humanBones = (await this.loadHumanoid(gltf)) || undefined;
+    const humanoid = vrmExt.humanoid
+      ? (await this._humanoidImporter.import(gltf, vrmExt.humanoid)) || undefined
+      : undefined;
 
     const firstPerson =
-      vrmExt.firstPerson && humanBones
-        ? (await this._firstPersonImporter.import(gltf, humanBones, vrmExt.firstPerson)) || undefined
+      vrmExt.firstPerson && humanoid
+        ? (await this._firstPersonImporter.import(gltf, humanoid, vrmExt.firstPerson)) || undefined
         : undefined;
 
     const animationMixer = new THREE.AnimationMixer(gltf.scene);
@@ -72,7 +78,9 @@ export class VRMImporter {
     const blendShapeProxy = (await this.loadBlendShapeMaster(animationMixer!, gltf)) || undefined;
 
     const lookAt =
-      blendShapeProxy && humanBones ? this.loadLookAt(vrmExt.firstPerson, blendShapeProxy, humanBones) : undefined;
+      vrmExt.firstPerson && blendShapeProxy && humanoid
+        ? this.loadLookAt(vrmExt.firstPerson, blendShapeProxy, humanoid)
+        : undefined;
 
     const springBoneManager = (await this._springBoneImporter.import(gltf)) || undefined;
 
@@ -80,7 +88,7 @@ export class VRMImporter {
       scene: gltf.scene,
       meta: vrmExt.meta,
       materials,
-      humanBones,
+      humanoid,
       firstPerson,
       animationMixer,
       blendShapeProxy,
@@ -89,38 +97,10 @@ export class VRMImporter {
     });
   }
 
-  /**
-   * load humanoid
-   * @param gltf
-   * @returns
-   */
-  public async loadHumanoid(gltf: THREE.GLTF): Promise<VRMHumanBones | null> {
-    const humanBones: VRMSchema.HumanoidBone[] | undefined =
-      gltf.parser.json.extensions &&
-      gltf.parser.json.extensions.VRM &&
-      gltf.parser.json.extensions.VRM.humanoid &&
-      gltf.parser.json.extensions.VRM.humanoid.humanBones;
-    if (!humanBones) {
-      console.warn('Could not find humanBones field on the VRM file');
-      return null;
-    }
-
-    return await humanBones.reduce(async (vrmBonesPromise, bone) => {
-      const vrmBones = await vrmBonesPromise;
-      const nodeIndex = bone.node;
-      const boneName = bone.bone;
-
-      if (nodeIndex !== undefined && boneName !== undefined) {
-        vrmBones[boneName] = await gltf.parser.getDependency('node', nodeIndex);
-      }
-      return vrmBones;
-    }, Promise.resolve({} as VRMHumanBones));
-  }
-
   public loadLookAt(
     firstPerson: VRMSchema.FirstPerson,
     blendShapeProxy: VRMBlendShapeProxy,
-    humanBodyBones: VRMHumanBones,
+    humanoid: VRMHumanoid,
   ): VRMLookAtHead {
     const lookAtHorizontalInner = firstPerson.lookAtHorizontalInner;
     const lookAtHorizontalOuter = firstPerson.lookAtHorizontalOuter;
@@ -135,12 +115,12 @@ export class VRMImporter {
           lookAtVerticalDown === undefined ||
           lookAtVerticalUp === undefined
         ) {
-          return new VRMLookAtHead(humanBodyBones);
+          return new VRMLookAtHead(humanoid);
         } else {
           return new VRMLookAtHead(
-            humanBodyBones,
+            humanoid,
             new VRMLookAtBoneApplyer(
-              humanBodyBones,
+              humanoid,
               lookAtHorizontalInner,
               lookAtHorizontalOuter,
               lookAtVerticalDown,
@@ -151,10 +131,10 @@ export class VRMImporter {
       }
       case VRMSchema.FirstPersonLookAtTypeName.BlendShape: {
         if (lookAtHorizontalOuter === undefined || lookAtVerticalDown === undefined || lookAtVerticalUp === undefined) {
-          return new VRMLookAtHead(humanBodyBones);
+          return new VRMLookAtHead(humanoid);
         } else {
           return new VRMLookAtHead(
-            humanBodyBones,
+            humanoid,
             new VRMLookAtBlendShapeApplyer(
               blendShapeProxy,
               lookAtHorizontalOuter,
@@ -165,7 +145,7 @@ export class VRMImporter {
         }
       }
       default: {
-        return new VRMLookAtHead(humanBodyBones);
+        return new VRMLookAtHead(humanoid);
       }
     }
   }

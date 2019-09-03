@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import { VRMHumanBones } from '../humanoid';
-import { GLTFNode, RawVector3 } from '../types';
+import { VRMHumanoid } from '../humanoid';
+import { GLTFNode, RawVector3, VRMSchema } from '../types';
 import { getWorldQuaternionLite } from '../utils/math';
 import { VRMLookAtApplyer } from './VRMLookAtApplyer';
 
@@ -25,8 +25,8 @@ export class VRMLookAtHead {
   public leftEyeWorldPosition?: THREE.Vector3;
   public rightEyeWorldPosition?: THREE.Vector3;
 
-  private readonly _leftEye?: GLTFNode;
-  private readonly _rightEye?: GLTFNode;
+  private readonly _leftEye: GLTFNode | null;
+  private readonly _rightEye: GLTFNode | null;
 
   private readonly _applyer?: VRMLookAtApplyer;
 
@@ -35,13 +35,13 @@ export class VRMLookAtHead {
   private _lookAtTargetTo?: THREE.Vector3;
   private _lookAtTarget?: THREE.Vector3;
 
-  constructor(humanBones: VRMHumanBones, applyer?: VRMLookAtApplyer) {
+  constructor(humanoid: VRMHumanoid, applyer?: VRMLookAtApplyer) {
     this._applyer = applyer;
-    this.head = humanBones.head!;
+    this.head = humanoid.getBoneNode(VRMSchema.HumanoidBoneName.Head)!;
 
     // 目のボーンはVRM仕様ではオプショナル。
-    this._leftEye = humanBones.leftEye;
-    this._rightEye = humanBones.rightEye;
+    this._leftEye = humanoid.getBoneNode(VRMSchema.HumanoidBoneName.LeftEye);
+    this._rightEye = humanoid.getBoneNode(VRMSchema.HumanoidBoneName.RightEye);
 
     if (this._leftEye) {
       this.leftEyeWorldPosition = new THREE.Vector3().setFromMatrixPosition(this._leftEye.matrixWorld);
