@@ -78,7 +78,7 @@ export class VRMImporter {
     const blendShapeProxy = (await this.loadBlendShapeMaster(animationMixer!, gltf)) || undefined;
 
     const lookAt =
-      firstPerson && blendShapeProxy && humanoid
+      vrmExt.firstPerson && firstPerson && blendShapeProxy && humanoid
         ? await this._lookAtImporter.import(vrmExt.firstPerson, firstPerson, blendShapeProxy, humanoid)
         : undefined;
 
