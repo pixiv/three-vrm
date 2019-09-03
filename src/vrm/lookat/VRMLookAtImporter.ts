@@ -1,6 +1,6 @@
 import { VRMBlendShapeProxy } from '../blendshape';
-import { VRMHumanBones } from '../humanoid';
-import * as Raw from '../types/VRM';
+import { VRMHumanoid } from '../humanoid';
+import { VRMSchema } from '../types';
 import { VRMLookAtApplyer } from './VRMLookAtApplyer';
 import { VRMLookAtBlendShapeApplyer } from './VRMLookAtBlendShapeApplyer';
 import { VRMLookAtBoneApplyer } from './VRMLookAtBoneApplyer';
@@ -8,18 +8,18 @@ import { VRMLookAtHead } from './VRMLookAtHead';
 
 export class VRMLookAtImporter {
   public import(
-    firstPerson: Raw.RawVrmFirstPerson,
+    firstPerson: VRMSchema.FirstPerson,
     blendShapeProxy: VRMBlendShapeProxy,
-    humanBodyBones: VRMHumanBones,
+    humanoid: VRMHumanoid,
   ): VRMLookAtHead {
-    const applyer = this._importApplyer(firstPerson, blendShapeProxy, humanBodyBones);
-    return new VRMLookAtHead(humanBodyBones, applyer || undefined);
+    const applyer = this._importApplyer(firstPerson, blendShapeProxy, humanoid);
+    return new VRMLookAtHead(humanoid, applyer || undefined);
   }
 
   protected _importApplyer(
-    firstPerson: Raw.RawVrmFirstPerson,
+    firstPerson: VRMSchema.FirstPerson,
     blendShapeProxy: VRMBlendShapeProxy,
-    humanBodyBones: VRMHumanBones,
+    humanoid: VRMHumanoid,
   ): VRMLookAtApplyer | null {
     const lookAtHorizontalInner = firstPerson.lookAtHorizontalInner;
     const lookAtHorizontalOuter = firstPerson.lookAtHorizontalOuter;
@@ -27,7 +27,7 @@ export class VRMLookAtImporter {
     const lookAtVerticalUp = firstPerson.lookAtVerticalUp;
 
     switch (firstPerson.lookAtTypeName) {
-      case Raw.LookAtTypeName.Bone: {
+      case VRMSchema.FirstPersonLookAtTypeName.Bone: {
         if (
           lookAtHorizontalInner === undefined ||
           lookAtHorizontalOuter === undefined ||
@@ -37,7 +37,7 @@ export class VRMLookAtImporter {
           return null;
         } else {
           return new VRMLookAtBoneApplyer(
-            humanBodyBones,
+            humanoid,
             lookAtHorizontalInner,
             lookAtHorizontalOuter,
             lookAtVerticalDown,
@@ -45,7 +45,7 @@ export class VRMLookAtImporter {
           );
         }
       }
-      case Raw.LookAtTypeName.BlendShape: {
+      case VRMSchema.FirstPersonLookAtTypeName.BlendShape: {
         if (lookAtHorizontalOuter === undefined || lookAtVerticalDown === undefined || lookAtVerticalUp === undefined) {
           return null;
         } else {

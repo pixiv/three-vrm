@@ -1,17 +1,17 @@
 import { VRMBlendShapeProxy } from '../blendshape';
-import { VRMHumanBones } from '../humanoid';
+import { VRMHumanoid } from '../humanoid';
 import { VRMLookAtHead } from '../lookat/VRMLookAtHead';
 import { VRMLookAtImporter } from '../lookat/VRMLookAtImporter';
-import * as Raw from '../types/VRM';
+import { VRMSchema } from '../types';
 import { VRMLookAtHeadDebug } from './VRMLookAtHeadDebug';
 
 export class VRMLookAtImporterDebug extends VRMLookAtImporter {
   public import(
-    firstPerson: Raw.RawVrmFirstPerson,
+    firstPerson: VRMSchema.FirstPerson,
     blendShapeProxy: VRMBlendShapeProxy,
-    humanBodyBones: VRMHumanBones,
+    humanoid: VRMHumanoid,
   ): VRMLookAtHead {
-    const applyer = this._importApplyer(firstPerson, blendShapeProxy, humanBodyBones);
-    return new VRMLookAtHeadDebug(humanBodyBones, applyer || undefined);
+    const applyer = this._importApplyer(firstPerson, blendShapeProxy, humanoid);
+    return new VRMLookAtHeadDebug(humanoid, applyer || undefined);
   }
 }

@@ -21,6 +21,12 @@ Once you start the `yarn dev`, you can see examples at http://localhost:3000/exa
 - We are not bound of [Mr.doob's Code Style™](https://github.com/mrdoob/three.js/wiki/Mr.doob%27s-Code-Style%E2%84%A2) inside of `/src`, but you MUST follow the style inside of `/examples`
 - When you modified some API, make sure every examples are working properly.
 
+## `typedefgen.js`
+
+`typedefgen.js` ( can be run via `yarn typedefgen` ) is a script that generates type definitions of GLTF and VRM schema automatically using [quicktype](https://quicktype.io/).
+However, names of each interfaces/enums are not good so you have to rename these names by your own hand.
+We usually don't have to generate these frequently.
+
 ## Syntax guidelines
 
 ### `private` / `protected` members must start from `_`
