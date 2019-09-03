@@ -148,6 +148,7 @@ export class MToon extends THREE.ShaderMaterial {
 
     // == update shader stuff ==================================================
     this.updateShaderCode();
+    this._applyUniforms();
   }
 
   get mainTex(): THREE.Texture | null {
@@ -256,6 +257,16 @@ export class MToon extends THREE.ShaderMaterial {
     this.updateCullFace();
   }
 
+  /**
+   * Update this material.
+   * Usually this will be called via [[VRM.update]] so you don't have to call this manually.
+   *
+   * @param delta deltaTime since last update
+   */
+  public updateVRMMaterials(delta: number): void {
+    this._applyUniforms();
+  }
+
   public copy(source: this): this {
     super.copy(source);
 
@@ -306,7 +317,7 @@ export class MToon extends THREE.ShaderMaterial {
    * Apply updated uniform variables.
    * Strongly recommended to call this in `Object3D.onBeforeRender` .
    */
-  public applyUniforms() {
+  private _applyUniforms() {
     if (!this.shouldApplyUniforms) {
       return;
     }
