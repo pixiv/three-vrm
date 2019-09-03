@@ -25,8 +25,6 @@ class App extends React.Component<{}, { vrmId: string | null }> {
   private cameraControls?: CameraControls;
   private debug: boolean = false;
   private debugOption: DebugOption = {
-    disableRightEyeDirectionHelper: false,
-    disableLeftEyeDirectionHelper: false,
     disableFaceDirectionHelper: false,
     disableSkeletonHelper: false,
     disableBoxHelper: false,
