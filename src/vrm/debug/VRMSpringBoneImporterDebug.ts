@@ -1,9 +1,10 @@
 import * as THREE from 'three';
-import { VRMSpringBone, VRMSpringBoneManager } from '../springbone';
-import { VRMSpringBoneDebug } from './VRMSpringBone';
+import { VRMSpringBone } from '../springbone/VRMSpringBone';
+import { VRMSpringBoneImporter } from '../springbone/VRMSpringBoneImporter';
+import { VRMSpringBoneDebug } from './VRMSpringBoneDebug';
 
-export class VRMSpringBoneManagerDebug extends VRMSpringBoneManager {
-  protected isColiderMeshVisible(): boolean {
+export class VRMSpringBoneImporterDebug extends VRMSpringBoneImporter {
+  protected get isColiderMeshVisible(): boolean {
     return true;
   }
 
