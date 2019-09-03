@@ -35,9 +35,10 @@ export class VRMImporterDebug extends VRMImporter {
 
     const humanoid = (await this._humanoidImporter.import(gltf, vrmExt.humanoid)) || undefined;
 
-    const firstPerson = humanoid
-      ? (await this.loadFirstPerson(vrmExt.firstPerson, humanoid, gltf)) || undefined
-      : undefined;
+    const firstPerson =
+      vrmExt.firstPerson && humanoid
+        ? (await this._firstPersonImporter.import(gltf, humanoid, vrmExt.firstPerson)) || undefined
+        : undefined;
 
     const animationMixer = new THREE.AnimationMixer(gltf.scene);
 

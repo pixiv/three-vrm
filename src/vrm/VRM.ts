@@ -20,25 +20,6 @@ export interface VRMParameters {
   meta?: RawVrmMeta;
 }
 
-/**
- * Represents a VRM model.
- * It has so many feature to deal with your VRM models!
- *
- * @example Most basic use of VRM
- * ```
- * const scene = new THREE.Scene();
- *
- * new THREE.GLTFLoader().load( 'models/shino.vrm', ( gltf ) => {
- *
- *   THREE.VRM.from( gltf ).then( ( vrm ) => {
- *
- *     scene.add( vrm.scene );
- *
- *   } );
- *
- * } );
- * ```
- */
 export class VRM {
   /**
    * Create a [[VRM]] from a parsed result of GLTF taken from GLTFLoader.
@@ -66,7 +47,6 @@ export class VRM {
     const importer = new VRMImporter(options);
     return await importer.import(gltf);
   }
-
   /**
    * `THREE.Scene` that contains the entire VRM.
    */
@@ -166,10 +146,6 @@ export class VRM {
     }
   }
 
-  /**
-   * Dispose the VRM.
-   * You might want to call this when you want to unload the VRM model.
-   */
   public dispose(): void {
     const scene = this.scene;
     if (scene) {

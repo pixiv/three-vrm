@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { BlendShapeController, BlendShapeMaster, VRMBlendShapeProxy } from './blendshape';
-import { RendererFirstPersonFlags, VRMFirstPerson } from './firstperson';
+import { VRMFirstPersonImporter } from './firstperson';
 import { VRMHumanoid } from './humanoid';
 import { VRMHumanoidImporter } from './humanoid/VRMHumanoidImporter';
 import { VRMLookAtHead } from './lookat';
@@ -9,18 +9,20 @@ import { VRMLookAtBoneApplyer } from './lookat/VRMLookAtBoneApplyer';
 import { VRMMaterialImporter } from './material';
 import { reduceBones } from './reduceBones';
 import { VRMSpringBoneImporter } from './springbone/VRMSpringBoneImporter';
-import { GLTFMesh, GLTFNode, GLTFPrimitive } from './types';
+import { GLTFMesh, GLTFPrimitive } from './types';
 import * as Raw from './types/VRM';
 import { VRM } from './VRM';
 
 export interface VRMImporterOptions {
   humanoidImporter?: VRMHumanoidImporter;
+  firstPersonImporter?: VRMFirstPersonImporter;
   materialImporter?: VRMMaterialImporter;
   springBoneImporter?: VRMSpringBoneImporter;
 }
 
 export class VRMImporter {
   protected readonly _humanoidImporter: VRMHumanoidImporter;
+  protected readonly _firstPersonImporter: VRMFirstPersonImporter;
   protected readonly _materialImporter: VRMMaterialImporter;
   protected readonly _springBoneImporter: VRMSpringBoneImporter;
 
@@ -31,6 +33,7 @@ export class VRMImporter {
    */
   public constructor(options: VRMImporterOptions = {}) {
     this._humanoidImporter = options.humanoidImporter || new VRMHumanoidImporter();
+    this._firstPersonImporter = options.firstPersonImporter || new VRMFirstPersonImporter();
     this._materialImporter = options.materialImporter || new VRMMaterialImporter();
     this._springBoneImporter = options.springBoneImporter || new VRMSpringBoneImporter();
   }
@@ -68,7 +71,7 @@ export class VRMImporter {
 
     const firstPerson =
       vrmExt.firstPerson && humanoid
-        ? (await this.loadFirstPerson(vrmExt.firstPerson, humanoid, gltf)) || undefined
+        ? (await this._firstPersonImporter.import(gltf, humanoid, vrmExt.firstPerson)) || undefined
         : undefined;
 
     const animationMixer = new THREE.AnimationMixer(gltf.scene);
@@ -93,57 +96,6 @@ export class VRMImporter {
       lookAt,
       springBoneManager,
     });
-  }
-
-  /**
-   * load first person
-   * @param firstPerson
-   * @param humanBones
-   * @param gltf
-   * @returns
-   */
-  public async loadFirstPerson(
-    firstPerson: Raw.RawVrmFirstPerson,
-    humanoid: VRMHumanoid,
-    gltf: THREE.GLTF,
-  ): Promise<VRMFirstPerson | null> {
-    const isFirstPersonBoneNotSet = firstPerson.firstPersonBone === undefined || firstPerson.firstPersonBone === -1;
-
-    let firstPersonBone: GLTFNode;
-    if (isFirstPersonBoneNotSet) {
-      const headNode = humanoid.getBoneNode(Raw.HumanBone.Head);
-      if (!headNode) {
-        return null;
-      }
-      firstPersonBone = headNode; // fallback
-    } else {
-      firstPersonBone = await gltf.parser.getDependency('node', firstPerson.firstPersonBone!);
-    }
-
-    if (!firstPersonBone) {
-      console.warn('Could not find firstPersonBone of the VRM');
-      return null;
-    }
-
-    const firstPersonBoneOffset =
-      !isFirstPersonBoneNotSet && firstPerson.firstPersonBoneOffset
-        ? new THREE.Vector3(
-            firstPerson.firstPersonBoneOffset!.x,
-            firstPerson.firstPersonBoneOffset!.y,
-            firstPerson.firstPersonBoneOffset!.z,
-          )
-        : new THREE.Vector3(0, 0.06, 0); // fallback
-
-    const meshAnnotations: RendererFirstPersonFlags[] = [];
-    const meshes: GLTFMesh[] = await gltf.parser.getDependencies('mesh');
-    meshes.forEach((mesh, meshIndex) => {
-      const flag = firstPerson.meshAnnotations
-        ? firstPerson.meshAnnotations.find((annotation) => annotation.mesh === meshIndex)
-        : undefined;
-      meshAnnotations.push(new RendererFirstPersonFlags(flag && flag.firstPersonFlag, mesh));
-    });
-
-    return new VRMFirstPerson(firstPersonBone, firstPersonBoneOffset, meshAnnotations);
   }
 
   public loadLookAt(
