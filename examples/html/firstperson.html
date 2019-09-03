@@ -121,13 +121,13 @@
 
           if ( isFirstPerson ) {
 
-            camera.layers.enable(currentVrm.firstPerson.getFirstPersonOnlyLayer());
-            camera.layers.disable(currentVrm.firstPerson.getThirdPersonOnlyLayer());
+            camera.layers.enable(currentVrm.firstPerson.firstPersonOnlyLayer);
+            camera.layers.disable(currentVrm.firstPerson.thirdPersonOnlyLayer);
 
           } else {
 
-            camera.layers.disable(currentVrm.firstPerson.getFirstPersonOnlyLayer());
-            camera.layers.enable(currentVrm.firstPerson.getThirdPersonOnlyLayer());
+            camera.layers.disable(currentVrm.firstPerson.firstPersonOnlyLayer);
+            camera.layers.enable(currentVrm.firstPerson.thirdPersonOnlyLayer);
 
           }
 
