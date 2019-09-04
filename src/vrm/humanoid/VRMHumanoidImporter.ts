@@ -1,13 +1,19 @@
 import * as THREE from 'three';
 import { VRMSchema } from '../types';
 import { VRMHumanBone } from './VRMHumanBone';
-import { VRMHumanBones } from './VRMHumanBones';
+import { VRMHumanBoneArray } from './VRMHumanBoneArray';
 import { VRMHumanDescription } from './VRMHumanDescription';
 import { VRMHumanoid } from './VRMHumanoid';
 
 export class VRMHumanoidImporter {
+  /**
+   * Import a [[VRMHumanoid]] from a VRM.
+   *
+   * @param gltf A parsed result of GLTF taken from GLTFLoader
+   * @param schemaHumanoid A raw `humanoid` field taken from VRM extension of the GLTF
+   */
   public async import(gltf: THREE.GLTF, schemaHumanoid: VRMSchema.Humanoid): Promise<VRMHumanoid | null> {
-    const humanBones: VRMHumanBones = {};
+    const humanBoneArray: VRMHumanBoneArray = [];
     if (schemaHumanoid.humanBones) {
       await Promise.all(
         schemaHumanoid.humanBones.map(async (bone) => {
@@ -16,12 +22,15 @@ export class VRMHumanoidImporter {
           }
 
           const node = await gltf.parser.getDependency('node', bone.node);
-          humanBones[bone.bone] = new VRMHumanBone(node, {
-            axisLength: bone.axisLength,
-            center: bone.center && new THREE.Vector3(bone.center.x, bone.center.y, bone.center.z),
-            max: bone.max && new THREE.Vector3(bone.max.x, bone.max.y, bone.max.z),
-            min: bone.min && new THREE.Vector3(bone.min.x, bone.min.y, bone.min.z),
-            useDefaultValues: bone.useDefaultValues,
+          humanBoneArray.push({
+            name: bone.bone,
+            bone: new VRMHumanBone(node, {
+              axisLength: bone.axisLength,
+              center: bone.center && new THREE.Vector3(bone.center.x, bone.center.y, bone.center.z),
+              max: bone.max && new THREE.Vector3(bone.max.x, bone.max.y, bone.max.z),
+              min: bone.min && new THREE.Vector3(bone.min.x, bone.min.y, bone.min.z),
+              useDefaultValues: bone.useDefaultValues,
+            }),
           });
         }),
       );
@@ -38,6 +47,6 @@ export class VRMHumanoidImporter {
       hasTranslationDoF: schemaHumanoid.hasTranslationDoF,
     };
 
-    return new VRMHumanoid(humanBones, humanDescription);
+    return new VRMHumanoid(humanBoneArray, humanDescription);
   }
 }
