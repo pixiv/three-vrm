@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { GLTFMesh, GLTFPrimitive, VRMSchema } from '../types';
 import { renameMaterialProperty } from '../utils/renameMaterialProperty';
 import { VRMBlendShapeGroup } from './VRMBlendShapeGroup';
-import { VRMBlendShapeProxy } from './VRMBlendShapeMaster';
+import { VRMBlendShapeProxy } from './VRMBlendShapeProxy';
 
 export class VRMBlendShapeImporter {
   public async import(gltf: THREE.GLTF, schemaBlendShape: VRMSchema.BlendShape): Promise<VRMBlendShapeProxy | null> {
