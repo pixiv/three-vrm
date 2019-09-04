@@ -27,6 +27,7 @@ export class VRMBlendShapeProxy {
 
   /**
    * Return registered blend shape group.
+   *
    * @param name Name of the blend shape group
    */
   public getBlendShapeGroup(name: string | VRMSchema.BlendShapePresetName): VRMBlendShapeGroup | undefined {
@@ -41,6 +42,7 @@ export class VRMBlendShapeProxy {
 
   /**
    * Register a blend shape group.
+   *
    * @param name Name of the blend shape gorup
    * @param controller VRMBlendShapeController that describes the blend shape group
    */
@@ -55,11 +57,22 @@ export class VRMBlendShapeProxy {
     }
   }
 
+  /**
+   * Get current weight of specified blend shape group.
+   *
+   * @param name Name of the blend shape group
+   */
   public getValue(name: VRMSchema.BlendShapePresetName | string): number | null {
     const controller = this.getBlendShapeGroup(name);
     return (controller && controller.weight) || null;
   }
 
+  /**
+   * Set a weight to specified blend shape group.
+   *
+   * @param name Name of the blend shape group
+   * @param weight Weight
+   */
   public setValue(name: VRMSchema.BlendShapePresetName | string, weight: number) {
     const controller = this.getBlendShapeGroup(name);
     if (controller) {
