@@ -517,13 +517,13 @@ export const FirstPerson = (props: Props) => {
 };
 
 export const BlendShape = (props: Props) => {
-  const blendShapeMaster: VRM.VRMBlendShapeMaster = props.vrm.blendShapeMaster!;
+  const blendShapeProxy: VRM.VRMBlendShapeProxy = props.vrm.blendShapeProxy!;
 
   const setValue = (name: VRMSchema.BlendShapePresetName) => {
-    Object.keys(blendShapeMaster.expressions).forEach((vname) => {
-      blendShapeMaster.setValue(vname, 0.0);
+    Object.keys(blendShapeProxy.expressions).forEach((vname) => {
+      blendShapeProxy.setValue(vname, 0.0);
     });
-    blendShapeMaster.setValue(name, 1.0);
+    blendShapeProxy.setValue(name, 1.0);
   };
 
   return (

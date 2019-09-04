@@ -76,13 +76,13 @@ export class VRMImporter {
         ? (await this._firstPersonImporter.import(gltf, humanoid, vrmExt.firstPerson)) || undefined
         : undefined;
 
-    const blendShapeMaster = vrmExt.blendShapeMaster
+    const blendShapeProxy = vrmExt.blendShapeMaster
       ? (await this._blendShapeImporter.import(gltf, vrmExt.blendShapeMaster)) || undefined
       : undefined;
 
     const lookAt =
-      vrmExt.firstPerson && blendShapeMaster && humanoid
-        ? await this._lookAtImporter.import(vrmExt.firstPerson, blendShapeMaster, humanoid)
+      vrmExt.firstPerson && blendShapeProxy && humanoid
+        ? await this._lookAtImporter.import(vrmExt.firstPerson, blendShapeProxy, humanoid)
         : undefined;
 
     const springBoneManager = (await this._springBoneImporter.import(gltf)) || undefined;
@@ -93,7 +93,7 @@ export class VRMImporter {
       materials,
       humanoid,
       firstPerson,
-      blendShapeMaster,
+      blendShapeProxy,
       lookAt,
       springBoneManager,
     });

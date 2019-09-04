@@ -2,7 +2,7 @@ import { VRMSchema } from '../types';
 import { saturate } from '../utils/math';
 import { VRMBlendShapeGroup } from './VRMBlendShapeGroup';
 
-export class VRMBlendShapeMaster {
+export class VRMBlendShapeProxy {
   /**
    * List of registered blend shape.
    */

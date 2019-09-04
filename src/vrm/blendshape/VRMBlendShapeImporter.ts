@@ -2,11 +2,11 @@ import * as THREE from 'three';
 import { GLTFMesh, GLTFPrimitive, VRMSchema } from '../types';
 import { renameMaterialProperty } from '../utils/renameMaterialProperty';
 import { VRMBlendShapeGroup } from './VRMBlendShapeGroup';
-import { VRMBlendShapeMaster } from './VRMBlendShapeMaster';
+import { VRMBlendShapeProxy } from './VRMBlendShapeMaster';
 
 export class VRMBlendShapeImporter {
-  public async import(gltf: THREE.GLTF, schemaBlendShape: VRMSchema.BlendShape): Promise<VRMBlendShapeMaster | null> {
-    const blendShape = new VRMBlendShapeMaster();
+  public async import(gltf: THREE.GLTF, schemaBlendShape: VRMSchema.BlendShape): Promise<VRMBlendShapeProxy | null> {
+    const blendShape = new VRMBlendShapeProxy();
 
     const blendShapeGroups: VRMSchema.BlendShapeGroup[] | undefined = schemaBlendShape.blendShapeGroups;
     if (!blendShapeGroups) {
@@ -19,7 +19,7 @@ export class VRMBlendShapeImporter {
       blendShapeGroups.map(async (schemaGroup) => {
         const name = schemaGroup.name;
         if (name === undefined) {
-          console.warn('createBlendShapeMasterFromVRM: One of blendShapeGroups has no name');
+          console.warn('VRMBlendShapeImporter: One of blendShapeGroups has no name');
           return;
         }
 
@@ -58,7 +58,7 @@ export class VRMBlendShapeImporter {
               )
             ) {
               console.warn(
-                `createBlendShapeMasterFromVRM: ${
+                `VRMBlendShapeImporter: ${
                   schemaGroup.name
                 } attempts to index ${morphTargetIndex}th morph but not found.`,
               );

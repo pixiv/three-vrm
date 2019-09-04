@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { VRMBlendShapeMaster } from './blendshape';
+import { VRMBlendShapeProxy } from './blendshape';
 import { VRMFirstPerson } from './firstperson';
 import { VRMHumanoid } from './humanoid';
 import { VRMLookAtHead } from './lookat';
@@ -11,7 +11,7 @@ import { VRMImporter, VRMImporterOptions } from './VRMImporter';
 export interface VRMParameters {
   scene: THREE.Scene;
   humanoid?: VRMHumanoid;
-  blendShapeMaster?: VRMBlendShapeMaster;
+  blendShapeProxy?: VRMBlendShapeProxy;
   firstPerson?: VRMFirstPerson;
   lookAt?: VRMLookAtHead;
   materials?: THREE.Material[];
@@ -60,10 +60,10 @@ export class VRM {
   public readonly humanoid?: VRMHumanoid;
 
   /**
-   * Contains [[VRMBlendShapeMaster]] of the VRM.
-   * You might want to control these facial expressions via [[VRMBlendShapeMaster.setValue]].
+   * Contains [[VRMBlendShapeProxy]] of the VRM.
+   * You might want to control these facial expressions via [[VRMBlendShapeProxy.setValue]].
    */
-  public readonly blendShapeMaster?: VRMBlendShapeMaster;
+  public readonly blendShapeProxy?: VRMBlendShapeProxy;
 
   /**
    * Contains [[VRMFirstPerson]] of the VRM.
@@ -98,7 +98,7 @@ export class VRM {
   public constructor(params: VRMParameters) {
     this.scene = params.scene;
     this.humanoid = params.humanoid;
-    this.blendShapeMaster = params.blendShapeMaster;
+    this.blendShapeProxy = params.blendShapeProxy;
     this.firstPerson = params.firstPerson;
     this.lookAt = params.lookAt;
     this.materials = params.materials;
@@ -118,8 +118,8 @@ export class VRM {
       this.lookAt.update();
     }
 
-    if (this.blendShapeMaster) {
-      this.blendShapeMaster.update();
+    if (this.blendShapeProxy) {
+      this.blendShapeProxy.update();
     }
 
     if (this.springBoneManager) {

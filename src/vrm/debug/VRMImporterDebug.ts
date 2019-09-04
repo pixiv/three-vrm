@@ -43,13 +43,13 @@ export class VRMImporterDebug extends VRMImporter {
         ? (await this._firstPersonImporter.import(gltf, humanoid, vrmExt.firstPerson)) || undefined
         : undefined;
 
-    const blendShapeMaster = vrmExt.blendShapeMaster
+    const blendShapeProxy = vrmExt.blendShapeMaster
       ? (await this._blendShapeImporter.import(gltf, vrmExt.blendShapeMaster)) || undefined
       : undefined;
 
     const lookAt =
-      blendShapeMaster && humanoid
-        ? await this._lookAtImporter.import(vrmExt.firstPerson, blendShapeMaster, humanoid)
+      blendShapeProxy && humanoid
+        ? await this._lookAtImporter.import(vrmExt.firstPerson, blendShapeProxy, humanoid)
         : undefined;
     if ((lookAt as any).setupHelper) {
       (lookAt as VRMLookAtHeadDebug).setupHelper(scene, debugOption);
@@ -64,7 +64,7 @@ export class VRMImporterDebug extends VRMImporter {
         materials,
         humanoid,
         firstPerson,
-        blendShapeMaster,
+        blendShapeProxy,
         lookAt,
         springBoneManager,
       },

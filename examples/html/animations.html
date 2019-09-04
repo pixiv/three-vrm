@@ -95,7 +95,7 @@
 				);
 
 				const blinkTrack = new THREE.NumberKeyframeTrack(
-					vrm.blendShapeMaster.getBlendShapeGroup( THREE.VRMSchema.BlendShapePresetName.Blink ).name + '.weight', // name
+					vrm.blendShapeProxy.getBlendShapeGroup( THREE.VRMSchema.BlendShapePresetName.Blink ).name + '.weight', // name
 					[ 0.0, 0.5, 1.0 ], // times
 					[ 0.0, 1.0, 0.0 ] // values
 				);

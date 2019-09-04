@@ -1,4 +1,4 @@
-import { VRMBlendShapeMaster } from '../blendshape';
+import { VRMBlendShapeProxy } from '../blendshape';
 import { VRMHumanoid } from '../humanoid';
 import { VRMSchema } from '../types';
 import { VRMLookAtApplyer } from './VRMLookAtApplyer';
@@ -9,16 +9,16 @@ import { VRMLookAtHead } from './VRMLookAtHead';
 export class VRMLookAtImporter {
   public import(
     firstPerson: VRMSchema.FirstPerson,
-    blendShapeMaster: VRMBlendShapeMaster,
+    blendShapeProxy: VRMBlendShapeProxy,
     humanoid: VRMHumanoid,
   ): VRMLookAtHead {
-    const applyer = this._importApplyer(firstPerson, blendShapeMaster, humanoid);
+    const applyer = this._importApplyer(firstPerson, blendShapeProxy, humanoid);
     return new VRMLookAtHead(humanoid, applyer || undefined);
   }
 
   protected _importApplyer(
     firstPerson: VRMSchema.FirstPerson,
-    blendShapeMaster: VRMBlendShapeMaster,
+    blendShapeProxy: VRMBlendShapeProxy,
     humanoid: VRMHumanoid,
   ): VRMLookAtApplyer | null {
     const lookAtHorizontalInner = firstPerson.lookAtHorizontalInner;
@@ -50,7 +50,7 @@ export class VRMLookAtImporter {
           return null;
         } else {
           return new VRMLookAtBlendShapeApplyer(
-            blendShapeMaster,
+            blendShapeProxy,
             lookAtHorizontalOuter,
             lookAtVerticalDown,
             lookAtVerticalUp,
