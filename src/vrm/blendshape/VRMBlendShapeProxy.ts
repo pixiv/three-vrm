@@ -68,6 +68,17 @@ export class VRMBlendShapeProxy {
   }
 
   /**
+   * Get a track name of specified blend shape group.
+   * This track name is needed to manipulate its blend shape group via keyframe animations.
+   *
+   * @param name Name of the blend shape group
+   */
+  public getBlendShapeTrackName(name: VRMSchema.BlendShapePresetName | string): string | null {
+    const controller = this.getBlendShapeGroup(name);
+    return controller ? `${controller.name}.weight` : null;
+  }
+
+  /**
    * Update every blend shape groups.
    */
   public update() {
