@@ -1,13 +1,13 @@
 import * as THREE from 'three';
 import { GLTFPrimitive } from '../types';
 
-export interface BlendShapeBind {
+export interface VRMBlendShapeBind {
   meshes: GLTFPrimitive[];
   morphTargetIndex: number;
   weight: number;
 }
 
-enum BlendShapeMaterialValueType {
+enum VRMBlendShapeMaterialValueType {
   NUMBER,
   VECTOR2,
   VECTOR3,
@@ -15,13 +15,13 @@ enum BlendShapeMaterialValueType {
   COLOR,
 }
 
-export interface BlendShapeMaterialValue {
+export interface VRMBlendShapeMaterialValue {
   material: THREE.Material;
   propertyName: string;
   defaultValue: number | THREE.Vector2 | THREE.Vector3 | THREE.Vector4 | THREE.Color;
   targetValue: number | THREE.Vector2 | THREE.Vector3 | THREE.Vector4 | THREE.Color;
   deltaValue: number | THREE.Vector2 | THREE.Vector3 | THREE.Vector4 | THREE.Color; // targetValue - defaultValue
-  type: BlendShapeMaterialValueType;
+  type: VRMBlendShapeMaterialValueType;
 }
 
 const _v2 = new THREE.Vector2();
@@ -31,12 +31,12 @@ const _color = new THREE.Color();
 
 // animationMixer の監視対象は、Scene の中に入っている必要がある。
 // そのため、表示オブジェクトではないけれど、Object3D を継承して Scene に投入できるようにする。
-export class BlendShapeController extends THREE.Object3D {
+export class VRMBlendShapeGroup extends THREE.Object3D {
   public weight: number = 0.0;
   public isBinary: boolean = false;
 
-  private _binds: BlendShapeBind[] = [];
-  private _materialValues: BlendShapeMaterialValue[] = [];
+  private _binds: VRMBlendShapeBind[] = [];
+  private _materialValues: VRMBlendShapeMaterialValue[] = [];
 
   constructor(expressionName: string) {
     super();
@@ -76,23 +76,23 @@ export class BlendShapeController extends THREE.Object3D {
     }
     value = args.defaultValue || value;
 
-    let type: BlendShapeMaterialValueType;
+    let type: VRMBlendShapeMaterialValueType;
     let defaultValue: number | THREE.Vector2 | THREE.Vector3 | THREE.Vector4 | THREE.Color;
     let targetValue: number | THREE.Vector2 | THREE.Vector3 | THREE.Vector4 | THREE.Color;
     let deltaValue: number | THREE.Vector2 | THREE.Vector3 | THREE.Vector4 | THREE.Color;
 
     if ((value as any).isVector2) {
-      type = BlendShapeMaterialValueType.VECTOR2;
+      type = VRMBlendShapeMaterialValueType.VECTOR2;
       defaultValue = (value as THREE.Vector2).clone();
       targetValue = new THREE.Vector2().fromArray(args.targetValue);
       deltaValue = targetValue.clone().sub(defaultValue);
     } else if ((value as any).isVector3) {
-      type = BlendShapeMaterialValueType.VECTOR3;
+      type = VRMBlendShapeMaterialValueType.VECTOR3;
       defaultValue = (value as THREE.Vector3).clone();
       targetValue = new THREE.Vector3().fromArray(args.targetValue);
       deltaValue = targetValue.clone().sub(defaultValue);
     } else if ((value as any).isVector4) {
-      type = BlendShapeMaterialValueType.VECTOR4;
+      type = VRMBlendShapeMaterialValueType.VECTOR4;
       defaultValue = (value as THREE.Vector4).clone();
 
       // vectorProperty and targetValue index is different from each other
@@ -113,12 +113,12 @@ export class BlendShapeController extends THREE.Object3D {
       ]);
       deltaValue = targetValue.clone().sub(defaultValue);
     } else if ((value as any).isColor) {
-      type = BlendShapeMaterialValueType.COLOR;
+      type = VRMBlendShapeMaterialValueType.COLOR;
       defaultValue = (value as THREE.Color).clone();
       targetValue = new THREE.Color().fromArray(args.targetValue);
       deltaValue = targetValue.clone().sub(defaultValue);
     } else {
-      type = BlendShapeMaterialValueType.NUMBER;
+      type = VRMBlendShapeMaterialValueType.NUMBER;
       defaultValue = value as number;
       targetValue = args.targetValue[0];
       deltaValue = targetValue - defaultValue;
@@ -156,19 +156,19 @@ export class BlendShapeController extends THREE.Object3D {
         return;
       } // TODO: we should kick this at `addMaterialValue`
 
-      if (materialValue.type === BlendShapeMaterialValueType.NUMBER) {
+      if (materialValue.type === VRMBlendShapeMaterialValueType.NUMBER) {
         const deltaValue = materialValue.deltaValue as number;
         (materialValue.material as any)[materialValue.propertyName] += deltaValue * w;
-      } else if (materialValue.type === BlendShapeMaterialValueType.VECTOR2) {
+      } else if (materialValue.type === VRMBlendShapeMaterialValueType.VECTOR2) {
         const deltaValue = materialValue.deltaValue as THREE.Vector2;
         (materialValue.material as any)[materialValue.propertyName].add(_v2.copy(deltaValue).multiplyScalar(w));
-      } else if (materialValue.type === BlendShapeMaterialValueType.VECTOR3) {
+      } else if (materialValue.type === VRMBlendShapeMaterialValueType.VECTOR3) {
         const deltaValue = materialValue.deltaValue as THREE.Vector3;
         (materialValue.material as any)[materialValue.propertyName].add(_v3.copy(deltaValue).multiplyScalar(w));
-      } else if (materialValue.type === BlendShapeMaterialValueType.VECTOR4) {
+      } else if (materialValue.type === VRMBlendShapeMaterialValueType.VECTOR4) {
         const deltaValue = materialValue.deltaValue as THREE.Vector4;
         (materialValue.material as any)[materialValue.propertyName].add(_v4.copy(deltaValue).multiplyScalar(w));
-      } else if (materialValue.type === BlendShapeMaterialValueType.COLOR) {
+      } else if (materialValue.type === VRMBlendShapeMaterialValueType.COLOR) {
         const deltaValue = materialValue.deltaValue as THREE.Color;
         (materialValue.material as any)[materialValue.propertyName].add(_color.copy(deltaValue).multiplyScalar(w));
       }
@@ -198,19 +198,19 @@ export class BlendShapeController extends THREE.Object3D {
         return;
       } // TODO: we should kick this at `addMaterialValue`
 
-      if (materialValue.type === BlendShapeMaterialValueType.NUMBER) {
+      if (materialValue.type === VRMBlendShapeMaterialValueType.NUMBER) {
         const defaultValue = materialValue.defaultValue as number;
         (materialValue.material as any)[materialValue.propertyName] = defaultValue;
-      } else if (materialValue.type === BlendShapeMaterialValueType.VECTOR2) {
+      } else if (materialValue.type === VRMBlendShapeMaterialValueType.VECTOR2) {
         const defaultValue = materialValue.defaultValue as THREE.Vector2;
         (materialValue.material as any)[materialValue.propertyName].copy(defaultValue);
-      } else if (materialValue.type === BlendShapeMaterialValueType.VECTOR3) {
+      } else if (materialValue.type === VRMBlendShapeMaterialValueType.VECTOR3) {
         const defaultValue = materialValue.defaultValue as THREE.Vector3;
         (materialValue.material as any)[materialValue.propertyName].copy(defaultValue);
-      } else if (materialValue.type === BlendShapeMaterialValueType.VECTOR4) {
+      } else if (materialValue.type === VRMBlendShapeMaterialValueType.VECTOR4) {
         const defaultValue = materialValue.defaultValue as THREE.Vector4;
         (materialValue.material as any)[materialValue.propertyName].copy(defaultValue);
-      } else if (materialValue.type === BlendShapeMaterialValueType.COLOR) {
+      } else if (materialValue.type === VRMBlendShapeMaterialValueType.COLOR) {
         const defaultValue = materialValue.defaultValue as THREE.Color;
         (materialValue.material as any)[materialValue.propertyName].copy(defaultValue);
       }

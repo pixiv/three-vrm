@@ -1,3 +1,3 @@
+export * from './VRMBlendShapeGroup';
+export * from './VRMBlendShapeImporter';
 export * from './VRMBlendShapeProxy';
-export * from './BlendShapeController';
-export * from './BlendShapeMaster';
