@@ -3,10 +3,13 @@ import { reduceBones } from '../reduceBones';
 import { VRMImporter, VRMImporterOptions } from '../VRMImporter';
 import { DebugOption } from './DebugOption';
 import { VRMDebug } from './VRMDebug';
+import { VRMLookAtHeadDebug } from './VRMLookAtHeadDebug';
+import { VRMLookAtImporterDebug } from './VRMLookAtImporterDebug';
 import { VRMSpringBoneImporterDebug } from './VRMSpringBoneImporterDebug';
 
 export class VRMImporterDebug extends VRMImporter {
   public constructor(options: VRMImporterOptions = {}) {
+    options.lookAtImporter = options.lookAtImporter || new VRMLookAtImporterDebug();
     options.springBoneImporter = options.springBoneImporter || new VRMSpringBoneImporterDebug();
     super(options);
   }
@@ -33,19 +36,24 @@ export class VRMImporterDebug extends VRMImporter {
 
     const materials = await this._materialImporter.convertGLTFMaterials(gltf);
 
-    const humanBones = (await this.loadHumanoid(gltf)) || undefined;
+    const humanoid = (await this._humanoidImporter.import(gltf, vrmExt.humanoid)) || undefined;
 
     const firstPerson =
-      vrmExt.firstPerson && humanBones
-        ? (await this._firstPersonImporter.import(gltf, humanBones, vrmExt.firstPerson)) || undefined
+      vrmExt.firstPerson && humanoid
+        ? (await this._firstPersonImporter.import(gltf, humanoid, vrmExt.firstPerson)) || undefined
         : undefined;
 
-    const animationMixer = new THREE.AnimationMixer(gltf.scene);
-
-    const blendShapeProxy = (await this.loadBlendShapeMaster(animationMixer!, gltf)) || undefined;
+    const blendShapeProxy = vrmExt.blendShapeMaster
+      ? (await this._blendShapeImporter.import(gltf, vrmExt.blendShapeMaster)) || undefined
+      : undefined;
 
     const lookAt =
-      blendShapeProxy && humanBones ? this.loadLookAt(vrmExt.firstPerson, blendShapeProxy, humanBones) : undefined;
+      blendShapeProxy && humanoid
+        ? await this._lookAtImporter.import(vrmExt.firstPerson, blendShapeProxy, humanoid)
+        : undefined;
+    if ((lookAt as any).setupHelper) {
+      (lookAt as VRMLookAtHeadDebug).setupHelper(scene, debugOption);
+    }
 
     const springBoneManager = (await this._springBoneImporter.import(gltf)) || undefined;
 
@@ -54,9 +62,8 @@ export class VRMImporterDebug extends VRMImporter {
         scene: gltf.scene,
         meta: vrmExt.meta,
         materials,
-        humanBones,
+        humanoid,
         firstPerson,
-        animationMixer,
         blendShapeProxy,
         lookAt,
         springBoneManager,

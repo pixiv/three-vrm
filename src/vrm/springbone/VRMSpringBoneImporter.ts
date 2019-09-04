@@ -1,6 +1,5 @@
 import * as THREE from 'three';
-import { GLTFNode } from '../types';
-import * as Raw from '../types/VRM';
+import { GLTFNode, VRMSchema } from '../types';
 import { GIZMO_RENDER_ORDER, VRMSpringBone } from './VRMSpringBone';
 import { ColliderMesh, VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';
 import { VRMSpringBoneGroup, VRMSpringBoneManager } from './VRMSpringBoneManager';
@@ -50,7 +49,7 @@ export class VRMSpringBoneImporter {
     gltf: THREE.GLTF,
     colliderGroups: VRMSpringBoneColliderGroup[],
   ): Promise<VRMSpringBoneGroup[]> {
-    const springBoneGroups: Raw.RawVrmSecondaryanimationSpring[] = gltf.parser.json.extensions!.VRM!.secondaryAnimation!
+    const springBoneGroups: VRMSchema.SecondaryAnimationSpring[] = gltf.parser.json.extensions!.VRM!.secondaryAnimation!
       .boneGroups;
 
     const springBoneGroupList: VRMSpringBoneGroup[] = [];
@@ -121,7 +120,7 @@ export class VRMSpringBoneImporter {
    * Create an array of [[VRMSpringBoneColliderGroup]].
    */
   private async getColliderMeshGroups(gltf: THREE.GLTF): Promise<VRMSpringBoneColliderGroup[]> {
-    const vrmExt: Raw.RawVrm | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
+    const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
     if (vrmExt === undefined) {
       return [];
     }
