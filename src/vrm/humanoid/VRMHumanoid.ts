@@ -1,25 +1,49 @@
 import { GLTFNode, RawVector3, RawVector4, VRMPose, VRMSchema } from '../types';
+import { VRMHumanBone } from './VRMHumanBone';
+import { VRMHumanBoneArray } from './VRMHumanBoneArray';
 import { VRMHumanBones } from './VRMHumanBones';
 import { VRMHumanDescription } from './VRMHumanDescription';
 
+/**
+ * A class represents humanoid of a VRM.
+ */
 export class VRMHumanoid {
   public readonly humanBones: VRMHumanBones;
   public readonly humanDescription: VRMHumanDescription;
 
   public readonly restPose: VRMPose;
 
-  public constructor(humanBones: VRMHumanBones, humanDescription: VRMHumanDescription) {
-    this.humanBones = humanBones;
+  /**
+   * Create a new [[VRMHumanoid]].
+   * @param boneArray A [[VRMHumanBoneArray]] contains all the bones of the new humanoid
+   * @param humanDescription A [[VRMHumanDescription]] represents the new humanoid
+   */
+  public constructor(boneArray: VRMHumanBoneArray, humanDescription: VRMHumanDescription) {
+    this.humanBones = this._createHumanBones(boneArray);
     this.humanDescription = humanDescription;
 
     this.restPose = this.getPose();
   }
 
+  /**
+   * Return the current pose of this humanoid as a [[VRMPose]].
+   */
   public getPose(): VRMPose {
     const pose: VRMPose = {};
     Object.keys(this.humanBones).forEach(
       (vrmBoneName) => {
         const node = this.getBoneNode(vrmBoneName as VRMSchema.HumanoidBoneName)!;
+
+        // Ignore when there are no bone on the VRMHumanoid
+        if (!node) {
+          return;
+        }
+
+        // When there are two or more bones in a same name, we are not going to overwrite existing one
+        if (pose[vrmBoneName]) {
+          return;
+        }
+
         pose[vrmBoneName] = {
           position: node.position.toArray() as RawVector3,
           rotation: node.quaternion.toArray() as RawVector4,
@@ -30,6 +54,11 @@ export class VRMHumanoid {
     return pose;
   }
 
+  /**
+   * Let the humanoid do a specified pose.
+   *
+   * @param poseObject A [[VRMPose]] that represents a single pose
+   */
   public setPose(poseObject: VRMPose): void {
     Object.keys(poseObject).forEach((boneName) => {
       const state = poseObject[boneName]!;
@@ -59,7 +88,55 @@ export class VRMHumanoid {
     });
   }
 
+  /**
+   * Return a bone bound to a specified [[HumanBone]], as a [[VRMHumanBone]].
+   *
+   * @param name Name of the bone you want
+   */
+  public getBone(name: VRMSchema.HumanoidBoneName): VRMHumanBone | undefined {
+    return this.humanBones[name][0] || undefined;
+  }
+
+  /**
+   * Return bones bound to a specified [[HumanBone]], as an array of [[VRMHumanBone]].
+   *
+   * @param name Name of the bone you want
+   */
+  public getBones(name: VRMSchema.HumanoidBoneName): VRMHumanBone[] {
+    return this.humanBones[name];
+  }
+
+  /**
+   * Return a bone bound to a specified [[HumanBone]], as a THREE.Object3D.
+   *
+   * @param name Name of the bone you want
+   */
   public getBoneNode(name: VRMSchema.HumanoidBoneName): GLTFNode | null {
-    return (this.humanBones && this.humanBones[name] && this.humanBones[name]!.node) || null;
+    return (this.humanBones[name][0] && this.humanBones[name][0].node) || null;
+  }
+
+  /**
+   * Return bones bound to a specified [[HumanBone]], as an array of THREE.Object3D.
+   *
+   * @param name Name of the bone you want
+   */
+  public getBoneNodes(name: VRMSchema.HumanoidBoneName): GLTFNode[] {
+    return this.humanBones[name].map((bone) => bone.node);
+  }
+
+  /**
+   * Prepare a [[VRMHumanBones]] from a [[VRMHumanBoneArray]].
+   */
+  private _createHumanBones(boneArray: VRMHumanBoneArray): VRMHumanBones {
+    const bones: VRMHumanBones = Object.values(VRMSchema.HumanoidBoneName).reduce((accum, name) => {
+      accum[name] = [];
+      return accum;
+    }, {});
+
+    boneArray.forEach((bone) => {
+      bones[bone.name].push(bone.bone);
+    });
+
+    return bones;
   }
 }
