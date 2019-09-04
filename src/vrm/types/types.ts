@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { VRMSchema } from '.';
 
 /**
  * A single node of GLTF, represented as Three.js object.
@@ -50,18 +49,6 @@ export interface VRMPoseTransform {
  */
 export interface VRMPose {
   [boneName: string]: VRMPoseTransform | undefined;
-}
-
-export interface AnimationClipKeyframe {
-  name: VRMSchema.HumanoidBone | VRMSchema.BlendShapePresetName;
-  type: 'morph' | 'rotation' | 'position';
-  times: number[];
-  values: number[];
-}
-
-export interface AnimationClipData {
-  duration: number;
-  tracks: AnimationClipKeyframe[];
 }
 
 /**
