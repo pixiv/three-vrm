@@ -1,23 +1,25 @@
 import * as THREE from 'three';
-import { BlendShapeController, BlendShapeMaster, VRMBlendShapeProxy } from './blendshape';
+import { VRMBlendShapeImporter } from './blendshape';
 import { VRMFirstPersonImporter } from './firstperson';
 import { VRMHumanoidImporter } from './humanoid/VRMHumanoidImporter';
 import { VRMLookAtImporter } from './lookat/VRMLookAtImporter';
 import { VRMMaterialImporter } from './material';
 import { reduceBones } from './reduceBones';
 import { VRMSpringBoneImporter } from './springbone/VRMSpringBoneImporter';
-import { GLTFMesh, GLTFPrimitive, VRMSchema } from './types';
+import { VRMSchema } from './types';
 import { VRM } from './VRM';
 
 export interface VRMImporterOptions {
   lookAtImporter?: VRMLookAtImporter;
   humanoidImporter?: VRMHumanoidImporter;
+  blendShapeImporter?: VRMBlendShapeImporter;
   firstPersonImporter?: VRMFirstPersonImporter;
   materialImporter?: VRMMaterialImporter;
   springBoneImporter?: VRMSpringBoneImporter;
 }
 
 export class VRMImporter {
+  protected readonly _blendShapeImporter: VRMBlendShapeImporter;
   protected readonly _lookAtImporter: VRMLookAtImporter;
   protected readonly _humanoidImporter: VRMHumanoidImporter;
   protected readonly _firstPersonImporter: VRMFirstPersonImporter;
@@ -30,6 +32,7 @@ export class VRMImporter {
    * @param options [[VRMImporterOptions]], optionally contains importers for each component
    */
   public constructor(options: VRMImporterOptions = {}) {
+    this._blendShapeImporter = options.blendShapeImporter || new VRMBlendShapeImporter();
     this._lookAtImporter = options.lookAtImporter || new VRMLookAtImporter();
     this._humanoidImporter = options.humanoidImporter || new VRMHumanoidImporter();
     this._firstPersonImporter = options.firstPersonImporter || new VRMFirstPersonImporter();
@@ -73,9 +76,9 @@ export class VRMImporter {
         ? (await this._firstPersonImporter.import(gltf, humanoid, vrmExt.firstPerson)) || undefined
         : undefined;
 
-    const animationMixer = new THREE.AnimationMixer(gltf.scene);
-
-    const blendShapeProxy = (await this.loadBlendShapeMaster(animationMixer!, gltf)) || undefined;
+    const blendShapeProxy = vrmExt.blendShapeMaster
+      ? (await this._blendShapeImporter.import(gltf, vrmExt.blendShapeMaster)) || undefined
+      : undefined;
 
     const lookAt =
       vrmExt.firstPerson && firstPerson && blendShapeProxy && humanoid
@@ -90,144 +93,9 @@ export class VRMImporter {
       materials,
       humanoid,
       firstPerson,
-      animationMixer,
       blendShapeProxy,
       lookAt,
       springBoneManager,
     });
-  }
-
-  /**
-   *
-   * @param {AnimationMixer} animationMixer
-   * @param {GLTF} gltf
-   * @returns {VRMBlendShapeProxy}
-   */
-  public async loadBlendShapeMaster(
-    animationMixer: THREE.AnimationMixer,
-    gltf: THREE.GLTF,
-  ): Promise<VRMBlendShapeProxy | null> {
-    const blendShapeGroups: VRMSchema.BlendShapeGroup[] | undefined =
-      gltf.parser.json.extensions &&
-      gltf.parser.json.extensions.VRM &&
-      gltf.parser.json.extensions.VRM.blendShapeMaster &&
-      gltf.parser.json.extensions.VRM.blendShapeMaster.blendShapeGroups;
-    if (!blendShapeGroups) {
-      return null;
-    }
-
-    const blendShapeMaster = new BlendShapeMaster();
-    const blendShapePresetMap: { [presetName in VRMSchema.BlendShapePresetName]?: string } = {};
-
-    blendShapeGroups.forEach(async (group) => {
-      const name = group.name;
-      if (name === undefined) {
-        console.warn('createBlendShapeMasterFromVRM: One of blendShapeGroups has no name');
-        return;
-      }
-
-      if (
-        group.presetName &&
-        group.presetName !== VRMSchema.BlendShapePresetName.Unknown &&
-        !blendShapePresetMap[group.presetName]
-      ) {
-        blendShapePresetMap[group.presetName] = group.name;
-      }
-
-      const controller = new BlendShapeController(name);
-      gltf.scene.add(controller);
-
-      controller.isBinary = group.isBinary || false;
-
-      if (Array.isArray(group.binds)) {
-        group.binds.forEach(async (bind) => {
-          if (bind.mesh === undefined || bind.index === undefined) {
-            return;
-          }
-
-          const morphMeshes: GLTFMesh = await gltf.parser.getDependency('mesh', bind.mesh);
-          const primitives: GLTFPrimitive[] =
-            morphMeshes.type === 'Group'
-              ? (morphMeshes.children as Array<GLTFPrimitive>)
-              : [morphMeshes as GLTFPrimitive];
-          const morphTargetIndex = bind.index;
-          if (
-            !primitives.every(
-              (primitive) =>
-                Array.isArray(primitive.morphTargetInfluences) &&
-                morphTargetIndex < primitive.morphTargetInfluences.length,
-            )
-          ) {
-            console.warn(
-              `createBlendShapeMasterFromVRM: ${
-                group.name
-              } attempts to index ${morphTargetIndex}th morph but not found.`,
-            );
-            return;
-          }
-
-          controller.addBind({
-            meshes: primitives,
-            morphTargetIndex,
-            weight: bind.weight || 100,
-          });
-        });
-      }
-
-      const materialValues = group.materialValues;
-      if (Array.isArray(materialValues)) {
-        materialValues.forEach((materialValue) => {
-          if (
-            materialValue.materialName === undefined ||
-            materialValue.propertyName === undefined ||
-            materialValue.targetValue === undefined
-          ) {
-            return;
-          }
-
-          const materials: THREE.Material[] = [];
-          gltf.scene.traverse((object) => {
-            if ((object as any).material) {
-              const material: THREE.Material[] | THREE.Material = (object as any).material;
-              if (Array.isArray(material)) {
-                materials.push(
-                  ...material.filter(
-                    (mtl) => mtl.name === materialValue.materialName! && materials.indexOf(mtl) === -1,
-                  ),
-                );
-              } else if (material.name === materialValue.materialName && materials.indexOf(material) === -1) {
-                materials.push(material);
-              }
-            }
-          });
-
-          materials.forEach((material) => {
-            controller.addMaterialValue({
-              material,
-              propertyName: this.renameMaterialProperty(materialValue.propertyName!),
-              targetValue: materialValue.targetValue!,
-            });
-          });
-        });
-      }
-
-      blendShapeMaster.registerBlendShapeGroup(name, controller);
-    });
-
-    return VRMBlendShapeProxy.create(animationMixer, blendShapeMaster, blendShapePresetMap);
-  }
-
-  private renameMaterialProperty(name: string): string {
-    if (name[0] !== '_') {
-      console.warn(`VRMMaterials: Given property name "${name}" might be invalid`);
-      return name;
-    }
-    name = name.substring(1);
-
-    if (!/[A-Z]/.test(name[0])) {
-      console.warn(`VRMMaterials: Given property name "${name}" might be invalid`);
-      return name;
-    }
-    return name[0].toLowerCase() + name.substring(1);
   }
 }

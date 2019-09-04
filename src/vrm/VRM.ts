@@ -11,7 +11,6 @@ import { VRMImporter, VRMImporterOptions } from './VRMImporter';
 export interface VRMParameters {
   scene: THREE.Scene;
   humanoid?: VRMHumanoid;
-  animationMixer?: THREE.AnimationMixer;
   blendShapeProxy?: VRMBlendShapeProxy;
   firstPerson?: VRMFirstPerson;
   lookAt?: VRMLookAtHead;
@@ -86,11 +85,6 @@ export class VRM {
   public readonly meta?: VRMSchema.Meta;
 
   /**
-   * Contains AnimationMixer associated with the [[VRM.blendShapeProxy]].
-   */
-  public readonly animationMixer?: THREE.AnimationMixer;
-
-  /**
    * A [[VRMSpringBoneManager]] manipulates all spring bones attached on the VRM.
    * Usually you don't have to care about this property.
    */
@@ -104,7 +98,6 @@ export class VRM {
   public constructor(params: VRMParameters) {
     this.scene = params.scene;
     this.humanoid = params.humanoid;
-    this.animationMixer = params.animationMixer;
     this.blendShapeProxy = params.blendShapeProxy;
     this.firstPerson = params.firstPerson;
     this.lookAt = params.lookAt;
@@ -123,10 +116,6 @@ export class VRM {
   public update(delta: number): void {
     if (this.lookAt) {
       this.lookAt.update(delta);
-    }
-
-    if (this.animationMixer) {
-      this.animationMixer.update(delta);
     }
 
     if (this.blendShapeProxy) {

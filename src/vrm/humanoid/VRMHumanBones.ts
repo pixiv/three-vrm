@@ -1,5 +1,7 @@
+import { VRMSchema } from '../types';
 import { VRMHumanBone } from './VRMHumanBone';
 
-export interface VRMHumanBones {
-  [key: string]: VRMHumanBone | undefined;
-}
+/**
+ * This object is a object variant of [[VRMHumanBoneArray]], used internally in [[VRMHumanoid]].
+ */
+export type VRMHumanBones = { [name in VRMSchema.HumanoidBoneName]: VRMHumanBone[] };
