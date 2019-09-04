@@ -1,7 +1,7 @@
 /* tslint:disable:member-ordering */
 
 import * as THREE from 'three';
-import { getTexelDecodingFunction } from './getTexelDecodingFunction';
+import { getTexelDecodingFunction } from './texel-decoder';
 
 const TAU = 2.0 * Math.PI;
 
@@ -11,11 +11,11 @@ const TAU = 2.0 * Math.PI;
  *
  * See: https://github.com/Santarh/MToon
  */
-export class MToonMaterial extends THREE.ShaderMaterial {
+export class MToon extends THREE.ShaderMaterial {
   /**
-   * Readonly boolean that indicates this is a [[MToonMaterial]].
+   * Readonly boolean that indicates this is a MToon material.
    */
-  public readonly isMToonMaterial: boolean = true;
+  public readonly isVRMMToon: boolean = true;
 
   public cutoff: number = 0.5; // _Cutoff
   public color: THREE.Vector4 = new THREE.Vector4(1.0, 1.0, 1.0, 1.0); // _Color
@@ -60,12 +60,12 @@ export class MToonMaterial extends THREE.ShaderMaterial {
 
   public shouldApplyUniforms: boolean = true; // when this is true, applyUniforms effects
 
-  private _debugMode: MToonMaterialDebugMode = MToonMaterialDebugMode.None; // _DebugMode
-  private _blendMode: MToonMaterialRenderMode = MToonMaterialRenderMode.Opaque; // _BlendMode
-  private _outlineWidthMode: MToonMaterialOutlineWidthMode = MToonMaterialOutlineWidthMode.None; // _OutlineWidthMode
-  private _outlineColorMode: MToonMaterialOutlineColorMode = MToonMaterialOutlineColorMode.FixedColor; // _OutlineColorMode
-  private _cullMode: MToonMaterialCullMode = MToonMaterialCullMode.Back; // _CullMode
-  private _outlineCullMode: MToonMaterialCullMode = MToonMaterialCullMode.Front; // _OutlineCullMode
+  private _debugMode: MToonDebugMode = MToonDebugMode.None; // _DebugMode
+  private _blendMode: MToonRenderMode = MToonRenderMode.Opaque; // _BlendMode
+  private _outlineWidthMode: MToonOutlineWidthMode = MToonOutlineWidthMode.None; // _OutlineWidthMode
+  private _outlineColorMode: MToonOutlineColorMode = MToonOutlineColorMode.FixedColor; // _OutlineColorMode
+  private _cullMode: MToonCullMode = MToonCullMode.Back; // _CullMode
+  private _outlineCullMode: MToonCullMode = MToonCullMode.Front; // _OutlineCullMode
   // public srcBlend: number = 1.0; // _SrcBlend (is not supported)
   // public dstBlend: number = 0.0; // _DstBlend (is not supported)
   // public zWrite: number = 1.0; // _ZWrite (will be converted to depthWrite)
@@ -189,65 +189,64 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.emissiveMap = t;
   }
 
-  get blendMode(): MToonMaterialRenderMode {
+  get blendMode(): MToonRenderMode {
     return this._blendMode;
   }
 
-  set blendMode(m: MToonMaterialRenderMode) {
+  set blendMode(m: MToonRenderMode) {
     this._blendMode = m;
 
-    this.depthWrite = this._blendMode !== MToonMaterialRenderMode.Transparent;
+    this.depthWrite = this._blendMode !== MToonRenderMode.Transparent;
     this.transparent =
-      this._blendMode === MToonMaterialRenderMode.Transparent ||
-      this._blendMode === MToonMaterialRenderMode.TransparentWithZWrite;
+      this._blendMode === MToonRenderMode.Transparent || this._blendMode === MToonRenderMode.TransparentWithZWrite;
     this.updateShaderCode();
   }
 
-  get debugMode(): MToonMaterialDebugMode {
+  get debugMode(): MToonDebugMode {
     return this._debugMode;
   }
 
-  set debugMode(m: MToonMaterialDebugMode) {
+  set debugMode(m: MToonDebugMode) {
     this._debugMode = m;
 
     this.updateShaderCode();
   }
 
-  get outlineWidthMode(): MToonMaterialOutlineWidthMode {
+  get outlineWidthMode(): MToonOutlineWidthMode {
     return this._outlineWidthMode;
   }
 
-  set outlineWidthMode(m: MToonMaterialOutlineWidthMode) {
+  set outlineWidthMode(m: MToonOutlineWidthMode) {
     this._outlineWidthMode = m;
 
     this.updateShaderCode();
   }
 
-  get outlineColorMode(): MToonMaterialOutlineColorMode {
+  get outlineColorMode(): MToonOutlineColorMode {
     return this._outlineColorMode;
   }
 
-  set outlineColorMode(m: MToonMaterialOutlineColorMode) {
+  set outlineColorMode(m: MToonOutlineColorMode) {
     this._outlineColorMode = m;
 
     this.updateShaderCode();
   }
 
-  get cullMode(): MToonMaterialCullMode {
+  get cullMode(): MToonCullMode {
     return this._cullMode;
   }
 
-  set cullMode(m: MToonMaterialCullMode) {
+  set cullMode(m: MToonCullMode) {
     this._cullMode = m;
 
     this.updateCullFace();
   }
 
-  get outlineCullMode(): MToonMaterialCullMode {
+  get outlineCullMode(): MToonCullMode {
     return this._outlineCullMode;
   }
 
-  set outlineCullMode(m: MToonMaterialCullMode) {
+  set outlineCullMode(m: MToonCullMode) {
     this._outlineCullMode = m;
 
     this.updateCullFace();
@@ -403,11 +402,10 @@ export class MToonMaterial extends THREE.ShaderMaterial {
   private updateShaderCode() {
     this.defines = {
       OUTLINE: this._isOutline,
-      BLENDMODE_OPAQUE: this._blendMode === MToonMaterialRenderMode.Opaque,
-      BLENDMODE_CUTOUT: this._blendMode === MToonMaterialRenderMode.Cutout,
+      BLENDMODE_OPAQUE: this._blendMode === MToonRenderMode.Opaque,
+      BLENDMODE_CUTOUT: this._blendMode === MToonRenderMode.Cutout,
       BLENDMODE_TRANSPARENT:
-        this._blendMode === MToonMaterialRenderMode.Transparent ||
-        this._blendMode === MToonMaterialRenderMode.TransparentWithZWrite,
+        this._blendMode === MToonRenderMode.Transparent || this._blendMode === MToonRenderMode.TransparentWithZWrite,
       USE_SHADETEXTURE: this.shadeTexture !== null,
       USE_RECEIVESHADOWTEXTURE: this.receiveShadowTexture !== null,
       USE_SHADINGGRADETEXTURE: this.shadingGradeTexture !== null,
@@ -415,13 +413,13 @@ export class MToonMaterial extends THREE.ShaderMaterial {
       USE_SPHEREADD: this.sphereAdd !== null,
       USE_OUTLINEWIDTHTEXTURE: this.outlineWidthTexture !== null,
       USE_UVANIMMASKTEXTURE: this.uvAnimMaskTexture !== null,
-      DEBUG_NORMAL: this._debugMode === MToonMaterialDebugMode.Normal,
-      DEBUG_LITSHADERATE: this._debugMode === MToonMaterialDebugMode.LitShadeRate,
-      DEBUG_UV: this._debugMode === MToonMaterialDebugMode.UV,
-      OUTLINE_WIDTH_WORLD: this._outlineWidthMode === MToonMaterialOutlineWidthMode.WorldCoordinates,
-      OUTLINE_WIDTH_SCREEN: this._outlineWidthMode === MToonMaterialOutlineWidthMode.ScreenCoordinates,
-      OUTLINE_COLOR_FIXED: this._outlineColorMode === MToonMaterialOutlineColorMode.FixedColor,
-      OUTLINE_COLOR_MIXED: this._outlineColorMode === MToonMaterialOutlineColorMode.MixedLighting,
+      DEBUG_NORMAL: this._debugMode === MToonDebugMode.Normal,
+      DEBUG_LITSHADERATE: this._debugMode === MToonDebugMode.LitShadeRate,
+      DEBUG_UV: this._debugMode === MToonDebugMode.UV,
+      OUTLINE_WIDTH_WORLD: this._outlineWidthMode === MToonOutlineWidthMode.WorldCoordinates,
+      OUTLINE_WIDTH_SCREEN: this._outlineWidthMode === MToonOutlineWidthMode.ScreenCoordinates,
+      OUTLINE_COLOR_FIXED: this._outlineColorMode === MToonOutlineColorMode.FixedColor,
+      OUTLINE_COLOR_MIXED: this._outlineColorMode === MToonOutlineColorMode.MixedLighting,
     };
 
     // == texture encodings ====================================================
@@ -443,19 +441,19 @@ export class MToonMaterial extends THREE.ShaderMaterial {
 
   private updateCullFace() {
     if (!this.isOutline) {
-      if (this.cullMode === MToonMaterialCullMode.Off) {
+      if (this.cullMode === MToonCullMode.Off) {
         this.side = THREE.DoubleSide;
-      } else if (this.cullMode === MToonMaterialCullMode.Front) {
+      } else if (this.cullMode === MToonCullMode.Front) {
         this.side = THREE.BackSide;
-      } else if (this.cullMode === MToonMaterialCullMode.Back) {
+      } else if (this.cullMode === MToonCullMode.Back) {
         this.side = THREE.FrontSide;
       }
     } else {
-      if (this.outlineCullMode === MToonMaterialCullMode.Off) {
+      if (this.outlineCullMode === MToonCullMode.Off) {
         this.side = THREE.DoubleSide;
-      } else if (this.outlineCullMode === MToonMaterialCullMode.Front) {
+      } else if (this.outlineCullMode === MToonCullMode.Front) {
         this.side = THREE.BackSide;
-      } else if (this.outlineCullMode === MToonMaterialCullMode.Back) {
+      } else if (this.outlineCullMode === MToonCullMode.Back) {
         this.side = THREE.FrontSide;
       }
     }
@@ -500,12 +498,12 @@ export interface MToonParameters extends THREE.ShaderMaterialParameters {
   uvAnimScrollY?: number; // _UvAnimScrollY
   uvAnimRotation?: number; // _uvAnimRotation
 
-  debugMode?: MToonMaterialDebugMode | number; // _DebugMode
-  blendMode?: MToonMaterialRenderMode | number; // _BlendMode
-  outlineWidthMode?: MToonMaterialOutlineWidthMode | number; // OutlineWidthMode
-  outlineColorMode?: MToonMaterialOutlineColorMode | number; // OutlineColorMode
-  cullMode?: MToonMaterialCullMode | number; // _CullMode
-  outlineCullMode?: MToonMaterialCullMode | number; // _OutlineCullMode
+  debugMode?: MToonDebugMode | number; // _DebugMode
+  blendMode?: MToonRenderMode | number; // _BlendMode
+  outlineWidthMode?: MToonOutlineWidthMode | number; // OutlineWidthMode
+  outlineColorMode?: MToonOutlineColorMode | number; // OutlineColorMode
+  cullMode?: MToonCullMode | number; // _CullMode
+  outlineCullMode?: MToonCullMode | number; // _OutlineCullMode
   srcBlend?: number; // _SrcBlend
   dstBlend?: number; // _DstBlend
   zWrite?: number; // _ZWrite (will be renamed to depthWrite)
@@ -513,31 +511,31 @@ export interface MToonParameters extends THREE.ShaderMaterialParameters {
   isOutline?: boolean;
 }
 
-export enum MToonMaterialCullMode {
+export enum MToonCullMode {
   Off,
   Front,
   Back,
 }
 
-export enum MToonMaterialDebugMode {
+export enum MToonDebugMode {
   None,
   Normal,
   LitShadeRate,
   UV,
 }
 
-export enum MToonMaterialOutlineColorMode {
+export enum MToonOutlineColorMode {
   FixedColor,
   MixedLighting,
 }
 
-export enum MToonMaterialOutlineWidthMode {
+export enum MToonOutlineWidthMode {
   None,
   WorldCoordinates,
   ScreenCoordinates,
 }
 
-export enum MToonMaterialRenderMode {
+export enum MToonRenderMode {
   Opaque,
   Cutout,
   Transparent,
