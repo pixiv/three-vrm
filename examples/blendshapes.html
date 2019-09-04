@@ -96,8 +96,8 @@
 
 					// tweak blendshape
 					const s = Math.sin( Math.PI * clock.elapsedTime );
-					currentVrm.blendShapeProxy.setValue( 'A', 0.5 + 0.5 * s );
-					currentVrm.blendShapeProxy.setValue( 'Blink_L', 0.5 - 0.5 * s );
+					currentVrm.blendShapeProxy.setValue( THREE.VRMSchema.BlendShapePresetName.A, 0.5 + 0.5 * s );
+					currentVrm.blendShapeProxy.setValue( THREE.VRMSchema.BlendShapePresetName.BlinkL, 0.5 - 0.5 * s );
 
 					// update vrm
 					currentVrm.update( deltaTime );

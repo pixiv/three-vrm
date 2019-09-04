@@ -1,5 +1,9 @@
 import * as THREE from 'three';
 
+export function saturate(value: number): number {
+  return Math.max(Math.min(value, 1.0), 0.0);
+}
+
 // minとmaxの間の距離における、xのパーセンテージを表す、0から1までの浮動小数点数値を返す
 // （three.jsにはsmoothstepはあるが、linstepが用意されていない）
 export function linstep(x: number, min: number, max: number): number {
