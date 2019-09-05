@@ -94,10 +94,14 @@
 			scene.add( axesHelper );
 
 			// animate
+			const clock = new THREE.Clock();
+			clock.start();
+
 			function animate() {
 
 				requestAnimationFrame( animate );
 
+				if ( currentVrm ) { currentVrm.update( clock.getDelta() ); }
 				renderer.render( scene, camera );
 
 			}
