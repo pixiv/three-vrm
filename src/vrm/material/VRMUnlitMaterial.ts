@@ -5,16 +5,16 @@ import * as THREE from 'three';
 /**
  * This is a material that is an equivalent of "VRM/Unlit***" on VRM spec, those materials are already kinda deprecated though...
  */
-export class Unlit extends THREE.ShaderMaterial {
+export class VRMUnlitMaterial extends THREE.ShaderMaterial {
   /**
-   * Readonly boolean that indicates this is a Unlit material.
+   * Readonly boolean that indicates this is a [[VRMUnlitMaterial]].
    */
-  public readonly isVRMUnlit: boolean = true;
+  public readonly isVRMUnlitMaterial: boolean = true;
 
   public cutoff: number = 0.5;
   public map: THREE.Texture | null = null; // _MainTex
   public mainTex_ST: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _MainTex_ST
-  private _renderType: UnlitRenderType = UnlitRenderType.Opaque;
+  private _renderType: VRMUnlitMaterialRenderType = VRMUnlitMaterialRenderType.Opaque;
 
   public shouldApplyUniforms: boolean = true; // when this is true, applyUniforms effects
 
@@ -59,16 +59,17 @@ export class Unlit extends THREE.ShaderMaterial {
     this.map = t;
   }
 
-  get renderType(): UnlitRenderType {
+  get renderType(): VRMUnlitMaterialRenderType {
     return this._renderType;
   }
 
-  set renderType(t: UnlitRenderType) {
+  set renderType(t: VRMUnlitMaterialRenderType) {
     this._renderType = t;
 
-    this.depthWrite = this._renderType !== UnlitRenderType.Transparent;
+    this.depthWrite = this._renderType !== VRMUnlitMaterialRenderType.Transparent;
     this.transparent =
-      this._renderType === UnlitRenderType.Transparent || this._renderType === UnlitRenderType.TransparentWithZWrite;
+      this._renderType === VRMUnlitMaterialRenderType.Transparent ||
+      this._renderType === VRMUnlitMaterialRenderType.TransparentWithZWrite;
     this.updateShaderCode();
   }
 
@@ -111,10 +112,11 @@ export class Unlit extends THREE.ShaderMaterial {
 
   private updateShaderCode() {
     this.defines = {
-      RENDERTYPE_OPAQUE: this._renderType === UnlitRenderType.Opaque,
-      RENDERTYPE_CUTOUT: this._renderType === UnlitRenderType.Cutout,
+      RENDERTYPE_OPAQUE: this._renderType === VRMUnlitMaterialRenderType.Opaque,
+      RENDERTYPE_CUTOUT: this._renderType === VRMUnlitMaterialRenderType.Cutout,
       RENDERTYPE_TRANSPARENT:
-        this._renderType === UnlitRenderType.Transparent || this._renderType === UnlitRenderType.TransparentWithZWrite,
+        this._renderType === VRMUnlitMaterialRenderType.Transparent ||
+        this._renderType === VRMUnlitMaterialRenderType.TransparentWithZWrite,
     };
 
     this.vertexShader = require('./shaders/unlit.vert');
@@ -131,10 +133,10 @@ export interface UnlitParameters extends THREE.ShaderMaterialParameters {
   mainTex?: THREE.Texture; // _MainTex (will be renamed to map)
   mainTex_ST?: THREE.Vector4; // _MainTex_ST
 
-  renderType?: UnlitRenderType | number;
+  renderType?: VRMUnlitMaterialRenderType | number;
 }
 
-export enum UnlitRenderType {
+export enum VRMUnlitMaterialRenderType {
   Opaque,
   Cutout,
   Transparent,
