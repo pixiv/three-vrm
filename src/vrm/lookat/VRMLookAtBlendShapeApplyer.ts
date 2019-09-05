@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { VRMBlendShapeProxy } from '../blendshape';
 import { VRMSchema } from '../types';
-import { CurveMapper, DEG2RAD } from './CurveMapper';
+import { CurveMapper } from './CurveMapper';
 import { VRMLookAtApplyer } from './VRMLookAtApplyer';
 
 export class VRMLookAtBlendShapeApplyer extends VRMLookAtApplyer {
@@ -48,7 +48,7 @@ export class VRMLookAtBlendShapeApplyer extends VRMLookAtApplyer {
 
 function deg2rad(map: VRMSchema.FirstPersonDegreeMap): VRMSchema.FirstPersonDegreeMap {
   return {
-    xRange: typeof map.xRange === 'number' ? DEG2RAD * map.xRange : undefined,
+    xRange: typeof map.xRange === 'number' ? THREE.Math.DEG2RAD * map.xRange : undefined,
     yRange: map.yRange, // yRange means weight not radian
     curve: map.curve,
   };
