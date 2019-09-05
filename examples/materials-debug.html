@@ -24,7 +24,7 @@
 		<script src="https://unpkg.com/three@0.106.2/build/three.js"></script>
 		<script src="https://unpkg.com/three@0.106.2/examples/js/loaders/GLTFLoader.js"></script>
 		<script src="https://unpkg.com/three@0.106.2/examples/js/controls/OrbitControls.js"></script>
-		<script src="../lib/index.js"></script>
+		<script src="../../lib/index.js"></script>
 		<script>
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
@@ -50,41 +50,31 @@
 			// gltf and vrm
 			let currentVrm = undefined;
 			const loader = new THREE.GLTFLoader();
+			loader.crossOrigin = 'anonymous';
+			loader.load(
 
-			function load( url ) {
+				'../react/models/shino.vrm',
 
-				loader.crossOrigin = 'anonymous';
-				loader.load(
+				( gltf ) => {
 
-					url,
+					THREE.VRM.from( gltf ).then( ( vrm ) => {
 
-					( gltf ) => {
+						scene.add( vrm.scene );
+						currentVrm = vrm;
 
-						THREE.VRM.from( gltf ).then( ( vrm ) => {
+						vrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.Hips ).rotation.y = Math.PI;
 
-							if ( currentVrm ) { scene.remove( currentVrm.scene ); }
-							// currentVrm.dispose(); // not implemented
+						console.log( vrm );
 
-							currentVrm = vrm;
-							scene.add( vrm.scene );
+					} );
 
-							vrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.Hips ).rotation.y = Math.PI;
+				},
 
-							console.log( vrm );
+				( progress ) => console.log( 'Loading model...', 100.0 * ( progress.loaded / progress.total ), '%' ),
 
-						} );
+				( error ) => console.error( error )
 
-					},
-
-					( progress ) => console.log( 'Loading model...', 100.0 * ( progress.loaded / progress.total ), '%' ),
-
-					( error ) => console.error( error )
-
-				);
-
-			}
-
-			load( './models/shino.vrm' );
+			);
 
 			// helpers
 			const gridHelper = new THREE.GridHelper( 10, 10 );
@@ -95,38 +85,62 @@
 
 			// animate
 			const clock = new THREE.Clock();
-			clock.start();
 
 			function animate() {
 
 				requestAnimationFrame( animate );
 
-				if ( currentVrm ) { currentVrm.update( clock.getDelta() ); }
+				const deltaTime = clock.getDelta();
+
+				if ( currentVrm ) {
+
+					// update vrm
+					currentVrm.update( deltaTime );
+
+				}
+
 				renderer.render( scene, camera );
 
 			}
 
 			animate();
 
-			// dnd handler
-			window.addEventListener( 'dragover', function( event ) {
+			// keyboard listener
+			function setMToonDebugMode( material, mode ) {
 
-				event.preventDefault();
+				if ( material.isMToonMaterial ) {
 
-			} );
+					material.debugMode = mode;
 
-			window.addEventListener( 'drop', function( event ) {
+				}
 
-				event.preventDefault();
+			}
 
-				// read given file then convert it to blob url
-				const files = event.dataTransfer.files;
-				if ( !files ) { return; }
-				const file = files[0];
-				if ( !file ) { return; }
-				const blob = new Blob( [ file ], { type: "application/octet-stream" } );
-				const url = URL.createObjectURL( blob );
-				load( url );
+			let debugMode = 0;
+
+			window.addEventListener( 'keydown', () => {
+
+				if ( !currentVrm ) { return; }
+
+				debugMode = ( debugMode + 1 ) % 4;
+
+				currentVrm.scene.traverse( ( object ) => {
+
+					if ( object.material ) {
+
+						if ( Array.isArray( object.material ) ) {
+
+							object.material.forEach( ( material ) => setMToonDebugMode( material, debugMode ) );
+
+						} else {
+
+							setMToonDebugMode( object.material, debugMode );
+
+						}
+
+					}
+
+				} );
 
 			} );
 		</script>
