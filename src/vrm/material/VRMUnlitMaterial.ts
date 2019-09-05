@@ -97,7 +97,6 @@ export class VRMUnlitMaterial extends THREE.ShaderMaterial {
 
   /**
    * Apply updated uniform variables.
-   * Strongly recommended to call this in `Object3D.onBeforeRender` .
    */
   private _applyUniforms() {
     if (!this.shouldApplyUniforms) {
