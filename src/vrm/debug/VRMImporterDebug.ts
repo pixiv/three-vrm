@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import { reduceBones } from '../reduceBones';
 import { VRMImporter, VRMImporterOptions } from '../VRMImporter';
-import { DebugOption } from './DebugOption';
 import { VRMDebug } from './VRMDebug';
+import { VRMDebugOptions } from './VRMDebugOptions';
 import { VRMLookAtHeadDebug } from './VRMLookAtHeadDebug';
 import { VRMLookAtImporterDebug } from './VRMLookAtImporterDebug';
 import { VRMSpringBoneImporterDebug } from './VRMSpringBoneImporterDebug';
@@ -14,7 +14,7 @@ export class VRMImporterDebug extends VRMImporter {
     super(options);
   }
 
-  public async import(gltf: THREE.GLTF, debugOption: DebugOption = {}): Promise<VRMDebug> {
+  public async import(gltf: THREE.GLTF, debugOptions: VRMDebugOptions = {}): Promise<VRMDebug> {
     if (gltf.parser.json.extensions === undefined || gltf.parser.json.extensions.VRM === undefined) {
       throw new Error('Could not find VRM extension on the GLTF');
     }
@@ -52,7 +52,7 @@ export class VRMImporterDebug extends VRMImporter {
         ? await this._lookAtImporter.import(vrmExt.firstPerson, blendShapeProxy, humanoid)
         : undefined;
     if ((lookAt as any).setupHelper) {
-      (lookAt as VRMLookAtHeadDebug).setupHelper(scene, debugOption);
+      (lookAt as VRMLookAtHeadDebug).setupHelper(scene, debugOptions);
     }
 
     const springBoneManager = (await this._springBoneImporter.import(gltf)) || undefined;
@@ -68,7 +68,7 @@ export class VRMImporterDebug extends VRMImporter {
         lookAt,
         springBoneManager,
       },
-      debugOption,
+      debugOptions,
     );
   }
 }

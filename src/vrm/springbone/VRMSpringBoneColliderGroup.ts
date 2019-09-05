@@ -8,7 +8,7 @@ import * as THREE from 'three';
  * ColliderMesh, is actually just a `THREE.Mesh`.
  * Its radius and world position will be used for collisions.
  */
-export type ColliderMesh = THREE.Mesh;
+export type VRMSpringBoneColliderMesh = THREE.Mesh;
 
 /**
  * A group of colliders, equivalents to an element of `colliderGroups` field of VRM schema.
@@ -17,5 +17,5 @@ export type ColliderMesh = THREE.Mesh;
  */
 export interface VRMSpringBoneColliderGroup {
   node: number;
-  colliders: ColliderMesh[];
+  colliders: VRMSpringBoneColliderMesh[];
 }

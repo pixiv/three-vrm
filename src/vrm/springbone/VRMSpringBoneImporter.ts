@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { GLTFNode, VRMSchema } from '../types';
 import { GIZMO_RENDER_ORDER, VRMSpringBone } from './VRMSpringBone';
-import { ColliderMesh, VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';
+import { VRMSpringBoneColliderGroup, VRMSpringBoneColliderMesh } from './VRMSpringBoneColliderGroup';
 import { VRMSpringBoneGroup, VRMSpringBoneManager } from './VRMSpringBoneManager';
 
 export class VRMSpringBoneImporter {
@@ -80,7 +80,7 @@ export class VRMSpringBoneImporter {
       const dragForce = vrmBoneGroup.dragForce;
       const hitRadius = vrmBoneGroup.hitRadius;
 
-      const colliders: ColliderMesh[] = [];
+      const colliders: VRMSpringBoneColliderMesh[] = [];
       vrmBoneGroup.colliderGroups.forEach((colliderIndex) => {
         colliders.push(...colliderGroups[colliderIndex].colliders);
       });
@@ -140,7 +140,7 @@ export class VRMSpringBoneImporter {
       }
 
       const bone = await gltf.parser.getDependency('node', colliderGroup.node);
-      const colliders: ColliderMesh[] = [];
+      const colliders: VRMSpringBoneColliderMesh[] = [];
       colliderGroup.colliders.forEach((collider) => {
         if (
           collider.offset === undefined ||
