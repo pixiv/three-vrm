@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { VRMHumanoid } from '../humanoid';
 import { GLTFNode, VRMSchema } from '../types';
-import { CurveMapper, DEG2RAD } from './CurveMapper';
+import { CurveMapper } from './CurveMapper';
 import { VRMLookAtApplyer } from './VRMLookAtApplyer';
 
 export class VRMLookAtBoneApplyer extends VRMLookAtApplyer {
@@ -70,8 +70,8 @@ export class VRMLookAtBoneApplyer extends VRMLookAtApplyer {
 
 function deg2rad(map: VRMSchema.FirstPersonDegreeMap): VRMSchema.FirstPersonDegreeMap {
   return {
-    xRange: typeof map.xRange === 'number' ? DEG2RAD * map.xRange : undefined,
-    yRange: typeof map.yRange === 'number' ? DEG2RAD * map.yRange : undefined,
+    xRange: typeof map.xRange === 'number' ? THREE.Math.DEG2RAD * map.xRange : undefined,
+    yRange: typeof map.yRange === 'number' ? THREE.Math.DEG2RAD * map.yRange : undefined,
     curve: map.curve,
   };
 }
