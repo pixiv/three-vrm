@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { VRMBlendShapeProxy } from '../blendshape';
 import { VRMFirstPerson } from '../firstperson';
 import { VRMHumanoid } from '../humanoid';
@@ -7,8 +8,6 @@ import { VRMLookAtApplyer } from './VRMLookAtApplyer';
 import { VRMLookAtBlendShapeApplyer } from './VRMLookAtBlendShapeApplyer';
 import { VRMLookAtBoneApplyer } from './VRMLookAtBoneApplyer';
 import { VRMLookAtHead } from './VRMLookAtHead';
-
-const DEG2RAD = Math.PI / 180.0;
 
 export class VRMLookAtImporter {
   public import(
@@ -70,13 +69,17 @@ export class VRMLookAtImporter {
 
   private _importCurveMapperBone(map: VRMSchema.FirstPersonDegreeMap): CurveMapper {
     return new CurveMapper(
-      typeof map.xRange === 'number' ? DEG2RAD * map.xRange : undefined,
-      typeof map.yRange === 'number' ? DEG2RAD * map.yRange : undefined,
+      typeof map.xRange === 'number' ? THREE.Math.DEG2RAD * map.xRange : undefined,
+      typeof map.yRange === 'number' ? THREE.Math.DEG2RAD * map.yRange : undefined,
       map.curve,
     );
   }
 
   private _importCurveMapperBlendShape(map: VRMSchema.FirstPersonDegreeMap): CurveMapper {
-    return new CurveMapper(typeof map.xRange === 'number' ? DEG2RAD * map.xRange : undefined, map.yRange, map.curve);
+    return new CurveMapper(
+      typeof map.xRange === 'number' ? THREE.Math.DEG2RAD * map.xRange : undefined,
+      map.yRange,
+      map.curve,
+    );
   }
 }
