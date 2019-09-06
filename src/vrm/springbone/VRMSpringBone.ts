@@ -5,7 +5,7 @@ import { getWorldQuaternionLite } from '../utils/math';
 // https://github.com/dwango/UniVRM/blob/master/Scripts/SpringBone/VRMSpringBone.cs
 
 export const GIZMO_RENDER_ORDER = 10000;
-export const IDENTITY_MATRIX4 = Object.freeze(new THREE.Matrix4());
+const IDENTITY_MATRIX4 = Object.freeze(new THREE.Matrix4());
 const IDENTITY_QUATERNION = Object.freeze(new THREE.Quaternion());
 
 // 計算中の一時保存用変数（一度インスタンスを作ったらあとは使い回す）
