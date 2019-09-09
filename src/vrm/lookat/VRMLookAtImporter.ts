@@ -16,16 +16,26 @@ export class VRMLookAtImporter {
   /**
    * Import a [[VRMLookAtHead]] from a VRM.
    *
-   * @param firstPerson A raw `firstPerson` field taken from the VRM extension of the GLTF
+   * @param gltf A parsed result of GLTF taken from GLTFLoader
    * @param blendShapeProxy A [[VRMBlendShapeProxy]] instance that represents the VRM
    * @param humanoid A [[VRMHumanoid]] instance that represents the VRM
    */
   public import(
-    schemaFirstPerson: VRMSchema.FirstPerson,
+    gltf: THREE.GLTF,
     firstPerson: VRMFirstPerson,
     blendShapeProxy: VRMBlendShapeProxy,
     humanoid: VRMHumanoid,
-  ): VRMLookAtHead {
+  ): VRMLookAtHead | null {
+    const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
+    if (!vrmExt) {
+      return null;
+    }
+
+    const schemaFirstPerson: VRMSchema.FirstPerson | undefined = vrmExt.firstPerson;
+    if (!schemaFirstPerson) {
+      return null;
+    }
+
     const applyer = this._importApplyer(schemaFirstPerson, blendShapeProxy, humanoid);
     return new VRMLookAtHead(firstPerson, applyer || undefined);
   }

@@ -13,9 +13,18 @@ export class VRMHumanoidImporter {
    * Import a [[VRMHumanoid]] from a VRM.
    *
    * @param gltf A parsed result of GLTF taken from GLTFLoader
-   * @param schemaHumanoid A raw `humanoid` field taken from the VRM extension of the GLTF
    */
-  public async import(gltf: THREE.GLTF, schemaHumanoid: VRMSchema.Humanoid): Promise<VRMHumanoid | null> {
+  public async import(gltf: THREE.GLTF): Promise<VRMHumanoid | null> {
+    const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
+    if (!vrmExt) {
+      return null;
+    }
+
+    const schemaHumanoid: VRMSchema.Humanoid | undefined = vrmExt.humanoid;
+    if (!schemaHumanoid) {
+      return null;
+    }
+
     const humanBoneArray: VRMHumanBoneArray = [];
     if (schemaHumanoid.humanBones) {
       await Promise.all(

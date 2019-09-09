@@ -83,6 +83,11 @@ export class VRM {
    * You might want to use [[VRMLookAtHead.setTarget]] to control the eye direction of your VRMs.
    */
   public readonly lookAt?: VRMLookAtHead;
+
+  /**
+   * Contains materials of the VRM.
+   * `updateVRMMaterials` method of these materials will be called via its [[VRM.update]] method.
+   */
   public readonly materials?: THREE.Material[];
 
   /**
