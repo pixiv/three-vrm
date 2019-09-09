@@ -1,7 +1,5 @@
 import { VRMSchema } from '../types';
 
-export const DEG2RAD = Math.PI / 180.0;
-
 const hermiteSpline = (y0: number, y1: number, t0: number, t1: number, x: number): number => {
   const xc = x * x * x;
   const xs = x * x;

@@ -1,7 +1,7 @@
 {
   "name": "three-vrm-example",
   "version": "0.0.1",
-  "description": "An react example of three-vrm",
+  "description": "An react example of @pixiv/three-vrm",
   "license": "MIT",
   "author": "pixiv",
   "scripts": {
