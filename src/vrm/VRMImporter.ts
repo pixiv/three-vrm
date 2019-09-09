@@ -18,6 +18,9 @@ export interface VRMImporterOptions {
   springBoneImporter?: VRMSpringBoneImporter;
 }
 
+/**
+ * An importer that imports a [[VRM]] from a VRM extension of a GLTF.
+ */
 export class VRMImporter {
   protected readonly _blendShapeImporter: VRMBlendShapeImporter;
   protected readonly _lookAtImporter: VRMLookAtImporter;
@@ -65,24 +68,17 @@ export class VRMImporter {
 
     reduceBones(scene);
 
-    const materials = await this._materialImporter.convertGLTFMaterials(gltf);
+    const materials = (await this._materialImporter.convertGLTFMaterials(gltf)) || undefined;
 
-    const humanoid = vrmExt.humanoid
-      ? (await this._humanoidImporter.import(gltf, vrmExt.humanoid)) || undefined
-      : undefined;
+    const humanoid = (await this._humanoidImporter.import(gltf)) || undefined;
 
-    const firstPerson =
-      vrmExt.firstPerson && humanoid
-        ? (await this._firstPersonImporter.import(gltf, humanoid, vrmExt.firstPerson)) || undefined
-        : undefined;
+    const firstPerson = humanoid ? (await this._firstPersonImporter.import(gltf, humanoid)) || undefined : undefined;
 
-    const blendShapeProxy = vrmExt.blendShapeMaster
-      ? (await this._blendShapeImporter.import(gltf, vrmExt.blendShapeMaster)) || undefined
-      : undefined;
+    const blendShapeProxy = (await this._blendShapeImporter.import(gltf)) || undefined;
 
     const lookAt =
-      vrmExt.firstPerson && firstPerson && blendShapeProxy && humanoid
-        ? await this._lookAtImporter.import(vrmExt.firstPerson, firstPerson, blendShapeProxy, humanoid)
+      firstPerson && blendShapeProxy && humanoid
+        ? (await this._lookAtImporter.import(gltf, firstPerson, blendShapeProxy, humanoid)) || undefined
         : undefined;
 
     const springBoneManager = (await this._springBoneImporter.import(gltf)) || undefined;

@@ -1,3 +1,12 @@
+/**
+ * Evaluate a hermite spline.
+ *
+ * @param y0 y on start
+ * @param y1 y on end
+ * @param t0 delta y on start
+ * @param t1 delta y on end
+ * @param x input value
+ */
 const hermiteSpline = (y0: number, y1: number, t0: number, t1: number, x: number): number => {
   const xc = x * x * x;
   const xs = x * x;
@@ -8,6 +17,14 @@ const hermiteSpline = (y0: number, y1: number, t0: number, t1: number, x: number
   return y0 + dy * h01 + t0 * h10 + t1 * h11;
 };
 
+/**
+ * Evaluate an AnimationCurve array. See AnimationCurve class of Unity for its details.
+ *
+ * See: https://docs.unity3d.com/ja/current/ScriptReference/AnimationCurve.html
+ *
+ * @param arr An array represents a curve
+ * @param x An input value
+ */
 const evaluateCurve = (arr: number[], x: number): number => {
   // -- sanity check -----------------------------------------------------------
   if (arr.length < 8) {
@@ -46,11 +63,37 @@ const evaluateCurve = (arr: number[], x: number): number => {
   return hermiteSpline(y0, y1, t0, t1, xHermite);
 };
 
+/**
+ * This is an equivalent of CurveMapper class defined in UniVRM.
+ * Will be used for [[VRMLookAtApplyer]]s, to define behavior of LookAt.
+ *
+ * See: https://github.com/vrm-c/UniVRM/blob/master/Assets/VRM/UniVRM/Scripts/LookAt/CurveMapper.cs
+ */
 export class CurveMapper {
+  /**
+   * An array represents the curve. See AnimationCurve class of Unity for its details.
+   *
+   * See: https://docs.unity3d.com/ja/current/ScriptReference/AnimationCurve.html
+   */
   public curve: number[] = [0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0];
+
+  /**
+   * The maximum input range of the [[CurveMapper]].
+   */
   public curveXRangeDegree: number = 90.0;
+
+  /**
+   * The maximum output value of the [[CurveMapper]].
+   */
   public curveYRangeDegree: number = 10.0;
 
+  /**
+   * Create a new [[CurveMapper]].
+   *
+   * @param xRange The maximum input range
+   * @param yRange The maximum output value
+   * @param curve An array represents the curve
+   */
   constructor(xRange?: number, yRange?: number, curve?: number[]) {
     if (xRange !== undefined) {
       this.curveXRangeDegree = xRange;
@@ -65,6 +108,11 @@ export class CurveMapper {
     }
   }
 
+  /**
+   * Evaluate an input value and output a mapped value.
+   *
+   * @param src The input value
+   */
   public map(src: number) {
     const clampedSrc = Math.min(Math.max(src, 0.0), this.curveXRangeDegree);
     const x = clampedSrc / this.curveXRangeDegree;

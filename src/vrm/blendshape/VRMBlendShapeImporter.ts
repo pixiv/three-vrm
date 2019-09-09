@@ -4,8 +4,26 @@ import { renameMaterialProperty } from '../utils/renameMaterialProperty';
 import { VRMBlendShapeGroup } from './VRMBlendShapeGroup';
 import { VRMBlendShapeProxy } from './VRMBlendShapeProxy';
 
+/**
+ * An importer that imports a [[VRMBlendShape]] from a VRM extension of a GLTF.
+ */
 export class VRMBlendShapeImporter {
-  public async import(gltf: THREE.GLTF, schemaBlendShape: VRMSchema.BlendShape): Promise<VRMBlendShapeProxy | null> {
+  /**
+   * Import a [[VRMBlendShape]] from a VRM.
+   *
+   * @param gltf A parsed result of GLTF taken from GLTFLoader
+   */
+  public async import(gltf: THREE.GLTF): Promise<VRMBlendShapeProxy | null> {
+    const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
+    if (!vrmExt) {
+      return null;
+    }
+
+    const schemaBlendShape: VRMSchema.BlendShape | undefined = vrmExt.blendShapeMaster;
+    if (!schemaBlendShape) {
+      return null;
+    }
+
     const blendShape = new VRMBlendShapeProxy();
 
     const blendShapeGroups: VRMSchema.BlendShapeGroup[] | undefined = schemaBlendShape.blendShapeGroups;

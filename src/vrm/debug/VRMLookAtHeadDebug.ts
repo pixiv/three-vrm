@@ -1,13 +1,13 @@
 import * as THREE from 'three';
 import { VRMLookAtHead } from '../lookat/VRMLookAtHead';
-import { DebugOption } from './DebugOption';
+import { VRMDebugOptions } from './VRMDebugOptions';
 
 const _v3 = new THREE.Vector3();
 
 export class VRMLookAtHeadDebug extends VRMLookAtHead {
   private _faceDirectionHelper?: THREE.ArrowHelper;
 
-  public setupHelper(scene: THREE.Scene, debugOption: DebugOption) {
+  public setupHelper(scene: THREE.Scene, debugOption: VRMDebugOptions) {
     if (!debugOption.disableFaceDirectionHelper) {
       this._faceDirectionHelper = new THREE.ArrowHelper(
         new THREE.Vector3(0, 0, -1),

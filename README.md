@@ -1,4 +1,4 @@
-# three-vrm
+# `@pixiv/three-vrm`
 
 Use [VRM](https://vrm.dev/) on [three.js](https://threejs.org/)
 

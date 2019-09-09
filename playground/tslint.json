@@ -1,0 +1,16 @@
+{
+  "extends": ["tslint:recommended", "tslint-react", "tslint-plugin-prettier", "tslint-config-prettier"],
+  "rules": {
+    "curly": [true, "ignore-same-line"],
+    "interface-name": [true, "never-prefix"],
+    "no-conditional-assignment": false,
+    "no-console": false,
+    "no-empty": false,
+    "jsx-no-lambda":false,
+    "ordered-imports": [true],
+    "object-literal-sort-keys": false,
+    "max-classes-per-file": false,
+    "variable-name": false,
+    "array-type": false
+  }
+}

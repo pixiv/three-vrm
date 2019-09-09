@@ -1,23 +1,59 @@
 import * as THREE from 'three';
 import { GLTFMesh, GLTFPrimitive, VRMSchema } from '../types';
-import { MToon, MToonOutlineWidthMode, MToonRenderMode } from './MToon';
-import { Unlit, UnlitRenderType } from './Unlit';
+import { MToonMaterial, MToonMaterialOutlineWidthMode, MToonMaterialRenderMode } from './MToonMaterial';
+import { VRMUnlitMaterial, VRMUnlitMaterialRenderType } from './VRMUnlitMaterial';
 
+/**
+ * Options for a [[VRMMaterialImporter]] instance.
+ */
 export interface VRMMaterialImporterOptions {
+  /**
+   * Whether the workflow should be linear or gamma.
+   *
+   * See also: https://threejs.org/docs/#api/en/renderers/WebGLRenderer.gammaOutput
+   */
   colorSpaceGamma?: boolean;
+
+  /**
+   * A function that returns a `Promise` of environment map texture.
+   * The importer will attempt to call this function when it have to use an envmap.
+   */
   requestEnvMap?: () => Promise<THREE.Texture | null>;
 }
 
+/**
+ * An importer that imports VRM materials from a VRM extension of a GLTF.
+ */
 export class VRMMaterialImporter {
   private readonly _colorSpaceGamma: boolean;
   private readonly _requestEnvMap?: () => Promise<THREE.Texture | null>;
 
+  /**
+   * Create a new VRMMaterialImporter.
+   *
+   * @param options Options of the VRMMaterialImporter
+   */
   constructor(options: VRMMaterialImporterOptions = {}) {
     this._colorSpaceGamma = options.colorSpaceGamma || true;
     this._requestEnvMap = options.requestEnvMap;
   }
 
-  public async convertGLTFMaterials(gltf: THREE.GLTF): Promise<THREE.Material[]> {
+  /**
+   * Convert all the materials of given GLTF based on VRM extension field `materialProperties`.
+   *
+   * @param gltf A parsed result of GLTF taken from GLTFLoader
+   */
+  public async convertGLTFMaterials(gltf: THREE.GLTF): Promise<THREE.Material[] | null> {
+    const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
+    if (!vrmExt) {
+      return null;
+    }
+
+    const materialProperties: VRMSchema.Material[] | undefined = vrmExt.materialProperties;
+    if (!materialProperties) {
+      return null;
+    }
+
     const meshesMap: GLTFMesh[] = await gltf.parser.getDependencies('mesh');
     const materialList: { [vrmMaterialIndex: number]: { surface: THREE.Material; outline?: THREE.Material } } = {};
     const materials: THREE.Material[] = []; // result
@@ -41,7 +77,7 @@ export class VRMMaterialImporter {
             // create / push to cache (or pop from cache) vrm materials
             const vrmMaterialIndex = gltf.parser.json.meshes![meshIndex].primitives[primitiveIndex].material!;
 
-            let props = (gltf.parser.json.extensions!.VRM as VRMSchema.VRM).materialProperties![vrmMaterialIndex];
+            let props = materialProperties[vrmMaterialIndex];
             if (!props) {
               console.warn(
                 `VRMMaterialImporter: There are no material definition for material #${vrmMaterialIndex} on VRM extension.`,
@@ -122,33 +158,33 @@ export class VRMMaterialImporter {
       });
 
       // done
-      newSurface = new MToon(this._colorSpaceGamma, params);
+      newSurface = new MToonMaterial(this._colorSpaceGamma, params);
 
       // outline
-      if (params.outlineWidthMode !== MToonOutlineWidthMode.None) {
+      if (params.outlineWidthMode !== MToonMaterialOutlineWidthMode.None) {
         params.isOutline = true;
-        newOutline = new MToon(this._colorSpaceGamma, params);
+        newOutline = new MToonMaterial(this._colorSpaceGamma, params);
       }
     } else if (vrmProps.shader === 'VRM/UnlitTexture') {
       // this is very legacy
       const params = await this.extractMaterialProperties(originalMaterial, vrmProps, gltf);
-      params.renderType = UnlitRenderType.Opaque;
-      newSurface = new Unlit(params);
+      params.renderType = VRMUnlitMaterialRenderType.Opaque;
+      newSurface = new VRMUnlitMaterial(params);
     } else if (vrmProps.shader === 'VRM/UnlitCutout') {
       // this is very legacy
       const params = await this.extractMaterialProperties(originalMaterial, vrmProps, gltf);
-      params.renderType = UnlitRenderType.Cutout;
-      newSurface = new Unlit(params);
+      params.renderType = VRMUnlitMaterialRenderType.Cutout;
+      newSurface = new VRMUnlitMaterial(params);
     } else if (vrmProps.shader === 'VRM/UnlitTransparent') {
       // this is very legacy
       const params = await this.extractMaterialProperties(originalMaterial, vrmProps, gltf);
-      params.renderType = UnlitRenderType.Transparent;
-      newSurface = new Unlit(params);
+      params.renderType = VRMUnlitMaterialRenderType.Transparent;
+      newSurface = new VRMUnlitMaterial(params);
     } else if (vrmProps.shader === 'VRM/UnlitTransparentZWrite') {
       // this is very legacy
       const params = await this.extractMaterialProperties(originalMaterial, vrmProps, gltf);
-      params.renderType = UnlitRenderType.TransparentWithZWrite;
-      newSurface = new Unlit(params);
+      params.renderType = VRMUnlitMaterialRenderType.TransparentWithZWrite;
+      newSurface = new VRMUnlitMaterial(params);
     } else {
       if (vrmProps.shader !== 'VRM_USE_GLTFSHADER') {
         console.warn(`Unknown shader detected: "${vrmProps.shader}"`);
@@ -276,8 +312,8 @@ export class VRMMaterialImporter {
     }
 
     // TODO: f (https://github.com/dwango/UniVRM/issues/172)
-    if (vrmProps.keywordMap!._ALPHATEST_ON && params.blendMode === MToonRenderMode.Opaque) {
-      params.blendMode = MToonRenderMode.Cutout;
+    if (vrmProps.keywordMap!._ALPHATEST_ON && params.blendMode === MToonMaterialRenderMode.Opaque) {
+      params.blendMode = MToonMaterialRenderMode.Cutout;
     }
 
     // set whether it needs skinning and morphing or not

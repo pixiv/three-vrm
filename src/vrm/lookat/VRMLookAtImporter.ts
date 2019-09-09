@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { VRMBlendShapeProxy } from '../blendshape';
 import { VRMFirstPerson } from '../firstperson';
 import { VRMHumanoid } from '../humanoid';
@@ -8,15 +9,33 @@ import { VRMLookAtBlendShapeApplyer } from './VRMLookAtBlendShapeApplyer';
 import { VRMLookAtBoneApplyer } from './VRMLookAtBoneApplyer';
 import { VRMLookAtHead } from './VRMLookAtHead';
 
-const DEG2RAD = Math.PI / 180.0;
-
+/**
+ * An importer that imports a [[VRMLookAtHead]] from a VRM extension of a GLTF.
+ */
 export class VRMLookAtImporter {
+  /**
+   * Import a [[VRMLookAtHead]] from a VRM.
+   *
+   * @param gltf A parsed result of GLTF taken from GLTFLoader
+   * @param blendShapeProxy A [[VRMBlendShapeProxy]] instance that represents the VRM
+   * @param humanoid A [[VRMHumanoid]] instance that represents the VRM
+   */
   public import(
-    schemaFirstPerson: VRMSchema.FirstPerson,
+    gltf: THREE.GLTF,
     firstPerson: VRMFirstPerson,
     blendShapeProxy: VRMBlendShapeProxy,
     humanoid: VRMHumanoid,
-  ): VRMLookAtHead {
+  ): VRMLookAtHead | null {
+    const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
+    if (!vrmExt) {
+      return null;
+    }
+
+    const schemaFirstPerson: VRMSchema.FirstPerson | undefined = vrmExt.firstPerson;
+    if (!schemaFirstPerson) {
+      return null;
+    }
+
     const applyer = this._importApplyer(schemaFirstPerson, blendShapeProxy, humanoid);
     return new VRMLookAtHead(firstPerson, applyer || undefined);
   }
@@ -70,13 +89,17 @@ export class VRMLookAtImporter {
 
   private _importCurveMapperBone(map: VRMSchema.FirstPersonDegreeMap): CurveMapper {
     return new CurveMapper(
-      typeof map.xRange === 'number' ? DEG2RAD * map.xRange : undefined,
-      typeof map.yRange === 'number' ? DEG2RAD * map.yRange : undefined,
+      typeof map.xRange === 'number' ? THREE.Math.DEG2RAD * map.xRange : undefined,
+      typeof map.yRange === 'number' ? THREE.Math.DEG2RAD * map.yRange : undefined,
       map.curve,
     );
   }
 
   private _importCurveMapperBlendShape(map: VRMSchema.FirstPersonDegreeMap): CurveMapper {
-    return new CurveMapper(typeof map.xRange === 'number' ? DEG2RAD * map.xRange : undefined, map.yRange, map.curve);
+    return new CurveMapper(
+      typeof map.xRange === 'number' ? THREE.Math.DEG2RAD * map.xRange : undefined,
+      map.yRange,
+      map.curve,
+    );
   }
 }
