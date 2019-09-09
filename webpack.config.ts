@@ -23,11 +23,6 @@ const base = (mode: 'production' | 'development'): webpack.Configuration => {
       rules: [
         {
           test: /\.ts?$/,
-          enforce: 'pre',
-          use: 'eslint-loader',
-        },
-        {
-          test: /\.ts?$/,
           exclude: /node_modules/,
           use: 'ts-loader',
         },
