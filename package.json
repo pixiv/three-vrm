@@ -1,5 +1,5 @@
 {
-  "name": "three-vrm",
+  "name": "@pixiv/three-vrm",
   "version": "0.0.1",
   "description": "VRM file loader for three.js.",
   "license": "MIT",
@@ -16,6 +16,7 @@
   },
   "scripts": {
     "version": "yarn all",
+    "postpublish": "yarn gh-pages",
     "all": "yarn clean && yarn build && yarn docs",
     "dev": "webpack-dev-server --mode development",
     "clean": "rimraf docs lib",
@@ -24,6 +25,7 @@
     "build-prod": "webpack --mode production",
     "build-types": "tsc --emitDeclarationOnly",
     "docs": "typedoc --out docs --mode file --excludeNotExported",
+    "gh-pages": "node ./bin/gh-pages.js",
     "typedefgen": "node ./bin/typedefgen.js"
   },
   "husky": {
@@ -54,6 +56,7 @@
     "@types/webpack-merge": "^4.1.5",
     "ansi-colors": "^3.2.1",
     "fork-ts-checker-webpack-plugin": "^0.5.0",
+    "gh-pages": "^2.1.1",
     "husky": "^1.2.0",
     "imagemin-lint-staged": "^0.3.0",
     "imports-loader": "^0.8.0",
