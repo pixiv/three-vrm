@@ -18,7 +18,7 @@ export class VRMUnlitMaterial extends THREE.ShaderMaterial {
 
   public shouldApplyUniforms: boolean = true; // when this is true, applyUniforms effects
 
-  constructor(parameters?: UnlitParameters) {
+  constructor(parameters?: VRMUnlitMaterialParameters) {
     super();
 
     if (parameters === undefined) {
@@ -126,7 +126,7 @@ export class VRMUnlitMaterial extends THREE.ShaderMaterial {
   }
 }
 
-export interface UnlitParameters extends THREE.ShaderMaterialParameters {
+export interface VRMUnlitMaterialParameters extends THREE.ShaderMaterialParameters {
   cutoff?: number; // _Cutoff
   map?: THREE.Texture; // _MainTex
   mainTex?: THREE.Texture; // _MainTex (will be renamed to map)

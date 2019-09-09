@@ -1,4 +1,4 @@
-export interface DebugOption {
+export interface VRMDebugOptions {
   disableBoxHelper?: boolean;
   disableSkeletonHelper?: boolean;
   disableFaceDirectionHelper?: boolean;
