@@ -26,7 +26,7 @@
     "build-types": "tsc --emitDeclarationOnly",
     "docs": "typedoc --out docs --mode file --excludeNotExported",
     "gh-pages": "node ./bin/gh-pages.js",
-    "lint": "eslint --fix src/**/*.ts",
+    "lint": "eslint --fix src/**/*.{ts,tsx}",
     "typedefgen": "node ./bin/typedefgen.js"
   },
   "husky": {
@@ -37,7 +37,6 @@
   "lint-staged": {
     "src/**/*.{ts,tsx}": [
       "eslint --fix",
-      "prettier --write",
       "git add"
     ]
   },
