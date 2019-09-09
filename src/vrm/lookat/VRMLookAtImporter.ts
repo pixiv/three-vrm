@@ -6,7 +6,17 @@ import { VRMLookAtBlendShapeApplyer } from './VRMLookAtBlendShapeApplyer';
 import { VRMLookAtBoneApplyer } from './VRMLookAtBoneApplyer';
 import { VRMLookAtHead } from './VRMLookAtHead';
 
+/**
+ * An importer that imports a [[VRMLookAtHead]] from a VRM extension of a GLTF.
+ */
 export class VRMLookAtImporter {
+  /**
+   * Import a [[VRMLookAtHead]] from a VRM.
+   *
+   * @param firstPerson A raw `firstPerson` field taken from the VRM extension of the GLTF
+   * @param blendShapeProxy A [[VRMBlendShapeProxy]] instance that represents the VRM
+   * @param humanoid A [[VRMHumanoid]] instance that represents the VRM
+   */
   public import(
     firstPerson: VRMSchema.FirstPerson,
     blendShapeProxy: VRMBlendShapeProxy,

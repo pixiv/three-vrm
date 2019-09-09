@@ -4,7 +4,19 @@ import { VRMImporterOptions } from '../VRMImporter';
 import { VRMDebugOptions } from './VRMDebugOptions';
 import { VRMImporterDebug } from './VRMImporterDebug';
 
+/**
+ * [[VRM]] but it has some useful gizmos.
+ */
 export class VRMDebug extends VRM {
+  /**
+   * Create a new VRMDebug from a parsed result of GLTF taken from GLTFLoader.
+   *
+   * See [[VRM.from]] for a detailed example.
+   *
+   * @param gltf A parsed GLTF object taken from GLTFLoader
+   * @param options Options that will be used in importer
+   * @param debugOption Options for VRMDebug features
+   */
   public static async from(
     gltf: THREE.GLTF,
     options: VRMImporterOptions = {},
@@ -14,6 +26,12 @@ export class VRMDebug extends VRM {
     return await importer.import(gltf, debugOption);
   }
 
+  /**
+   * Create a new VRMDebug instance.
+   *
+   * @param params [[VRMParameters]] that represents components of the VRM
+   * @param debugOption Options for VRMDebug features
+   */
   constructor(params: VRMParameters, debugOption: VRMDebugOptions = {}) {
     super(params);
 

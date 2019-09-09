@@ -1,14 +1,24 @@
 import * as THREE from 'three';
 
 /**
- * A single node of GLTF, represented as Three.js object.
+ * A single node of GLTFs, represented as a Three.js object.
+ *
+ * See: https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#nodes-and-hierarchy
  */
 export type GLTFNode = THREE.Object3D;
 
 /**
- * A single primitive of GLTF, represented as Three.js object.
+ * A single primitive of GLTFs, represented as a Three.js object.
+ *
+ * See: https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#meshes
  */
 export type GLTFPrimitive = THREE.Mesh | THREE.SkinnedMesh;
+
+/**
+ * A single mesh of GLTFs, represented as a Three.js object;
+ *
+ * See: https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#meshes
+ */
 export type GLTFMesh = THREE.Group | THREE.Mesh | THREE.SkinnedMesh;
 
 /**
