@@ -68,24 +68,17 @@ export class VRMImporter {
 
     reduceBones(scene);
 
-    const materials = await this._materialImporter.convertGLTFMaterials(gltf);
+    const materials = (await this._materialImporter.convertGLTFMaterials(gltf)) || undefined;
 
-    const humanoid = vrmExt.humanoid
-      ? (await this._humanoidImporter.import(gltf, vrmExt.humanoid)) || undefined
-      : undefined;
+    const humanoid = (await this._humanoidImporter.import(gltf)) || undefined;
 
-    const firstPerson =
-      vrmExt.firstPerson && humanoid
-        ? (await this._firstPersonImporter.import(gltf, humanoid, vrmExt.firstPerson)) || undefined
-        : undefined;
+    const firstPerson = humanoid ? (await this._firstPersonImporter.import(gltf, humanoid)) || undefined : undefined;
 
-    const blendShapeProxy = vrmExt.blendShapeMaster
-      ? (await this._blendShapeImporter.import(gltf, vrmExt.blendShapeMaster)) || undefined
-      : undefined;
+    const blendShapeProxy = (await this._blendShapeImporter.import(gltf)) || undefined;
 
     const lookAt =
-      vrmExt.firstPerson && blendShapeProxy && humanoid
-        ? await this._lookAtImporter.import(vrmExt.firstPerson, blendShapeProxy, humanoid)
+      blendShapeProxy && humanoid
+        ? (await this._lookAtImporter.import(gltf, blendShapeProxy, humanoid)) || undefined
         : undefined;
 
     const springBoneManager = (await this._springBoneImporter.import(gltf)) || undefined;

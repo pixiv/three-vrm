@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { VRMBlendShapeProxy } from '../blendshape';
 import { VRMHumanoid } from '../humanoid';
 import { VRMLookAtHead } from '../lookat/VRMLookAtHead';
@@ -6,12 +7,18 @@ import { VRMSchema } from '../types';
 import { VRMLookAtHeadDebug } from './VRMLookAtHeadDebug';
 
 export class VRMLookAtImporterDebug extends VRMLookAtImporter {
-  public import(
-    firstPerson: VRMSchema.FirstPerson,
-    blendShapeProxy: VRMBlendShapeProxy,
-    humanoid: VRMHumanoid,
-  ): VRMLookAtHead {
-    const applyer = this._importApplyer(firstPerson, blendShapeProxy, humanoid);
+  public import(gltf: THREE.GLTF, blendShapeProxy: VRMBlendShapeProxy, humanoid: VRMHumanoid): VRMLookAtHead | null {
+    const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
+    if (!vrmExt) {
+      return null;
+    }
+
+    const schemaFirstPerson: VRMSchema.FirstPerson | undefined = vrmExt.firstPerson;
+    if (!schemaFirstPerson) {
+      return null;
+    }
+
+    const applyer = this._importApplyer(schemaFirstPerson, blendShapeProxy, humanoid);
     return new VRMLookAtHeadDebug(humanoid, applyer || undefined);
   }
 }

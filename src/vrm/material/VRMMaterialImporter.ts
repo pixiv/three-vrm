@@ -43,7 +43,17 @@ export class VRMMaterialImporter {
    *
    * @param gltf A parsed result of GLTF taken from GLTFLoader
    */
-  public async convertGLTFMaterials(gltf: THREE.GLTF): Promise<THREE.Material[]> {
+  public async convertGLTFMaterials(gltf: THREE.GLTF): Promise<THREE.Material[] | null> {
+    const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
+    if (!vrmExt) {
+      return null;
+    }
+
+    const materialProperties: VRMSchema.Material[] | undefined = vrmExt.materialProperties;
+    if (!materialProperties) {
+      return null;
+    }
+
     const meshesMap: GLTFMesh[] = await gltf.parser.getDependencies('mesh');
     const materialList: { [vrmMaterialIndex: number]: { surface: THREE.Material; outline?: THREE.Material } } = {};
     const materials: THREE.Material[] = []; // result
@@ -67,7 +77,7 @@ export class VRMMaterialImporter {
             // create / push to cache (or pop from cache) vrm materials
             const vrmMaterialIndex = gltf.parser.json.meshes![meshIndex].primitives[primitiveIndex].material!;
 
-            let props = (gltf.parser.json.extensions!.VRM as VRMSchema.VRM).materialProperties![vrmMaterialIndex];
+            let props = materialProperties[vrmMaterialIndex];
             if (!props) {
               console.warn(
                 `VRMMaterialImporter: There are no material definition for material #${vrmMaterialIndex} on VRM extension.`,
