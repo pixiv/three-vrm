@@ -1,20 +1,20 @@
 import * as THREE from 'three';
 import { VRM, VRMParameters } from '../VRM';
 import { VRMImporterOptions } from '../VRMImporter';
-import { DebugOption } from './DebugOption';
+import { VRMDebugOptions } from './VRMDebugOptions';
 import { VRMImporterDebug } from './VRMImporterDebug';
 
 export class VRMDebug extends VRM {
   public static async from(
     gltf: THREE.GLTF,
     options: VRMImporterOptions = {},
-    debugOption: DebugOption = {},
+    debugOption: VRMDebugOptions = {},
   ): Promise<VRM> {
     const importer = new VRMImporterDebug(options);
     return await importer.import(gltf, debugOption);
   }
 
-  constructor(params: VRMParameters, debugOption: DebugOption = {}) {
+  constructor(params: VRMParameters, debugOption: VRMDebugOptions = {}) {
     super(params);
 
     // Gizmoを展開
