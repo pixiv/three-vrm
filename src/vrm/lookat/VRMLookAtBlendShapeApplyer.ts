@@ -4,6 +4,14 @@ import { VRMSchema } from '../types';
 import { CurveMapper } from './CurveMapper';
 import { VRMLookAtApplyer } from './VRMLookAtApplyer';
 
+function deg2rad(map: VRMSchema.FirstPersonDegreeMap): VRMSchema.FirstPersonDegreeMap {
+  return {
+    xRange: typeof map.xRange === 'number' ? THREE.Math.DEG2RAD * map.xRange : undefined,
+    yRange: map.yRange, // yRange means weight not radian
+    curve: map.curve,
+  };
+}
+
 export class VRMLookAtBlendShapeApplyer extends VRMLookAtApplyer {
   private readonly _blendShapeProxy: VRMBlendShapeProxy;
 
@@ -21,7 +29,7 @@ export class VRMLookAtBlendShapeApplyer extends VRMLookAtApplyer {
     return VRMSchema.FirstPersonLookAtTypeName.BlendShape;
   }
 
-  public lookAt(euler: THREE.Euler) {
+  public lookAt(euler: THREE.Euler): void {
     const srcX = euler.x;
     const srcY = euler.y;
 
@@ -44,12 +52,4 @@ export class VRMLookAtBlendShapeApplyer extends VRMLookAtApplyer {
       this._blendShapeProxy.setValue(VRMSchema.BlendShapePresetName.Lookdown, mapperVerticalDown.map(srcX));
     }
   }
-}
-
-function deg2rad(map: VRMSchema.FirstPersonDegreeMap): VRMSchema.FirstPersonDegreeMap {
-  return {
-    xRange: typeof map.xRange === 'number' ? THREE.Math.DEG2RAD * map.xRange : undefined,
-    yRange: map.yRange, // yRange means weight not radian
-    curve: map.curve,
-  };
 }

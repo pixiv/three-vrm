@@ -4,6 +4,14 @@ import { GLTFNode, VRMSchema } from '../types';
 import { CurveMapper } from './CurveMapper';
 import { VRMLookAtApplyer } from './VRMLookAtApplyer';
 
+function deg2rad(map: VRMSchema.FirstPersonDegreeMap): VRMSchema.FirstPersonDegreeMap {
+  return {
+    xRange: typeof map.xRange === 'number' ? THREE.Math.DEG2RAD * map.xRange : undefined,
+    yRange: typeof map.yRange === 'number' ? THREE.Math.DEG2RAD * map.yRange : undefined,
+    curve: map.curve,
+  };
+}
+
 export class VRMLookAtBoneApplyer extends VRMLookAtApplyer {
   private readonly lookAtHorizontalInner: VRMSchema.FirstPersonDegreeMap;
 
@@ -27,7 +35,7 @@ export class VRMLookAtBoneApplyer extends VRMLookAtApplyer {
     return VRMSchema.FirstPersonLookAtTypeName.Bone;
   }
 
-  public lookAt(euler: THREE.Euler) {
+  public lookAt(euler: THREE.Euler): void {
     const srcX = euler.x;
     const srcY = euler.y;
 
@@ -66,12 +74,4 @@ export class VRMLookAtBoneApplyer extends VRMLookAtApplyer {
       }
     }
   }
-}
-
-function deg2rad(map: VRMSchema.FirstPersonDegreeMap): VRMSchema.FirstPersonDegreeMap {
-  return {
-    xRange: typeof map.xRange === 'number' ? THREE.Math.DEG2RAD * map.xRange : undefined,
-    yRange: typeof map.yRange === 'number' ? THREE.Math.DEG2RAD * map.yRange : undefined,
-    curve: map.curve,
-  };
 }

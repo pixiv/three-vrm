@@ -76,9 +76,7 @@ export class VRMBlendShapeImporter {
               )
             ) {
               console.warn(
-                `VRMBlendShapeImporter: ${
-                  schemaGroup.name
-                } attempts to index ${morphTargetIndex}th morph but not found.`,
+                `VRMBlendShapeImporter: ${schemaGroup.name} attempts to index ${morphTargetIndex}th morph but not found.`,
               );
               return;
             }

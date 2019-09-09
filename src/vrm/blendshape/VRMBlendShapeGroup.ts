@@ -32,8 +32,8 @@ const _color = new THREE.Color();
 // animationMixer の監視対象は、Scene の中に入っている必要がある。
 // そのため、表示オブジェクトではないけれど、Object3D を継承して Scene に投入できるようにする。
 export class VRMBlendShapeGroup extends THREE.Object3D {
-  public weight: number = 0.0;
-  public isBinary: boolean = false;
+  public weight = 0.0;
+  public isBinary = false;
 
   private _binds: VRMBlendShapeBind[] = [];
   private _materialValues: VRMBlendShapeMaterialValue[] = [];

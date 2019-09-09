@@ -17,10 +17,10 @@ const LOOK_AT_EULER_ORDER = 'ZXY'; // yaw-pitch-roll
 export class VRMLookAtHead {
   public head: GLTFNode;
 
-  public autoUpdate: boolean = true;
+  public autoUpdate = true;
 
   public givingUpThreshold?: number = undefined; // this is the value of cos(theta)
-  public dumpingFactor: number = 0.5;
+  public dumpingFactor = 0.5;
 
   public leftEyeWorldPosition?: THREE.Vector3;
   public rightEyeWorldPosition?: THREE.Vector3;
@@ -59,7 +59,7 @@ export class VRMLookAtHead {
     return this._target;
   }
 
-  public setTarget(target: THREE.Object3D) {
+  public setTarget(target: THREE.Object3D): void {
     this._target = target;
     const worldPosition = new THREE.Vector3();
     this._target.getWorldPosition(worldPosition);
@@ -132,7 +132,7 @@ export class VRMLookAtHead {
     }
   }
 
-  private setCurrentTargetPosition(target: THREE.Object3D, lookAtTargetTo: THREE.Vector3) {
+  private setCurrentTargetPosition(target: THREE.Object3D, lookAtTargetTo: THREE.Vector3): void {
     if (!this._lastTargetPosition.equals(target.position)) {
       this.setTarget(target);
 

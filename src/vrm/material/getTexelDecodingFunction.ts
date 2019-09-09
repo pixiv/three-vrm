@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-export const getEncodingComponents = (encoding: THREE.TextureEncoding) => {
+export const getEncodingComponents = (encoding: THREE.TextureEncoding): [string, string] => {
   switch (encoding) {
     case THREE.LinearEncoding:
       return ['Linear', '( value )'];
@@ -21,7 +21,7 @@ export const getEncodingComponents = (encoding: THREE.TextureEncoding) => {
   }
 };
 
-export const getTexelDecodingFunction = (functionName: string, encoding: THREE.TextureEncoding) => {
+export const getTexelDecodingFunction = (functionName: string, encoding: THREE.TextureEncoding): string => {
   const components = getEncodingComponents(encoding);
   return 'vec4 ' + functionName + '( vec4 value ) { return ' + components[0] + 'ToLinear' + components[1] + '; }';
 };
