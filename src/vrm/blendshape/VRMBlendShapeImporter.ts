@@ -4,7 +4,16 @@ import { renameMaterialProperty } from '../utils/renameMaterialProperty';
 import { VRMBlendShapeGroup } from './VRMBlendShapeGroup';
 import { VRMBlendShapeProxy } from './VRMBlendShapeProxy';
 
+/**
+ * An importer that imports a [[VRMBlendShape]] from a VRM extension of a GLTF.
+ */
 export class VRMBlendShapeImporter {
+  /**
+   * Import a [[VRMBlendShape]] from a VRM.
+   *
+   * @param gltf A parsed result of GLTF taken from GLTFLoader
+   * @param schemaBlendShape A raw `blendShapeMaster` field taken from the VRM extension of the GLTF
+   */
   public async import(gltf: THREE.GLTF, schemaBlendShape: VRMSchema.BlendShape): Promise<VRMBlendShapeProxy | null> {
     const blendShape = new VRMBlendShapeProxy();
 

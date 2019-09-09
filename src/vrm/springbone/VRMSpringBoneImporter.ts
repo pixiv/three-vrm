@@ -4,13 +4,18 @@ import { GIZMO_RENDER_ORDER, VRMSpringBone } from './VRMSpringBone';
 import { VRMSpringBoneColliderGroup, VRMSpringBoneColliderMesh } from './VRMSpringBoneColliderGroup';
 import { VRMSpringBoneGroup, VRMSpringBoneManager } from './VRMSpringBoneManager';
 
+/**
+ * An importer that imports a [[VRMSpringBoneManager]] from a VRM extension of a GLTF.
+ */
 export class VRMSpringBoneImporter {
   protected get isColiderMeshVisible(): boolean {
     return false;
   }
 
   /**
-   * Import spring bones from a VRM.
+   * Import a [[VRMLookAtHead]] from a VRM.
+   *
+   * @param gltf A parsed result of GLTF taken from GLTFLoader
    */
   public async import(gltf: THREE.GLTF): Promise<VRMSpringBoneManager | null> {
     if (

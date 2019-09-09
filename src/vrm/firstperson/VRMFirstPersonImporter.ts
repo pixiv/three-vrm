@@ -3,7 +3,17 @@ import { VRMHumanoid } from '../humanoid';
 import { GLTFMesh, GLTFNode, VRMSchema } from '../types';
 import { VRMFirstPerson, VRMRendererFirstPersonFlags } from './VRMFirstPerson';
 
+/**
+ * An importer that imports a [[VRMFirstPerson]] from a VRM extension of a GLTF.
+ */
 export class VRMFirstPersonImporter {
+  /**
+   * Import a [[VRMFirstPerson]] from a VRM.
+   *
+   * @param gltf A parsed result of GLTF taken from GLTFLoader
+   * @param humanoid A [[VRMHumanoid]] instance that represents the VRM
+   * @param schemaFirstPerson A raw `firstPerson` field taken from the VRM extension of the GLTF
+   */
   public async import(
     gltf: THREE.GLTF,
     humanoid: VRMHumanoid,

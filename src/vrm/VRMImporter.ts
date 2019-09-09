@@ -18,6 +18,9 @@ export interface VRMImporterOptions {
   springBoneImporter?: VRMSpringBoneImporter;
 }
 
+/**
+ * An importer that imports a [[VRM]] from a VRM extension of a GLTF.
+ */
 export class VRMImporter {
   protected readonly _blendShapeImporter: VRMBlendShapeImporter;
   protected readonly _lookAtImporter: VRMLookAtImporter;

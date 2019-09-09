@@ -7,6 +7,9 @@ import { VRMLookAtHeadDebug } from './VRMLookAtHeadDebug';
 import { VRMLookAtImporterDebug } from './VRMLookAtImporterDebug';
 import { VRMSpringBoneImporterDebug } from './VRMSpringBoneImporterDebug';
 
+/**
+ * An importer that imports a [[VRMDebug]] from a VRM extension of a GLTF.
+ */
 export class VRMImporterDebug extends VRMImporter {
   public constructor(options: VRMImporterOptions = {}) {
     options.lookAtImporter = options.lookAtImporter || new VRMLookAtImporterDebug();
