@@ -1,16 +1,21 @@
 import * as THREE from 'three';
 import { GLTFNode, VRMSchema } from '../types';
 import { GIZMO_RENDER_ORDER, VRMSpringBone } from './VRMSpringBone';
-import { ColliderMesh, VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';
+import { VRMSpringBoneColliderGroup, VRMSpringBoneColliderMesh } from './VRMSpringBoneColliderGroup';
 import { VRMSpringBoneGroup, VRMSpringBoneManager } from './VRMSpringBoneManager';
 
+/**
+ * An importer that imports a [[VRMSpringBoneManager]] from a VRM extension of a GLTF.
+ */
 export class VRMSpringBoneImporter {
   protected get isColiderMeshVisible(): boolean {
     return false;
   }
 
   /**
-   * Import spring bones from a VRM.
+   * Import a [[VRMLookAtHead]] from a VRM.
+   *
+   * @param gltf A parsed result of GLTF taken from GLTFLoader
    */
   public async import(gltf: THREE.GLTF): Promise<VRMSpringBoneManager | null> {
     if (
@@ -80,7 +85,7 @@ export class VRMSpringBoneImporter {
       const dragForce = vrmBoneGroup.dragForce;
       const hitRadius = vrmBoneGroup.hitRadius;
 
-      const colliders: ColliderMesh[] = [];
+      const colliders: VRMSpringBoneColliderMesh[] = [];
       vrmBoneGroup.colliderGroups.forEach((colliderIndex) => {
         colliders.push(...colliderGroups[colliderIndex].colliders);
       });
@@ -140,7 +145,7 @@ export class VRMSpringBoneImporter {
       }
 
       const bone = await gltf.parser.getDependency('node', colliderGroup.node);
-      const colliders: ColliderMesh[] = [];
+      const colliders: VRMSpringBoneColliderMesh[] = [];
       colliderGroup.colliders.forEach((collider) => {
         if (
           collider.offset === undefined ||

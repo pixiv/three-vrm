@@ -8,15 +8,27 @@ import { VRMHumanDescription } from './VRMHumanDescription';
  * A class represents humanoid of a VRM.
  */
 export class VRMHumanoid {
+  /**
+   * A [[VRMHumanBones]] that contains all the human bones of the VRM.
+   * You might want to get these bones using [[VRMHumanoid.getBone]].
+   */
   public readonly humanBones: VRMHumanBones;
+
+  /**
+   * A [[VRMHumanDescription]] that represents properties of the humanoid.
+   */
   public readonly humanDescription: VRMHumanDescription;
 
+  /**
+   * A [[VRMPose]] that is its default state.
+   * You might use [[VRMHumanoid.setPose]] with this pose to reset its state.
+   */
   public readonly restPose: VRMPose;
 
   /**
    * Create a new [[VRMHumanoid]].
    * @param boneArray A [[VRMHumanBoneArray]] contains all the bones of the new humanoid
-   * @param humanDescription A [[VRMHumanDescription]] represents the new humanoid
+   * @param humanDescription A [[VRMHumanDescription]] that represents properties of the new humanoid
    */
   public constructor(boneArray: VRMHumanBoneArray, humanDescription: VRMHumanDescription) {
     this.humanBones = this._createHumanBones(boneArray);
@@ -91,6 +103,8 @@ export class VRMHumanoid {
   /**
    * Return a bone bound to a specified [[HumanBone]], as a [[VRMHumanBone]].
    *
+   * See also: [[VRMHumanoid.getBones]]
+   *
    * @param name Name of the bone you want
    */
   public getBone(name: VRMSchema.HumanoidBoneName): VRMHumanBone | undefined {
@@ -99,6 +113,8 @@ export class VRMHumanoid {
 
   /**
    * Return bones bound to a specified [[HumanBone]], as an array of [[VRMHumanBone]].
+   *
+   * See also: [[VRMHumanoid.getBone]]
    *
    * @param name Name of the bone you want
    */
@@ -109,6 +125,8 @@ export class VRMHumanoid {
   /**
    * Return a bone bound to a specified [[HumanBone]], as a THREE.Object3D.
    *
+   * See also: [[VRMHumanoid.getBoneNodes]]
+   *
    * @param name Name of the bone you want
    */
   public getBoneNode(name: VRMSchema.HumanoidBoneName): GLTFNode | null {
@@ -117,6 +135,8 @@ export class VRMHumanoid {
 
   /**
    * Return bones bound to a specified [[HumanBone]], as an array of THREE.Object3D.
+   *
+   * See also: [[VRMHumanoid.getBoneNode]]
    *
    * @param name Name of the bone you want
    */

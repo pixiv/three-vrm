@@ -3,20 +3,46 @@ import { GLTFMesh, GLTFPrimitive, VRMSchema } from '../types';
 import { MToonMaterial, MToonMaterialOutlineWidthMode, MToonMaterialRenderMode } from './MToonMaterial';
 import { VRMUnlitMaterial, VRMUnlitMaterialRenderType } from './VRMUnlitMaterial';
 
+/**
+ * Options for a [[VRMMaterialImporter]] instance.
+ */
 export interface VRMMaterialImporterOptions {
+  /**
+   * Whether the workflow should be linear or gamma.
+   *
+   * See also: https://threejs.org/docs/#api/en/renderers/WebGLRenderer.gammaOutput
+   */
   colorSpaceGamma?: boolean;
+
+  /**
+   * A function that returns a `Promise` of environment map texture.
+   * The importer will attempt to call this function when it have to use an envmap.
+   */
   requestEnvMap?: () => Promise<THREE.Texture | null>;
 }
 
+/**
+ * An importer that imports VRM materials from a VRM extension of a GLTF.
+ */
 export class VRMMaterialImporter {
   private readonly _colorSpaceGamma: boolean;
   private readonly _requestEnvMap?: () => Promise<THREE.Texture | null>;
 
+  /**
+   * Create a new VRMMaterialImporter.
+   *
+   * @param options Options of the VRMMaterialImporter
+   */
   constructor(options: VRMMaterialImporterOptions = {}) {
     this._colorSpaceGamma = options.colorSpaceGamma || true;
     this._requestEnvMap = options.requestEnvMap;
   }
 
+  /**
+   * Convert all the materials of given GLTF based on VRM extension field `materialProperties`.
+   *
+   * @param gltf A parsed result of GLTF taken from GLTFLoader
+   */
   public async convertGLTFMaterials(gltf: THREE.GLTF): Promise<THREE.Material[]> {
     const meshesMap: GLTFMesh[] = await gltf.parser.getDependencies('mesh');
     const materialList: { [vrmMaterialIndex: number]: { surface: THREE.Material; outline?: THREE.Material } } = {};

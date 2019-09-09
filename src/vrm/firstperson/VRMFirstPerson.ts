@@ -15,7 +15,7 @@ enum FirstPersonFlag {
  * This class represents a single [`meshAnnotation`](https://github.com/vrm-c/UniVRM/blob/master/specification/0.0/schema/vrm.firstperson.meshannotation.schema.json) entry.
  * Each mesh will be assigned to specified layer when you call [[VRMFirstPerson.setup]].
  */
-export class RendererFirstPersonFlags {
+export class VRMRendererFirstPersonFlags {
   private static parseFirstPersonFlag(firstPersonFlag: string | undefined) {
     switch (firstPersonFlag) {
       case 'Both':
@@ -46,7 +46,7 @@ export class RendererFirstPersonFlags {
    * @param node A node of the annotation entry.
    */
   constructor(firstPersonFlag: string | undefined, mesh: GLTFMesh) {
-    this.firstPersonFlag = RendererFirstPersonFlags.parseFirstPersonFlag(firstPersonFlag);
+    this.firstPersonFlag = VRMRendererFirstPersonFlags.parseFirstPersonFlag(firstPersonFlag);
     this.mesh = mesh;
   }
 }
@@ -67,7 +67,7 @@ export class VRMFirstPerson {
   private static readonly DEFAULT_THIRDPERSON_ONLY_LAYER = 10;
 
   private readonly _firstPersonBone: GLTFNode;
-  private readonly _meshAnnotations: RendererFirstPersonFlags[] = [];
+  private readonly _meshAnnotations: VRMRendererFirstPersonFlags[] = [];
   private readonly _firstPersonBoneOffset: THREE.Vector3;
 
   private _firstPersonOnlyLayer = VRMFirstPerson.DEFAULT_FIRSTPERSON_ONLY_LAYER;
@@ -85,7 +85,7 @@ export class VRMFirstPerson {
   constructor(
     firstPersonBone: GLTFNode,
     firstPersonBoneOffset: THREE.Vector3,
-    meshAnnotations: RendererFirstPersonFlags[],
+    meshAnnotations: VRMRendererFirstPersonFlags[],
   ) {
     this._firstPersonBone = firstPersonBone;
     this._firstPersonBoneOffset = firstPersonBoneOffset;
@@ -96,7 +96,7 @@ export class VRMFirstPerson {
     return this._firstPersonBone;
   }
 
-  public get meshAnnotations(): RendererFirstPersonFlags[] {
+  public get meshAnnotations(): VRMRendererFirstPersonFlags[] {
     return this._meshAnnotations;
   }
 

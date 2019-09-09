@@ -8,6 +8,9 @@ import { VRMSchema } from './types';
 import { deepDispose } from './utils/disposer';
 import { VRMImporter, VRMImporterOptions } from './VRMImporter';
 
+/**
+ * Parameters for a [[VRM]] class.
+ */
 export interface VRMParameters {
   scene: THREE.Scene;
   humanoid?: VRMHumanoid;
@@ -19,9 +22,13 @@ export interface VRMParameters {
   meta?: VRMSchema.Meta;
 }
 
+/**
+ * A class that represents a single VRM model.
+ * See the documentation of [[VRM.from]] for the most basic use of VRM.
+ */
 export class VRM {
   /**
-   * Create a [[VRM]] from a parsed result of GLTF taken from GLTFLoader.
+   * Create a new VRM from a parsed result of GLTF taken from GLTFLoader.
    * It's probably a thing what you want to get started with VRMs.
    *
    * @example Most basic use of VRM
@@ -135,6 +142,9 @@ export class VRM {
     }
   }
 
+  /**
+   * Dispose everything about the VRM instance.
+   */
   public dispose(): void {
     const scene = this.scene;
     if (scene) {

@@ -84,6 +84,26 @@ export class VRMBlendShapeProxy {
    * Get a track name of specified blend shape group.
    * This track name is needed to manipulate its blend shape group via keyframe animations.
    *
+   * @example Manipulate a blend shape group using keyframe animation
+   * ```js
+   * const trackName = vrm.blendShapeProxy.getBlendShapeTrackName( THREE.VRMSchema.BlendShapePresetName.Blink );
+   * const track = new THREE.NumberKeyframeTrack(
+   *   name,
+   *   [ 0.0, 0.5, 1.0 ], // times
+   *   [ 0.0, 1.0, 0.0 ] // values
+   * );
+   *
+   * const clip = new THREE.AnimationClip(
+   *   'blink', // name
+   *   1.0, // duration
+   *   [ track ] // tracks
+   * );
+   *
+   * const mixer = new THREE.AnimationMixer( vrm.scene );
+   * const action = mixer.clipAction( clip );
+   * action.play();
+   * ```
+   *
    * @param name Name of the blend shape group
    */
   public getBlendShapeTrackName(name: VRMSchema.BlendShapePresetName | string): string | null {

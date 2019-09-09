@@ -1,20 +1,38 @@
 import * as THREE from 'three';
 import { VRM, VRMParameters } from '../VRM';
 import { VRMImporterOptions } from '../VRMImporter';
-import { DebugOption } from './DebugOption';
+import { VRMDebugOptions } from './VRMDebugOptions';
 import { VRMImporterDebug } from './VRMImporterDebug';
 
+/**
+ * [[VRM]] but it has some useful gizmos.
+ */
 export class VRMDebug extends VRM {
+  /**
+   * Create a new VRMDebug from a parsed result of GLTF taken from GLTFLoader.
+   *
+   * See [[VRM.from]] for a detailed example.
+   *
+   * @param gltf A parsed GLTF object taken from GLTFLoader
+   * @param options Options that will be used in importer
+   * @param debugOption Options for VRMDebug features
+   */
   public static async from(
     gltf: THREE.GLTF,
     options: VRMImporterOptions = {},
-    debugOption: DebugOption = {},
+    debugOption: VRMDebugOptions = {},
   ): Promise<VRM> {
     const importer = new VRMImporterDebug(options);
     return await importer.import(gltf, debugOption);
   }
 
-  constructor(params: VRMParameters, debugOption: DebugOption = {}) {
+  /**
+   * Create a new VRMDebug instance.
+   *
+   * @param params [[VRMParameters]] that represents components of the VRM
+   * @param debugOption Options for VRMDebug features
+   */
+  constructor(params: VRMParameters, debugOption: VRMDebugOptions = {}) {
     super(params);
 
     // Gizmoを展開

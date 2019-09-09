@@ -3,7 +3,7 @@ import * as React from 'react';
 import { render } from 'react-dom';
 import * as THREE from 'three';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { DebugOption, VRM, VRMDebug, VRMSchema, VRMSpringBoneImporter, VRMSpringBoneImporterDebug } from '../..';
+import { VRM, VRMDebug, VRMDebugOptions, VRMSchema, VRMSpringBoneImporter, VRMSpringBoneImporterDebug } from '../..';
 import * as Action from './components';
 
 CameraControls.install({ THREE });
@@ -24,7 +24,7 @@ class App extends React.Component<{}, { vrmId: string | null }> {
   private directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
   private cameraControls?: CameraControls;
   private debug: boolean = false;
-  private debugOption: DebugOption = {
+  private debugOption: VRMDebugOptions = {
     disableFaceDirectionHelper: false,
     disableSkeletonHelper: false,
     disableBoxHelper: false,
