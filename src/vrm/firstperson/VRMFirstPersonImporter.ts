@@ -12,13 +12,18 @@ export class VRMFirstPersonImporter {
    *
    * @param gltf A parsed result of GLTF taken from GLTFLoader
    * @param humanoid A [[VRMHumanoid]] instance that represents the VRM
-   * @param schemaFirstPerson A raw `firstPerson` field taken from the VRM extension of the GLTF
    */
-  public async import(
-    gltf: THREE.GLTF,
-    humanoid: VRMHumanoid,
-    schemaFirstPerson: VRMSchema.FirstPerson,
-  ): Promise<VRMFirstPerson | null> {
+  public async import(gltf: THREE.GLTF, humanoid: VRMHumanoid): Promise<VRMFirstPerson | null> {
+    const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
+    if (!vrmExt) {
+      return null;
+    }
+
+    const schemaFirstPerson: VRMSchema.FirstPerson | undefined = vrmExt.firstPerson;
+    if (!schemaFirstPerson) {
+      return null;
+    }
+
     const firstPersonBoneIndex = schemaFirstPerson.firstPersonBone;
 
     let firstPersonBone: GLTFNode | null;

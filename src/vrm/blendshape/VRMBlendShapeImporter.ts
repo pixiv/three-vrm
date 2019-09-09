@@ -12,9 +12,18 @@ export class VRMBlendShapeImporter {
    * Import a [[VRMBlendShape]] from a VRM.
    *
    * @param gltf A parsed result of GLTF taken from GLTFLoader
-   * @param schemaBlendShape A raw `blendShapeMaster` field taken from the VRM extension of the GLTF
    */
-  public async import(gltf: THREE.GLTF, schemaBlendShape: VRMSchema.BlendShape): Promise<VRMBlendShapeProxy | null> {
+  public async import(gltf: THREE.GLTF): Promise<VRMBlendShapeProxy | null> {
+    const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
+    if (!vrmExt) {
+      return null;
+    }
+
+    const schemaBlendShape: VRMSchema.BlendShape | undefined = vrmExt.blendShapeMaster;
+    if (!schemaBlendShape) {
+      return null;
+    }
+
     const blendShape = new VRMBlendShapeProxy();
 
     const blendShapeGroups: VRMSchema.BlendShapeGroup[] | undefined = schemaBlendShape.blendShapeGroups;

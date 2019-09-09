@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { VRMBlendShapeProxy } from '../blendshape';
 import { VRMHumanoid } from '../humanoid';
 import { VRMSchema } from '../types';
@@ -13,30 +14,36 @@ export class VRMLookAtImporter {
   /**
    * Import a [[VRMLookAtHead]] from a VRM.
    *
-   * @param firstPerson A raw `firstPerson` field taken from the VRM extension of the GLTF
+   * @param gltf A parsed result of GLTF taken from GLTFLoader
    * @param blendShapeProxy A [[VRMBlendShapeProxy]] instance that represents the VRM
    * @param humanoid A [[VRMHumanoid]] instance that represents the VRM
    */
-  public import(
-    firstPerson: VRMSchema.FirstPerson,
-    blendShapeProxy: VRMBlendShapeProxy,
-    humanoid: VRMHumanoid,
-  ): VRMLookAtHead {
-    const applyer = this._importApplyer(firstPerson, blendShapeProxy, humanoid);
+  public import(gltf: THREE.GLTF, blendShapeProxy: VRMBlendShapeProxy, humanoid: VRMHumanoid): VRMLookAtHead | null {
+    const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
+    if (!vrmExt) {
+      return null;
+    }
+
+    const schemaFirstPerson: VRMSchema.FirstPerson | undefined = vrmExt.firstPerson;
+    if (!schemaFirstPerson) {
+      return null;
+    }
+
+    const applyer = this._importApplyer(schemaFirstPerson, blendShapeProxy, humanoid);
     return new VRMLookAtHead(humanoid, applyer || undefined);
   }
 
   protected _importApplyer(
-    firstPerson: VRMSchema.FirstPerson,
+    schemaFirstPerson: VRMSchema.FirstPerson,
     blendShapeProxy: VRMBlendShapeProxy,
     humanoid: VRMHumanoid,
   ): VRMLookAtApplyer | null {
-    const lookAtHorizontalInner = firstPerson.lookAtHorizontalInner;
-    const lookAtHorizontalOuter = firstPerson.lookAtHorizontalOuter;
-    const lookAtVerticalDown = firstPerson.lookAtVerticalDown;
-    const lookAtVerticalUp = firstPerson.lookAtVerticalUp;
+    const lookAtHorizontalInner = schemaFirstPerson.lookAtHorizontalInner;
+    const lookAtHorizontalOuter = schemaFirstPerson.lookAtHorizontalOuter;
+    const lookAtVerticalDown = schemaFirstPerson.lookAtVerticalDown;
+    const lookAtVerticalUp = schemaFirstPerson.lookAtVerticalUp;
 
-    switch (firstPerson.lookAtTypeName) {
+    switch (schemaFirstPerson.lookAtTypeName) {
       case VRMSchema.FirstPersonLookAtTypeName.Bone: {
         if (
           lookAtHorizontalInner === undefined ||
