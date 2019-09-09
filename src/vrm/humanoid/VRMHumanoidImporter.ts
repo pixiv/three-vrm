@@ -5,6 +5,9 @@ import { VRMHumanBoneArray } from './VRMHumanBoneArray';
 import { VRMHumanDescription } from './VRMHumanDescription';
 import { VRMHumanoid } from './VRMHumanoid';
 
+/**
+ * A class that imports [[VRMHumanoid]] from a VRM field of a GLTF.
+ */
 export class VRMHumanoidImporter {
   /**
    * Import a [[VRMHumanoid]] from a VRM.
