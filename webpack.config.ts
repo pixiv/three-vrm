@@ -24,7 +24,7 @@ const base = (mode: 'production' | 'development'): webpack.Configuration => {
         {
           test: /\.ts?$/,
           enforce: 'pre',
-          use: 'tslint-loader',
+          use: 'eslint-loader',
         },
         {
           test: /\.ts?$/,
@@ -57,7 +57,7 @@ const base = (mode: 'production' | 'development'): webpack.Configuration => {
   };
 };
 
-export default (env: any, argv: any) => {
+export default (env: any, argv: any): webpack.Configuration[] => {
   const isProd = argv.mode === 'production';
 
   return [
