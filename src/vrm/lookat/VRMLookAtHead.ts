@@ -112,7 +112,7 @@ export class VRMLookAtHead {
 
   public update(): void {
     if (this._target && this.head && this.autoUpdate && this._lookAtTarget && this._lookAtTargetTo) {
-      this.setCurrentTargetPosition(this._target, this._lookAtTargetTo);
+      this._setCurrentTargetPosition(this._target, this._lookAtTargetTo);
 
       const result = new THREE.Vector3().set(
         this._lookAtTargetTo.x - this._lookAtTarget.x,
@@ -132,7 +132,7 @@ export class VRMLookAtHead {
     }
   }
 
-  private setCurrentTargetPosition(target: THREE.Object3D, lookAtTargetTo: THREE.Vector3): void {
+  private _setCurrentTargetPosition(target: THREE.Object3D, lookAtTargetTo: THREE.Vector3): void {
     if (!this._lastTargetPosition.equals(target.position)) {
       this.setTarget(target);
 

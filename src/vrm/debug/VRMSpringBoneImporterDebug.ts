@@ -4,11 +4,11 @@ import { VRMSpringBoneImporter } from '../springbone/VRMSpringBoneImporter';
 import { VRMSpringBoneDebug } from './VRMSpringBoneDebug';
 
 export class VRMSpringBoneImporterDebug extends VRMSpringBoneImporter {
-  protected get isColiderMeshVisible(): boolean {
+  protected get _isColiderMeshVisible(): boolean {
     return true;
   }
 
-  protected createSpringBone(
+  protected _createSpringBone(
     gltf: THREE.GLTF,
     bone: THREE.Object3D,
     hitRadius: number,
