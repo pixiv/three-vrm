@@ -29,6 +29,12 @@ We usually don't have to generate these frequently.
 
 ## Syntax guidelines
 
+### First of all, obey your linter
+
+We are utilizing `eslint` and `prettier` to ensure our syntax rules consistent.
+
+Some editors like [Visual Studio Code](https://code.visualstudio.com/) have extensions that lets us enable to see which part on the code is not syntactically incorrect, or even fix such parts automatically.
+
 ### `private` / `protected` members must start from `_`
 
 Every private (or protected) members of a class should have leading underscore.
