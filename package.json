@@ -6,10 +6,11 @@
   "author": "pixiv",
   "files": [
     "lib",
+    "types",
     "LICENSE"
   ],
   "main": "lib/index.module.js",
-  "types": "lib/index.d.ts",
+  "types": "types/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/pixiv/three-vrm.git"
