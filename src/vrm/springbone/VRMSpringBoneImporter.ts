@@ -186,7 +186,7 @@ export class VRMSpringBoneImporter {
         // The colliderMesh must sync with the bone.
         // Attaching bone's matrix to the colliderMesh at every update.
         // (colliderMesh will move automecicallty)
-        colliderMesh.updateMatrixWorld = () => {
+        colliderMesh.updateMatrixWorld = (): void => {
           colliderMesh.matrixWorld.copy(bone.matrixWorld).multiply(offsetMatrix);
         };
         colliders.push(colliderMesh);

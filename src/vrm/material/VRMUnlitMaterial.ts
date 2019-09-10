@@ -2,6 +2,22 @@
 
 import * as THREE from 'three';
 
+export interface VRMUnlitMaterialParameters extends THREE.ShaderMaterialParameters {
+  cutoff?: number; // _Cutoff
+  map?: THREE.Texture; // _MainTex
+  mainTex?: THREE.Texture; // _MainTex (will be renamed to map)
+  mainTex_ST?: THREE.Vector4; // _MainTex_ST
+
+  renderType?: VRMUnlitMaterialRenderType | number;
+}
+
+export enum VRMUnlitMaterialRenderType {
+  Opaque,
+  Cutout,
+  Transparent,
+  TransparentWithZWrite,
+}
+
 /**
  * This is a material that is an equivalent of "VRM/Unlit***" on VRM spec, those materials are already kinda deprecated though...
  */
@@ -11,12 +27,12 @@ export class VRMUnlitMaterial extends THREE.ShaderMaterial {
    */
   public readonly isVRMUnlitMaterial: boolean = true;
 
-  public cutoff: number = 0.5;
+  public cutoff = 0.5;
   public map: THREE.Texture | null = null; // _MainTex
   public mainTex_ST: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _MainTex_ST
   private _renderType: VRMUnlitMaterialRenderType = VRMUnlitMaterialRenderType.Opaque;
 
-  public shouldApplyUniforms: boolean = true; // when this is true, applyUniforms effects
+  public shouldApplyUniforms = true; // when this is true, applyUniforms effects
 
   constructor(parameters?: VRMUnlitMaterialParameters) {
     super();
@@ -98,7 +114,7 @@ export class VRMUnlitMaterial extends THREE.ShaderMaterial {
   /**
    * Apply updated uniform variables.
    */
-  private _applyUniforms() {
+  private _applyUniforms(): void {
     if (!this.shouldApplyUniforms) {
       return;
     }
@@ -109,7 +125,7 @@ export class VRMUnlitMaterial extends THREE.ShaderMaterial {
     this.uniforms.mainTex_ST.value.copy(this.mainTex_ST);
   }
 
-  private updateShaderCode() {
+  private updateShaderCode(): void {
     this.defines = {
       RENDERTYPE_OPAQUE: this._renderType === VRMUnlitMaterialRenderType.Opaque,
       RENDERTYPE_CUTOUT: this._renderType === VRMUnlitMaterialRenderType.Cutout,
@@ -124,20 +140,4 @@ export class VRMUnlitMaterial extends THREE.ShaderMaterial {
     // == set needsUpdate flag =================================================
     this.needsUpdate = true;
   }
-}
-
-export interface VRMUnlitMaterialParameters extends THREE.ShaderMaterialParameters {
-  cutoff?: number; // _Cutoff
-  map?: THREE.Texture; // _MainTex
-  mainTex?: THREE.Texture; // _MainTex (will be renamed to map)
-  mainTex_ST?: THREE.Vector4; // _MainTex_ST
-
-  renderType?: VRMUnlitMaterialRenderType | number;
-}
-
-export enum VRMUnlitMaterialRenderType {
-  Opaque,
-  Cutout,
-  Transparent,
-  TransparentWithZWrite,
 }

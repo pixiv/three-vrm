@@ -16,7 +16,9 @@ export class VRMBlendShapeProxy {
   /**
    * Create a new VRMBlendShape.
    */
-  public constructor() {}
+  public constructor() {
+    // do nothing
+  }
 
   /**
    * List of name of registered blend shape group.
@@ -50,7 +52,7 @@ export class VRMBlendShapeProxy {
     name: string,
     presetName: VRMSchema.BlendShapePresetName | undefined,
     controller: VRMBlendShapeGroup,
-  ) {
+  ): void {
     this._blendShapeGroups[name] = controller;
     if (presetName) {
       this._blendShapePresetMap[presetName] = name;
@@ -73,7 +75,7 @@ export class VRMBlendShapeProxy {
    * @param name Name of the blend shape group
    * @param weight Weight
    */
-  public setValue(name: VRMSchema.BlendShapePresetName | string, weight: number) {
+  public setValue(name: VRMSchema.BlendShapePresetName | string, weight: number): void {
     const controller = this.getBlendShapeGroup(name);
     if (controller) {
       controller.weight = saturate(weight);
@@ -114,7 +116,7 @@ export class VRMBlendShapeProxy {
   /**
    * Update every blend shape groups.
    */
-  public update() {
+  public update(): void {
     Object.keys(this._blendShapeGroups).forEach((name) => {
       const controller = this._blendShapeGroups[name];
       controller.clearAppliedWeight();

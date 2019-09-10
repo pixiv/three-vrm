@@ -149,7 +149,7 @@ export class VRMSpringBone {
 
     this._initialLocalMatrix = this.bone.matrix.clone();
     this._initialLocalRotation = this.bone.quaternion.clone();
-    this._initialLocalChildPosition = (() => {
+    this._initialLocalChildPosition = ((): THREE.Vector3 => {
       if (this.bone.children.length === 0) {
         // 末端のボーン。子ボーンがいないため「自分の少し先」が子ボーンということにする
         // https://github.com/dwango/UniVRM/blob/master/Assets/VRM/UniVRM/Scripts/SpringBone/VRMSpringBone.cs#L246
@@ -204,7 +204,7 @@ export class VRMSpringBone {
     // それに基づいて処理直前に自分のworldMatrixを更新しておく
     this.bone.matrixWorld.multiplyMatrices(this.getParentMatrixWorld(), this.bone.matrix);
 
-    if (!!this.bone.parent) {
+    if (this.bone.parent) {
       // SpringBoneは親から順に処理されていくため、
       // 親のmatrixWorldは最新状態の前提でworldMatrixからquaternionを取り出す。
       // 制限はあるけれど、計算は少ないのでgetWorldQuaternionではなくこの方法を取る。
