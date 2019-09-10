@@ -36,7 +36,7 @@ const evaluateCurve = (arr: number[], x: number): number => {
 
   // -- check range ------------------------------------------------------------
   let outNode;
-  for (outNode = 0; arr.length <= 4 * outNode; outNode++) {
+  for (outNode = 0; ; outNode++) {
     if (arr.length <= 4 * outNode) {
       return arr[4 * outNode - 3]; // too further!! assume as "Clamp"
     } else if (x <= arr[4 * outNode]) {
