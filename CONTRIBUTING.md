@@ -58,7 +58,7 @@ class someClass {
 We accept use of accessors ( `get` / `set` ) .
 Let's use them unless you have any reason you should not use accessors (there are some arguments required, the stuff we are going to see via accessor does not have to be a private member...).
 
-The value that is required to be instanced (instances) are not applicable to this since we should give a priority to the [Instantiation should be minimal](#instantiation-should-be-minimal) rule described below.
+Some values that are required to be instanced (instances) are not applicable to this since we should give priority to the [Instantiation should be minimal](#instantiation-should-be-minimal) rule described below.
 
 ```ts
 class someClass {
