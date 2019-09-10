@@ -2,7 +2,7 @@
 // then we have to use `namespace` instead of export declarations for now.
 // See: https://github.com/TypeStrong/typedoc/pull/801
 
-// tslint:disable-next-line:no-namespace
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace VRMSchema {
   /**
    * VRM extension is for 3d humanoid avatars (and models) in VR applications.

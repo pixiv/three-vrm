@@ -11,7 +11,7 @@ const base = (mode: 'production' | 'development'): webpack.Configuration => {
     entry: path.resolve(__dirname, 'src', 'index.ts'),
     output: {
       path: path.resolve(__dirname, 'lib'),
-      filename: `index.module.js`,
+      filename: `three-vrm.module.js`,
       library: 'vrm',
       libraryTarget: 'umd',
       globalObject: 'this',
@@ -21,11 +21,6 @@ const base = (mode: 'production' | 'development'): webpack.Configuration => {
     },
     module: {
       rules: [
-        {
-          test: /\.ts?$/,
-          enforce: 'pre',
-          use: 'tslint-loader',
-        },
         {
           test: /\.ts?$/,
           exclude: /node_modules/,
@@ -62,7 +57,7 @@ const base = (mode: 'production' | 'development'): webpack.Configuration => {
   };
 };
 
-export default (env: any, argv: any) => {
+export default (env: any, argv: any): webpack.Configuration[] => {
   const isProd = argv.mode === 'production';
 
   return [
@@ -70,7 +65,7 @@ export default (env: any, argv: any) => {
     merge(base(argv.mode), {
       entry: path.resolve(__dirname, 'src', 'assign.ts'),
       output: {
-        filename: isProd ? 'index.min.js' : `index.js`,
+        filename: isProd ? 'three-vrm.min.js' : `three-vrm.js`,
         library: '__three_vrm__',
         libraryTarget: 'var',
       },
