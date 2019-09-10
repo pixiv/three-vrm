@@ -29,7 +29,7 @@ We usually don't have to generate these frequently.
 
 ## Syntax guidelines
 
-### `private` / `protected` members must start from `_`
+### `private` / `protected` members must start with `_`
 
 Every private (or protected) members of a class should have a leading underscore.
 It's kind of old JavaScript convention but it actually turns out to be very useful when you want to add accessors to members.
