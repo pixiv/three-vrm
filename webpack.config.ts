@@ -11,7 +11,7 @@ const base = (mode: 'production' | 'development'): webpack.Configuration => {
     entry: path.resolve(__dirname, 'src', 'index.ts'),
     output: {
       path: path.resolve(__dirname, 'lib'),
-      filename: `index.module.js`,
+      filename: `three-vrm.module.js`,
       library: 'vrm',
       libraryTarget: 'umd',
       globalObject: 'this',
@@ -70,7 +70,7 @@ export default (env: any, argv: any) => {
     merge(base(argv.mode), {
       entry: path.resolve(__dirname, 'src', 'assign.ts'),
       output: {
-        filename: isProd ? 'index.min.js' : `index.js`,
+        filename: isProd ? 'three-vrm.min.js' : `three-vrm.js`,
         library: '__three_vrm__',
         libraryTarget: 'var',
       },
