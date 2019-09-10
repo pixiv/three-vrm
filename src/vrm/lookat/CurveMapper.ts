@@ -35,14 +35,13 @@ const evaluateCurve = (arr: number[], x: number): number => {
   }
 
   // -- check range ------------------------------------------------------------
-  let outNode = 0;
-  while (true) {
+  let outNode;
+  for (outNode = 0; arr.length <= 4 * outNode; outNode++) {
     if (arr.length <= 4 * outNode) {
       return arr[4 * outNode - 3]; // too further!! assume as "Clamp"
     } else if (x <= arr[4 * outNode]) {
       break;
     }
-    outNode++;
   }
 
   const inNode = outNode - 1;
@@ -80,12 +79,12 @@ export class CurveMapper {
   /**
    * The maximum input range of the [[CurveMapper]].
    */
-  public curveXRangeDegree: number = 90.0;
+  public curveXRangeDegree = 90.0;
 
   /**
    * The maximum output value of the [[CurveMapper]].
    */
-  public curveYRangeDegree: number = 10.0;
+  public curveYRangeDegree = 10.0;
 
   /**
    * Create a new [[CurveMapper]].
@@ -113,7 +112,7 @@ export class CurveMapper {
    *
    * @param src The input value
    */
-  public map(src: number) {
+  public map(src: number): number {
     const clampedSrc = Math.min(Math.max(src, 0.0), this.curveXRangeDegree);
     const x = clampedSrc / this.curveXRangeDegree;
     return this.curveYRangeDegree * evaluateCurve(this.curve, x);

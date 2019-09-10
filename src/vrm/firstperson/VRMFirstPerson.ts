@@ -16,7 +16,7 @@ enum FirstPersonFlag {
  * Each mesh will be assigned to specified layer when you call [[VRMFirstPerson.setup]].
  */
 export class VRMRendererFirstPersonFlags {
-  private static parseFirstPersonFlag(firstPersonFlag: string | undefined) {
+  private static parseFirstPersonFlag(firstPersonFlag: string | undefined): FirstPersonFlag {
     switch (firstPersonFlag) {
       case 'Both':
         return FirstPersonFlag.Both;
@@ -73,7 +73,7 @@ export class VRMFirstPerson {
   private _firstPersonOnlyLayer = VRMFirstPerson.DEFAULT_FIRSTPERSON_ONLY_LAYER;
   private _thirdPersonOnlyLayer = VRMFirstPerson.DEFAULT_THIRDPERSON_ONLY_LAYER;
 
-  private _initialized: boolean = false;
+  private _initialized = false;
 
   /**
    * Create a new VRMFirstPerson object.
@@ -165,7 +165,7 @@ export class VRMFirstPerson {
   public setup({
     firstPersonOnlyLayer = VRMFirstPerson.DEFAULT_FIRSTPERSON_ONLY_LAYER,
     thirdPersonOnlyLayer = VRMFirstPerson.DEFAULT_THIRDPERSON_ONLY_LAYER,
-  } = {}) {
+  } = {}): void {
     if (this._initialized) {
       return;
     }
@@ -186,7 +186,7 @@ export class VRMFirstPerson {
     });
   }
 
-  private _excludeTriangles(triangles: number[], bws: number[][], skinIndex: number[][], exclude: number[]) {
+  private _excludeTriangles(triangles: number[], bws: number[][], skinIndex: number[][], exclude: number[]): number {
     let count = 0;
     if (bws != null && bws.length > 0) {
       for (let i = 0; i < triangles.length; i += 3) {
@@ -256,7 +256,7 @@ export class VRMFirstPerson {
     return dst;
   }
 
-  private _createHeadlessModelForSkinnedMesh(parent: THREE.Object3D, mesh: THREE.SkinnedMesh) {
+  private _createHeadlessModelForSkinnedMesh(parent: THREE.Object3D, mesh: THREE.SkinnedMesh): void {
     const eraseBoneIndexes: number[] = [];
     mesh.skeleton.bones.forEach((bone, index) => {
       if (this._isEraseTarget(bone)) eraseBoneIndexes.push(index);
@@ -273,7 +273,7 @@ export class VRMFirstPerson {
     parent.add(newMesh);
   }
 
-  private _createHeadlessModel(node: GLTFNode) {
+  private _createHeadlessModel(node: GLTFNode): void {
     if (node.type === 'Group') {
       node.layers.set(this._thirdPersonOnlyLayer);
       if (this._isEraseTarget(node)) {

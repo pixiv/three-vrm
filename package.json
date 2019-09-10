@@ -6,10 +6,11 @@
   "author": "pixiv",
   "files": [
     "lib",
+    "types",
     "LICENSE"
   ],
-  "main": "lib/index.module.js",
-  "types": "lib/index.d.ts",
+  "main": "lib/three-vrm.module.js",
+  "types": "types/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/pixiv/three-vrm.git"
@@ -19,13 +20,14 @@
     "postpublish": "yarn gh-pages",
     "all": "yarn clean && yarn build && yarn docs",
     "dev": "webpack-dev-server --mode development",
-    "clean": "rimraf docs lib",
+    "clean": "rimraf docs lib types",
     "build": "yarn build-dev && yarn build-prod && yarn build-types",
     "build-dev": "webpack --mode development",
     "build-prod": "webpack --mode production",
     "build-types": "tsc --emitDeclarationOnly",
     "docs": "typedoc --out docs --mode file --excludeNotExported",
     "gh-pages": "node ./bin/gh-pages.js",
+    "lint": "eslint src/**/*.{ts,tsx}",
     "typedefgen": "node ./bin/typedefgen.js"
   },
   "husky": {
@@ -35,12 +37,13 @@
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": [
-      "tslint --fix",
-      "prettier --write",
+      "eslint --fix",
       "git add"
     ]
   },
   "prettier": {
+    "endOfLine": "lf",
+    "tabWidth": 2,
     "singleQuote": true,
     "arrowParens": "always",
     "trailingComma": "all",
@@ -54,7 +57,12 @@
     "@types/webpack": "^4.4.19",
     "@types/webpack-dev-server": "^3.1.7",
     "@types/webpack-merge": "^4.1.5",
+    "@typescript-eslint/eslint-plugin": "^2.1.0",
+    "@typescript-eslint/parser": "^2.1.0",
     "ansi-colors": "^3.2.1",
+    "eslint": "^6.3.0",
+    "eslint-config-prettier": "^6.2.0",
+    "eslint-plugin-prettier": "^3.1.0",
     "fork-ts-checker-webpack-plugin": "^0.5.0",
     "gh-pages": "^2.1.1",
     "husky": "^1.2.0",
@@ -62,7 +70,7 @@
     "imports-loader": "^0.8.0",
     "jsonlint": "^1.6.3",
     "lint-staged": "8.1.0",
-    "prettier": "^1.15.2",
+    "prettier": "^1.18.2",
     "quicktype": "^15.0.199",
     "raw-loader": "^0.5.1",
     "rimraf": "^2.6.3",
@@ -71,10 +79,6 @@
     "three": "^0.103.0",
     "ts-loader": "^5.3.0",
     "ts-node": "^7.0.1",
-    "tslint": "^5.11.0",
-    "tslint-config-prettier": "^1.17.0",
-    "tslint-loader": "^3.5.4",
-    "tslint-plugin-prettier": "^2.0.1",
     "typedoc": "^0.14.2",
     "typedoc-webpack-plugin": "^1.1.4",
     "typescript": "^3.1.6",

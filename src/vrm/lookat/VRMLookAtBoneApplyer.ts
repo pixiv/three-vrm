@@ -36,7 +36,7 @@ export class VRMLookAtBoneApplyer extends VRMLookAtApplyer {
     this._rightEye = humanoid.getBoneNode(VRMSchema.HumanoidBoneName.RightEye);
   }
 
-  public lookAt(euler: THREE.Euler) {
+  public lookAt(euler: THREE.Euler): void {
     const srcX = euler.x;
     const srcY = euler.y;
 

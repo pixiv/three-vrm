@@ -5,6 +5,88 @@ import { getTexelDecodingFunction } from './getTexelDecodingFunction';
 
 const TAU = 2.0 * Math.PI;
 
+export interface MToonParameters extends THREE.ShaderMaterialParameters {
+  cutoff?: number; // _Cutoff
+  color?: THREE.Vector4; // rgb of _Color
+  shadeColor?: THREE.Vector4; // _ShadeColor
+  map?: THREE.Texture; // _MainTex
+  mainTex?: THREE.Texture; // _MainTex (will be renamed to map)
+  mainTex_ST?: THREE.Vector4; // _MainTex_ST
+  shadeTexture?: THREE.Texture; // _ShadeTexture
+  bumpScale?: number; // _BumpScale
+  normalMap?: THREE.Texture; // _BumpMap
+  bumpMap?: THREE.Texture; // _BumpMap (will be renamed to normalMap)
+  receiveShadowRate?: number; // _ReceiveShadowRate
+  receiveShadowTexture?: THREE.Texture; // _ReceiveShadowTexture
+  shadingGradeRate?: number; // _ShadingGradeRate
+  shadingGradeTexture?: THREE.Texture; // _ShadingGradeTexture
+  shadeShift?: number; // _ShadeShift
+  shadeToony?: number; // _ShadeToony
+  lightColorAttenuation?: number; // _LightColorAttenuation
+  indirectLightIntensity?: number; // _IndirectLightIntensity
+  rimTexture?: THREE.Texture; // _RimTexture
+  rimColor?: THREE.Vector4; // _RimColor
+  rimLightingMix?: number; // _RimLightingMix
+  rimFresnelPower?: number; // _RimFresnelPower
+  rimLift?: number; // _RimLift
+  sphereAdd?: THREE.Texture; // _SphereAdd
+  emissionColor?: THREE.Vector4; // _EmissionColor
+  emissiveMap?: THREE.Texture; // _EmissionMap
+  emissionMap?: THREE.Texture; // _EmissionMap (will be renamed to emissiveMap)
+  outlineWidthTexture?: THREE.Texture; // _OutlineWidthTexture
+  outlineWidth?: number; // _OutlineWidth
+  outlineScaledMaxDistance?: number; // _OutlineScaledMaxDistance
+  outlineColor?: THREE.Vector4; // _OutlineColor
+  outlineLightingMix?: number; // _OutlineLightingMix
+  uvAnimMaskTexture?: THREE.Texture; // _UvAnimMaskTexture
+  uvAnimScrollX?: number; // _UvAnimScrollX
+  uvAnimScrollY?: number; // _UvAnimScrollY
+  uvAnimRotation?: number; // _uvAnimRotation
+
+  debugMode?: MToonMaterialDebugMode | number; // _DebugMode
+  blendMode?: MToonMaterialRenderMode | number; // _BlendMode
+  outlineWidthMode?: MToonMaterialOutlineWidthMode | number; // OutlineWidthMode
+  outlineColorMode?: MToonMaterialOutlineColorMode | number; // OutlineColorMode
+  cullMode?: MToonMaterialCullMode | number; // _CullMode
+  outlineCullMode?: MToonMaterialCullMode | number; // _OutlineCullMode
+  srcBlend?: number; // _SrcBlend
+  dstBlend?: number; // _DstBlend
+  zWrite?: number; // _ZWrite (will be renamed to depthWrite)
+
+  isOutline?: boolean;
+}
+
+export enum MToonMaterialCullMode {
+  Off,
+  Front,
+  Back,
+}
+
+export enum MToonMaterialDebugMode {
+  None,
+  Normal,
+  LitShadeRate,
+  UV,
+}
+
+export enum MToonMaterialOutlineColorMode {
+  FixedColor,
+  MixedLighting,
+}
+
+export enum MToonMaterialOutlineWidthMode {
+  None,
+  WorldCoordinates,
+  ScreenCoordinates,
+}
+
+export enum MToonMaterialRenderMode {
+  Opaque,
+  Cutout,
+  Transparent,
+  TransparentWithZWrite,
+}
+
 /**
  * MToon is a material specification that has various features.
  * The spec and implementation are originally founded for Unity engine and this is a port of the material.
@@ -17,31 +99,31 @@ export class MToonMaterial extends THREE.ShaderMaterial {
    */
   public readonly isMToonMaterial: boolean = true;
 
-  public cutoff: number = 0.5; // _Cutoff
+  public cutoff = 0.5; // _Cutoff
   public color: THREE.Vector4 = new THREE.Vector4(1.0, 1.0, 1.0, 1.0); // _Color
   public shadeColor: THREE.Vector4 = new THREE.Vector4(0.97, 0.81, 0.86, 1.0); // _ShadeColor
   public map: THREE.Texture | null = null; // _MainTex
   public mainTex_ST: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _MainTex_ST
   public shadeTexture: THREE.Texture | null = null; // _ShadeTexture
   // public shadeTexture_ST: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _ShadeTexture_ST (unused)
-  public bumpScale: number = 1.0; // _BumpScale
+  public bumpScale = 1.0; // _BumpScale
   public normalMap: THREE.Texture | null = null; // _BumpMap. again, THIS IS _BumpMap
   // public bumpMap_ST: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _BumpMap_ST (unused)
-  public receiveShadowRate: number = 1.0; // _ReceiveShadowRate
+  public receiveShadowRate = 1.0; // _ReceiveShadowRate
   public receiveShadowTexture: THREE.Texture | null = null; // _ReceiveShadowTexture
   // public receiveShadowTexture_ST: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _ReceiveShadowTexture_ST (unused)
-  public shadingGradeRate: number = 1.0; // _ShadingGradeRate
+  public shadingGradeRate = 1.0; // _ShadingGradeRate
   public shadingGradeTexture: THREE.Texture | null = null; // _ShadingGradeTexture
   // public shadingGradeTexture_ST: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _ShadingGradeTexture_ST (unused)
-  public shadeShift: number = 0.0; // _ShadeShift
-  public shadeToony: number = 0.9; // _ShadeToony
-  public lightColorAttenuation: number = 0.0; // _LightColorAttenuation
-  public indirectLightIntensity: number = 0.1; // _IndirectLightIntensity
+  public shadeShift = 0.0; // _ShadeShift
+  public shadeToony = 0.9; // _ShadeToony
+  public lightColorAttenuation = 0.0; // _LightColorAttenuation
+  public indirectLightIntensity = 0.1; // _IndirectLightIntensity
   public rimTexture: THREE.Texture | null = null; // _RimTexture
   public rimColor: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 0.0, 1.0); // _RimColor
-  public rimLightingMix: number = 0.0; // _RimLightingMix
-  public rimFresnelPower: number = 1.0; // _RimFresnelPower
-  public rimLift: number = 0.0; // _RimLift
+  public rimLightingMix = 0.0; // _RimLightingMix
+  public rimFresnelPower = 1.0; // _RimFresnelPower
+  public rimLift = 0.0; // _RimLift
   public sphereAdd: THREE.Texture | null = null; // _SphereAdd
   // public sphereAdd_ST: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _SphereAdd_ST (unused)
   public emissionColor: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 0.0, 1.0); // _EmissionColor
@@ -49,16 +131,16 @@ export class MToonMaterial extends THREE.ShaderMaterial {
   // public emissionMap_ST: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _EmissionMap_ST (unused)
   public outlineWidthTexture: THREE.Texture | null = null; // _OutlineWidthTexture
   // public outlineWidthTexture_ST: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _OutlineWidthTexture_ST (unused)
-  public outlineWidth: number = 0.5; // _OutlineWidth
-  public outlineScaledMaxDistance: number = 1.0; // _OutlineScaledMaxDistance
+  public outlineWidth = 0.5; // _OutlineWidth
+  public outlineScaledMaxDistance = 1.0; // _OutlineScaledMaxDistance
   public outlineColor: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 0.0, 1.0); // _OutlineColor
-  public outlineLightingMix: number = 1.0; // _OutlineLightingMix
+  public outlineLightingMix = 1.0; // _OutlineLightingMix
   public uvAnimMaskTexture: THREE.Texture | null = null; // _UvAnimMaskTexture
-  public uvAnimScrollX: number = 0.0; // _UvAnimScrollX
-  public uvAnimScrollY: number = 0.0; // _UvAnimScrollY
-  public uvAnimRotation: number = 0.0; // _uvAnimRotation
+  public uvAnimScrollX = 0.0; // _UvAnimScrollX
+  public uvAnimScrollY = 0.0; // _UvAnimScrollY
+  public uvAnimRotation = 0.0; // _uvAnimRotation
 
-  public shouldApplyUniforms: boolean = true; // when this is true, applyUniforms effects
+  public shouldApplyUniforms = true; // when this is true, applyUniforms effects
 
   private _debugMode: MToonMaterialDebugMode = MToonMaterialDebugMode.None; // _DebugMode
   private _blendMode: MToonMaterialRenderMode = MToonMaterialRenderMode.Opaque; // _BlendMode
@@ -70,13 +152,13 @@ export class MToonMaterial extends THREE.ShaderMaterial {
   // public dstBlend: number = 0.0; // _DstBlend (is not supported)
   // public zWrite: number = 1.0; // _ZWrite (will be converted to depthWrite)
 
-  private _isOutline: boolean = false;
+  private _isOutline = false;
 
   private readonly _colorSpaceGamma: boolean;
 
-  private _uvAnimOffsetX: number = 0.0;
-  private _uvAnimOffsetY: number = 0.0;
-  private _uvAnimPhase: number = 0.0;
+  private _uvAnimOffsetX = 0.0;
+  private _uvAnimOffsetY = 0.0;
+  private _uvAnimPhase = 0.0;
 
   // TODO: ここにcolorSpaceGammaあるのダサい
   constructor(colorSpaceGamma: boolean, parameters?: MToonParameters) {
@@ -339,7 +421,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
   /**
    * Apply updated uniform variables.
    */
-  private _applyUniforms() {
+  private _applyUniforms(): void {
     this.uniforms.uvAnimOffsetX.value = this._uvAnimOffsetX;
     this.uniforms.uvAnimOffsetY.value = this._uvAnimOffsetY;
     this.uniforms.uvAnimTheta.value = TAU * this._uvAnimPhase;
@@ -399,7 +481,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.updateCullFace();
   }
 
-  private updateShaderCode() {
+  private updateShaderCode(): void {
     this.defines = {
       OUTLINE: this._isOutline,
       BLENDMODE_OPAQUE: this._blendMode === MToonMaterialRenderMode.Opaque,
@@ -440,7 +522,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.needsUpdate = true;
   }
 
-  private updateCullFace() {
+  private updateCullFace(): void {
     if (!this.isOutline) {
       if (this.cullMode === MToonMaterialCullMode.Off) {
         this.side = THREE.DoubleSide;
@@ -459,86 +541,4 @@ export class MToonMaterial extends THREE.ShaderMaterial {
       }
     }
   }
-}
-
-export interface MToonParameters extends THREE.ShaderMaterialParameters {
-  cutoff?: number; // _Cutoff
-  color?: THREE.Vector4; // rgb of _Color
-  shadeColor?: THREE.Vector4; // _ShadeColor
-  map?: THREE.Texture; // _MainTex
-  mainTex?: THREE.Texture; // _MainTex (will be renamed to map)
-  mainTex_ST?: THREE.Vector4; // _MainTex_ST
-  shadeTexture?: THREE.Texture; // _ShadeTexture
-  bumpScale?: number; // _BumpScale
-  normalMap?: THREE.Texture; // _BumpMap
-  bumpMap?: THREE.Texture; // _BumpMap (will be renamed to normalMap)
-  receiveShadowRate?: number; // _ReceiveShadowRate
-  receiveShadowTexture?: THREE.Texture; // _ReceiveShadowTexture
-  shadingGradeRate?: number; // _ShadingGradeRate
-  shadingGradeTexture?: THREE.Texture; // _ShadingGradeTexture
-  shadeShift?: number; // _ShadeShift
-  shadeToony?: number; // _ShadeToony
-  lightColorAttenuation?: number; // _LightColorAttenuation
-  indirectLightIntensity?: number; // _IndirectLightIntensity
-  rimTexture?: THREE.Texture; // _RimTexture
-  rimColor?: THREE.Vector4; // _RimColor
-  rimLightingMix?: number; // _RimLightingMix
-  rimFresnelPower?: number; // _RimFresnelPower
-  rimLift?: number; // _RimLift
-  sphereAdd?: THREE.Texture; // _SphereAdd
-  emissionColor?: THREE.Vector4; // _EmissionColor
-  emissiveMap?: THREE.Texture; // _EmissionMap
-  emissionMap?: THREE.Texture; // _EmissionMap (will be renamed to emissiveMap)
-  outlineWidthTexture?: THREE.Texture; // _OutlineWidthTexture
-  outlineWidth?: number; // _OutlineWidth
-  outlineScaledMaxDistance?: number; // _OutlineScaledMaxDistance
-  outlineColor?: THREE.Vector4; // _OutlineColor
-  outlineLightingMix?: number; // _OutlineLightingMix
-  uvAnimMaskTexture?: THREE.Texture; // _UvAnimMaskTexture
-  uvAnimScrollX?: number; // _UvAnimScrollX
-  uvAnimScrollY?: number; // _UvAnimScrollY
-  uvAnimRotation?: number; // _uvAnimRotation
-
-  debugMode?: MToonMaterialDebugMode | number; // _DebugMode
-  blendMode?: MToonMaterialRenderMode | number; // _BlendMode
-  outlineWidthMode?: MToonMaterialOutlineWidthMode | number; // OutlineWidthMode
-  outlineColorMode?: MToonMaterialOutlineColorMode | number; // OutlineColorMode
-  cullMode?: MToonMaterialCullMode | number; // _CullMode
-  outlineCullMode?: MToonMaterialCullMode | number; // _OutlineCullMode
-  srcBlend?: number; // _SrcBlend
-  dstBlend?: number; // _DstBlend
-  zWrite?: number; // _ZWrite (will be renamed to depthWrite)
-
-  isOutline?: boolean;
-}
-
-export enum MToonMaterialCullMode {
-  Off,
-  Front,
-  Back,
-}
-
-export enum MToonMaterialDebugMode {
-  None,
-  Normal,
-  LitShadeRate,
-  UV,
-}
-
-export enum MToonMaterialOutlineColorMode {
-  FixedColor,
-  MixedLighting,
-}
-
-export enum MToonMaterialOutlineWidthMode {
-  None,
-  WorldCoordinates,
-  ScreenCoordinates,
-}
-
-export enum MToonMaterialRenderMode {
-  Opaque,
-  Cutout,
-  Transparent,
-  TransparentWithZWrite,
 }

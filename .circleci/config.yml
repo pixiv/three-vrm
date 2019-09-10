@@ -37,11 +37,26 @@ jobs:
       - store_artifacts:
           path: examples
 
+  lint:
+    docker: *docker
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - deps-{{ checksum "package.json" }}
+            - deps-
+      - run:
+          name: Lint
+          command: yarn lint
+
 workflows:
   version: 2
   inspection:
     jobs:
       - fetch
       - build:
+          requires:
+            - fetch
+      - lint:
           requires:
             - fetch

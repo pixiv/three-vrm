@@ -14,7 +14,7 @@ export class VRMLookAtHead {
   public readonly firstPerson: VRMFirstPerson;
   public readonly applyer?: VRMLookAtApplyer;
 
-  public autoUpdate: boolean = true;
+  public autoUpdate = true;
 
   private _target?: THREE.Object3D;
   private _euler: THREE.Euler = new THREE.Euler(0.0, 0.0, 0.0, VRMLookAtHead.EULER_ORDER);
@@ -28,11 +28,11 @@ export class VRMLookAtHead {
     return this._target;
   }
 
-  public setTarget(target: THREE.Object3D) {
+  public setTarget(target: THREE.Object3D): void {
     this._target = target;
   }
 
-  public getLookAtWorldDirection(target: THREE.Vector3) {
+  public getLookAtWorldDirection(target: THREE.Vector3): THREE.Vector3 {
     const rot = getWorldQuaternionLite(this.firstPerson.firstPersonBone, _quat);
     return target
       .set(0.0, 0.0, -1.0)
