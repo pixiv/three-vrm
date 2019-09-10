@@ -1,4 +1,4 @@
-node_modules/
-docs/
-lib/
-types/
+/node_modules
+/docs
+/lib
+/types
