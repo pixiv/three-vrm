@@ -14,6 +14,8 @@
     "browser": true
   },
   "rules": {
+    "curly": ["error", "multi-line"], // if statements without curly are evil
+    "no-console": ["error", { "allow": ["info", "warn", "error"] }], // do not leave console.log
     "require-atomic-updates": ["off"], // the rule is kinda buggy
     "@typescript-eslint/camelcase": ["warn", { "properties": "never" }], // we sometimes have to use weird variables for properties
     "@typescript-eslint/no-unused-vars": ["warn", { "args": "none" }], // we sometimes have to define unused arguments
