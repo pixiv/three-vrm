@@ -24,7 +24,12 @@ const base = (mode: 'production' | 'development'): webpack.Configuration => {
         {
           test: /\.ts?$/,
           exclude: /node_modules/,
-          use: 'ts-loader',
+          use: {
+            loader: 'ts-loader',
+            options: {
+              transpileOnly: true
+            }
+          },
         },
         {
           test: /\.(glsl|frag|vert)$/,
