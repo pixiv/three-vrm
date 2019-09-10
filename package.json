@@ -9,7 +9,7 @@
     "types",
     "LICENSE"
   ],
-  "main": "lib/index.module.js",
+  "main": "lib/three-vrm.module.js",
   "types": "types/index.d.ts",
   "repository": {
     "type": "git",
