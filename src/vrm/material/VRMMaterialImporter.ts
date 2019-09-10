@@ -141,7 +141,7 @@ export class VRMMaterialImporter {
     let newOutline: THREE.Material | undefined;
 
     if (vrmProps.shader === 'VRM/MToon') {
-      const params = await this.extractMaterialProperties(originalMaterial, vrmProps, gltf);
+      const params = await this._extractMaterialProperties(originalMaterial, vrmProps, gltf);
 
       // we need to get rid of these properties
       ['srcBlend', 'dstBlend', 'isFirstSetup'].forEach((name) => {
@@ -167,22 +167,22 @@ export class VRMMaterialImporter {
       }
     } else if (vrmProps.shader === 'VRM/UnlitTexture') {
       // this is very legacy
-      const params = await this.extractMaterialProperties(originalMaterial, vrmProps, gltf);
+      const params = await this._extractMaterialProperties(originalMaterial, vrmProps, gltf);
       params.renderType = VRMUnlitMaterialRenderType.Opaque;
       newSurface = new VRMUnlitMaterial(params);
     } else if (vrmProps.shader === 'VRM/UnlitCutout') {
       // this is very legacy
-      const params = await this.extractMaterialProperties(originalMaterial, vrmProps, gltf);
+      const params = await this._extractMaterialProperties(originalMaterial, vrmProps, gltf);
       params.renderType = VRMUnlitMaterialRenderType.Cutout;
       newSurface = new VRMUnlitMaterial(params);
     } else if (vrmProps.shader === 'VRM/UnlitTransparent') {
       // this is very legacy
-      const params = await this.extractMaterialProperties(originalMaterial, vrmProps, gltf);
+      const params = await this._extractMaterialProperties(originalMaterial, vrmProps, gltf);
       params.renderType = VRMUnlitMaterialRenderType.Transparent;
       newSurface = new VRMUnlitMaterial(params);
     } else if (vrmProps.shader === 'VRM/UnlitTransparentZWrite') {
       // this is very legacy
-      const params = await this.extractMaterialProperties(originalMaterial, vrmProps, gltf);
+      const params = await this._extractMaterialProperties(originalMaterial, vrmProps, gltf);
       params.renderType = VRMUnlitMaterialRenderType.TransparentWithZWrite;
       newSurface = new VRMUnlitMaterial(params);
     } else {
@@ -191,7 +191,7 @@ export class VRMMaterialImporter {
         // then presume as VRM_USE_GLTFSHADER
       }
 
-      newSurface = this.convertGLTFMaterial(originalMaterial.clone());
+      newSurface = this._convertGLTFMaterial(originalMaterial.clone());
     }
 
     newSurface.name = originalMaterial.name;
@@ -210,7 +210,7 @@ export class VRMMaterialImporter {
     };
   }
 
-  private renameMaterialProperty(name: string): string {
+  private _renameMaterialProperty(name: string): string {
     if (name[0] !== '_') {
       console.warn(`VRMMaterials: Given property name "${name}" might be invalid`);
       return name;
@@ -224,7 +224,7 @@ export class VRMMaterialImporter {
     return name[0].toLowerCase() + name.substring(1);
   }
 
-  private convertGLTFMaterial(material: THREE.Material): THREE.Material {
+  private _convertGLTFMaterial(material: THREE.Material): THREE.Material {
     if ((material as any).isMeshStandardMaterial) {
       const mtl = material as THREE.MeshStandardMaterial;
 
@@ -256,7 +256,7 @@ export class VRMMaterialImporter {
     return material;
   }
 
-  private extractMaterialProperties(
+  private _extractMaterialProperties(
     originalMaterial: THREE.Material,
     vrmProps: VRMSchema.Material,
     gltf: THREE.GLTF,
@@ -267,7 +267,7 @@ export class VRMMaterialImporter {
     // extract texture properties
     if (vrmProps.textureProperties) {
       for (const name of Object.keys(vrmProps.textureProperties)) {
-        const newName = this.renameMaterialProperty(name);
+        const newName = this._renameMaterialProperty(name);
         const textureIndex = vrmProps.textureProperties[name];
 
         taskList.push(
@@ -281,7 +281,7 @@ export class VRMMaterialImporter {
     // extract float properties
     if (vrmProps.floatProperties) {
       for (const name of Object.keys(vrmProps.floatProperties)) {
-        const newName = this.renameMaterialProperty(name);
+        const newName = this._renameMaterialProperty(name);
         params[newName] = vrmProps.floatProperties[name];
       }
     }
@@ -289,7 +289,7 @@ export class VRMMaterialImporter {
     // extract vector (color tbh) properties
     if (vrmProps.vectorProperties) {
       for (const name of Object.keys(vrmProps.vectorProperties)) {
-        let newName = this.renameMaterialProperty(name);
+        let newName = this._renameMaterialProperty(name);
 
         // if this is textureST (same name as texture name itself), add '_ST'
         // this is my most favorite MToon feature tbh

@@ -63,7 +63,7 @@ export class VRMUnlitMaterial extends THREE.ShaderMaterial {
     this.setValues(parameters);
 
     // == update shader stuff ==================================================
-    this.updateShaderCode();
+    this._updateShaderCode();
     this._applyUniforms();
   }
 
@@ -86,7 +86,7 @@ export class VRMUnlitMaterial extends THREE.ShaderMaterial {
     this.transparent =
       this._renderType === VRMUnlitMaterialRenderType.Transparent ||
       this._renderType === VRMUnlitMaterialRenderType.TransparentWithZWrite;
-    this.updateShaderCode();
+    this._updateShaderCode();
   }
 
   /**
@@ -125,7 +125,7 @@ export class VRMUnlitMaterial extends THREE.ShaderMaterial {
     this.uniforms.mainTex_ST.value.copy(this.mainTex_ST);
   }
 
-  private updateShaderCode(): void {
+  private _updateShaderCode(): void {
     this.defines = {
       RENDERTYPE_OPAQUE: this._renderType === VRMUnlitMaterialRenderType.Opaque,
       RENDERTYPE_CUTOUT: this._renderType === VRMUnlitMaterialRenderType.Cutout,

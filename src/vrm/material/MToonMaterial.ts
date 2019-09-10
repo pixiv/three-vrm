@@ -243,7 +243,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.setValues(parameters);
 
     // == update shader stuff ==================================================
-    this.updateShaderCode();
+    this._updateShaderCode();
     this._applyUniforms();
   }
 
@@ -282,7 +282,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.transparent =
       this._blendMode === MToonMaterialRenderMode.Transparent ||
       this._blendMode === MToonMaterialRenderMode.TransparentWithZWrite;
-    this.updateShaderCode();
+    this._updateShaderCode();
   }
 
   get debugMode(): MToonMaterialDebugMode {
@@ -292,7 +292,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
   set debugMode(m: MToonMaterialDebugMode) {
     this._debugMode = m;
 
-    this.updateShaderCode();
+    this._updateShaderCode();
   }
 
   get outlineWidthMode(): MToonMaterialOutlineWidthMode {
@@ -302,7 +302,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
   set outlineWidthMode(m: MToonMaterialOutlineWidthMode) {
     this._outlineWidthMode = m;
 
-    this.updateShaderCode();
+    this._updateShaderCode();
   }
 
   get outlineColorMode(): MToonMaterialOutlineColorMode {
@@ -312,7 +312,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
   set outlineColorMode(m: MToonMaterialOutlineColorMode) {
     this._outlineColorMode = m;
 
-    this.updateShaderCode();
+    this._updateShaderCode();
   }
 
   get cullMode(): MToonMaterialCullMode {
@@ -322,7 +322,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
   set cullMode(m: MToonMaterialCullMode) {
     this._cullMode = m;
 
-    this.updateCullFace();
+    this._updateCullFace();
   }
 
   get outlineCullMode(): MToonMaterialCullMode {
@@ -332,7 +332,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
   set outlineCullMode(m: MToonMaterialCullMode) {
     this._outlineCullMode = m;
 
-    this.updateCullFace();
+    this._updateCullFace();
   }
 
   get zWrite(): number {
@@ -350,8 +350,8 @@ export class MToonMaterial extends THREE.ShaderMaterial {
   set isOutline(b: boolean) {
     this._isOutline = b;
 
-    this.updateShaderCode();
-    this.updateCullFace();
+    this._updateShaderCode();
+    this._updateCullFace();
   }
 
   /**
@@ -478,10 +478,10 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.uniforms.outlineLightingMix.value = this.outlineLightingMix;
     this.uniforms.uvAnimMaskTexture.value = this.uvAnimMaskTexture;
 
-    this.updateCullFace();
+    this._updateCullFace();
   }
 
-  private updateShaderCode(): void {
+  private _updateShaderCode(): void {
     this.defines = {
       OUTLINE: this._isOutline,
       BLENDMODE_OPAQUE: this._blendMode === MToonMaterialRenderMode.Opaque,
@@ -522,7 +522,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.needsUpdate = true;
   }
 
-  private updateCullFace(): void {
+  private _updateCullFace(): void {
     if (!this.isOutline) {
       if (this.cullMode === MToonMaterialCullMode.Off) {
         this.side = THREE.DoubleSide;

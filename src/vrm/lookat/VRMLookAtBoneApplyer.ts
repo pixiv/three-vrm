@@ -13,7 +13,7 @@ function deg2rad(map: VRMSchema.FirstPersonDegreeMap): VRMSchema.FirstPersonDegr
 }
 
 export class VRMLookAtBoneApplyer extends VRMLookAtApplyer {
-  private readonly lookAtHorizontalInner: VRMSchema.FirstPersonDegreeMap;
+  private readonly _lookAtHorizontalInner: VRMSchema.FirstPersonDegreeMap;
 
   private readonly _leftEye: GLTFNode | null;
   private readonly _rightEye: GLTFNode | null;
@@ -28,7 +28,7 @@ export class VRMLookAtBoneApplyer extends VRMLookAtApplyer {
     super(lookAtHorizontalOuter, lookAtVerticalDown, lookAtVerticalUp);
     this._leftEye = humanoid.getBoneNode(VRMSchema.HumanoidBoneName.LeftEye);
     this._rightEye = humanoid.getBoneNode(VRMSchema.HumanoidBoneName.RightEye);
-    this.lookAtHorizontalInner = lookAtHorizontalInner;
+    this._lookAtHorizontalInner = lookAtHorizontalInner;
   }
 
   public name(): VRMSchema.FirstPersonLookAtTypeName {
@@ -39,7 +39,7 @@ export class VRMLookAtBoneApplyer extends VRMLookAtApplyer {
     const srcX = euler.x;
     const srcY = euler.y;
 
-    const mapperHorizontalInner = CurveMapper.apply(deg2rad(this.lookAtHorizontalInner));
+    const mapperHorizontalInner = CurveMapper.apply(deg2rad(this._lookAtHorizontalInner));
     const mapperHorizontalOuter = CurveMapper.apply(deg2rad(this.lookAtHorizontalOuter));
     const mapperVerticalDown = CurveMapper.apply(deg2rad(this.lookAtVerticalDown));
     const mapperVerticalUp = CurveMapper.apply(deg2rad(this.lookAtVerticalUp));
