@@ -33,7 +33,7 @@ We usually don't have to generate these frequently.
 
 We are utilizing `eslint` and `prettier` to ensure our syntax rules consistent.
 
-Some editors like [Visual Studio Code](https://code.visualstudio.com/) have extensions that lets us enable to see which part on the code is not syntactically incorrect, or even fix such parts automatically.
+Some editors like [Visual Studio Code](https://code.visualstudio.com/) have extensions that enable us to see which part on the code is not syntactically incorrect or even fix such parts automatically.
 
 ### `private` / `protected` members must start from `_`
 
