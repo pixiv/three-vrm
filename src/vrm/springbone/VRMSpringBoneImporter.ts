@@ -116,6 +116,9 @@ export class VRMSpringBoneImporter {
 
   /**
    * Create an array of [[VRMSpringBoneColliderGroup]].
+   *
+   * @param gltf A parsed result of GLTF taken from GLTFLoader
+   * @param schemaSecondaryAnimation A `secondaryAnimation` field of VRM
    */
   protected async _importColliderMeshGroups(
     gltf: THREE.GLTF,
