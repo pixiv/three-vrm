@@ -4,6 +4,9 @@ import { VRMSchema } from '../types';
 import { CurveMapper } from './CurveMapper';
 import { VRMLookAtApplyer } from './VRMLookAtApplyer';
 
+/**
+ * This class is used by [[VRMLookAtHead]], applies look at direction to eye blend shapes of a VRM.
+ */
 export class VRMLookAtBlendShapeApplyer extends VRMLookAtApplyer {
   public readonly type = VRMSchema.FirstPersonLookAtTypeName.BlendShape;
 
@@ -13,6 +16,14 @@ export class VRMLookAtBlendShapeApplyer extends VRMLookAtApplyer {
 
   private readonly _blendShapeProxy: VRMBlendShapeProxy;
 
+  /**
+   * Create a new VRMLookAtBlendShapeApplyer.
+   *
+   * @param blendShapeProxy A [[VRMBlendShapeProxy]] used by this applier
+   * @param curveHorizontal A [[CurveMapper]] used for transverse direction
+   * @param curveVerticalDown A [[CurveMapper]] used for down direction
+   * @param curveVerticalUp A [[CurveMapper]] used for up direction
+   */
   constructor(
     blendShapeProxy: VRMBlendShapeProxy,
     curveHorizontal: CurveMapper,
