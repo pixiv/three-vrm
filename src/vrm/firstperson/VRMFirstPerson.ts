@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { GLTFMesh, GLTFNode } from '../types';
 import { getWorldQuaternionLite } from '../utils/math';
 
+const VECTOR3_FRONT = Object.freeze(new THREE.Vector3(0.0, 0.0, -1.0));
+
 const _quat = new THREE.Quaternion();
 
 enum FirstPersonFlag {
@@ -16,7 +18,7 @@ enum FirstPersonFlag {
  * Each mesh will be assigned to specified layer when you call [[VRMFirstPerson.setup]].
  */
 export class VRMRendererFirstPersonFlags {
-  private static parseFirstPersonFlag(firstPersonFlag: string | undefined) {
+  private static _parseFirstPersonFlag(firstPersonFlag: string | undefined): FirstPersonFlag {
     switch (firstPersonFlag) {
       case 'Both':
         return FirstPersonFlag.Both;
@@ -46,7 +48,7 @@ export class VRMRendererFirstPersonFlags {
    * @param node A node of the annotation entry.
    */
   constructor(firstPersonFlag: string | undefined, mesh: GLTFMesh) {
-    this.firstPersonFlag = VRMRendererFirstPersonFlags.parseFirstPersonFlag(firstPersonFlag);
+    this.firstPersonFlag = VRMRendererFirstPersonFlags._parseFirstPersonFlag(firstPersonFlag);
     this.mesh = mesh;
   }
 }
@@ -57,23 +59,23 @@ export class VRMFirstPerson {
    *
    * @see [[getFirstPersonOnlyLayer]]
    */
-  private static readonly DEFAULT_FIRSTPERSON_ONLY_LAYER = 9;
+  private static readonly _DEFAULT_FIRSTPERSON_ONLY_LAYER = 9;
 
   /**
    * A default camera layer for `ThirdPersonOnly` layer.
    *
    * @see [[getThirdPersonOnlyLayer]]
    */
-  private static readonly DEFAULT_THIRDPERSON_ONLY_LAYER = 10;
+  private static readonly _DEFAULT_THIRDPERSON_ONLY_LAYER = 10;
 
   private readonly _firstPersonBone: GLTFNode;
   private readonly _meshAnnotations: VRMRendererFirstPersonFlags[] = [];
   private readonly _firstPersonBoneOffset: THREE.Vector3;
 
-  private _firstPersonOnlyLayer = VRMFirstPerson.DEFAULT_FIRSTPERSON_ONLY_LAYER;
-  private _thirdPersonOnlyLayer = VRMFirstPerson.DEFAULT_THIRDPERSON_ONLY_LAYER;
+  private _firstPersonOnlyLayer = VRMFirstPerson._DEFAULT_FIRSTPERSON_ONLY_LAYER;
+  private _thirdPersonOnlyLayer = VRMFirstPerson._DEFAULT_THIRDPERSON_ONLY_LAYER;
 
-  private _initialized: boolean = false;
+  private _initialized = false;
 
   /**
    * Create a new VRMFirstPerson object.
@@ -101,7 +103,7 @@ export class VRMFirstPerson {
   }
 
   public getFirstPersonWorldDirection(target: THREE.Vector3): THREE.Vector3 {
-    return target.set(0.0, 0.0, -1.0).applyQuaternion(getWorldQuaternionLite(this._firstPersonBone, _quat));
+    return target.copy(VECTOR3_FRONT).applyQuaternion(getWorldQuaternionLite(this._firstPersonBone, _quat));
   }
 
   /**
@@ -163,9 +165,9 @@ export class VRMFirstPerson {
    * @param cameraLayer Specify which layer will be for `FirstPersonOnly` / `ThirdPersonOnly`.
    */
   public setup({
-    firstPersonOnlyLayer = VRMFirstPerson.DEFAULT_FIRSTPERSON_ONLY_LAYER,
-    thirdPersonOnlyLayer = VRMFirstPerson.DEFAULT_THIRDPERSON_ONLY_LAYER,
-  } = {}) {
+    firstPersonOnlyLayer = VRMFirstPerson._DEFAULT_FIRSTPERSON_ONLY_LAYER,
+    thirdPersonOnlyLayer = VRMFirstPerson._DEFAULT_THIRDPERSON_ONLY_LAYER,
+  } = {}): void {
     if (this._initialized) {
       return;
     }
@@ -186,7 +188,7 @@ export class VRMFirstPerson {
     });
   }
 
-  private _excludeTriangles(triangles: number[], bws: number[][], skinIndex: number[][], exclude: number[]) {
+  private _excludeTriangles(triangles: number[], bws: number[][], skinIndex: number[][], exclude: number[]): number {
     let count = 0;
     if (bws != null && bws.length > 0) {
       for (let i = 0; i < triangles.length; i += 3) {
@@ -256,7 +258,7 @@ export class VRMFirstPerson {
     return dst;
   }
 
-  private _createHeadlessModelForSkinnedMesh(parent: THREE.Object3D, mesh: THREE.SkinnedMesh) {
+  private _createHeadlessModelForSkinnedMesh(parent: THREE.Object3D, mesh: THREE.SkinnedMesh): void {
     const eraseBoneIndexes: number[] = [];
     mesh.skeleton.bones.forEach((bone, index) => {
       if (this._isEraseTarget(bone)) eraseBoneIndexes.push(index);
@@ -273,7 +275,7 @@ export class VRMFirstPerson {
     parent.add(newMesh);
   }
 
-  private _createHeadlessModel(node: GLTFNode) {
+  private _createHeadlessModel(node: GLTFNode): void {
     if (node.type === 'Group') {
       node.layers.set(this._thirdPersonOnlyLayer);
       if (this._isEraseTarget(node)) {

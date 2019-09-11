@@ -1,0 +1,26 @@
+{
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:prettier/recommended",
+    "prettier/@typescript-eslint"
+  ],
+  "env": {
+    "browser": true
+  },
+  "rules": {
+    "curly": ["error", "multi-line"], // if statements without curly are evil
+    "no-console": ["error", { "allow": ["info", "warn", "error"] }], // do not leave console.log
+    "require-atomic-updates": ["off"], // the rule is kinda buggy
+    "@typescript-eslint/member-naming": ["error", { "private": "^_", "protected": "^_" }], // private members must start from underscore
+    "@typescript-eslint/camelcase": ["warn", { "properties": "never" }], // we sometimes have to use weird variables for properties
+    "@typescript-eslint/no-unused-vars": ["warn", { "args": "none" }], // we sometimes have to define unused arguments
+    "@typescript-eslint/no-explicit-any": ["off"], // Three.js sometimes forces us to deal with anys
+    "@typescript-eslint/no-non-null-assertion": ["off"] // Three.js sometimes forces us to deal with bangs
+  }
+}

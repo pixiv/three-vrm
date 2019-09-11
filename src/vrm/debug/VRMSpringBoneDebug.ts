@@ -28,12 +28,12 @@ export class VRMSpringBoneDebug extends VRMSpringBone {
       return this._gizmo;
     }
 
-    const nextTailRelative = _v3A.copy(this.nextTail).sub(this.worldPosition);
+    const nextTailRelative = _v3A.copy(this._nextTail).sub(this._worldPosition);
     const nextTailRelativeLength = nextTailRelative.length();
 
     this._gizmo = new THREE.ArrowHelper(
       nextTailRelative.normalize(),
-      this.worldPosition,
+      this._worldPosition,
       nextTailRelativeLength,
       0xffff00,
       this.radius,
@@ -54,19 +54,19 @@ export class VRMSpringBoneDebug extends VRMSpringBone {
   public update(delta: number): void {
     super.update(delta);
     // lastly we're gonna update gizmo
-    this.updateGizmo();
+    this._updateGizmo();
   }
 
-  private updateGizmo(): void {
+  private _updateGizmo(): void {
     if (!this._gizmo) {
       return;
     }
 
-    const nextTailRelative = _v3A.copy(this.currentTail).sub(this.worldPosition);
+    const nextTailRelative = _v3A.copy(this._currentTail).sub(this._worldPosition);
     const nextTailRelativeLength = nextTailRelative.length();
 
     this._gizmo.setDirection(nextTailRelative.normalize());
     this._gizmo.setLength(nextTailRelativeLength, this.radius, this.radius);
-    this._gizmo.position.copy(this.worldPosition);
+    this._gizmo.position.copy(this._worldPosition);
   }
 }

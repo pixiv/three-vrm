@@ -3,6 +3,8 @@ import { VRMFirstPerson } from '../firstperson/VRMFirstPerson';
 import { getWorldQuaternionLite } from '../utils/math';
 import { VRMLookAtApplyer } from './VRMLookAtApplyer';
 
+const VECTOR3_FRONT = Object.freeze(new THREE.Vector3(0.0, 0.0, -1.0));
+
 const _v3A = new THREE.Vector3();
 const _v3B = new THREE.Vector3();
 const _v3C = new THREE.Vector3();
@@ -14,7 +16,7 @@ export class VRMLookAtHead {
   public readonly firstPerson: VRMFirstPerson;
   public readonly applyer?: VRMLookAtApplyer;
 
-  public autoUpdate: boolean = true;
+  public autoUpdate = true;
 
   protected _euler: THREE.Euler = new THREE.Euler(0.0, 0.0, 0.0, VRMLookAtHead.EULER_ORDER);
   protected _target?: THREE.Object3D;
@@ -28,14 +30,14 @@ export class VRMLookAtHead {
     return this._target;
   }
 
-  public setTarget(target: THREE.Object3D) {
+  public setTarget(target: THREE.Object3D): void {
     this._target = target;
   }
 
-  public getLookAtWorldDirection(target: THREE.Vector3) {
+  public getLookAtWorldDirection(target: THREE.Vector3): THREE.Vector3 {
     const rot = getWorldQuaternionLite(this.firstPerson.firstPersonBone, _quat);
     return target
-      .set(0.0, 0.0, -1.0)
+      .copy(VECTOR3_FRONT)
       .applyEuler(this._euler)
       .applyQuaternion(rot);
   }

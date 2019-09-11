@@ -8,10 +8,6 @@ import { VRMSpringBoneGroup, VRMSpringBoneManager } from './VRMSpringBoneManager
  * An importer that imports a [[VRMSpringBoneManager]] from a VRM extension of a GLTF.
  */
 export class VRMSpringBoneImporter {
-  protected get isColiderMeshVisible(): boolean {
-    return false;
-  }
-
   /**
    * Import a [[VRMLookAtHead]] from a VRM.
    *
@@ -27,17 +23,21 @@ export class VRMSpringBoneImporter {
     }
 
     // 衝突判定球体メッシュ。
-    const colliderGroups = await this.getColliderMeshGroups(gltf);
+    const colliderGroups = await this._getColliderMeshGroups(gltf);
     colliderGroups.forEach((group) => gltf.scene.add(...group.colliders));
 
     // 同じ属性（stiffinessやdragForceが同じ）のボーンはboneGroupにまとめられている。
     // 一列だけではないことに注意。
-    const springBoneGroupList = await this.getSpringBoneGroupList(gltf, colliderGroups);
+    const springBoneGroupList = await this._getSpringBoneGroupList(gltf, colliderGroups);
 
     return new VRMSpringBoneManager(springBoneGroupList);
   }
 
-  protected createSpringBone(
+  protected get _isColiderMeshVisible(): boolean {
+    return false;
+  }
+
+  protected _createSpringBone(
     gltf: THREE.GLTF,
     bone: THREE.Object3D,
     hitRadius: number,
@@ -50,7 +50,7 @@ export class VRMSpringBoneImporter {
     return new VRMSpringBone(bone, hitRadius, stiffiness, gravityDir, gravityPower, dragForce, colliders);
   }
 
-  private async getSpringBoneGroupList(
+  private async _getSpringBoneGroupList(
     gltf: THREE.GLTF,
     colliderGroups: VRMSpringBoneColliderGroup[],
   ): Promise<VRMSpringBoneGroup[]> {
@@ -101,7 +101,7 @@ export class VRMSpringBoneImporter {
         }
 
         springRootBone.traverse((bone) => {
-          const springBone = this.createSpringBone(
+          const springBone = this._createSpringBone(
             gltf,
             bone,
             hitRadius,
@@ -124,7 +124,7 @@ export class VRMSpringBoneImporter {
   /**
    * Create an array of [[VRMSpringBoneColliderGroup]].
    */
-  private async getColliderMeshGroups(gltf: THREE.GLTF): Promise<VRMSpringBoneColliderGroup[]> {
+  private async _getColliderMeshGroups(gltf: THREE.GLTF): Promise<VRMSpringBoneColliderGroup[]> {
     const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
     if (vrmExt === undefined) {
       return [];
@@ -162,7 +162,7 @@ export class VRMSpringBoneImporter {
           collider.offset.y,
           -collider.offset.z, // this is pretty weird. See: https://github.com/dwango/UniVRM/issues/65
         );
-        const visible = this.isColiderMeshVisible;
+        const visible = this._isColiderMeshVisible;
         const colliderMesh = new THREE.Mesh(
           new THREE.SphereBufferGeometry(collider.radius, 8, 4),
           new THREE.MeshBasicMaterial({
@@ -186,7 +186,7 @@ export class VRMSpringBoneImporter {
         // The colliderMesh must sync with the bone.
         // Attaching bone's matrix to the colliderMesh at every update.
         // (colliderMesh will move automecicallty)
-        colliderMesh.updateMatrixWorld = () => {
+        colliderMesh.updateMatrixWorld = (): void => {
           colliderMesh.matrixWorld.copy(bone.matrixWorld).multiply(offsetMatrix);
         };
         colliders.push(colliderMesh);
