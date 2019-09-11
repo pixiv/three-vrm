@@ -7,6 +7,9 @@ import { VRMLookAtHead } from './VRMLookAtHead';
 
 const _euler = new THREE.Euler(0.0, 0.0, 0.0, VRMLookAtHead.EULER_ORDER);
 
+/**
+ * This class is used by [[VRMLookAtHead]], applies look at direction to eye bones of a VRM.
+ */
 export class VRMLookAtBoneApplyer extends VRMLookAtApplyer {
   public readonly type = VRMSchema.FirstPersonLookAtTypeName.Bone;
 
@@ -18,6 +21,15 @@ export class VRMLookAtBoneApplyer extends VRMLookAtApplyer {
   private readonly _leftEye: GLTFNode | null;
   private readonly _rightEye: GLTFNode | null;
 
+  /**
+   * Create a new VRMLookAtBoneApplyer.
+   *
+   * @param humanoid A [[VRMHumanoid]] used by this applier
+   * @param curveHorizontalInner A [[CurveMapper]] used for inner transverse direction
+   * @param curveHorizontalOuter A [[CurveMapper]] used for outer transverse direction
+   * @param curveVerticalDown A [[CurveMapper]] used for down direction
+   * @param curveVerticalUp A [[CurveMapper]] used for up direction
+   */
   constructor(
     humanoid: VRMHumanoid,
     curveHorizontalInner: CurveMapper,
