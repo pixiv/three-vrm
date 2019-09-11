@@ -77,8 +77,8 @@ export class VRMImporter {
     const blendShapeProxy = (await this._blendShapeImporter.import(gltf)) || undefined;
 
     const lookAt =
-      blendShapeProxy && humanoid
-        ? (await this._lookAtImporter.import(gltf, blendShapeProxy, humanoid)) || undefined
+      firstPerson && blendShapeProxy && humanoid
+        ? (await this._lookAtImporter.import(gltf, firstPerson, blendShapeProxy, humanoid)) || undefined
         : undefined;
 
     const springBoneManager = (await this._springBoneImporter.import(gltf)) || undefined;

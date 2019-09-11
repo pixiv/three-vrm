@@ -3,75 +3,75 @@ import { VRMHumanoid } from '../humanoid';
 import { GLTFNode, VRMSchema } from '../types';
 import { CurveMapper } from './CurveMapper';
 import { VRMLookAtApplyer } from './VRMLookAtApplyer';
+import { VRMLookAtHead } from './VRMLookAtHead';
 
-function deg2rad(map: VRMSchema.FirstPersonDegreeMap): VRMSchema.FirstPersonDegreeMap {
-  return {
-    xRange: typeof map.xRange === 'number' ? THREE.Math.DEG2RAD * map.xRange : undefined,
-    yRange: typeof map.yRange === 'number' ? THREE.Math.DEG2RAD * map.yRange : undefined,
-    curve: map.curve,
-  };
-}
+const _euler = new THREE.Euler(0.0, 0.0, 0.0, VRMLookAtHead.EULER_ORDER);
 
 export class VRMLookAtBoneApplyer extends VRMLookAtApplyer {
-  private readonly _lookAtHorizontalInner: VRMSchema.FirstPersonDegreeMap;
+  public readonly type = VRMSchema.FirstPersonLookAtTypeName.Bone;
+
+  private readonly _curveHorizontalInner: CurveMapper;
+  private readonly _curveHorizontalOuter: CurveMapper;
+  private readonly _curveVerticalDown: CurveMapper;
+  private readonly _curveVerticalUp: CurveMapper;
 
   private readonly _leftEye: GLTFNode | null;
   private readonly _rightEye: GLTFNode | null;
 
   constructor(
     humanoid: VRMHumanoid,
-    lookAtHorizontalInner: VRMSchema.FirstPersonDegreeMap,
-    lookAtHorizontalOuter: VRMSchema.FirstPersonDegreeMap,
-    lookAtVerticalDown: VRMSchema.FirstPersonDegreeMap,
-    lookAtVerticalUp: VRMSchema.FirstPersonDegreeMap,
+    curveHorizontalInner: CurveMapper,
+    curveHorizontalOuter: CurveMapper,
+    curveVerticalDown: CurveMapper,
+    curveVerticalUp: CurveMapper,
   ) {
-    super(lookAtHorizontalOuter, lookAtVerticalDown, lookAtVerticalUp);
+    super();
+
+    this._curveHorizontalInner = curveHorizontalInner;
+    this._curveHorizontalOuter = curveHorizontalOuter;
+    this._curveVerticalDown = curveVerticalDown;
+    this._curveVerticalUp = curveVerticalUp;
+
     this._leftEye = humanoid.getBoneNode(VRMSchema.HumanoidBoneName.LeftEye);
     this._rightEye = humanoid.getBoneNode(VRMSchema.HumanoidBoneName.RightEye);
-    this._lookAtHorizontalInner = lookAtHorizontalInner;
-  }
-
-  public name(): VRMSchema.FirstPersonLookAtTypeName {
-    return VRMSchema.FirstPersonLookAtTypeName.Bone;
   }
 
   public lookAt(euler: THREE.Euler): void {
     const srcX = euler.x;
     const srcY = euler.y;
 
-    const mapperHorizontalInner = CurveMapper.apply(deg2rad(this._lookAtHorizontalInner));
-    const mapperHorizontalOuter = CurveMapper.apply(deg2rad(this.lookAtHorizontalOuter));
-    const mapperVerticalDown = CurveMapper.apply(deg2rad(this.lookAtVerticalDown));
-    const mapperVerticalUp = CurveMapper.apply(deg2rad(this.lookAtVerticalUp));
-
     // left
     if (this._leftEye) {
       if (srcX < 0.0) {
-        this._leftEye.rotation.x = -mapperVerticalDown.map(-srcX);
+        _euler.x = -this._curveVerticalDown.map(-srcX);
       } else {
-        this._leftEye.rotation.x = mapperVerticalUp.map(srcX);
+        _euler.x = this._curveVerticalUp.map(srcX);
       }
 
       if (srcY < 0.0) {
-        this._leftEye.rotation.y = -mapperHorizontalInner.map(-srcY);
+        _euler.y = -this._curveHorizontalInner.map(-srcY);
       } else {
-        this._leftEye.rotation.y = mapperHorizontalOuter.map(srcY);
+        _euler.y = this._curveHorizontalOuter.map(srcY);
       }
+
+      this._leftEye.quaternion.setFromEuler(_euler);
     }
 
     // right
     if (this._rightEye) {
       if (srcX < 0.0) {
-        this._rightEye.rotation.x = -mapperVerticalDown.map(-srcX);
+        _euler.x = -this._curveVerticalDown.map(-srcX);
       } else {
-        this._rightEye.rotation.x = mapperVerticalUp.map(srcX);
+        _euler.x = this._curveVerticalUp.map(srcX);
       }
 
       if (srcY < 0.0) {
-        this._rightEye.rotation.y = -mapperHorizontalOuter.map(-srcY);
+        _euler.y = -this._curveHorizontalOuter.map(-srcY);
       } else {
-        this._rightEye.rotation.y = mapperHorizontalInner.map(srcY);
+        _euler.y = this._curveHorizontalInner.map(srcY);
       }
+
+      this._rightEye.quaternion.setFromEuler(_euler);
     }
   }
 }

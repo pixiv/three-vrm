@@ -1,7 +1,9 @@
 import * as THREE from 'three';
 import { VRMBlendShapeProxy } from '../blendshape';
+import { VRMFirstPerson } from '../firstperson';
 import { VRMHumanoid } from '../humanoid';
 import { VRMSchema } from '../types';
+import { CurveMapper } from './CurveMapper';
 import { VRMLookAtApplyer } from './VRMLookAtApplyer';
 import { VRMLookAtBlendShapeApplyer } from './VRMLookAtBlendShapeApplyer';
 import { VRMLookAtBoneApplyer } from './VRMLookAtBoneApplyer';
@@ -18,7 +20,12 @@ export class VRMLookAtImporter {
    * @param blendShapeProxy A [[VRMBlendShapeProxy]] instance that represents the VRM
    * @param humanoid A [[VRMHumanoid]] instance that represents the VRM
    */
-  public import(gltf: THREE.GLTF, blendShapeProxy: VRMBlendShapeProxy, humanoid: VRMHumanoid): VRMLookAtHead | null {
+  public import(
+    gltf: THREE.GLTF,
+    firstPerson: VRMFirstPerson,
+    blendShapeProxy: VRMBlendShapeProxy,
+    humanoid: VRMHumanoid,
+  ): VRMLookAtHead | null {
     const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
     if (!vrmExt) {
       return null;
@@ -30,7 +37,7 @@ export class VRMLookAtImporter {
     }
 
     const applyer = this._importApplyer(schemaFirstPerson, blendShapeProxy, humanoid);
-    return new VRMLookAtHead(humanoid, applyer || undefined);
+    return new VRMLookAtHead(firstPerson, applyer || undefined);
   }
 
   protected _importApplyer(
@@ -55,10 +62,10 @@ export class VRMLookAtImporter {
         } else {
           return new VRMLookAtBoneApplyer(
             humanoid,
-            lookAtHorizontalInner,
-            lookAtHorizontalOuter,
-            lookAtVerticalDown,
-            lookAtVerticalUp,
+            this._importCurveMapperBone(lookAtHorizontalInner),
+            this._importCurveMapperBone(lookAtHorizontalOuter),
+            this._importCurveMapperBone(lookAtVerticalDown),
+            this._importCurveMapperBone(lookAtVerticalUp),
           );
         }
       }
@@ -68,9 +75,9 @@ export class VRMLookAtImporter {
         } else {
           return new VRMLookAtBlendShapeApplyer(
             blendShapeProxy,
-            lookAtHorizontalOuter,
-            lookAtVerticalDown,
-            lookAtVerticalUp,
+            this._importCurveMapperBlendShape(lookAtHorizontalOuter),
+            this._importCurveMapperBlendShape(lookAtVerticalDown),
+            this._importCurveMapperBlendShape(lookAtVerticalUp),
           );
         }
       }
@@ -78,5 +85,21 @@ export class VRMLookAtImporter {
         return null;
       }
     }
+  }
+
+  private _importCurveMapperBone(map: VRMSchema.FirstPersonDegreeMap): CurveMapper {
+    return new CurveMapper(
+      typeof map.xRange === 'number' ? THREE.Math.DEG2RAD * map.xRange : undefined,
+      typeof map.yRange === 'number' ? THREE.Math.DEG2RAD * map.yRange : undefined,
+      map.curve,
+    );
+  }
+
+  private _importCurveMapperBlendShape(map: VRMSchema.FirstPersonDegreeMap): CurveMapper {
+    return new CurveMapper(
+      typeof map.xRange === 'number' ? THREE.Math.DEG2RAD * map.xRange : undefined,
+      map.yRange,
+      map.curve,
+    );
   }
 }

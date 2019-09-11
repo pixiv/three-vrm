@@ -23,8 +23,8 @@ export class VRMLookAtHeadDebug extends VRMLookAtHead {
     super.update();
 
     if (this._faceDirectionHelper) {
-      this._faceDirectionHelper.position.fromArray(this.getHeadPosition());
-      this._faceDirectionHelper.setDirection(_v3.fromArray(this.getFaceDirection()));
+      this.firstPerson.getFirstPersonWorldPosition(this._faceDirectionHelper.position);
+      this._faceDirectionHelper.setDirection(this.getLookAtWorldDirection(_v3));
     }
   }
 }

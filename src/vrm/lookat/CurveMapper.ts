@@ -1,5 +1,3 @@
-import { VRMSchema } from '../types';
-
 /**
  * Evaluate a hermite spline.
  *
@@ -38,7 +36,7 @@ const evaluateCurve = (arr: number[], x: number): number => {
 
   // -- check range ------------------------------------------------------------
   let outNode;
-  for (outNode = 0; arr.length <= 4 * outNode; outNode++) {
+  for (outNode = 0; ; outNode++) {
     if (arr.length <= 4 * outNode) {
       return arr[4 * outNode - 3]; // too further!! assume as "Clamp"
     } else if (x <= arr[4 * outNode]) {
@@ -71,15 +69,6 @@ const evaluateCurve = (arr: number[], x: number): number => {
  * See: https://github.com/vrm-c/UniVRM/blob/master/Assets/VRM/UniVRM/Scripts/LookAt/CurveMapper.cs
  */
 export class CurveMapper {
-  /**
-   * Create a new CurveMapper from [[VRMSchema.FirstPersonDegreeMap]].
-   *
-   * @param map A [[VRMSchema.FirstPersonDegreeMap]] you want to import
-   */
-  public static apply(map: VRMSchema.FirstPersonDegreeMap): CurveMapper {
-    return new CurveMapper(map.xRange, map.yRange, map.curve);
-  }
-
   /**
    * An array represents the curve. See AnimationCurve class of Unity for its details.
    *
