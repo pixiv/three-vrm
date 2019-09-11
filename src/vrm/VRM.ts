@@ -80,7 +80,7 @@ export class VRM {
 
   /**
    * Contains [[VRMLookAtHead]] of the VRM.
-   * You might want to use [[VRMLookAtHead.setTarget]] to control the eye direction of your VRMs.
+   * You might want to use [[VRMLookAtHead.target]] to control the eye direction of your VRMs.
    */
   public readonly lookAt?: VRMLookAtHead;
 
