@@ -24,7 +24,7 @@
 		<script src="https://unpkg.com/three@0.106.2/build/three.js"></script>
 		<script src="https://unpkg.com/three@0.106.2/examples/js/loaders/GLTFLoader.js"></script>
 		<script src="https://unpkg.com/three@0.106.2/examples/js/controls/OrbitControls.js"></script>
-		<script src="../../lib/index.js"></script>
+		<script src="../lib/three-vrm.js"></script>
 		<script>
 			const _v3A = new THREE.Vector3();
 
@@ -48,11 +48,7 @@
 
 					if ( this._target && this.autoUpdate ) {
 
-						if (!this.applyer) {
-
-							return;
-
-						}
+						if ( ! this.applyer ) return;
 
 						this._calcEuler( this._eulerTo, this._target.getWorldPosition( _v3A ) );
 
@@ -68,7 +64,7 @@
 						}
 
 
-						const k = 1.0 - Math.exp( -this.smoothFactor * delta );
+						const k = 1.0 - Math.exp( - this.smoothFactor * delta );
 
 						this._euler.x += ( this._eulerTo.x - this._euler.x ) * k;
 						this._euler.y += ( this._eulerTo.y - this._euler.y ) * k;
@@ -84,7 +80,13 @@
 			// extended lookat importer
 			class VRMSmoothLookAtImporter extends THREE.VRMLookAtImporter {
 
-				import( schemaFirstPerson, firstPerson, blendShapeProxy, humanBodyBones ) {
+				import( gltf, firstPerson, blendShapeProxy, humanBodyBones ) {
+
+					const vrmExt = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
+					if ( ! vrmExt ) return null;
+
+					const schemaFirstPerson = vrmExt.firstPerson;
+					if ( ! schemaFirstPerson ) return null;
 
 					const applyer = this._importApplyer( schemaFirstPerson, blendShapeProxy, humanBodyBones );
 					return new VRMSmoothLookAtHead( firstPerson, applyer || undefined );
@@ -120,7 +122,7 @@
 			loader.crossOrigin = 'anonymous';
 			loader.load(
 
-				'../react/models/shino.vrm',
+				'./models/shibu.vrm',
 
 				( gltf ) => {
 
