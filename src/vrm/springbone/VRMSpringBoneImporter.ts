@@ -162,6 +162,9 @@ export class VRMSpringBoneImporter {
 
   /**
    * Create a collider mesh.
+   *
+   * @param radius Radius of the new collider mesh
+   * @param offset Offest of the new collider mesh
    */
   protected _createColliderMesh(radius: number, offset: THREE.Vector3): VRMSpringBoneColliderMesh {
     const colliderMesh = new THREE.Mesh(new THREE.SphereBufferGeometry(radius, 8, 4));
