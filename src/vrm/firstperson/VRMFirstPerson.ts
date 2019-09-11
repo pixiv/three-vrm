@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { GLTFMesh, GLTFNode } from '../types';
 import { getWorldQuaternionLite } from '../utils/math';
 
+const VECTOR3_FRONT = Object.freeze(new THREE.Vector3(0.0, 0.0, -1.0));
+
 const _quat = new THREE.Quaternion();
 
 enum FirstPersonFlag {
@@ -101,7 +103,7 @@ export class VRMFirstPerson {
   }
 
   public getFirstPersonWorldDirection(target: THREE.Vector3): THREE.Vector3 {
-    return target.set(0.0, 0.0, -1.0).applyQuaternion(getWorldQuaternionLite(this._firstPersonBone, _quat));
+    return target.copy(VECTOR3_FRONT).applyQuaternion(getWorldQuaternionLite(this._firstPersonBone, _quat));
   }
 
   /**
