@@ -6,6 +6,7 @@ import { VRMDebugOptions } from './VRMDebugOptions';
 import { VRMLookAtHeadDebug } from './VRMLookAtHeadDebug';
 import { VRMLookAtImporterDebug } from './VRMLookAtImporterDebug';
 import { VRMSpringBoneImporterDebug } from './VRMSpringBoneImporterDebug';
+import { VRMSpringBoneManagerDebug } from './VRMSpringBoneManagerDebug';
 
 /**
  * An importer that imports a [[VRMDebug]] from a VRM extension of a GLTF.
@@ -54,6 +55,9 @@ export class VRMImporterDebug extends VRMImporter {
     }
 
     const springBoneManager = (await this._springBoneImporter.import(gltf)) || undefined;
+    if ((springBoneManager as any).setupHelper) {
+      (springBoneManager as VRMSpringBoneManagerDebug).setupHelper(scene, debugOptions);
+    }
 
     return new VRMDebug(
       {
