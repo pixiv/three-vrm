@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { reduceBones } from '../reduceBones';
 import { VRMImporter, VRMImporterOptions } from '../VRMImporter';
 import { VRMDebug } from './VRMDebug';
 import { VRMDebugOptions } from './VRMDebugOptions';
@@ -34,8 +33,6 @@ export class VRMImporterDebug extends VRMImporter {
         object3d.frustumCulled = false;
       }
     });
-
-    reduceBones(scene);
 
     const materials = (await this._materialImporter.convertGLTFMaterials(gltf)) || undefined;
 

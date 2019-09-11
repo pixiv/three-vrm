@@ -4,7 +4,6 @@ import { VRMFirstPersonImporter } from './firstperson';
 import { VRMHumanoidImporter } from './humanoid/VRMHumanoidImporter';
 import { VRMLookAtImporter } from './lookat/VRMLookAtImporter';
 import { VRMMaterialImporter } from './material';
-import { reduceBones } from './reduceBones';
 import { VRMSpringBoneImporter } from './springbone/VRMSpringBoneImporter';
 import { VRMSchema } from './types';
 import { VRM } from './VRM';
@@ -65,8 +64,6 @@ export class VRMImporter {
         object3d.frustumCulled = false;
       }
     });
-
-    reduceBones(scene);
 
     const materials = (await this._materialImporter.convertGLTFMaterials(gltf)) || undefined;
 
