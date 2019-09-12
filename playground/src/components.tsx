@@ -319,7 +319,7 @@ export const LookAt = (props: Props) => {
   const applyer = lookAt.getApplyer();
   const lookAtTypeName = applyer && applyer.name();
 
-  const target = lookAt.getTarget();
+  const target = lookAt.target;
 
   return (
     <Panel title={'VRM Look At Head'}>
