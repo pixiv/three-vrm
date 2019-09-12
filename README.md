@@ -72,8 +72,8 @@ Code like this:
 
 ```javascript
 import * as THREE from 'three';
-import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { VRM, VRMLoader } from '@pixiv/three-vrm';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { VRM } from '@pixiv/three-vrm';
 
 const scene = new THREE.Scene();
 
