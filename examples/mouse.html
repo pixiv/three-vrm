@@ -9,13 +9,11 @@
 			content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
 		/>
 		<style>
-			html,
 			body {
-				overflow: hidden;
-				width: 100vw;
-				height: 100vh;
 				margin: 0;
-				padding: 0;
+			}
+			canvas {
+				display: block;
 			}
 		</style>
 	</head>
@@ -29,6 +27,7 @@
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
 			renderer.setSize( window.innerWidth, window.innerHeight );
+			renderer.setPixelRatio( window.devicePixelRatio );
 			document.body.appendChild( renderer.domElement );
 
 			// camera
@@ -51,7 +50,7 @@
 			loader.crossOrigin = 'anonymous';
 			loader.load(
 
-				'./models/shibu.vrm',
+				'./models/three-vrm-girl.vrm',
 
 				( gltf ) => {
 

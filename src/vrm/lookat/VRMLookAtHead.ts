@@ -29,12 +29,17 @@ export class VRMLookAtHead {
   /**
    * If this is true, its look at direction will be updated automatically by calling [[VRMLookAtHead.update]] (which is called from [[VRM.update]]).
    *
-   * See also: [[VRMLookAtHead.setTarget]]
+   * See also: [[VRMLookAtHead.target]]
    */
   public autoUpdate = true;
 
+  /**
+   * The target object of the look at.
+   * Note that it does not make any sense if [[VRMLookAtHead.autoUpdate]] is disabled.
+   */
+  public target?: THREE.Object3D;
+
   protected _euler: THREE.Euler = new THREE.Euler(0.0, 0.0, 0.0, VRMLookAtHead.EULER_ORDER);
-  protected _target?: THREE.Object3D;
 
   /**
    * Create a new VRMLookAtHead.
@@ -45,14 +50,6 @@ export class VRMLookAtHead {
   constructor(firstPerson: VRMFirstPerson, applyer?: VRMLookAtApplyer) {
     this.firstPerson = firstPerson;
     this.applyer = applyer;
-  }
-
-  public getTarget(): THREE.Object3D | undefined {
-    return this._target;
-  }
-
-  public setTarget(target: THREE.Object3D): void {
-    this._target = target;
   }
 
   /**
@@ -89,8 +86,8 @@ export class VRMLookAtHead {
    * @param delta deltaTime
    */
   public update(delta: number): void {
-    if (this._target && this.autoUpdate) {
-      this.lookAt(this._target.getWorldPosition(_v3A));
+    if (this.target && this.autoUpdate) {
+      this.lookAt(this.target.getWorldPosition(_v3A));
 
       if (this.applyer) {
         this.applyer.lookAt(this._euler);

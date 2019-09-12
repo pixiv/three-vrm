@@ -106,19 +106,33 @@ varying vec3 vViewPosition;
     vec3 S = ( q0 * st1.t - q1 * st0.t ) * scale;
     vec3 T = ( - q0 * st1.s + q1 * st0.s ) * scale;
 
-    // See: https://hub.vroid.com/characters/5207275812824687366/models/1630298405840303507
+    // Workaround for the issue that happens when delta of uv = 0.0
     if ( length( S ) == 0.0 || length( T ) == 0.0 ) {
       return surf_norm;
     }
 
     S = normalize( S );
     T = normalize( T );
-
     vec3 N = normalize( surf_norm );
-    mat3 tsn = mat3( S, T, N );
+
     vec3 mapN = texture2D( normalMap, uv ).xyz * 2.0 - 1.0;
+
     mapN.xy *= bumpScale;
-    mapN.xy *= ( float( gl_FrontFacing ) * 2.0 - 1.0 );
+
+    #ifdef DOUBLE_SIDED
+      // Workaround for Adreno GPUs gl_FrontFacing bug. See #15850 and #10331
+      // http://hacksoflife.blogspot.com/2009/11/per-pixel-tangent-space-normal-mapping.html?showComment=1522254677437#c5087545147696715943
+      vec3 NfromST = cross( S, T );
+      if( dot( NfromST, N ) > 0.0 ) {
+        S *= -1.0;
+        T *= -1.0;
+      }
+    #else
+      mapN.xy *= ( float( gl_FrontFacing ) * 2.0 - 1.0 );
+    #endif
+
+    mat3 tsn = mat3( S, T, N );
+
     return normalize( tsn * mapN );
   }
 #endif
@@ -340,10 +354,6 @@ void main() {
   #ifdef USE_EMISSIVEMAP
     totalEmissiveRadiance *= emissiveMapTexelToLinear( texture2D( emissiveMap, uv ) ).rgb;
   #endif
-
-  if (normal.z < 0.0) { // TODO: temporary treatment against Snapdragon issue
-    normal = -normal;
-  }
 
   #ifdef DEBUG_NORMAL
     gl_FragColor = vec4( 0.5 + 0.5 * normal, 1.0 );

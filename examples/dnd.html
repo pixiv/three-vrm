@@ -9,13 +9,11 @@
 			content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
 		/>
 		<style>
-			html,
 			body {
-				overflow: hidden;
-				width: 100vw;
-				height: 100vh;
 				margin: 0;
-				padding: 0;
+			}
+			canvas {
+				display: block;
 			}
 		</style>
 	</head>
@@ -29,15 +27,18 @@
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
 			renderer.setSize( window.innerWidth, window.innerHeight );
+			renderer.setPixelRatio( window.devicePixelRatio );
 			document.body.appendChild( renderer.domElement );
 
 			// camera
 			const camera = new THREE.PerspectiveCamera( 30.0, window.innerWidth / window.innerHeight, 0.1, 20.0 );
-			camera.position.set( 0.0, 0.0, 5.0 );
+			camera.position.set( 0.0, 1.0, 5.0 );
 
 			// camera controls
 			const controls = new THREE.OrbitControls( camera, renderer.domElement );
 			controls.screenSpacePanning = true;
+			controls.target.set( 0.0, 1.0, 0.0 );
+			controls.update();
 
 			// scene
 			const scene = new THREE.Scene();
@@ -84,7 +85,7 @@
 
 			}
 
-			load( './models/shibu.vrm' );
+			load( './models/three-vrm-girl.vrm' );
 
 			// helpers
 			const gridHelper = new THREE.GridHelper( 10, 10 );

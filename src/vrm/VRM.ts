@@ -35,7 +35,7 @@ export class VRM {
    * ```
    * const scene = new THREE.Scene();
    *
-   * new THREE.GLTFLoader().load( 'models/shibu.vrm', ( gltf ) => {
+   * new THREE.GLTFLoader().load( 'models/three-vrm-girl.vrm', ( gltf ) => {
    *
    *   THREE.VRM.from( gltf ).then( ( vrm ) => {
    *
@@ -80,7 +80,7 @@ export class VRM {
 
   /**
    * Contains [[VRMLookAtHead]] of the VRM.
-   * You might want to use [[VRMLookAtHead.setTarget]] to control the eye direction of your VRMs.
+   * You might want to use [[VRMLookAtHead.target]] to control the eye direction of your VRMs.
    */
   public readonly lookAt?: VRMLookAtHead;
 
