@@ -35,7 +35,7 @@ export class VRM {
    * ```
    * const scene = new THREE.Scene();
    *
-   * new THREE.GLTFLoader().load( 'models/shibu.vrm', ( gltf ) => {
+   * new THREE.GLTFLoader().load( 'models/three-vrm-girl.vrm', ( gltf ) => {
    *
    *   THREE.VRM.from( gltf ).then( ( vrm ) => {
    *
