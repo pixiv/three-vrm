@@ -111,3 +111,7 @@ loader.load(
 ## Contributing
 
 See: [CONTRIBUTING.md](CONTRIBUTING.md)
+
+## LICENSE
+
+[MIT](LICENSE)
