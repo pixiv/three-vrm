@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>three-vrm</title>
+	<title>@pixiv/three-vrm</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="index.html" class="title">three-vrm</a>
+					<a href="index.html" class="title">@pixiv/three-vrm</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -54,7 +54,7 @@
 					<a href="globals.html">Globals</a>
 				</li>
 			</ul>
-			<h1> three-vrm</h1>
+			<h1> @pixiv/three-vrm</h1>
 		</div>
 	</div>
 </header>
@@ -62,100 +62,100 @@
 	<div class="row">
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
-				<h1 id="three-vrm">three-vrm</h1>
-				<p><a href="https://vrm.dev/">VRM</a> utilities for <a href="https://threejs.org/">three.js</a>.</p>
-				<h2 id="dependencies">Dependencies</h2>
-				<pre><code>yarn <span class="hljs-keyword">add</span><span class="bash"> three</span></code></pre><h2 id="usage">Usage</h2>
-				<pre><code><span class="hljs-selector-tag">yarn</span> <span class="hljs-selector-tag">add</span> @<span class="hljs-keyword">pixiv</span>/<span class="hljs-keyword">three</span>-<span class="hljs-keyword">vrm</span></code></pre><pre><code class="language-javascript"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> THREE <span class="hljs-keyword">from</span> <span class="hljs-string">'three'</span>;
+				<h1 id="-pixiv-three-vrm"><code>@pixiv/three-vrm</code></h1>
+				<p>Use <a href="https://vrm.dev/">VRM</a> on <a href="https://threejs.org/">three.js</a></p>
+				<p><img src="./three-vrm.png" alt="three-vrm"></p>
+				<p><a href="https://pixiv.github.io/three-vrm/examples">Examples</a></p>
+				<p><a href="https://pixiv.github.io/three-vrm/docs">Documentation</a></p>
+				<h2 id="usage">Usage</h2>
+				<h3 id="from-html">from HTML</h3>
+				<p>You will need:</p>
+				<ul>
+					<li><a href="https://github.com/mrdoob/three.js/blob/master/build/three.js">Three.js build</a></li>
+					<li><a href="https://github.com/mrdoob/three.js/blob/master/examples/js/loaders/GLTFLoader.js">GLTFLoader</a></li>
+					<li><a href="https://github.com/pixiv/three-vrm/releases">A build of @pixiv/three-vrm</a></li>
+				</ul>
+				<p>Code like this:</p>
+				<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"three.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"GLTFLoader.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"three-vrm.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+<span class="hljs-keyword">const</span> scene = <span class="hljs-keyword">new</span> THREE.Scene();
+
+<span class="hljs-keyword">const</span> loader = <span class="hljs-keyword">new</span> THREE.GLTFLoader();
+loader.load(
+
+    <span class="hljs-comment">// URL of the VRM you want to load</span>
+    <span class="hljs-string">'/models/three-vrm-girl.vrm'</span>,
+
+    <span class="hljs-comment">// called when the resource is loaded</span>
+    ( gltf ) =&gt; {
+
+        <span class="hljs-comment">// generate a VRM instance from gltf</span>
+        THREE.VRM.from( gltf ).then( <span class="hljs-function">(<span class="hljs-params"> vrm </span>) =&gt;</span> {
+
+            <span class="hljs-comment">// add the loaded vrm to the scene</span>
+            scene.add( vrm.scene );
+
+            <span class="hljs-comment">// deal with vrm features</span>
+            <span class="hljs-built_in">console</span>.log( vrm );
+
+        } );
+
+    },
+
+    <span class="hljs-comment">// called while loading is progressing</span>
+    ( progress ) =&gt; <span class="hljs-built_in">console</span>.log( <span class="hljs-string">'Loading model...'</span>, <span class="hljs-number">100.0</span> * ( progress.loaded / progress.total ), <span class="hljs-string">'%'</span> ),
+
+    <span class="hljs-comment">// called when loading has errors</span>
+    ( error ) =&gt; <span class="hljs-built_in">console</span>.error( error )
+
+);
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+				<h3 id="via-npm">via npm</h3>
+				<p>Install <a href="https://www.npmjs.com/package/three"><code>three</code></a> and <a href="https://www.npmjs.com/package/@pixiv/three-vrm"><code>@pixiv/three-vrm</code></a> :</p>
+				<pre><code class="language-sh">npm install three @pixiv/three-vrm</code></pre>
+				<p>Code like this:</p>
+				<pre><code class="language-javascript"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> THREE <span class="hljs-keyword">from</span> <span class="hljs-string">'three'</span>;
+<span class="hljs-keyword">import</span> { GLTF, GLTFLoader } <span class="hljs-keyword">from</span> <span class="hljs-string">'three/examples/jsm/loaders/GLTFLoader'</span>;
 <span class="hljs-keyword">import</span> { VRM, VRMLoader } <span class="hljs-keyword">from</span> <span class="hljs-string">'@pixiv/three-vrm'</span>;
 
 <span class="hljs-keyword">const</span> scene = <span class="hljs-keyword">new</span> THREE.Scene();
 
-<span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>( <span class="hljs-function">(<span class="hljs-params"> resolve, reject </span>) =&gt;</span> {
-
-    <span class="hljs-keyword">new</span> VRMLoader().load( <span class="hljs-string">"/models/shino.vrm"</span>, resolve, () =&gt; {}, reject );
-
-} ).then( <span class="hljs-function">(<span class="hljs-params"> vrm </span>) =&gt;</span> {
-
-    scene.add( vrm.scene );
-
-} );</code></pre>
-				<p>Copy <code>node_modules/three-vrm/lib/index.min.js</code> to your public directory.<br>ex) cp <code>node_modules/three-vrm/lib/index.min.js</code> <code>static/js/three-vrm.min.js</code></p>
-				<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"/static/js/three-vrm.min.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-<span class="hljs-keyword">const</span> loader = <span class="hljs-keyword">new</span> THREE.VRMLoader();
+<span class="hljs-keyword">const</span> loader = <span class="hljs-keyword">new</span> THREE.GLTFLoader();
 loader.load(
+
     <span class="hljs-comment">// URL of the VRM you want to load</span>
-    <span class="hljs-string">'/models/shino.vrm'</span>,
+    <span class="hljs-string">'/models/three-vrm-girl.vrm'</span>,
+
     <span class="hljs-comment">// called when the resource is loaded</span>
-    ( vrm ) =&gt; {
-        scene.add( vrm.scene );
-  },
-    <span class="hljs-comment">// called while loading is progressing</span>
-    ( progress ) =&gt; {
-        <span class="hljs-built_in">console</span>.log( ( xhr.loaded / xhr.total * <span class="hljs-number">100.0</span> ) + <span class="hljs-string">'% loaded'</span> );
+    ( gltf ) =&gt; {
+
+        <span class="hljs-comment">// generate a VRM instance from gltf</span>
+        THREE.VRM.from( gltf ).then( <span class="hljs-function">(<span class="hljs-params"> vrm </span>) =&gt;</span> {
+
+            <span class="hljs-comment">// add the loaded vrm to the scene</span>
+            scene.add( vrm.scene );
+
+            <span class="hljs-comment">// deal with vrm features</span>
+            <span class="hljs-built_in">console</span>.log( vrm );
+
+        } );
+
     },
+
+    <span class="hljs-comment">// called while loading is progressing</span>
+    ( progress ) =&gt; <span class="hljs-built_in">console</span>.log( <span class="hljs-string">'Loading model...'</span>, <span class="hljs-number">100.0</span> * ( progress.loaded / progress.total ), <span class="hljs-string">'%'</span> ),
+
     <span class="hljs-comment">// called when loading has errors</span>
-    ( error ) =&gt; {
-        <span class="hljs-built_in">console</span>.error( <span class="hljs-string">'Something went wrong!'</span> );
-        <span class="hljs-keyword">throw</span> error;
-    }
-);
-</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
-				<pre><code class="language-javascript"></code></pre>
-				<h2 id="examples">Examples</h2>
-				<h3 id="load-from-html">Load from Html</h3>
-				<pre><code>three-vrm$ yarn build
-three-vrm$ yarn <span class="hljs-keyword">global</span> <span class="hljs-keyword">add</span> http-<span class="hljs-keyword">server</span> &amp;&amp; http-<span class="hljs-keyword">server</span></code></pre><ul>
-					<li><a href="http://localhost:8080/examples/html/basic.html">http://localhost:8080/examples/html/basic.html</a></li>
-					<li><a href="http://localhost:8080/examples/html/dnd.html">http://localhost:8080/examples/html/dnd.html</a></li>
-					<li><a href="http://localhost:8080/exmaples/html/mouse.html">http://localhost:8080/exmaples/html/mouse.html</a></li>
-				</ul>
-				<h3 id="use-with-react">Use with React</h3>
-				<pre><code>three-vrm<span class="hljs-variable">$ </span>yarn build
-three-vrm/examples/react<span class="hljs-variable">$ </span>yarn
-three-vrm/examples/react<span class="hljs-variable">$ </span>yarn dev</code></pre><ul>
-					<li><a href="http://localhost:4000">http://localhost:4000</a></li>
-				</ul>
-				<h2 id="public-api">Public API</h2>
-				<h3 id="vrm">VRM</h3>
-				<p>get the human bones of VRM model.</p>
-				<pre><code><span class="hljs-selector-class">.humanBones</span>: VRMHumanBones</code></pre><p>get the utility for <a href="https://vrm.dev/univrm/components/univrm_blendshape/">blendshape</a>.</p>
-				<pre><code><span class="hljs-selector-class">.blendShapeProxy</span>: VRMBlendShapeProxy</code></pre><p>get the utilifty for <a href="https://vrm.dev/univrm/components/univrm_firstperson/">lookAt</a>.</p>
-				<pre><code><span class="hljs-selector-class">.lookAt</span>: VRMLookAtHead</code></pre><p>get the utility for <a href="https://vrm.dev/univrm/components/univrm_lookat/">first person</a>.</p>
-				<pre><code><span class="hljs-selector-class">.firstPerson</span>: VRMFirstPerson</code></pre><p>get the utility for <a href="https://vrm.dev/univrm/components/univrm_secondary/">spring bone</a>.</p>
-				<pre><code><span class="hljs-selector-class">.springBoneManager</span>: VRMSpringBoneManager</code></pre><p>get the <a href="https://vrm.dev/univrm/components/univrm_meta/">information</a> of the VRM model.</p>
-				<pre><code><span class="hljs-selector-class">.meta</span>: RawVrmMeta</code></pre><p>update VRM model.</p>
-				<pre><code><span class="hljs-selector-class">.update</span>(<span class="hljs-attribute">deltaTime</span>: number)</code></pre><p>call when unload VRM model.</p>
-				<pre><code><span class="hljs-title">.dispose()</span></code></pre><h3 id="vrmblendshapeproxy">VRMBlendShapeProxy</h3>
-				<p>set the blendshape animation weight.</p>
-				<pre><code>.set<span class="hljs-constructor">Value(<span class="hljs-params">name</span>:<span class="hljs-params">string</span>, <span class="hljs-params">weight</span>:<span class="hljs-params">number</span>)</span></code></pre><p>get the blendshape animation weight.</p>
-				<pre><code>.getValue(<span class="hljs-built_in">name</span>:<span class="hljs-built_in">string</span>) : <span class="hljs-built_in">number</span></code></pre><p>get the blendshape animation controller.</p>
-				<pre><code>.get<span class="hljs-constructor">Controller(<span class="hljs-params">name</span>:<span class="hljs-params">string</span>)</span> : BlendShapeController</code></pre><p>get the blendshape animations.</p>
-				<pre><code><span class="hljs-selector-class">.expressions</span> : <span class="hljs-selector-tag">AnimationClip</span><span class="hljs-selector-attr">[]</span></code></pre><h3 id="vrmlookathead">VRMLookAtHead</h3>
-				<p>get the head object of VRM. default is HumanBone.Head.</p>
-				<pre><code><span class="hljs-selector-class">.head</span> : THREE<span class="hljs-selector-class">.Object3D</span> </code></pre><p>set the look at target.</p>
-				<pre><code><span class="hljs-selector-class">.setTarget</span>( <span class="hljs-selector-tag">THREE</span><span class="hljs-selector-class">.Object3D</span> )</code></pre><p>get the look at target.</p>
-				<pre><code><span class="hljs-selector-class">.getTarget</span>() : <span class="hljs-selector-tag">THREE</span><span class="hljs-selector-class">.Object3D</span></code></pre><p>make VRM model look specified position.</p>
-				<pre><code>.look<span class="hljs-constructor">At(<span class="hljs-params">x</span>:<span class="hljs-params">number</span>, <span class="hljs-params">y</span>:<span class="hljs-params">number</span>, <span class="hljs-params">z</span>:<span class="hljs-params">number</span>)</span></code></pre><h3 id="vrmfirstperson">VRMFirstPerson</h3>
-				<p>setup firstperson function.</p>
-				<ul>
-					<li>firstperson function is not setup by automatically.</li>
-					<li>if you use firstperson function you must call this method.</li>
-					<li>firstPersonOnlyLayer and thirdPersonOnlyLayer is camera layer.</li>
-				</ul>
-				<pre><code>.setup(cameraLayer?: {
-  firstPersonOnlyLayer?: number;
-  thirdPersonOnlyLayer?: number;
-}) </code></pre><p>get the firstperson bone. default is Bone.head.</p>
-				<pre><code><span class="hljs-selector-class">.getFirstPersonBone</span>() : <span class="hljs-selector-tag">THREE</span><span class="hljs-selector-class">.Object3D</span></code></pre><p>get the firstperson bone offset. default is [0,0.06,0].</p>
-				<pre><code><span class="hljs-selector-class">.getFirstPersonBoneOffset</span>() : <span class="hljs-selector-tag">THREE</span><span class="hljs-selector-class">.Vector3</span> </code></pre><p>get the firstperson bone position. default is head position with offset.</p>
-				<pre><code><span class="hljs-selector-class">.getFirstBonePosition</span>(<span class="hljs-selector-tag">v3</span>: <span class="hljs-selector-tag">THREE</span><span class="hljs-selector-class">.Vector3</span>) : <span class="hljs-selector-tag">THREE</span><span class="hljs-selector-class">.Vector3</span></code></pre><p>get the First Person Camera layer. default is 9.</p>
-				<pre><code>.getFirstPersonOnlyLayer(): <span class="hljs-built_in">number</span></code></pre><p>get the Third Person Camera layer. default is 10.</p>
-				<pre><code>.getThirdPersonOnlyLayer(): <span class="hljs-built_in">number</span></code></pre><h3 id="vrmspringbonemanager">VRMSpringBoneManager</h3>
-				<p>manually reset the spring bones.</p>
-				<pre><code>.<span class="hljs-keyword">reset</span>(): <span class="hljs-type">void</span></code></pre><p>get the spring bones.</p>
-				<pre><code><span class="hljs-selector-class">.springBoneGroupList</span>: <span class="hljs-selector-tag">VRMSpringBoneGroup</span><span class="hljs-selector-attr">[]</span></code></pre>
+    ( error ) =&gt; <span class="hljs-built_in">console</span>.error( error )
+
+);</code></pre>
+				<h2 id="contributing">Contributing</h2>
+				<p>See: <a href="CONTRIBUTING.md">CONTRIBUTING.md</a></p>
+				<h2 id="license">LICENSE</h2>
+				<p><a href="LICENSE">MIT</a></p>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -164,78 +164,51 @@ three-vrm/examples/react<span class="hljs-variable">$ </span>yarn dev</code></pr
 					<li class="globals  ">
 						<a href="globals.html"><em>Globals</em></a>
 					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/gltfschema.html">GLTFSchema</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/vrmschema.html">VRMSchema</a>
+					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-enum">
-						<a href="enums/allowedusername.html" class="tsd-kind-icon">Allowed<wbr>User<wbr>Name</a>
+						<a href="enums/mtoonmaterialcullmode.html" class="tsd-kind-icon">MToon<wbr>Material<wbr>Cull<wbr>Mode</a>
 					</li>
 					<li class=" tsd-kind-enum">
-						<a href="enums/blendshapepresetname.html" class="tsd-kind-icon">Blend<wbr>Shape<wbr>Preset<wbr>Name</a>
+						<a href="enums/mtoonmaterialdebugmode.html" class="tsd-kind-icon">MToon<wbr>Material<wbr>Debug<wbr>Mode</a>
 					</li>
 					<li class=" tsd-kind-enum">
-						<a href="enums/humanbone.html" class="tsd-kind-icon">Human<wbr>Bone</a>
+						<a href="enums/mtoonmaterialoutlinecolormode.html" class="tsd-kind-icon">MToon<wbr>Material<wbr>Outline<wbr>Color<wbr>Mode</a>
 					</li>
 					<li class=" tsd-kind-enum">
-						<a href="enums/licensename.html" class="tsd-kind-icon">License<wbr>Name</a>
+						<a href="enums/mtoonmaterialoutlinewidthmode.html" class="tsd-kind-icon">MToon<wbr>Material<wbr>Outline<wbr>Width<wbr>Mode</a>
 					</li>
 					<li class=" tsd-kind-enum">
-						<a href="enums/lookattypename.html" class="tsd-kind-icon">Look<wbr>AtType<wbr>Name</a>
+						<a href="enums/mtoonmaterialrendermode.html" class="tsd-kind-icon">MToon<wbr>Material<wbr>Render<wbr>Mode</a>
 					</li>
 					<li class=" tsd-kind-enum">
-						<a href="enums/mtooncullmode.html" class="tsd-kind-icon">MToon<wbr>Cull<wbr>Mode</a>
-					</li>
-					<li class=" tsd-kind-enum">
-						<a href="enums/mtoondebugmode.html" class="tsd-kind-icon">MToon<wbr>Debug<wbr>Mode</a>
-					</li>
-					<li class=" tsd-kind-enum">
-						<a href="enums/mtoonoutlinecolormode.html" class="tsd-kind-icon">MToon<wbr>Outline<wbr>Color<wbr>Mode</a>
-					</li>
-					<li class=" tsd-kind-enum">
-						<a href="enums/mtoonoutlinewidthmode.html" class="tsd-kind-icon">MToon<wbr>Outline<wbr>Width<wbr>Mode</a>
-					</li>
-					<li class=" tsd-kind-enum">
-						<a href="enums/mtoonrendermode.html" class="tsd-kind-icon">MToon<wbr>Render<wbr>Mode</a>
-					</li>
-					<li class=" tsd-kind-enum">
-						<a href="enums/unlitrendertype.html" class="tsd-kind-icon">Unlit<wbr>Render<wbr>Type</a>
-					</li>
-					<li class=" tsd-kind-enum">
-						<a href="enums/ussagename.html" class="tsd-kind-icon">Ussage<wbr>Name</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/blendshapecontroller.html" class="tsd-kind-icon">Blend<wbr>Shape<wbr>Controller</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/blendshapemaster.html" class="tsd-kind-icon">Blend<wbr>Shape<wbr>Master</a>
+						<a href="enums/vrmunlitmaterialrendertype.html" class="tsd-kind-icon">VRMUnlit<wbr>Material<wbr>Render<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/curvemapper.html" class="tsd-kind-icon">Curve<wbr>Mapper</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="classes/mtoon.html" class="tsd-kind-icon">MToon</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/materialconverter.html" class="tsd-kind-icon">Material<wbr>Converter</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/rendererfirstpersonflags.html" class="tsd-kind-icon">Renderer<wbr>First<wbr>Person<wbr>Flags</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/unlit.html" class="tsd-kind-icon">Unlit</a>
+						<a href="classes/mtoonmaterial.html" class="tsd-kind-icon">MToon<wbr>Material</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/vrm.html" class="tsd-kind-icon">VRM</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/vrmblendshapegroup.html" class="tsd-kind-icon">VRMBlend<wbr>Shape<wbr>Group</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/vrmblendshapeimporter.html" class="tsd-kind-icon">VRMBlend<wbr>Shape<wbr>Importer</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/vrmblendshapeproxy.html" class="tsd-kind-icon">VRMBlend<wbr>Shape<wbr>Proxy</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/vrmbuilder.html" class="tsd-kind-icon">VRMBuilder</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/vrmbuilderdebug.html" class="tsd-kind-icon">VRMBuilder<wbr>Debug</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/vrmdebug.html" class="tsd-kind-icon">VRMDebug</a>
@@ -244,7 +217,22 @@ three-vrm/examples/react<span class="hljs-variable">$ </span>yarn dev</code></pr
 						<a href="classes/vrmfirstperson.html" class="tsd-kind-icon">VRMFirst<wbr>Person</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="classes/vrmhumanbones.html" class="tsd-kind-icon">VRMHuman<wbr>Bones</a>
+						<a href="classes/vrmfirstpersonimporter.html" class="tsd-kind-icon">VRMFirst<wbr>Person<wbr>Importer</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/vrmhumanbone.html" class="tsd-kind-icon">VRMHuman<wbr>Bone</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/vrmhumanoid.html" class="tsd-kind-icon">VRMHumanoid</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/vrmhumanoidimporter.html" class="tsd-kind-icon">VRMHumanoid<wbr>Importer</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/vrmimporter.html" class="tsd-kind-icon">VRMImporter</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/vrmimporterdebug.html" class="tsd-kind-icon">VRMImporter<wbr>Debug</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/vrmlookatapplyer.html" class="tsd-kind-icon">VRMLook<wbr>AtApplyer</a>
@@ -259,10 +247,19 @@ three-vrm/examples/react<span class="hljs-variable">$ </span>yarn dev</code></pr
 						<a href="classes/vrmlookathead.html" class="tsd-kind-icon">VRMLook<wbr>AtHead</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="classes/vrmpartsbuilder.html" class="tsd-kind-icon">VRMParts<wbr>Builder</a>
+						<a href="classes/vrmlookatheaddebug.html" class="tsd-kind-icon">VRMLook<wbr>AtHead<wbr>Debug</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="classes/vrmpartsbuilderdebugproxy.html" class="tsd-kind-icon">VRMParts<wbr>Builder<wbr>Debug<wbr>Proxy</a>
+						<a href="classes/vrmlookatimporter.html" class="tsd-kind-icon">VRMLook<wbr>AtImporter</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/vrmlookatimporterdebug.html" class="tsd-kind-icon">VRMLook<wbr>AtImporter<wbr>Debug</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/vrmmaterialimporter.html" class="tsd-kind-icon">VRMMaterial<wbr>Importer</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/vrmrendererfirstpersonflags.html" class="tsd-kind-icon">VRMRenderer<wbr>First<wbr>Person<wbr>Flags</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/vrmspringbone.html" class="tsd-kind-icon">VRMSpring<wbr>Bone</a>
@@ -271,184 +268,43 @@ three-vrm/examples/react<span class="hljs-variable">$ </span>yarn dev</code></pr
 						<a href="classes/vrmspringbonedebug.html" class="tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Debug</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/vrmspringboneimporter.html" class="tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Importer</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/vrmspringboneimporterdebug.html" class="tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Importer<wbr>Debug</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/vrmspringbonemanager.html" class="tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Manager</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="classes/vrmspringbonemanagerdebug.html" class="tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Manager<wbr>Debug</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/animationclipdata.html" class="tsd-kind-icon">Animation<wbr>Clip<wbr>Data</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/animationclipkeyframe.html" class="tsd-kind-icon">Animation<wbr>Clip<wbr>Keyframe</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/blendshapebind.html" class="tsd-kind-icon">Blend<wbr>Shape<wbr>Bind</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/blendshapematerialvalue.html" class="tsd-kind-icon">Blend<wbr>Shape<wbr>Material<wbr>Value</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/debugoption.html" class="tsd-kind-icon">Debug<wbr>Option</a>
+						<a href="classes/vrmunlitmaterial.html" class="tsd-kind-icon">VRMUnlit<wbr>Material</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/mtoonparameters.html" class="tsd-kind-icon">MToon<wbr>Parameters</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/materialconverteroptions.html" class="tsd-kind-icon">Material<wbr>Converter<wbr>Options</a>
+						<a href="interfaces/vrmblendshapebind.html" class="tsd-kind-icon">VRMBlend<wbr>Shape<wbr>Bind</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawaccessor.html" class="tsd-kind-icon">Raw<wbr>Accessor</a>
+						<a href="interfaces/vrmblendshapematerialvalue.html" class="tsd-kind-icon">VRMBlend<wbr>Shape<wbr>Material<wbr>Value</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawaccessorsparse.html" class="tsd-kind-icon">Raw<wbr>Accessor<wbr>Sparse</a>
+						<a href="interfaces/vrmdebugoptions.html" class="tsd-kind-icon">VRMDebug<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawaccessorsparseindices.html" class="tsd-kind-icon">Raw<wbr>Accessor<wbr>Sparse<wbr>Indices</a>
+						<a href="interfaces/vrmhumandescription.html" class="tsd-kind-icon">VRMHuman<wbr>Description</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawaccessorsparsevalues.html" class="tsd-kind-icon">Raw<wbr>Accessor<wbr>Sparse<wbr>Values</a>
+						<a href="interfaces/vrmhumanlimit.html" class="tsd-kind-icon">VRMHuman<wbr>Limit</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawanimation.html" class="tsd-kind-icon">Raw<wbr>Animation</a>
+						<a href="interfaces/vrmimporteroptions.html" class="tsd-kind-icon">VRMImporter<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawanimationchannel.html" class="tsd-kind-icon">Raw<wbr>Animation<wbr>Channel</a>
+						<a href="interfaces/vrmmaterialimporteroptions.html" class="tsd-kind-icon">VRMMaterial<wbr>Importer<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawanimationchanneltarget.html" class="tsd-kind-icon">Raw<wbr>Animation<wbr>Channel<wbr>Target</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawanimationsampler.html" class="tsd-kind-icon">Raw<wbr>Animation<wbr>Sampler</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawasset.html" class="tsd-kind-icon">Raw<wbr>Asset</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawbuffer.html" class="tsd-kind-icon">Raw<wbr>Buffer</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawbufferview.html" class="tsd-kind-icon">Raw<wbr>Buffer<wbr>View</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawcamera.html" class="tsd-kind-icon">Raw<wbr>Camera</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawcameraorthographic.html" class="tsd-kind-icon">Raw<wbr>Camera<wbr>Orthographic</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawcameraperspective.html" class="tsd-kind-icon">Raw<wbr>Camera<wbr>Perspective</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawcenter.html" class="tsd-kind-icon">Raw<wbr>Center</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawcollider.html" class="tsd-kind-icon">Raw<wbr>Collider</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawfirstpersonboneoffset.html" class="tsd-kind-icon">Raw<wbr>First<wbr>Person<wbr>Bone<wbr>Offset</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawgltf.html" class="tsd-kind-icon">Raw<wbr>Gltf</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawgravitydir.html" class="tsd-kind-icon">Raw<wbr>Gravity<wbr>Dir</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawimage.html" class="tsd-kind-icon">Raw<wbr>Image</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawmaterial.html" class="tsd-kind-icon">Raw<wbr>Material</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawmaterialnormaltextureinfoobject.html" class="tsd-kind-icon">Raw<wbr>Material<wbr>Normal<wbr>Texture<wbr>Info<wbr>Object</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawmaterialocclusiontextureinfoobject.html" class="tsd-kind-icon">Raw<wbr>Material<wbr>Occlusion<wbr>Texture<wbr>Info<wbr>Object</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawmaterialpbrmetallicroughness.html" class="tsd-kind-icon">Raw<wbr>MaterialPBRMetallic<wbr>Roughness</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawmax.html" class="tsd-kind-icon">Raw<wbr>Max</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawmesh.html" class="tsd-kind-icon">Raw<wbr>Mesh</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawmeshprimitive.html" class="tsd-kind-icon">Raw<wbr>Mesh<wbr>Primitive</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawmin.html" class="tsd-kind-icon">Raw<wbr>Min</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawnode.html" class="tsd-kind-icon">Raw<wbr>Node</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawoffset.html" class="tsd-kind-icon">Raw<wbr>Offset</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawsampler.html" class="tsd-kind-icon">Raw<wbr>Sampler</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawscene.html" class="tsd-kind-icon">Raw<wbr>Scene</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawskin.html" class="tsd-kind-icon">Raw<wbr>Skin</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawtexture.html" class="tsd-kind-icon">Raw<wbr>Texture</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawtextureinfo.html" class="tsd-kind-icon">Raw<wbr>Texture<wbr>Info</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawvrm.html" class="tsd-kind-icon">Raw<wbr>Vrm</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawvrmblendshape.html" class="tsd-kind-icon">Raw<wbr>Vrm<wbr>Blend<wbr>Shape</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawvrmblendshapebind.html" class="tsd-kind-icon">Raw<wbr>Vrm<wbr>Blend<wbr>Shape<wbr>Bind</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawvrmblendshapegroup.html" class="tsd-kind-icon">Raw<wbr>Vrm<wbr>Blend<wbr>Shape<wbr>Group</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawvrmblendshapematerialbind.html" class="tsd-kind-icon">Raw<wbr>Vrm<wbr>Blend<wbr>Shape<wbr>Materialbind</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawvrmfirstperson.html" class="tsd-kind-icon">Raw<wbr>Vrm<wbr>First<wbr>Person</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawvrmfirstpersondegreemap.html" class="tsd-kind-icon">Raw<wbr>Vrm<wbr>First<wbr>Person<wbr>Degreemap</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawvrmfirstpersonmeshannotation.html" class="tsd-kind-icon">Raw<wbr>Vrm<wbr>First<wbr>Person<wbr>Meshannotation</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawvrmhumanoid.html" class="tsd-kind-icon">Raw<wbr>Vrm<wbr>Humanoid</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawvrmhumanoidbone.html" class="tsd-kind-icon">Raw<wbr>Vrm<wbr>Humanoid<wbr>Bone</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawvrmmaterial.html" class="tsd-kind-icon">Raw<wbr>Vrm<wbr>Material</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawvrmmeta.html" class="tsd-kind-icon">Raw<wbr>Vrm<wbr>Meta</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawvrmsecondaryanimation.html" class="tsd-kind-icon">Raw<wbr>Vrm<wbr>Secondaryanimation</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawvrmsecondaryanimationcollidergroup.html" class="tsd-kind-icon">Raw<wbr>Vrm<wbr>Secondaryanimation<wbr>Collidergroup</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rawvrmsecondaryanimationspring.html" class="tsd-kind-icon">Raw<wbr>Vrm<wbr>Secondaryanimation<wbr>Spring</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/unlitparameters.html" class="tsd-kind-icon">Unlit<wbr>Parameters</a>
+						<a href="interfaces/vrmparameters.html" class="tsd-kind-icon">VRMParameters</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/vrmpose.html" class="tsd-kind-icon">VRMPose</a>
@@ -459,8 +315,8 @@ three-vrm/examples/react<span class="hljs-variable">$ </span>yarn dev</code></pr
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/vrmspringbonecollidergroup.html" class="tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Collider<wbr>Group</a>
 					</li>
-					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#collidermesh" class="tsd-kind-icon">Collider<wbr>Mesh</a>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/vrmunlitmaterialparameters.html" class="tsd-kind-icon">VRMUnlit<wbr>Material<wbr>Parameters</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#gltfmesh" class="tsd-kind-icon">GLTFMesh</a>
@@ -478,16 +334,19 @@ three-vrm/examples/react<span class="hljs-variable">$ </span>yarn dev</code></pr
 						<a href="globals.html#rawvector4" class="tsd-kind-icon">Raw<wbr>Vector4</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#vrmhumanbonearray" class="tsd-kind-icon">VRMHuman<wbr>Bone<wbr>Array</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#vrmhumanbones" class="tsd-kind-icon">VRMHuman<wbr>Bones</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#vrmspringbonecollidermesh" class="tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Collider<wbr>Mesh</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#vrmspringbonegroup" class="tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Group</a>
 					</li>
 					<li class=" tsd-kind-variable">
-						<a href="globals.html#deg2rad" class="tsd-kind-icon">DEG2RAD</a>
-					</li>
-					<li class=" tsd-kind-variable">
 						<a href="globals.html#gizmo_render_order" class="tsd-kind-icon">GIZMO_<wbr>RENDER_<wbr>ORDER</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#identity_matrix4" class="tsd-kind-icon">IDENTITY_<wbr>MATRIX4</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#deepdispose" class="tsd-kind-icon">deep<wbr>Dispose</a>
@@ -509,6 +368,15 @@ three-vrm/examples/react<span class="hljs-variable">$ </span>yarn dev</code></pr
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#linstep" class="tsd-kind-icon">linstep</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#reducebones" class="tsd-kind-icon">reduce<wbr>Bones</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#renamematerialproperty" class="tsd-kind-icon">rename<wbr>Material<wbr>Property</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#saturate" class="tsd-kind-icon">saturate</a>
 					</li>
 				</ul>
 			</nav>

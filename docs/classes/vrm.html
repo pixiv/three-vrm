@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>VRM | three-vrm</title>
+	<title>VRM | @pixiv/three-vrm</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">three-vrm</a>
+					<a href="../index.html" class="title">@pixiv/three-vrm</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -67,24 +67,9 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Represents a VRM model.
-						It has so many feature to deal with your VRM models!</p>
+						<p>A class that represents a single VRM model.
+						See the documentation of <a href="vrm.html#from">VRM.from</a> for the most basic use of VRM.</p>
 					</div>
-					<dl class="tsd-comment-tags">
-						<dt>example</dt>
-						<dd><p>Most basic use of VRM</p>
-							<pre><code>const scene = <span class="hljs-keyword">new</span> THREE.Scene();
-
-<span class="hljs-keyword">new</span> THREE.GLTFLoader().load( <span class="hljs-string">'models/shino.vrm'</span>, <span class="hljs-function"><span class="hljs-params">( gltf )</span> =&gt;</span> {
-
-  THREE.VRM.<span class="hljs-keyword">from</span>( gltf ).<span class="hljs-keyword">then</span>( <span class="hljs-function"><span class="hljs-params">( vrm )</span> =&gt;</span> {
-
-    scene.add( vrm.scene );
-
-  } );
-
-} );</code></pre></dd>
-					</dl>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
@@ -110,42 +95,23 @@
 								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="vrm.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
+						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="vrm.html#_animationmixer" class="tsd-kind-icon">_animation<wbr>Mixer</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="vrm.html#_blendshapeproxy" class="tsd-kind-icon">_blend<wbr>Shape<wbr>Proxy</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="vrm.html#_firstperson" class="tsd-kind-icon">_first<wbr>Person</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="vrm.html#_gltf" class="tsd-kind-icon">_gltf</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="vrm.html#_humanbones" class="tsd-kind-icon">_human<wbr>Bones</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="vrm.html#_lookat" class="tsd-kind-icon">_look<wbr>At</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="vrm.html#_meta" class="tsd-kind-icon">_meta</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="vrm.html#_partsbuilder" class="tsd-kind-icon">_parts<wbr>Builder</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="vrm.html#_restpose" class="tsd-kind-icon">_rest<wbr>Pose</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="vrm.html#_springbonemanager" class="tsd-kind-icon">_spring<wbr>Bone<wbr>Manager</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Accessors</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="vrm.html#animationmixer" class="tsd-kind-icon">animation<wbr>Mixer</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="vrm.html#blendshapeproxy" class="tsd-kind-icon">blend<wbr>Shape<wbr>Proxy</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="vrm.html#firstperson" class="tsd-kind-icon">first<wbr>Person</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="vrm.html#humanbones" class="tsd-kind-icon">human<wbr>Bones</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="vrm.html#lookat" class="tsd-kind-icon">look<wbr>At</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="vrm.html#meta" class="tsd-kind-icon">meta</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="vrm.html#restpose" class="tsd-kind-icon">rest<wbr>Pose</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="vrm.html#scene" class="tsd-kind-icon">scene</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="vrm.html#springbonemanager" class="tsd-kind-icon">spring<wbr>Bone<wbr>Manager</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-static"><a href="vrm.html#builder" class="tsd-kind-icon">Builder</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="vrm.html#blendshapeproxy" class="tsd-kind-icon">blend<wbr>Shape<wbr>Proxy</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="vrm.html#firstperson" class="tsd-kind-icon">first<wbr>Person</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="vrm.html#humanoid" class="tsd-kind-icon">humanoid</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="vrm.html#lookat" class="tsd-kind-icon">look<wbr>At</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="vrm.html#materials" class="tsd-kind-icon">materials</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="vrm.html#meta" class="tsd-kind-icon">meta</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="vrm.html#scene" class="tsd-kind-icon">scene</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="vrm.html#springbonemanager" class="tsd-kind-icon">spring<wbr>Bone<wbr>Manager</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrm.html#dispose" class="tsd-kind-icon">dispose</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrm.html#loadgltf" class="tsd-kind-icon">loadGLTF</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrm.html#setpose" class="tsd-kind-icon">set<wbr>Pose</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrm.html#update" class="tsd-kind-icon">update</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="vrm.html#from" class="tsd-kind-icon">from</a></li>
 							</ul>
@@ -159,13 +125,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new VRM<span class="tsd-signature-symbol">(</span>_builder<span class="tsd-signature-symbol">?: </span><a href="vrmpartsbuilder.html" class="tsd-signature-type">VRMPartsBuilder</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="vrm.html" class="tsd-signature-type">VRM</a></li>
+						<li class="tsd-signature tsd-kind-icon">new VRM<span class="tsd-signature-symbol">(</span>params<span class="tsd-signature-symbol">: </span><a href="../interfaces/vrmparameters.html" class="tsd-signature-type">VRMParameters</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="vrm.html" class="tsd-signature-type">VRM</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/VRM.ts#L176">vrm/VRM.ts:176</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/VRM.ts#L103">vrm/VRM.ts:103</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -176,10 +142,10 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> _builder: <a href="vrmpartsbuilder.html" class="tsd-signature-type">VRMPartsBuilder</a></h5>
+									<h5>params: <a href="../interfaces/vrmparameters.html" class="tsd-signature-type">VRMParameters</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
-											<p>A <a href="vrmpartsbuilder.html">VRMPartsBuilder</a>. Usually you don&#39;t have to care about it</p>
+											<p><a href="../interfaces/vrmparameters.html">VRMParameters</a> that represents components of the VRM</p>
 										</div>
 									</div>
 								</li>
@@ -189,389 +155,139 @@
 					</ul>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-private tsd-is-private-protected">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_animationmixer" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> <span class="tsd-flag ts-flagOptional">Optional</span> _animation<wbr>Mixer</h3>
-					<div class="tsd-signature tsd-kind-icon">_animation<wbr>Mixer<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">THREE.AnimationMixer</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="blendshapeproxy" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> blend<wbr>Shape<wbr>Proxy</h3>
+					<div class="tsd-signature tsd-kind-icon">blend<wbr>Shape<wbr>Proxy<span class="tsd-signature-symbol">:</span> <a href="vrmblendshapeproxy.html" class="tsd-signature-type">VRMBlendShapeProxy</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/VRM.ts#L152">vrm/VRM.ts:152</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_blendshapeproxy" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> <span class="tsd-flag ts-flagOptional">Optional</span> _blend<wbr>Shape<wbr>Proxy</h3>
-					<div class="tsd-signature tsd-kind-icon">_blend<wbr>Shape<wbr>Proxy<span class="tsd-signature-symbol">:</span> <a href="vrmblendshapeproxy.html" class="tsd-signature-type">VRMBlendShapeProxy</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/VRM.ts#L112">vrm/VRM.ts:112</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_firstperson" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> <span class="tsd-flag ts-flagOptional">Optional</span> _first<wbr>Person</h3>
-					<div class="tsd-signature tsd-kind-icon">_first<wbr>Person<span class="tsd-signature-symbol">:</span> <a href="vrmfirstperson.html" class="tsd-signature-type">VRMFirstPerson</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/VRM.ts#L122">vrm/VRM.ts:122</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_gltf" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> <span class="tsd-flag ts-flagOptional">Optional</span> _gltf</h3>
-					<div class="tsd-signature tsd-kind-icon">_gltf<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">THREE.GLTF</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/VRM.ts#L174">vrm/VRM.ts:174</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/VRM.ts#L73">vrm/VRM.ts:73</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>A parsed result of GLTF taken from GLTFLoader.</p>
+							<p>Contains <a href="vrmblendshapeproxy.html">VRMBlendShapeProxy</a> of the VRM.
+							You might want to control these facial expressions via <a href="vrmblendshapeproxy.html#setvalue">VRMBlendShapeProxy.setValue</a>.</p>
 						</div>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_humanbones" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> <span class="tsd-flag ts-flagOptional">Optional</span> _human<wbr>Bones</h3>
-					<div class="tsd-signature tsd-kind-icon">_human<wbr>Bones<span class="tsd-signature-symbol">:</span> <a href="vrmhumanbones.html" class="tsd-signature-type">VRMHumanBones</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/VRM.ts#L98">vrm/VRM.ts:98</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_lookat" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> <span class="tsd-flag ts-flagOptional">Optional</span> _look<wbr>At</h3>
-					<div class="tsd-signature tsd-kind-icon">_look<wbr>At<span class="tsd-signature-symbol">:</span> <a href="vrmlookathead.html" class="tsd-signature-type">VRMLookAtHead</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/VRM.ts#L132">vrm/VRM.ts:132</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_meta" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> <span class="tsd-flag ts-flagOptional">Optional</span> _meta</h3>
-					<div class="tsd-signature tsd-kind-icon">_meta<span class="tsd-signature-symbol">:</span> <a href="../interfaces/rawvrmmeta.html" class="tsd-signature-type">RawVrmMeta</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/VRM.ts#L142">vrm/VRM.ts:142</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_partsbuilder" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _parts<wbr>Builder</h3>
-					<div class="tsd-signature tsd-kind-icon">_parts<wbr>Builder<span class="tsd-signature-symbol">:</span> <a href="vrmpartsbuilder.html" class="tsd-signature-type">VRMPartsBuilder</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/VRM.ts#L176">vrm/VRM.ts:176</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_restpose" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> <span class="tsd-flag ts-flagOptional">Optional</span> _rest<wbr>Pose</h3>
-					<div class="tsd-signature tsd-kind-icon">_rest<wbr>Pose<span class="tsd-signature-symbol">:</span> <a href="../interfaces/vrmpose.html" class="tsd-signature-type">VRMPose</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/VRM.ts#L88">vrm/VRM.ts:88</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_springbonemanager" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> <span class="tsd-flag ts-flagOptional">Optional</span> _spring<wbr>Bone<wbr>Manager</h3>
-					<div class="tsd-signature tsd-kind-icon">_spring<wbr>Bone<wbr>Manager<span class="tsd-signature-symbol">:</span> <a href="vrmspringbonemanager.html" class="tsd-signature-type">VRMSpringBoneManager</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/VRM.ts#L161">vrm/VRM.ts:161</a></li>
-						</ul>
-					</aside>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Accessors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
-					<a name="animationmixer" class="tsd-anchor"></a>
-					<h3>animation<wbr>Mixer</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> animationMixer<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AnimationMixer</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/VRM.ts#L157">vrm/VRM.ts:157</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Contains AnimationMixer associated with the <a href="vrm.html#blendshapeproxy">VRM.blendShapeProxy</a>.</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">AnimationMixer</span>
-							</h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
-					<a name="blendshapeproxy" class="tsd-anchor"></a>
-					<h3>blend<wbr>Shape<wbr>Proxy</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> blendShapeProxy<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="vrmblendshapeproxy.html" class="tsd-signature-type">VRMBlendShapeProxy</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/VRM.ts#L118">vrm/VRM.ts:118</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Contains <a href="vrmblendshapeproxy.html">VRMBlendShapeProxy</a> of the VRM.
-									You might want to control these facial expressions via <a href="vrmblendshapeproxy.html#setvalue">VRMBlendShapeProxy.setValue</a>.</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">null</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<a href="vrmblendshapeproxy.html" class="tsd-signature-type">VRMBlendShapeProxy</a>
-							</h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="firstperson" class="tsd-anchor"></a>
-					<h3>first<wbr>Person</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> firstPerson<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="vrmfirstperson.html" class="tsd-signature-type">VRMFirstPerson</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/VRM.ts#L128">vrm/VRM.ts:128</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Contains <a href="vrmfirstperson.html">VRMFirstPerson</a> of the VRM.
-									You can use various feature of the firstPerson field.</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">null</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<a href="vrmfirstperson.html" class="tsd-signature-type">VRMFirstPerson</a>
-							</h4>
-						</li>
-					</ul>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> first<wbr>Person</h3>
+					<div class="tsd-signature tsd-kind-icon">first<wbr>Person<span class="tsd-signature-symbol">:</span> <a href="vrmfirstperson.html" class="tsd-signature-type">VRMFirstPerson</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/VRM.ts#L79">vrm/VRM.ts:79</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Contains <a href="vrmfirstperson.html">VRMFirstPerson</a> of the VRM.
+							You can use various feature of the firstPerson field.</p>
+						</div>
+					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
-					<a name="humanbones" class="tsd-anchor"></a>
-					<h3>human<wbr>Bones</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> humanBones<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="vrmhumanbones.html" class="tsd-signature-type">VRMHumanBones</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/VRM.ts#L108">vrm/VRM.ts:108</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Contains <a href="vrmhumanbones.html">VRMHumanBones</a> of the VRM.
-										You can move or rotate these bones as a <code>THREE.Object3D</code>.
-										Each bones defined in VRM spec are either required or optional.
-									See also: <a href="vrm.html#setpose">VRM.setPose</a></p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>todo</dt>
-									<dd><p>Add a link to VRM spec</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">null</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<a href="vrmhumanbones.html" class="tsd-signature-type">VRMHumanBones</a>
-							</h4>
-						</li>
-					</ul>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="humanoid" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> humanoid</h3>
+					<div class="tsd-signature tsd-kind-icon">humanoid<span class="tsd-signature-symbol">:</span> <a href="vrmhumanoid.html" class="tsd-signature-type">VRMHumanoid</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/VRM.ts#L67">vrm/VRM.ts:67</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Contains <a href="vrmhumanoid.html">VRMHumanoid</a> of the VRM.
+							You can control each bones using <a href="vrmhumanoid.html#getbonenode">VRMHumanoid.getBoneNode</a>.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>todo</dt>
+							<dd><p>Add a link to VRM spec</p>
+							</dd>
+						</dl>
+					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="lookat" class="tsd-anchor"></a>
-					<h3>look<wbr>At</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> lookAt<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="vrmlookathead.html" class="tsd-signature-type">VRMLookAtHead</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/VRM.ts#L138">vrm/VRM.ts:138</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Contains <a href="vrmlookathead.html">VRMLookAtHead</a> of the VRM.
-									You might want to use <a href="vrmlookathead.html#settarget">VRMLookAtHead.setTarget</a> to control the eye direction of your VRMs.</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">null</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<a href="vrmlookathead.html" class="tsd-signature-type">VRMLookAtHead</a>
-							</h4>
-						</li>
-					</ul>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> look<wbr>At</h3>
+					<div class="tsd-signature tsd-kind-icon">look<wbr>At<span class="tsd-signature-symbol">:</span> <a href="vrmlookathead.html" class="tsd-signature-type">VRMLookAtHead</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/VRM.ts#L85">vrm/VRM.ts:85</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Contains <a href="vrmlookathead.html">VRMLookAtHead</a> of the VRM.
+							You might want to use <a href="vrmlookathead.html#target">VRMLookAtHead.target</a> to control the eye direction of your VRMs.</p>
+						</div>
+					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="materials" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> materials</h3>
+					<div class="tsd-signature tsd-kind-icon">materials<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Material</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/VRM.ts#L91">vrm/VRM.ts:91</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Contains materials of the VRM.
+							<code>updateVRMMaterials</code> method of these materials will be called via its <a href="vrm.html#update">VRM.update</a> method.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="meta" class="tsd-anchor"></a>
-					<h3>meta</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> meta<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/rawvrmmeta.html" class="tsd-signature-type">RawVrmMeta</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/VRM.ts#L148">vrm/VRM.ts:148</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Contains meta fields of the VRM.
-									You might want to refer these license fields before use your VRMs.</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<a href="../interfaces/rawvrmmeta.html" class="tsd-signature-type">RawVrmMeta</a>
-							</h4>
-						</li>
-					</ul>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> meta</h3>
+					<div class="tsd-signature tsd-kind-icon">meta<span class="tsd-signature-symbol">:</span> <a href="../interfaces/vrmschema.meta.html" class="tsd-signature-type">Meta</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/VRM.ts#L97">vrm/VRM.ts:97</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Contains meta fields of the VRM.
+							You might want to refer these license fields before use your VRMs.</p>
+						</div>
+					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
-					<a name="restpose" class="tsd-anchor"></a>
-					<h3>rest<wbr>Pose</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> restPose<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/vrmpose.html" class="tsd-signature-type">VRMPose</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/VRM.ts#L94">vrm/VRM.ts:94</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Contains informations about rest pose of the VRM.
-									You might want to refer this when you want to reset its pose, along with <a href="vrm.html#setpose">VRM.setPose</a>}.</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">null</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<a href="../interfaces/vrmpose.html" class="tsd-signature-type">VRMPose</a>
-							</h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="scene" class="tsd-anchor"></a>
 					<h3>scene</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> scene<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Scene</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/VRM.ts#L303">vrm/VRM.ts:303</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Contains the scene of the entire VRM.
-										You might want to do <code>scene.add( vrm.scene )</code>.
-									It is an equivalent of <code>gltf.scene</code>.</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">Scene</span>
-							</h4>
-						</li>
-					</ul>
+					<div class="tsd-signature tsd-kind-icon">scene<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Scene</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/VRM.ts#L59">vrm/VRM.ts:59</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p><code>THREE.Scene</code> that contains the entire VRM.</p>
+						</div>
+					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="springbonemanager" class="tsd-anchor"></a>
-					<h3>spring<wbr>Bone<wbr>Manager</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> springBoneManager<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="vrmspringbonemanager.html" class="tsd-signature-type">VRMSpringBoneManager</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/VRM.ts#L167">vrm/VRM.ts:167</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>A <a href="vrmspringbonemanager.html">VRMSpringBoneManager</a> manipulates all spring bones attached on the VRM.
-									Usually you don&#39;t have to care about this property.</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<a href="vrmspringbonemanager.html" class="tsd-signature-type">VRMSpringBoneManager</a>
-							</h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-static">
-					<a name="builder" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> Builder</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> Builder<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="vrmbuilder.html" class="tsd-signature-type">VRMBuilder</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/VRM.ts#L59">vrm/VRM.ts:59</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Create a <a href="vrm.html">VRM</a> using Builder pattern.
-									See the reference of <a href="vrmbuilder.html">VRMBuilder</a> for further use.</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <a href="vrmbuilder.html" class="tsd-signature-type">VRMBuilder</a></h4>
-						</li>
-					</ul>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> spring<wbr>Bone<wbr>Manager</h3>
+					<div class="tsd-signature tsd-kind-icon">spring<wbr>Bone<wbr>Manager<span class="tsd-signature-symbol">:</span> <a href="vrmspringbonemanager.html" class="tsd-signature-type">VRMSpringBoneManager</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/VRM.ts#L103">vrm/VRM.ts:103</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A <a href="vrmspringbonemanager.html">VRMSpringBoneManager</a> manipulates all spring bones attached on the VRM.
+							Usually you don&#39;t have to care about this property.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
@@ -586,77 +302,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/VRM.ts#L336">vrm/VRM.ts:336</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/VRM.ts#L153">vrm/VRM.ts:153</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Dispose the VRM.
-									You might want to call this when you want to unload the VRM model.</p>
+									<p>Dispose everything about the VRM instance.</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="loadgltf" class="tsd-anchor"></a>
-					<h3>loadGLTF</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">loadGLTF<span class="tsd-signature-symbol">(</span>gltf<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GLTF</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/VRM.ts#L196">vrm/VRM.ts:196</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Receive a GLTF object retrieved from <code>THREE.GLTFLoader</code> and load VRM components.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>gltf: <span class="tsd-signature-type">GLTF</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>A parsed result of GLTF taken from GLTFLoader</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="setpose" class="tsd-anchor"></a>
-					<h3>set<wbr>Pose</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">set<wbr>Pose<span class="tsd-signature-symbol">(</span>poseObject<span class="tsd-signature-symbol">: </span><a href="../interfaces/vrmpose.html" class="tsd-signature-type">VRMPose</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/VRM.ts#L261">vrm/VRM.ts:261</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Let the VRM do a given pose.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>poseObject: <a href="../interfaces/vrmpose.html" class="tsd-signature-type">VRMPose</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p><a href="../interfaces/vrmpose.html">VRMPose</a> represents a pose</p>
-									</div>
-								</li>
-							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
@@ -671,7 +324,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/VRM.ts#L314">vrm/VRM.ts:314</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/VRM.ts#L128">vrm/VRM.ts:128</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -697,18 +350,18 @@
 					<a name="from" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> from</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">from<span class="tsd-signature-symbol">(</span>gltf<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GLTF</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="vrm.html" class="tsd-signature-type">VRM</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">from<span class="tsd-signature-symbol">(</span>gltf<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GLTF</span>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/vrmimporteroptions.html" class="tsd-signature-type">VRMImporterOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="vrm.html" class="tsd-signature-type">VRM</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/VRM.ts#L84">vrm/VRM.ts:84</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/VRM.ts#L52">vrm/VRM.ts:52</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Create a <a href="vrm.html">VRM</a> from a parsed result of GLTF taken from GLTFLoader.
+									<p>Create a new VRM from a parsed result of GLTF taken from GLTFLoader.
 									It&#39;s probably a thing what you want to get started with VRMs.</p>
 								</div>
 								<dl class="tsd-comment-tags">
@@ -716,7 +369,7 @@
 									<dd><p>Most basic use of VRM</p>
 										<pre><code>const scene = <span class="hljs-keyword">new</span> THREE.Scene();
 
-<span class="hljs-keyword">new</span> THREE.GLTFLoader().load( <span class="hljs-string">'models/shino.vrm'</span>, <span class="hljs-function"><span class="hljs-params">( gltf )</span> =&gt;</span> {
+<span class="hljs-keyword">new</span> THREE.GLTFLoader().load( <span class="hljs-string">'models/three-vrm-girl.vrm'</span>, <span class="hljs-function"><span class="hljs-params">( gltf )</span> =&gt;</span> {
 
   THREE.VRM.<span class="hljs-keyword">from</span>( gltf ).<span class="hljs-keyword">then</span>( <span class="hljs-function"><span class="hljs-params">( vrm )</span> =&gt;</span> {
 
@@ -733,6 +386,12 @@
 									<h5>gltf: <span class="tsd-signature-type">GLTF</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>A parsed GLTF object taken from GLTFLoader</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> options: <a href="../interfaces/vrmimporteroptions.html" class="tsd-signature-type">VRMImporterOptions</a><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Options that will be used in importer</p>
 									</div>
 								</li>
 							</ul>
@@ -760,74 +419,32 @@
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
 								<a href="vrm.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="vrm.html#_animationmixer" class="tsd-kind-icon">_animation<wbr>Mixer</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="vrm.html#_blendshapeproxy" class="tsd-kind-icon">_blend<wbr>Shape<wbr>Proxy</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="vrm.html#_firstperson" class="tsd-kind-icon">_first<wbr>Person</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="vrm.html#_gltf" class="tsd-kind-icon">_gltf</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="vrm.html#_humanbones" class="tsd-kind-icon">_human<wbr>Bones</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="vrm.html#_lookat" class="tsd-kind-icon">_look<wbr>At</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="vrm.html#_meta" class="tsd-kind-icon">_meta</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="vrm.html#_partsbuilder" class="tsd-kind-icon">_parts<wbr>Builder</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="vrm.html#_restpose" class="tsd-kind-icon">_rest<wbr>Pose</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="vrm.html#_springbonemanager" class="tsd-kind-icon">_spring<wbr>Bone<wbr>Manager</a>
-							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
-								<a href="vrm.html#animationmixer" class="tsd-kind-icon">animation<wbr>Mixer</a>
-							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="vrm.html#blendshapeproxy" class="tsd-kind-icon">blend<wbr>Shape<wbr>Proxy</a>
 							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="vrm.html#firstperson" class="tsd-kind-icon">first<wbr>Person</a>
 							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
-								<a href="vrm.html#humanbones" class="tsd-kind-icon">human<wbr>Bones</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="vrm.html#humanoid" class="tsd-kind-icon">humanoid</a>
 							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="vrm.html#lookat" class="tsd-kind-icon">look<wbr>At</a>
 							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="vrm.html#materials" class="tsd-kind-icon">materials</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="vrm.html#meta" class="tsd-kind-icon">meta</a>
 							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
-								<a href="vrm.html#restpose" class="tsd-kind-icon">rest<wbr>Pose</a>
-							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="vrm.html#scene" class="tsd-kind-icon">scene</a>
 							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="vrm.html#springbonemanager" class="tsd-kind-icon">spring<wbr>Bone<wbr>Manager</a>
-							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-static">
-								<a href="vrm.html#builder" class="tsd-kind-icon">Builder</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="vrm.html#dispose" class="tsd-kind-icon">dispose</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="vrm.html#loadgltf" class="tsd-kind-icon">loadGLTF</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="vrm.html#setpose" class="tsd-kind-icon">set<wbr>Pose</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="vrm.html#update" class="tsd-kind-icon">update</a>

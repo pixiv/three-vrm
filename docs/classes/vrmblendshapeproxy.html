@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>VRMBlendShapeProxy | three-vrm</title>
+	<title>VRMBlendShapeProxy | @pixiv/three-vrm</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">three-vrm</a>
+					<a href="../index.html" class="title">@pixiv/three-vrm</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -64,14 +64,6 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-comment">
-				<div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>A class represents the <code>blendShapeProxy</code> field of a VRM.
-						This class has several methods to control expressions of your VRM.</p>
-					</div>
-				</div>
-			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -84,69 +76,59 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section tsd-is-private-protected">
+						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-protected"><a href="vrmblendshapeproxy.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="vrmblendshapeproxy.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="vrmblendshapeproxy.html#_blendshapemaster" class="tsd-kind-icon">_blend<wbr>Shape<wbr>Master</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="vrmblendshapeproxy.html#_blendshapegroups" class="tsd-kind-icon">_blend<wbr>Shape<wbr>Groups</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="vrmblendshapeproxy.html#_blendshapepresetmap" class="tsd-kind-icon">_blend<wbr>Shape<wbr>Preset<wbr>Map</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="vrmblendshapeproxy.html#expressions" class="tsd-kind-icon">expressions</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Accessors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="vrmblendshapeproxy.html#expressions" class="tsd-kind-icon">expressions</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrmblendshapeproxy.html#getcontroller" class="tsd-kind-icon">get<wbr>Controller</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrmblendshapeproxy.html#getexpression" class="tsd-kind-icon">get<wbr>Expression</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrmblendshapeproxy.html#getblendshapegroup" class="tsd-kind-icon">get<wbr>Blend<wbr>Shape<wbr>Group</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrmblendshapeproxy.html#getblendshapetrackname" class="tsd-kind-icon">get<wbr>Blend<wbr>Shape<wbr>Track<wbr>Name</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrmblendshapeproxy.html#getvalue" class="tsd-kind-icon">get<wbr>Value</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrmblendshapeproxy.html#registerblendshapegroup" class="tsd-kind-icon">register<wbr>Blend<wbr>Shape<wbr>Group</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrmblendshapeproxy.html#setvalue" class="tsd-kind-icon">set<wbr>Value</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrmblendshapeproxy.html#update" class="tsd-kind-icon">update</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static"><a href="vrmblendshapeproxy.html#clamp" class="tsd-kind-icon">clamp</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="vrmblendshapeproxy.html#create" class="tsd-kind-icon">create</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-private-protected">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Constructors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-protected">
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
 					<a name="constructor" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">new VRMBlend<wbr>Shape<wbr>Proxy<span class="tsd-signature-symbol">(</span>blendShapeMaster<span class="tsd-signature-symbol">: </span><a href="blendshapemaster.html" class="tsd-signature-type">BlendShapeMaster</a>, blendShapePresetMap<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span>, expressions<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="vrmblendshapeproxy.html" class="tsd-signature-type">VRMBlendShapeProxy</a></li>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">new VRMBlend<wbr>Shape<wbr>Proxy<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="vrmblendshapeproxy.html" class="tsd-signature-type">VRMBlendShapeProxy</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/blendshape/VRMBlendShapeProxy.ts#L47">vrm/blendshape/VRMBlendShapeProxy.ts:47</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/blendshape/VRMBlendShapeProxy.ts#L14">vrm/blendshape/VRMBlendShapeProxy.ts:14</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>blendShapeMaster: <a href="blendshapemaster.html" class="tsd-signature-type">BlendShapeMaster</a></h5>
-								</li>
-								<li>
-									<h5>blendShapePresetMap: <span class="tsd-signature-type">object</span></h5>
-									<ul class="tsd-parameters">
-									</ul>
-								</li>
-								<li>
-									<h5>expressions: <span class="tsd-signature-type">object</span></h5>
-									<ul class="tsd-parameters">
-										<li class="tsd-parameter-index-signature">
-											<h5><span class="tsd-signature-symbol">[</span>key: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">AnimationAction</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h5>
-										</li>
-									</ul>
-								</li>
-							</ul>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create a new VRMBlendShape.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <a href="vrmblendshapeproxy.html" class="tsd-signature-type">VRMBlendShapeProxy</a></h4>
 						</li>
 					</ul>
@@ -154,15 +136,28 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_blendshapemaster" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _blend<wbr>Shape<wbr>Master</h3>
-					<div class="tsd-signature tsd-kind-icon">_blend<wbr>Shape<wbr>Master<span class="tsd-signature-symbol">:</span> <a href="blendshapemaster.html" class="tsd-signature-type">BlendShapeMaster</a></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="_blendshapegroups" class="tsd-anchor"></a>
+					<h3>_blend<wbr>Shape<wbr>Groups</h3>
+					<div class="tsd-signature tsd-kind-icon">_blend<wbr>Shape<wbr>Groups<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/blendshape/VRMBlendShapeProxy.ts#L46">vrm/blendshape/VRMBlendShapeProxy.ts:46</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/blendshape/VRMBlendShapeProxy.ts#L9">vrm/blendshape/VRMBlendShapeProxy.ts:9</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>List of registered blend shape.</p>
+						</div>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-index-signature">
+								<h5><span class="tsd-signature-symbol">[</span>name: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><a href="vrmblendshapegroup.html" class="tsd-signature-type">VRMBlendShapeGroup</a></h5>
+							</li>
+						</ul>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="_blendshapepresetmap" class="tsd-anchor"></a>
@@ -170,104 +165,134 @@
 					<div class="tsd-signature tsd-kind-icon">_blend<wbr>Shape<wbr>Preset<wbr>Map<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/blendshape/VRMBlendShapeProxy.ts#L47">vrm/blendshape/VRMBlendShapeProxy.ts:47</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/blendshape/VRMBlendShapeProxy.ts#L14">vrm/blendshape/VRMBlendShapeProxy.ts:14</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-						</ul>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A map from <a href="../enums/vrmschema.blendshapepresetname.html">VRMSchema.BlendShapePresetName</a> to its actual blend shape name.</p>
+						</div>
 					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="expressions" class="tsd-anchor"></a>
-					<h3>expressions</h3>
-					<div class="tsd-signature tsd-kind-icon">expressions<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/blendshape/VRMBlendShapeProxy.ts#L44">vrm/blendshape/VRMBlendShapeProxy.ts:44</a></li>
-						</ul>
-					</aside>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
-							<li class="tsd-parameter-index-signature">
-								<h5><span class="tsd-signature-symbol">[</span>key: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">AnimationAction</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h5>
-							</li>
 						</ul>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getcontroller" class="tsd-anchor"></a>
-					<h3>get<wbr>Controller</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Controller<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><a href="../enums/blendshapepresetname.html" class="tsd-signature-type">BlendShapePresetName</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="blendshapecontroller.html" class="tsd-signature-type">BlendShapeController</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+				<h2>Accessors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+					<a name="expressions" class="tsd-anchor"></a>
+					<h3>expressions</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> expressions<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/blendshape/VRMBlendShapeProxy.ts#L123">vrm/blendshape/VRMBlendShapeProxy.ts:123</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/blendshape/VRMBlendShapeProxy.ts#L26">vrm/blendshape/VRMBlendShapeProxy.ts:26</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>It returns a <a href="blendshapecontroller.html">BlendShapeController</a> of a specified blend shape.
-									You might want to grab the controller when you want to manipulate its weight manually, or animate using <code>THREE.NumberKeyframeTrack</code>.</p>
+									<p>List of name of registered blend shape group.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getblendshapegroup" class="tsd-anchor"></a>
+					<h3>get<wbr>Blend<wbr>Shape<wbr>Group</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Blend<wbr>Shape<wbr>Group<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="../enums/vrmschema.blendshapepresetname.html" class="tsd-signature-type">BlendShapePresetName</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="vrmblendshapegroup.html" class="tsd-signature-type">VRMBlendShapeGroup</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/blendshape/VRMBlendShapeProxy.ts#L35">vrm/blendshape/VRMBlendShapeProxy.ts:35</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Return registered blend shape group.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>name: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="../enums/vrmschema.blendshapepresetname.html" class="tsd-signature-type">BlendShapePresetName</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Name of the blend shape group</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="vrmblendshapegroup.html" class="tsd-signature-type">VRMBlendShapeGroup</a>
+								<span class="tsd-signature-symbol"> | </span>
+								<span class="tsd-signature-type">undefined</span>
+							</h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getblendshapetrackname" class="tsd-anchor"></a>
+					<h3>get<wbr>Blend<wbr>Shape<wbr>Track<wbr>Name</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Blend<wbr>Shape<wbr>Track<wbr>Name<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><a href="../enums/vrmschema.blendshapepresetname.html" class="tsd-signature-type">BlendShapePresetName</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/blendshape/VRMBlendShapeProxy.ts#L111">vrm/blendshape/VRMBlendShapeProxy.ts:111</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get a track name of specified blend shape group.
+									This track name is needed to manipulate its blend shape group via keyframe animations.</p>
 								</div>
 								<dl class="tsd-comment-tags">
 									<dt>example</dt>
-									<dd><p>How to animate blend shapes using keyframes</p>
-										<pre><code class="language-javascript"><span class="hljs-keyword">const</span> track = <span class="hljs-keyword">new</span> THREE.NumberKeyframeTrack(
-  vrm.blendShapeProxy.getController( <span class="hljs-string">'Blink'</span> ).name + <span class="hljs-string">'.weight'</span>, <span class="hljs-comment">// name</span>
+									<dd><p>Manipulate a blend shape group using keyframe animation</p>
+										<pre><code class="language-js"><span class="hljs-keyword">const</span> trackName = vrm.blendShapeProxy.getBlendShapeTrackName( THREE.VRMSchema.BlendShapePresetName.Blink );
+<span class="hljs-keyword">const</span> track = <span class="hljs-keyword">new</span> THREE.NumberKeyframeTrack(
+  name,
   [ <span class="hljs-number">0.0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">1.0</span> ], <span class="hljs-comment">// times</span>
   [ <span class="hljs-number">0.0</span>, <span class="hljs-number">1.0</span>, <span class="hljs-number">0.0</span> ] <span class="hljs-comment">// values</span>
-);</code></pre>
+);
+
+<span class="hljs-keyword">const</span> clip = <span class="hljs-keyword">new</span> THREE.AnimationClip(
+  <span class="hljs-string">'blink'</span>, <span class="hljs-comment">// name</span>
+  <span class="hljs-number">1.0</span>, <span class="hljs-comment">// duration</span>
+  [ track ] <span class="hljs-comment">// tracks</span>
+);
+
+<span class="hljs-keyword">const</span> mixer = <span class="hljs-keyword">new</span> THREE.AnimationMixer( vrm.scene );
+<span class="hljs-keyword">const</span> action = mixer.clipAction( clip );
+action.play();</code></pre>
 									</dd>
 								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>name: <a href="../enums/blendshapepresetname.html" class="tsd-signature-type">BlendShapePresetName</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+									<h5>name: <a href="../enums/vrmschema.blendshapepresetname.html" class="tsd-signature-type">BlendShapePresetName</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Name of the blend shape you want to get</p>
+										<p>Name of the blend shape group</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="blendshapecontroller.html" class="tsd-signature-type">BlendShapeController</a>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span>
 								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">undefined</span>
-							</h4>
-							<p>The <a href="blendshapecontroller.html">BlendShapeController</a> of the specified blend shape</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getexpression" class="tsd-anchor"></a>
-					<h3>get<wbr>Expression</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Expression<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AnimationAction</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/blendshape/VRMBlendShapeProxy.ts#L59">vrm/blendshape/VRMBlendShapeProxy.ts:59</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>name: <span class="tsd-signature-type">string</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">AnimationAction</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">undefined</span>
+								<span class="tsd-signature-type">null</span>
 							</h4>
 						</li>
 					</ul>
@@ -276,34 +301,73 @@
 					<a name="getvalue" class="tsd-anchor"></a>
 					<h3>get<wbr>Value</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Value<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><a href="../enums/blendshapepresetname.html" class="tsd-signature-type">BlendShapePresetName</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Value<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><a href="../enums/vrmschema.blendshapepresetname.html" class="tsd-signature-type">BlendShapePresetName</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/blendshape/VRMBlendShapeProxy.ts#L69">vrm/blendshape/VRMBlendShapeProxy.ts:69</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/blendshape/VRMBlendShapeProxy.ts#L67">vrm/blendshape/VRMBlendShapeProxy.ts:67</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>It returns a current weight value of a specified blend shape.</p>
+									<p>Get current weight of specified blend shape group.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>name: <a href="../enums/blendshapepresetname.html" class="tsd-signature-type">BlendShapePresetName</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+									<h5>name: <a href="../enums/vrmschema.blendshapepresetname.html" class="tsd-signature-type">BlendShapePresetName</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Name of the blend shape you want to set</p>
+										<p>Name of the blend shape group</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span>
 								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">undefined</span>
+								<span class="tsd-signature-type">null</span>
 							</h4>
-							<p>The current weight value of the specified blend shape</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="registerblendshapegroup" class="tsd-anchor"></a>
+					<h3>register<wbr>Blend<wbr>Shape<wbr>Group</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">register<wbr>Blend<wbr>Shape<wbr>Group<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, presetName<span class="tsd-signature-symbol">: </span><a href="../enums/vrmschema.blendshapepresetname.html" class="tsd-signature-type">BlendShapePresetName</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span>, controller<span class="tsd-signature-symbol">: </span><a href="vrmblendshapegroup.html" class="tsd-signature-type">VRMBlendShapeGroup</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/blendshape/VRMBlendShapeProxy.ts#L51">vrm/blendshape/VRMBlendShapeProxy.ts:51</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Register a blend shape group.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>name: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Name of the blend shape gorup</p>
+									</div>
+								</li>
+								<li>
+									<h5>presetName: <a href="../enums/vrmschema.blendshapepresetname.html" class="tsd-signature-type">BlendShapePresetName</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h5>
+								</li>
+								<li>
+									<h5>controller: <a href="vrmblendshapegroup.html" class="tsd-signature-type">VRMBlendShapeGroup</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>VRMBlendShapeController that describes the blend shape group</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -311,42 +375,33 @@
 					<a name="setvalue" class="tsd-anchor"></a>
 					<h3>set<wbr>Value</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">set<wbr>Value<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><a href="../enums/blendshapepresetname.html" class="tsd-signature-type">BlendShapePresetName</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span>, weight<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Value<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><a href="../enums/vrmschema.blendshapepresetname.html" class="tsd-signature-type">BlendShapePresetName</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span>, weight<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/blendshape/VRMBlendShapeProxy.ts#L92">vrm/blendshape/VRMBlendShapeProxy.ts:92</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/blendshape/VRMBlendShapeProxy.ts#L78">vrm/blendshape/VRMBlendShapeProxy.ts:78</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Set a weight value of a specified blend shape.</p>
+									<p>Set a weight to specified blend shape group.</p>
 								</div>
-								<p>Note that you also can animate the blend shape via <code>THREE.NumberKeyframeTrack</code>.
-								See an example of <a href="vrmblendshapeproxy.html#getcontroller">getController</a> for more info.</p>
-								<dl class="tsd-comment-tags">
-									<dt>example</dt>
-									<dd><p>Set a weight value to a specific blend shape</p>
-										<pre><code class="language-javascript"><span class="hljs-comment">// When you want to specify a preset blend shape</span>
-vrm.blendShapeProxy.setValue( THREE.BlendShapePresetName.A, <span class="hljs-number">0.83</span> );
-
-<span class="hljs-comment">// When you want to specify a custom blend shape</span>
-vrm.blendShapeProxy.setValue( <span class="hljs-string">'Thinking'</span>, <span class="hljs-number">1.0</span> );</code></pre>
-									</dd>
-								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>name: <a href="../enums/blendshapepresetname.html" class="tsd-signature-type">BlendShapePresetName</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+									<h5>name: <a href="../enums/vrmschema.blendshapepresetname.html" class="tsd-signature-type">BlendShapePresetName</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Name of the blend shape you want to set</p>
+										<p>Name of the blend shape group</p>
 									</div>
 								</li>
 								<li>
 									<h5>weight: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Weight</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -363,70 +418,15 @@ vrm.blendShapeProxy.setValue( <span class="hljs-string">'Thinking'</span>, <span
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/blendshape/VRMBlendShapeProxy.ts#L103">vrm/blendshape/VRMBlendShapeProxy.ts:103</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/blendshape/VRMBlendShapeProxy.ts#L119">vrm/blendshape/VRMBlendShapeProxy.ts:119</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Update every blend shapes of the VRM.
-									Usually this will be called via <a href="vrm.html#update">VRM.update</a> so you don&#39;t have to call this manually.</p>
+									<p>Update every blend shape groups.</p>
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static">
-					<a name="clamp" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> <span class="tsd-flag ts-flagPrivate">Private</span> clamp</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">clamp<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/blendshape/VRMBlendShapeProxy.ts#L40">vrm/blendshape/VRMBlendShapeProxy.ts:40</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>value: <span class="tsd-signature-type">number</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="create" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> create</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">(</span>animationMixer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AnimationMixer</span>, blendShapeMaster<span class="tsd-signature-symbol">: </span><a href="blendshapemaster.html" class="tsd-signature-type">BlendShapeMaster</a>, blendShapePresetMap<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="vrmblendshapeproxy.html" class="tsd-signature-type">VRMBlendShapeProxy</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/blendshape/VRMBlendShapeProxy.ts#L11">vrm/blendshape/VRMBlendShapeProxy.ts:11</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>animationMixer: <span class="tsd-signature-type">AnimationMixer</span></h5>
-								</li>
-								<li>
-									<h5>blendShapeMaster: <a href="blendshapemaster.html" class="tsd-signature-type">BlendShapeMaster</a></h5>
-								</li>
-								<li>
-									<h5>blendShapePresetMap: <span class="tsd-signature-type">object</span></h5>
-									<ul class="tsd-parameters">
-									</ul>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="vrmblendshapeproxy.html" class="tsd-signature-type">VRMBlendShapeProxy</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -447,38 +447,35 @@ vrm.blendShapeProxy.setValue( <span class="hljs-string">'Thinking'</span>, <span
 					<li class="current tsd-kind-class">
 						<a href="vrmblendshapeproxy.html" class="tsd-kind-icon">VRMBlend<wbr>Shape<wbr>Proxy</a>
 						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-protected">
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
 								<a href="vrmblendshapeproxy.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="vrmblendshapeproxy.html#_blendshapemaster" class="tsd-kind-icon">_blend<wbr>Shape<wbr>Master</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="vrmblendshapeproxy.html#_blendshapegroups" class="tsd-kind-icon">_blend<wbr>Shape<wbr>Groups</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="vrmblendshapeproxy.html#_blendshapepresetmap" class="tsd-kind-icon">_blend<wbr>Shape<wbr>Preset<wbr>Map</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
 								<a href="vrmblendshapeproxy.html#expressions" class="tsd-kind-icon">expressions</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="vrmblendshapeproxy.html#getcontroller" class="tsd-kind-icon">get<wbr>Controller</a>
+								<a href="vrmblendshapeproxy.html#getblendshapegroup" class="tsd-kind-icon">get<wbr>Blend<wbr>Shape<wbr>Group</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="vrmblendshapeproxy.html#getexpression" class="tsd-kind-icon">get<wbr>Expression</a>
+								<a href="vrmblendshapeproxy.html#getblendshapetrackname" class="tsd-kind-icon">get<wbr>Blend<wbr>Shape<wbr>Track<wbr>Name</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="vrmblendshapeproxy.html#getvalue" class="tsd-kind-icon">get<wbr>Value</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="vrmblendshapeproxy.html#registerblendshapegroup" class="tsd-kind-icon">register<wbr>Blend<wbr>Shape<wbr>Group</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="vrmblendshapeproxy.html#setvalue" class="tsd-kind-icon">set<wbr>Value</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="vrmblendshapeproxy.html#update" class="tsd-kind-icon">update</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static">
-								<a href="vrmblendshapeproxy.html#clamp" class="tsd-kind-icon">clamp</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="vrmblendshapeproxy.html#create" class="tsd-kind-icon">create</a>
 							</li>
 						</ul>
 					</li>

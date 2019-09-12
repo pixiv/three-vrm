@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>MToonParameters | three-vrm</title>
+	<title>MToonParameters | @pixiv/three-vrm</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">three-vrm</a>
+					<a href="../index.html" class="title">@pixiv/three-vrm</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -162,6 +162,10 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="mtoonparameters.html#srcblend" class="tsd-kind-icon">src<wbr>Blend</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="mtoonparameters.html#transparent" class="tsd-kind-icon">transparent</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="mtoonparameters.html#uniforms" class="tsd-kind-icon">uniforms</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="mtoonparameters.html#uvanimmasktexture" class="tsd-kind-icon">uv<wbr>Anim<wbr>Mask<wbr>Texture</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="mtoonparameters.html#uvanimrotation" class="tsd-kind-icon">uv<wbr>Anim<wbr>Rotation</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="mtoonparameters.html#uvanimscrollx" class="tsd-kind-icon">uv<wbr>Anim<wbr>ScrollX</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="mtoonparameters.html#uvanimscrolly" class="tsd-kind-icon">uv<wbr>Anim<wbr>ScrollY</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="mtoonparameters.html#vertexcolors" class="tsd-kind-icon">vertex<wbr>Colors</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="mtoonparameters.html#vertexshader" class="tsd-kind-icon">vertex<wbr>Shader</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="mtoonparameters.html#vertextangents" class="tsd-kind-icon">vertex<wbr>Tangents</a></li>
@@ -234,10 +238,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="blendmode" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> blend<wbr>Mode</h3>
-					<div class="tsd-signature tsd-kind-icon">blend<wbr>Mode<span class="tsd-signature-symbol">:</span> <a href="../enums/mtoonrendermode.html" class="tsd-signature-type">MToonRenderMode</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<div class="tsd-signature tsd-kind-icon">blend<wbr>Mode<span class="tsd-signature-symbol">:</span> <a href="../enums/mtoonmaterialrendermode.html" class="tsd-signature-type">MToonMaterialRenderMode</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L459">vrm/material/MToon.ts:459</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L47">vrm/material/MToonMaterial.ts:47</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -280,7 +284,7 @@
 					<div class="tsd-signature tsd-kind-icon">bump<wbr>Map<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">THREE.Texture</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L434">vrm/material/MToon.ts:434</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L18">vrm/material/MToonMaterial.ts:18</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -290,7 +294,7 @@
 					<div class="tsd-signature tsd-kind-icon">bump<wbr>Scale<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L432">vrm/material/MToon.ts:432</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L16">vrm/material/MToonMaterial.ts:16</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -344,7 +348,7 @@
 					<div class="tsd-signature tsd-kind-icon">color<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">THREE.Vector4</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L426">vrm/material/MToon.ts:426</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L10">vrm/material/MToonMaterial.ts:10</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -362,10 +366,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="cullmode" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> cull<wbr>Mode</h3>
-					<div class="tsd-signature tsd-kind-icon">cull<wbr>Mode<span class="tsd-signature-symbol">:</span> <a href="../enums/mtooncullmode.html" class="tsd-signature-type">MToonCullMode</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<div class="tsd-signature tsd-kind-icon">cull<wbr>Mode<span class="tsd-signature-symbol">:</span> <a href="../enums/mtoonmaterialcullmode.html" class="tsd-signature-type">MToonMaterialCullMode</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L462">vrm/material/MToon.ts:462</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L50">vrm/material/MToonMaterial.ts:50</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -375,17 +379,17 @@
 					<div class="tsd-signature tsd-kind-icon">cutoff<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L425">vrm/material/MToon.ts:425</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L9">vrm/material/MToonMaterial.ts:9</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="debugmode" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> debug<wbr>Mode</h3>
-					<div class="tsd-signature tsd-kind-icon">debug<wbr>Mode<span class="tsd-signature-symbol">:</span> <a href="../enums/mtoondebugmode.html" class="tsd-signature-type">MToonDebugMode</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<div class="tsd-signature tsd-kind-icon">debug<wbr>Mode<span class="tsd-signature-symbol">:</span> <a href="../enums/mtoonmaterialdebugmode.html" class="tsd-signature-type">MToonMaterialDebugMode</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L458">vrm/material/MToon.ts:458</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L46">vrm/material/MToonMaterial.ts:46</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -450,7 +454,7 @@
 					<div class="tsd-signature tsd-kind-icon">dst<wbr>Blend<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L465">vrm/material/MToon.ts:465</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L53">vrm/material/MToonMaterial.ts:53</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -460,7 +464,7 @@
 					<div class="tsd-signature tsd-kind-icon">emission<wbr>Color<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">THREE.Vector4</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L449">vrm/material/MToon.ts:449</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L33">vrm/material/MToonMaterial.ts:33</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -470,7 +474,7 @@
 					<div class="tsd-signature tsd-kind-icon">emission<wbr>Map<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">THREE.Texture</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L451">vrm/material/MToon.ts:451</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L35">vrm/material/MToonMaterial.ts:35</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -480,7 +484,7 @@
 					<div class="tsd-signature tsd-kind-icon">emissive<wbr>Map<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">THREE.Texture</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L450">vrm/material/MToon.ts:450</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L34">vrm/material/MToonMaterial.ts:34</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -523,7 +527,7 @@
 					<div class="tsd-signature tsd-kind-icon">indirect<wbr>Light<wbr>Intensity<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L442">vrm/material/MToon.ts:442</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L26">vrm/material/MToonMaterial.ts:26</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -533,7 +537,7 @@
 					<div class="tsd-signature tsd-kind-icon">is<wbr>Outline<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L468">vrm/material/MToon.ts:468</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L56">vrm/material/MToonMaterial.ts:56</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -543,7 +547,7 @@
 					<div class="tsd-signature tsd-kind-icon">light<wbr>Color<wbr>Attenuation<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L441">vrm/material/MToon.ts:441</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L25">vrm/material/MToonMaterial.ts:25</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -576,7 +580,7 @@
 					<div class="tsd-signature tsd-kind-icon">main<wbr>Tex<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">THREE.Texture</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L429">vrm/material/MToon.ts:429</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L13">vrm/material/MToonMaterial.ts:13</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -586,7 +590,7 @@
 					<div class="tsd-signature tsd-kind-icon">main<wbr>Tex_<wbr>ST<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">THREE.Vector4</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L430">vrm/material/MToon.ts:430</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L14">vrm/material/MToonMaterial.ts:14</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -596,7 +600,7 @@
 					<div class="tsd-signature tsd-kind-icon">map<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">THREE.Texture</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L428">vrm/material/MToon.ts:428</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L12">vrm/material/MToonMaterial.ts:12</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -639,7 +643,7 @@
 					<div class="tsd-signature tsd-kind-icon">normal<wbr>Map<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">THREE.Texture</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L433">vrm/material/MToon.ts:433</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L17">vrm/material/MToonMaterial.ts:17</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -660,27 +664,27 @@
 					<div class="tsd-signature tsd-kind-icon">outline<wbr>Color<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">THREE.Vector4</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L455">vrm/material/MToon.ts:455</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L39">vrm/material/MToonMaterial.ts:39</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="outlinecolormode" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> outline<wbr>Color<wbr>Mode</h3>
-					<div class="tsd-signature tsd-kind-icon">outline<wbr>Color<wbr>Mode<span class="tsd-signature-symbol">:</span> <a href="../enums/mtoonoutlinecolormode.html" class="tsd-signature-type">MToonOutlineColorMode</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<div class="tsd-signature tsd-kind-icon">outline<wbr>Color<wbr>Mode<span class="tsd-signature-symbol">:</span> <a href="../enums/mtoonmaterialoutlinecolormode.html" class="tsd-signature-type">MToonMaterialOutlineColorMode</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L461">vrm/material/MToon.ts:461</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L49">vrm/material/MToonMaterial.ts:49</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="outlinecullmode" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> outline<wbr>Cull<wbr>Mode</h3>
-					<div class="tsd-signature tsd-kind-icon">outline<wbr>Cull<wbr>Mode<span class="tsd-signature-symbol">:</span> <a href="../enums/mtooncullmode.html" class="tsd-signature-type">MToonCullMode</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<div class="tsd-signature tsd-kind-icon">outline<wbr>Cull<wbr>Mode<span class="tsd-signature-symbol">:</span> <a href="../enums/mtoonmaterialcullmode.html" class="tsd-signature-type">MToonMaterialCullMode</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L463">vrm/material/MToon.ts:463</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L51">vrm/material/MToonMaterial.ts:51</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -690,7 +694,7 @@
 					<div class="tsd-signature tsd-kind-icon">outline<wbr>Lighting<wbr>Mix<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L456">vrm/material/MToon.ts:456</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L40">vrm/material/MToonMaterial.ts:40</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -700,7 +704,7 @@
 					<div class="tsd-signature tsd-kind-icon">outline<wbr>Scaled<wbr>Max<wbr>Distance<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L454">vrm/material/MToon.ts:454</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L38">vrm/material/MToonMaterial.ts:38</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -710,17 +714,17 @@
 					<div class="tsd-signature tsd-kind-icon">outline<wbr>Width<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L453">vrm/material/MToon.ts:453</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L37">vrm/material/MToonMaterial.ts:37</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="outlinewidthmode" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> outline<wbr>Width<wbr>Mode</h3>
-					<div class="tsd-signature tsd-kind-icon">outline<wbr>Width<wbr>Mode<span class="tsd-signature-symbol">:</span> <a href="../enums/mtoonoutlinewidthmode.html" class="tsd-signature-type">MToonOutlineWidthMode</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<div class="tsd-signature tsd-kind-icon">outline<wbr>Width<wbr>Mode<span class="tsd-signature-symbol">:</span> <a href="../enums/mtoonmaterialoutlinewidthmode.html" class="tsd-signature-type">MToonMaterialOutlineWidthMode</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L460">vrm/material/MToon.ts:460</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L48">vrm/material/MToonMaterial.ts:48</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -730,7 +734,7 @@
 					<div class="tsd-signature tsd-kind-icon">outline<wbr>Width<wbr>Texture<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">THREE.Texture</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L452">vrm/material/MToon.ts:452</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L36">vrm/material/MToonMaterial.ts:36</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -806,7 +810,7 @@
 					<div class="tsd-signature tsd-kind-icon">receive<wbr>Shadow<wbr>Rate<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L435">vrm/material/MToon.ts:435</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L19">vrm/material/MToonMaterial.ts:19</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -816,7 +820,7 @@
 					<div class="tsd-signature tsd-kind-icon">receive<wbr>Shadow<wbr>Texture<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">THREE.Texture</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L436">vrm/material/MToon.ts:436</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L20">vrm/material/MToonMaterial.ts:20</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -826,7 +830,7 @@
 					<div class="tsd-signature tsd-kind-icon">rim<wbr>Color<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">THREE.Vector4</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L444">vrm/material/MToon.ts:444</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L28">vrm/material/MToonMaterial.ts:28</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -836,7 +840,7 @@
 					<div class="tsd-signature tsd-kind-icon">rim<wbr>Fresnel<wbr>Power<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L446">vrm/material/MToon.ts:446</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L30">vrm/material/MToonMaterial.ts:30</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -846,7 +850,7 @@
 					<div class="tsd-signature tsd-kind-icon">rim<wbr>Lift<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L447">vrm/material/MToon.ts:447</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L31">vrm/material/MToonMaterial.ts:31</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -856,7 +860,7 @@
 					<div class="tsd-signature tsd-kind-icon">rim<wbr>Lighting<wbr>Mix<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L445">vrm/material/MToon.ts:445</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L29">vrm/material/MToonMaterial.ts:29</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -866,7 +870,7 @@
 					<div class="tsd-signature tsd-kind-icon">rim<wbr>Texture<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">THREE.Texture</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L443">vrm/material/MToon.ts:443</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L27">vrm/material/MToonMaterial.ts:27</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -876,7 +880,7 @@
 					<div class="tsd-signature tsd-kind-icon">shade<wbr>Color<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">THREE.Vector4</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L427">vrm/material/MToon.ts:427</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L11">vrm/material/MToonMaterial.ts:11</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -886,7 +890,7 @@
 					<div class="tsd-signature tsd-kind-icon">shade<wbr>Shift<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L439">vrm/material/MToon.ts:439</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L23">vrm/material/MToonMaterial.ts:23</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -896,7 +900,7 @@
 					<div class="tsd-signature tsd-kind-icon">shade<wbr>Texture<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">THREE.Texture</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L431">vrm/material/MToon.ts:431</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L15">vrm/material/MToonMaterial.ts:15</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -906,7 +910,7 @@
 					<div class="tsd-signature tsd-kind-icon">shade<wbr>Toony<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L440">vrm/material/MToon.ts:440</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L24">vrm/material/MToonMaterial.ts:24</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -916,7 +920,7 @@
 					<div class="tsd-signature tsd-kind-icon">shading<wbr>Grade<wbr>Rate<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L437">vrm/material/MToon.ts:437</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L21">vrm/material/MToonMaterial.ts:21</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -926,7 +930,7 @@
 					<div class="tsd-signature tsd-kind-icon">shading<wbr>Grade<wbr>Texture<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">THREE.Texture</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L438">vrm/material/MToon.ts:438</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L22">vrm/material/MToonMaterial.ts:22</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -958,7 +962,7 @@
 					<div class="tsd-signature tsd-kind-icon">sphere<wbr>Add<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">THREE.Texture</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L448">vrm/material/MToon.ts:448</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L32">vrm/material/MToonMaterial.ts:32</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -968,7 +972,7 @@
 					<div class="tsd-signature tsd-kind-icon">src<wbr>Blend<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L464">vrm/material/MToon.ts:464</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L52">vrm/material/MToonMaterial.ts:52</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -991,6 +995,46 @@
 						<p>Inherited from ShaderMaterialParameters.uniforms</p>
 						<ul>
 							<li>Defined in C:/Users/yutaka/Documents/Workspace/three-vrm/node_modules/three/src/materials/ShaderMaterial.d.ts:17</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="uvanimmasktexture" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> uv<wbr>Anim<wbr>Mask<wbr>Texture</h3>
+					<div class="tsd-signature tsd-kind-icon">uv<wbr>Anim<wbr>Mask<wbr>Texture<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">THREE.Texture</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L41">vrm/material/MToonMaterial.ts:41</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="uvanimrotation" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> uv<wbr>Anim<wbr>Rotation</h3>
+					<div class="tsd-signature tsd-kind-icon">uv<wbr>Anim<wbr>Rotation<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L44">vrm/material/MToonMaterial.ts:44</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="uvanimscrollx" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> uv<wbr>Anim<wbr>ScrollX</h3>
+					<div class="tsd-signature tsd-kind-icon">uv<wbr>Anim<wbr>ScrollX<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L42">vrm/material/MToonMaterial.ts:42</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="uvanimscrolly" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> uv<wbr>Anim<wbr>ScrollY</h3>
+					<div class="tsd-signature tsd-kind-icon">uv<wbr>Anim<wbr>ScrollY<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L43">vrm/material/MToonMaterial.ts:43</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -1066,7 +1110,7 @@
 					<div class="tsd-signature tsd-kind-icon">z<wbr>Write<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/material/MToon.ts#L466">vrm/material/MToon.ts:466</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/material/MToonMaterial.ts#L54">vrm/material/MToonMaterial.ts:54</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -1320,6 +1364,18 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="mtoonparameters.html#uniforms" class="tsd-kind-icon">uniforms</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="mtoonparameters.html#uvanimmasktexture" class="tsd-kind-icon">uv<wbr>Anim<wbr>Mask<wbr>Texture</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="mtoonparameters.html#uvanimrotation" class="tsd-kind-icon">uv<wbr>Anim<wbr>Rotation</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="mtoonparameters.html#uvanimscrollx" class="tsd-kind-icon">uv<wbr>Anim<wbr>ScrollX</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="mtoonparameters.html#uvanimscrolly" class="tsd-kind-icon">uv<wbr>Anim<wbr>ScrollY</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="mtoonparameters.html#vertexcolors" class="tsd-kind-icon">vertex<wbr>Colors</a>

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>VRMLookAtBlendShapeApplyer | three-vrm</title>
+	<title>VRMLookAtBlendShapeApplyer | @pixiv/three-vrm</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">three-vrm</a>
+					<a href="../index.html" class="title">@pixiv/three-vrm</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -64,6 +64,13 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>This class is used by <a href="vrmlookathead.html">VRMLookAtHead</a>, applies look at direction to eye blend shapes of a VRM.</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -84,23 +91,24 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite"><a href="vrmlookatblendshapeapplyer.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="vrmlookatblendshapeapplyer.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="vrmlookatblendshapeapplyer.html#_blendshapeproxy" class="tsd-kind-icon">_blend<wbr>Shape<wbr>Proxy</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="vrmlookatblendshapeapplyer.html#lookathorizontalouter" class="tsd-kind-icon">look<wbr>AtHorizontal<wbr>Outer</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="vrmlookatblendshapeapplyer.html#lookatverticaldown" class="tsd-kind-icon">look<wbr>AtVertical<wbr>Down</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="vrmlookatblendshapeapplyer.html#lookatverticalup" class="tsd-kind-icon">look<wbr>AtVertical<wbr>Up</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="vrmlookatblendshapeapplyer.html#_curvehorizontal" class="tsd-kind-icon">_curve<wbr>Horizontal</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="vrmlookatblendshapeapplyer.html#_curveverticaldown" class="tsd-kind-icon">_curve<wbr>Vertical<wbr>Down</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="vrmlookatblendshapeapplyer.html#_curveverticalup" class="tsd-kind-icon">_curve<wbr>Vertical<wbr>Up</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite"><a href="vrmlookatblendshapeapplyer.html#type" class="tsd-kind-icon">type</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="vrmlookatblendshapeapplyer.html#lookat" class="tsd-kind-icon">look<wbr>At</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="vrmlookatblendshapeapplyer.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrmlookatblendshapeapplyer.html#name" class="tsd-kind-icon">name</a></li>
 							</ul>
 						</section>
 					</div>
@@ -108,33 +116,57 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Constructors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new VRMLook<wbr>AtBlend<wbr>Shape<wbr>Applyer<span class="tsd-signature-symbol">(</span>blendShapeProxy<span class="tsd-signature-symbol">: </span><a href="vrmblendshapeproxy.html" class="tsd-signature-type">VRMBlendShapeProxy</a>, lookAtHorizontalOuter<span class="tsd-signature-symbol">: </span><a href="../interfaces/rawvrmfirstpersondegreemap.html" class="tsd-signature-type">RawVrmFirstPersonDegreemap</a>, lookAtVerticalDown<span class="tsd-signature-symbol">: </span><a href="../interfaces/rawvrmfirstpersondegreemap.html" class="tsd-signature-type">RawVrmFirstPersonDegreemap</a>, lookAtVerticalUp<span class="tsd-signature-symbol">: </span><a href="../interfaces/rawvrmfirstpersondegreemap.html" class="tsd-signature-type">RawVrmFirstPersonDegreemap</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="vrmlookatblendshapeapplyer.html" class="tsd-signature-type">VRMLookAtBlendShapeApplyer</a></li>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">new VRMLook<wbr>AtBlend<wbr>Shape<wbr>Applyer<span class="tsd-signature-symbol">(</span>blendShapeProxy<span class="tsd-signature-symbol">: </span><a href="vrmblendshapeproxy.html" class="tsd-signature-type">VRMBlendShapeProxy</a>, curveHorizontal<span class="tsd-signature-symbol">: </span><a href="curvemapper.html" class="tsd-signature-type">CurveMapper</a>, curveVerticalDown<span class="tsd-signature-symbol">: </span><a href="curvemapper.html" class="tsd-signature-type">CurveMapper</a>, curveVerticalUp<span class="tsd-signature-symbol">: </span><a href="curvemapper.html" class="tsd-signature-type">CurveMapper</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="vrmlookatblendshapeapplyer.html" class="tsd-signature-type">VRMLookAtBlendShapeApplyer</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides <a href="vrmlookatapplyer.html">VRMLookAtApplyer</a>.<a href="vrmlookatapplyer.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/lookat/VRMLookAtBlendShapeApplyer.ts#L8">vrm/lookat/VRMLookAtBlendShapeApplyer.ts:8</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/lookat/VRMLookAtBlendShapeApplyer.ts#L17">vrm/lookat/VRMLookAtBlendShapeApplyer.ts:17</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create a new VRMLookAtBlendShapeApplyer.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>blendShapeProxy: <a href="vrmblendshapeproxy.html" class="tsd-signature-type">VRMBlendShapeProxy</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>A <a href="vrmblendshapeproxy.html">VRMBlendShapeProxy</a> used by this applier</p>
+										</div>
+									</div>
 								</li>
 								<li>
-									<h5>lookAtHorizontalOuter: <a href="../interfaces/rawvrmfirstpersondegreemap.html" class="tsd-signature-type">RawVrmFirstPersonDegreemap</a></h5>
+									<h5>curveHorizontal: <a href="curvemapper.html" class="tsd-signature-type">CurveMapper</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>A <a href="curvemapper.html">CurveMapper</a> used for transverse direction</p>
+										</div>
+									</div>
 								</li>
 								<li>
-									<h5>lookAtVerticalDown: <a href="../interfaces/rawvrmfirstpersondegreemap.html" class="tsd-signature-type">RawVrmFirstPersonDegreemap</a></h5>
+									<h5>curveVerticalDown: <a href="curvemapper.html" class="tsd-signature-type">CurveMapper</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>A <a href="curvemapper.html">CurveMapper</a> used for down direction</p>
+										</div>
+									</div>
 								</li>
 								<li>
-									<h5>lookAtVerticalUp: <a href="../interfaces/rawvrmfirstpersondegreemap.html" class="tsd-signature-type">RawVrmFirstPersonDegreemap</a></h5>
+									<h5>curveVerticalUp: <a href="curvemapper.html" class="tsd-signature-type">CurveMapper</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>A <a href="curvemapper.html">CurveMapper</a> used for up direction</p>
+										</div>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="vrmlookatblendshapeapplyer.html" class="tsd-signature-type">VRMLookAtBlendShapeApplyer</a></h4>
@@ -150,40 +182,48 @@
 					<div class="tsd-signature tsd-kind-icon">_blend<wbr>Shape<wbr>Proxy<span class="tsd-signature-symbol">:</span> <a href="vrmblendshapeproxy.html" class="tsd-signature-type">VRMBlendShapeProxy</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/lookat/VRMLookAtBlendShapeApplyer.ts#L8">vrm/lookat/VRMLookAtBlendShapeApplyer.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/lookat/VRMLookAtBlendShapeApplyer.ts#L17">vrm/lookat/VRMLookAtBlendShapeApplyer.ts:17</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
-					<a name="lookathorizontalouter" class="tsd-anchor"></a>
-					<h3>look<wbr>AtHorizontal<wbr>Outer</h3>
-					<div class="tsd-signature tsd-kind-icon">look<wbr>AtHorizontal<wbr>Outer<span class="tsd-signature-symbol">:</span> <a href="../interfaces/rawvrmfirstpersondegreemap.html" class="tsd-signature-type">RawVrmFirstPersonDegreemap</a></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="_curvehorizontal" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _curve<wbr>Horizontal</h3>
+					<div class="tsd-signature tsd-kind-icon">_curve<wbr>Horizontal<span class="tsd-signature-symbol">:</span> <a href="curvemapper.html" class="tsd-signature-type">CurveMapper</a></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="vrmlookatapplyer.html">VRMLookAtApplyer</a>.<a href="vrmlookatapplyer.html#lookathorizontalouter">lookAtHorizontalOuter</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/lookat/VRMLookAtApplyer.ts#L5">vrm/lookat/VRMLookAtApplyer.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/lookat/VRMLookAtBlendShapeApplyer.ts#L13">vrm/lookat/VRMLookAtBlendShapeApplyer.ts:13</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
-					<a name="lookatverticaldown" class="tsd-anchor"></a>
-					<h3>look<wbr>AtVertical<wbr>Down</h3>
-					<div class="tsd-signature tsd-kind-icon">look<wbr>AtVertical<wbr>Down<span class="tsd-signature-symbol">:</span> <a href="../interfaces/rawvrmfirstpersondegreemap.html" class="tsd-signature-type">RawVrmFirstPersonDegreemap</a></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="_curveverticaldown" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _curve<wbr>Vertical<wbr>Down</h3>
+					<div class="tsd-signature tsd-kind-icon">_curve<wbr>Vertical<wbr>Down<span class="tsd-signature-symbol">:</span> <a href="curvemapper.html" class="tsd-signature-type">CurveMapper</a></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="vrmlookatapplyer.html">VRMLookAtApplyer</a>.<a href="vrmlookatapplyer.html#lookatverticaldown">lookAtVerticalDown</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/lookat/VRMLookAtApplyer.ts#L6">vrm/lookat/VRMLookAtApplyer.ts:6</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/lookat/VRMLookAtBlendShapeApplyer.ts#L14">vrm/lookat/VRMLookAtBlendShapeApplyer.ts:14</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
-					<a name="lookatverticalup" class="tsd-anchor"></a>
-					<h3>look<wbr>AtVertical<wbr>Up</h3>
-					<div class="tsd-signature tsd-kind-icon">look<wbr>AtVertical<wbr>Up<span class="tsd-signature-symbol">:</span> <a href="../interfaces/rawvrmfirstpersondegreemap.html" class="tsd-signature-type">RawVrmFirstPersonDegreemap</a></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="_curveverticalup" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _curve<wbr>Vertical<wbr>Up</h3>
+					<div class="tsd-signature tsd-kind-icon">_curve<wbr>Vertical<wbr>Up<span class="tsd-signature-symbol">:</span> <a href="curvemapper.html" class="tsd-signature-type">CurveMapper</a></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="vrmlookatapplyer.html">VRMLookAtApplyer</a>.<a href="vrmlookatapplyer.html#lookatverticalup">lookAtVerticalUp</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/lookat/VRMLookAtApplyer.ts#L7">vrm/lookat/VRMLookAtApplyer.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/lookat/VRMLookAtBlendShapeApplyer.ts#L15">vrm/lookat/VRMLookAtBlendShapeApplyer.ts:15</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
+					<a name="type" class="tsd-anchor"></a>
+					<h3>type</h3>
+					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <a href="../enums/vrmschema.firstpersonlookattypename.html#blendshape" class="tsd-signature-type">BlendShape</a><span class="tsd-signature-symbol"> =&nbsp;VRMSchema.FirstPersonLookAtTypeName.BlendShape</span></div>
+					<aside class="tsd-sources">
+						<p>Overrides <a href="vrmlookatapplyer.html">VRMLookAtApplyer</a>.<a href="vrmlookatapplyer.html#type">type</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/lookat/VRMLookAtBlendShapeApplyer.ts#L11">vrm/lookat/VRMLookAtBlendShapeApplyer.ts:11</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -201,7 +241,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="vrmlookatapplyer.html">VRMLookAtApplyer</a>.<a href="vrmlookatapplyer.html#lookat">lookAt</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/lookat/VRMLookAtBlendShapeApplyer.ts#L24">vrm/lookat/VRMLookAtBlendShapeApplyer.ts:24</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/lookat/VRMLookAtBlendShapeApplyer.ts#L46">vrm/lookat/VRMLookAtBlendShapeApplyer.ts:46</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -214,21 +254,20 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="name" class="tsd-anchor"></a>
 					<h3>name</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../enums/lookattypename.html" class="tsd-signature-type">LookAtTypeName</a></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../enums/vrmschema.firstpersonlookattypename.html" class="tsd-signature-type">FirstPersonLookAtTypeName</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides <a href="vrmlookatapplyer.html">VRMLookAtApplyer</a>.<a href="vrmlookatapplyer.html#name">name</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/862f366/src/vrm/lookat/VRMLookAtBlendShapeApplyer.ts#L20">vrm/lookat/VRMLookAtBlendShapeApplyer.ts:20</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/15c02bc/src/vrm/lookat/VRMLookAtBlendShapeApplyer.ts#L42">vrm/lookat/VRMLookAtBlendShapeApplyer.ts:42</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <a href="../enums/lookattypename.html" class="tsd-signature-type">LookAtTypeName</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../enums/vrmschema.firstpersonlookattypename.html" class="tsd-signature-type">FirstPersonLookAtTypeName</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -249,25 +288,28 @@
 					<li class="current tsd-kind-class">
 						<a href="vrmlookatblendshapeapplyer.html" class="tsd-kind-icon">VRMLook<wbr>AtBlend<wbr>Shape<wbr>Applyer</a>
 						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
 								<a href="vrmlookatblendshapeapplyer.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="vrmlookatblendshapeapplyer.html#_blendshapeproxy" class="tsd-kind-icon">_blend<wbr>Shape<wbr>Proxy</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
-								<a href="vrmlookatblendshapeapplyer.html#lookathorizontalouter" class="tsd-kind-icon">look<wbr>AtHorizontal<wbr>Outer</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="vrmlookatblendshapeapplyer.html#_curvehorizontal" class="tsd-kind-icon">_curve<wbr>Horizontal</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
-								<a href="vrmlookatblendshapeapplyer.html#lookatverticaldown" class="tsd-kind-icon">look<wbr>AtVertical<wbr>Down</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="vrmlookatblendshapeapplyer.html#_curveverticaldown" class="tsd-kind-icon">_curve<wbr>Vertical<wbr>Down</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
-								<a href="vrmlookatblendshapeapplyer.html#lookatverticalup" class="tsd-kind-icon">look<wbr>AtVertical<wbr>Up</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="vrmlookatblendshapeapplyer.html#_curveverticalup" class="tsd-kind-icon">_curve<wbr>Vertical<wbr>Up</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
+								<a href="vrmlookatblendshapeapplyer.html#type" class="tsd-kind-icon">type</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="vrmlookatblendshapeapplyer.html#lookat" class="tsd-kind-icon">look<wbr>At</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="vrmlookatblendshapeapplyer.html#name" class="tsd-kind-icon">name</a>
 							</li>
 						</ul>
