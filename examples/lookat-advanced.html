@@ -46,11 +46,11 @@
 
 				update( delta ) {
 
-					if ( this._target && this.autoUpdate ) {
+					if ( this.target && this.autoUpdate ) {
 
 						if ( ! this.applyer ) return;
 
-						this._calcEuler( this._eulerTo, this._target.getWorldPosition( _v3A ) );
+						this._calcEuler( this._eulerTo, this.target.getWorldPosition( _v3A ) );
 
 						if (
 
@@ -134,7 +134,7 @@
 
 						vrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.Hips ).rotation.y = Math.PI;
 
-						vrm.lookAt.setTarget( camera );
+						vrm.lookAt.target = camera;
 
 						console.log( vrm );
 
