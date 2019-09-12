@@ -39,7 +39,7 @@ export class VRMLookAtHead {
    */
   public target?: THREE.Object3D;
 
-  private _euler: THREE.Euler = new THREE.Euler(0.0, 0.0, 0.0, VRMLookAtHead.EULER_ORDER);
+  protected _euler: THREE.Euler = new THREE.Euler(0.0, 0.0, 0.0, VRMLookAtHead.EULER_ORDER);
 
   /**
    * Create a new VRMLookAtHead.
@@ -72,10 +72,30 @@ export class VRMLookAtHead {
    * @param position A target position
    */
   public lookAt(position: THREE.Vector3): void {
-    if (!this.applyer) {
-      return;
-    }
+    this._calcEuler(this._euler, position);
 
+    if (this.applyer) {
+      this.applyer.lookAt(this._euler);
+    }
+  }
+
+  /**
+   * Update the VRMLookAtHead.
+   * If [[VRMLookAtHead.autoUpdate]] is disabled, it will do nothing.
+   *
+   * @param delta deltaTime
+   */
+  public update(delta: number): void {
+    if (this.target && this.autoUpdate) {
+      this.lookAt(this.target.getWorldPosition(_v3A));
+
+      if (this.applyer) {
+        this.applyer.lookAt(this._euler);
+      }
+    }
+  }
+
+  protected _calcEuler(target: THREE.Euler, position: THREE.Vector3): THREE.Euler {
     const headPosition = this.firstPerson.getFirstPersonWorldPosition(_v3B);
 
     // Look at direction in world coordinate
@@ -88,19 +108,9 @@ export class VRMLookAtHead {
     lookAtDir.applyQuaternion(getWorldQuaternionLite(this.firstPerson.firstPersonBone, _quat).inverse());
 
     // convert the direction into euler
-    this._euler.x = Math.atan2(lookAtDir.y, Math.sqrt(lookAtDir.x * lookAtDir.x + lookAtDir.z * lookAtDir.z));
-    this._euler.y = Math.atan2(-lookAtDir.x, -lookAtDir.z);
+    target.x = Math.atan2(lookAtDir.y, Math.sqrt(lookAtDir.x * lookAtDir.x + lookAtDir.z * lookAtDir.z));
+    target.y = Math.atan2(-lookAtDir.x, -lookAtDir.z);
 
-    this.applyer.lookAt(this._euler);
-  }
-
-  /**
-   * Update the VRMLookAtHead.
-   * If [[VRMLookAtHead.autoUpdate]] is disabled, it will do nothing.
-   */
-  public update(): void {
-    if (this.target && this.autoUpdate) {
-      this.lookAt(this.target.getWorldPosition(_v3A));
-    }
+    return target;
   }
 }
