@@ -4,6 +4,8 @@ Use [VRM](https://vrm.dev/) on [three.js](https://threejs.org/)
 
 ![three-vrm](https://github.com/pixiv/three-vrm/raw/dev/three-vrm.png)
 
+[GitHub Repository](https://github.com/pixiv/three-vrm/)
+
 [Examples](https://pixiv.github.io/three-vrm/examples)
 
 [Documentation](https://pixiv.github.io/three-vrm/docs)
