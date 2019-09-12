@@ -52,7 +52,7 @@ class App extends React.Component<{}, { vrmId: string | null }> {
     this.scene.add(new THREE.GridHelper(10, 10));
     this.scene.add(this.directionalLight);
 
-    this.loadVRM('../models/shibu.vrm')
+    this.loadVRM('../models/three-vrm-girl.vrm')
       .then((vrm: VRM) => {
         this.clock.start();
         this.animate();

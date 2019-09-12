@@ -32,7 +32,7 @@ const loader = new THREE.GLTFLoader();
 loader.load(
 
 	// URL of the VRM you want to load
-	'/models/shibu.vrm',
+	'/models/three-vrm-girl.vrm',
 
 	// called when the resource is loaded
 	( gltf ) => {
@@ -81,7 +81,7 @@ const loader = new THREE.GLTFLoader();
 loader.load(
 
 	// URL of the VRM you want to load
-	'/models/shibu.vrm',
+	'/models/three-vrm-girl.vrm',
 
 	// called when the resource is loaded
 	( gltf ) => {
