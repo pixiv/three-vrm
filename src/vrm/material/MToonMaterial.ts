@@ -2,6 +2,8 @@
 
 import * as THREE from 'three';
 import { getTexelDecodingFunction } from './getTexelDecodingFunction';
+import shaderVert from './shaders/mtoon.vert';
+import shaderFrag from './shaders/mtoon.frag';
 
 const TAU = 2.0 * Math.PI;
 
@@ -515,8 +517,8 @@ export class MToonMaterial extends THREE.ShaderMaterial {
         : '');
 
     // == generate shader code =================================================
-    this.vertexShader = require('./shaders/mtoon.vert');
-    this.fragmentShader = encodings + require('./shaders/mtoon.frag');
+    this.vertexShader = shaderVert;
+    this.fragmentShader = encodings + shaderFrag;
 
     // == set needsUpdate flag =================================================
     this.needsUpdate = true;
