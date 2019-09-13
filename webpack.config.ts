@@ -6,6 +6,15 @@ import * as merge from 'webpack-merge';
 const base = (mode: 'production' | 'development'): webpack.Configuration => {
   const isProd = mode === 'production';
 
+  const banner = isProd
+    ? '(c) 2019 pixiv Inc. - https://github.com/pixiv/three-vrm/blob/master/LICENSE'
+    : `@pixiv/three-vrm v${require('./package.json').version}
+Use VRM on Three.js
+
+Copyright (c) 2019 pixiv Inc.
+@pixiv/three-vrm is distributed under the MIT License
+https://github.com/pixiv/three-vrm/blob/master/LICENSE`;
+
   return {
     mode,
     entry: path.resolve(__dirname, 'src', 'index.ts'),
@@ -50,6 +59,7 @@ const base = (mode: 'production' | 'development'): webpack.Configuration => {
       inline: true,
     },
     plugins: [
+      new webpack.BannerPlugin(banner),
       new webpack.DefinePlugin({ 'process.env': { NODE_ENV: mode } }),
       ...(isProd ? [] : [new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true })]),
     ],
