@@ -65,7 +65,7 @@
     "lint-staged": "9.2.5",
     "prettier": "^1.18.2",
     "quicktype": "^15.0.199",
-    "raw-loader": "^0.5.1",
+    "raw-loader": "^3.1.0",
     "rimraf": "^3.0.0",
     "three": "^0.103.0",
     "ts-loader": "^5.3.0",
