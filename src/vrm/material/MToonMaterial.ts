@@ -8,6 +8,8 @@ import fragmentShader from './shaders/mtoon.frag';
 const TAU = 2.0 * Math.PI;
 
 export interface MToonParameters extends THREE.ShaderMaterialParameters {
+  mToonVersion?: number; // _MToonVersion
+
   cutoff?: number; // _Cutoff
   color?: THREE.Vector4; // rgb of _Color
   shadeColor?: THREE.Vector4; // _ShadeColor
@@ -174,6 +176,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
 
     // == these parameter has no compatibility with this implementation ========
     [
+      'mToonVersion',
       'shadeTexture_ST',
       'bumpMap_ST',
       'receiveShadowTexture_ST',
