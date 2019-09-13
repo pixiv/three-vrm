@@ -27,7 +27,7 @@
     "style-loader": "^0.23.1",
     "three": "^0.103.0",
     "ts-loader": "^5.3.3",
-    "tslint": "^5.14.0",
+    "tslint": "^5.20.0",
     "tslint-config-prettier": "^1.17.0",
     "tslint-loader": "^3.5.4",
     "tslint-plugin-prettier": "^2.0.1",
