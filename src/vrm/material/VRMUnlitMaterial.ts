@@ -1,6 +1,8 @@
 /* tslint:disable:member-ordering */
 
 import * as THREE from 'three';
+import vertexShader from './shaders/unlit.vert';
+import fragmentShader from './shaders/unlit.frag';
 
 export interface VRMUnlitMaterialParameters extends THREE.ShaderMaterialParameters {
   cutoff?: number; // _Cutoff
@@ -134,8 +136,8 @@ export class VRMUnlitMaterial extends THREE.ShaderMaterial {
         this._renderType === VRMUnlitMaterialRenderType.TransparentWithZWrite,
     };
 
-    this.vertexShader = require('./shaders/unlit.vert');
-    this.fragmentShader = require('./shaders/unlit.frag');
+    this.vertexShader = vertexShader;
+    this.fragmentShader = fragmentShader;
 
     // == set needsUpdate flag =================================================
     this.needsUpdate = true;
