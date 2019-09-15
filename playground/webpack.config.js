@@ -1,8 +1,10 @@
+/* eslint-env node */
+
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = (env, argv) => {
-  const isProd = argv.mode === 'production'
+  const isProd = argv.mode === 'production';
   return {
     mode: argv.mode || 'development',
     entry: path.resolve(__dirname, 'src', 'index.tsx'),
@@ -12,11 +14,6 @@ module.exports = (env, argv) => {
     },
     module: {
       rules: [
-        {
-          test: /\.tsx?$/,
-          enforce: 'pre',
-          use: 'tslint-loader',
-        },
         {
           test: /\.tsx?$/,
           exclude: /node_modules/,
@@ -36,7 +33,7 @@ module.exports = (env, argv) => {
       new HtmlWebpackPlugin({
         template: 'index.ejs',
         filename: 'index.html',
-        inject: true
+        inject: true,
       }),
     ],
     devServer: {
@@ -50,5 +47,5 @@ module.exports = (env, argv) => {
       historyApiFallback: true,
       noInfo: true,
     },
-  }
-}
+  };
+};

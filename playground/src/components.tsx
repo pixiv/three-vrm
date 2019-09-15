@@ -261,6 +261,7 @@ export const Meta = (props: Props) => {
 
 export const LookAt = (props: Props) => {
   const humanoid: VRM.VRMHumanoid = props.vrm.humanoid!;
+  const firstPerson: VRM.VRMFirstPerson = props.vrm.firstPerson!;
   const lookAt: VRM.VRMLookAtHead = props.vrm.lookAt!;
   const camera: THREE.Camera = props.camera;
   const cameraControls = props.cameraControls;
@@ -274,9 +275,9 @@ export const LookAt = (props: Props) => {
 
   const focusHead = () => {
     cameraControls.enabled = true;
-    const __head = lookAt.getHeadPosition();
+    const __head = firstPerson.getFirstPersonWorldPosition(_v3);
     cameraControls.rotateTo(180 * THREE.Math.DEG2RAD, 90 * THREE.Math.DEG2RAD, false);
-    cameraControls.moveTo(__head[0], __head[1], __head[2], false);
+    cameraControls.moveTo(__head.x, __head.y, __head.z, false);
     cameraControls.dollyTo(0.8, false);
   };
 
@@ -293,8 +294,7 @@ export const LookAt = (props: Props) => {
   const v = 0.5;
   const vy = 1;
 
-  const _head = props.vrm.lookAt!.getHeadPosition();
-  const head = new THREE.Vector3(_head[0], _head[1], _head[2]);
+  const head = props.vrm.firstPerson!.getFirstPersonWorldPosition(new THREE.Vector3());
 
   const looper = (r: number) => {
     if (cameraControls.enabled) return;
@@ -316,8 +316,8 @@ export const LookAt = (props: Props) => {
     looper(r);
   };
 
-  const applyer = lookAt.getApplyer();
-  const lookAtTypeName = applyer && applyer.name();
+  const applyer = lookAt.applyer;
+  const lookAtTypeName = applyer && applyer.type;
 
   const target = lookAt.target;
 
@@ -325,7 +325,7 @@ export const LookAt = (props: Props) => {
     <Panel title={'VRM Look At Head'}>
       <div style={{ display: 'flex', flexDirection: 'row', marginBottom: 5 }}>
         <ItemName value="Head" />
-        <div style={{ display: 'flex', alignItems: 'center', marginRight: 10 }}>{lookAt.head.name}</div>
+        <div style={{ display: 'flex', alignItems: 'center', marginRight: 10 }}>{firstPerson.firstPersonBone.name}</div>
       </div>
       <div style={{ display: 'flex', flexDirection: 'row', marginBottom: 5 }}>
         <ItemName value="Target" />
