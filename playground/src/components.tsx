@@ -520,7 +520,7 @@ export const BlendShape = (props: Props) => {
   const blendShapeProxy: VRM.VRMBlendShapeProxy = props.vrm.blendShapeProxy!;
 
   const setValue = (name: VRMSchema.BlendShapePresetName) => {
-    Object.keys(blendShapeProxy.expressions).forEach((vname) => {
+    blendShapeProxy.expressions.forEach((vname) => {
       blendShapeProxy.setValue(vname, 0.0);
     });
     blendShapeProxy.setValue(name, 1.0);
