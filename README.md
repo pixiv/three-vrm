@@ -79,7 +79,7 @@ import { VRM } from '@pixiv/three-vrm';
 
 const scene = new THREE.Scene();
 
-const loader = new THREE.GLTFLoader();
+const loader = new GLTFLoader();
 loader.load(
 
 	// URL of the VRM you want to load
@@ -89,7 +89,7 @@ loader.load(
 	( gltf ) => {
 
 		// generate a VRM instance from gltf
-		THREE.VRM.from( gltf ).then( ( vrm ) => {
+		VRM.from( gltf ).then( ( vrm ) => {
 
 			// add the loaded vrm to the scene
 			scene.add( vrm.scene );
