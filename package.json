@@ -27,7 +27,7 @@
     "build-types": "tsc --emitDeclarationOnly",
     "docs": "typedoc --out docs --mode file --excludeNotExported",
     "gh-pages": "node ./bin/gh-pages.js",
-    "lint": "eslint src/**/*.{ts,tsx}",
+    "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "typedefgen": "node ./bin/typedefgen.js"
   },
   "husky": {
