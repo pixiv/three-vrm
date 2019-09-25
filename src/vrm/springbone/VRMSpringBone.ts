@@ -187,7 +187,7 @@ export class VRMSpringBone {
     this._worldPosition.setFromMatrixPosition(this.bone.matrixWorld);
 
     // Apply updated position to tail states
-    this._currentTail.copy(this._initialLocalChildPosition).applyMatrix4(this.bone.matrixWorld);
+    this.bone.localToWorld(this._currentTail.copy(this._initialLocalChildPosition));
     this._prevTail.copy(this._currentTail);
     this._nextTail.copy(this._currentTail);
   }
