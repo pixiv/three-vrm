@@ -9,26 +9,92 @@
 			content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
 		/>
 		<style>
+			html,
 			body {
+				overflow: hidden;
+				width: 100vw;
+				height: 100vh;
 				margin: 0;
-			}
-			canvas {
-				display: block;
-			}
-			#meta {
-				position: absolute;
-				background: #fff;
+				padding: 0;
 			}
 		</style>
 	</head>
 
 	<body>
-		<span id="meta"></span>
 		<script src="https://unpkg.com/three@0.108.0/build/three.js"></script>
 		<script src="https://unpkg.com/three@0.108.0/examples/js/loaders/GLTFLoader.js"></script>
 		<script src="https://unpkg.com/three@0.108.0/examples/js/controls/OrbitControls.js"></script>
 		<script src="../lib/three-vrm.js"></script>
 		<script>
+			const _v3A = new THREE.Vector3();
+
+			// extended lookat
+			class VRMSmoothLookAtHead extends THREE.VRMLookAtHead {
+
+				constructor( firstPerson, applyer ) {
+
+					super( firstPerson, applyer );
+
+					this.smoothFactor = 10.0;
+
+					this.horizontalLimit = Math.PI / 4.0;
+					this.verticalLimit = Math.PI / 4.0;
+
+					this._eulerTo = new THREE.Euler( 0.0, 0.0, 0.0, THREE.VRMLookAtHead.EULER_ORDER );
+
+				}
+
+				update( delta ) {
+
+					if ( this.target && this.autoUpdate ) {
+
+						if ( ! this.applyer ) return;
+
+						this._calcEuler( this._eulerTo, this.target.getWorldPosition( _v3A ) );
+
+						if (
+
+							this.horizontalLimit < Math.abs( this._eulerTo.y ) ||
+							this.verticalLimit < Math.abs( this._eulerTo.x )
+
+						) {
+
+							this._eulerTo.set( 0.0, 0.0, 0.0 );
+
+						}
+
+
+						const k = 1.0 - Math.exp( - this.smoothFactor * delta );
+
+						this._euler.x += ( this._eulerTo.x - this._euler.x ) * k;
+						this._euler.y += ( this._eulerTo.y - this._euler.y ) * k;
+
+						this.applyer.lookAt( this._euler );
+
+					}
+
+				}
+
+			}
+
+			// extended lookat importer
+			class VRMSmoothLookAtImporter extends THREE.VRMLookAtImporter {
+
+				import( gltf, firstPerson, blendShapeProxy, humanBodyBones ) {
+
+					const vrmExt = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
+					if ( ! vrmExt ) return null;
+
+					const schemaFirstPerson = vrmExt.firstPerson;
+					if ( ! schemaFirstPerson ) return null;
+
+					const applyer = this._importApplyer( schemaFirstPerson, blendShapeProxy, humanBodyBones );
+					return new VRMSmoothLookAtHead( firstPerson, applyer || undefined );
+
+				}
+
+			}
+
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
 			renderer.setSize( window.innerWidth, window.innerHeight );
@@ -54,39 +120,33 @@
 			scene.add( light );
 
 			// gltf and vrm
+			let currentVrm = undefined;
 			const loader = new THREE.GLTFLoader();
 			loader.crossOrigin = 'anonymous';
 			loader.load(
 
-				// URL of the VRM you want to load
 				'./models/three-vrm-girl.vrm',
 
-				// called when the resource is loaded
 				( gltf ) => {
 
-					// generate VRM instance from gltf
-					THREE.VRM.from( gltf ).then( ( vrm ) => {
+					const lookAtImporter = new VRMSmoothLookAtImporter();
+					THREE.VRM.from( gltf, { lookAtImporter } ).then( ( vrm ) => {
 
-						console.log( vrm );
 						scene.add( vrm.scene );
+						currentVrm = vrm;
 
 						vrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.Hips ).rotation.y = Math.PI;
 
-						// print meta fields
-						Object.keys( vrm.meta ).forEach( ( key ) => {
+						vrm.lookAt.target = camera;
 
-							document.getElementById( 'meta' ).innerText += key + ' : ' + vrm.meta[ key ] + '\n';
-
-						} );
+						console.log( vrm );
 
 					} );
 
 				},
 
-				// called while loading is progressing
 				( progress ) => console.log( 'Loading model...', 100.0 * ( progress.loaded / progress.total ), '%' ),
 
-				// called when loading has errors
 				( error ) => console.error( error )
 
 			);
@@ -98,9 +158,21 @@
 			const axesHelper = new THREE.AxesHelper( 5 );
 			scene.add( axesHelper );
 
+			// animate
+			const clock = new THREE.Clock();
+
 			function animate() {
 
 				requestAnimationFrame( animate );
+
+				const deltaTime = clock.getDelta();
+
+				if ( currentVrm ) {
+
+					// update vrm
+					currentVrm.update( deltaTime );
+
+				}
 
 				renderer.render( scene, camera );
 

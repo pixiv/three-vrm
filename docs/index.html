@@ -64,7 +64,8 @@
 			<div class="tsd-panel tsd-typography">
 				<h1 id="-pixiv-three-vrm"><code>@pixiv/three-vrm</code></h1>
 				<p>Use <a href="https://vrm.dev/">VRM</a> on <a href="https://threejs.org/">three.js</a></p>
-				<p><img src="./three-vrm.png" alt="three-vrm"></p>
+				<p><img src="https://github.com/pixiv/three-vrm/raw/dev/three-vrm.png" alt="three-vrm"></p>
+				<p><a href="https://github.com/pixiv/three-vrm/">GitHub Repository</a></p>
 				<p><a href="https://pixiv.github.io/three-vrm/examples">Examples</a></p>
 				<p><a href="https://pixiv.github.io/three-vrm/docs">Documentation</a></p>
 				<h2 id="usage">Usage</h2>
@@ -118,12 +119,12 @@ loader.load(
 				<pre><code class="language-sh">npm install three @pixiv/three-vrm</code></pre>
 				<p>Code like this:</p>
 				<pre><code class="language-javascript"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> THREE <span class="hljs-keyword">from</span> <span class="hljs-string">'three'</span>;
-<span class="hljs-keyword">import</span> { GLTF, GLTFLoader } <span class="hljs-keyword">from</span> <span class="hljs-string">'three/examples/jsm/loaders/GLTFLoader'</span>;
-<span class="hljs-keyword">import</span> { VRM, VRMLoader } <span class="hljs-keyword">from</span> <span class="hljs-string">'@pixiv/three-vrm'</span>;
+<span class="hljs-keyword">import</span> { GLTFLoader } <span class="hljs-keyword">from</span> <span class="hljs-string">'three/examples/jsm/loaders/GLTFLoader'</span>;
+<span class="hljs-keyword">import</span> { VRM } <span class="hljs-keyword">from</span> <span class="hljs-string">'@pixiv/three-vrm'</span>;
 
 <span class="hljs-keyword">const</span> scene = <span class="hljs-keyword">new</span> THREE.Scene();
 
-<span class="hljs-keyword">const</span> loader = <span class="hljs-keyword">new</span> THREE.GLTFLoader();
+<span class="hljs-keyword">const</span> loader = <span class="hljs-keyword">new</span> GLTFLoader();
 loader.load(
 
     <span class="hljs-comment">// URL of the VRM you want to load</span>
@@ -133,7 +134,7 @@ loader.load(
     ( gltf ) =&gt; {
 
         <span class="hljs-comment">// generate a VRM instance from gltf</span>
-        THREE.VRM.from( gltf ).then( <span class="hljs-function">(<span class="hljs-params"> vrm </span>) =&gt;</span> {
+        VRM.from( gltf ).then( <span class="hljs-function">(<span class="hljs-params"> vrm </span>) =&gt;</span> {
 
             <span class="hljs-comment">// add the loaded vrm to the scene</span>
             scene.add( vrm.scene );
