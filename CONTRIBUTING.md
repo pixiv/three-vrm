@@ -92,7 +92,7 @@ function createSomeVector(): THREE.Vector3 {
   return new THREE.Vector3(5.0, 5.0, 5.0);
 }
 
-// 😃 perferable
+// 😃 preferable
 function createSomeVector(target: THREE.Vector3): THREE.Vector3 {
   return target.set(5.0, 5.0, 5.0);
 }
@@ -126,3 +126,4 @@ function processSomeVector(v: THREE.Vector3): number {
   ```
 
 - 3, Add a release note to https://github.com/pixiv/three-vrm/releases
+  - Do not forget to upload builds!

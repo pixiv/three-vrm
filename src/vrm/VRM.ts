@@ -127,7 +127,7 @@ export class VRM {
    */
   public update(delta: number): void {
     if (this.lookAt) {
-      this.lookAt.update();
+      this.lookAt.update(delta);
     }
 
     if (this.blendShapeProxy) {

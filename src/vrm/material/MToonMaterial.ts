@@ -2,10 +2,14 @@
 
 import * as THREE from 'three';
 import { getTexelDecodingFunction } from './getTexelDecodingFunction';
+import vertexShader from './shaders/mtoon.vert';
+import fragmentShader from './shaders/mtoon.frag';
 
 const TAU = 2.0 * Math.PI;
 
 export interface MToonParameters extends THREE.ShaderMaterialParameters {
+  mToonVersion?: number; // _MToonVersion
+
   cutoff?: number; // _Cutoff
   color?: THREE.Vector4; // rgb of _Color
   shadeColor?: THREE.Vector4; // _ShadeColor
@@ -172,6 +176,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
 
     // == these parameter has no compatibility with this implementation ========
     [
+      'mToonVersion',
       'shadeTexture_ST',
       'bumpMap_ST',
       'receiveShadowTexture_ST',
@@ -515,8 +520,8 @@ export class MToonMaterial extends THREE.ShaderMaterial {
         : '');
 
     // == generate shader code =================================================
-    this.vertexShader = require('./shaders/mtoon.vert');
-    this.fragmentShader = encodings + require('./shaders/mtoon.frag');
+    this.vertexShader = vertexShader;
+    this.fragmentShader = encodings + fragmentShader;
 
     // == set needsUpdate flag =================================================
     this.needsUpdate = true;

@@ -22,17 +22,17 @@ const base = (mode: 'production' | 'development'): webpack.Configuration => {
     module: {
       rules: [
         {
-          test: /\.ts?$/,
+          test: /\.ts$/,
           exclude: /node_modules/,
           use: {
             loader: 'ts-loader',
             options: {
-              transpileOnly: true
-            }
+              transpileOnly: true,
+            },
           },
         },
         {
-          test: /\.(glsl|frag|vert)$/,
+          test: /\.(frag|vert)$/,
           use: 'raw-loader',
         },
       ],
