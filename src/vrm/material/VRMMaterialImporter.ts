@@ -102,7 +102,7 @@ export class VRMMaterialImporter {
             primitive.material[0] = vrmMaterials.surface;
 
             // envmap
-            if (this._requestEnvMap) {
+            if (this._requestEnvMap && (vrmMaterials.surface as any).isMeshStandardMaterial) {
               this._requestEnvMap().then((envMap) => {
                 (vrmMaterials.surface as any).envMap = envMap;
                 vrmMaterials.surface.needsUpdate = true;
