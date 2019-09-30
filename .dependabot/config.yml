@@ -8,11 +8,8 @@ update_configs:
 
     update_schedule: "weekly"
 
-    allowed_updates:
-      - match:
-          dependency_type: "direct"
-      - match:
-          update_type: "security"
+    default_assignees:
+      - FMS-Cat
 
     version_requirement_updates: "auto"
 
@@ -22,10 +19,7 @@ update_configs:
 
     update_schedule: "weekly"
 
-    allowed_updates:
-      - match:
-          dependency_type: "direct"
-      - match:
-          update_type: "security"
+    default_assignees:
+      - FMS-Cat
 
     version_requirement_updates: "auto"
