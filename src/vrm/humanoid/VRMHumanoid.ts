@@ -154,7 +154,7 @@ export class VRMHumanoid {
         return accum;
       },
       {} as Partial<VRMHumanBones>,
-    );
+    ) as VRMHumanBones;
 
     boneArray.forEach((bone) => {
       bones[bone.name].push(bone.bone);
