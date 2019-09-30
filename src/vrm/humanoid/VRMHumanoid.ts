@@ -148,10 +148,13 @@ export class VRMHumanoid {
    * Prepare a [[VRMHumanBones]] from a [[VRMHumanBoneArray]].
    */
   private _createHumanBones(boneArray: VRMHumanBoneArray): VRMHumanBones {
-    const bones: VRMHumanBones = Object.values(VRMSchema.HumanoidBoneName).reduce((accum, name) => {
-      accum[name] = [];
-      return accum;
-    }, {});
+    const bones: VRMHumanBones = Object.values(VRMSchema.HumanoidBoneName).reduce(
+      (accum, name) => {
+        accum[name] = [];
+        return accum;
+      },
+      {} as Partial<VRMHumanBones>,
+    ) as VRMHumanBones;
 
     boneArray.forEach((bone) => {
       bones[bone.name].push(bone.bone);
