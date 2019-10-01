@@ -5,6 +5,7 @@
     "module": "commonjs",
     "lib": ["es2018", "dom"],
     "moduleResolution": "node",
+    "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "declaration": true,
     "declarationDir": "./types",
