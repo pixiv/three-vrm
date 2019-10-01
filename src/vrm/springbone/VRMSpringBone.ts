@@ -179,16 +179,17 @@ export class VRMSpringBone {
    * You might want to call [[VRMSpringBoneManager.reset]] instead.
    */
   public reset(): void {
-    this.bone.matrix.copy(this._initialLocalMatrix);
+    this.bone.quaternion.copy(this._initialLocalRotation);
 
-    this.bone.localToWorld(this._currentTail.copy(this._initialLocalChildPosition));
-    this._prevTail.copy(this._currentTail);
-    this._nextTail.copy(this._currentTail);
-
-    // ボーンの姿勢を手動で操作したので、matrixWorldも更新しておく
+    // We need to update its matrixWorld manually, since we tweaked the bone by our hand
     this.bone.updateMatrix();
     this.bone.matrixWorld.multiplyMatrices(this._getParentMatrixWorld(), this.bone.matrix);
     this._worldPosition.setFromMatrixPosition(this.bone.matrixWorld);
+
+    // Apply updated position to tail states
+    this.bone.localToWorld(this._currentTail.copy(this._initialLocalChildPosition));
+    this._prevTail.copy(this._currentTail);
+    this._nextTail.copy(this._currentTail);
   }
 
   /**
