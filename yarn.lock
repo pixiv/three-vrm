@@ -207,9 +207,9 @@
     source-map "^0.6.1"
 
 "@types/webpack-dev-server@^3.1.7":
-  version "3.1.7"
-  resolved "https://registry.yarnpkg.com/@types/webpack-dev-server/-/webpack-dev-server-3.1.7.tgz#a3e7a20366e68bc9853c730b56e994634cb78dac"
-  integrity sha512-VIRkDkBDuOkYRXQ1EG/etisQ3odo6pcjSmA1Si4VYANuNhSBsLxfuPGeGERwCx1nDKxK3aaXnicPzi0gUvxUaw==
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/@types/webpack-dev-server/-/webpack-dev-server-3.4.0.tgz#8e29afafb8238185c0d4e94fb544f0e12f0248e1"
+  integrity sha512-cNxiXfGnMxVgXOjmo/SQdsIX2Muan0A44AvPgVfz9y1PfWogOJGEy+/nFkrF/luvFxykJXT+fZYPpyuIGZtRZg==
   dependencies:
     "@types/connect-history-api-fallback" "*"
     "@types/express" "*"
