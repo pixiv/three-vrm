@@ -11,7 +11,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@types/node": "^11.12.2",
+    "@types/node": "^12.12.7",
     "@types/react": "^16.8.10",
     "@types/react-dom": "^16.8.3",
     "camera-controls": "^1.12.1",
