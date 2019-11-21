@@ -403,11 +403,17 @@ void main() {
 
   vec3 col = reflectedLight.directDiffuse + reflectedLight.indirectDiffuse;
 
-  #if defined( OUTLINE ) && defined( OUTLINE_COLOR_MIXED ) // omitting DebugMode
+  #if defined( OUTLINE ) && defined( OUTLINE_COLOR_MIXED )
     gl_FragColor = vec4(
       outlineColor.rgb * mix( vec3( 1.0 ), col, outlineLightingMix ),
       diffuseColor.a
     );
+    postCorrection();
+    return;
+  #endif
+
+  #ifdef DEBUG_LITSHADERATE
+    gl_FragColor = vec4( col, diffuseColor.a );
     postCorrection();
     return;
   #endif
