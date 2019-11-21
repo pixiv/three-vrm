@@ -6,7 +6,7 @@ function disposeMaterial(material: THREE.Material): void {
   Object.keys(material).forEach((propertyName) => {
     const value = (material as any)[propertyName];
     if (value && typeof value === 'object' && value.isTexture) {
-      const texture = (material as any)[propertyName] as THREE.Texture;
+      const texture = value as THREE.Texture;
       texture.dispose();
     }
   });
