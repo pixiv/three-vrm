@@ -63,8 +63,10 @@
 
 						THREE.VRM.from( gltf ).then( ( vrm ) => {
 
-							if ( currentVrm ) { scene.remove( currentVrm.scene ); }
-							// currentVrm.dispose(); // not implemented
+							if ( currentVrm ) {
+								scene.remove( currentVrm.scene );
+								currentVrm.dispose();
+							}
 
 							currentVrm = vrm;
 							scene.add( vrm.scene );
