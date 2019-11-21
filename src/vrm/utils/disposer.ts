@@ -5,7 +5,7 @@ import * as THREE from 'three';
 function disposeMaterial(material: THREE.Material): void {
   Object.keys(material).forEach((propertyName) => {
     const value = (material as any)[propertyName];
-    if (value && typeof value === 'object' && value.isTexture) {
+    if (value && value.isTexture) {
       const texture = value as THREE.Texture;
       texture.dispose();
     }
