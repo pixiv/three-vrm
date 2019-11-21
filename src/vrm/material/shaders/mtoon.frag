@@ -104,9 +104,9 @@ varying vec3 vViewPosition;
   // Per-Pixel Tangent Space Normal Mapping
   // http://hacksoflife.blogspot.ch/2009/11/per-pixel-tangent-space-normal-mapping.html
 
-  // three-vrm specific change: it requires `uv` as an input to support uv scrolls
+  // three-vrm specific change: it requires `uv` as an input in order to support uv scrolls
 
-  vec3 perturbNormal2Arb( vec2 uv, vec3 eye_pos, vec3 surf_norm ) {
+  vec3 perturbNormal2Arb( vec2 uv, vec3 eye_pos, vec3 surf_norm, vec3 mapN ) {
 
     // Workaround for Adreno 3XX dFd*( vec3 ) bug. See #9988
 
@@ -120,7 +120,9 @@ varying vec3 vViewPosition;
     vec3 S = ( q0 * st1.t - q1 * st0.t ) * scale;
     vec3 T = ( - q0 * st1.s + q1 * st0.s ) * scale;
 
-    // Workaround for the issue that happens when delta of uv = 0.0
+    // three-vrm specific change: Workaround for the issue that happens when delta of uv = 0.0
+    // TODO: Is this still required? Or shall I make a PR about it?
+
     if ( length( S ) == 0.0 || length( T ) == 0.0 ) {
       return surf_norm;
     }
@@ -128,10 +130,6 @@ varying vec3 vViewPosition;
     S = normalize( S );
     T = normalize( T );
     vec3 N = normalize( surf_norm );
-
-    vec3 mapN = texture2D( normalMap, uv ).xyz * 2.0 - 1.0;
-
-    mapN.xy *= normalScale;
 
     #ifdef DOUBLE_SIDED
 
@@ -384,16 +382,16 @@ void main() {
 
   #elif defined( TANGENTSPACE_NORMALMAP )
 
+    vec3 mapN = texture2D( normalMap, uv ).xyz * 2.0 - 1.0;
+    mapN.xy *= normalScale;
+
     #ifdef USE_TANGENT
 
-      mat3 vTBN = mat3( tangent, bitangent, normal );
-      vec3 mapN = texture2D( normalMap, uv ).xyz * 2.0 - 1.0;
-      mapN.xy = normalScale * mapN.xy;
       normal = normalize( vTBN * mapN );
 
     #else
 
-      normal = perturbNormal2Arb( uv, -vViewPosition, normal );
+      normal = perturbNormal2Arb( uv, -vViewPosition, normal, mapN );
 
     #endif
 
