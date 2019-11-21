@@ -17,8 +17,10 @@ export interface MToonParameters extends THREE.ShaderMaterialParameters {
   mainTex?: THREE.Texture; // _MainTex (will be renamed to map)
   mainTex_ST?: THREE.Vector4; // _MainTex_ST
   shadeTexture?: THREE.Texture; // _ShadeTexture
-  bumpScale?: number; // _BumpScale
+  bumpScale?: number; // _BumpScale (will be converted to normalScale)
   normalMap?: THREE.Texture; // _BumpMap
+  normalMapType?: THREE.NormalMapTypes; // Three.js specific value
+  normalScale?: THREE.Vector2; // _BumpScale in Three.js fashion
   bumpMap?: THREE.Texture; // _BumpMap (will be renamed to normalMap)
   receiveShadowRate?: number; // _ReceiveShadowRate
   receiveShadowTexture?: THREE.Texture; // _ReceiveShadowTexture
@@ -110,8 +112,9 @@ export class MToonMaterial extends THREE.ShaderMaterial {
   public mainTex_ST: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _MainTex_ST
   public shadeTexture: THREE.Texture | null = null; // _ShadeTexture
   // public shadeTexture_ST: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _ShadeTexture_ST (unused)
-  public bumpScale = 1.0; // _BumpScale
   public normalMap: THREE.Texture | null = null; // _BumpMap. again, THIS IS _BumpMap
+  public normalMapType: THREE.NormalMapTypes = THREE.TangentSpaceNormalMap; // Three.js requires this
+  public normalScale: THREE.Vector2 = new THREE.Vector2(1.0, 1.0); // _BumpScale, in Vector2
   // public bumpMap_ST: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _BumpMap_ST (unused)
   public receiveShadowRate = 1.0; // _ReceiveShadowRate
   public receiveShadowTexture: THREE.Texture | null = null; // _ReceiveShadowTexture
@@ -216,7 +219,6 @@ export class MToonMaterial extends THREE.ShaderMaterial {
         shadeColor: { value: new THREE.Color(0.97, 0.81, 0.86) },
         mainTex_ST: { value: new THREE.Vector4(0.0, 0.0, 1.0, 1.0) },
         shadeTexture: { value: null },
-        bumpScale: { value: 1.0 },
         receiveShadowRate: { value: 1.0 },
         receiveShadowTexture: { value: null },
         shadingGradeRate: { value: 1.0 },
@@ -266,6 +268,20 @@ export class MToonMaterial extends THREE.ShaderMaterial {
 
   set bumpMap(t: THREE.Texture | null) {
     this.normalMap = t;
+  }
+
+  /**
+   * Getting the `bumpScale` reutrns its x component of `normalScale` (assuming x and y component of `normalScale` are same).
+   */
+  get bumpScale(): number {
+    return this.normalScale.x;
+  }
+
+  /**
+   * Setting the `bumpScale` will be convert the value into Vector2 `normalScale` .
+   */
+  set bumpScale(t: number) {
+    this.normalScale.set(t, t);
   }
 
   get emissionMap(): THREE.Texture | null {
@@ -383,8 +399,9 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.map = source.map;
     this.mainTex_ST.copy(source.mainTex_ST);
     this.shadeTexture = source.shadeTexture;
-    this.bumpScale = source.bumpScale;
     this.normalMap = source.normalMap;
+    this.normalMapType = source.normalMapType;
+    this.normalScale.copy(this.normalScale);
     this.receiveShadowRate = source.receiveShadowRate;
     this.receiveShadowTexture = source.receiveShadowTexture;
     this.shadingGradeRate = source.shadingGradeRate;
@@ -449,8 +466,8 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.uniforms.map.value = this.map;
     this.uniforms.mainTex_ST.value.copy(this.mainTex_ST);
     this.uniforms.shadeTexture.value = this.shadeTexture;
-    this.uniforms.bumpScale.value = this.bumpScale;
     this.uniforms.normalMap.value = this.normalMap;
+    this.uniforms.normalScale.value.copy(this.normalScale);
     this.uniforms.receiveShadowRate.value = this.receiveShadowRate;
     this.uniforms.receiveShadowTexture.value = this.receiveShadowTexture;
     this.uniforms.shadingGradeRate.value = this.shadingGradeRate;
