@@ -8,7 +8,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - deps-{{ checksum "package.json" }}
+            - deps-{{ checksum "yarn.lock" }}
             - deps-
       - run:
           name: Node version
@@ -17,7 +17,7 @@ jobs:
           name: Fetch deps
           command: yarn
       - save_cache:
-          key: deps-{{ checksum "package.json" }}
+          key: deps-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
 
@@ -27,7 +27,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - deps-{{ checksum "package.json" }}
+            - deps-{{ checksum "yarn.lock" }}
             - deps-
       - run:
           name: Build
@@ -43,7 +43,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - deps-{{ checksum "package.json" }}
+            - deps-{{ checksum "yarn.lock" }}
             - deps-
       - run:
           name: Lint
