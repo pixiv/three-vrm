@@ -1,3 +1,5 @@
+// See: https://threejs.org/docs/#manual/en/introduction/How-to-dispose-of-objects
+
 import * as THREE from 'three';
 
 function disposeMaterial(material: THREE.Material): void {
