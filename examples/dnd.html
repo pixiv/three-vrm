@@ -61,6 +61,8 @@
 
 					( gltf ) => {
 
+						THREE.removeUnnecessaryJoints( gltf.scene );
+
 						THREE.VRM.from( gltf ).then( ( vrm ) => {
 
 							if ( currentVrm ) { scene.remove( currentVrm.scene ); }
