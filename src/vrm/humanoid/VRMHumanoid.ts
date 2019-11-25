@@ -42,27 +42,24 @@ export class VRMHumanoid {
    */
   public getPose(): VRMPose {
     const pose: VRMPose = {};
-    Object.keys(this.humanBones).forEach(
-      (vrmBoneName) => {
-        const node = this.getBoneNode(vrmBoneName as VRMSchema.HumanoidBoneName)!;
+    Object.keys(this.humanBones).forEach((vrmBoneName) => {
+      const node = this.getBoneNode(vrmBoneName as VRMSchema.HumanoidBoneName)!;
 
-        // Ignore when there are no bone on the VRMHumanoid
-        if (!node) {
-          return;
-        }
+      // Ignore when there are no bone on the VRMHumanoid
+      if (!node) {
+        return;
+      }
 
-        // When there are two or more bones in a same name, we are not going to overwrite existing one
-        if (pose[vrmBoneName]) {
-          return;
-        }
+      // When there are two or more bones in a same name, we are not going to overwrite existing one
+      if (pose[vrmBoneName]) {
+        return;
+      }
 
-        pose[vrmBoneName] = {
-          position: node.position.toArray() as RawVector3,
-          rotation: node.quaternion.toArray() as RawVector4,
-        };
-      },
-      {} as VRMPose,
-    );
+      pose[vrmBoneName] = {
+        position: node.position.toArray() as RawVector3,
+        rotation: node.quaternion.toArray() as RawVector4,
+      };
+    }, {} as VRMPose);
     return pose;
   }
 
@@ -148,13 +145,10 @@ export class VRMHumanoid {
    * Prepare a [[VRMHumanBones]] from a [[VRMHumanBoneArray]].
    */
   private _createHumanBones(boneArray: VRMHumanBoneArray): VRMHumanBones {
-    const bones: VRMHumanBones = Object.values(VRMSchema.HumanoidBoneName).reduce(
-      (accum, name) => {
-        accum[name] = [];
-        return accum;
-      },
-      {} as Partial<VRMHumanBones>,
-    ) as VRMHumanBones;
+    const bones: VRMHumanBones = Object.values(VRMSchema.HumanoidBoneName).reduce((accum, name) => {
+      accum[name] = [];
+      return accum;
+    }, {} as Partial<VRMHumanBones>) as VRMHumanBones;
 
     boneArray.forEach((bone) => {
       bones[bone.name].push(bone.bone);
