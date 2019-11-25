@@ -153,11 +153,8 @@ export class VRM {
   public dispose(): void {
     const scene = this.scene;
     if (scene) {
-      while (scene.children.length > 0) {
-        const object = scene.children[scene.children.length - 1];
-        deepDispose(object);
-        scene.remove(object);
-      }
+      deepDispose(scene);
+      scene.dispose();
     }
   }
 }
