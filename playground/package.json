@@ -25,7 +25,7 @@
     "style-loader": "^0.23.1",
     "three": "^0.108.0",
     "ts-loader": "^5.3.3",
-    "typescript": "^3.4.1",
+    "typescript": "^3.7.2",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
     "webpack-dev-server": "^3.2.1"
