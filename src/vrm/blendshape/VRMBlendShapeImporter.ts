@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { GLTFMesh, GLTFPrimitive, VRMSchema } from '../types';
 import { renameMaterialProperty } from '../utils/renameMaterialProperty';
 import { VRMBlendShapeGroup } from './VRMBlendShapeGroup';
@@ -13,7 +14,7 @@ export class VRMBlendShapeImporter {
    *
    * @param gltf A parsed result of GLTF taken from GLTFLoader
    */
-  public async import(gltf: THREE.GLTF): Promise<VRMBlendShapeProxy | null> {
+  public async import(gltf: GLTF): Promise<VRMBlendShapeProxy | null> {
     const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
     if (!vrmExt) {
       return null;

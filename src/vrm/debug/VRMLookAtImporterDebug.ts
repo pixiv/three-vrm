@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRMBlendShapeProxy } from '../blendshape';
 import { VRMFirstPerson } from '../firstperson';
 import { VRMHumanoid } from '../humanoid';
@@ -9,7 +10,7 @@ import { VRMLookAtHeadDebug } from './VRMLookAtHeadDebug';
 
 export class VRMLookAtImporterDebug extends VRMLookAtImporter {
   public import(
-    gltf: THREE.GLTF,
+    gltf: GLTF,
     firstPerson: VRMFirstPerson,
     blendShapeProxy: VRMBlendShapeProxy,
     humanoid: VRMHumanoid,
