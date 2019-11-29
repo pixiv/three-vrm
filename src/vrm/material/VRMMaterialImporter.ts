@@ -72,7 +72,7 @@ export class VRMMaterialImporter {
             // if primitives material is not an array, make it an array
             if (!Array.isArray(primitive.material)) {
               primitive.material = [primitive.material];
-              (primitive.geometry as THREE.BufferGeometry).addGroup(0, primitiveVertices, 0);
+              primitiveGeometry.addGroup(0, primitiveVertices, 0);
             }
 
             // create / push to cache (or pop from cache) vrm materials
@@ -116,7 +116,7 @@ export class VRMMaterialImporter {
             // outline ("2 pass shading using groups" trick here)
             if (vrmMaterials.outline) {
               primitive.material[1] = vrmMaterials.outline;
-              (primitive.geometry as THREE.BufferGeometry).addGroup(0, primitiveVertices, 1);
+              primitiveGeometry.addGroup(0, primitiveVertices, 1);
             }
           }),
         );
