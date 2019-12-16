@@ -233,8 +233,8 @@ export class VRMMaterialImporter {
           mtl.emissiveMap.encoding = THREE.LinearEncoding;
         }
       } else {
-        (mtl as any).color.convertSRGBToLinear(); // TODO: `as any` is temporal, since there are no declaration in @types/three
-        (mtl as any).emissive.convertSRGBToLinear(); // TODO: `as any` is temporal, since there are no declaration in @types/three
+        mtl.color.convertSRGBToLinear();
+        mtl.emissive.convertSRGBToLinear();
       }
     }
 
@@ -246,7 +246,7 @@ export class VRMMaterialImporter {
           mtl.map.encoding = THREE.LinearEncoding;
         }
       } else {
-        (mtl as any).color.convertSRGBToLinear(); // TODO: `as any` is temporal, since there are no declaration in @types/three
+        mtl.color.convertSRGBToLinear();
       }
     }
 
