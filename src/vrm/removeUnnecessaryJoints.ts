@@ -8,6 +8,7 @@ import * as THREE from 'three';
  * @param root Root object that will be traversed
  */
 export function removeUnnecessaryJoints(root: THREE.Object3D): void {
+  // some meshes might share a same skinIndex attribute and this map prevents to convert the attribute twice
   const skeletonList: Map<THREE.BufferAttribute, THREE.Skeleton> = new Map();
 
   // Traverse an entire tree
