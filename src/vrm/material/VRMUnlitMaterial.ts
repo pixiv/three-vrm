@@ -31,8 +31,8 @@ export class VRMUnlitMaterial extends THREE.ShaderMaterial {
 
   public cutoff = 0.5;
   public map: THREE.Texture | null = null; // _MainTex
-  public mainTex_ST: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _MainTex_ST
-  private _renderType: VRMUnlitMaterialRenderType = VRMUnlitMaterialRenderType.Opaque;
+  public mainTex_ST = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _MainTex_ST
+  private _renderType = VRMUnlitMaterialRenderType.Opaque;
 
   public shouldApplyUniforms = true; // when this is true, applyUniforms effects
 
