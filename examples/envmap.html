@@ -89,7 +89,7 @@
 				// called when the resource is loaded
 				( gltf ) => {
 
-					THREE.removeUnnecessaryJoints( gltf.scene );
+					THREE.VRMUtils.removeUnnecessaryJoints( gltf.scene );
 
 					// generate VRM instance from gltf
 					THREE.VRM.from(

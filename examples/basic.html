@@ -60,7 +60,7 @@
 				( gltf ) => {
 
 					// calling this function greatly improves the performance
-					THREE.removeUnnecessaryJoints( gltf.scene );
+					THREE.VRMUtils.removeUnnecessaryJoints( gltf.scene );
 
 					// generate VRM instance from gltf
 					THREE.VRM.from( gltf ).then( ( vrm ) => {
