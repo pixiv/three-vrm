@@ -1,19 +1,12 @@
 import { GLTFSchema } from '.';
 
-declare module 'three' {
+declare module 'three/examples/jsm/loaders/GLTFLoader' {
   export class GLTF {
     public scene: THREE.Scene;
     public scenes: THREE.Scene[];
     public cameras: THREE.Camera[];
     public animations: THREE.AnimationClip[];
-    public asset: {
-      copyright?: string;
-      generator?: string;
-      version: string;
-      minVersion?: string;
-      extensions?: object;
-      extras?: any;
-    };
+    public asset: object;
     public parser: {
       json: GLTFSchema.GLTF;
       getDependency: (type: string, index: number) => Promise<any>;
