@@ -3,6 +3,9 @@
     "@typescript-eslint"
   ],
   "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -18,6 +21,7 @@
     "no-console": ["error", { "allow": ["info", "warn", "error"] }], // do not leave console.log
     "require-atomic-updates": ["off"], // the rule is kinda buggy
     "@typescript-eslint/member-naming": ["error", { "private": "^_", "protected": "^_" }], // private members must start from underscore
+    "@typescript-eslint/no-unnecessary-type-assertion": ["error"], // we don't need unnecessary type assertions
     "@typescript-eslint/camelcase": ["warn", { "properties": "never" }], // we sometimes have to use weird variables for properties
     "@typescript-eslint/no-unused-vars": ["warn", { "args": "none" }], // we sometimes have to define unused arguments
     "@typescript-eslint/no-explicit-any": ["off"], // Three.js sometimes forces us to deal with anys

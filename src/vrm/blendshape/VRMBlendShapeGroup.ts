@@ -81,17 +81,17 @@ export class VRMBlendShapeGroup extends THREE.Object3D {
     let targetValue: number | THREE.Vector2 | THREE.Vector3 | THREE.Vector4 | THREE.Color;
     let deltaValue: number | THREE.Vector2 | THREE.Vector3 | THREE.Vector4 | THREE.Color;
 
-    if ((value as any).isVector2) {
+    if (value.isVector2) {
       type = VRMBlendShapeMaterialValueType.VECTOR2;
       defaultValue = (value as THREE.Vector2).clone();
       targetValue = new THREE.Vector2().fromArray(args.targetValue);
       deltaValue = targetValue.clone().sub(defaultValue);
-    } else if ((value as any).isVector3) {
+    } else if (value.isVector3) {
       type = VRMBlendShapeMaterialValueType.VECTOR3;
       defaultValue = (value as THREE.Vector3).clone();
       targetValue = new THREE.Vector3().fromArray(args.targetValue);
       deltaValue = targetValue.clone().sub(defaultValue);
-    } else if ((value as any).isVector4) {
+    } else if (value.isVector4) {
       type = VRMBlendShapeMaterialValueType.VECTOR4;
       defaultValue = (value as THREE.Vector4).clone();
 
@@ -112,7 +112,7 @@ export class VRMBlendShapeGroup extends THREE.Object3D {
         args.targetValue[1],
       ]);
       deltaValue = targetValue.clone().sub(defaultValue);
-    } else if ((value as any).isColor) {
+    } else if (value.isColor) {
       type = VRMBlendShapeMaterialValueType.COLOR;
       defaultValue = (value as THREE.Color).clone();
       targetValue = new THREE.Color().fromArray(args.targetValue);
