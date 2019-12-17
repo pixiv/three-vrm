@@ -1,4 +1,3 @@
-import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRMBlendShapeProxy } from '../blendshape';
 import { VRMFirstPerson } from '../firstperson';
