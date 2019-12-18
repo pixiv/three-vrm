@@ -68,7 +68,7 @@ const evaluateCurve = (arr: number[], x: number): number => {
  *
  * See: https://github.com/vrm-c/UniVRM/blob/master/Assets/VRM/UniVRM/Scripts/LookAt/CurveMapper.cs
  */
-export class CurveMapper {
+export class VRMCurveMapper {
   /**
    * An array represents the curve. See AnimationCurve class of Unity for its details.
    *
@@ -77,17 +77,17 @@ export class CurveMapper {
   public curve: number[] = [0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0];
 
   /**
-   * The maximum input range of the [[CurveMapper]].
+   * The maximum input range of the [[VRMCurveMapper]].
    */
   public curveXRangeDegree = 90.0;
 
   /**
-   * The maximum output value of the [[CurveMapper]].
+   * The maximum output value of the [[VRMCurveMapper]].
    */
   public curveYRangeDegree = 10.0;
 
   /**
-   * Create a new [[CurveMapper]].
+   * Create a new [[VRMCurveMapper]].
    *
    * @param xRange The maximum input range
    * @param yRange The maximum output value
