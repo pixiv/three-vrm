@@ -76,3 +76,6 @@ workflows:
       - lint:
           requires:
             - fetch
+      - docs:
+          requires:
+            - fetch
