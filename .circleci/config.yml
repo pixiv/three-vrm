@@ -35,6 +35,8 @@ jobs:
       - store_artifacts:
           path: lib
       - store_artifacts:
+          path: types
+      - store_artifacts:
           path: examples
 
   lint:
@@ -48,6 +50,20 @@ jobs:
       - run:
           name: Lint
           command: yarn lint
+
+  docs:
+    docker: *docker
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - deps-{{ checksum "yarn.lock" }}
+            - deps-
+      - run:
+          name: Docs
+          command: yarn docs
+      - store_artifacts:
+          path: docs
 
 workflows:
   version: 2
