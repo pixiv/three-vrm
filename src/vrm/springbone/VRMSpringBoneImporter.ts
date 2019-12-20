@@ -7,6 +7,8 @@ import { VRMSpringBoneGroup, VRMSpringBoneManager } from './VRMSpringBoneManager
 
 const _v3A = new THREE.Vector3();
 
+const _colliderMaterial = new THREE.MeshBasicMaterial({ visible: false });
+
 /**
  * An importer that imports a [[VRMSpringBoneManager]] from a VRM extension of a GLTF.
  */
@@ -171,7 +173,7 @@ export class VRMSpringBoneImporter {
    * @param offset Offest of the new collider mesh
    */
   protected _createColliderMesh(radius: number, offset: THREE.Vector3): VRMSpringBoneColliderMesh {
-    const colliderMesh = new THREE.Mesh(new THREE.SphereBufferGeometry(radius, 8, 4));
+    const colliderMesh = new THREE.Mesh(new THREE.SphereBufferGeometry(radius, 8, 4), _colliderMaterial);
 
     colliderMesh.position.copy(offset);
 
