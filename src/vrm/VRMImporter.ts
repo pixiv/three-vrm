@@ -1,10 +1,9 @@
-import * as THREE from 'three';
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRMBlendShapeImporter } from './blendshape';
 import { VRMFirstPersonImporter } from './firstperson';
 import { VRMHumanoidImporter } from './humanoid/VRMHumanoidImporter';
 import { VRMLookAtImporter } from './lookat/VRMLookAtImporter';
 import { VRMMaterialImporter } from './material';
-import { reduceBones } from './reduceBones';
 import { VRMSpringBoneImporter } from './springbone/VRMSpringBoneImporter';
 import { VRMSchema } from './types';
 import { VRM } from './VRM';
@@ -48,7 +47,7 @@ export class VRMImporter {
    *
    * @param gltf A parsed result of GLTF taken from GLTFLoader
    */
-  public async import(gltf: THREE.GLTF): Promise<VRM> {
+  public async import(gltf: GLTF): Promise<VRM> {
     if (gltf.parser.json.extensions === undefined || gltf.parser.json.extensions.VRM === undefined) {
       throw new Error('Could not find VRM extension on the GLTF');
     }
@@ -65,8 +64,6 @@ export class VRMImporter {
         object3d.frustumCulled = false;
       }
     });
-
-    reduceBones(scene);
 
     const materials = (await this._materialImporter.convertGLTFMaterials(gltf)) || undefined;
 

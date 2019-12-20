@@ -1,11 +1,12 @@
 import * as THREE from 'three';
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRMSpringBoneImporter } from '../springbone/VRMSpringBoneImporter';
 import { VRMSpringBoneManagerDebug } from './VRMSpringBoneManagerDebug';
 import { VRMSchema } from '../types';
 import { VRMSpringBoneDebug } from './VRMSpringBoneDebug';
 
 export class VRMSpringBoneImporterDebug extends VRMSpringBoneImporter {
-  public async import(gltf: THREE.GLTF): Promise<VRMSpringBoneManagerDebug | null> {
+  public async import(gltf: GLTF): Promise<VRMSpringBoneManagerDebug | null> {
     const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
     if (!vrmExt) return null;
 

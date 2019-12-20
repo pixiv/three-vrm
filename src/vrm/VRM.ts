@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRMBlendShapeProxy } from './blendshape';
 import { VRMFirstPerson } from './firstperson';
 import { VRMHumanoid } from './humanoid';
@@ -35,7 +36,7 @@ export class VRM {
    * ```
    * const scene = new THREE.Scene();
    *
-   * new THREE.GLTFLoader().load( 'models/shibu.vrm', ( gltf ) => {
+   * new THREE.GLTFLoader().load( 'models/three-vrm-girl.vrm', ( gltf ) => {
    *
    *   THREE.VRM.from( gltf ).then( ( vrm ) => {
    *
@@ -49,7 +50,7 @@ export class VRM {
    * @param gltf A parsed GLTF object taken from GLTFLoader
    * @param options Options that will be used in importer
    */
-  public static async from(gltf: THREE.GLTF, options: VRMImporterOptions = {}): Promise<VRM> {
+  public static async from(gltf: GLTF, options: VRMImporterOptions = {}): Promise<VRM> {
     const importer = new VRMImporter(options);
     return await importer.import(gltf);
   }
@@ -80,7 +81,7 @@ export class VRM {
 
   /**
    * Contains [[VRMLookAtHead]] of the VRM.
-   * You might want to use [[VRMLookAtHead.setTarget]] to control the eye direction of your VRMs.
+   * You might want to use [[VRMLookAtHead.target]] to control the eye direction of your VRMs.
    */
   public readonly lookAt?: VRMLookAtHead;
 
@@ -127,7 +128,7 @@ export class VRM {
    */
   public update(delta: number): void {
     if (this.lookAt) {
-      this.lookAt.update();
+      this.lookAt.update(delta);
     }
 
     if (this.blendShapeProxy) {
@@ -153,11 +154,8 @@ export class VRM {
   public dispose(): void {
     const scene = this.scene;
     if (scene) {
-      while (scene.children.length > 0) {
-        const object = scene.children[scene.children.length - 1];
-        deepDispose(object);
-        scene.remove(object);
-      }
+      deepDispose(scene);
+      scene.dispose();
     }
   }
 }

@@ -1,0 +1,31 @@
+# c.f. https://dependabot.com/docs/config-file/
+version: 1
+
+update_configs:
+  - package_manager: "javascript"
+
+    directory: "/"
+
+    update_schedule: "weekly"
+
+    allowed_updates:
+      - match:
+          dependency_type: "direct"
+      - match:
+          update_type: "security"
+
+    version_requirement_updates: "auto"
+
+  - package_manager: "javascript"
+
+    directory: "/playground"
+
+    update_schedule: "weekly"
+
+    allowed_updates:
+      - match:
+          dependency_type: "direct"
+      - match:
+          update_type: "security"
+
+    version_requirement_updates: "auto"

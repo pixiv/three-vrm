@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { GLTFMesh, GLTFPrimitive, VRMSchema } from '../types';
 import { MToonMaterial, MToonMaterialOutlineWidthMode, MToonMaterialRenderMode } from './MToonMaterial';
 import { VRMUnlitMaterial, VRMUnlitMaterialRenderType } from './VRMUnlitMaterial';
@@ -43,7 +44,7 @@ export class VRMMaterialImporter {
    *
    * @param gltf A parsed result of GLTF taken from GLTFLoader
    */
-  public async convertGLTFMaterials(gltf: THREE.GLTF): Promise<THREE.Material[] | null> {
+  public async convertGLTFMaterials(gltf: GLTF): Promise<THREE.Material[] | null> {
     const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
     if (!vrmExt) {
       return null;
@@ -64,14 +65,15 @@ export class VRMMaterialImporter {
           mesh.type === 'Group' ? (mesh.children as GLTFPrimitive[]) : [mesh as GLTFPrimitive];
         await Promise.all(
           primitives.map(async (primitive, primitiveIndex) => {
+            const primitiveGeometry = primitive.geometry as THREE.BufferGeometry;
+            const primitiveVertices = primitiveGeometry.index
+              ? primitiveGeometry.index.count
+              : primitiveGeometry.attributes.position.count / 3;
+
             // if primitives material is not an array, make it an array
             if (!Array.isArray(primitive.material)) {
               primitive.material = [primitive.material];
-              (primitive.geometry as THREE.BufferGeometry).addGroup(
-                0,
-                (primitive.geometry as THREE.BufferGeometry).index.count,
-                0,
-              );
+              primitiveGeometry.addGroup(0, primitiveVertices, 0);
             }
 
             // create / push to cache (or pop from cache) vrm materials
@@ -102,7 +104,7 @@ export class VRMMaterialImporter {
             primitive.material[0] = vrmMaterials.surface;
 
             // envmap
-            if (this._requestEnvMap) {
+            if (this._requestEnvMap && (vrmMaterials.surface as any).isMeshStandardMaterial) {
               this._requestEnvMap().then((envMap) => {
                 (vrmMaterials.surface as any).envMap = envMap;
                 vrmMaterials.surface.needsUpdate = true;
@@ -115,11 +117,7 @@ export class VRMMaterialImporter {
             // outline ("2 pass shading using groups" trick here)
             if (vrmMaterials.outline) {
               primitive.material[1] = vrmMaterials.outline;
-              (primitive.geometry as THREE.BufferGeometry).addGroup(
-                0,
-                (primitive.geometry as THREE.BufferGeometry).index.count,
-                1,
-              );
+              primitiveGeometry.addGroup(0, primitiveVertices, 1);
             }
           }),
         );
@@ -132,7 +130,7 @@ export class VRMMaterialImporter {
   public async createVRMMaterials(
     originalMaterial: THREE.Material,
     vrmProps: VRMSchema.Material,
-    gltf: THREE.GLTF,
+    gltf: GLTF,
   ): Promise<{
     surface: THREE.Material;
     outline?: THREE.Material;
@@ -236,8 +234,8 @@ export class VRMMaterialImporter {
           mtl.emissiveMap.encoding = THREE.LinearEncoding;
         }
       } else {
-        (mtl as any).color.convertSRGBToLinear(); // TODO: `as any` is temporal, since there are no declaration in @types/three
-        (mtl as any).emissive.convertSRGBToLinear(); // TODO: `as any` is temporal, since there are no declaration in @types/three
+        mtl.color.convertSRGBToLinear();
+        mtl.emissive.convertSRGBToLinear();
       }
     }
 
@@ -249,7 +247,7 @@ export class VRMMaterialImporter {
           mtl.map.encoding = THREE.LinearEncoding;
         }
       } else {
-        (mtl as any).color.convertSRGBToLinear(); // TODO: `as any` is temporal, since there are no declaration in @types/three
+        mtl.color.convertSRGBToLinear();
       }
     }
 
@@ -259,7 +257,7 @@ export class VRMMaterialImporter {
   private _extractMaterialProperties(
     originalMaterial: THREE.Material,
     vrmProps: VRMSchema.Material,
-    gltf: THREE.GLTF,
+    gltf: GLTF,
   ): Promise<any> {
     const taskList: Array<Promise<any>> = [];
     const params: any = {};

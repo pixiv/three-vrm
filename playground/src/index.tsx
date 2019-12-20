@@ -52,7 +52,7 @@ class App extends React.Component<{}, { vrmId: string | null }> {
     this.scene.add(new THREE.GridHelper(10, 10));
     this.scene.add(this.directionalLight);
 
-    this.loadVRM('../models/shibu.vrm')
+    this.loadVRM('../models/three-vrm-girl.vrm')
       .then((vrm: VRM) => {
         this.clock.start();
         this.animate();
@@ -208,7 +208,7 @@ class App extends React.Component<{}, { vrmId: string | null }> {
         this.cameraControls!.rotateTo(180 * THREE.Math.DEG2RAD, 90 * THREE.Math.DEG2RAD, false);
         this.cameraControls!.moveTo(hip.x, hip.y, hip.z, false);
         this.cameraControls!.dollyTo(1.5, false);
-        this.vrm.lookAt!.setTarget(this.camera);
+        this.vrm.lookAt!.target = this.camera;
 
         this.setState({
           vrmId: this.vrm.scene!.uuid,

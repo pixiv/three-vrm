@@ -2,6 +2,10 @@
 
 Use [VRM](https://vrm.dev/) on [three.js](https://threejs.org/)
 
+![three-vrm](https://github.com/pixiv/three-vrm/raw/dev/three-vrm.png)
+
+[GitHub Repository](https://github.com/pixiv/three-vrm/)
+
 [Examples](https://pixiv.github.io/three-vrm/examples)
 
 [Documentation](https://pixiv.github.io/three-vrm/docs)
@@ -30,7 +34,7 @@ const loader = new THREE.GLTFLoader();
 loader.load(
 
 	// URL of the VRM you want to load
-	'/models/shibu.vrm',
+	'/models/three-vrm-girl.vrm',
 
 	// called when the resource is loaded
 	( gltf ) => {
@@ -70,22 +74,22 @@ Code like this:
 
 ```javascript
 import * as THREE from 'three';
-import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { VRM, VRMLoader } from '@pixiv/three-vrm';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { VRM } from '@pixiv/three-vrm';
 
 const scene = new THREE.Scene();
 
-const loader = new THREE.GLTFLoader();
+const loader = new GLTFLoader();
 loader.load(
 
 	// URL of the VRM you want to load
-	'/models/shibu.vrm',
+	'/models/three-vrm-girl.vrm',
 
 	// called when the resource is loaded
 	( gltf ) => {
 
 		// generate a VRM instance from gltf
-		THREE.VRM.from( gltf ).then( ( vrm ) => {
+		VRM.from( gltf ).then( ( vrm ) => {
 
 			// add the loaded vrm to the scene
 			scene.add( vrm.scene );
@@ -109,3 +113,7 @@ loader.load(
 ## Contributing
 
 See: [CONTRIBUTING.md](CONTRIBUTING.md)
+
+## LICENSE
+
+[MIT](LICENSE)

@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { GLTFNode, VRMSchema } from '../types';
 import { VRMSpringBone } from './VRMSpringBone';
 import { VRMSpringBoneColliderGroup, VRMSpringBoneColliderMesh } from './VRMSpringBoneColliderGroup';
@@ -15,8 +16,8 @@ export class VRMSpringBoneImporter {
    *
    * @param gltf A parsed result of GLTF taken from GLTFLoader
    */
-  public async import(gltf: THREE.GLTF): Promise<VRMSpringBoneManager | null> {
-    const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
+  public async import(gltf: GLTF): Promise<VRMSpringBoneManager | null> {
+    const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions?.VRM;
     if (!vrmExt) return null;
 
     const schemaSecondaryAnimation: VRMSchema.SecondaryAnimation | undefined = vrmExt.secondaryAnimation;
@@ -45,7 +46,7 @@ export class VRMSpringBoneImporter {
   }
 
   protected async _importSpringBoneGroupList(
-    gltf: THREE.GLTF,
+    gltf: GLTF,
     schemaSecondaryAnimation: VRMSchema.SecondaryAnimation,
     colliderGroups: VRMSpringBoneColliderGroup[],
   ): Promise<VRMSpringBoneGroup[]> {
@@ -121,7 +122,7 @@ export class VRMSpringBoneImporter {
    * @param schemaSecondaryAnimation A `secondaryAnimation` field of VRM
    */
   protected async _importColliderMeshGroups(
-    gltf: THREE.GLTF,
+    gltf: GLTF,
     schemaSecondaryAnimation: VRMSchema.SecondaryAnimation,
   ): Promise<VRMSpringBoneColliderGroup[]> {
     const vrmColliderGroups = schemaSecondaryAnimation.colliderGroups;

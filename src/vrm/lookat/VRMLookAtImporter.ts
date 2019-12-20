@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRMBlendShapeProxy } from '../blendshape';
 import { VRMFirstPerson } from '../firstperson';
 import { VRMHumanoid } from '../humanoid';
@@ -21,7 +22,7 @@ export class VRMLookAtImporter {
    * @param humanoid A [[VRMHumanoid]] instance that represents the VRM
    */
   public import(
-    gltf: THREE.GLTF,
+    gltf: GLTF,
     firstPerson: VRMFirstPerson,
     blendShapeProxy: VRMBlendShapeProxy,
     humanoid: VRMHumanoid,

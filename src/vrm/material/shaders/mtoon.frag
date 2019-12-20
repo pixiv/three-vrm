@@ -87,40 +87,69 @@ varying vec3 vViewPosition;
 
 // #include <normalmap_pars_fragment>
 #ifdef USE_NORMALMAP
-  uniform sampler2D normalMap;
-  uniform float bumpScale;
 
-  // this number is very random, this is still a 対処療法
-  #define UV_DERIVATIVE_EPSILON 1E-6
+  uniform sampler2D normalMap;
+  uniform vec2 normalScale;
+
+#endif
+
+#ifdef OBJECTSPACE_NORMALMAP
+
+  uniform mat3 normalMatrix;
+
+#endif
+
+#if ! defined ( USE_TANGENT ) && defined ( TANGENTSPACE_NORMALMAP )
 
   // Per-Pixel Tangent Space Normal Mapping
   // http://hacksoflife.blogspot.ch/2009/11/per-pixel-tangent-space-normal-mapping.html
-  vec3 perturbNormal2Arb( vec2 uv, vec3 eye_pos, vec3 surf_norm ) {
+
+  // three-vrm specific change: it requires `uv` as an input in order to support uv scrolls
+
+  vec3 perturbNormal2Arb( vec2 uv, vec3 eye_pos, vec3 surf_norm, vec3 mapN ) {
+
     // Workaround for Adreno 3XX dFd*( vec3 ) bug. See #9988
+
     vec3 q0 = vec3( dFdx( eye_pos.x ), dFdx( eye_pos.y ), dFdx( eye_pos.z ) );
     vec3 q1 = vec3( dFdy( eye_pos.x ), dFdy( eye_pos.y ), dFdy( eye_pos.z ) );
     vec2 st0 = dFdx( uv.st );
     vec2 st1 = dFdy( uv.st );
 
     float scale = sign( st1.t * st0.s - st0.t * st1.s ); // we do not care about the magnitude
+
     vec3 S = ( q0 * st1.t - q1 * st0.t ) * scale;
     vec3 T = ( - q0 * st1.s + q1 * st0.s ) * scale;
 
-    // See: https://hub.vroid.com/characters/5207275812824687366/models/1630298405840303507
+    // three-vrm specific change: Workaround for the issue that happens when delta of uv = 0.0
+    // TODO: Is this still required? Or shall I make a PR about it?
+
     if ( length( S ) == 0.0 || length( T ) == 0.0 ) {
       return surf_norm;
     }
 
     S = normalize( S );
     T = normalize( T );
-
     vec3 N = normalize( surf_norm );
+
+    #ifdef DOUBLE_SIDED
+
+      // Workaround for Adreno GPUs gl_FrontFacing bug. See #15850 and #10331
+
+      bool frontFacing = dot( cross( S, T ), N ) > 0.0;
+
+      mapN.xy *= ( float( frontFacing ) * 2.0 - 1.0 );
+
+    #else
+
+      mapN.xy *= ( float( gl_FrontFacing ) * 2.0 - 1.0 );
+
+    #endif
+
     mat3 tsn = mat3( S, T, N );
-    vec3 mapN = texture2D( normalMap, uv ).xyz * 2.0 - 1.0;
-    mapN.xy *= bumpScale;
-    mapN.xy *= ( float( gl_FrontFacing ) * 2.0 - 1.0 );
     return normalize( tsn * mapN );
+
   }
+
 #endif
 
 // #include <specularmap_pars_fragment>
@@ -332,18 +361,46 @@ void main() {
   #endif
 
   // #include <normal_fragment_maps>
-  #ifdef USE_NORMALMAP
-    normal = perturbNormal2Arb( uv, -vViewPosition, normal );
+
+  #ifdef OBJECTSPACE_NORMALMAP
+
+    normal = texture2D( normalMap, uv ).xyz * 2.0 - 1.0; // overrides both flatShading and attribute normals
+
+    #ifdef FLIP_SIDED
+
+      normal = - normal;
+
+    #endif
+
+    #ifdef DOUBLE_SIDED
+
+      normal = normal * ( float( gl_FrontFacing ) * 2.0 - 1.0 );
+
+    #endif
+
+    normal = normalize( normalMatrix * normal );
+
+  #elif defined( TANGENTSPACE_NORMALMAP )
+
+    vec3 mapN = texture2D( normalMap, uv ).xyz * 2.0 - 1.0;
+    mapN.xy *= normalScale;
+
+    #ifdef USE_TANGENT
+
+      normal = normalize( vTBN * mapN );
+
+    #else
+
+      normal = perturbNormal2Arb( uv, -vViewPosition, normal, mapN );
+
+    #endif
+
   #endif
 
   // #include <emissivemap_fragment>
   #ifdef USE_EMISSIVEMAP
     totalEmissiveRadiance *= emissiveMapTexelToLinear( texture2D( emissiveMap, uv ) ).rgb;
   #endif
-
-  if (normal.z < 0.0) { // TODO: temporary treatment against Snapdragon issue
-    normal = -normal;
-  }
 
   #ifdef DEBUG_NORMAL
     gl_FragColor = vec4( 0.5 + 0.5 * normal, 1.0 );
@@ -393,11 +450,17 @@ void main() {
 
   vec3 col = reflectedLight.directDiffuse + reflectedLight.indirectDiffuse;
 
-  #if defined( OUTLINE ) && defined( OUTLINE_COLOR_MIXED ) // omitting DebugMode
+  #if defined( OUTLINE ) && defined( OUTLINE_COLOR_MIXED )
     gl_FragColor = vec4(
       outlineColor.rgb * mix( vec3( 1.0 ), col, outlineLightingMix ),
       diffuseColor.a
     );
+    postCorrection();
+    return;
+  #endif
+
+  #ifdef DEBUG_LITSHADERATE
+    gl_FragColor = vec4( col, diffuseColor.a );
     postCorrection();
     return;
   #endif

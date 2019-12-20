@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRMHumanoid } from '../humanoid';
 import { GLTFMesh, GLTFNode, VRMSchema } from '../types';
 import { VRMFirstPerson, VRMRendererFirstPersonFlags } from './VRMFirstPerson';
@@ -13,7 +14,7 @@ export class VRMFirstPersonImporter {
    * @param gltf A parsed result of GLTF taken from GLTFLoader
    * @param humanoid A [[VRMHumanoid]] instance that represents the VRM
    */
-  public async import(gltf: THREE.GLTF, humanoid: VRMHumanoid): Promise<VRMFirstPerson | null> {
+  public async import(gltf: GLTF, humanoid: VRMHumanoid): Promise<VRMFirstPerson | null> {
     const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
     if (!vrmExt) {
       return null;

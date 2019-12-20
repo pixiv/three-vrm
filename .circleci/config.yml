@@ -8,7 +8,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - deps-{{ checksum "package.json" }}
+            - deps-{{ checksum "yarn.lock" }}
             - deps-
       - run:
           name: Node version
@@ -17,7 +17,7 @@ jobs:
           name: Fetch deps
           command: yarn
       - save_cache:
-          key: deps-{{ checksum "package.json" }}
+          key: deps-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
 
@@ -27,13 +27,15 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - deps-{{ checksum "package.json" }}
+            - deps-{{ checksum "yarn.lock" }}
             - deps-
       - run:
           name: Build
           command: yarn build
       - store_artifacts:
           path: lib
+      - store_artifacts:
+          path: types
       - store_artifacts:
           path: examples
 
@@ -43,11 +45,25 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - deps-{{ checksum "package.json" }}
+            - deps-{{ checksum "yarn.lock" }}
             - deps-
       - run:
           name: Lint
           command: yarn lint
+
+  docs:
+    docker: *docker
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - deps-{{ checksum "yarn.lock" }}
+            - deps-
+      - run:
+          name: Docs
+          command: yarn docs
+      - store_artifacts:
+          path: docs
 
 workflows:
   version: 2
@@ -58,5 +74,8 @@ workflows:
           requires:
             - fetch
       - lint:
+          requires:
+            - fetch
+      - docs:
           requires:
             - fetch

@@ -2,10 +2,14 @@
 
 import * as THREE from 'three';
 import { getTexelDecodingFunction } from './getTexelDecodingFunction';
+import vertexShader from './shaders/mtoon.vert';
+import fragmentShader from './shaders/mtoon.frag';
 
 const TAU = 2.0 * Math.PI;
 
 export interface MToonParameters extends THREE.ShaderMaterialParameters {
+  mToonVersion?: number; // _MToonVersion
+
   cutoff?: number; // _Cutoff
   color?: THREE.Vector4; // rgb of _Color
   shadeColor?: THREE.Vector4; // _ShadeColor
@@ -13,8 +17,10 @@ export interface MToonParameters extends THREE.ShaderMaterialParameters {
   mainTex?: THREE.Texture; // _MainTex (will be renamed to map)
   mainTex_ST?: THREE.Vector4; // _MainTex_ST
   shadeTexture?: THREE.Texture; // _ShadeTexture
-  bumpScale?: number; // _BumpScale
+  bumpScale?: number; // _BumpScale (will be converted to normalScale)
   normalMap?: THREE.Texture; // _BumpMap
+  normalMapType?: THREE.NormalMapTypes; // Three.js specific value
+  normalScale?: THREE.Vector2; // _BumpScale in Three.js fashion
   bumpMap?: THREE.Texture; // _BumpMap (will be renamed to normalMap)
   receiveShadowRate?: number; // _ReceiveShadowRate
   receiveShadowTexture?: THREE.Texture; // _ReceiveShadowTexture
@@ -100,40 +106,41 @@ export class MToonMaterial extends THREE.ShaderMaterial {
   public readonly isMToonMaterial: boolean = true;
 
   public cutoff = 0.5; // _Cutoff
-  public color: THREE.Vector4 = new THREE.Vector4(1.0, 1.0, 1.0, 1.0); // _Color
-  public shadeColor: THREE.Vector4 = new THREE.Vector4(0.97, 0.81, 0.86, 1.0); // _ShadeColor
+  public color = new THREE.Vector4(1.0, 1.0, 1.0, 1.0); // _Color
+  public shadeColor = new THREE.Vector4(0.97, 0.81, 0.86, 1.0); // _ShadeColor
   public map: THREE.Texture | null = null; // _MainTex
-  public mainTex_ST: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _MainTex_ST
+  public mainTex_ST = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _MainTex_ST
   public shadeTexture: THREE.Texture | null = null; // _ShadeTexture
-  // public shadeTexture_ST: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _ShadeTexture_ST (unused)
-  public bumpScale = 1.0; // _BumpScale
+  // public shadeTexture_ST = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _ShadeTexture_ST (unused)
   public normalMap: THREE.Texture | null = null; // _BumpMap. again, THIS IS _BumpMap
-  // public bumpMap_ST: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _BumpMap_ST (unused)
+  public normalMapType = THREE.TangentSpaceNormalMap; // Three.js requires this
+  public normalScale = new THREE.Vector2(1.0, 1.0); // _BumpScale, in Vector2
+  // public bumpMap_ST = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _BumpMap_ST (unused)
   public receiveShadowRate = 1.0; // _ReceiveShadowRate
   public receiveShadowTexture: THREE.Texture | null = null; // _ReceiveShadowTexture
-  // public receiveShadowTexture_ST: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _ReceiveShadowTexture_ST (unused)
+  // public receiveShadowTexture_ST = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _ReceiveShadowTexture_ST (unused)
   public shadingGradeRate = 1.0; // _ShadingGradeRate
   public shadingGradeTexture: THREE.Texture | null = null; // _ShadingGradeTexture
-  // public shadingGradeTexture_ST: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _ShadingGradeTexture_ST (unused)
+  // public shadingGradeTexture_ST = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _ShadingGradeTexture_ST (unused)
   public shadeShift = 0.0; // _ShadeShift
   public shadeToony = 0.9; // _ShadeToony
   public lightColorAttenuation = 0.0; // _LightColorAttenuation
   public indirectLightIntensity = 0.1; // _IndirectLightIntensity
   public rimTexture: THREE.Texture | null = null; // _RimTexture
-  public rimColor: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 0.0, 1.0); // _RimColor
+  public rimColor = new THREE.Vector4(0.0, 0.0, 0.0, 1.0); // _RimColor
   public rimLightingMix = 0.0; // _RimLightingMix
   public rimFresnelPower = 1.0; // _RimFresnelPower
   public rimLift = 0.0; // _RimLift
   public sphereAdd: THREE.Texture | null = null; // _SphereAdd
-  // public sphereAdd_ST: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _SphereAdd_ST (unused)
-  public emissionColor: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 0.0, 1.0); // _EmissionColor
+  // public sphereAdd_ST = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _SphereAdd_ST (unused)
+  public emissionColor = new THREE.Vector4(0.0, 0.0, 0.0, 1.0); // _EmissionColor
   public emissiveMap: THREE.Texture | null = null; // _EmissionMap
-  // public emissionMap_ST: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _EmissionMap_ST (unused)
+  // public emissionMap_ST = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _EmissionMap_ST (unused)
   public outlineWidthTexture: THREE.Texture | null = null; // _OutlineWidthTexture
-  // public outlineWidthTexture_ST: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _OutlineWidthTexture_ST (unused)
+  // public outlineWidthTexture_ST = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _OutlineWidthTexture_ST (unused)
   public outlineWidth = 0.5; // _OutlineWidth
   public outlineScaledMaxDistance = 1.0; // _OutlineScaledMaxDistance
-  public outlineColor: THREE.Vector4 = new THREE.Vector4(0.0, 0.0, 0.0, 1.0); // _OutlineColor
+  public outlineColor = new THREE.Vector4(0.0, 0.0, 0.0, 1.0); // _OutlineColor
   public outlineLightingMix = 1.0; // _OutlineLightingMix
   public uvAnimMaskTexture: THREE.Texture | null = null; // _UvAnimMaskTexture
   public uvAnimScrollX = 0.0; // _UvAnimScrollX
@@ -142,15 +149,15 @@ export class MToonMaterial extends THREE.ShaderMaterial {
 
   public shouldApplyUniforms = true; // when this is true, applyUniforms effects
 
-  private _debugMode: MToonMaterialDebugMode = MToonMaterialDebugMode.None; // _DebugMode
-  private _blendMode: MToonMaterialRenderMode = MToonMaterialRenderMode.Opaque; // _BlendMode
-  private _outlineWidthMode: MToonMaterialOutlineWidthMode = MToonMaterialOutlineWidthMode.None; // _OutlineWidthMode
-  private _outlineColorMode: MToonMaterialOutlineColorMode = MToonMaterialOutlineColorMode.FixedColor; // _OutlineColorMode
-  private _cullMode: MToonMaterialCullMode = MToonMaterialCullMode.Back; // _CullMode
-  private _outlineCullMode: MToonMaterialCullMode = MToonMaterialCullMode.Front; // _OutlineCullMode
-  // public srcBlend: number = 1.0; // _SrcBlend (is not supported)
-  // public dstBlend: number = 0.0; // _DstBlend (is not supported)
-  // public zWrite: number = 1.0; // _ZWrite (will be converted to depthWrite)
+  private _debugMode = MToonMaterialDebugMode.None; // _DebugMode
+  private _blendMode = MToonMaterialRenderMode.Opaque; // _BlendMode
+  private _outlineWidthMode = MToonMaterialOutlineWidthMode.None; // _OutlineWidthMode
+  private _outlineColorMode = MToonMaterialOutlineColorMode.FixedColor; // _OutlineColorMode
+  private _cullMode = MToonMaterialCullMode.Back; // _CullMode
+  private _outlineCullMode = MToonMaterialCullMode.Front; // _OutlineCullMode
+  // public srcBlend = 1.0; // _SrcBlend (is not supported)
+  // public dstBlend = 0.0; // _DstBlend (is not supported)
+  // public zWrite = 1.0; // _ZWrite (will be converted to depthWrite)
 
   private _isOutline = false;
 
@@ -172,6 +179,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
 
     // == these parameter has no compatibility with this implementation ========
     [
+      'mToonVersion',
       'shadeTexture_ST',
       'bumpMap_ST',
       'receiveShadowTexture_ST',
@@ -211,7 +219,6 @@ export class MToonMaterial extends THREE.ShaderMaterial {
         shadeColor: { value: new THREE.Color(0.97, 0.81, 0.86) },
         mainTex_ST: { value: new THREE.Vector4(0.0, 0.0, 1.0, 1.0) },
         shadeTexture: { value: null },
-        bumpScale: { value: 1.0 },
         receiveShadowRate: { value: 1.0 },
         receiveShadowTexture: { value: null },
         shadingGradeRate: { value: 1.0 },
@@ -261,6 +268,20 @@ export class MToonMaterial extends THREE.ShaderMaterial {
 
   set bumpMap(t: THREE.Texture | null) {
     this.normalMap = t;
+  }
+
+  /**
+   * Getting the `bumpScale` reutrns its x component of `normalScale` (assuming x and y component of `normalScale` are same).
+   */
+  get bumpScale(): number {
+    return this.normalScale.x;
+  }
+
+  /**
+   * Setting the `bumpScale` will be convert the value into Vector2 `normalScale` .
+   */
+  set bumpScale(t: number) {
+    this.normalScale.set(t, t);
   }
 
   get emissionMap(): THREE.Texture | null {
@@ -378,8 +399,9 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.map = source.map;
     this.mainTex_ST.copy(source.mainTex_ST);
     this.shadeTexture = source.shadeTexture;
-    this.bumpScale = source.bumpScale;
     this.normalMap = source.normalMap;
+    this.normalMapType = source.normalMapType;
+    this.normalScale.copy(this.normalScale);
     this.receiveShadowRate = source.receiveShadowRate;
     this.receiveShadowTexture = source.receiveShadowTexture;
     this.shadingGradeRate = source.shadingGradeRate;
@@ -444,8 +466,8 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.uniforms.map.value = this.map;
     this.uniforms.mainTex_ST.value.copy(this.mainTex_ST);
     this.uniforms.shadeTexture.value = this.shadeTexture;
-    this.uniforms.bumpScale.value = this.bumpScale;
     this.uniforms.normalMap.value = this.normalMap;
+    this.uniforms.normalScale.value.copy(this.normalScale);
     this.uniforms.receiveShadowRate.value = this.receiveShadowRate;
     this.uniforms.receiveShadowTexture.value = this.receiveShadowTexture;
     this.uniforms.shadingGradeRate.value = this.shadingGradeRate;
@@ -515,8 +537,8 @@ export class MToonMaterial extends THREE.ShaderMaterial {
         : '');
 
     // == generate shader code =================================================
-    this.vertexShader = require('./shaders/mtoon.vert');
-    this.fragmentShader = encodings + require('./shaders/mtoon.frag');
+    this.vertexShader = vertexShader;
+    this.fragmentShader = encodings + fragmentShader;
 
     // == set needsUpdate flag =================================================
     this.needsUpdate = true;

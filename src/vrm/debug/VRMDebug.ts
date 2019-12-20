@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRM, VRMParameters } from '../VRM';
 import { VRMImporterOptions } from '../VRMImporter';
 import { VRMDebugOptions } from './VRMDebugOptions';
@@ -20,7 +21,7 @@ export class VRMDebug extends VRM {
    * @param debugOption Options for VRMDebug features
    */
   public static async from(
-    gltf: THREE.GLTF,
+    gltf: GLTF,
     options: VRMImporterOptions = {},
     debugOption: VRMDebugOptions = {},
   ): Promise<VRM> {
