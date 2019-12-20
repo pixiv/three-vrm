@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRMImporter, VRMImporterOptions } from '../VRMImporter';
 import { VRMDebug } from './VRMDebug';
 import { VRMDebugOptions } from './VRMDebugOptions';
@@ -16,7 +16,7 @@ export class VRMImporterDebug extends VRMImporter {
     super(options);
   }
 
-  public async import(gltf: THREE.GLTF, debugOptions: VRMDebugOptions = {}): Promise<VRMDebug> {
+  public async import(gltf: GLTF, debugOptions: VRMDebugOptions = {}): Promise<VRMDebug> {
     if (gltf.parser.json.extensions === undefined || gltf.parser.json.extensions.VRM === undefined) {
       throw new Error('Could not find VRM extension on the GLTF');
     }

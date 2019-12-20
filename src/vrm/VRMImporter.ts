@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRMBlendShapeImporter } from './blendshape';
 import { VRMFirstPersonImporter } from './firstperson';
 import { VRMHumanoidImporter } from './humanoid/VRMHumanoidImporter';
@@ -47,7 +47,7 @@ export class VRMImporter {
    *
    * @param gltf A parsed result of GLTF taken from GLTFLoader
    */
-  public async import(gltf: THREE.GLTF): Promise<VRM> {
+  public async import(gltf: GLTF): Promise<VRM> {
     if (gltf.parser.json.extensions === undefined || gltf.parser.json.extensions.VRM === undefined) {
       throw new Error('Could not find VRM extension on the GLTF');
     }

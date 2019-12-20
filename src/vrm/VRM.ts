@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRMBlendShapeProxy } from './blendshape';
 import { VRMFirstPerson } from './firstperson';
 import { VRMHumanoid } from './humanoid';
@@ -49,7 +50,7 @@ export class VRM {
    * @param gltf A parsed GLTF object taken from GLTFLoader
    * @param options Options that will be used in importer
    */
-  public static async from(gltf: THREE.GLTF, options: VRMImporterOptions = {}): Promise<VRM> {
+  public static async from(gltf: GLTF, options: VRMImporterOptions = {}): Promise<VRM> {
     const importer = new VRMImporter(options);
     return await importer.import(gltf);
   }

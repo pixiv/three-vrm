@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { GLTFMesh, GLTFPrimitive, VRMSchema } from '../types';
 import { MToonMaterial, MToonMaterialOutlineWidthMode, MToonMaterialRenderMode } from './MToonMaterial';
 import { VRMUnlitMaterial, VRMUnlitMaterialRenderType } from './VRMUnlitMaterial';
@@ -43,7 +44,7 @@ export class VRMMaterialImporter {
    *
    * @param gltf A parsed result of GLTF taken from GLTFLoader
    */
-  public async convertGLTFMaterials(gltf: THREE.GLTF): Promise<THREE.Material[] | null> {
+  public async convertGLTFMaterials(gltf: GLTF): Promise<THREE.Material[] | null> {
     const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
     if (!vrmExt) {
       return null;
@@ -129,7 +130,7 @@ export class VRMMaterialImporter {
   public async createVRMMaterials(
     originalMaterial: THREE.Material,
     vrmProps: VRMSchema.Material,
-    gltf: THREE.GLTF,
+    gltf: GLTF,
   ): Promise<{
     surface: THREE.Material;
     outline?: THREE.Material;
@@ -256,7 +257,7 @@ export class VRMMaterialImporter {
   private _extractMaterialProperties(
     originalMaterial: THREE.Material,
     vrmProps: VRMSchema.Material,
-    gltf: THREE.GLTF,
+    gltf: GLTF,
   ): Promise<any> {
     const taskList: Array<Promise<any>> = [];
     const params: any = {};
