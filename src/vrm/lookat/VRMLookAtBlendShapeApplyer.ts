@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { VRMBlendShapeProxy } from '../blendshape';
 import { VRMSchema } from '../types';
-import { CurveMapper } from './CurveMapper';
+import { VRMCurveMapper } from './VRMCurveMapper';
 import { VRMLookAtApplyer } from './VRMLookAtApplyer';
 
 /**
@@ -10,9 +10,9 @@ import { VRMLookAtApplyer } from './VRMLookAtApplyer';
 export class VRMLookAtBlendShapeApplyer extends VRMLookAtApplyer {
   public readonly type = VRMSchema.FirstPersonLookAtTypeName.BlendShape;
 
-  private readonly _curveHorizontal: CurveMapper;
-  private readonly _curveVerticalDown: CurveMapper;
-  private readonly _curveVerticalUp: CurveMapper;
+  private readonly _curveHorizontal: VRMCurveMapper;
+  private readonly _curveVerticalDown: VRMCurveMapper;
+  private readonly _curveVerticalUp: VRMCurveMapper;
 
   private readonly _blendShapeProxy: VRMBlendShapeProxy;
 
@@ -20,15 +20,15 @@ export class VRMLookAtBlendShapeApplyer extends VRMLookAtApplyer {
    * Create a new VRMLookAtBlendShapeApplyer.
    *
    * @param blendShapeProxy A [[VRMBlendShapeProxy]] used by this applier
-   * @param curveHorizontal A [[CurveMapper]] used for transverse direction
-   * @param curveVerticalDown A [[CurveMapper]] used for down direction
-   * @param curveVerticalUp A [[CurveMapper]] used for up direction
+   * @param curveHorizontal A [[VRMCurveMapper]] used for transverse direction
+   * @param curveVerticalDown A [[VRMCurveMapper]] used for down direction
+   * @param curveVerticalUp A [[VRMCurveMapper]] used for up direction
    */
   constructor(
     blendShapeProxy: VRMBlendShapeProxy,
-    curveHorizontal: CurveMapper,
-    curveVerticalDown: CurveMapper,
-    curveVerticalUp: CurveMapper,
+    curveHorizontal: VRMCurveMapper,
+    curveVerticalDown: VRMCurveMapper,
+    curveVerticalUp: VRMCurveMapper,
   ) {
     super();
 
