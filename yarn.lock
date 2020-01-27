@@ -4497,9 +4497,9 @@ querystringify@^2.1.1:
   integrity sha512-w7fLxIRCRT7U8Qu53jQnJyPkYZIaR4n5151KMfcJlO/A9397Wxb1amJvROTK6TOnp7PfoAmg/qXiNHI+08jRfA==
 
 quicktype@^15.0.199:
-  version "15.0.207"
-  resolved "https://registry.yarnpkg.com/quicktype/-/quicktype-15.0.207.tgz#423ab687863bb858db3bb28408a7c18c67944eb8"
-  integrity sha512-HqWffbfL5D4HtkzV+Suw7xWie4RAgkmGCL8PiIwT1wOwE1t4kfzAL4EWGH3rMY+trKccQFNfYrQboGERmxJukg==
+  version "15.0.210"
+  resolved "https://registry.yarnpkg.com/quicktype/-/quicktype-15.0.210.tgz#cb2d25690bab8de297bcadcdaa82a9930125bac1"
+  integrity sha512-wohKbZXIWjZy1wDRWJRgxYayV8vGVC0VO0+6f8+b4idauwUAipLABPmoVPe3MlvcIpzR8+G8MUllKUsXnLt7/A==
   dependencies:
     "@mark.probst/typescript-json-schema" "~0.32.0"
     "@mark.probst/unicode-properties" "~1.1.0"
