@@ -234,9 +234,9 @@
     source-map "^0.6.1"
 
 "@types/webpack@*", "@types/webpack@^4.4.19":
-  version "4.41.0"
-  resolved "https://registry.yarnpkg.com/@types/webpack/-/webpack-4.41.0.tgz#b813a044d8b0dec7dfcd7622fdbe327bde06eb9a"
-  integrity sha512-tWkdf9nO0zFgAY/EumUKwrDUhraHKDqCPhwfFR/R8l0qnPdgb9le0Gzhvb7uzVpouuDGBgiE//ZdY+5jcZy2TA==
+  version "4.41.4"
+  resolved "https://registry.yarnpkg.com/@types/webpack/-/webpack-4.41.4.tgz#6cd2d651d214c344640cbab1c82037289b0154cd"
+  integrity sha512-PlqTNzHzZ1UpBXKkq2wHAM8+jeMojJGfBFXjGB3/N4F4ESGeivdKsJuaS79rtbSofvjbwBIMOHP254mIq0ujiQ==
   dependencies:
     "@types/anymatch" "*"
     "@types/node" "*"
