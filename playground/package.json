@@ -14,7 +14,7 @@
     "@types/node": "^11.12.2",
     "@types/react": "^16.8.10",
     "@types/react-dom": "^16.8.3",
-    "camera-controls": "^1.12.1",
+    "camera-controls": "^1.18.3",
     "css-loader": "^2.1.1",
     "file-loader": "^3.0.1",
     "html-webpack-plugin": "^3.2.0",

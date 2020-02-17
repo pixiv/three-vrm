@@ -638,10 +638,10 @@ camelcase@^5.0.0, camelcase@^5.2.0:
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-5.3.1.tgz#e3c9b31569e106811df242f715725a1f4c494320"
   integrity sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==
 
-camera-controls@^1.12.1:
-  version "1.12.1"
-  resolved "https://registry.yarnpkg.com/camera-controls/-/camera-controls-1.12.1.tgz#3311ed7438c53b9be8c4e267a3e0baece21cea4d"
-  integrity sha512-+kd9VWUPueOuxeG3zJH06NNuPlXdmp/SBHEI0di+SswyhT0LS25Wl9qwKX2SeIZ/X6CVr8aA++F6zdkhXZXdVw==
+camera-controls@^1.18.3:
+  version "1.18.3"
+  resolved "https://registry.yarnpkg.com/camera-controls/-/camera-controls-1.18.3.tgz#8c5603d70dde02591358a45426edcc78bd309ed4"
+  integrity sha512-cuYim0neh5PtbCNiWa/TB9wE5iv/NBsmF6oMrh7vearGiHuoQDIDraI70U0jQ/Zbl1e1K/zKIom7uxWGtaGP5A==
 
 chalk@^2.3.0, chalk@^2.4.1, chalk@^2.4.2:
   version "2.4.2"
