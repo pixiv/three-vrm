@@ -90,15 +90,15 @@ export class VRMLookAtImporter {
 
   private _importCurveMapperBone(map: VRMSchema.FirstPersonDegreeMap): VRMCurveMapper {
     return new VRMCurveMapper(
-      typeof map.xRange === 'number' ? THREE.Math.DEG2RAD * map.xRange : undefined,
-      typeof map.yRange === 'number' ? THREE.Math.DEG2RAD * map.yRange : undefined,
+      typeof map.xRange === 'number' ? THREE.MathUtils.DEG2RAD * map.xRange : undefined,
+      typeof map.yRange === 'number' ? THREE.MathUtils.DEG2RAD * map.yRange : undefined,
       map.curve,
     );
   }
 
   private _importCurveMapperBlendShape(map: VRMSchema.FirstPersonDegreeMap): VRMCurveMapper {
     return new VRMCurveMapper(
-      typeof map.xRange === 'number' ? THREE.Math.DEG2RAD * map.xRange : undefined,
+      typeof map.xRange === 'number' ? THREE.MathUtils.DEG2RAD * map.xRange : undefined,
       map.yRange,
       map.curve,
     );
