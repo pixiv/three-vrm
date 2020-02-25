@@ -1,10 +1,10 @@
 import * as THREE from 'three';
 import { getWorldQuaternionLite } from '../utils/math';
+import { VRMSpringBoneColliderMesh } from './VRMSpringBoneColliderGroup';
 // based on
 // http://rocketjump.skr.jp/unity3d/109/
 // https://github.com/dwango/UniVRM/blob/master/Scripts/SpringBone/VRMSpringBone.cs
 
-export const GIZMO_RENDER_ORDER = 10000;
 const IDENTITY_MATRIX4 = Object.freeze(new THREE.Matrix4());
 const IDENTITY_QUATERNION = Object.freeze(new THREE.Quaternion());
 
@@ -56,9 +56,9 @@ export class VRMSpringBone {
   public readonly bone: THREE.Object3D;
 
   /**
-   * Colliders (as `THREE.Mesh` ) attached to this bone.
+   * Collider groups attached to this bone.
    */
-  public readonly colliders: THREE.Mesh[];
+  public readonly colliders: VRMSpringBoneColliderMesh[];
 
   /**
    * Current position of child tail, in world unit. Will be used for verlet integration.
@@ -138,7 +138,7 @@ export class VRMSpringBone {
 
     this.radius = radius;
     this.stiffnessForce = stiffiness;
-    this.gravityDir = gravityDir;
+    this.gravityDir = new THREE.Vector3().copy(gravityDir);
     this.gravityPower = gravityPower;
     this.dragForce = dragForce;
     this.colliders = colliders;

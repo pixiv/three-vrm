@@ -5,6 +5,8 @@ import { VRMImporterOptions } from '../VRMImporter';
 import { VRMDebugOptions } from './VRMDebugOptions';
 import { VRMImporterDebug } from './VRMImporterDebug';
 
+export const VRM_GIZMO_RENDER_ORDER = 10000;
+
 /**
  * [[VRM]] but it has some useful gizmos.
  */

@@ -1,4 +1,5 @@
 import { VRMSpringBone } from './VRMSpringBone';
+import { VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';
 
 /**
  * Represents a single spring bone group of a VRM.
@@ -9,6 +10,7 @@ export type VRMSpringBoneGroup = VRMSpringBone[];
  * A class manages every spring bones on a VRM.
  */
 export class VRMSpringBoneManager {
+  public readonly colliderGroups: VRMSpringBoneColliderGroup[] = [];
   public readonly springBoneGroupList: VRMSpringBoneGroup[] = [];
 
   /**
@@ -16,7 +18,8 @@ export class VRMSpringBoneManager {
    *
    * @param springBoneGroupList An array of [[VRMSpringBoneGroup]]
    */
-  public constructor(springBoneGroupList: VRMSpringBoneGroup[]) {
+  public constructor(colliderGroups: VRMSpringBoneColliderGroup[], springBoneGroupList: VRMSpringBoneGroup[]) {
+    this.colliderGroups = colliderGroups;
     this.springBoneGroupList = springBoneGroupList;
   }
 
