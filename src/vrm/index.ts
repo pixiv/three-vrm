@@ -1,6 +1,6 @@
 export * from './VRM';
 export * from './VRMImporter';
-export * from './removeUnnecessaryJoints';
+export * from './VRMUtils';
 export * from './blendshape';
 export * from './debug';
 export * from './firstperson';

@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { VRMHumanoid } from '../humanoid';
 import { GLTFNode, VRMSchema } from '../types';
-import { CurveMapper } from './CurveMapper';
+import { VRMCurveMapper } from './VRMCurveMapper';
 import { VRMLookAtApplyer } from './VRMLookAtApplyer';
 import { VRMLookAtHead } from './VRMLookAtHead';
 
@@ -13,10 +13,10 @@ const _euler = new THREE.Euler(0.0, 0.0, 0.0, VRMLookAtHead.EULER_ORDER);
 export class VRMLookAtBoneApplyer extends VRMLookAtApplyer {
   public readonly type = VRMSchema.FirstPersonLookAtTypeName.Bone;
 
-  private readonly _curveHorizontalInner: CurveMapper;
-  private readonly _curveHorizontalOuter: CurveMapper;
-  private readonly _curveVerticalDown: CurveMapper;
-  private readonly _curveVerticalUp: CurveMapper;
+  private readonly _curveHorizontalInner: VRMCurveMapper;
+  private readonly _curveHorizontalOuter: VRMCurveMapper;
+  private readonly _curveVerticalDown: VRMCurveMapper;
+  private readonly _curveVerticalUp: VRMCurveMapper;
 
   private readonly _leftEye: GLTFNode | null;
   private readonly _rightEye: GLTFNode | null;
@@ -25,17 +25,17 @@ export class VRMLookAtBoneApplyer extends VRMLookAtApplyer {
    * Create a new VRMLookAtBoneApplyer.
    *
    * @param humanoid A [[VRMHumanoid]] used by this applier
-   * @param curveHorizontalInner A [[CurveMapper]] used for inner transverse direction
-   * @param curveHorizontalOuter A [[CurveMapper]] used for outer transverse direction
-   * @param curveVerticalDown A [[CurveMapper]] used for down direction
-   * @param curveVerticalUp A [[CurveMapper]] used for up direction
+   * @param curveHorizontalInner A [[VRMCurveMapper]] used for inner transverse direction
+   * @param curveHorizontalOuter A [[VRMCurveMapper]] used for outer transverse direction
+   * @param curveVerticalDown A [[VRMCurveMapper]] used for down direction
+   * @param curveVerticalUp A [[VRMCurveMapper]] used for up direction
    */
   constructor(
     humanoid: VRMHumanoid,
-    curveHorizontalInner: CurveMapper,
-    curveHorizontalOuter: CurveMapper,
-    curveVerticalDown: CurveMapper,
-    curveVerticalUp: CurveMapper,
+    curveHorizontalInner: VRMCurveMapper,
+    curveHorizontalOuter: VRMCurveMapper,
+    curveVerticalDown: VRMCurveMapper,
+    curveVerticalUp: VRMCurveMapper,
   ) {
     super();
 

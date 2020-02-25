@@ -129,6 +129,8 @@
 
 				( gltf ) => {
 
+					THREE.VRMUtils.removeUnnecessaryJoints( gltf.scene );
+
 					const lookAtImporter = new VRMSmoothLookAtImporter();
 					THREE.VRM.from( gltf, { lookAtImporter } ).then( ( vrm ) => {
 

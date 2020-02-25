@@ -79,6 +79,6 @@
     "worker-loader": "^2.0.0"
   },
   "peerDependencies": {
-    "three": "^0.110.0"
+    "three": "^0.111.0"
   }
 }

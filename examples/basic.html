@@ -59,6 +59,9 @@
 				// called when the resource is loaded
 				( gltf ) => {
 
+					// calling this function greatly improves the performance
+					THREE.VRMUtils.removeUnnecessaryJoints( gltf.scene );
+
 					// generate VRM instance from gltf
 					THREE.VRM.from( gltf ).then( ( vrm ) => {
 
