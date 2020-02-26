@@ -60,6 +60,20 @@ export interface MToonParameters extends THREE.ShaderMaterialParameters {
   zWrite?: number; // _ZWrite (will be renamed to depthWrite)
 
   isOutline?: boolean;
+
+  /**
+   * Specify the encoding of input uniform colors.
+   *
+   * When your `renderer.outputEncoding` is `THREE.LinearEncoding`, use `THREE.LinearEncoding`.
+   * When your `renderer.outputEncoding` is `THREE.sRGBEncoding`, use `THREE.sRGBEncoding`.
+   *
+   * Encodings of textures should be set independently on textures.
+   *
+   * This will use `THREE.LinearEncoding` if this option isn't specified.
+   *
+   * See also: https://threejs.org/docs/#api/en/renderers/WebGLRenderer.outputEncoding
+   */
+  encoding?: THREE.TextureEncoding;
 }
 
 export enum MToonMaterialCullMode {
@@ -149,6 +163,20 @@ export class MToonMaterial extends THREE.ShaderMaterial {
 
   public shouldApplyUniforms = true; // when this is true, applyUniforms effects
 
+  /**
+   * The encoding of input uniform colors.
+   *
+   * When your `renderer.outputEncoding` is `THREE.LinearEncoding`, use `THREE.LinearEncoding`.
+   * When your `renderer.outputEncoding` is `THREE.sRGBEncoding`, use `THREE.sRGBEncoding`.
+   *
+   * Encodings of textures are set independently on textures.
+   *
+   * This is `THREE.LinearEncoding` by default.
+   *
+   * See also: https://threejs.org/docs/#api/en/renderers/WebGLRenderer.outputEncoding
+   */
+  public encoding: THREE.TextureEncoding;
+
   private _debugMode = MToonMaterialDebugMode.None; // _DebugMode
   private _blendMode = MToonMaterialRenderMode.Opaque; // _BlendMode
   private _outlineWidthMode = MToonMaterialOutlineWidthMode.None; // _OutlineWidthMode
@@ -161,20 +189,18 @@ export class MToonMaterial extends THREE.ShaderMaterial {
 
   private _isOutline = false;
 
-  private readonly _colorSpaceGamma: boolean;
-
   private _uvAnimOffsetX = 0.0;
   private _uvAnimOffsetY = 0.0;
   private _uvAnimPhase = 0.0;
 
-  // TODO: ここにcolorSpaceGammaあるのダサい
-  constructor(colorSpaceGamma: boolean, parameters?: MToonParameters) {
+  constructor(parameters: MToonParameters = {}) {
     super();
 
-    this._colorSpaceGamma = colorSpaceGamma;
-
-    if (parameters === undefined) {
-      parameters = {};
+    this.encoding = parameters.encoding || THREE.LinearEncoding;
+    if (this.encoding !== THREE.LinearEncoding && this.encoding !== THREE.sRGBEncoding) {
+      console.warn(
+        'The specified color encoding does not work properly with MToonMaterial. You might want to use THREE.sRGBEncoding instead.',
+      );
     }
 
     // == these parameter has no compatibility with this implementation ========
@@ -455,14 +481,8 @@ export class MToonMaterial extends THREE.ShaderMaterial {
 
     this.uniforms.cutoff.value = this.cutoff;
     this.uniforms.color.value.setRGB(this.color.x, this.color.y, this.color.z);
-    if (!this._colorSpaceGamma) {
-      this.uniforms.color.value.convertSRGBToLinear();
-    }
     this.uniforms.colorAlpha.value = this.color.w;
     this.uniforms.shadeColor.value.setRGB(this.shadeColor.x, this.shadeColor.y, this.shadeColor.z);
-    if (!this._colorSpaceGamma) {
-      this.uniforms.shadeColor.value.convertSRGBToLinear();
-    }
     this.uniforms.map.value = this.map;
     this.uniforms.mainTex_ST.value.copy(this.mainTex_ST);
     this.uniforms.shadeTexture.value = this.shadeTexture;
@@ -478,27 +498,27 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.uniforms.indirectLightIntensity.value = this.indirectLightIntensity;
     this.uniforms.rimTexture.value = this.rimTexture;
     this.uniforms.rimColor.value.setRGB(this.rimColor.x, this.rimColor.y, this.rimColor.z);
-    if (!this._colorSpaceGamma) {
-      this.uniforms.rimColor.value.convertSRGBToLinear();
-    }
     this.uniforms.rimLightingMix.value = this.rimLightingMix;
     this.uniforms.rimFresnelPower.value = this.rimFresnelPower;
     this.uniforms.rimLift.value = this.rimLift;
     this.uniforms.sphereAdd.value = this.sphereAdd;
     this.uniforms.emissionColor.value.setRGB(this.emissionColor.x, this.emissionColor.y, this.emissionColor.z);
-    if (!this._colorSpaceGamma) {
-      this.uniforms.emissionColor.value.convertSRGBToLinear();
-    }
     this.uniforms.emissiveMap.value = this.emissiveMap;
     this.uniforms.outlineWidthTexture.value = this.outlineWidthTexture;
     this.uniforms.outlineWidth.value = this.outlineWidth;
     this.uniforms.outlineScaledMaxDistance.value = this.outlineScaledMaxDistance;
     this.uniforms.outlineColor.value.setRGB(this.outlineColor.x, this.outlineColor.y, this.outlineColor.z);
-    if (!this._colorSpaceGamma) {
-      this.uniforms.outlineColor.value.convertSRGBToLinear();
-    }
     this.uniforms.outlineLightingMix.value = this.outlineLightingMix;
     this.uniforms.uvAnimMaskTexture.value = this.uvAnimMaskTexture;
+
+    // apply color space to uniform colors
+    if (this.encoding === THREE.sRGBEncoding) {
+      this.uniforms.color.value.convertSRGBToLinear();
+      this.uniforms.shadeColor.value.convertSRGBToLinear();
+      this.uniforms.rimColor.value.convertSRGBToLinear();
+      this.uniforms.emissionColor.value.convertSRGBToLinear();
+      this.uniforms.outlineColor.value.convertSRGBToLinear();
+    }
 
     this._updateCullFace();
   }

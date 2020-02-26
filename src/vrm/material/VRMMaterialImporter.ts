@@ -9,11 +9,16 @@ import { VRMUnlitMaterial, VRMUnlitMaterialRenderType } from './VRMUnlitMaterial
  */
 export interface VRMMaterialImporterOptions {
   /**
-   * Whether the workflow should be linear or gamma.
+   * Specify the encoding of input uniform colors and textures.
    *
-   * See also: https://threejs.org/docs/#api/en/renderers/WebGLRenderer.gammaOutput
+   * When your `renderer.outputEncoding` is `THREE.LinearEncoding`, use `THREE.LinearEncoding`.
+   * When your `renderer.outputEncoding` is `THREE.sRGBEncoding`, use `THREE.sRGBEncoding`.
+   *
+   * The importer will use `THREE.LinearEncoding` if this option isn't specified.
+   *
+   * See also: https://threejs.org/docs/#api/en/renderers/WebGLRenderer.outputEncoding
    */
-  colorSpaceGamma?: boolean;
+  encoding?: THREE.TextureEncoding;
 
   /**
    * A function that returns a `Promise` of environment map texture.
@@ -26,7 +31,7 @@ export interface VRMMaterialImporterOptions {
  * An importer that imports VRM materials from a VRM extension of a GLTF.
  */
 export class VRMMaterialImporter {
-  private readonly _colorSpaceGamma: boolean;
+  private readonly _encoding: THREE.TextureEncoding;
   private readonly _requestEnvMap?: () => Promise<THREE.Texture | null>;
 
   /**
@@ -35,7 +40,13 @@ export class VRMMaterialImporter {
    * @param options Options of the VRMMaterialImporter
    */
   constructor(options: VRMMaterialImporterOptions = {}) {
-    this._colorSpaceGamma = options.colorSpaceGamma || true;
+    this._encoding = options.encoding || THREE.LinearEncoding;
+    if (this._encoding !== THREE.LinearEncoding && this._encoding !== THREE.sRGBEncoding) {
+      console.warn(
+        'The specified color encoding might not work properly with VRMMaterialImporter. You might want to use THREE.sRGBEncoding instead.',
+      );
+    }
+
     this._requestEnvMap = options.requestEnvMap;
   }
 
@@ -151,17 +162,20 @@ export class VRMMaterialImporter {
       // these textures must be sRGB Encoding, depends on current colorspace
       ['mainTex', 'shadeTexture', 'emission', 'sphereAdd'].forEach((name) => {
         if (params[name] !== undefined) {
-          params[name].encoding = this._colorSpaceGamma ? THREE.LinearEncoding : THREE.sRGBEncoding;
+          params[name].encoding = this._encoding;
         }
       });
 
+      // specify uniform color encodings
+      params.encoding = this._encoding;
+
       // done
-      newSurface = new MToonMaterial(this._colorSpaceGamma, params);
+      newSurface = new MToonMaterial(params);
 
       // outline
       if (params.outlineWidthMode !== MToonMaterialOutlineWidthMode.None) {
         params.isOutline = true;
-        newOutline = new MToonMaterial(this._colorSpaceGamma, params);
+        newOutline = new MToonMaterial(params);
       }
     } else if (vrmProps.shader === 'VRM/UnlitTexture') {
       // this is very legacy
@@ -226,28 +240,28 @@ export class VRMMaterialImporter {
     if ((material as any).isMeshStandardMaterial) {
       const mtl = material as THREE.MeshStandardMaterial;
 
-      if (this._colorSpaceGamma) {
-        if (mtl.map) {
-          mtl.map.encoding = THREE.LinearEncoding;
-        }
-        if (mtl.emissiveMap) {
-          mtl.emissiveMap.encoding = THREE.LinearEncoding;
-        }
-      } else {
-        mtl.color.convertSRGBToLinear();
-        mtl.emissive.convertSRGBToLinear();
+      if (mtl.map) {
+        mtl.map.encoding = this._encoding;
+      }
+      if (mtl.emissiveMap) {
+        mtl.emissiveMap.encoding = this._encoding;
+      }
+
+      if (this._encoding === THREE.LinearEncoding) {
+        mtl.color.convertLinearToSRGB();
+        mtl.emissive.convertLinearToSRGB();
       }
     }
 
     if ((material as any).isMeshBasicMaterial) {
       const mtl = material as THREE.MeshBasicMaterial;
 
-      if (this._colorSpaceGamma) {
-        if (mtl.map) {
-          mtl.map.encoding = THREE.LinearEncoding;
-        }
-      } else {
-        mtl.color.convertSRGBToLinear();
+      if (mtl.map) {
+        mtl.map.encoding = this._encoding;
+      }
+
+      if (this._encoding === THREE.LinearEncoding) {
+        mtl.color.convertLinearToSRGB();
       }
     }
 
