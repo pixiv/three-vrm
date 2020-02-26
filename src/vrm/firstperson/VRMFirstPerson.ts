@@ -232,17 +232,25 @@ export class VRMFirstPerson {
     dst.layers.set(this._firstPersonOnlyLayer);
 
     const geometry = dst.geometry as THREE.BufferGeometry;
+
     const skinIndexAttr = geometry.getAttribute('skinIndex').array;
     const skinIndex = [];
     for (let i = 0; i < skinIndexAttr.length; i += 4) {
       skinIndex.push([skinIndexAttr[i], skinIndexAttr[i + 1], skinIndexAttr[i + 2], skinIndexAttr[i + 3]]);
     }
+
     const skinWeightAttr = geometry.getAttribute('skinWeight').array;
     const skinWeight = [];
     for (let i = 0; i < skinWeightAttr.length; i += 4) {
       skinWeight.push([skinWeightAttr[i], skinWeightAttr[i + 1], skinWeightAttr[i + 2], skinWeightAttr[i + 3]]);
     }
-    const oldTriangles = Array.from(geometry.getIndex().array);
+
+    const index = geometry.getIndex();
+    if (!index) {
+      throw new Error("The geometry doesn't have an index buffer");
+    }
+    const oldTriangles = Array.from(index.array);
+
     const count = this._excludeTriangles(oldTriangles, skinWeight, skinIndex, erasingBonesIndex);
     const newTriangle: number[] = [];
     for (let i = 0; i < count; i++) {

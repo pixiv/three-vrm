@@ -1,4 +1,3 @@
-import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRMBlendShapeProxy } from '../blendshape';
 import { VRMFirstPerson } from '../firstperson';
@@ -9,6 +8,11 @@ import { VRMLookAtApplyer } from './VRMLookAtApplyer';
 import { VRMLookAtBlendShapeApplyer } from './VRMLookAtBlendShapeApplyer';
 import { VRMLookAtBoneApplyer } from './VRMLookAtBoneApplyer';
 import { VRMLookAtHead } from './VRMLookAtHead';
+
+// THREE.Math has been renamed to THREE.MathUtils since r113.
+// We are going to define the DEG2RAD by ourselves for a while
+// https://github.com/mrdoob/three.js/pull/18270
+const DEG2RAD = Math.PI / 180; // THREE.MathUtils.DEG2RAD;
 
 /**
  * An importer that imports a [[VRMLookAtHead]] from a VRM extension of a GLTF.
@@ -90,17 +94,13 @@ export class VRMLookAtImporter {
 
   private _importCurveMapperBone(map: VRMSchema.FirstPersonDegreeMap): VRMCurveMapper {
     return new VRMCurveMapper(
-      typeof map.xRange === 'number' ? THREE.Math.DEG2RAD * map.xRange : undefined,
-      typeof map.yRange === 'number' ? THREE.Math.DEG2RAD * map.yRange : undefined,
+      typeof map.xRange === 'number' ? DEG2RAD * map.xRange : undefined,
+      typeof map.yRange === 'number' ? DEG2RAD * map.yRange : undefined,
       map.curve,
     );
   }
 
   private _importCurveMapperBlendShape(map: VRMSchema.FirstPersonDegreeMap): VRMCurveMapper {
-    return new VRMCurveMapper(
-      typeof map.xRange === 'number' ? THREE.Math.DEG2RAD * map.xRange : undefined,
-      map.yRange,
-      map.curve,
-    );
+    return new VRMCurveMapper(typeof map.xRange === 'number' ? DEG2RAD * map.xRange : undefined, map.yRange, map.curve);
   }
 }
