@@ -149,7 +149,7 @@ export class VRMSpringBoneImporter {
           return;
         }
 
-        const offset = _v3A.set(collider.offset.x, collider.offset.y, collider.offset.z);
+        const offset = _v3A.set(collider.offset.x, collider.offset.y, -collider.offset.z);
         const colliderMesh = this._createColliderMesh(collider.radius, offset);
 
         bone.add(colliderMesh);
