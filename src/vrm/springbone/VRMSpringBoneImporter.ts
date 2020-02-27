@@ -74,7 +74,11 @@ export class VRMSpringBoneImporter {
         }
 
         const stiffiness = vrmBoneGroup.stiffiness;
-        const gravityDir = _v3A.set(vrmBoneGroup.gravityDir.x, vrmBoneGroup.gravityDir.y, vrmBoneGroup.gravityDir.z);
+        const gravityDir = new THREE.Vector3(
+          vrmBoneGroup.gravityDir.x,
+          vrmBoneGroup.gravityDir.y,
+          -vrmBoneGroup.gravityDir.z, // VRM 0.0 uses left-handed y-up
+        );
         const gravityPower = vrmBoneGroup.gravityPower;
         const dragForce = vrmBoneGroup.dragForce;
         const hitRadius = vrmBoneGroup.hitRadius;
