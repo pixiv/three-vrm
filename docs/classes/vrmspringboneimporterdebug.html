@@ -81,64 +81,75 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section tsd-is-private-protected">
-							<h3>Accessors</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-overwrite tsd-is-protected"><a href="vrmspringboneimporterdebug.html#_iscolidermeshvisible" class="tsd-kind-icon">_is<wbr>Colider<wbr>Mesh<wbr>Visible</a></li>
-							</ul>
-						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="vrmspringboneimporterdebug.html#_createcollidermesh" class="tsd-kind-icon">_create<wbr>Collider<wbr>Mesh</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected"><a href="vrmspringboneimporterdebug.html#_createspringbone" class="tsd-kind-icon">_create<wbr>Spring<wbr>Bone</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="vrmspringboneimporterdebug.html#import" class="tsd-kind-icon">import</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="vrmspringboneimporterdebug.html#_importcollidermeshgroups" class="tsd-kind-icon">_import<wbr>Collider<wbr>Mesh<wbr>Groups</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="vrmspringboneimporterdebug.html#_importspringbonegrouplist" class="tsd-kind-icon">_import<wbr>Spring<wbr>Bone<wbr>Group<wbr>List</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="vrmspringboneimporterdebug.html#import" class="tsd-kind-icon">import</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-private-protected">
-				<h2>Accessors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
-					<a name="_iscolidermeshvisible" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _is<wbr>Colider<wbr>Mesh<wbr>Visible</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> _isColiderMeshVisible<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+					<a name="_createcollidermesh" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _create<wbr>Collider<wbr>Mesh</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+						<li class="tsd-signature tsd-kind-icon">_create<wbr>Collider<wbr>Mesh<span class="tsd-signature-symbol">(</span>radius<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, offset<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Vector3</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../globals.html#vrmspringbonecollidermesh" class="tsd-signature-type">VRMSpringBoneColliderMesh</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides <a href="vrmspringboneimporter.html">VRMSpringBoneImporter</a>.<a href="vrmspringboneimporter.html#_iscolidermeshvisible">_isColiderMeshVisible</a></p>
+								<p>Inherited from <a href="vrmspringboneimporter.html">VRMSpringBoneImporter</a>.<a href="vrmspringboneimporter.html#_createcollidermesh">_createColliderMesh</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/2f3a3f0/src/vrm/debug/VRMSpringBoneImporterDebug.ts#L7">vrm/debug/VRMSpringBoneImporterDebug.ts:7</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/springbone/VRMSpringBoneImporter.ts#L183">src/vrm/springbone/VRMSpringBoneImporter.ts:183</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create a collider mesh.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>radius: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Radius of the new collider mesh</p>
+									</div>
+								</li>
+								<li>
+									<h5>offset: <span class="tsd-signature-type">Vector3</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Offest of the new collider mesh</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../globals.html#vrmspringbonecollidermesh" class="tsd-signature-type">VRMSpringBoneColliderMesh</a></h4>
 						</li>
 					</ul>
 				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
 					<a name="_createspringbone" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _create<wbr>Spring<wbr>Bone</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">_create<wbr>Spring<wbr>Bone<span class="tsd-signature-symbol">(</span>gltf<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GLTF</span>, bone<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Object3D</span>, hitRadius<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, stiffiness<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, gravityDir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Vector3</span>, gravityPower<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, dragForce<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, colliders<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Mesh</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="vrmspringbone.html" class="tsd-signature-type">VRMSpringBone</a></li>
+						<li class="tsd-signature tsd-kind-icon">_create<wbr>Spring<wbr>Bone<span class="tsd-signature-symbol">(</span>bone<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Object3D</span>, hitRadius<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, stiffiness<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, gravityDir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Vector3</span>, gravityPower<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, dragForce<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, colliders<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Mesh</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="vrmspringbonedebug.html" class="tsd-signature-type">VRMSpringBoneDebug</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides <a href="vrmspringboneimporter.html">VRMSpringBoneImporter</a>.<a href="vrmspringboneimporter.html#_createspringbone">_createSpringBone</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/2f3a3f0/src/vrm/debug/VRMSpringBoneImporterDebug.ts#L11">vrm/debug/VRMSpringBoneImporterDebug.ts:11</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/debug/VRMSpringBoneImporterDebug.ts#L26">src/vrm/debug/VRMSpringBoneImporterDebug.ts:26</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
-								<li>
-									<h5>gltf: <span class="tsd-signature-type">GLTF</span></h5>
-								</li>
 								<li>
 									<h5>bone: <span class="tsd-signature-type">Object3D</span></h5>
 								</li>
@@ -161,27 +172,27 @@
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> colliders: <span class="tsd-signature-type">Mesh</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="vrmspringbone.html" class="tsd-signature-type">VRMSpringBone</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="vrmspringbonedebug.html" class="tsd-signature-type">VRMSpringBoneDebug</a></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-					<a name="import" class="tsd-anchor"></a>
-					<h3>import</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">import<span class="tsd-signature-symbol">(</span>gltf<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GLTF</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="vrmspringbonemanager.html" class="tsd-signature-type">VRMSpringBoneManager</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+					<a name="_importcollidermeshgroups" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _import<wbr>Collider<wbr>Mesh<wbr>Groups</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+						<li class="tsd-signature tsd-kind-icon">_import<wbr>Collider<wbr>Mesh<wbr>Groups<span class="tsd-signature-symbol">(</span>gltf<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GLTF</span>, schemaSecondaryAnimation<span class="tsd-signature-symbol">: </span><a href="../interfaces/vrmschema.secondaryanimation.html" class="tsd-signature-type">SecondaryAnimation</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/vrmspringbonecollidergroup.html" class="tsd-signature-type">VRMSpringBoneColliderGroup</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="vrmspringboneimporter.html">VRMSpringBoneImporter</a>.<a href="vrmspringboneimporter.html#import">import</a></p>
+								<p>Inherited from <a href="vrmspringboneimporter.html">VRMSpringBoneImporter</a>.<a href="vrmspringboneimporter.html#_importcollidermeshgroups">_importColliderMeshGroups</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/2f3a3f0/src/vrm/springbone/VRMSpringBoneImporter.ts#L16">vrm/springbone/VRMSpringBoneImporter.ts:16</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/springbone/VRMSpringBoneImporter.ts#L130">src/vrm/springbone/VRMSpringBoneImporter.ts:130</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Import a <a href="vrmlookathead.html">VRMLookAtHead</a> from a VRM.</p>
+									<p>Create an array of <a href="../interfaces/vrmspringbonecollidergroup.html">VRMSpringBoneColliderGroup</a>.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -192,8 +203,68 @@
 										<p>A parsed result of GLTF taken from GLTFLoader</p>
 									</div>
 								</li>
+								<li>
+									<h5>schemaSecondaryAnimation: <a href="../interfaces/vrmschema.secondaryanimation.html" class="tsd-signature-type">SecondaryAnimation</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>A <code>secondaryAnimation</code> field of VRM</p>
+									</div>
+								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="vrmspringbonemanager.html" class="tsd-signature-type">VRMSpringBoneManager</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/vrmspringbonecollidergroup.html" class="tsd-signature-type">VRMSpringBoneColliderGroup</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+					<a name="_importspringbonegrouplist" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _import<wbr>Spring<wbr>Bone<wbr>Group<wbr>List</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+						<li class="tsd-signature tsd-kind-icon">_import<wbr>Spring<wbr>Bone<wbr>Group<wbr>List<span class="tsd-signature-symbol">(</span>gltf<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GLTF</span>, schemaSecondaryAnimation<span class="tsd-signature-symbol">: </span><a href="../interfaces/vrmschema.secondaryanimation.html" class="tsd-signature-type">SecondaryAnimation</a>, colliderGroups<span class="tsd-signature-symbol">: </span><a href="../interfaces/vrmspringbonecollidergroup.html" class="tsd-signature-type">VRMSpringBoneColliderGroup</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#vrmspringbonegroup" class="tsd-signature-type">VRMSpringBoneGroup</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="vrmspringboneimporter.html">VRMSpringBoneImporter</a>.<a href="vrmspringboneimporter.html#_importspringbonegrouplist">_importSpringBoneGroupList</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/springbone/VRMSpringBoneImporter.ts#L50">src/vrm/springbone/VRMSpringBoneImporter.ts:50</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>gltf: <span class="tsd-signature-type">GLTF</span></h5>
+								</li>
+								<li>
+									<h5>schemaSecondaryAnimation: <a href="../interfaces/vrmschema.secondaryanimation.html" class="tsd-signature-type">SecondaryAnimation</a></h5>
+								</li>
+								<li>
+									<h5>colliderGroups: <a href="../interfaces/vrmspringbonecollidergroup.html" class="tsd-signature-type">VRMSpringBoneColliderGroup</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#vrmspringbonegroup" class="tsd-signature-type">VRMSpringBoneGroup</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+					<a name="import" class="tsd-anchor"></a>
+					<h3>import</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">import<span class="tsd-signature-symbol">(</span>gltf<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GLTF</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="vrmspringbonemanagerdebug.html" class="tsd-signature-type">VRMSpringBoneManagerDebug</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Overrides <a href="vrmspringboneimporter.html">VRMSpringBoneImporter</a>.<a href="vrmspringboneimporter.html#import">import</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/debug/VRMSpringBoneImporterDebug.ts#L9">src/vrm/debug/VRMSpringBoneImporterDebug.ts:9</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>gltf: <span class="tsd-signature-type">GLTF</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="vrmspringbonemanagerdebug.html" class="tsd-signature-type">VRMSpringBoneManagerDebug</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -214,13 +285,19 @@
 					<li class="current tsd-kind-class">
 						<a href="vrmspringboneimporterdebug.html" class="tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Importer<wbr>Debug</a>
 						<ul>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
-								<a href="vrmspringboneimporterdebug.html#_iscolidermeshvisible" class="tsd-kind-icon">_is<wbr>Colider<wbr>Mesh<wbr>Visible</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+								<a href="vrmspringboneimporterdebug.html#_createcollidermesh" class="tsd-kind-icon">_create<wbr>Collider<wbr>Mesh</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
 								<a href="vrmspringboneimporterdebug.html#_createspringbone" class="tsd-kind-icon">_create<wbr>Spring<wbr>Bone</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+								<a href="vrmspringboneimporterdebug.html#_importcollidermeshgroups" class="tsd-kind-icon">_import<wbr>Collider<wbr>Mesh<wbr>Groups</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+								<a href="vrmspringboneimporterdebug.html#_importspringbonegrouplist" class="tsd-kind-icon">_import<wbr>Spring<wbr>Bone<wbr>Group<wbr>List</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="vrmspringboneimporterdebug.html#import" class="tsd-kind-icon">import</a>
 							</li>
 						</ul>
@@ -244,6 +321,7 @@
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
 				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
@@ -292,7 +370,7 @@
 	</div>
 </footer>
 <div class="container tsd-generator">
-	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
 </div>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>

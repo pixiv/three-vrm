@@ -86,12 +86,12 @@
 						<section class="tsd-index-section ">
 							<h3>Classes</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-class"><a href="classes/curvemapper.html" class="tsd-kind-icon">Curve<wbr>Mapper</a></li>
 								<li class="tsd-kind-class"><a href="classes/mtoonmaterial.html" class="tsd-kind-icon">MToon<wbr>Material</a></li>
 								<li class="tsd-kind-class"><a href="classes/vrm.html" class="tsd-kind-icon">VRM</a></li>
 								<li class="tsd-kind-class"><a href="classes/vrmblendshapegroup.html" class="tsd-kind-icon">VRMBlend<wbr>Shape<wbr>Group</a></li>
 								<li class="tsd-kind-class"><a href="classes/vrmblendshapeimporter.html" class="tsd-kind-icon">VRMBlend<wbr>Shape<wbr>Importer</a></li>
 								<li class="tsd-kind-class"><a href="classes/vrmblendshapeproxy.html" class="tsd-kind-icon">VRMBlend<wbr>Shape<wbr>Proxy</a></li>
+								<li class="tsd-kind-class"><a href="classes/vrmcurvemapper.html" class="tsd-kind-icon">VRMCurve<wbr>Mapper</a></li>
 								<li class="tsd-kind-class"><a href="classes/vrmdebug.html" class="tsd-kind-icon">VRMDebug</a></li>
 								<li class="tsd-kind-class"><a href="classes/vrmfirstperson.html" class="tsd-kind-icon">VRMFirst<wbr>Person</a></li>
 								<li class="tsd-kind-class"><a href="classes/vrmfirstpersonimporter.html" class="tsd-kind-icon">VRMFirst<wbr>Person<wbr>Importer</a></li>
@@ -114,7 +114,9 @@
 								<li class="tsd-kind-class"><a href="classes/vrmspringboneimporter.html" class="tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Importer</a></li>
 								<li class="tsd-kind-class"><a href="classes/vrmspringboneimporterdebug.html" class="tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Importer<wbr>Debug</a></li>
 								<li class="tsd-kind-class"><a href="classes/vrmspringbonemanager.html" class="tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Manager</a></li>
+								<li class="tsd-kind-class"><a href="classes/vrmspringbonemanagerdebug.html" class="tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Manager<wbr>Debug</a></li>
 								<li class="tsd-kind-class"><a href="classes/vrmunlitmaterial.html" class="tsd-kind-icon">VRMUnlit<wbr>Material</a></li>
+								<li class="tsd-kind-class"><a href="classes/vrmutils.html" class="tsd-kind-icon">VRMUtils</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -147,12 +149,13 @@
 								<li class="tsd-kind-type-alias"><a href="globals.html#vrmhumanbones" class="tsd-kind-icon">VRMHuman<wbr>Bones</a></li>
 								<li class="tsd-kind-type-alias"><a href="globals.html#vrmspringbonecollidermesh" class="tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Collider<wbr>Mesh</a></li>
 								<li class="tsd-kind-type-alias"><a href="globals.html#vrmspringbonegroup" class="tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Group</a></li>
+								<li class="tsd-kind-type-alias"><a href="globals.html#vrmspringbonegroupdebug" class="tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Group<wbr>Debug</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Variables</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-variable"><a href="globals.html#gizmo_render_order" class="tsd-kind-icon">GIZMO_<wbr>RENDER_<wbr>ORDER</a></li>
+								<li class="tsd-kind-variable"><a href="globals.html#vrm_gizmo_render_order" class="tsd-kind-icon">VRM_<wbr>GIZMO_<wbr>RENDER_<wbr>ORDER</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -165,7 +168,7 @@
 								<li class="tsd-kind-function"><a href="globals.html#getworldquaternionlite" class="tsd-kind-icon">get<wbr>World<wbr>Quaternion<wbr>Lite</a></li>
 								<li class="tsd-kind-function"><a href="globals.html#getworldscalelite" class="tsd-kind-icon">get<wbr>World<wbr>Scale<wbr>Lite</a></li>
 								<li class="tsd-kind-function"><a href="globals.html#linstep" class="tsd-kind-icon">linstep</a></li>
-								<li class="tsd-kind-function"><a href="globals.html#reducebones" class="tsd-kind-icon">reduce<wbr>Bones</a></li>
+								<li class="tsd-kind-function"><a href="globals.html#removeunnecessaryjoints" class="tsd-kind-icon">remove<wbr>Unnecessary<wbr>Joints</a></li>
 								<li class="tsd-kind-function"><a href="globals.html#renamematerialproperty" class="tsd-kind-icon">rename<wbr>Material<wbr>Property</a></li>
 								<li class="tsd-kind-function"><a href="globals.html#saturate" class="tsd-kind-icon">saturate</a></li>
 							</ul>
@@ -181,7 +184,7 @@
 					<div class="tsd-signature tsd-kind-icon">GLTFMesh<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Group</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Mesh</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">SkinnedMesh</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/2f3a3f0/src/vrm/types/types.ts#L22">vrm/types/types.ts:22</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/types/types.ts#L22">src/vrm/types/types.ts:22</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -197,7 +200,7 @@
 					<div class="tsd-signature tsd-kind-icon">GLTFNode<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Object3D</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/2f3a3f0/src/vrm/types/types.ts#L8">vrm/types/types.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/types/types.ts#L8">src/vrm/types/types.ts:8</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -213,7 +216,7 @@
 					<div class="tsd-signature tsd-kind-icon">GLTFPrimitive<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Mesh</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">SkinnedMesh</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/2f3a3f0/src/vrm/types/types.ts#L15">vrm/types/types.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/types/types.ts#L15">src/vrm/types/types.ts:15</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -229,7 +232,7 @@
 					<div class="tsd-signature tsd-kind-icon">Raw<wbr>Vector3<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/2f3a3f0/src/vrm/types/types.ts#L67">vrm/types/types.ts:67</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/types/types.ts#L67">src/vrm/types/types.ts:67</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -244,7 +247,7 @@
 					<div class="tsd-signature tsd-kind-icon">Raw<wbr>Vector4<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/2f3a3f0/src/vrm/types/types.ts#L72">vrm/types/types.ts:72</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/types/types.ts#L72">src/vrm/types/types.ts:72</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -259,7 +262,7 @@
 					<div class="tsd-signature tsd-kind-icon">VRMHuman<wbr>Bone<wbr>Array<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/2f3a3f0/src/vrm/humanoid/VRMHumanBoneArray.ts#L7">vrm/humanoid/VRMHumanBoneArray.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/humanoid/VRMHumanBoneArray.ts#L7">src/vrm/humanoid/VRMHumanBoneArray.ts:7</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -274,7 +277,7 @@
 					<div class="tsd-signature tsd-kind-icon">VRMHuman<wbr>Bones<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/2f3a3f0/src/vrm/humanoid/VRMHumanBones.ts#L7">vrm/humanoid/VRMHumanBones.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/humanoid/VRMHumanBones.ts#L7">src/vrm/humanoid/VRMHumanBones.ts:7</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -294,7 +297,7 @@
 					<div class="tsd-signature tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Collider<wbr>Mesh<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Mesh</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/2f3a3f0/src/vrm/springbone/VRMSpringBoneColliderGroup.ts#L11">vrm/springbone/VRMSpringBoneColliderGroup.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/springbone/VRMSpringBoneColliderGroup.ts#L11">src/vrm/springbone/VRMSpringBoneColliderGroup.ts:11</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -310,7 +313,22 @@
 					<div class="tsd-signature tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Group<span class="tsd-signature-symbol">:</span> <a href="classes/vrmspringbone.html" class="tsd-signature-type">VRMSpringBone</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/2f3a3f0/src/vrm/springbone/VRMSpringBoneManager.ts#L6">vrm/springbone/VRMSpringBoneManager.ts:6</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/springbone/VRMSpringBoneManager.ts#L7">src/vrm/springbone/VRMSpringBoneManager.ts:7</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Represents a single spring bone group of a VRM.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias">
+					<a name="vrmspringbonegroupdebug" class="tsd-anchor"></a>
+					<h3>VRMSpring<wbr>Bone<wbr>Group<wbr>Debug</h3>
+					<div class="tsd-signature tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Group<wbr>Debug<span class="tsd-signature-symbol">:</span> <a href="classes/vrmspringbonedebug.html" class="tsd-signature-type">VRMSpringBoneDebug</a><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/debug/VRMSpringBoneManagerDebug.ts#L17">src/vrm/debug/VRMSpringBoneManagerDebug.ts:17</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -323,12 +341,12 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Variables</h2>
 				<section class="tsd-panel tsd-member tsd-kind-variable">
-					<a name="gizmo_render_order" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> GIZMO_<wbr>RENDER_<wbr>ORDER</h3>
-					<div class="tsd-signature tsd-kind-icon">GIZMO_<wbr>RENDER_<wbr>ORDER<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">10000</span><span class="tsd-signature-symbol"> =&nbsp;10000</span></div>
+					<a name="vrm_gizmo_render_order" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> VRM_<wbr>GIZMO_<wbr>RENDER_<wbr>ORDER</h3>
+					<div class="tsd-signature tsd-kind-icon">VRM_<wbr>GIZMO_<wbr>RENDER_<wbr>ORDER<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">10000</span><span class="tsd-signature-symbol"> =&nbsp;10000</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/2f3a3f0/src/vrm/springbone/VRMSpringBone.ts#L7">vrm/springbone/VRMSpringBone.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/debug/VRMDebug.ts#L8">src/vrm/debug/VRMDebug.ts:8</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -345,7 +363,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/2f3a3f0/src/vrm/utils/disposer.ts#L27">vrm/utils/disposer.ts:27</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/utils/disposer.ts#L33">src/vrm/utils/disposer.ts:33</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -368,7 +386,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/2f3a3f0/src/vrm/material/getTexelDecodingFunction.ts#L3">vrm/material/getTexelDecodingFunction.ts:3</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/material/getTexelDecodingFunction.ts#L3">src/vrm/material/getTexelDecodingFunction.ts:3</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -391,7 +409,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/2f3a3f0/src/vrm/material/getTexelDecodingFunction.ts#L24">vrm/material/getTexelDecodingFunction.ts:24</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/material/getTexelDecodingFunction.ts#L24">src/vrm/material/getTexelDecodingFunction.ts:24</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -417,7 +435,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/2f3a3f0/src/vrm/utils/math.ts#L40">vrm/utils/math.ts:40</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/utils/math.ts#L40">src/vrm/utils/math.ts:40</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -454,7 +472,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/2f3a3f0/src/vrm/utils/math.ts#L62">vrm/utils/math.ts:62</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/utils/math.ts#L62">src/vrm/utils/math.ts:62</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -491,7 +509,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/2f3a3f0/src/vrm/utils/math.ts#L51">vrm/utils/math.ts:51</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/utils/math.ts#L51">src/vrm/utils/math.ts:51</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -528,7 +546,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/2f3a3f0/src/vrm/utils/math.ts#L23">vrm/utils/math.ts:23</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/utils/math.ts#L23">src/vrm/utils/math.ts:23</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -565,22 +583,32 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function">
-					<a name="reducebones" class="tsd-anchor"></a>
-					<h3>reduce<wbr>Bones</h3>
+					<a name="removeunnecessaryjoints" class="tsd-anchor"></a>
+					<h3>remove<wbr>Unnecessary<wbr>Joints</h3>
 					<ul class="tsd-signatures tsd-kind-function">
-						<li class="tsd-signature tsd-kind-icon">reduce<wbr>Bones<span class="tsd-signature-symbol">(</span>root<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Object3D</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">remove<wbr>Unnecessary<wbr>Joints<span class="tsd-signature-symbol">(</span>root<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Object3D</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/2f3a3f0/src/vrm/reduceBones.ts#L3">vrm/reduceBones.ts:3</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/VRMUtils/removeUnnecessaryJoints.ts#L10">src/vrm/VRMUtils/removeUnnecessaryJoints.ts:10</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Traverse given object and remove unnecessarily bound joints from every <code>THREE.SkinnedMesh</code>.
+										Some environments like mobile devices have a lower limit of bones and might be unable to perform mesh skinning, this function might resolve such an issue.
+									Also this function might greatly improve the performance of mesh skinning.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>root: <span class="tsd-signature-type">Object3D</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Root object that will be traversed</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -597,7 +625,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/2f3a3f0/src/vrm/utils/renameMaterialProperty.ts#L1">vrm/utils/renameMaterialProperty.ts:1</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/utils/renameMaterialProperty.ts#L1">src/vrm/utils/renameMaterialProperty.ts:1</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -620,7 +648,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/2f3a3f0/src/vrm/utils/math.ts#L8">vrm/utils/math.ts:8</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/utils/math.ts#L8">src/vrm/utils/math.ts:8</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -678,9 +706,6 @@
 						<a href="enums/vrmunlitmaterialrendertype.html" class="tsd-kind-icon">VRMUnlit<wbr>Material<wbr>Render<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="classes/curvemapper.html" class="tsd-kind-icon">Curve<wbr>Mapper</a>
-					</li>
-					<li class=" tsd-kind-class">
 						<a href="classes/mtoonmaterial.html" class="tsd-kind-icon">MToon<wbr>Material</a>
 					</li>
 					<li class=" tsd-kind-class">
@@ -694,6 +719,9 @@
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/vrmblendshapeproxy.html" class="tsd-kind-icon">VRMBlend<wbr>Shape<wbr>Proxy</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/vrmcurvemapper.html" class="tsd-kind-icon">VRMCurve<wbr>Mapper</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/vrmdebug.html" class="tsd-kind-icon">VRMDebug</a>
@@ -762,7 +790,13 @@
 						<a href="classes/vrmspringbonemanager.html" class="tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Manager</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/vrmspringbonemanagerdebug.html" class="tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Manager<wbr>Debug</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/vrmunlitmaterial.html" class="tsd-kind-icon">VRMUnlit<wbr>Material</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/vrmutils.html" class="tsd-kind-icon">VRMUtils</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/mtoonparameters.html" class="tsd-kind-icon">MToon<wbr>Parameters</a>
@@ -830,8 +864,11 @@
 					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#vrmspringbonegroup" class="tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Group</a>
 					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#vrmspringbonegroupdebug" class="tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Group<wbr>Debug</a>
+					</li>
 					<li class=" tsd-kind-variable">
-						<a href="globals.html#gizmo_render_order" class="tsd-kind-icon">GIZMO_<wbr>RENDER_<wbr>ORDER</a>
+						<a href="globals.html#vrm_gizmo_render_order" class="tsd-kind-icon">VRM_<wbr>GIZMO_<wbr>RENDER_<wbr>ORDER</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#deepdispose" class="tsd-kind-icon">deep<wbr>Dispose</a>
@@ -855,7 +892,7 @@
 						<a href="globals.html#linstep" class="tsd-kind-icon">linstep</a>
 					</li>
 					<li class=" tsd-kind-function">
-						<a href="globals.html#reducebones" class="tsd-kind-icon">reduce<wbr>Bones</a>
+						<a href="globals.html#removeunnecessaryjoints" class="tsd-kind-icon">remove<wbr>Unnecessary<wbr>Joints</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#renamematerialproperty" class="tsd-kind-icon">rename<wbr>Material<wbr>Property</a>
@@ -880,6 +917,7 @@
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
 				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
@@ -928,7 +966,7 @@
 	</div>
 </footer>
 <div class="container tsd-generator">
-	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
 </div>
 <div class="overlay"></div>
 <script src="assets/js/main.js"></script>

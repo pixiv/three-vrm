@@ -76,6 +76,11 @@
 				<ul class="tsd-hierarchy">
 					<li>
 						<span class="target">VRMSpringBoneManager</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<a href="vrmspringbonemanagerdebug.html" class="tsd-signature-type">VRMSpringBoneManagerDebug</a>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -92,6 +97,7 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="vrmspringbonemanager.html#collidergroups" class="tsd-kind-icon">collider<wbr>Groups</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="vrmspringbonemanager.html#springbonegrouplist" class="tsd-kind-icon">spring<wbr>Bone<wbr>Group<wbr>List</a></li>
 							</ul>
 						</section>
@@ -111,13 +117,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new VRMSpring<wbr>Bone<wbr>Manager<span class="tsd-signature-symbol">(</span>springBoneGroupList<span class="tsd-signature-symbol">: </span><a href="../globals.html#vrmspringbonegroup" class="tsd-signature-type">VRMSpringBoneGroup</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="vrmspringbonemanager.html" class="tsd-signature-type">VRMSpringBoneManager</a></li>
+						<li class="tsd-signature tsd-kind-icon">new VRMSpring<wbr>Bone<wbr>Manager<span class="tsd-signature-symbol">(</span>colliderGroups<span class="tsd-signature-symbol">: </span><a href="../interfaces/vrmspringbonecollidergroup.html" class="tsd-signature-type">VRMSpringBoneColliderGroup</a><span class="tsd-signature-symbol">[]</span>, springBoneGroupList<span class="tsd-signature-symbol">: </span><a href="../globals.html#vrmspringbonegroup" class="tsd-signature-type">VRMSpringBoneGroup</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="vrmspringbonemanager.html" class="tsd-signature-type">VRMSpringBoneManager</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/2f3a3f0/src/vrm/springbone/VRMSpringBoneManager.ts#L12">vrm/springbone/VRMSpringBoneManager.ts:12</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/springbone/VRMSpringBoneManager.ts#L14">src/vrm/springbone/VRMSpringBoneManager.ts:14</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -127,6 +133,9 @@
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
+								<li>
+									<h5>colliderGroups: <a href="../interfaces/vrmspringbonecollidergroup.html" class="tsd-signature-type">VRMSpringBoneColliderGroup</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
 								<li>
 									<h5>springBoneGroupList: <a href="../globals.html#vrmspringbonegroup" class="tsd-signature-type">VRMSpringBoneGroup</a><span class="tsd-signature-symbol">[]</span></h5>
 									<div class="tsd-comment tsd-typography">
@@ -144,12 +153,22 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="collidergroups" class="tsd-anchor"></a>
+					<h3>collider<wbr>Groups</h3>
+					<div class="tsd-signature tsd-kind-icon">collider<wbr>Groups<span class="tsd-signature-symbol">:</span> <a href="../interfaces/vrmspringbonecollidergroup.html" class="tsd-signature-type">VRMSpringBoneColliderGroup</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/springbone/VRMSpringBoneManager.ts#L13">src/vrm/springbone/VRMSpringBoneManager.ts:13</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="springbonegrouplist" class="tsd-anchor"></a>
 					<h3>spring<wbr>Bone<wbr>Group<wbr>List</h3>
 					<div class="tsd-signature tsd-kind-icon">spring<wbr>Bone<wbr>Group<wbr>List<span class="tsd-signature-symbol">:</span> <a href="../globals.html#vrmspringbonegroup" class="tsd-signature-type">VRMSpringBoneGroup</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/2f3a3f0/src/vrm/springbone/VRMSpringBoneManager.ts#L12">vrm/springbone/VRMSpringBoneManager.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/springbone/VRMSpringBoneManager.ts#L14">src/vrm/springbone/VRMSpringBoneManager.ts:14</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -166,7 +185,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/2f3a3f0/src/vrm/springbone/VRMSpringBoneManager.ts#L28">vrm/springbone/VRMSpringBoneManager.ts:28</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/springbone/VRMSpringBoneManager.ts#L31">src/vrm/springbone/VRMSpringBoneManager.ts:31</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -197,7 +216,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/2f3a3f0/src/vrm/springbone/VRMSpringBoneManager.ts#L39">vrm/springbone/VRMSpringBoneManager.ts:39</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/springbone/VRMSpringBoneManager.ts#L42">src/vrm/springbone/VRMSpringBoneManager.ts:42</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -230,6 +249,9 @@
 								<a href="vrmspringbonemanager.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="vrmspringbonemanager.html#collidergroups" class="tsd-kind-icon">collider<wbr>Groups</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="vrmspringbonemanager.html#springbonegrouplist" class="tsd-kind-icon">spring<wbr>Bone<wbr>Group<wbr>List</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -259,6 +281,7 @@
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
 				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
@@ -307,7 +330,7 @@
 	</div>
 </footer>
 <div class="container tsd-generator">
-	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
 </div>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>

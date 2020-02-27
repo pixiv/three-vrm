@@ -86,7 +86,7 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="vrmmaterialimporteroptions.html#colorspacegamma" class="tsd-kind-icon">color<wbr>Space<wbr>Gamma</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="vrmmaterialimporteroptions.html#encoding" class="tsd-kind-icon">encoding</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="vrmmaterialimporteroptions.html#requestenvmap" class="tsd-kind-icon">request<wbr>Env<wbr>Map</a></li>
 							</ul>
 						</section>
@@ -96,19 +96,22 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="colorspacegamma" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> color<wbr>Space<wbr>Gamma</h3>
-					<div class="tsd-signature tsd-kind-icon">color<wbr>Space<wbr>Gamma<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
+					<a name="encoding" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> encoding</h3>
+					<div class="tsd-signature tsd-kind-icon">encoding<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">THREE.TextureEncoding</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/2f3a3f0/src/vrm/material/VRMMaterialImporter.ts#L15">vrm/material/VRMMaterialImporter.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/material/VRMMaterialImporter.ts#L21">src/vrm/material/VRMMaterialImporter.ts:21</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Whether the workflow should be linear or gamma.</p>
+							<p>Specify the encoding of input uniform colors and textures.</p>
 						</div>
-						<p>See also: <a href="https://threejs.org/docs/#api/en/renderers/WebGLRenderer.gammaOutput">https://threejs.org/docs/#api/en/renderers/WebGLRenderer.gammaOutput</a></p>
+						<p>When your <code>renderer.outputEncoding</code> is <code>THREE.LinearEncoding</code>, use <code>THREE.LinearEncoding</code>.
+						When your <code>renderer.outputEncoding</code> is <code>THREE.sRGBEncoding</code>, use <code>THREE.sRGBEncoding</code>.</p>
+						<p>The importer will use <code>THREE.LinearEncoding</code> if this option isn&#39;t specified.</p>
+						<p>See also: <a href="https://threejs.org/docs/#api/en/renderers/WebGLRenderer.outputEncoding">https://threejs.org/docs/#api/en/renderers/WebGLRenderer.outputEncoding</a></p>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
@@ -117,7 +120,7 @@
 					<div class="tsd-signature tsd-kind-icon">request<wbr>Env<wbr>Map<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/2f3a3f0/src/vrm/material/VRMMaterialImporter.ts#L21">vrm/material/VRMMaterialImporter.ts:21</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/d2d1e0bc/src/vrm/material/VRMMaterialImporter.ts#L27">src/vrm/material/VRMMaterialImporter.ts:27</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -145,7 +148,7 @@
 						<a href="vrmmaterialimporteroptions.html" class="tsd-kind-icon">VRMMaterial<wbr>Importer<wbr>Options</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="vrmmaterialimporteroptions.html#colorspacegamma" class="tsd-kind-icon">color<wbr>Space<wbr>Gamma</a>
+								<a href="vrmmaterialimporteroptions.html#encoding" class="tsd-kind-icon">encoding</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="vrmmaterialimporteroptions.html#requestenvmap" class="tsd-kind-icon">request<wbr>Env<wbr>Map</a>
@@ -171,6 +174,7 @@
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
 				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
@@ -219,7 +223,7 @@
 	</div>
 </footer>
 <div class="container tsd-generator">
-	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
 </div>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>

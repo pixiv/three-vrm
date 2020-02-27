@@ -19,9 +19,9 @@
 	</head>
 
 	<body>
-		<script src="https://unpkg.com/three@0.108.0/build/three.js"></script>
-		<script src="https://unpkg.com/three@0.108.0/examples/js/loaders/GLTFLoader.js"></script>
-		<script src="https://unpkg.com/three@0.108.0/examples/js/controls/OrbitControls.js"></script>
+		<script src="https://unpkg.com/three@0.113.0/build/three.js"></script>
+		<script src="https://unpkg.com/three@0.113.0/examples/js/loaders/GLTFLoader.js"></script>
+		<script src="https://unpkg.com/three@0.113.0/examples/js/controls/OrbitControls.js"></script>
 		<script src="../lib/three-vrm.js"></script>
 		<script>
 			// renderer
@@ -58,6 +58,9 @@
 
 				// called when the resource is loaded
 				( gltf ) => {
+
+					// calling this function greatly improves the performance
+					THREE.VRMUtils.removeUnnecessaryJoints( gltf.scene );
 
 					// generate VRM instance from gltf
 					THREE.VRM.from( gltf ).then( ( vrm ) => {
