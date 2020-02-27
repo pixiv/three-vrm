@@ -43,7 +43,7 @@ export class VRMFirstPersonImporter {
       ? new THREE.Vector3(
           schemaFirstPerson.firstPersonBoneOffset.x,
           schemaFirstPerson.firstPersonBoneOffset.y,
-          -schemaFirstPerson.firstPersonBoneOffset.z!,
+          -schemaFirstPerson.firstPersonBoneOffset.z!, // VRM 0.0 uses left-handed y-up
         )
       : new THREE.Vector3(0.0, 0.06, 0.0); // fallback, taken from UniVRM implementation
 
