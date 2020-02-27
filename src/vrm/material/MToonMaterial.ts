@@ -554,6 +554,9 @@ export class MToonMaterial extends THREE.ShaderMaterial {
         : '') +
       (this.sphereAdd !== null
         ? getTexelDecodingFunction('sphereAddTexelToLinear', this.sphereAdd.encoding) + '\n'
+        : '') +
+      (this.rimTexture !== null
+        ? getTexelDecodingFunction('rimTextureTexelToLinear', this.rimTexture.encoding) + '\n'
         : '');
 
     // == generate shader code =================================================

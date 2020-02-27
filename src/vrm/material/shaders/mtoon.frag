@@ -470,7 +470,7 @@ void main() {
   vec3 rimMix = mix(vec3(1.0), lighting + indirectLightIntensity * irradiance, rimLightingMix);
   vec3 rim = rimColor * pow( saturate( 1.0 - dot( viewDir, normal ) + rimLift ), rimFresnelPower );
   #ifdef USE_RIMTEXTURE
-    rim *= texture2D( rimTexture, uv ).rgb;
+    rim *= rimTextureTexelToLinear( texture2D( rimTexture, uv ) ).rgb;
   #endif
   col += rim;
 

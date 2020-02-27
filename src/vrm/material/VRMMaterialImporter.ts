@@ -160,7 +160,7 @@ export class VRMMaterialImporter {
       });
 
       // these textures must be sRGB Encoding, depends on current colorspace
-      ['mainTex', 'shadeTexture', 'emission', 'sphereAdd'].forEach((name) => {
+      ['mainTex', 'shadeTexture', 'emissionMap', 'sphereAdd', 'rimTexture'].forEach((name) => {
         if (params[name] !== undefined) {
           params[name].encoding = this._encoding;
         }
