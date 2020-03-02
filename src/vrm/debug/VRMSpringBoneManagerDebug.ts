@@ -17,7 +17,7 @@ const _colliderGizmoMaterial = new THREE.MeshBasicMaterial({
 export type VRMSpringBoneGroupDebug = VRMSpringBoneDebug[];
 
 export class VRMSpringBoneManagerDebug extends VRMSpringBoneManager {
-  public setupHelper(scene: THREE.Scene, debugOption: VRMDebugOptions): void {
+  public setupHelper(scene: THREE.Object3D, debugOption: VRMDebugOptions): void {
     if (debugOption.disableSpringBoneHelper) return;
 
     this.springBoneGroupList.forEach((springBoneGroup) => {
