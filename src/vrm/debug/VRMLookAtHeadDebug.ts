@@ -7,7 +7,7 @@ const _v3 = new THREE.Vector3();
 export class VRMLookAtHeadDebug extends VRMLookAtHead {
   private _faceDirectionHelper?: THREE.ArrowHelper;
 
-  public setupHelper(scene: THREE.Scene, debugOption: VRMDebugOptions): void {
+  public setupHelper(scene: THREE.Object3D, debugOption: VRMDebugOptions): void {
     if (!debugOption.disableFaceDirectionHelper) {
       this._faceDirectionHelper = new THREE.ArrowHelper(
         new THREE.Vector3(0, 0, -1),

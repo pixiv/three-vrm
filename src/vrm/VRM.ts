@@ -13,7 +13,7 @@ import { VRMImporter, VRMImporterOptions } from './VRMImporter';
  * Parameters for a [[VRM]] class.
  */
 export interface VRMParameters {
-  scene: THREE.Scene;
+  scene: THREE.Scene | THREE.Group; // COMPAT: `GLTF.scene` is going to be `THREE.Group` in r114
   humanoid?: VRMHumanoid;
   blendShapeProxy?: VRMBlendShapeProxy;
   firstPerson?: VRMFirstPerson;
@@ -55,9 +55,9 @@ export class VRM {
     return await importer.import(gltf);
   }
   /**
-   * `THREE.Scene` that contains the entire VRM.
+   * `THREE.Scene` or `THREE.Group` (depends on your three.js revision) that contains the entire VRM.
    */
-  public readonly scene: THREE.Scene;
+  public readonly scene: THREE.Scene | THREE.Group; // COMPAT: `GLTF.scene` is going to be `THREE.Group` in r114
 
   /**
    * Contains [[VRMHumanoid]] of the VRM.
@@ -155,7 +155,6 @@ export class VRM {
     const scene = this.scene;
     if (scene) {
       deepDispose(scene);
-      scene.dispose();
     }
   }
 }
