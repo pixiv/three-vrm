@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
-import { GLTFMesh, GLTFPrimitive, VRMSchema } from '../types';
+import { GLTFMesh, GLTFPrimitive, GLTFSchema, VRMSchema } from '../types';
 import { MToonMaterial, MToonMaterialOutlineWidthMode, MToonMaterialRenderMode } from './MToonMaterial';
 import { VRMUnlitMaterial, VRMUnlitMaterialRenderType } from './VRMUnlitMaterial';
 
@@ -72,10 +72,23 @@ export class VRMMaterialImporter {
 
     await Promise.all(
       meshesMap.map(async (mesh, meshIndex) => {
+        const schemaMesh: GLTFSchema.Mesh = gltf.parser.json.meshes![meshIndex];
         const primitives: GLTFPrimitive[] =
           mesh.type === 'Group' ? (mesh.children as GLTFPrimitive[]) : [mesh as GLTFPrimitive];
+
         await Promise.all(
           primitives.map(async (primitive, primitiveIndex) => {
+            const schemaPrimitive = schemaMesh.primitives[primitiveIndex];
+
+            // some glTF might have both `node.mesh` and `node.children` at once
+            // and GLTFLoader handles both mesh primitives and "children" in glTF as "children" in THREE
+            // It seems GLTFLoader handles primitives first then handles "children" in glTF (it's lucky!)
+            // so we should ignore (primitives.length)th and following children of `mesh.children`
+            // TODO: sanitize this after GLTFLoader plugin system gets introduced : https://github.com/mrdoob/three.js/pull/18421
+            if (!schemaPrimitive) {
+              return;
+            }
+
             const primitiveGeometry = primitive.geometry as THREE.BufferGeometry;
             const primitiveVertices = primitiveGeometry.index
               ? primitiveGeometry.index.count
@@ -88,7 +101,7 @@ export class VRMMaterialImporter {
             }
 
             // create / push to cache (or pop from cache) vrm materials
-            const vrmMaterialIndex = gltf.parser.json.meshes![meshIndex].primitives[primitiveIndex].material!;
+            const vrmMaterialIndex = schemaPrimitive.material!;
 
             let props = materialProperties[vrmMaterialIndex];
             if (!props) {
