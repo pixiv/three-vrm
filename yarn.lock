@@ -3400,7 +3400,7 @@ lodash.unescape@4.0.1:
   resolved "https://registry.yarnpkg.com/lodash.unescape/-/lodash.unescape-4.0.1.tgz#bf2249886ce514cda112fae9218cdc065211fc9c"
   integrity sha1-vyJJiGzlFM2hEvrpIYzcBlIR/Jw=
 
-lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15:
+lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15:
   version "4.17.15"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
@@ -4497,9 +4497,9 @@ querystringify@^2.1.1:
   integrity sha512-w7fLxIRCRT7U8Qu53jQnJyPkYZIaR4n5151KMfcJlO/A9397Wxb1amJvROTK6TOnp7PfoAmg/qXiNHI+08jRfA==
 
 quicktype@^15.0.199:
-  version "15.0.207"
-  resolved "https://registry.yarnpkg.com/quicktype/-/quicktype-15.0.207.tgz#423ab687863bb858db3bb28408a7c18c67944eb8"
-  integrity sha512-HqWffbfL5D4HtkzV+Suw7xWie4RAgkmGCL8PiIwT1wOwE1t4kfzAL4EWGH3rMY+trKccQFNfYrQboGERmxJukg==
+  version "15.0.221"
+  resolved "https://registry.yarnpkg.com/quicktype/-/quicktype-15.0.221.tgz#9354b1363b670cb2b004e2f95d1bde12960ca184"
+  integrity sha512-umPUw40/Uko1v9Ojh2pIq0SURM25fznK/xRzvojD7+b0038r97XnBQvtB5nKwWnhyoScxtROumMrrn8N7P0yfg==
   dependencies:
     "@mark.probst/typescript-json-schema" "~0.32.0"
     "@mark.probst/unicode-properties" "~1.1.0"
@@ -4510,13 +4510,14 @@ quicktype@^15.0.199:
     graphql "^0.11.7"
     is-url "^1.2.4"
     js-base64 "^2.4.3"
-    lodash "^4.17.10"
+    lodash "^4.17.13"
     moment "^2.22.1"
     node-fetch "^1.7.1"
     pako "^1.0.6"
     pluralize "^7.0.0"
     stream-json "1.1.3"
     string-to-stream "^1.1.0"
+    typescript "~3.2.1"
     urijs "^1.19.1"
     uuid "^3.2.1"
     wordwrap "^1.0.0"
