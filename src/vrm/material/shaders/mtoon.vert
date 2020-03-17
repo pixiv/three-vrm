@@ -46,6 +46,10 @@ void main() {
   #include <morphnormal_vertex>
   #include <skinbase_vertex>
   #include <skinnormal_vertex>
+
+  // we need this to compute the outline properly
+  objectNormal = normalize( objectNormal );
+
   #include <defaultnormal_vertex>
 
   #ifndef FLAT_SHADED // Normal computed with derivatives when FLAT_SHADED
@@ -71,13 +75,13 @@ void main() {
     #endif
 
     #ifdef OUTLINE_WIDTH_WORLD
-      float worldNormalLength = length( normalMatrix * normalize( objectNormal ) );
-      vec3 outlineOffset = 0.01 * outlineWidth * outlineTex * worldNormalLength * normalize( objectNormal );
+      float worldNormalLength = length( transformedNormal );
+      vec3 outlineOffset = 0.01 * outlineWidth * outlineTex * worldNormalLength * objectNormal;
       gl_Position = projectionMatrix * modelViewMatrix * vec4( outlineOffset + transformed, 1.0 );
     #endif
 
     #ifdef OUTLINE_WIDTH_SCREEN
-      vec3 clipNormal = ( projectionMatrix * modelViewMatrix * vec4( normalize( objectNormal ), 0.0 ) ).xyz;
+      vec3 clipNormal = ( projectionMatrix * modelViewMatrix * vec4( objectNormal, 0.0 ) ).xyz;
       vec2 projectedNormal = normalize( clipNormal.xy );
       projectedNormal *= min( gl_Position.w, outlineScaledMaxDistance );
       projectedNormal.x *= projectionMatrix[ 0 ].x / projectionMatrix[ 1 ].y;
