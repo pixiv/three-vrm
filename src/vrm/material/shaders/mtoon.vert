@@ -71,8 +71,9 @@ void main() {
     #endif
 
     #ifdef OUTLINE_WIDTH_WORLD
-      vec3 outlineOffset = 0.01 * outlineWidth * outlineTex * normalize( objectNormal );
-      gl_Position += projectionMatrix * modelViewMatrix * vec4( outlineOffset, 0.0 );
+      float worldNormalLength = length( transformedNormal );
+      vec3 outlineOffset = 0.01 * outlineWidth * outlineTex * worldNormalLength * normalize( objectNormal );
+      gl_Position = projectionMatrix * modelViewMatrix * vec4( outlineOffset + transformed, 1.0 );
     #endif
 
     #ifdef OUTLINE_WIDTH_SCREEN
