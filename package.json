@@ -71,7 +71,7 @@
     "ts-loader": "^6.1.0",
     "ts-node": "^8.4.1",
     "typedoc": "^0.15.0",
-    "typescript": "^3.1.6",
+    "typescript": "^3.8.3",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
     "webpack-dev-server": "^3.2.1",
