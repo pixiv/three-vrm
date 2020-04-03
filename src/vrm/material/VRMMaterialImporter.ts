@@ -317,16 +317,17 @@ export class VRMMaterialImporter {
         let newName = this._renameMaterialProperty(name);
 
         // if this is textureST (same name as texture name itself), add '_ST'
-        // this is my most favorite MToon feature tbh
         const isTextureST = [
           '_MainTex',
           '_ShadeTexture',
           '_BumpMap',
           '_ReceiveShadowTexture',
           '_ShadingGradeTexture',
+          '_RimTexture',
           '_SphereAdd',
           '_EmissionMap',
           '_OutlineWidthTexture',
+          '_UvAnimMaskTexture',
         ].some((textureName) => name === textureName);
         if (isTextureST) {
           newName += '_ST';

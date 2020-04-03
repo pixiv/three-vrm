@@ -210,9 +210,11 @@ export class MToonMaterial extends THREE.ShaderMaterial {
       'bumpMap_ST',
       'receiveShadowTexture_ST',
       'shadingGradeTexture_ST',
+      'rimTexture_ST',
       'sphereAdd_ST',
       'emissionMap_ST',
       'outlineWidthTexture_ST',
+      'uvAnimMaskTexture_ST',
       'srcBlend',
       'dstBlend',
     ].forEach((key) => {
