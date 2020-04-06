@@ -63,7 +63,7 @@
     "gh-pages": "^2.1.1",
     "husky": "^3.0.5",
     "lint-staged": "10.0.8",
-    "prettier": "^1.18.2",
+    "prettier": "^2.0.3",
     "quicktype": "^15.0.199",
     "raw-loader": "^3.1.0",
     "rimraf": "^3.0.0",
