@@ -168,7 +168,9 @@ float getLightIntensity(
   lightIntensity = lightIntensity * shadow;
   lightIntensity = lightIntensity * shadingGrade;
   lightIntensity = lightIntensity * 2.0 - 1.0;
-  return smoothstep( shadeShift, shadeShift + ( 1.0 - shadeToony ), lightIntensity );
+  return shadeToony == 1.0
+    ? step( shadeShift, lightIntensity )
+    : smoothstep( shadeShift, shadeShift + ( 1.0 - shadeToony ), lightIntensity );
 }
 
 vec3 getLighting( const in vec3 lightColor ) {
