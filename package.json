@@ -5,12 +5,20 @@
   "license": "MIT",
   "author": "pixiv",
   "files": [
-    "lib",
-    "types",
+    "/lib/",
+    "/ts*/",
+    "/types/",
     "LICENSE"
   ],
   "main": "lib/three-vrm.module.js",
   "types": "types/index.d.ts",
+  "typesVersions": {
+    "<3.8": {
+      "*": [
+        "ts3.4/*"
+      ]
+    }
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/pixiv/three-vrm.git"
@@ -20,11 +28,11 @@
     "postpublish": "yarn gh-pages",
     "all": "yarn lint && yarn clean && yarn build && yarn docs",
     "dev": "webpack-dev-server --mode development",
-    "clean": "rimraf docs lib types",
+    "clean": "rimraf docs lib ts*/ types",
     "build": "yarn build-dev && yarn build-prod && yarn build-types",
     "build-dev": "webpack --mode development",
     "build-prod": "webpack --mode production",
-    "build-types": "tsc --emitDeclarationOnly",
+    "build-types": "tsc --emitDeclarationOnly && downlevel-dts types ts3.4/types",
     "docs": "typedoc --out docs --mode file --excludeNotExported",
     "gh-pages": "node ./bin/gh-pages.js",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
@@ -56,6 +64,7 @@
     "@types/webpack-merge": "^4.1.5",
     "@typescript-eslint/eslint-plugin": "^2.1.0",
     "@typescript-eslint/parser": "^2.1.0",
+    "downlevel-dts": "^0.4.0",
     "eslint": "^6.3.0",
     "eslint-config-prettier": "^6.2.0",
     "eslint-plugin-prettier": "^3.1.0",
