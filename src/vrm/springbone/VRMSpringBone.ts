@@ -282,7 +282,7 @@ export class VRMSpringBone {
   private _collision(tail: THREE.Vector3): void {
     this.colliders.forEach((collider) => {
       const colliderWorldPosition = _v3A.setFromMatrixPosition(collider.matrixWorld);
-      const colliderRadius = collider.geometry.boundingSphere!.radius;
+      const colliderRadius = collider.geometry.boundingSphere!.radius; // the bounding sphere is guaranteed to be exist by VRMSpringBoneImporter._createColliderMesh
       const r = this.radius + colliderRadius;
 
       if (tail.distanceToSquared(colliderWorldPosition) <= r * r) {
