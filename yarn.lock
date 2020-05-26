@@ -5531,10 +5531,10 @@ text-table@^0.2.0:
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
 
-three@^0.114.0:
-  version "0.114.0"
-  resolved "https://registry.yarnpkg.com/three/-/three-0.114.0.tgz#754d08467a950ddeef06a0c645a1302b130e455a"
-  integrity sha512-3av45FxJeqYm7Rl02dfGBoqTaf2a934oUB4zMNrN8xjmASoSGeeykYoAr35+UntTdJDY/STw6CY3KuXFBWETig==
+three@^0.116.0:
+  version "0.116.1"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.116.1.tgz#a393f7a81fdc3e2fbf57ded5ba47dc5bd3678ce0"
+  integrity sha512-l2JCMiA/lVZAuSrLWRYMalvpR+0j8hbIhCpfs4V6JFnw2+JQEQJ5HltNpfFr+9TDpQts1BhtcISehWf/xBGPvQ==
 
 through2@^2.0.0, through2@~2.0.3:
   version "2.0.5"
