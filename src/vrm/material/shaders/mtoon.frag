@@ -224,7 +224,7 @@ vec3 calcDirectDiffuse(
   #if ( NUM_POINT_LIGHTS > 0 )
     PointLight pointLight;
 
-    #pragma unroll_loop
+    #pragma unroll_loop_start
     for ( int i = 0; i < NUM_POINT_LIGHTS; i ++ ) {
       pointLight = pointLights[ i ];
       getPointDirectLightIrradiance( pointLight, geometry, directLight );
@@ -240,12 +240,13 @@ vec3 calcDirectDiffuse(
       reflectedLight.directDiffuse += getDiffuse( lit, shade, lightIntensity, lighting );
       lightingSum += lighting;
     }
+    #pragma unroll_loop_end
   #endif
 
   #if ( NUM_SPOT_LIGHTS > 0 )
     SpotLight spotLight;
 
-    #pragma unroll_loop
+    #pragma unroll_loop_start
     for ( int i = 0; i < NUM_SPOT_LIGHTS; i ++ ) {
       spotLight = spotLights[ i ];
       getSpotDirectLightIrradiance( spotLight, geometry, directLight );
@@ -261,12 +262,13 @@ vec3 calcDirectDiffuse(
       reflectedLight.directDiffuse += getDiffuse( lit, shade, lightIntensity, lighting );
       lightingSum += lighting;
     }
+    #pragma unroll_loop_end
   #endif
 
   #if ( NUM_DIR_LIGHTS > 0 )
     DirectionalLight directionalLight;
 
-    #pragma unroll_loop
+    #pragma unroll_loop_start
     for ( int i = 0; i < NUM_DIR_LIGHTS; i ++ ) {
       directionalLight = directionalLights[ i ];
       getDirectionalDirectLightIrradiance( directionalLight, geometry, directLight );
@@ -282,6 +284,7 @@ vec3 calcDirectDiffuse(
       reflectedLight.directDiffuse += getDiffuse( lit, shade, lightIntensity, lighting );
       lightingSum += lighting;
     }
+    #pragma unroll_loop_end
   #endif
 
   return lightingSum;
@@ -429,10 +432,11 @@ void main() {
 
   vec3 irradiance = getAmbientLightIrradiance( ambientLightColor );
   #if ( NUM_HEMI_LIGHTS > 0 )
-    #pragma unroll_loop
+    #pragma unroll_loop_start
     for ( int i = 0; i < NUM_HEMI_LIGHTS; i ++ ) {
       irradiance += getHemisphereLightIrradiance( hemisphereLights[ i ], geometry );
     }
+    #pragma unroll_loop_end
   #endif
 
   // #include <lights_fragment_maps>
