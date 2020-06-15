@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>three-vrm-constraints example - position.html</title>
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+		/>
+		<style>
+			body {
+				margin: 0;
+			}
+			canvas {
+				display: block;
+			}
+		</style>
+	</head>
+
+	<body>
+		<script src="https://unpkg.com/three@0.117.1/build/three.js"></script>
+		<script src="https://unpkg.com/three@0.117.1/examples/js/controls/OrbitControls.js"></script>
+		<script src="../lib/three-vrm-constraints.js"></script>
+		<script>
+			// renderer
+			const renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			renderer.setPixelRatio( window.devicePixelRatio );
+			document.body.appendChild( renderer.domElement );
+
+			// camera
+			const camera = new THREE.PerspectiveCamera( 30.0, window.innerWidth / window.innerHeight, 0.1, 20.0 );
+			camera.position.set( 0.0, 0.5, 5.0 );
+
+			// camera controls
+			const controls = new THREE.OrbitControls( camera, renderer.domElement );
+			controls.screenSpacePanning = true;
+			controls.target.set( 0.0, 0.5, 0.0 );
+			controls.update();
+
+			// scene
+			const scene = new THREE.Scene();
+
+			// light
+			const light = new THREE.DirectionalLight( 0xffffff );
+			light.position.set( 1.0, 1.0, 1.0 ).normalize();
+			scene.add( light );
+
+			// objects
+			const geometry = new THREE.BoxGeometry( 0.25, 0.25, 0.25 );
+			const material = new THREE.MeshStandardMaterial( { color: 0xbbbbbb } );
+
+			const cubeA = new THREE.Mesh( geometry, material );
+			scene.add( cubeA );
+
+			const cubeB = new THREE.Mesh( geometry, material );
+			cubeB.position.set( 0.5, 0.5, 0.5 );
+			scene.add( cubeB );
+
+			const cubeC = new THREE.Mesh( geometry, material );
+			cubeC.position.set( 1.0, 1.0, 1.0 );
+			scene.add( cubeC );
+
+			// helpers
+			const gridHelper = new THREE.GridHelper( 10, 10 );
+			scene.add( gridHelper );
+
+			const axesHelper = new THREE.AxesHelper( 5 );
+			scene.add( axesHelper );
+
+			// constraints
+			const constraintManager = new THREE_VRM_CONSTRAINTS.VRMConstraintManager({
+				autoRemoveCircularDependency: true
+			});
+
+			const constraintAB = new THREE_VRM_CONSTRAINTS.VRMPositionConstraint(cubeB);
+			constraintAB.addSource({ object: cubeA, weight: 0.5 });
+			constraintAB.setInitState();
+			constraintManager.addConstraint(constraintAB);
+
+			const constraintBC = new THREE_VRM_CONSTRAINTS.VRMPositionConstraint(cubeC);
+			constraintBC.addSource({ object: cubeB, weight: 0.5 });
+			constraintBC.setInitState();
+			constraintManager.addConstraint(constraintBC);
+
+			// animate
+			const clock = new THREE.Clock();
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				const deltaTime = clock.getDelta();
+
+				cubeA.position.x = Math.sin( Math.PI * clock.elapsedTime );
+
+				constraintManager.update();
+
+				renderer.render( scene, camera );
+
+			}
+
+			animate();
+		</script>
+	</body>
+</html>
