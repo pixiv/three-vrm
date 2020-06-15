@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "es5", // will be overwritten in rollup config
+    "module": "es6",
+    "strict": true,
+    "moduleResolution": "node",
+    "downlevelIteration": true,
+    "lib": [ "es2020", "dom" ],
+    "rootDir": "./src"
+  },
+  "include": [ "src" ],
+  "exclude": [ "node_modules" ]
+}
