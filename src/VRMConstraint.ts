@@ -2,6 +2,8 @@ import type * as THREE from 'three';
 import type { VRMConstraintSource } from './VRMConstraintSource';
 
 export abstract class VRMConstraint {
+  public weight = 1.0;
+
   protected _object: THREE.Object3D;
   public get object(): THREE.Object3D {
     return this._object;
