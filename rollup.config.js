@@ -1,7 +1,6 @@
 /* eslint-env node */
 
 import banner from 'rollup-plugin-banner';
-import livereload from 'rollup-plugin-livereload';
 import packageJson from './package.json';
 import serve from 'rollup-plugin-serve';
 import { terser } from 'rollup-plugin-terser';
@@ -56,7 +55,7 @@ export default {
   plugins: [
     typescript(tsOptions),
     ...(DEV ? [] : [terser()]),
-    ...(SERVE ? [serve(serveOptions), livereload('')] : []),
+    ...(SERVE ? [serve(serveOptions)] : []),
     ...(DEV ? [] : [banner(bannerTextProd)]),
   ],
 };
