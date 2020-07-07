@@ -13,20 +13,8 @@ const _quatGetRotation = new THREE.Quaternion();
 export class VRMAimConstraint extends VRMConstraint {
   public aimVector = new THREE.Vector3(0.0, 0.0, 1.0);
   public upVector = new THREE.Vector3(0.0, 1.0, 0.0);
-  public upNode?: THREE.Object3D;
 
   private _initQuaternion = new THREE.Quaternion();
-
-  public get dependencies(): Set<THREE.Object3D> {
-    const deps = new Set<THREE.Object3D>();
-    for (const source of this._sources) {
-      deps.add(source.object);
-    }
-    if (this.upNode) {
-      deps.add(this.upNode);
-    }
-    return deps;
-  }
 
   public setInitState(): void {
     this._initQuaternion.copy(this._object.quaternion);
@@ -49,11 +37,6 @@ export class VRMAimConstraint extends VRMConstraint {
 
   private _getAimRotation(target: THREE.Quaternion): THREE.Quaternion {
     _v3GetRotationUp.copy(this.upVector).normalize();
-    if (this.upNode) {
-      this.upNode.updateMatrixWorld();
-      _quatGetRotation.setFromRotationMatrix(this.upNode.matrixWorld);
-      _v3GetRotationUp.applyQuaternion(_quatGetRotation);
-    }
 
     this._getWeightedSum(_v3GetRotationDir);
     _v3GetRotationPos.setFromMatrixPosition(this._object.matrixWorld);

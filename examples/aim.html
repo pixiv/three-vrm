@@ -52,11 +52,9 @@
 			const material = new THREE.MeshStandardMaterial( { color: 0xbbbbbb } );
 
 			const cubeA = new THREE.Mesh( geometry, material );
-			cubeA.scale.set( 0.1, 0.5, 10.0 );
 			scene.add( cubeA );
 
 			const cubeB = new THREE.Mesh( geometry, material );
-			cubeB.position.set( 0.0, 0.5, -0.5 );
 			scene.add( cubeB );
 
 			// helpers
@@ -72,11 +70,12 @@
 			});
 
 			const constraint = new THREE_VRM_CONSTRAINTS.VRMAimConstraint(cubeA);
-			// constraint.aimVector.set( 0.0, 0.5, -0.5 ).normalize();
 			// constraint.upVector.set( 1.0, 0.0, 0.0 ).normalize();
 			constraint.addSource({ object: cubeB, weight: 1.0 });
 			constraint.setInitState();
 			constraintManager.addConstraint(constraint);
+
+			cubeB.position.set( 0.0, 0.5, -0.5 );
 
 			// animate
 			const clock = new THREE.Clock();
