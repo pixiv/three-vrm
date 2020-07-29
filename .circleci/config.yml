@@ -3,7 +3,7 @@ version: 2
 jobs:
   fetch:
     docker: &docker
-      - image: circleci/node:12.7.0
+      - image: circleci/node:14.6.0
     steps:
       - checkout
       - restore_cache:
