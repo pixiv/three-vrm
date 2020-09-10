@@ -1,3 +1,5 @@
+/* eslint-env jest */
+
 import * as THREE from 'three';
 import { quatExp, quatLog } from '../quatUtils';
 
