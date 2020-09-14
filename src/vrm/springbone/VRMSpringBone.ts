@@ -86,62 +86,62 @@ export class VRMSpringBone {
    * Length of the bone in relative space unit. Will be used for normalization in update loop.
    * It's same as local unit length unless there are scale transformation in world matrix.
    */
-  protected _relativeBoneLength: number;
+  protected _centerSpaceBoneLength: number;
 
   /**
    * Position of this bone in relative space, kind of a temporary variable.
    */
-  protected _relativePosition = new THREE.Vector3();
+  protected _centerSpacePosition = new THREE.Vector3();
 
   /**
    * This springbone will be calculated based on the space relative from this object.
    * If this is `null`, springbone will be calculated in world space.
    */
-  protected _relativeRoot: THREE.Object3D | null = null;
-  public get relativeRoot(): THREE.Object3D | null {
-    return this._relativeRoot;
+  protected _center: THREE.Object3D | null = null;
+  public get center(): THREE.Object3D | null {
+    return this._center;
   }
-  public set relativeRoot(root: THREE.Object3D | null) {
+  public set center(center: THREE.Object3D | null) {
     // convert tails to world space
-    this._getMatrixRelativeToWorld(_matA);
+    this._getMatrixCenterToWorld(_matA);
 
     this._currentTail.applyMatrix4(_matA);
     this._prevTail.applyMatrix4(_matA);
     this._nextTail.applyMatrix4(_matA);
 
     // change `matrixWorld` back to an ordinary Matrix4
-    if (this._relativeRoot) {
+    if (this._center) {
       const newMatrix = new THREE.Matrix4();
-      newMatrix.copy(this._relativeRoot.matrixWorld);
-      this._relativeRoot.matrixWorld = newMatrix;
+      newMatrix.copy(this._center.matrixWorld);
+      this._center.matrixWorld = newMatrix;
     }
 
-    // change the root
-    this._relativeRoot = root;
+    // change the center
+    this._center = center;
 
-    // HACK: replacing `matrixWorld` of relative root with a Matrix4 that has a cache of inverse (wow)
-    if (this._relativeRoot) {
+    // HACK: replacing `matrixWorld` of the center with a Matrix4 that has a cache of inverse (wow)
+    if (this._center) {
       const newMatrix = new Matrix4WithInverseCache();
-      newMatrix.copy(this._relativeRoot.matrixWorld);
-      this._relativeRoot.matrixWorld = newMatrix;
+      newMatrix.copy(this._center.matrixWorld);
+      this._center.matrixWorld = newMatrix;
     }
 
-    // convert tails to relative space
-    this._getMatrixWorldToRelative(_matA);
+    // convert tails to center space
+    this._getMatrixWorldToCenter(_matA);
 
     this._currentTail.applyMatrix4(_matA);
     this._prevTail.applyMatrix4(_matA);
     this._nextTail.applyMatrix4(_matA);
 
-    // convert relative space dependant state
+    // convert center space dependant state
     _matA.multiply(this.bone.matrixWorld); // 🔥 ??
 
-    this._relativePosition.setFromMatrixPosition(_matA);
+    this._centerSpacePosition.setFromMatrixPosition(_matA);
 
-    this._relativeBoneLength = _v3A
+    this._centerSpaceBoneLength = _v3A
       .copy(this._initialLocalChildPosition)
       .applyMatrix4(_matA)
-      .sub(this._relativePosition)
+      .sub(this._centerSpacePosition)
       .length();
   }
 
@@ -196,7 +196,7 @@ export class VRMSpringBone {
     this.dragForce = dragForce;
     this.colliders = colliders;
 
-    this._relativePosition.setFromMatrixPosition(this.bone.matrixWorld);
+    this._centerSpacePosition.setFromMatrixPosition(this.bone.matrixWorld);
 
     this._initialLocalMatrix.copy(this.bone.matrix);
     this._initialLocalRotation.copy(this.bone.quaternion);
@@ -218,10 +218,10 @@ export class VRMSpringBone {
     this._nextTail.copy(this._currentTail);
 
     this._boneAxis.copy(this._initialLocalChildPosition).normalize();
-    this._relativeBoneLength = _v3A
+    this._centerSpaceBoneLength = _v3A
       .copy(this._initialLocalChildPosition)
       .applyMatrix4(this.bone.matrixWorld)
-      .sub(this._relativePosition)
+      .sub(this._centerSpacePosition)
       .length();
   }
 
@@ -235,7 +235,7 @@ export class VRMSpringBone {
     // We need to update its matrixWorld manually, since we tweaked the bone by our hand
     this.bone.updateMatrix();
     this.bone.matrixWorld.multiplyMatrices(this._getParentMatrixWorld(), this.bone.matrix);
-    this._relativePosition.setFromMatrixPosition(this.bone.matrixWorld);
+    this._centerSpacePosition.setFromMatrixPosition(this.bone.matrixWorld);
 
     // Apply updated position to tail states
     this.bone.localToWorld(this._currentTail.copy(this._initialLocalChildPosition));
@@ -265,13 +265,13 @@ export class VRMSpringBone {
       this._parentWorldRotation.copy(IDENTITY_QUATERNION);
     }
 
-    // Get bone position in relative space
-    this._getMatrixWorldToRelative(_matA);
+    // Get bone position in center space
+    this._getMatrixWorldToCenter(_matA);
     _matA.multiply(this.bone.matrixWorld); // 🔥 ??
-    this._relativePosition.setFromMatrixPosition(_matA);
+    this._centerSpacePosition.setFromMatrixPosition(_matA);
 
-    // Get parent position in relative space
-    this._getMatrixWorldToRelative(_matB);
+    // Get parent position in center space
+    this._getMatrixWorldToCenter(_matB);
     _matB.multiply(this._getParentMatrixWorld());
 
     // several parameters
@@ -292,7 +292,7 @@ export class VRMSpringBone {
           .copy(this._boneAxis)
           .applyMatrix4(this._initialLocalMatrix)
           .applyMatrix4(_matB)
-          .sub(this._relativePosition)
+          .sub(this._centerSpacePosition)
           .normalize()
           .multiplyScalar(stiffness),
       ) // 親の回転による子ボーンの移動目標
@@ -300,10 +300,10 @@ export class VRMSpringBone {
 
     // normalize bone length
     this._nextTail
-      .sub(this._relativePosition)
+      .sub(this._centerSpacePosition)
       .normalize()
-      .multiplyScalar(this._relativeBoneLength)
-      .add(this._relativePosition);
+      .multiplyScalar(this._centerSpaceBoneLength)
+      .add(this._centerSpacePosition);
 
     // Collisionで移動
     this._collision(this._nextTail);
@@ -314,12 +314,12 @@ export class VRMSpringBone {
     // Apply rotation, convert vector3 thing into actual quaternion
     // Original UniVRM is doing world unit calculus at here but we're gonna do this on local unit
     // since Three.js is not good at world coordination stuff
-    const initialRelativeMatrixInv = _matA.getInverse(_matB.multiply(this._initialLocalMatrix));
+    const initialCenterSpaceMatrixInv = _matA.getInverse(_matB.multiply(this._initialLocalMatrix));
     const applyRotation = _quatA.setFromUnitVectors(
       this._boneAxis,
       _v3A
         .copy(this._nextTail)
-        .applyMatrix4(initialRelativeMatrixInv)
+        .applyMatrix4(initialCenterSpaceMatrixInv)
         .normalize(),
     );
 
@@ -337,36 +337,36 @@ export class VRMSpringBone {
    */
   private _collision(tail: THREE.Vector3): void {
     this.colliders.forEach((collider) => {
-      this._getMatrixWorldToRelative(_matA);
+      this._getMatrixWorldToCenter(_matA);
       _matA.multiply(collider.matrixWorld);
-      const colliderRelativePosition = _v3A.setFromMatrixPosition(_matA);
+      const colliderCenterSpacePosition = _v3A.setFromMatrixPosition(_matA);
       const colliderRadius = collider.geometry.boundingSphere!.radius; // the bounding sphere is guaranteed to be exist by VRMSpringBoneImporter._createColliderMesh
       const r = this.radius + colliderRadius;
 
-      if (tail.distanceToSquared(colliderRelativePosition) <= r * r) {
+      if (tail.distanceToSquared(colliderCenterSpacePosition) <= r * r) {
         // ヒット。Colliderの半径方向に押し出す
-        const normal = _v3B.subVectors(tail, colliderRelativePosition).normalize();
-        const posFromCollider = _v3C.addVectors(colliderRelativePosition, normal.multiplyScalar(r));
+        const normal = _v3B.subVectors(tail, colliderCenterSpacePosition).normalize();
+        const posFromCollider = _v3C.addVectors(colliderCenterSpacePosition, normal.multiplyScalar(r));
 
         // normalize bone length
         tail.copy(
           posFromCollider
-            .sub(this._relativePosition)
+            .sub(this._centerSpacePosition)
             .normalize()
-            .multiplyScalar(this._relativeBoneLength)
-            .add(this._relativePosition),
+            .multiplyScalar(this._centerSpaceBoneLength)
+            .add(this._centerSpacePosition),
         );
       }
     });
   }
 
   /**
-   * Create a matrix that converts relative space into world space.
+   * Create a matrix that converts center space into world space.
    * @param target Target matrix
    */
-  private _getMatrixRelativeToWorld(target: THREE.Matrix4): THREE.Matrix4 {
-    if (this._relativeRoot) {
-      target.copy(this._relativeRoot.matrixWorld);
+  private _getMatrixCenterToWorld(target: THREE.Matrix4): THREE.Matrix4 {
+    if (this._center) {
+      target.copy(this._center.matrixWorld);
     } else {
       target.identity();
     }
@@ -375,12 +375,12 @@ export class VRMSpringBone {
   }
 
   /**
-   * Create a matrix that converts world space into relative space.
+   * Create a matrix that converts world space into center space.
    * @param target Target matrix
    */
-  private _getMatrixWorldToRelative(target: THREE.Matrix4): THREE.Matrix4 {
-    if (this._relativeRoot) {
-      target.copy((this._relativeRoot.matrixWorld as Matrix4WithInverseCache).inverse);
+  private _getMatrixWorldToCenter(target: THREE.Matrix4): THREE.Matrix4 {
+    if (this._center) {
+      target.copy((this._center.matrixWorld as Matrix4WithInverseCache).inverse);
     } else {
       target.identity();
     }

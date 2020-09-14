@@ -28,10 +28,10 @@ export class VRMSpringBoneManager {
    * If `null` is given, springbone will be calculated in world space.
    * @param root Root object, or `null`
    */
-  public setRelativeRoot(root: THREE.Object3D | null): void {
+  public setCenter(root: THREE.Object3D | null): void {
     this.springBoneGroupList.forEach((springBoneGroup) => {
       springBoneGroup.forEach((springBone) => {
-        springBone.relativeRoot = root;
+        springBone.center = root;
       });
     });
   }
