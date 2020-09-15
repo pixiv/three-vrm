@@ -4,6 +4,7 @@ import { VRMSpringBoneImporter } from '../springbone/VRMSpringBoneImporter';
 import { VRMSpringBoneManagerDebug } from './VRMSpringBoneManagerDebug';
 import { VRMSchema } from '../types';
 import { VRMSpringBoneDebug } from './VRMSpringBoneDebug';
+import { VRMSpringBoneParameters } from '../springbone/VRMSpringBoneParameters';
 
 export class VRMSpringBoneImporterDebug extends VRMSpringBoneImporter {
   public async import(gltf: GLTF): Promise<VRMSpringBoneManagerDebug | null> {
@@ -23,16 +24,7 @@ export class VRMSpringBoneImporterDebug extends VRMSpringBoneImporter {
     return new VRMSpringBoneManagerDebug(colliderGroups, springBoneGroupList);
   }
 
-  protected _createSpringBone(
-    bone: THREE.Object3D,
-    hitRadius: number,
-    stiffiness: number,
-    gravityDir: THREE.Vector3,
-    gravityPower: number,
-    dragForce: number,
-    colliders: THREE.Mesh[] = [],
-    center?: THREE.Object3D | null, // TODO: make it sane in next breaking update
-  ): VRMSpringBoneDebug {
-    return new VRMSpringBoneDebug(bone, hitRadius, stiffiness, gravityDir, gravityPower, dragForce, colliders, center);
+  protected _createSpringBone(bone: THREE.Object3D, params: VRMSpringBoneParameters): VRMSpringBoneDebug {
+    return new VRMSpringBoneDebug(bone, params);
   }
 }

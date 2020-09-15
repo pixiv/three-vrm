@@ -1,23 +1,15 @@
 import * as THREE from 'three';
 import { VRMSpringBone } from '../springbone';
 import { VRM_GIZMO_RENDER_ORDER } from './VRMDebug';
+import { VRMSpringBoneParameters } from '../springbone/VRMSpringBoneParameters';
 
 const _v3A = new THREE.Vector3();
 
 export class VRMSpringBoneDebug extends VRMSpringBone {
   private _gizmo?: THREE.ArrowHelper;
 
-  constructor(
-    bone: THREE.Object3D,
-    radius: number,
-    stiffiness: number,
-    gravityDir: THREE.Vector3,
-    gravityPower: number,
-    dragForce: number,
-    colliders: THREE.Mesh[] = [],
-    center?: THREE.Object3D | null, // TODO: make it sane in next breaking update
-  ) {
-    super(bone, radius, stiffiness, gravityDir, gravityPower, dragForce, colliders, center);
+  constructor(bone: THREE.Object3D, params: VRMSpringBoneParameters) {
+    super(bone, params);
   }
 
   /**

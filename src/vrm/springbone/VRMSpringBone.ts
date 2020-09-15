@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { getWorldQuaternionLite } from '../utils/math';
 import { VRMSpringBoneColliderMesh } from './VRMSpringBoneColliderGroup';
 import { Matrix4WithInverseCache } from '../utils/Matrix4WithInverseCache';
+import { VRMSpringBoneParameters } from './VRMSpringBoneParameters';
 // based on
 // http://rocketjump.skr.jp/unity3d/109/
 // https://github.com/dwango/UniVRM/blob/master/Scripts/SpringBone/VRMSpringBone.cs
@@ -25,41 +26,41 @@ export class VRMSpringBone {
   /**
    * Radius of the bone, will be used for collision.
    */
-  public readonly radius: number;
+  public radius: number;
 
   /**
    * Stiffness force of the bone. Increasing the value = faster convergence (feels "harder").
    * On UniVRM, its range on GUI is between `0.0` and `4.0` .
    */
-  public readonly stiffnessForce: number;
+  public stiffnessForce: number;
 
   /**
    * Power of the gravity against this bone.
    * The "power" used in here is very far from scientific physics term...
    */
-  public readonly gravityPower: number;
+  public gravityPower: number;
 
   /**
    * Direction of the gravity against this bone.
    * Usually it should be normalized.
    */
-  public readonly gravityDir: THREE.Vector3;
+  public gravityDir: THREE.Vector3;
 
   /**
    * Drag force of the bone. Increasing the value = less oscillation (feels "heavier").
    * On UniVRM, its range on GUI is between `0.0` and `1.0` .
    */
-  public readonly dragForce: number;
+  public dragForce: number;
+
+  /**
+   * Collider groups attached to this bone.
+   */
+  public colliders: VRMSpringBoneColliderMesh[];
 
   /**
    * An Object3D attached to this bone.
    */
   public readonly bone: THREE.Object3D;
-
-  /**
-   * Collider groups attached to this bone.
-   */
-  public readonly colliders: VRMSpringBoneColliderMesh[];
 
   /**
    * Current position of child tail, in world unit. Will be used for verlet integration.
@@ -170,32 +171,20 @@ export class VRMSpringBone {
    * Create a new VRMSpringBone.
    *
    * @param bone An Object3D that will be attached to this bone
-   * @param radius Radius of the bone
-   * @param stiffness Stiffness force of the bone
-   * @param gravityDir Direction of the gravity against this bone
-   * @param gravityPower Power of the gravity against this bone
-   * @param dragForce Drag force of the bone
-   * @param colliders Colliders that will be attached to this bone
+   * @param params Several parameters related to behavior of the spring bone
    */
-  constructor(
-    bone: THREE.Object3D,
-    radius: number,
-    stiffiness: number,
-    gravityDir: THREE.Vector3,
-    gravityPower: number,
-    dragForce: number,
-    colliders: THREE.Mesh[] = [],
-    center?: THREE.Object3D | null, // TODO: make it sane in next breaking update
-  ) {
+  constructor(bone: THREE.Object3D, params: VRMSpringBoneParameters = {}) {
     this.bone = bone; // uniVRMでの parent
     this.bone.matrixAutoUpdate = false; // updateにより計算されるのでthree.js内での自動処理は不要
 
-    this.radius = radius;
-    this.stiffnessForce = stiffiness;
-    this.gravityDir = new THREE.Vector3().copy(gravityDir);
-    this.gravityPower = gravityPower;
-    this.dragForce = dragForce;
-    this.colliders = colliders;
+    this.radius = params.radius ?? 0.02;
+    this.stiffnessForce = params.stiffnessForce ?? 1.0;
+    this.gravityDir = params.gravityDir
+      ? new THREE.Vector3().copy(params.gravityDir)
+      : new THREE.Vector3().set(0.0, -1.0, 0.0);
+    this.gravityPower = params.gravityPower ?? 0.0;
+    this.dragForce = params.dragForce ?? 0.4;
+    this.colliders = params.colliders ?? [];
 
     this._centerSpacePosition.setFromMatrixPosition(this.bone.matrixWorld);
 
@@ -225,7 +214,7 @@ export class VRMSpringBone {
       .sub(this._centerSpacePosition)
       .length();
 
-    this.center = center ?? null;
+    this.center = params.center ?? null;
   }
 
   /**
