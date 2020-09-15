@@ -185,6 +185,7 @@ export class VRMSpringBone {
     gravityPower: number,
     dragForce: number,
     colliders: THREE.Mesh[] = [],
+    center?: THREE.Object3D | null, // TODO: make it sane in next breaking update
   ) {
     this.bone = bone; // uniVRMでの parent
     this.bone.matrixAutoUpdate = false; // updateにより計算されるのでthree.js内での自動処理は不要
@@ -223,6 +224,8 @@ export class VRMSpringBone {
       .applyMatrix4(this.bone.matrixWorld)
       .sub(this._centerSpacePosition)
       .length();
+
+    this.center = center ?? null;
   }
 
   /**

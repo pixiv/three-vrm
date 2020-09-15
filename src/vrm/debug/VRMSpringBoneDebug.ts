@@ -15,8 +15,9 @@ export class VRMSpringBoneDebug extends VRMSpringBone {
     gravityPower: number,
     dragForce: number,
     colliders: THREE.Mesh[] = [],
+    center?: THREE.Object3D | null, // TODO: make it sane in next breaking update
   ) {
-    super(bone, radius, stiffiness, gravityDir, gravityPower, dragForce, colliders);
+    super(bone, radius, stiffiness, gravityDir, gravityPower, dragForce, colliders, center);
   }
 
   /**
