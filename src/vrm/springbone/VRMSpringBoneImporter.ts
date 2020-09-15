@@ -43,8 +43,9 @@ export class VRMSpringBoneImporter {
     gravityPower: number,
     dragForce: number,
     colliders: THREE.Mesh[] = [],
+    center?: THREE.Object3D | null, // TODO: make it sane in next breaking update
   ): VRMSpringBone {
-    return new VRMSpringBone(bone, hitRadius, stiffiness, gravityDir, gravityPower, dragForce, colliders);
+    return new VRMSpringBone(bone, hitRadius, stiffiness, gravityDir, gravityPower, dragForce, colliders, center);
   }
 
   protected async _importSpringBoneGroupList(
@@ -94,6 +95,9 @@ export class VRMSpringBoneImporter {
             // VRMの情報から「揺れモノ」ボーンのルートが取れる
             const springRootBone: GLTFNode = await gltf.parser.getDependency('node', nodeIndex);
 
+            const center: GLTFNode =
+              vrmBoneGroup.center != null ? await gltf.parser.getDependency('node', vrmBoneGroup.center) : null;
+
             // it's weird but there might be cases we can't find the root bone
             if (!springRootBone) {
               return;
@@ -108,6 +112,7 @@ export class VRMSpringBoneImporter {
                 gravityPower,
                 dragForce,
                 colliders,
+                center,
               );
               springBoneGroup.push(springBone);
             });

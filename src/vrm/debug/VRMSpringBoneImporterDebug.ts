@@ -31,7 +31,8 @@ export class VRMSpringBoneImporterDebug extends VRMSpringBoneImporter {
     gravityPower: number,
     dragForce: number,
     colliders: THREE.Mesh[] = [],
+    center?: THREE.Object3D | null, // TODO: make it sane in next breaking update
   ): VRMSpringBoneDebug {
-    return new VRMSpringBoneDebug(bone, hitRadius, stiffiness, gravityDir, gravityPower, dragForce, colliders);
+    return new VRMSpringBoneDebug(bone, hitRadius, stiffiness, gravityDir, gravityPower, dragForce, colliders, center);
   }
 }

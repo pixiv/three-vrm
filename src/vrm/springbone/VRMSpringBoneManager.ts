@@ -24,6 +24,19 @@ export class VRMSpringBoneManager {
   }
 
   /**
+   * Set all bones be calculated based on the space relative from this object.
+   * If `null` is given, springbone will be calculated in world space.
+   * @param root Root object, or `null`
+   */
+  public setCenter(root: THREE.Object3D | null): void {
+    this.springBoneGroupList.forEach((springBoneGroup) => {
+      springBoneGroup.forEach((springBone) => {
+        springBone.center = root;
+      });
+    });
+  }
+
+  /**
    * Update every spring bone attached to this manager.
    *
    * @param delta deltaTime
