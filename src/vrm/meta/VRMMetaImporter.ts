@@ -13,8 +13,8 @@ export class VRMMetaImporter {
    */
   public ignoreTexture: boolean;
 
-  constructor(options: VRMMetaImporterOptions) {
-    this.ignoreTexture = options.ignoreTexture ?? false;
+  constructor(options?: VRMMetaImporterOptions) {
+    this.ignoreTexture = options?.ignoreTexture ?? false;
   }
 
   public async import(gltf: GLTF): Promise<VRMMeta | null> {
