@@ -156,5 +156,7 @@ export class VRM {
     if (scene) {
       deepDispose(scene);
     }
+
+    this.meta?.texture?.dispose();
   }
 }
