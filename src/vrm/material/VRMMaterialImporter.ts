@@ -56,7 +56,7 @@ export class VRMMaterialImporter {
    * @param gltf A parsed result of GLTF taken from GLTFLoader
    */
   public async convertGLTFMaterials(gltf: GLTF): Promise<THREE.Material[] | null> {
-    const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
+    const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions?.VRM;
     if (!vrmExt) {
       return null;
     }

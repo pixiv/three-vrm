@@ -8,7 +8,7 @@ import { VRMSpringBoneParameters } from '../springbone/VRMSpringBoneParameters';
 
 export class VRMSpringBoneImporterDebug extends VRMSpringBoneImporter {
   public async import(gltf: GLTF): Promise<VRMSpringBoneManagerDebug | null> {
-    const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
+    const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions?.VRM;
     if (!vrmExt) return null;
 
     const schemaSecondaryAnimation: VRMSchema.SecondaryAnimation | undefined = vrmExt.secondaryAnimation;

@@ -31,7 +31,7 @@ export class VRMLookAtImporter {
     blendShapeProxy: VRMBlendShapeProxy,
     humanoid: VRMHumanoid,
   ): VRMLookAtHead | null {
-    const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
+    const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions?.VRM;
     if (!vrmExt) {
       return null;
     }

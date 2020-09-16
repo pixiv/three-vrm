@@ -66,7 +66,7 @@ export class VRMBlendShapeProxy {
    */
   public getValue(name: VRMSchema.BlendShapePresetName | string): number | null {
     const controller = this.getBlendShapeGroup(name);
-    return (controller && controller.weight) || null;
+    return controller?.weight ?? null;
   }
 
   /**
