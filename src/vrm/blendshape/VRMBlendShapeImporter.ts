@@ -15,7 +15,7 @@ export class VRMBlendShapeImporter {
    * @param gltf A parsed result of GLTF taken from GLTFLoader
    */
   public async import(gltf: GLTF): Promise<VRMBlendShapeProxy | null> {
-    const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
+    const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions?.VRM;
     if (!vrmExt) {
       return null;
     }

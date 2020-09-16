@@ -127,7 +127,7 @@ export class VRMHumanoid {
    * @param name Name of the bone you want
    */
   public getBoneNode(name: VRMSchema.HumanoidBoneName): GLTFNode | null {
-    return (this.humanBones[name][0] && this.humanBones[name][0].node) || null;
+    return this.humanBones[name][0]?.node ?? null;
   }
 
   /**
