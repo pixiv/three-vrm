@@ -39,6 +39,9 @@ export function extractThumbnailBlob(renderer: THREE.WebGLRenderer, vrm: VRM, si
   // render
   renderer.render(_scene, _camera);
 
+  // unassign the texture
+  _plane.material.map = null;
+
   // get blob
   return new Promise((resolve, reject) => {
     (renderer.getContext().canvas as HTMLCanvasElement).toBlob((blob) => {
