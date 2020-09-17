@@ -99,6 +99,9 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="vrmspringbone.html#_boneaxis" class="tsd-kind-icon">_bone<wbr>Axis</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="vrmspringbone.html#_center" class="tsd-kind-icon">_center</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="vrmspringbone.html#_centerspacebonelength" class="tsd-kind-icon">_center<wbr>Space<wbr>Bone<wbr>Length</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="vrmspringbone.html#_centerspaceposition" class="tsd-kind-icon">_center<wbr>Space<wbr>Position</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="vrmspringbone.html#_currenttail" class="tsd-kind-icon">_current<wbr>Tail</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="vrmspringbone.html#_initiallocalchildposition" class="tsd-kind-icon">_initial<wbr>Local<wbr>Child<wbr>Position</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="vrmspringbone.html#_initiallocalmatrix" class="tsd-kind-icon">_initial<wbr>Local<wbr>Matrix</a></li>
@@ -106,8 +109,6 @@
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="vrmspringbone.html#_nexttail" class="tsd-kind-icon">_next<wbr>Tail</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="vrmspringbone.html#_parentworldrotation" class="tsd-kind-icon">_parent<wbr>World<wbr>Rotation</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="vrmspringbone.html#_prevtail" class="tsd-kind-icon">_prev<wbr>Tail</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="vrmspringbone.html#_worldbonelength" class="tsd-kind-icon">_world<wbr>Bone<wbr>Length</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="vrmspringbone.html#_worldposition" class="tsd-kind-icon">_world<wbr>Position</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="vrmspringbone.html#bone" class="tsd-kind-icon">bone</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="vrmspringbone.html#colliders" class="tsd-kind-icon">colliders</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="vrmspringbone.html#dragforce" class="tsd-kind-icon">drag<wbr>Force</a></li>
@@ -118,9 +119,17 @@
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
+							<h3>Accessors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-accessor tsd-parent-kind-class"><a href="vrmspringbone.html#center" class="tsd-kind-icon">center</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="vrmspringbone.html#_collision" class="tsd-kind-icon">_collision</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="vrmspringbone.html#_getmatrixcentertoworld" class="tsd-kind-icon">_get<wbr>Matrix<wbr>Center<wbr>ToWorld</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="vrmspringbone.html#_getmatrixworldtocenter" class="tsd-kind-icon">_get<wbr>Matrix<wbr>World<wbr>ToCenter</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="vrmspringbone.html#_getparentmatrixworld" class="tsd-kind-icon">_get<wbr>Parent<wbr>Matrix<wbr>World</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrmspringbone.html#reset" class="tsd-kind-icon">reset</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrmspringbone.html#update" class="tsd-kind-icon">update</a></li>
@@ -135,13 +144,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new VRMSpring<wbr>Bone<span class="tsd-signature-symbol">(</span>bone<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Object3D</span>, radius<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, stiffiness<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, gravityDir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Vector3</span>, gravityPower<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, dragForce<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, colliders<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Mesh</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="vrmspringbone.html" class="tsd-signature-type">VRMSpringBone</a></li>
+						<li class="tsd-signature tsd-kind-icon">new VRMSpring<wbr>Bone<span class="tsd-signature-symbol">(</span>bone<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Object3D</span>, params<span class="tsd-signature-symbol">?: </span><a href="../interfaces/vrmspringboneparameters.html" class="tsd-signature-type">VRMSpringBoneParameters</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="vrmspringbone.html" class="tsd-signature-type">VRMSpringBone</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/486649cd/src/vrm/springbone/VRMSpringBone.ts#L114">src/vrm/springbone/VRMSpringBone.ts:114</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/springbone/VRMSpringBone.ts#L168">src/vrm/springbone/VRMSpringBone.ts:168</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -160,45 +169,10 @@
 									</div>
 								</li>
 								<li>
-									<h5>radius: <span class="tsd-signature-type">number</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> params: <a href="../interfaces/vrmspringboneparameters.html" class="tsd-signature-type">VRMSpringBoneParameters</a><span class="tsd-signature-symbol"> = {}</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
-											<p>Radius of the bone</p>
-										</div>
-									</div>
-								</li>
-								<li>
-									<h5>stiffiness: <span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li>
-									<h5>gravityDir: <span class="tsd-signature-type">Vector3</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>Direction of the gravity against this bone</p>
-										</div>
-									</div>
-								</li>
-								<li>
-									<h5>gravityPower: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>Power of the gravity against this bone</p>
-										</div>
-									</div>
-								</li>
-								<li>
-									<h5>dragForce: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>Drag force of the bone</p>
-										</div>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> colliders: <span class="tsd-signature-type">Mesh</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>Colliders that will be attached to this bone</p>
+											<p>Several parameters related to behavior of the spring bone</p>
 										</div>
 									</div>
 								</li>
@@ -213,10 +187,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 					<a name="_boneaxis" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _bone<wbr>Axis</h3>
-					<div class="tsd-signature tsd-kind-icon">_bone<wbr>Axis<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Vector3</span></div>
+					<div class="tsd-signature tsd-kind-icon">_bone<wbr>Axis<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Vector3</span><span class="tsd-signature-symbol"> = new THREE.Vector3()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/486649cd/src/vrm/springbone/VRMSpringBone.ts#L82">src/vrm/springbone/VRMSpringBone.ts:82</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/springbone/VRMSpringBone.ts#L84">src/vrm/springbone/VRMSpringBone.ts:84</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -226,12 +200,59 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-					<a name="_currenttail" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _current<wbr>Tail</h3>
-					<div class="tsd-signature tsd-kind-icon">_current<wbr>Tail<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Vector3</span></div>
+					<a name="_center" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _center</h3>
+					<div class="tsd-signature tsd-kind-icon">_center<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Object3D</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> = null</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/486649cd/src/vrm/springbone/VRMSpringBone.ts#L66">src/vrm/springbone/VRMSpringBone.ts:66</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/springbone/VRMSpringBone.ts#L101">src/vrm/springbone/VRMSpringBone.ts:101</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>This springbone will be calculated based on the space relative from this object.
+							If this is <code>null</code>, springbone will be calculated in world space.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="_centerspacebonelength" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _center<wbr>Space<wbr>Bone<wbr>Length</h3>
+					<div class="tsd-signature tsd-kind-icon">_center<wbr>Space<wbr>Bone<wbr>Length<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/springbone/VRMSpringBone.ts#L90">src/vrm/springbone/VRMSpringBone.ts:90</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Length of the bone in relative space unit. Will be used for normalization in update loop.
+							It&#39;s same as local unit length unless there are scale transformation in world matrix.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="_centerspaceposition" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _center<wbr>Space<wbr>Position</h3>
+					<div class="tsd-signature tsd-kind-icon">_center<wbr>Space<wbr>Position<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Vector3</span><span class="tsd-signature-symbol"> = new THREE.Vector3()</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/springbone/VRMSpringBone.ts#L95">src/vrm/springbone/VRMSpringBone.ts:95</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Position of this bone in relative space, kind of a temporary variable.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="_currenttail" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _current<wbr>Tail</h3>
+					<div class="tsd-signature tsd-kind-icon">_current<wbr>Tail<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Vector3</span><span class="tsd-signature-symbol"> = new THREE.Vector3()</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/springbone/VRMSpringBone.ts#L68">src/vrm/springbone/VRMSpringBone.ts:68</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -243,10 +264,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="_initiallocalchildposition" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _initial<wbr>Local<wbr>Child<wbr>Position</h3>
-					<div class="tsd-signature tsd-kind-icon">_initial<wbr>Local<wbr>Child<wbr>Position<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Vector3</span></div>
+					<div class="tsd-signature tsd-kind-icon">_initial<wbr>Local<wbr>Child<wbr>Position<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Vector3</span><span class="tsd-signature-symbol"> = new THREE.Vector3()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/486649cd/src/vrm/springbone/VRMSpringBone.ts#L114">src/vrm/springbone/VRMSpringBone.ts:114</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/springbone/VRMSpringBone.ts#L168">src/vrm/springbone/VRMSpringBone.ts:168</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -258,10 +279,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="_initiallocalmatrix" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _initial<wbr>Local<wbr>Matrix</h3>
-					<div class="tsd-signature tsd-kind-icon">_initial<wbr>Local<wbr>Matrix<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Matrix4</span></div>
+					<div class="tsd-signature tsd-kind-icon">_initial<wbr>Local<wbr>Matrix<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Matrix4</span><span class="tsd-signature-symbol"> = new THREE.Matrix4()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/486649cd/src/vrm/springbone/VRMSpringBone.ts#L104">src/vrm/springbone/VRMSpringBone.ts:104</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/springbone/VRMSpringBone.ts#L158">src/vrm/springbone/VRMSpringBone.ts:158</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -273,10 +294,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="_initiallocalrotation" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _initial<wbr>Local<wbr>Rotation</h3>
-					<div class="tsd-signature tsd-kind-icon">_initial<wbr>Local<wbr>Rotation<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Quaternion</span></div>
+					<div class="tsd-signature tsd-kind-icon">_initial<wbr>Local<wbr>Rotation<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Quaternion</span><span class="tsd-signature-symbol"> = new THREE.Quaternion()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/486649cd/src/vrm/springbone/VRMSpringBone.ts#L109">src/vrm/springbone/VRMSpringBone.ts:109</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/springbone/VRMSpringBone.ts#L163">src/vrm/springbone/VRMSpringBone.ts:163</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -288,10 +309,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 					<a name="_nexttail" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _next<wbr>Tail</h3>
-					<div class="tsd-signature tsd-kind-icon">_next<wbr>Tail<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Vector3</span></div>
+					<div class="tsd-signature tsd-kind-icon">_next<wbr>Tail<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Vector3</span><span class="tsd-signature-symbol"> = new THREE.Vector3()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/486649cd/src/vrm/springbone/VRMSpringBone.ts#L77">src/vrm/springbone/VRMSpringBone.ts:77</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/springbone/VRMSpringBone.ts#L79">src/vrm/springbone/VRMSpringBone.ts:79</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -304,10 +325,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="_parentworldrotation" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _parent<wbr>World<wbr>Rotation</h3>
-					<div class="tsd-signature tsd-kind-icon">_parent<wbr>World<wbr>Rotation<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Quaternion</span></div>
+					<div class="tsd-signature tsd-kind-icon">_parent<wbr>World<wbr>Rotation<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Quaternion</span><span class="tsd-signature-symbol"> = new THREE.Quaternion()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/486649cd/src/vrm/springbone/VRMSpringBone.ts#L99">src/vrm/springbone/VRMSpringBone.ts:99</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/springbone/VRMSpringBone.ts#L153">src/vrm/springbone/VRMSpringBone.ts:153</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -320,46 +341,15 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 					<a name="_prevtail" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _prev<wbr>Tail</h3>
-					<div class="tsd-signature tsd-kind-icon">_prev<wbr>Tail<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Vector3</span></div>
+					<div class="tsd-signature tsd-kind-icon">_prev<wbr>Tail<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Vector3</span><span class="tsd-signature-symbol"> = new THREE.Vector3()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/486649cd/src/vrm/springbone/VRMSpringBone.ts#L71">src/vrm/springbone/VRMSpringBone.ts:71</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/springbone/VRMSpringBone.ts#L73">src/vrm/springbone/VRMSpringBone.ts:73</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Previous position of child tail, in world unit. Will be used for verlet integration.</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-					<a name="_worldbonelength" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _world<wbr>Bone<wbr>Length</h3>
-					<div class="tsd-signature tsd-kind-icon">_world<wbr>Bone<wbr>Length<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/486649cd/src/vrm/springbone/VRMSpringBone.ts#L88">src/vrm/springbone/VRMSpringBone.ts:88</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Length of the bone in <strong>world unit</strong>. Will be used for normalization in update loop.
-							It&#39;s same as local unit length unless there are scale transformation in world matrix.</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-					<a name="_worldposition" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _world<wbr>Position</h3>
-					<div class="tsd-signature tsd-kind-icon">_world<wbr>Position<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Vector3</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/486649cd/src/vrm/springbone/VRMSpringBone.ts#L93">src/vrm/springbone/VRMSpringBone.ts:93</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>World position of this bone, kind of temporary variable.</p>
 						</div>
 					</div>
 				</section>
@@ -369,7 +359,7 @@
 					<div class="tsd-signature tsd-kind-icon">bone<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Object3D</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/486649cd/src/vrm/springbone/VRMSpringBone.ts#L56">src/vrm/springbone/VRMSpringBone.ts:56</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/springbone/VRMSpringBone.ts#L63">src/vrm/springbone/VRMSpringBone.ts:63</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -380,11 +370,11 @@
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="colliders" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> colliders</h3>
+					<h3>colliders</h3>
 					<div class="tsd-signature tsd-kind-icon">colliders<span class="tsd-signature-symbol">:</span> <a href="../globals.html#vrmspringbonecollidermesh" class="tsd-signature-type">VRMSpringBoneColliderMesh</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/486649cd/src/vrm/springbone/VRMSpringBone.ts#L61">src/vrm/springbone/VRMSpringBone.ts:61</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/springbone/VRMSpringBone.ts#L58">src/vrm/springbone/VRMSpringBone.ts:58</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -395,11 +385,11 @@
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="dragforce" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> drag<wbr>Force</h3>
+					<h3>drag<wbr>Force</h3>
 					<div class="tsd-signature tsd-kind-icon">drag<wbr>Force<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/486649cd/src/vrm/springbone/VRMSpringBone.ts#L51">src/vrm/springbone/VRMSpringBone.ts:51</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/springbone/VRMSpringBone.ts#L53">src/vrm/springbone/VRMSpringBone.ts:53</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -411,11 +401,11 @@
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="gravitydir" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> gravity<wbr>Dir</h3>
+					<h3>gravity<wbr>Dir</h3>
 					<div class="tsd-signature tsd-kind-icon">gravity<wbr>Dir<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Vector3</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/486649cd/src/vrm/springbone/VRMSpringBone.ts#L45">src/vrm/springbone/VRMSpringBone.ts:45</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/springbone/VRMSpringBone.ts#L47">src/vrm/springbone/VRMSpringBone.ts:47</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -427,11 +417,11 @@
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="gravitypower" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> gravity<wbr>Power</h3>
+					<h3>gravity<wbr>Power</h3>
 					<div class="tsd-signature tsd-kind-icon">gravity<wbr>Power<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/486649cd/src/vrm/springbone/VRMSpringBone.ts#L39">src/vrm/springbone/VRMSpringBone.ts:39</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/springbone/VRMSpringBone.ts#L41">src/vrm/springbone/VRMSpringBone.ts:41</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -443,11 +433,11 @@
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="radius" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> radius</h3>
+					<h3>radius</h3>
 					<div class="tsd-signature tsd-kind-icon">radius<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/486649cd/src/vrm/springbone/VRMSpringBone.ts#L27">src/vrm/springbone/VRMSpringBone.ts:27</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/springbone/VRMSpringBone.ts#L29">src/vrm/springbone/VRMSpringBone.ts:29</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -458,11 +448,11 @@
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="stiffnessforce" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> stiffness<wbr>Force</h3>
+					<h3>stiffness<wbr>Force</h3>
 					<div class="tsd-signature tsd-kind-icon">stiffness<wbr>Force<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/486649cd/src/vrm/springbone/VRMSpringBone.ts#L33">src/vrm/springbone/VRMSpringBone.ts:33</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/springbone/VRMSpringBone.ts#L35">src/vrm/springbone/VRMSpringBone.ts:35</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -471,6 +461,41 @@
 							On UniVRM, its range on GUI is between <code>0.0</code> and <code>4.0</code> .</p>
 						</div>
 					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Accessors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-accessor tsd-parent-kind-class">
+					<a name="center" class="tsd-anchor"></a>
+					<h3>center</h3>
+					<ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> center<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Object3D</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> center<span class="tsd-signature-symbol">(</span>center<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Object3D</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/springbone/VRMSpringBone.ts#L102">src/vrm/springbone/VRMSpringBone.ts:102</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Object3D</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></h4>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/springbone/VRMSpringBone.ts#L105">src/vrm/springbone/VRMSpringBone.ts:105</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>center: <span class="tsd-signature-type">Object3D</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
@@ -485,7 +510,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/486649cd/src/vrm/springbone/VRMSpringBone.ts#L282">src/vrm/springbone/VRMSpringBone.ts:282</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/springbone/VRMSpringBone.ts#L330">src/vrm/springbone/VRMSpringBone.ts:330</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -507,6 +532,68 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
+					<a name="_getmatrixcentertoworld" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _get<wbr>Matrix<wbr>Center<wbr>ToWorld</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
+						<li class="tsd-signature tsd-kind-icon">_get<wbr>Matrix<wbr>Center<wbr>ToWorld<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Matrix4</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Matrix4</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/springbone/VRMSpringBone.ts#L359">src/vrm/springbone/VRMSpringBone.ts:359</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create a matrix that converts center space into world space.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>target: <span class="tsd-signature-type">Matrix4</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Target matrix</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Matrix4</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
+					<a name="_getmatrixworldtocenter" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _get<wbr>Matrix<wbr>World<wbr>ToCenter</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
+						<li class="tsd-signature tsd-kind-icon">_get<wbr>Matrix<wbr>World<wbr>ToCenter<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Matrix4</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Matrix4</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/springbone/VRMSpringBone.ts#L373">src/vrm/springbone/VRMSpringBone.ts:373</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create a matrix that converts world space into center space.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>target: <span class="tsd-signature-type">Matrix4</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Target matrix</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Matrix4</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
 					<a name="_getparentmatrixworld" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _get<wbr>Parent<wbr>Matrix<wbr>World</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
@@ -516,7 +603,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/486649cd/src/vrm/springbone/VRMSpringBone.ts#L308">src/vrm/springbone/VRMSpringBone.ts:308</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/springbone/VRMSpringBone.ts#L386">src/vrm/springbone/VRMSpringBone.ts:386</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -538,7 +625,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/486649cd/src/vrm/springbone/VRMSpringBone.ts#L181">src/vrm/springbone/VRMSpringBone.ts:181</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/springbone/VRMSpringBone.ts#L224">src/vrm/springbone/VRMSpringBone.ts:224</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -561,7 +648,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/486649cd/src/vrm/springbone/VRMSpringBone.ts#L201">src/vrm/springbone/VRMSpringBone.ts:201</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/springbone/VRMSpringBone.ts#L244">src/vrm/springbone/VRMSpringBone.ts:244</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -607,6 +694,15 @@
 								<a href="vrmspringbone.html#_boneaxis" class="tsd-kind-icon">_bone<wbr>Axis</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="vrmspringbone.html#_center" class="tsd-kind-icon">_center</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="vrmspringbone.html#_centerspacebonelength" class="tsd-kind-icon">_center<wbr>Space<wbr>Bone<wbr>Length</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="vrmspringbone.html#_centerspaceposition" class="tsd-kind-icon">_center<wbr>Space<wbr>Position</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 								<a href="vrmspringbone.html#_currenttail" class="tsd-kind-icon">_current<wbr>Tail</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
@@ -626,12 +722,6 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 								<a href="vrmspringbone.html#_prevtail" class="tsd-kind-icon">_prev<wbr>Tail</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-								<a href="vrmspringbone.html#_worldbonelength" class="tsd-kind-icon">_world<wbr>Bone<wbr>Length</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-								<a href="vrmspringbone.html#_worldposition" class="tsd-kind-icon">_world<wbr>Position</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="vrmspringbone.html#bone" class="tsd-kind-icon">bone</a>
@@ -654,8 +744,17 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="vrmspringbone.html#stiffnessforce" class="tsd-kind-icon">stiffness<wbr>Force</a>
 							</li>
+							<li class=" tsd-kind-accessor tsd-parent-kind-class">
+								<a href="vrmspringbone.html#center" class="tsd-kind-icon">center</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
 								<a href="vrmspringbone.html#_collision" class="tsd-kind-icon">_collision</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
+								<a href="vrmspringbone.html#_getmatrixcentertoworld" class="tsd-kind-icon">_get<wbr>Matrix<wbr>Center<wbr>ToWorld</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
+								<a href="vrmspringbone.html#_getmatrixworldtocenter" class="tsd-kind-icon">_get<wbr>Matrix<wbr>World<wbr>ToCenter</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
 								<a href="vrmspringbone.html#_getparentmatrixworld" class="tsd-kind-icon">_get<wbr>Parent<wbr>Matrix<wbr>World</a>
@@ -689,6 +788,7 @@
 				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>

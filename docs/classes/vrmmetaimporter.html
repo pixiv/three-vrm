@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>VRMPoseTransform | @pixiv/three-vrm</title>
+	<title>VRMMetaImporter | @pixiv/three-vrm</title>
 	<meta name="description" content="Documentation for @pixiv/three-vrm">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,10 +54,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="vrmposetransform.html">VRMPoseTransform</a>
+					<a href="vrmmetaimporter.html">VRMMetaImporter</a>
 				</li>
 			</ul>
-			<h1>Interface VRMPoseTransform</h1>
+			<h1>Class VRMMetaImporter</h1>
 		</div>
 	</div>
 </header>
@@ -67,8 +67,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Represents a transform of a single bone of <a href="vrmpose.html">VRMPose</a>.
-						Both <code>position</code> and <code>rotation</code> are optional.</p>
+						<p>An importer that imports a <a href="../interfaces/vrmmeta.html">VRMMeta</a> from a VRM extension of a GLTF.</p>
 					</div>
 				</div>
 			</section>
@@ -76,7 +75,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">VRMPoseTransform</span>
+						<span class="target">VRMMetaImporter</span>
 					</li>
 				</ul>
 			</section>
@@ -85,47 +84,94 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
+							<h3>Constructors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="vrmmetaimporter.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="vrmposetransform.html#position" class="tsd-kind-icon">position</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="vrmposetransform.html#rotation" class="tsd-kind-icon">rotation</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="vrmmetaimporter.html#ignoretexture" class="tsd-kind-icon">ignore<wbr>Texture</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrmmetaimporter.html#import" class="tsd-kind-icon">import</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
+					<a name="constructor" class="tsd-anchor"></a>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">new VRMMeta<wbr>Importer<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/vrmmetaimporteroptions.html" class="tsd-signature-type">VRMMetaImporterOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="vrmmetaimporter.html" class="tsd-signature-type">VRMMetaImporter</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/meta/VRMMetaImporter.ts#L14">src/vrm/meta/VRMMetaImporter.ts:14</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <a href="../interfaces/vrmmetaimporteroptions.html" class="tsd-signature-type">VRMMetaImporterOptions</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="vrmmetaimporter.html" class="tsd-signature-type">VRMMetaImporter</a></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="position" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> position</h3>
-					<div class="tsd-signature tsd-kind-icon">position<span class="tsd-signature-symbol">:</span> <a href="../globals.html#rawvector3" class="tsd-signature-type">RawVector3</a></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="ignoretexture" class="tsd-anchor"></a>
+					<h3>ignore<wbr>Texture</h3>
+					<div class="tsd-signature tsd-kind-icon">ignore<wbr>Texture<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/types/types.ts#L32">src/vrm/types/types.ts:32</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/meta/VRMMetaImporter.ts#L14">src/vrm/meta/VRMMetaImporter.ts:14</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Position of the transform.</p>
+							<p>If <code>true</code>, it won&#39;t load its thumbnail texture (<a href="../interfaces/vrmmeta.html#texture">VRMMeta.texture</a>). <code>false</code> by default.</p>
 						</div>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="rotation" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> rotation</h3>
-					<div class="tsd-signature tsd-kind-icon">rotation<span class="tsd-signature-symbol">:</span> <a href="../globals.html#rawvector4" class="tsd-signature-type">RawVector4</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/types/types.ts#L38">src/vrm/types/types.ts:38</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Rotation of the transform.
-							Note that it&#39;s a quaternion.</p>
-						</div>
-					</div>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="import" class="tsd-anchor"></a>
+					<h3>import</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">import<span class="tsd-signature-symbol">(</span>gltf<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GLTF</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/vrmmeta.html" class="tsd-signature-type">VRMMeta</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/54e11d46/src/vrm/meta/VRMMetaImporter.ts#L20">src/vrm/meta/VRMMetaImporter.ts:20</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>gltf: <span class="tsd-signature-type">GLTF</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/vrmmeta.html" class="tsd-signature-type">VRMMeta</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -141,14 +187,17 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface">
-						<a href="vrmposetransform.html" class="tsd-kind-icon">VRMPose<wbr>Transform</a>
+					<li class="current tsd-kind-class">
+						<a href="vrmmetaimporter.html" class="tsd-kind-icon">VRMMeta<wbr>Importer</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="vrmposetransform.html#position" class="tsd-kind-icon">position</a>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
+								<a href="vrmmetaimporter.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="vrmposetransform.html#rotation" class="tsd-kind-icon">rotation</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="vrmmetaimporter.html#ignoretexture" class="tsd-kind-icon">ignore<wbr>Texture</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="vrmmetaimporter.html#import" class="tsd-kind-icon">import</a>
 							</li>
 						</ul>
 					</li>
