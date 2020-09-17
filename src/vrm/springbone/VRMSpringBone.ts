@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { getWorldQuaternionLite } from '../utils/math';
+import { Matrix4InverseCache } from '../utils/Matrix4InverseCache';
 import { VRMSpringBoneColliderMesh } from './VRMSpringBoneColliderGroup';
-import { Matrix4WithInverseCache } from '../utils/Matrix4WithInverseCache';
 import { VRMSpringBoneParameters } from './VRMSpringBoneParameters';
 // based on
 // http://rocketjump.skr.jp/unity3d/109/
@@ -110,21 +110,20 @@ export class VRMSpringBone {
     this._prevTail.applyMatrix4(_matA);
     this._nextTail.applyMatrix4(_matA);
 
-    // change `matrixWorld` back to an ordinary Matrix4
-    if (this._center) {
-      const newMatrix = new THREE.Matrix4();
-      newMatrix.copy(this._center.matrixWorld);
-      this._center.matrixWorld = newMatrix;
+    // uninstall inverse cache
+    if (this._center?.userData.inverseCacheProxy) {
+      (this._center.userData.inverseCacheProxy as Matrix4InverseCache).revert();
+      delete this._center.userData.inverseCacheProxy;
     }
 
     // change the center
     this._center = center;
 
-    // HACK: replacing `matrixWorld` of the center with a Matrix4 that has a cache of inverse (wow)
+    // install inverse cache
     if (this._center) {
-      const newMatrix = new Matrix4WithInverseCache();
-      newMatrix.copy(this._center.matrixWorld);
-      this._center.matrixWorld = newMatrix;
+      if (!this._center.userData.inverseCacheProxy) {
+        this._center.userData.inverseCacheProxy = new Matrix4InverseCache(this._center.matrixWorld);
+      }
     }
 
     // convert tails to center space
@@ -372,7 +371,7 @@ export class VRMSpringBone {
    */
   private _getMatrixWorldToCenter(target: THREE.Matrix4): THREE.Matrix4 {
     if (this._center) {
-      target.copy((this._center.matrixWorld as Matrix4WithInverseCache).inverse);
+      target.copy((this._center.userData.inverseCacheProxy as Matrix4InverseCache).inverse);
     } else {
       target.identity();
     }
