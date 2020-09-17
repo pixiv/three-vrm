@@ -4,8 +4,8 @@ import { VRMBlendShapeProxy } from './blendshape';
 import { VRMFirstPerson } from './firstperson';
 import { VRMHumanoid } from './humanoid';
 import { VRMLookAtHead } from './lookat';
+import { VRMMeta } from './meta/VRMMeta';
 import { VRMSpringBoneManager } from './springbone';
-import { VRMSchema } from './types';
 import { deepDispose } from './utils/disposer';
 import { VRMImporter, VRMImporterOptions } from './VRMImporter';
 
@@ -20,7 +20,7 @@ export interface VRMParameters {
   lookAt?: VRMLookAtHead;
   materials?: THREE.Material[];
   springBoneManager?: VRMSpringBoneManager;
-  meta?: VRMSchema.Meta;
+  meta?: VRMMeta;
 }
 
 /**
@@ -95,7 +95,7 @@ export class VRM {
    * Contains meta fields of the VRM.
    * You might want to refer these license fields before use your VRMs.
    */
-  public readonly meta?: VRMSchema.Meta;
+  public readonly meta?: VRMMeta;
 
   /**
    * A [[VRMSpringBoneManager]] manipulates all spring bones attached on the VRM.
@@ -156,5 +156,7 @@ export class VRM {
     if (scene) {
       deepDispose(scene);
     }
+
+    this.meta?.texture?.dispose();
   }
 }

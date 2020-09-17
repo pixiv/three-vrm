@@ -19,11 +19,17 @@
 				position: absolute;
 				background: #fff;
 			}
+			#thumbnail {
+				position: absolute;
+				top: 0;
+				right: 0;
+			}
 		</style>
 	</head>
 
 	<body>
 		<span id="meta"></span>
+		<img id="thumbnail" alt="thumbnail" />
 		<script src="https://unpkg.com/three@0.118.3/build/three.js"></script>
 		<script src="https://unpkg.com/three@0.118.3/examples/js/loaders/GLTFLoader.js"></script>
 		<script src="https://unpkg.com/three@0.118.3/examples/js/controls/OrbitControls.js"></script>
@@ -78,6 +84,14 @@
 						Object.keys( vrm.meta ).forEach( ( key ) => {
 
 							document.getElementById( 'meta' ).innerText += key + ' : ' + vrm.meta[ key ] + '\n';
+
+						} );
+
+						// show thumbnail
+						THREE.VRMUtils.extractThumbnailBlob( renderer, vrm, 256 ).then( ( blob ) => {
+
+							const url = URL.createObjectURL( blob );
+							document.getElementById( 'thumbnail' ).src = url;
 
 						} );
 

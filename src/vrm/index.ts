@@ -9,3 +9,4 @@ export * from './lookat';
 export * from './springbone';
 export * from './types';
 export * from './material';
+export * from './meta';

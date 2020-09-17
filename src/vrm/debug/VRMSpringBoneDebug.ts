@@ -1,22 +1,15 @@
 import * as THREE from 'three';
 import { VRMSpringBone } from '../springbone';
 import { VRM_GIZMO_RENDER_ORDER } from './VRMDebug';
+import { VRMSpringBoneParameters } from '../springbone/VRMSpringBoneParameters';
 
 const _v3A = new THREE.Vector3();
 
 export class VRMSpringBoneDebug extends VRMSpringBone {
   private _gizmo?: THREE.ArrowHelper;
 
-  constructor(
-    bone: THREE.Object3D,
-    radius: number,
-    stiffiness: number,
-    gravityDir: THREE.Vector3,
-    gravityPower: number,
-    dragForce: number,
-    colliders: THREE.Mesh[] = [],
-  ) {
-    super(bone, radius, stiffiness, gravityDir, gravityPower, dragForce, colliders);
+  constructor(bone: THREE.Object3D, params: VRMSpringBoneParameters) {
+    super(bone, params);
   }
 
   /**
@@ -29,12 +22,12 @@ export class VRMSpringBoneDebug extends VRMSpringBone {
       return this._gizmo;
     }
 
-    const nextTailRelative = _v3A.copy(this._nextTail).sub(this._worldPosition);
+    const nextTailRelative = _v3A.copy(this._nextTail).sub(this._centerSpacePosition);
     const nextTailRelativeLength = nextTailRelative.length();
 
     this._gizmo = new THREE.ArrowHelper(
       nextTailRelative.normalize(),
-      this._worldPosition,
+      this._centerSpacePosition,
       nextTailRelativeLength,
       0xffff00,
       this.radius,
@@ -63,11 +56,11 @@ export class VRMSpringBoneDebug extends VRMSpringBone {
       return;
     }
 
-    const nextTailRelative = _v3A.copy(this._currentTail).sub(this._worldPosition);
+    const nextTailRelative = _v3A.copy(this._currentTail).sub(this._centerSpacePosition);
     const nextTailRelativeLength = nextTailRelative.length();
 
     this._gizmo.setDirection(nextTailRelative.normalize());
     this._gizmo.setLength(nextTailRelativeLength, this.radius, this.radius);
-    this._gizmo.position.copy(this._worldPosition);
+    this._gizmo.position.copy(this._centerSpacePosition);
   }
 }

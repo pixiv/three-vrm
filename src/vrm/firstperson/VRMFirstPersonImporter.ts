@@ -15,7 +15,7 @@ export class VRMFirstPersonImporter {
    * @param humanoid A [[VRMHumanoid]] instance that represents the VRM
    */
   public async import(gltf: GLTF, humanoid: VRMHumanoid): Promise<VRMFirstPerson | null> {
-    const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
+    const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions?.VRM;
     if (!vrmExt) {
       return null;
     }
@@ -53,7 +53,7 @@ export class VRMFirstPersonImporter {
       const flag = schemaFirstPerson.meshAnnotations
         ? schemaFirstPerson.meshAnnotations.find((a) => a.mesh === meshIndex)
         : undefined;
-      meshAnnotations.push(new VRMRendererFirstPersonFlags(flag && flag.firstPersonFlag, mesh));
+      meshAnnotations.push(new VRMRendererFirstPersonFlags(flag?.firstPersonFlag, mesh));
     });
 
     return new VRMFirstPerson(firstPersonBone, firstPersonBoneOffset, meshAnnotations);

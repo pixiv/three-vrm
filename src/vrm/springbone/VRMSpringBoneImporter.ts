@@ -4,6 +4,7 @@ import { GLTFNode, VRMSchema } from '../types';
 import { VRMSpringBone } from './VRMSpringBone';
 import { VRMSpringBoneColliderGroup, VRMSpringBoneColliderMesh } from './VRMSpringBoneColliderGroup';
 import { VRMSpringBoneGroup, VRMSpringBoneManager } from './VRMSpringBoneManager';
+import { VRMSpringBoneParameters } from './VRMSpringBoneParameters';
 
 const _v3A = new THREE.Vector3();
 
@@ -35,16 +36,8 @@ export class VRMSpringBoneImporter {
     return new VRMSpringBoneManager(colliderGroups, springBoneGroupList);
   }
 
-  protected _createSpringBone(
-    bone: THREE.Object3D,
-    hitRadius: number,
-    stiffiness: number,
-    gravityDir: THREE.Vector3,
-    gravityPower: number,
-    dragForce: number,
-    colliders: THREE.Mesh[] = [],
-  ): VRMSpringBone {
-    return new VRMSpringBone(bone, hitRadius, stiffiness, gravityDir, gravityPower, dragForce, colliders);
+  protected _createSpringBone(bone: THREE.Object3D, params: VRMSpringBoneParameters = {}): VRMSpringBone {
+    return new VRMSpringBone(bone, params);
   }
 
   protected async _importSpringBoneGroupList(
@@ -68,12 +61,13 @@ export class VRMSpringBoneImporter {
           vrmBoneGroup.dragForce === undefined ||
           vrmBoneGroup.hitRadius === undefined ||
           vrmBoneGroup.colliderGroups === undefined ||
-          vrmBoneGroup.bones === undefined
+          vrmBoneGroup.bones === undefined ||
+          vrmBoneGroup.center === undefined
         ) {
           return;
         }
 
-        const stiffiness = vrmBoneGroup.stiffiness;
+        const stiffnessForce = vrmBoneGroup.stiffiness;
         const gravityDir = new THREE.Vector3(
           vrmBoneGroup.gravityDir.x,
           vrmBoneGroup.gravityDir.y,
@@ -81,7 +75,7 @@ export class VRMSpringBoneImporter {
         );
         const gravityPower = vrmBoneGroup.gravityPower;
         const dragForce = vrmBoneGroup.dragForce;
-        const hitRadius = vrmBoneGroup.hitRadius;
+        const radius = vrmBoneGroup.hitRadius;
 
         const colliders: VRMSpringBoneColliderMesh[] = [];
         vrmBoneGroup.colliderGroups.forEach((colliderIndex) => {
@@ -94,21 +88,24 @@ export class VRMSpringBoneImporter {
             // VRMの情報から「揺れモノ」ボーンのルートが取れる
             const springRootBone: GLTFNode = await gltf.parser.getDependency('node', nodeIndex);
 
+            const center: GLTFNode =
+              vrmBoneGroup.center! !== -1 ? await gltf.parser.getDependency('node', vrmBoneGroup.center!) : null;
+
             // it's weird but there might be cases we can't find the root bone
             if (!springRootBone) {
               return;
             }
 
             springRootBone.traverse((bone) => {
-              const springBone = this._createSpringBone(
-                bone,
-                hitRadius,
-                stiffiness,
+              const springBone = this._createSpringBone(bone, {
+                radius,
+                stiffnessForce,
                 gravityDir,
                 gravityPower,
                 dragForce,
                 colliders,
-              );
+                center,
+              });
               springBoneGroup.push(springBone);
             });
           }),

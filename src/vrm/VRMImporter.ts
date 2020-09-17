@@ -4,11 +4,12 @@ import { VRMFirstPersonImporter } from './firstperson';
 import { VRMHumanoidImporter } from './humanoid/VRMHumanoidImporter';
 import { VRMLookAtImporter } from './lookat/VRMLookAtImporter';
 import { VRMMaterialImporter } from './material';
+import { VRMMetaImporter } from './meta/VRMMetaImporter';
 import { VRMSpringBoneImporter } from './springbone/VRMSpringBoneImporter';
-import { VRMSchema } from './types';
 import { VRM } from './VRM';
 
 export interface VRMImporterOptions {
+  metaImporter?: VRMMetaImporter;
   lookAtImporter?: VRMLookAtImporter;
   humanoidImporter?: VRMHumanoidImporter;
   blendShapeImporter?: VRMBlendShapeImporter;
@@ -21,6 +22,7 @@ export interface VRMImporterOptions {
  * An importer that imports a [[VRM]] from a VRM extension of a GLTF.
  */
 export class VRMImporter {
+  protected readonly _metaImporter: VRMMetaImporter;
   protected readonly _blendShapeImporter: VRMBlendShapeImporter;
   protected readonly _lookAtImporter: VRMLookAtImporter;
   protected readonly _humanoidImporter: VRMHumanoidImporter;
@@ -34,6 +36,7 @@ export class VRMImporter {
    * @param options [[VRMImporterOptions]], optionally contains importers for each component
    */
   public constructor(options: VRMImporterOptions = {}) {
+    this._metaImporter = options.metaImporter || new VRMMetaImporter();
     this._blendShapeImporter = options.blendShapeImporter || new VRMBlendShapeImporter();
     this._lookAtImporter = options.lookAtImporter || new VRMLookAtImporter();
     this._humanoidImporter = options.humanoidImporter || new VRMHumanoidImporter();
@@ -51,8 +54,6 @@ export class VRMImporter {
     if (gltf.parser.json.extensions === undefined || gltf.parser.json.extensions.VRM === undefined) {
       throw new Error('Could not find VRM extension on the GLTF');
     }
-    const vrmExt: VRMSchema.VRM = gltf.parser.json.extensions.VRM;
-
     const scene = gltf.scene;
 
     scene.updateMatrixWorld(false);
@@ -64,6 +65,8 @@ export class VRMImporter {
         object3d.frustumCulled = false;
       }
     });
+
+    const meta = (await this._metaImporter.import(gltf)) || undefined;
 
     const materials = (await this._materialImporter.convertGLTFMaterials(gltf)) || undefined;
 
@@ -82,7 +85,7 @@ export class VRMImporter {
 
     return new VRM({
       scene: gltf.scene,
-      meta: vrmExt.meta,
+      meta,
       materials,
       humanoid,
       firstPerson,

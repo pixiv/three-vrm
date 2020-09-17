@@ -4,10 +4,11 @@ import { VRMSpringBoneImporter } from '../springbone/VRMSpringBoneImporter';
 import { VRMSpringBoneManagerDebug } from './VRMSpringBoneManagerDebug';
 import { VRMSchema } from '../types';
 import { VRMSpringBoneDebug } from './VRMSpringBoneDebug';
+import { VRMSpringBoneParameters } from '../springbone/VRMSpringBoneParameters';
 
 export class VRMSpringBoneImporterDebug extends VRMSpringBoneImporter {
   public async import(gltf: GLTF): Promise<VRMSpringBoneManagerDebug | null> {
-    const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
+    const vrmExt: VRMSchema.VRM | undefined = gltf.parser.json.extensions?.VRM;
     if (!vrmExt) return null;
 
     const schemaSecondaryAnimation: VRMSchema.SecondaryAnimation | undefined = vrmExt.secondaryAnimation;
@@ -23,15 +24,7 @@ export class VRMSpringBoneImporterDebug extends VRMSpringBoneImporter {
     return new VRMSpringBoneManagerDebug(colliderGroups, springBoneGroupList);
   }
 
-  protected _createSpringBone(
-    bone: THREE.Object3D,
-    hitRadius: number,
-    stiffiness: number,
-    gravityDir: THREE.Vector3,
-    gravityPower: number,
-    dragForce: number,
-    colliders: THREE.Mesh[] = [],
-  ): VRMSpringBoneDebug {
-    return new VRMSpringBoneDebug(bone, hitRadius, stiffiness, gravityDir, gravityPower, dragForce, colliders);
+  protected _createSpringBone(bone: THREE.Object3D, params: VRMSpringBoneParameters): VRMSpringBoneDebug {
+    return new VRMSpringBoneDebug(bone, params);
   }
 }
