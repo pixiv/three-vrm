@@ -84,7 +84,7 @@
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
     "webpack-dev-server": "^3.2.1",
-    "webpack-merge": "^4.2.1",
+    "webpack-merge": "^5.1.4",
     "worker-loader": "^2.0.0"
   },
   "peerDependencies": {
