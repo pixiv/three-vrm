@@ -21,8 +21,6 @@ export class VRMImporterDebug extends VRMImporter {
     if (gltf.parser.json.extensions === undefined || gltf.parser.json.extensions.VRM === undefined) {
       throw new Error('Could not find VRM extension on the GLTF');
     }
-    const vrmExt = gltf.parser.json.extensions.VRM;
-
     const scene = gltf.scene;
 
     scene.updateMatrixWorld(false);
@@ -34,6 +32,8 @@ export class VRMImporterDebug extends VRMImporter {
         object3d.frustumCulled = false;
       }
     });
+
+    const meta = (await this._metaImporter.import(gltf)) || undefined;
 
     const materials = (await this._materialImporter.convertGLTFMaterials(gltf)) || undefined;
 
@@ -59,7 +59,7 @@ export class VRMImporterDebug extends VRMImporter {
     return new VRMDebug(
       {
         scene: gltf.scene,
-        meta: vrmExt.meta,
+        meta,
         materials,
         humanoid,
         firstPerson,
