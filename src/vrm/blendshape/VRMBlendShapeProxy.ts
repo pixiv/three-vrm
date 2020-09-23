@@ -6,7 +6,7 @@ export class VRMBlendShapeProxy {
   /**
    * List of registered blend shape.
    */
-  public readonly _blendShapeGroups: { [name: string]: VRMBlendShapeGroup } = {};
+  private readonly _blendShapeGroups: { [name: string]: VRMBlendShapeGroup } = {};
 
   /**
    * A map from [[VRMSchema.BlendShapePresetName]] to its actual blend shape name.
