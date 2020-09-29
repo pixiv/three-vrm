@@ -28,6 +28,13 @@ export class VRMBlendShapeProxy {
   }
 
   /**
+   * A map from [[VRMSchema.BlendShapePresetName]] to its actual blend shape name.
+   */
+  public get blendShapePresetMap(): { [presetName in VRMSchema.BlendShapePresetName]?: string } {
+    return this._blendShapePresetMap;
+  }
+
+  /**
    * Return registered blend shape group.
    *
    * @param name Name of the blend shape group
