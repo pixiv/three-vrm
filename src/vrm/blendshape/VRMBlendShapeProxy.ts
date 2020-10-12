@@ -14,6 +14,11 @@ export class VRMBlendShapeProxy {
   private readonly _blendShapePresetMap: { [presetName in VRMSchema.BlendShapePresetName]?: string } = {};
 
   /**
+   * A list of name of unknown blend shapes.
+   */
+  private readonly _unknownGroupNames: string[] = [];
+
+  /**
    * Create a new VRMBlendShape.
    */
   public constructor() {
@@ -32,6 +37,13 @@ export class VRMBlendShapeProxy {
    */
   public get blendShapePresetMap(): { [presetName in VRMSchema.BlendShapePresetName]?: string } {
     return this._blendShapePresetMap;
+  }
+
+  /**
+   * A list of name of unknown blend shapes.
+   */
+  public get unknownGroupNames(): string[] {
+    return this._unknownGroupNames;
   }
 
   /**
@@ -63,6 +75,8 @@ export class VRMBlendShapeProxy {
     this._blendShapeGroups[name] = controller;
     if (presetName) {
       this._blendShapePresetMap[presetName] = name;
+    } else {
+      this._unknownGroupNames.push(name);
     }
   }
 
