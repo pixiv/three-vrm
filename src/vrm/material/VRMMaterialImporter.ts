@@ -89,7 +89,7 @@ export class VRMMaterialImporter {
               return;
             }
 
-            const primitiveGeometry = primitive.geometry as THREE.BufferGeometry;
+            const primitiveGeometry = primitive.geometry;
             const primitiveVertices = primitiveGeometry.index
               ? primitiveGeometry.index.count
               : primitiveGeometry.attributes.position.count / 3;
