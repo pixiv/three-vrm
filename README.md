@@ -16,6 +16,8 @@ Use [VRM](https://vrm.dev/) on [three.js](https://threejs.org/)
 
 From v0.5.0, You have to use [import maps](https://github.com/WICG/import-maps) to refer a Three.js from three-vrm.
 Since import map is still a draft, we are going to use [`es-module-shims`](https://github.com/guybedford/es-module-shims) to achieve this.
+For more information, please refer the "Import maps" section of this three.js document:
+https://threejs.org/docs/#manual/en/introduction/Installation
 
 In the example below, we are going to use the cdn [unpkg](https://unpkg.com). If you want to use either local or other cdns, please interpret them accordingly.
 
