@@ -1,21 +1,19 @@
 {
   "compilerOptions": {
-    "outDir": "lib",
-    "target": "es5",
-    "module": "commonjs",
+    "target": "es6",
+    "module": "es6",
     "lib": ["es2018", "dom"],
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
-    "declaration": true,
-    "declarationDir": "./types",
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": false,
     "removeComments": true,
     "strict": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "rootDir": "./src"
   },
-  "include": ["src/**/*"],
+  "include": ["src"],
   "exclude": ["node_modules"]
 }
