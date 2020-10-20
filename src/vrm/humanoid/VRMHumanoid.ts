@@ -27,7 +27,7 @@ export class VRMHumanoid {
    * A [[VRMPose]] that is its default state.
    * Note that it's not compatible with `setPose` and `getPose`, since it contains non-relative values of each local transforms.
    */
-  private readonly _restPose: VRMPose = {};
+  public readonly restPose: VRMPose = {};
 
   /**
    * Create a new [[VRMHumanoid]].
@@ -38,7 +38,7 @@ export class VRMHumanoid {
     this.humanBones = this._createHumanBones(boneArray);
     this.humanDescription = humanDescription;
 
-    this._restPose = this.getPose();
+    this.restPose = this.getPose();
   }
 
   /**
@@ -64,7 +64,7 @@ export class VRMHumanoid {
       _v3A.set(0, 0, 0);
       _quatA.identity();
 
-      const restState = this._restPose[vrmBoneName];
+      const restState = this.restPose[vrmBoneName];
       if (restState?.position) {
         _v3A.fromArray(restState.position).negate();
       }
@@ -106,7 +106,7 @@ export class VRMHumanoid {
         return;
       }
 
-      const restState = this._restPose[boneName];
+      const restState = this.restPose[boneName];
       if (!restState) {
         return;
       }
