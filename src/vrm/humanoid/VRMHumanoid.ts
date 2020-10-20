@@ -74,13 +74,6 @@ export class VRMHumanoid {
         _quatA.fromArray(restState.rotation).inverse();
       }
 
-      // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-      if (!restState) {
-        if (vrmBoneName === VRMSchema.HumanoidBoneName.LeftUpperArm) {
-          node.rotation.x = 0.5 * Math.PI;
-        }
-      }
-
       // Get the position / rotation from the node
       _v3A.add(node.position);
       _quatA.premultiply(node.quaternion);
