@@ -43,6 +43,8 @@ export class VRMHumanoid {
 
   /**
    * Return the current pose of this humanoid as a [[VRMPose]].
+   *
+   * Each transform is a local transform relative from rest pose (T-pose).
    */
   public getPose(): VRMPose {
     const pose: VRMPose = {};
@@ -93,6 +95,9 @@ export class VRMHumanoid {
 
   /**
    * Let the humanoid do a specified pose.
+   *
+   * Each transform have to be a local transform relative from rest pose (T-pose).
+   * You can pass what you got from {@link getPose}.
    *
    * @param poseObject A [[VRMPose]] that represents a single pose
    */
