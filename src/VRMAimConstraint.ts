@@ -1,8 +1,9 @@
 import * as THREE from 'three';
 import { VRMConstraint } from './VRMConstraint';
 
+const QUAT_IDENTITY = new THREE.Quaternion(0, 0, 0, 1);
+
 const _quatA = new THREE.Quaternion();
-const _v3GetWeightedSum = new THREE.Vector3();
 const _v3GetRotationUp = new THREE.Vector3();
 const _v3GetRotationPos = new THREE.Vector3();
 const _v3GetRotationDir = new THREE.Vector3();
@@ -38,7 +39,7 @@ export class VRMAimConstraint extends VRMConstraint {
   private _getAimRotation(target: THREE.Quaternion): THREE.Quaternion {
     _v3GetRotationUp.copy(this.upVector).normalize();
 
-    this._getWeightedSum(_v3GetRotationDir);
+    this._getSourcePosition(_v3GetRotationDir);
     _v3GetRotationPos.setFromMatrixPosition(this._object.matrixWorld);
     _v3GetRotationDir.sub(_v3GetRotationPos).normalize();
 
@@ -54,20 +55,18 @@ export class VRMAimConstraint extends VRMConstraint {
     _quatGetRotation.setFromAxisAngle(_v3GetRotationPlaneX, thetaAim - thetaDir);
     target.multiply(_quatGetRotation);
 
+    target.slerp(QUAT_IDENTITY, 1.0 - this.weight);
+
     return target;
   }
 
-  private _getWeightedSum(target: THREE.Vector3): THREE.Vector3 {
+  private _getSourcePosition(target: THREE.Vector3): THREE.Vector3 {
     target.set(0.0, 0.0, 0.0);
 
-    for (const source of this._sources) {
-      source.object.updateMatrixWorld();
-      _v3GetWeightedSum.setFromMatrixPosition(source.object.matrixWorld);
-      _v3GetWeightedSum.multiplyScalar(source.weight);
-      target.add(_v3GetWeightedSum);
+    if (this._source) {
+      this._source.updateMatrixWorld();
+      target.setFromMatrixPosition(this._source.matrixWorld);
     }
-
-    target.multiplyScalar(this.weight);
 
     return target;
   }

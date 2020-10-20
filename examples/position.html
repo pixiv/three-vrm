@@ -75,13 +75,15 @@
 			});
 
 			const constraintAB = new THREE_VRM_CONSTRAINTS.VRMPositionConstraint(cubeB);
-			constraintAB.addSource({ object: cubeA, weight: 0.5 });
+			constraintAB.setSource(cubeA);
 			constraintAB.setInitState();
+			constraintAB.weight = 0.5;
 			constraintManager.addConstraint(constraintAB);
 
 			const constraintBC = new THREE_VRM_CONSTRAINTS.VRMPositionConstraint(cubeC);
-			constraintBC.addSource({ object: cubeB, weight: 0.5 });
+			constraintBC.setSource(cubeB);
 			constraintBC.setInitState();
+			constraintBC.weight = 0.5;
 			constraintManager.addConstraint(constraintBC);
 
 			// animate

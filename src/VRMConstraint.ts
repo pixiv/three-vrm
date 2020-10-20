@@ -1,5 +1,4 @@
 import type * as THREE from 'three';
-import type { VRMConstraintSource } from './VRMConstraintSource';
 
 export abstract class VRMConstraint {
   public weight = 1.0;
@@ -9,13 +8,11 @@ export abstract class VRMConstraint {
     return this._object;
   }
 
-  protected _sources = new Set<VRMConstraintSource>();
+  protected _source?: THREE.Object3D | null;
 
   public get dependencies(): Set<THREE.Object3D> {
     const deps = new Set<THREE.Object3D>();
-    for (const source of this._sources) {
-      deps.add(source.object);
-    }
+    this._source && deps.add(this._source);
     return deps;
   }
 
@@ -23,12 +20,8 @@ export abstract class VRMConstraint {
     this._object = object;
   }
 
-  public addSource(source: VRMConstraintSource): void {
-    this._sources.add(source);
-  }
-
-  public deleteSource(source: VRMConstraintSource): void {
-    this._sources.delete(source);
+  public setSource(source: THREE.Object3D | null): void {
+    this._source = source;
   }
 
   public abstract setInitState(): void;

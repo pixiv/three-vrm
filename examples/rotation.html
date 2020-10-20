@@ -31,12 +31,12 @@
 
 			// camera
 			const camera = new THREE.PerspectiveCamera( 30.0, window.innerWidth / window.innerHeight, 0.1, 20.0 );
-			camera.position.set( 0.0, 0.5, 5.0 );
+			camera.position.set( 0.0, 0.0, 5.0 );
 
 			// camera controls
 			const controls = new THREE.OrbitControls( camera, renderer.domElement );
 			controls.screenSpacePanning = true;
-			controls.target.set( 0.0, 0.5, 0.0 );
+			controls.target.set( 0.0, 0.0, 0.0 );
 			controls.update();
 
 			// scene
@@ -55,20 +55,12 @@
 			cubeRotX.position.set( -0.5, 0.0, 0.0 );
 			scene.add( cubeRotX );
 
-			const cubeRotY = new THREE.Mesh( geometry, material );
-			cubeRotY.position.set( 0.0, 0.0, 0.0 );
-			scene.add( cubeRotY );
-
-			const cubeRotZ = new THREE.Mesh( geometry, material );
-			cubeRotZ.position.set( 0.5, 0.0, 0.0 );
-			scene.add( cubeRotZ );
-
 			const cubeConstrainedA = new THREE.Mesh( geometry, material );
-      cubeConstrainedA.position.set( -0.25, 1.0, 0.0 );
+      cubeConstrainedA.position.set( 0.0, 0.0, 0.0 );
 			scene.add( cubeConstrainedA );
 
 			const cubeConstrainedB = new THREE.Mesh( geometry, material );
-      cubeConstrainedB.position.set( 0.25, 1.0, 0.0 );
+      cubeConstrainedB.position.set( 0.5, 0.0, 0.0 );
       cubeConstrainedB.rotation.set( 0.5, 2.5, 4.5 );
 			scene.add( cubeConstrainedB );
 
@@ -85,14 +77,13 @@
 			});
 
 			const constraintA = new THREE_VRM_CONSTRAINTS.VRMRotationConstraint(cubeConstrainedA);
-			constraintA.addSource({ object: cubeRotX, weight: 1.0 / 3.0 });
-			constraintA.addSource({ object: cubeRotY, weight: 1.0 / 3.0 });
-			constraintA.addSource({ object: cubeRotZ, weight: 1.0 / 3.0 });
+			constraintA.setSource(cubeRotX);
 			constraintA.setInitState();
+			constraintA.weight = 0.5;
 			constraintManager.addConstraint(constraintA);
 
 			const constraintB = new THREE_VRM_CONSTRAINTS.VRMRotationConstraint(cubeConstrainedB);
-			constraintB.addSource({ object: cubeConstrainedA, weight: 1.0 });
+			constraintB.setSource(cubeConstrainedA);
 			constraintB.setInitState();
 			constraintManager.addConstraint(constraintB);
 
@@ -106,8 +97,6 @@
 				const deltaTime = clock.getDelta();
 
 				cubeRotX.rotation.x = Math.sin( Math.PI * clock.elapsedTime );
-				cubeRotY.rotation.y = Math.sin( 0.7 * Math.PI * clock.elapsedTime );
-				cubeRotZ.rotation.z = Math.sin( 0.4 * Math.PI * clock.elapsedTime );
 
 				constraintManager.update();
 

@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 import { VRMConstraint } from './VRMConstraint';
-import { quatExp, quatLog } from './utils/quatUtils';
+
+const QUAT_IDENTITY = new THREE.Quaternion(0, 0, 0, 1);
 
 const _quatA = new THREE.Quaternion();
-const _quatGetWeightedSum = new THREE.Quaternion();
 
 export class VRMRotationConstraint extends VRMConstraint {
   private _initQuaternion = new THREE.Quaternion();
@@ -11,7 +11,7 @@ export class VRMRotationConstraint extends VRMConstraint {
   public setInitState(): void {
     this._initQuaternion.copy(this._object.quaternion);
 
-    this._getWeightedSum(_quatA);
+    this._getWeightedSource(_quatA);
     _quatA.inverse();
     this._initQuaternion.multiply(_quatA);
   }
@@ -19,7 +19,7 @@ export class VRMRotationConstraint extends VRMConstraint {
   public update(): void {
     this._object.quaternion.set(0.0, 0.0, 0.0, 1.0);
 
-    this._getWeightedSum(_quatA);
+    this._getWeightedSource(_quatA);
     this._object.quaternion.multiply(_quatA);
 
     this._object.quaternion.multiply(this._initQuaternion);
@@ -27,28 +27,15 @@ export class VRMRotationConstraint extends VRMConstraint {
     this._object.updateMatrixWorld();
   }
 
-  private _getWeightedSum(target: THREE.Quaternion): THREE.Quaternion {
+  private _getWeightedSource(target: THREE.Quaternion): THREE.Quaternion {
     target.set(0.0, 0.0, 0.0, 0.0);
 
-    let weightSum = 0.0;
-    for (const source of this._sources) {
-      source.object.updateMatrixWorld();
-      _quatGetWeightedSum.setFromRotationMatrix(source.object.matrixWorld);
-      quatLog(_quatGetWeightedSum);
-
-      const weight = source.weight;
-      target.x += weight * _quatGetWeightedSum.x;
-      target.y += weight * _quatGetWeightedSum.y;
-      target.z += weight * _quatGetWeightedSum.z;
-      weightSum += weight;
+    if (this._source) {
+      this._source.updateMatrixWorld();
+      target.setFromRotationMatrix(this._source.matrixWorld);
     }
 
-    weightSum *= this.weight;
-    target.x /= weightSum;
-    target.y /= weightSum;
-    target.z /= weightSum;
-
-    quatExp(target);
+    target.slerp(QUAT_IDENTITY, 1.0 - this.weight);
 
     return target;
   }

@@ -70,9 +70,10 @@
 			});
 
 			const constraint = new THREE_VRM_CONSTRAINTS.VRMAimConstraint(cubeA);
-			// constraint.upVector.set( 1.0, 0.0, 0.0 ).normalize();
-			constraint.addSource({ object: cubeB, weight: 1.0 });
+			constraint.aimVector.set( 0.0, 0.0, -1.0 ).normalize();
+			constraint.setSource(cubeB);
 			constraint.setInitState();
+			constraint.weight = 0.5;
 			constraintManager.addConstraint(constraint);
 
 			cubeB.position.set( 0.0, 0.5, -0.5 );
