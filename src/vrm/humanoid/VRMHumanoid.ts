@@ -130,6 +130,13 @@ export class VRMHumanoid {
   }
 
   /**
+   * Reset the humanoid to its rest pose.
+   */
+  public resetPose(): void {
+    this.setPose({});
+  }
+
+  /**
    * Return a bone bound to a specified [[HumanBone]], as a [[VRMHumanBone]].
    *
    * See also: [[VRMHumanoid.getBones]]
