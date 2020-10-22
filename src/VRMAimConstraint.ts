@@ -19,7 +19,7 @@ export class VRMAimConstraint extends VRMConstraint {
   private _initQuaternion = new THREE.Quaternion();
 
   public setInitState(): void {
-    this._initQuaternion.copy(this._object.quaternion);
+    this._initQuaternion.copy(this.object.quaternion);
 
     this._getAimRotation(_quatA);
     _quatA.inverse();
@@ -27,21 +27,21 @@ export class VRMAimConstraint extends VRMConstraint {
   }
 
   public update(): void {
-    this._object.quaternion.set(0.0, 0.0, 0.0, 1.0);
+    this.object.quaternion.set(0.0, 0.0, 0.0, 1.0);
 
     this._getAimRotation(_quatA);
-    this._object.quaternion.multiply(_quatA);
+    this.object.quaternion.multiply(_quatA);
 
-    this._object.quaternion.multiply(this._initQuaternion);
+    this.object.quaternion.multiply(this._initQuaternion);
 
-    this._object.updateMatrixWorld();
+    this.object.updateMatrixWorld();
   }
 
   private _getAimRotation(target: THREE.Quaternion): THREE.Quaternion {
     _v3GetRotationUp.copy(this.upVector).normalize();
 
     this._getSourcePosition(_v3GetRotationDir);
-    _v3GetRotationPos.setFromMatrixPosition(this._object.matrixWorld);
+    _v3GetRotationPos.setFromMatrixPosition(this.object.matrixWorld);
     _v3GetRotationDir.sub(_v3GetRotationPos).normalize();
 
     const thetaAim = Math.asin(_v3GetRotationUp.dot(this.aimVector));

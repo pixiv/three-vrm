@@ -48,19 +48,26 @@
 			scene.add( light );
 
 			// objects
+			const modelRoot = new THREE.Object3D();
+			scene.add( modelRoot );
+
+			const haha = new THREE.Object3D();
+			haha.rotation.y = 1.0; // haha
+			modelRoot.add( haha );
+
 			const geometry = new THREE.BoxGeometry( 0.25, 0.25, 0.25 );
 			const material = new THREE.MeshStandardMaterial( { color: 0xbbbbbb } );
 
 			const cubeA = new THREE.Mesh( geometry, material );
-			scene.add( cubeA );
+			modelRoot.add( cubeA );
 
 			const cubeB = new THREE.Mesh( geometry, material );
 			cubeB.position.set( 0.5, 0.5, 0.5 );
-			scene.add( cubeB );
+			haha.add( cubeB );
 
 			const cubeC = new THREE.Mesh( geometry, material );
 			cubeC.position.set( 1.0, 1.0, 1.0 );
-			scene.add( cubeC );
+			haha.add( cubeC );
 
 			// helpers
 			const gridHelper = new THREE.GridHelper( 10, 10 );
@@ -74,17 +81,29 @@
 				autoRemoveCircularDependency: true
 			});
 
-			const constraintAB = new THREE_VRM_CONSTRAINTS.VRMPositionConstraint(cubeB);
-			constraintAB.setSource(cubeA);
-			constraintAB.setInitState();
+			const constraintAB = new THREE_VRM_CONSTRAINTS.VRMPositionConstraint( cubeB, modelRoot );
+			constraintAB.setSource( cubeA );
 			constraintAB.weight = 0.5;
-			constraintManager.addConstraint(constraintAB);
+			constraintManager.addConstraint( constraintAB );
 
-			const constraintBC = new THREE_VRM_CONSTRAINTS.VRMPositionConstraint(cubeC);
-			constraintBC.setSource(cubeB);
-			constraintBC.setInitState();
+			const constraintBC = new THREE_VRM_CONSTRAINTS.VRMPositionConstraint( cubeC, modelRoot );
+			constraintBC.setSource( cubeB );
 			constraintBC.weight = 0.5;
-			constraintManager.addConstraint(constraintBC);
+			constraintManager.addConstraint( constraintBC );
+
+			// constraints helper
+			const constraintABHelper = new THREE_VRM_CONSTRAINTS.VRMConstraintHelper( constraintAB );
+			constraintABHelper.renderOrder = 10000;
+			scene.add( constraintABHelper );
+
+			const constraintBCHelper = new THREE_VRM_CONSTRAINTS.VRMConstraintHelper( constraintBC );
+			constraintBCHelper.renderOrder = 10000;
+			scene.add( constraintBCHelper );
+
+			// init constraints
+			scene.updateMatrixWorld();
+			constraintAB.setInitState();
+			constraintBC.setInitState();
 
 			// animate
 			const clock = new THREE.Clock();
@@ -97,7 +116,11 @@
 
 				cubeA.position.x = Math.sin( Math.PI * clock.elapsedTime );
 
+				modelRoot.position.z = Math.sin( clock.elapsedTime );
+
 				constraintManager.update();
+				constraintABHelper.update();
+				constraintBCHelper.update();
 
 				renderer.render( scene, camera );
 

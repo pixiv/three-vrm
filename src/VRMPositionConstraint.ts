@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { VRMConstraint } from './VRMConstraint';
+import { VRMConstraintSpace } from './VRMConstraintSpace';
 
 const _v3A = new THREE.Vector3();
 const _matA = new THREE.Matrix4();
@@ -8,17 +9,22 @@ export class VRMPositionConstraint extends VRMConstraint {
   private _initPosition = new THREE.Vector3();
 
   public setInitState(): void {
-    this._initPosition.copy(this._object.position);
+    this._getDestinationMatrix(_matA);
+    this._initPosition.setFromMatrixPosition(_matA);
     this._getWeightedSource(_v3A);
     this._initPosition.sub(_v3A);
   }
 
   public update(): void {
-    this._object.position.copy(this._initPosition);
-    this._getWeightedSource(_v3A);
-    this._object.position.add(_v3A);
+    this._getWeightedSource(this.object.position);
+    this.object.position.add(this._initPosition);
 
-    this._object.updateMatrixWorld();
+    if (this.destinationSpace === VRMConstraintSpace.Model) {
+      this._getInverseParentMatrixInModelSpace(_matA);
+      this.object.position.applyMatrix4(_matA);
+    }
+
+    this.object.updateMatrixWorld();
   }
 
   private _getWeightedSource(target: THREE.Vector3): THREE.Vector3 {

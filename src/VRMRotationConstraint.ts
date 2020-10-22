@@ -10,7 +10,7 @@ export class VRMRotationConstraint extends VRMConstraint {
   private _initQuaternion = new THREE.Quaternion();
 
   public setInitState(): void {
-    this._initQuaternion.copy(this._object.quaternion);
+    this._initQuaternion.copy(this.object.quaternion);
 
     this._getWeightedSource(_quatA);
     _quatA.inverse();
@@ -18,14 +18,14 @@ export class VRMRotationConstraint extends VRMConstraint {
   }
 
   public update(): void {
-    this._object.quaternion.set(0.0, 0.0, 0.0, 1.0);
+    this.object.quaternion.set(0.0, 0.0, 0.0, 1.0);
 
     this._getWeightedSource(_quatA);
-    this._object.quaternion.multiply(_quatA);
+    this.object.quaternion.multiply(_quatA);
 
-    this._object.quaternion.multiply(this._initQuaternion);
+    this.object.quaternion.multiply(this._initQuaternion);
 
-    this._object.updateMatrixWorld();
+    this.object.updateMatrixWorld();
   }
 
   private _getWeightedSource(target: THREE.Quaternion): THREE.Quaternion {

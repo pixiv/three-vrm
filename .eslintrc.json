@@ -48,6 +48,10 @@
         "modifiers": ["private"],
         "format": ["camelCase"],
         "leadingUnderscore": "require"
+      },
+      {
+        "selector": "enumMember",
+        "format": ["PascalCase"]
       }
     ],
     "@typescript-eslint/no-unused-vars": ["warn", { "args": "none" }], // we sometimes have to define unused arguments
