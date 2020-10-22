@@ -4,6 +4,7 @@ import { VRMConstraint } from './VRMConstraint';
 const QUAT_IDENTITY = new THREE.Quaternion(0, 0, 0, 1);
 
 const _quatA = new THREE.Quaternion();
+const _matA = new THREE.Matrix4();
 const _v3GetRotationUp = new THREE.Vector3();
 const _v3GetRotationPos = new THREE.Vector3();
 const _v3GetRotationDir = new THREE.Vector3();
@@ -64,8 +65,8 @@ export class VRMAimConstraint extends VRMConstraint {
     target.set(0.0, 0.0, 0.0);
 
     if (this._source) {
-      this._source.updateMatrixWorld();
-      target.setFromMatrixPosition(this._source.matrixWorld);
+      this._getSourceMatrix(_matA);
+      target.setFromMatrixPosition(_matA);
     }
 
     return target;

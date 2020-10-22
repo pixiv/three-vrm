@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { VRMConstraint } from './VRMConstraint';
 
 const _v3A = new THREE.Vector3();
+const _matA = new THREE.Matrix4();
 
 export class VRMPositionConstraint extends VRMConstraint {
   private _initPosition = new THREE.Vector3();
@@ -24,8 +25,8 @@ export class VRMPositionConstraint extends VRMConstraint {
     target.set(0.0, 0.0, 0.0);
 
     if (this._source) {
-      this._source.updateMatrixWorld();
-      target.setFromMatrixPosition(this._source.matrixWorld);
+      this._getSourceMatrix(_matA);
+      target.setFromMatrixPosition(_matA);
     }
 
     target.multiplyScalar(this.weight);

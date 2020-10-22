@@ -24,6 +24,15 @@ export abstract class VRMConstraint {
     this._source = source;
   }
 
+  protected _getSourceMatrix(target: THREE.Matrix4): THREE.Matrix4 {
+    if (!this._source) {
+      throw new Error('There is no source specified');
+    }
+
+    this._source.updateMatrixWorld();
+    return target.copy(this._source.matrixWorld);
+  }
+
   public abstract setInitState(): void;
   public abstract update(): void;
 }

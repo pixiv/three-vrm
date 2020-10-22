@@ -3,6 +3,7 @@ import { VRMConstraint } from './VRMConstraint';
 
 const QUAT_IDENTITY = new THREE.Quaternion(0, 0, 0, 1);
 
+const _matA = new THREE.Matrix4();
 const _quatA = new THREE.Quaternion();
 
 export class VRMRotationConstraint extends VRMConstraint {
@@ -31,8 +32,8 @@ export class VRMRotationConstraint extends VRMConstraint {
     target.set(0.0, 0.0, 0.0, 0.0);
 
     if (this._source) {
-      this._source.updateMatrixWorld();
-      target.setFromRotationMatrix(this._source.matrixWorld);
+      this._getSourceMatrix(_matA);
+      target.setFromRotationMatrix(_matA);
     }
 
     target.slerp(QUAT_IDENTITY, 1.0 - this.weight);
