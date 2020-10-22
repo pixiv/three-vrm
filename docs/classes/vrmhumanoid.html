@@ -106,6 +106,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrmhumanoid.html#getbonenodes" class="tsd-kind-icon">get<wbr>Bone<wbr>Nodes</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrmhumanoid.html#getbones" class="tsd-kind-icon">get<wbr>Bones</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrmhumanoid.html#getpose" class="tsd-kind-icon">get<wbr>Pose</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrmhumanoid.html#resetpose" class="tsd-kind-icon">reset<wbr>Pose</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrmhumanoid.html#setpose" class="tsd-kind-icon">set<wbr>Pose</a></li>
 							</ul>
 						</section>
@@ -124,7 +125,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/6bac38d9/src/vrm/humanoid/VRMHumanoid.ts#L26">src/vrm/humanoid/VRMHumanoid.ts:26</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a932a198/src/vrm/humanoid/VRMHumanoid.ts#L30">src/vrm/humanoid/VRMHumanoid.ts:30</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -164,7 +165,7 @@
 					<div class="tsd-signature tsd-kind-icon">human<wbr>Bones<span class="tsd-signature-symbol">:</span> <a href="../globals.html#vrmhumanbones" class="tsd-signature-type">VRMHumanBones</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/6bac38d9/src/vrm/humanoid/VRMHumanoid.ts#L15">src/vrm/humanoid/VRMHumanoid.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a932a198/src/vrm/humanoid/VRMHumanoid.ts#L19">src/vrm/humanoid/VRMHumanoid.ts:19</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -180,7 +181,7 @@
 					<div class="tsd-signature tsd-kind-icon">human<wbr>Description<span class="tsd-signature-symbol">:</span> <a href="../interfaces/vrmhumandescription.html" class="tsd-signature-type">VRMHumanDescription</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/6bac38d9/src/vrm/humanoid/VRMHumanoid.ts#L20">src/vrm/humanoid/VRMHumanoid.ts:20</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a932a198/src/vrm/humanoid/VRMHumanoid.ts#L24">src/vrm/humanoid/VRMHumanoid.ts:24</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -195,13 +196,13 @@
 					<div class="tsd-signature tsd-kind-icon">rest<wbr>Pose<span class="tsd-signature-symbol">:</span> <a href="../interfaces/vrmpose.html" class="tsd-signature-type">VRMPose</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/6bac38d9/src/vrm/humanoid/VRMHumanoid.ts#L26">src/vrm/humanoid/VRMHumanoid.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a932a198/src/vrm/humanoid/VRMHumanoid.ts#L30">src/vrm/humanoid/VRMHumanoid.ts:30</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>A <a href="../interfaces/vrmpose.html">VRMPose</a> that is its default state.
-							You might use <a href="vrmhumanoid.html#setpose">VRMHumanoid.setPose</a> with this pose to reset its state.</p>
+							Note that it&#39;s not compatible with <code>setPose</code> and <code>getPose</code>, since it contains non-relative values of each local transforms.</p>
 						</div>
 					</div>
 				</section>
@@ -218,7 +219,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/6bac38d9/src/vrm/humanoid/VRMHumanoid.ts#L147">src/vrm/humanoid/VRMHumanoid.ts:147</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a932a198/src/vrm/humanoid/VRMHumanoid.ts#L184">src/vrm/humanoid/VRMHumanoid.ts:184</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -246,7 +247,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/6bac38d9/src/vrm/humanoid/VRMHumanoid.ts#L107">src/vrm/humanoid/VRMHumanoid.ts:107</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a932a198/src/vrm/humanoid/VRMHumanoid.ts#L144">src/vrm/humanoid/VRMHumanoid.ts:144</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -278,7 +279,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/6bac38d9/src/vrm/humanoid/VRMHumanoid.ts#L129">src/vrm/humanoid/VRMHumanoid.ts:129</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a932a198/src/vrm/humanoid/VRMHumanoid.ts#L166">src/vrm/humanoid/VRMHumanoid.ts:166</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -310,7 +311,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/6bac38d9/src/vrm/humanoid/VRMHumanoid.ts#L140">src/vrm/humanoid/VRMHumanoid.ts:140</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a932a198/src/vrm/humanoid/VRMHumanoid.ts#L177">src/vrm/humanoid/VRMHumanoid.ts:177</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -342,7 +343,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/6bac38d9/src/vrm/humanoid/VRMHumanoid.ts#L118">src/vrm/humanoid/VRMHumanoid.ts:118</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a932a198/src/vrm/humanoid/VRMHumanoid.ts#L155">src/vrm/humanoid/VRMHumanoid.ts:155</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -374,15 +375,38 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/6bac38d9/src/vrm/humanoid/VRMHumanoid.ts#L43">src/vrm/humanoid/VRMHumanoid.ts:43</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a932a198/src/vrm/humanoid/VRMHumanoid.ts#L49">src/vrm/humanoid/VRMHumanoid.ts:49</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Return the current pose of this humanoid as a <a href="../interfaces/vrmpose.html">VRMPose</a>.</p>
 								</div>
+								<p>Each transform is a local transform relative from rest pose (T-pose).</p>
 							</div>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/vrmpose.html" class="tsd-signature-type">VRMPose</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="resetpose" class="tsd-anchor"></a>
+					<h3>reset<wbr>Pose</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">reset<wbr>Pose<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a932a198/src/vrm/humanoid/VRMHumanoid.ts#L133">src/vrm/humanoid/VRMHumanoid.ts:133</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Reset the humanoid to its rest pose.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -396,13 +420,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/6bac38d9/src/vrm/humanoid/VRMHumanoid.ts#L71">src/vrm/humanoid/VRMHumanoid.ts:71</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a932a198/src/vrm/humanoid/VRMHumanoid.ts#L97">src/vrm/humanoid/VRMHumanoid.ts:97</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Let the humanoid do a specified pose.</p>
 								</div>
+								<p>Each transform have to be a local transform relative from rest pose (T-pose).
+								You can pass what you got from <a href="vrmhumanoid.html#getpose">getPose</a>.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -463,6 +489,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="vrmhumanoid.html#getpose" class="tsd-kind-icon">get<wbr>Pose</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="vrmhumanoid.html#resetpose" class="tsd-kind-icon">reset<wbr>Pose</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="vrmhumanoid.html#setpose" class="tsd-kind-icon">set<wbr>Pose</a>
