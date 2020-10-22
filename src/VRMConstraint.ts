@@ -24,6 +24,11 @@ export abstract class VRMConstraint {
     this._source = source;
   }
 
+  /**
+   * Get the object matrix of the source, taking desired object space into account.
+   * Intended to be used to absorb between different spaces.
+   * @param target Target matrix
+   */
   protected _getSourceMatrix(target: THREE.Matrix4): THREE.Matrix4 {
     if (!this._source) {
       throw new Error('There is no source specified');
