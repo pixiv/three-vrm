@@ -1,8 +1,12 @@
+import * as THREE from 'three';
 import { GLTFNode, RawVector3, RawVector4, VRMPose, VRMSchema } from '../types';
 import { VRMHumanBone } from './VRMHumanBone';
 import { VRMHumanBoneArray } from './VRMHumanBoneArray';
 import { VRMHumanBones } from './VRMHumanBones';
 import { VRMHumanDescription } from './VRMHumanDescription';
+
+const _v3A = new THREE.Vector3();
+const _quatA = new THREE.Quaternion();
 
 /**
  * A class represents humanoid of a VRM.
@@ -21,9 +25,9 @@ export class VRMHumanoid {
 
   /**
    * A [[VRMPose]] that is its default state.
-   * You might use [[VRMHumanoid.setPose]] with this pose to reset its state.
+   * Note that it's not compatible with `setPose` and `getPose`, since it contains non-relative values of each local transforms.
    */
-  public readonly restPose: VRMPose;
+  public readonly restPose: VRMPose = {};
 
   /**
    * Create a new [[VRMHumanoid]].
@@ -39,6 +43,8 @@ export class VRMHumanoid {
 
   /**
    * Return the current pose of this humanoid as a [[VRMPose]].
+   *
+   * Each transform is a local transform relative from rest pose (T-pose).
    */
   public getPose(): VRMPose {
     const pose: VRMPose = {};
@@ -55,9 +61,26 @@ export class VRMHumanoid {
         return;
       }
 
+      // Take a diff from restPose
+      // note that restPose also will use getPose to initialize itself
+      _v3A.set(0, 0, 0);
+      _quatA.identity();
+
+      const restState = this.restPose[vrmBoneName];
+      if (restState?.position) {
+        _v3A.fromArray(restState.position).negate();
+      }
+      if (restState?.rotation) {
+        _quatA.fromArray(restState.rotation).inverse();
+      }
+
+      // Get the position / rotation from the node
+      _v3A.add(node.position);
+      _quatA.premultiply(node.quaternion);
+
       pose[vrmBoneName] = {
-        position: node.position.toArray() as RawVector3,
-        rotation: node.quaternion.toArray() as RawVector4,
+        position: _v3A.toArray() as RawVector3,
+        rotation: _quatA.toArray() as RawVector4,
       };
     }, {} as VRMPose);
     return pose;
@@ -65,6 +88,9 @@ export class VRMHumanoid {
 
   /**
    * Let the humanoid do a specified pose.
+   *
+   * Each transform have to be a local transform relative from rest pose (T-pose).
+   * You can pass what you got from {@link getPose}.
    *
    * @param poseObject A [[VRMPose]] that represents a single pose
    */
@@ -84,17 +110,28 @@ export class VRMHumanoid {
       }
 
       if (state.position) {
-        // 元の状態に戻してから、移動分を追加
-        node.position.set(
-          restState.position![0] + state.position[0],
-          restState.position![1] + state.position[1],
-          restState.position![2] + state.position[2],
-        );
+        node.position.fromArray(state.position);
+
+        if (restState.position) {
+          node.position.add(_v3A.fromArray(restState.position));
+        }
       }
+
       if (state.rotation) {
         node.quaternion.fromArray(state.rotation);
+
+        if (restState.rotation) {
+          node.quaternion.multiply(_quatA.fromArray(restState.rotation));
+        }
       }
     });
+  }
+
+  /**
+   * Reset the humanoid to its rest pose.
+   */
+  public resetPose(): void {
+    this.setPose({});
   }
 
   /**
