@@ -2,6 +2,7 @@
 
 import banner from 'rollup-plugin-banner';
 import packageJson from './package.json';
+import replace from '@rollup/plugin-replace';
 import serve from 'rollup-plugin-serve';
 import { terser } from 'rollup-plugin-terser';
 import typescript from '@rollup/plugin-typescript';
@@ -12,7 +13,8 @@ const licenseName = 'MIT License';
 const licenseUri = 'https://github.com/pixiv/three-vrm-constraints/blob/master/LICENSE';
 
 // == envs =========================================================================================
-const DEV = process.env.DEV === '1';
+const NODE_ENV = process.env.NODE_ENV;
+const DEV = NODE_ENV === 'development';
 const SERVE = process.env.SERVE === '1';
 const ESM = process.env.ESM === '1';
 
@@ -54,6 +56,11 @@ export default {
   },
   plugins: [
     typescript(tsOptions),
+    replace({
+      'process.env.VERSION': `'${packageJson.version}'`,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      'process.env.NODE_ENV': `'${NODE_ENV}'`,
+    }),
     ...(DEV ? [] : [terser()]),
     ...(SERVE ? [serve(serveOptions)] : []),
     ...(DEV ? [] : [banner(bannerTextProd)]),
