@@ -23,7 +23,7 @@
     "build-prod": "cross-env NODE_ENV=production rollup -c -o lib/three-vrm-constraints.min.js",
     "build-types": "tsc --declaration --declarationDir ./types --emitDeclarationOnly && downlevel-dts types ts3.4/types",
     "docs": "typedoc --out docs --mode file --excludeNotExported",
-    "test": "jest --passWithNoTests",
+    "test": "jest",
     "lint": "eslint \"src/**/*.{ts,tsx}\""
   },
   "files": [
