@@ -30,7 +30,7 @@
 		</script>
 		<script type="module-shim">
 			import * as THREE from 'three';
-			import { VRMConstraintManager, VRMRotationConstraint } from '../lib/three-vrm-constraints.js';
+			import { VRMConstraintHelper, VRMConstraintManager, VRMRotationConstraint } from '../lib/three-vrm-constraints.js';
 			import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 			// renderer
@@ -58,21 +58,28 @@
 			scene.add( light );
 
 			// objects
+			const modelRoot = new THREE.Object3D();
+			modelRoot.name = 'modelRoot';
+			scene.add( modelRoot );
+
 			const geometry = new THREE.BoxGeometry( 0.25, 0.25, 0.25 );
 			const material = new THREE.MeshStandardMaterial( { color: 0xbbbbbb } );
 
-			const cubeRotX = new THREE.Mesh( geometry, material );
-			cubeRotX.position.set( -0.5, 0.0, 0.0 );
-			scene.add( cubeRotX );
+			const cubeA = new THREE.Mesh( geometry, material );
+			cubeA.name = 'cubeA';
+			cubeA.position.set( -0.5, 0.0, 0.0 );
+			modelRoot.add( cubeA );
 
 			const cubeConstrainedA = new THREE.Mesh( geometry, material );
+			cubeConstrainedA.name = 'cubeConstrainedA';
       cubeConstrainedA.position.set( 0.0, 0.0, 0.0 );
-			scene.add( cubeConstrainedA );
+			modelRoot.add( cubeConstrainedA );
 
 			const cubeConstrainedB = new THREE.Mesh( geometry, material );
+			cubeConstrainedB.name = 'cubeConstrainedB';
       cubeConstrainedB.position.set( 0.5, 0.0, 0.0 );
       cubeConstrainedB.rotation.set( 0.5, 2.5, 4.5 );
-			scene.add( cubeConstrainedB );
+			modelRoot.add( cubeConstrainedB );
 
 			// helpers
 			const gridHelper = new THREE.GridHelper( 10, 10 );
@@ -86,16 +93,28 @@
 				autoRemoveCircularDependency: true
 			});
 
-			const constraintA = new VRMRotationConstraint(cubeConstrainedA);
-			constraintA.setSource(cubeRotX);
-			constraintA.setInitState();
+			const constraintA = new VRMRotationConstraint(cubeConstrainedA, modelRoot);
+			constraintA.setSource(cubeA);
 			constraintA.weight = 0.5;
 			constraintManager.addConstraint(constraintA);
 
-			const constraintB = new VRMRotationConstraint(cubeConstrainedB);
+			const constraintB = new VRMRotationConstraint(cubeConstrainedB, modelRoot);
 			constraintB.setSource(cubeConstrainedA);
-			constraintB.setInitState();
 			constraintManager.addConstraint(constraintB);
+
+			// constraint helpers
+			const helpers = Array.from( constraintManager.constraints ).map( ( constraint ) => {
+
+				const helper = new VRMConstraintHelper( constraint );
+				helper.renderOrder = 10000;
+				scene.add( helper );
+				return helper;
+
+			} );
+
+			// init constraints
+			scene.updateMatrixWorld();
+			constraintManager.setInitState();
 
 			// animate
 			const clock = new THREE.Clock();
@@ -106,9 +125,10 @@
 
 				const deltaTime = clock.getDelta();
 
-				cubeRotX.rotation.x = Math.sin( Math.PI * clock.elapsedTime );
+				cubeA.rotation.x = Math.sin( Math.PI * clock.elapsedTime );
 
 				constraintManager.update();
+				helpers.forEach( ( helper ) => helper.update() );
 
 				renderer.render( scene, camera );
 

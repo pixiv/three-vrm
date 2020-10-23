@@ -25,6 +25,9 @@ export abstract class VRMConstraint {
   public get dependencies(): Set<THREE.Object3D> {
     const deps = new Set<THREE.Object3D>();
     this._source && deps.add(this._source);
+    if (this.destinationSpace === VRMConstraintSpace.Model && this.object.parent) {
+      deps.add(this.object.parent);
+    }
     return deps;
   }
 
@@ -34,6 +37,8 @@ export abstract class VRMConstraint {
    */
   public constructor(object: THREE.Object3D, modelRoot: THREE.Object3D) {
     this.object = object;
+    object.matrixAutoUpdate = false;
+
     this.modelRoot = modelRoot;
   }
 
@@ -49,7 +54,7 @@ export abstract class VRMConstraint {
     if (!this.object.parent) {
       target.identity();
     } else {
-      this.object.parent.updateMatrixWorld();
+      this.object.parent.updateWorldMatrix(false, false);
       target.copy(this.object.parent.matrixWorld);
       target.getInverse(target);
 
@@ -69,7 +74,7 @@ export abstract class VRMConstraint {
       this.object.updateMatrix();
       target.copy(this.object.matrix);
     } else if (this.destinationSpace === VRMConstraintSpace.Model) {
-      this.object.updateMatrixWorld();
+      this.object.updateWorldMatrix(false, false);
       target.copy(this.object.matrixWorld);
 
       this._getMatrixWorldToModel(_matWorldToModel);
@@ -93,7 +98,7 @@ export abstract class VRMConstraint {
       this._source.updateMatrix();
       target.copy(this._source.matrix);
     } else if (this.sourceSpace === VRMConstraintSpace.Model) {
-      this._source.updateMatrixWorld();
+      this._source.updateWorldMatrix(false, false);
       target.copy(this._source.matrixWorld);
 
       this._getMatrixWorldToModel(_matWorldToModel);

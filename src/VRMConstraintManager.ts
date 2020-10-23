@@ -28,12 +28,21 @@ export class VRMConstraintManager {
     objectSet.delete(constraint);
   }
 
+  public setInitState(): void {
+    const constraintsTried = new Set<VRMConstraint>();
+    const constraintsDone = new Set<VRMConstraint>();
+
+    for (const constraint of this._constraints) {
+      this._processConstraint(constraint, constraintsTried, constraintsDone, (constraint) => constraint.setInitState());
+    }
+  }
+
   public update(): void {
     const constraintsTried = new Set<VRMConstraint>();
     const constraintsDone = new Set<VRMConstraint>();
 
     for (const constraint of this._constraints) {
-      this._processConstraint(constraint, constraintsTried, constraintsDone);
+      this._processConstraint(constraint, constraintsTried, constraintsDone, (constraint) => constraint.update());
     }
   }
 
@@ -52,6 +61,7 @@ export class VRMConstraintManager {
     constraint: VRMConstraint,
     constraintsTried: Set<VRMConstraint>,
     constraintsDone: Set<VRMConstraint>,
+    callback: (constraint: VRMConstraint) => void,
   ): void {
     if (constraintsDone.has(constraint)) {
       return;
@@ -68,13 +78,13 @@ export class VRMConstraintManager {
         const objectSet = this._objectConstraintsMap.get(depObjectAncestor);
         if (objectSet) {
           for (const depConstraint of objectSet) {
-            this._processConstraint(depConstraint, constraintsTried, constraintsDone);
+            this._processConstraint(depConstraint, constraintsTried, constraintsDone, callback);
           }
         }
       });
     }
 
-    constraint.update();
+    callback(constraint);
 
     constraintsDone.add(constraint);
   }

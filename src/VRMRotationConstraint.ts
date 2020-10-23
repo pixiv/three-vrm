@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { VRMConstraint } from './VRMConstraint';
+import { VRMConstraintSpace } from './VRMConstraintSpace';
 
 const QUAT_IDENTITY = new THREE.Quaternion(0, 0, 0, 1);
 
@@ -10,22 +11,26 @@ export class VRMRotationConstraint extends VRMConstraint {
   private _initQuaternion = new THREE.Quaternion();
 
   public setInitState(): void {
-    this._initQuaternion.copy(this.object.quaternion);
+    this.object.updateMatrix();
 
+    this._getDestinationMatrix(_matA);
+    this._initQuaternion.setFromRotationMatrix(_matA);
     this._getWeightedSource(_quatA);
     _quatA.inverse();
     this._initQuaternion.multiply(_quatA);
   }
 
   public update(): void {
-    this.object.quaternion.set(0.0, 0.0, 0.0, 1.0);
-
-    this._getWeightedSource(_quatA);
-    this.object.quaternion.multiply(_quatA);
-
+    this._getWeightedSource(this.object.quaternion);
     this.object.quaternion.multiply(this._initQuaternion);
 
-    this.object.updateMatrixWorld();
+    if (this.destinationSpace === VRMConstraintSpace.Model) {
+      this._getInverseParentMatrixInModelSpace(_matA);
+      _quatA.setFromRotationMatrix(_matA);
+      this.object.quaternion.multiply(_quatA);
+    }
+
+    this.object.updateMatrix();
   }
 
   private _getWeightedSource(target: THREE.Quaternion): THREE.Quaternion {

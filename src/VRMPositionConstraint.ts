@@ -9,6 +9,8 @@ export class VRMPositionConstraint extends VRMConstraint {
   private _initPosition = new THREE.Vector3();
 
   public setInitState(): void {
+    this.object.updateMatrix();
+
     this._getDestinationMatrix(_matA);
     this._initPosition.setFromMatrixPosition(_matA);
     this._getWeightedSource(_v3A);
@@ -24,7 +26,7 @@ export class VRMPositionConstraint extends VRMConstraint {
       this.object.position.applyMatrix4(_matA);
     }
 
-    this.object.updateMatrixWorld();
+    this.object.updateMatrix();
   }
 
   private _getWeightedSource(target: THREE.Vector3): THREE.Vector3 {

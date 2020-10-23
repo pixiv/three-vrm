@@ -59,9 +59,11 @@
 
 			// objects
 			const modelRoot = new THREE.Object3D();
+			modelRoot.name = 'modelRoot';
 			scene.add( modelRoot );
 
 			const haha = new THREE.Object3D();
+			haha.name = 'haha';
 			haha.rotation.y = 1.0; // haha
 			modelRoot.add( haha );
 
@@ -69,13 +71,16 @@
 			const material = new THREE.MeshStandardMaterial( { color: 0xbbbbbb } );
 
 			const cubeA = new THREE.Mesh( geometry, material );
+			cubeA.name = 'cubeA';
 			modelRoot.add( cubeA );
 
 			const cubeB = new THREE.Mesh( geometry, material );
+			cubeB.name = 'cubeB';
 			cubeB.position.set( 0.5, 0.5, 0.5 );
 			haha.add( cubeB );
 
 			const cubeC = new THREE.Mesh( geometry, material );
+			cubeC.name = 'cubeC';
 			cubeC.position.set( 1.0, 1.0, 1.0 );
 			haha.add( cubeC );
 
@@ -113,8 +118,7 @@
 
 			// init constraints
 			scene.updateMatrixWorld();
-			constraintAB.setInitState();
-			constraintBC.setInitState();
+			constraintManager.setInitState();
 
 			// animate
 			const clock = new THREE.Clock();

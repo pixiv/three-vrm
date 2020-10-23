@@ -30,7 +30,7 @@
 		</script>
 		<script type="module-shim">
 			import * as THREE from 'three';
-			import { VRMAimConstraint, VRMConstraintManager } from '../lib/three-vrm-constraints.js';
+			import { VRMAimConstraint, VRMConstraintHelper, VRMConstraintManager } from '../lib/three-vrm-constraints.js';
 			import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 			// renderer
@@ -58,14 +58,20 @@
 			scene.add( light );
 
 			// objects
+			const modelRoot = new THREE.Object3D();
+			modelRoot.name = 'modelRoot';
+			scene.add( modelRoot );
+
 			const geometry = new THREE.BoxGeometry( 0.25, 0.25, 0.25 );
 			const material = new THREE.MeshStandardMaterial( { color: 0xbbbbbb } );
 
 			const cubeA = new THREE.Mesh( geometry, material );
-			scene.add( cubeA );
+			cubeA.name = 'cubeA';
+			modelRoot.add( cubeA );
 
 			const cubeB = new THREE.Mesh( geometry, material );
-			scene.add( cubeB );
+			cubeB.name = 'cubeB';
+			modelRoot.add( cubeB );
 
 			// helpers
 			const gridHelper = new THREE.GridHelper( 10, 10 );
@@ -79,12 +85,25 @@
 				autoRemoveCircularDependency: true
 			});
 
-			const constraint = new VRMAimConstraint(cubeA);
+			const constraint = new VRMAimConstraint(cubeA, modelRoot);
 			constraint.aimVector.set( 0.0, 0.0, -1.0 ).normalize();
 			constraint.setSource(cubeB);
-			constraint.setInitState();
 			constraint.weight = 0.5;
 			constraintManager.addConstraint(constraint);
+
+			// constraint helpers
+			const helpers = Array.from( constraintManager.constraints ).map( ( constraint ) => {
+
+				const helper = new VRMConstraintHelper( constraint );
+				helper.renderOrder = 10000;
+				scene.add( helper );
+				return helper;
+
+			} );
+
+			// init constraints
+			scene.updateMatrixWorld();
+			constraintManager.setInitState();
 
 			cubeB.position.set( 0.0, 0.5, -0.5 );
 
@@ -100,6 +119,7 @@
 				cubeB.position.x = 4.0 * Math.sin( clock.elapsedTime );
 
 				constraintManager.update();
+				helpers.forEach( ( helper ) => helper.update() );
 
 				renderer.render( scene, camera );
 
