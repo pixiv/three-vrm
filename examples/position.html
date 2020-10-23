@@ -91,14 +91,15 @@
 			constraintBC.weight = 0.5;
 			constraintManager.addConstraint( constraintBC );
 
-			// constraints helper
-			const constraintABHelper = new THREE_VRM_CONSTRAINTS.VRMConstraintHelper( constraintAB );
-			constraintABHelper.renderOrder = 10000;
-			scene.add( constraintABHelper );
+			// constraint helpers
+			const helpers = Array.from( constraintManager.constraints ).map( ( constraint ) => {
 
-			const constraintBCHelper = new THREE_VRM_CONSTRAINTS.VRMConstraintHelper( constraintBC );
-			constraintBCHelper.renderOrder = 10000;
-			scene.add( constraintBCHelper );
+				const helper = new THREE_VRM_CONSTRAINTS.VRMConstraintHelper( constraint );
+				helper.renderOrder = 10000;
+				scene.add( helper );
+				return helper;
+
+			} );
 
 			// init constraints
 			scene.updateMatrixWorld();
@@ -119,8 +120,7 @@
 				modelRoot.position.z = Math.sin( clock.elapsedTime );
 
 				constraintManager.update();
-				constraintABHelper.update();
-				constraintBCHelper.update();
+				helpers.forEach( ( helper ) => helper.update() );
 
 				renderer.render( scene, camera );
 
