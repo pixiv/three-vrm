@@ -16,12 +16,6 @@ const licenseUri = 'https://github.com/pixiv/three-vrm-constraints/blob/master/L
 const NODE_ENV = process.env.NODE_ENV;
 const DEV = NODE_ENV === 'development';
 const SERVE = process.env.SERVE === '1';
-const ESM = process.env.ESM === '1';
-
-// == typescript ===================================================================================
-const tsOptions = {
-  target: ESM ? 'es6' : 'es5',
-};
 
 // == banner =======================================================================================
 // uses `output.banner` in dev mode, since sourcemap matters
@@ -48,14 +42,12 @@ export default {
   external: ['three'],
   input: 'src/index.ts',
   output: {
-    format: ESM ? 'esm' : 'umd',
-    name: ESM ? undefined : 'THREE_VRM_CONSTRAINTS',
+    format: 'esm',
     banner: DEV ? bannerTextDev : null,
     sourcemap: DEV ? 'inline' : false,
-    globals: ESM ? {} : { three: 'THREE' },
   },
   plugins: [
-    typescript(tsOptions),
+    typescript(),
     replace({
       'process.env.VERSION': `'${packageJson.version}'`,
       // eslint-disable-next-line @typescript-eslint/naming-convention
