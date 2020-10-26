@@ -66,7 +66,7 @@
     "@typescript-eslint/parser": "^4.5.0",
     "downlevel-dts": "^0.4.0",
     "eslint": "^7.12.0",
-    "eslint-config-prettier": "^6.2.0",
+    "eslint-config-prettier": "^6.14.0",
     "eslint-plugin-prettier": "^3.1.0",
     "fork-ts-checker-webpack-plugin": "^4.1.4",
     "gh-pages": "^3.1.0",
