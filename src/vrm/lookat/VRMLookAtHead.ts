@@ -59,10 +59,7 @@ export class VRMLookAtHead {
    */
   public getLookAtWorldDirection(target: THREE.Vector3): THREE.Vector3 {
     const rot = getWorldQuaternionLite(this.firstPerson.firstPersonBone, _quat);
-    return target
-      .copy(VECTOR3_FRONT)
-      .applyEuler(this._euler)
-      .applyQuaternion(rot);
+    return target.copy(VECTOR3_FRONT).applyEuler(this._euler).applyQuaternion(rot);
   }
 
   /**
@@ -99,10 +96,7 @@ export class VRMLookAtHead {
     const headPosition = this.firstPerson.getFirstPersonWorldPosition(_v3B);
 
     // Look at direction in world coordinate
-    const lookAtDir = _v3C
-      .copy(position)
-      .sub(headPosition)
-      .normalize();
+    const lookAtDir = _v3C.copy(position).sub(headPosition).normalize();
 
     // Transform the direction into local coordinate from the first person bone
     lookAtDir.applyQuaternion(getWorldQuaternionLite(this.firstPerson.firstPersonBone, _quat).inverse());
