@@ -8,6 +8,7 @@ export interface VRMUnlitMaterialParameters extends THREE.ShaderMaterialParamete
   cutoff?: number; // _Cutoff
   map?: THREE.Texture; // _MainTex
   mainTex?: THREE.Texture; // _MainTex (will be renamed to map)
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   mainTex_ST?: THREE.Vector4; // _MainTex_ST
 
   renderType?: VRMUnlitMaterialRenderType | number;
@@ -31,6 +32,7 @@ export class VRMUnlitMaterial extends THREE.ShaderMaterial {
 
   public cutoff = 0.5;
   public map: THREE.Texture | null = null; // _MainTex
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   public mainTex_ST = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _MainTex_ST
   private _renderType = VRMUnlitMaterialRenderType.Opaque;
 
@@ -57,6 +59,7 @@ export class VRMUnlitMaterial extends THREE.ShaderMaterial {
       THREE.UniformsLib.fog,
       {
         cutoff: { value: 0.5 },
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         mainTex_ST: { value: new THREE.Vector4(0.0, 0.0, 1.0, 1.0) },
       },
     ]);
