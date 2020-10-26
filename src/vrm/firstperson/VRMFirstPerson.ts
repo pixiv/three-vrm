@@ -225,13 +225,16 @@ export class VRMFirstPerson {
     return count;
   }
 
-  private _createErasedMesh(src: THREE.SkinnedMesh, erasingBonesIndex: number[]): THREE.SkinnedMesh {
+  private _createErasedMesh(
+    src: THREE.SkinnedMesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>,
+    erasingBonesIndex: number[],
+  ): THREE.SkinnedMesh {
     const dst = new THREE.SkinnedMesh(src.geometry.clone(), src.material);
     dst.name = `${src.name}(erase)`;
     dst.frustumCulled = src.frustumCulled;
     dst.layers.set(this._firstPersonOnlyLayer);
 
-    const geometry = dst.geometry as THREE.BufferGeometry;
+    const geometry = dst.geometry;
 
     const skinIndexAttr = geometry.getAttribute('skinIndex').array;
     const skinIndex = [];
@@ -266,7 +269,10 @@ export class VRMFirstPerson {
     return dst;
   }
 
-  private _createHeadlessModelForSkinnedMesh(parent: THREE.Object3D, mesh: THREE.SkinnedMesh): void {
+  private _createHeadlessModelForSkinnedMesh(
+    parent: THREE.Object3D,
+    mesh: THREE.SkinnedMesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>,
+  ): void {
     const eraseBoneIndexes: number[] = [];
     mesh.skeleton.bones.forEach((bone, index) => {
       if (this._isEraseTarget(bone)) eraseBoneIndexes.push(index);
@@ -296,11 +302,13 @@ export class VRMFirstPerson {
         node.children
           .filter((child) => child.type === 'SkinnedMesh')
           .forEach((child) => {
-            this._createHeadlessModelForSkinnedMesh(parent, child as THREE.SkinnedMesh);
+            const skinnedMesh = child as THREE.SkinnedMesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>;
+            this._createHeadlessModelForSkinnedMesh(parent, skinnedMesh);
           });
       }
     } else if (node.type === 'SkinnedMesh') {
-      this._createHeadlessModelForSkinnedMesh(node.parent!, node as THREE.SkinnedMesh);
+      const skinnedMesh = node as THREE.SkinnedMesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>;
+      this._createHeadlessModelForSkinnedMesh(node.parent!, skinnedMesh);
     } else {
       if (this._isEraseTarget(node)) {
         node.layers.set(this._thirdPersonOnlyLayer);

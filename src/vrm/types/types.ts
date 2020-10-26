@@ -12,14 +12,19 @@ export type GLTFNode = THREE.Object3D;
  *
  * See: https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#meshes
  */
-export type GLTFPrimitive = THREE.Mesh | THREE.SkinnedMesh;
+export type GLTFPrimitive =
+  | THREE.Mesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>
+  | THREE.SkinnedMesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>;
 
 /**
  * A single mesh of GLTFs, represented as a Three.js object;
  *
  * See: https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#meshes
  */
-export type GLTFMesh = THREE.Group | THREE.Mesh | THREE.SkinnedMesh;
+export type GLTFMesh =
+  | THREE.Group
+  | THREE.Mesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>
+  | THREE.SkinnedMesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>;
 
 /**
  * Represents a transform of a single bone of [[VRMPose]].
