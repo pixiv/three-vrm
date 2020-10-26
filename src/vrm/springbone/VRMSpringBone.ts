@@ -193,10 +193,7 @@ export class VRMSpringBone {
     if (this.bone.children.length === 0) {
       // 末端のボーン。子ボーンがいないため「自分の少し先」が子ボーンということにする
       // https://github.com/dwango/UniVRM/blob/master/Assets/VRM/UniVRM/Scripts/SpringBone/VRMSpringBone.cs#L246
-      this._initialLocalChildPosition
-        .copy(this.bone.position)
-        .normalize()
-        .multiplyScalar(0.07); // magic number! derives from original source
+      this._initialLocalChildPosition.copy(this.bone.position).normalize().multiplyScalar(0.07); // magic number! derives from original source
     } else {
       const firstChild = this.bone.children[0];
       this._initialLocalChildPosition.copy(firstChild.position);
@@ -308,10 +305,7 @@ export class VRMSpringBone {
     const initialCenterSpaceMatrixInv = _matA.getInverse(_matB.multiply(this._initialLocalMatrix));
     const applyRotation = _quatA.setFromUnitVectors(
       this._boneAxis,
-      _v3A
-        .copy(this._nextTail)
-        .applyMatrix4(initialCenterSpaceMatrixInv)
-        .normalize(),
+      _v3A.copy(this._nextTail).applyMatrix4(initialCenterSpaceMatrixInv).normalize(),
     );
 
     this.bone.quaternion.copy(this._initialLocalRotation).multiply(applyRotation);

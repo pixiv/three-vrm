@@ -15,6 +15,7 @@ export interface MToonParameters extends THREE.ShaderMaterialParameters {
   shadeColor?: THREE.Vector4; // _ShadeColor
   map?: THREE.Texture; // _MainTex
   mainTex?: THREE.Texture; // _MainTex (will be renamed to map)
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   mainTex_ST?: THREE.Vector4; // _MainTex_ST
   shadeTexture?: THREE.Texture; // _ShadeTexture
   bumpScale?: number; // _BumpScale (will be converted to normalScale)
@@ -123,6 +124,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
   public color = new THREE.Vector4(1.0, 1.0, 1.0, 1.0); // _Color
   public shadeColor = new THREE.Vector4(0.97, 0.81, 0.86, 1.0); // _ShadeColor
   public map: THREE.Texture | null = null; // _MainTex
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   public mainTex_ST = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _MainTex_ST
   public shadeTexture: THREE.Texture | null = null; // _ShadeTexture
   // public shadeTexture_ST = new THREE.Vector4(0.0, 0.0, 1.0, 1.0); // _ShadeTexture_ST (unused)
@@ -245,6 +247,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
         color: { value: new THREE.Color(1.0, 1.0, 1.0) },
         colorAlpha: { value: 1.0 },
         shadeColor: { value: new THREE.Color(0.97, 0.81, 0.86) },
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         mainTex_ST: { value: new THREE.Vector4(0.0, 0.0, 1.0, 1.0) },
         shadeTexture: { value: null },
         receiveShadowRate: { value: 1.0 },
