@@ -25,13 +25,15 @@ export function extractThumbnailBlob(renderer: THREE.WebGLRenderer, vrm: VRM, si
     throw new Error('extractThumbnailBlob: This VRM does not have a thumbnail');
   }
 
+  const canvas = renderer.getContext().canvas;
+
   // store the current resolution
   renderer.getSize(_v2A);
   const prevWidth = _v2A.x;
   const prevHeight = _v2A.y;
 
   // overwrite the resolution
-  renderer.setSize(size, size);
+  renderer.setSize(size, size, !(canvas instanceof OffscreenCanvas));
 
   // assign the texture to plane
   _plane.material.map = texture;
@@ -43,8 +45,15 @@ export function extractThumbnailBlob(renderer: THREE.WebGLRenderer, vrm: VRM, si
   _plane.material.map = null;
 
   // get blob
+  if (canvas instanceof OffscreenCanvas) {
+    return canvas.convertToBlob().finally(() => {
+      // revert to previous resolution
+      renderer.setSize(prevWidth, prevHeight, false);
+    });
+  }
+
   return new Promise((resolve, reject) => {
-    (renderer.getContext().canvas as HTMLCanvasElement).toBlob((blob) => {
+    canvas.toBlob((blob) => {
       // revert to previous resolution
       renderer.setSize(prevWidth, prevHeight);
 
