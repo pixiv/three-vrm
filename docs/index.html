@@ -83,9 +83,9 @@
 					<li><a href="https://github.com/pixiv/three-vrm/releases">A build of @pixiv/three-vrm</a></li>
 				</ul>
 				<p>Code like this:</p>
-				<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"three.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"GLTFLoader.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"three-vrm.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+				<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;three.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;GLTFLoader.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;three-vrm.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
 <span class="hljs-keyword">const</span> scene = <span class="hljs-keyword">new</span> THREE.Scene();
@@ -94,10 +94,10 @@
 loader.load(
 
     <span class="hljs-comment">// URL of the VRM you want to load</span>
-    <span class="hljs-string">'/models/three-vrm-girl.vrm'</span>,
+    <span class="hljs-string">&#x27;/models/three-vrm-girl.vrm&#x27;</span>,
 
     <span class="hljs-comment">// called when the resource is loaded</span>
-    ( gltf ) =&gt; {
+    <span class="hljs-function">(<span class="hljs-params"> gltf </span>) =&gt;</span> {
 
         <span class="hljs-comment">// generate a VRM instance from gltf</span>
         THREE.VRM.from( gltf ).then( <span class="hljs-function">(<span class="hljs-params"> vrm </span>) =&gt;</span> {
@@ -113,10 +113,10 @@ loader.load(
     },
 
     <span class="hljs-comment">// called while loading is progressing</span>
-    ( progress ) =&gt; <span class="hljs-built_in">console</span>.log( <span class="hljs-string">'Loading model...'</span>, <span class="hljs-number">100.0</span> * ( progress.loaded / progress.total ), <span class="hljs-string">'%'</span> ),
+    <span class="hljs-function">(<span class="hljs-params"> progress </span>) =&gt;</span> <span class="hljs-built_in">console</span>.log( <span class="hljs-string">&#x27;Loading model...&#x27;</span>, <span class="hljs-number">100.0</span> * ( progress.loaded / progress.total ), <span class="hljs-string">&#x27;%&#x27;</span> ),
 
     <span class="hljs-comment">// called when loading has errors</span>
-    ( error ) =&gt; <span class="hljs-built_in">console</span>.error( error )
+    <span class="hljs-function">(<span class="hljs-params"> error </span>) =&gt;</span> <span class="hljs-built_in">console</span>.error( error )
 
 );
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
@@ -126,9 +126,9 @@ loader.load(
 				<p>Install <a href="https://www.npmjs.com/package/three"><code>three</code></a> and <a href="https://www.npmjs.com/package/@pixiv/three-vrm"><code>@pixiv/three-vrm</code></a> :</p>
 				<pre><code class="language-sh">npm install three @pixiv/three-vrm</code></pre>
 				<p>Code like this:</p>
-				<pre><code class="language-javascript"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> THREE <span class="hljs-keyword">from</span> <span class="hljs-string">'three'</span>;
-<span class="hljs-keyword">import</span> { GLTFLoader } <span class="hljs-keyword">from</span> <span class="hljs-string">'three/examples/jsm/loaders/GLTFLoader'</span>;
-<span class="hljs-keyword">import</span> { VRM } <span class="hljs-keyword">from</span> <span class="hljs-string">'@pixiv/three-vrm'</span>;
+				<pre><code class="language-javascript"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> THREE <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;three&#x27;</span>;
+<span class="hljs-keyword">import</span> { GLTFLoader } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;three/examples/jsm/loaders/GLTFLoader&#x27;</span>;
+<span class="hljs-keyword">import</span> { VRM } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@pixiv/three-vrm&#x27;</span>;
 
 <span class="hljs-keyword">const</span> scene = <span class="hljs-keyword">new</span> THREE.Scene();
 
@@ -136,10 +136,10 @@ loader.load(
 loader.load(
 
     <span class="hljs-comment">// URL of the VRM you want to load</span>
-    <span class="hljs-string">'/models/three-vrm-girl.vrm'</span>,
+    <span class="hljs-string">&#x27;/models/three-vrm-girl.vrm&#x27;</span>,
 
     <span class="hljs-comment">// called when the resource is loaded</span>
-    ( gltf ) =&gt; {
+    <span class="hljs-function">(<span class="hljs-params"> gltf </span>) =&gt;</span> {
 
         <span class="hljs-comment">// generate a VRM instance from gltf</span>
         VRM.from( gltf ).then( <span class="hljs-function">(<span class="hljs-params"> vrm </span>) =&gt;</span> {
@@ -155,10 +155,10 @@ loader.load(
     },
 
     <span class="hljs-comment">// called while loading is progressing</span>
-    ( progress ) =&gt; <span class="hljs-built_in">console</span>.log( <span class="hljs-string">'Loading model...'</span>, <span class="hljs-number">100.0</span> * ( progress.loaded / progress.total ), <span class="hljs-string">'%'</span> ),
+    <span class="hljs-function">(<span class="hljs-params"> progress </span>) =&gt;</span> <span class="hljs-built_in">console</span>.log( <span class="hljs-string">&#x27;Loading model...&#x27;</span>, <span class="hljs-number">100.0</span> * ( progress.loaded / progress.total ), <span class="hljs-string">&#x27;%&#x27;</span> ),
 
     <span class="hljs-comment">// called when loading has errors</span>
-    ( error ) =&gt; <span class="hljs-built_in">console</span>.error( error )
+    <span class="hljs-function">(<span class="hljs-params"> error </span>) =&gt;</span> <span class="hljs-built_in">console</span>.error( error )
 
 );</code></pre>
 				<a href="#contributing" id="contributing" style="color: inherit; text-decoration: none;">
@@ -558,6 +558,5 @@ loader.load(
 </div>
 <div class="overlay"></div>
 <script src="assets/js/main.js"></script>
-<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
 </body>
 </html>
