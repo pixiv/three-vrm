@@ -3311,10 +3311,15 @@ lodash.unescape@4.0.1:
   resolved "https://registry.yarnpkg.com/lodash.unescape/-/lodash.unescape-4.0.1.tgz#bf2249886ce514cda112fae9218cdc065211fc9c"
   integrity sha1-vyJJiGzlFM2hEvrpIYzcBlIR/Jw=
 
-lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15:
+lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15:
   version "4.17.19"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
   integrity sha512-JNvd8XER9GQX0v2qJgsaN/mzFCNA5BRe/j8JN9d+tWyGLSodKQHKFicdwNYzWwI3wjRnaKPsGj1XkBjx/F96DQ==
+
+lodash@^4.17.19:
+  version "4.17.20"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
+  integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
 
 log-symbols@^4.0.0:
   version "4.0.0"
@@ -4365,10 +4370,10 @@ querystringify@^2.1.1:
   resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-2.1.1.tgz#60e5a5fd64a7f8bfa4d2ab2ed6fdf4c85bad154e"
   integrity sha512-w7fLxIRCRT7U8Qu53jQnJyPkYZIaR4n5151KMfcJlO/A9397Wxb1amJvROTK6TOnp7PfoAmg/qXiNHI+08jRfA==
 
-quicktype@^15.0.199:
-  version "15.0.249"
-  resolved "https://registry.yarnpkg.com/quicktype/-/quicktype-15.0.249.tgz#387267574e227896976fd251b2ee0388b5d307f7"
-  integrity sha512-iA26cJTkalZf/oI+inoBCwn21l7xPHwfr+8dcJ1ydX3pnQDAratb6O8HLZ3JrFPatVfrt61QHb3/PHer1nlYcg==
+quicktype@^15.0.258:
+  version "15.0.258"
+  resolved "https://registry.yarnpkg.com/quicktype/-/quicktype-15.0.258.tgz#5afebb7e3d26c2f3c43332d3a652fdd8141c6743"
+  integrity sha512-nTDC6LmwsFNJU1qY9+t09e4k1J1PosVDhZKRizkRinQzRVITFOzKSMuFBD3UJ1yaO9Irn7QKBlm9rae+9p+Cdg==
   dependencies:
     "@mark.probst/typescript-json-schema" "~0.32.0"
     "@mark.probst/unicode-properties" "~1.1.0"
@@ -4381,7 +4386,7 @@ quicktype@^15.0.199:
     is-url "^1.2.4"
     isomorphic-fetch "^2.2.1"
     js-base64 "^2.4.3"
-    lodash "^4.17.13"
+    lodash "^4.17.19"
     moment "^2.22.1"
     node-fetch "^1.7.1"
     pako "^1.0.6"
