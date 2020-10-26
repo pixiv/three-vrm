@@ -33,7 +33,7 @@ export function extractThumbnailBlob(renderer: THREE.WebGLRenderer, vrm: VRM, si
   const prevHeight = _v2A.y;
 
   // overwrite the resolution
-  renderer.setSize(size, size, !(canvas instanceof OffscreenCanvas));
+  renderer.setSize(size, size, false);
 
   // assign the texture to plane
   _plane.material.map = texture;
@@ -55,7 +55,7 @@ export function extractThumbnailBlob(renderer: THREE.WebGLRenderer, vrm: VRM, si
   return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => {
       // revert to previous resolution
-      renderer.setSize(prevWidth, prevHeight);
+      renderer.setSize(prevWidth, prevHeight, false);
 
       if (blob == null) {
         reject('extractThumbnailBlob: Failed to create a blob');
