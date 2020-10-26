@@ -35,7 +35,8 @@
     "build-types": "tsc --emitDeclarationOnly && downlevel-dts types ts3.4/types",
     "docs": "typedoc --out docs --mode file --excludeNotExported",
     "gh-pages": "node ./bin/gh-pages.js",
-    "lint": "eslint \"src/**/*.{ts,tsx}\"",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier \"src/**/*.{ts,tsx}\" --check",
+    "lint-fix": "eslint \"src/**/*.{ts,tsx}\" --fix && prettier \"src/**/*.{ts,tsx}\" --write",
     "typedefgen": "node ./bin/typedefgen.js"
   },
   "husky": {
@@ -46,6 +47,7 @@
   "lint-staged": {
     "src/**/*.{ts,tsx}": [
       "eslint --fix",
+      "prettier --write",
       "git add"
     ]
   },
@@ -67,7 +69,6 @@
     "downlevel-dts": "^0.4.0",
     "eslint": "^7.12.0",
     "eslint-config-prettier": "^6.14.0",
-    "eslint-plugin-prettier": "^3.1.0",
     "fork-ts-checker-webpack-plugin": "^4.1.4",
     "gh-pages": "^3.1.0",
     "husky": "^4.3.0",
