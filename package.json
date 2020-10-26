@@ -26,7 +26,7 @@
   "scripts": {
     "version": "yarn all",
     "postpublish": "yarn gh-pages",
-    "all": "yarn lint && yarn clean && yarn build && yarn docs",
+    "all": "yarn && yarn lint && yarn clean && yarn build && yarn docs",
     "dev": "webpack-dev-server --mode development",
     "clean": "rimraf docs lib ts*/ types",
     "build": "yarn build-dev && yarn build-prod && yarn build-types",
