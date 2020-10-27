@@ -16,13 +16,13 @@ export function toBeCloseToVector3(
   if (expectedDiff < diff) {
     return {
       pass: false,
-      message: () => `The received array doesn't match to the expected array:
+      message: () => `The received vector doesn't match to the expected vector:
   expected ${vector3ToString(expected)}, received ${vector3ToString(received)}`,
     };
   } else {
     return {
       pass: true,
-      message: () => 'The received array approximately matches to the expected array',
+      message: () => 'The received vector approximately matches to the expected vector',
     };
   }
 }
