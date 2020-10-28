@@ -33,19 +33,19 @@ describe('VRMPositionConstraint', () => {
     scene.add(modelRoot);
 
     parent = new THREE.Object3D();
-    setRandomTransform(parent, rng);
+    setRandomTransform(parent, () => rng.gen());
     modelRoot.add(parent);
 
     object = new THREE.Object3D();
-    setRandomTransform(object, rng);
+    setRandomTransform(object, () => rng.gen());
     parent.add(object);
 
     source = new THREE.Object3D();
-    setRandomTransform(source, rng);
+    setRandomTransform(source, () => rng.gen());
     parent.add(source);
 
     rot = new THREE.Quaternion();
-    setRandomQuaternion(rot, rng);
+    setRandomQuaternion(rot, () => rng.gen());
 
     constraint = new VRMRotationConstraint(object, modelRoot);
     constraint.setSource(source);

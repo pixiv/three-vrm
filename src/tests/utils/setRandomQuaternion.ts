@@ -1,12 +1,11 @@
 import * as THREE from 'three';
-import { Xorshift } from './Xorshift';
 
 const TAU = Math.PI * 2.0;
 
-export function setRandomQuaternion(target: THREE.Quaternion, rng: Xorshift): typeof target {
-  const u1 = rng.gen();
-  const u2 = rng.gen();
-  const u3 = rng.gen();
+export function setRandomQuaternion(target: THREE.Quaternion, rng: () => number): typeof target {
+  const u1 = rng();
+  const u2 = rng();
+  const u3 = rng();
 
   const sqrtU1 = Math.sqrt(u1);
   const sqrtOneSubU1 = Math.sqrt(1.0 - u1);
