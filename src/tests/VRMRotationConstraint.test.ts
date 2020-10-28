@@ -12,7 +12,7 @@ beforeEach(() => {
   expect.extend({ toBeCloseToQuaternion });
 });
 
-describe('VRMPositionConstraint', () => {
+describe('VRMRotationConstraint', () => {
   let rng = new Xorshift(123456);
 
   let scene = new THREE.Scene();
