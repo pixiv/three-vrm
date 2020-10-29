@@ -1,11 +1,15 @@
 import * as THREE from 'three';
+import { decomposePosition } from './utils/decomposePosition';
 import { VRMConstraint } from './VRMConstraint';
 import { VRMConstraintSpace } from './VRMConstraintSpace';
 
 const QUAT_IDENTITY = new THREE.Quaternion(0, 0, 0, 1);
 
 const _quatA = new THREE.Quaternion();
+const _quatB = new THREE.Quaternion();
 const _matA = new THREE.Matrix4();
+const _v3UpdatePos = new THREE.Vector3();
+const _v3UpdateScale = new THREE.Vector3();
 const _v3GetRotationUp = new THREE.Vector3();
 const _v3GetRotationPos = new THREE.Vector3();
 const _v3GetRotationDir = new THREE.Vector3();
@@ -17,36 +21,60 @@ export class VRMAimConstraint extends VRMConstraint {
   public aimVector = new THREE.Vector3(0.0, 0.0, 1.0);
   public upVector = new THREE.Vector3(0.0, 1.0, 0.0);
 
-  private _initQuaternion = new THREE.Quaternion();
+  private _quatInitAim = new THREE.Quaternion();
+  private _quatInvInitAim = new THREE.Quaternion();
+  private _quatInitDst = new THREE.Quaternion();
 
   public setInitState(): void {
-    this.object.updateMatrix();
+    this._quatInitDst.copy(this.object.quaternion);
 
-    this._getDestinationMatrix(_matA);
-    this._initQuaternion.setFromRotationMatrix(_matA);
-    this._getAimRotation(_quatA);
-    _quatA.inverse();
-    this._initQuaternion.multiply(_quatA);
+    this._getAimQuat(this._quatInitAim);
+    this._quatInvInitAim.copy(this._quatInitAim).inverse();
   }
 
   public update(): void {
-    this._getAimRotation(this.object.quaternion);
-    this.object.quaternion.multiply(this._initQuaternion);
+    if (this.destinationSpace === VRMConstraintSpace.Local) {
+      this.object.quaternion.copy(this._quatInitDst);
+    } else {
+      this._getParentMatrixInModelSpace(_matA);
+      _matA.decompose(_v3UpdatePos, _quatA, _v3UpdateScale);
+      this.object.quaternion.copy(_quatA).inverse();
+    }
+
+    this._getAimDiffQuat(_quatB);
+    this.object.quaternion.multiply(_quatB);
 
     if (this.destinationSpace === VRMConstraintSpace.Model) {
-      this._getInverseParentMatrixInModelSpace(_matA);
-      _quatA.setFromRotationMatrix(_matA);
       this.object.quaternion.multiply(_quatA);
+      this.object.quaternion.multiply(this._quatInitDst);
     }
 
     this.object.updateMatrix();
   }
 
-  private _getAimRotation(target: THREE.Quaternion): THREE.Quaternion {
+  /**
+   * Return a quaternion that represents a diff from the initial -> current orientation of the aim direction.
+   * It's aware of its {@link sourceSpace} and its {@link weight}.
+   * @param target Target quaternion
+   */
+  private _getAimDiffQuat(target: THREE.Quaternion): typeof target {
+    this._getAimQuat(target);
+    target.multiply(this._quatInvInitAim);
+
+    target.slerp(QUAT_IDENTITY, 1.0 - this.weight);
+    return target;
+  }
+
+  /**
+   * Return a current orientation of the aim direction.
+   * It's aware of its {@link sourceSpace}.
+   * @param target Target quaternion
+   */
+  private _getAimQuat(target: THREE.Quaternion): THREE.Quaternion {
     _v3GetRotationUp.copy(this.upVector).normalize();
 
     this._getSourcePosition(_v3GetRotationDir);
-    _v3GetRotationPos.setFromMatrixPosition(this.object.matrixWorld);
+    this._getDestinationPosition(_v3GetRotationPos);
     _v3GetRotationDir.sub(_v3GetRotationPos).normalize();
 
     const thetaAim = Math.asin(_v3GetRotationUp.dot(this.aimVector));
@@ -61,17 +89,34 @@ export class VRMAimConstraint extends VRMConstraint {
     _quatGetRotation.setFromAxisAngle(_v3GetRotationPlaneX, thetaAim - thetaDir);
     target.multiply(_quatGetRotation);
 
-    target.slerp(QUAT_IDENTITY, 1.0 - this.weight);
+    return target;
+  }
+
+  /**
+   * Return the current position of the object.
+   * It's aware of its {@link sourceSpace}.
+   * @param target Target quaternion
+   */
+  private _getDestinationPosition(target: THREE.Vector3): THREE.Vector3 {
+    target.set(0.0, 0.0, 0.0);
+
+    this._getDestinationMatrix(_matA);
+    decomposePosition(_matA, target);
 
     return target;
   }
 
+  /**
+   * Return the current position of the source.
+   * It's aware of its {@link sourceSpace}.
+   * @param target Target quaternion
+   */
   private _getSourcePosition(target: THREE.Vector3): THREE.Vector3 {
     target.set(0.0, 0.0, 0.0);
 
     if (this._source) {
       this._getSourceMatrix(_matA);
-      target.setFromMatrixPosition(_matA);
+      decomposePosition(_matA, target);
     }
 
     return target;
