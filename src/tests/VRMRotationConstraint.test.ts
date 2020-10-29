@@ -104,7 +104,7 @@ describe('VRMRotationConstraint', () => {
         });
 
         it('should apply the constraint properly', () => {
-          const expected = object.getWorldQuaternion(new THREE.Quaternion()).multiply(sourceDelta);
+          const expected = object.getWorldQuaternion(new THREE.Quaternion()).premultiply(sourceDelta);
 
           source.quaternion.multiply(rot);
           constraint.update();

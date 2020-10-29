@@ -22,7 +22,7 @@ export class VRMPositionConstraint extends VRMConstraint {
     this.object.position.add(this._initPosition);
 
     if (this.destinationSpace === VRMConstraintSpace.Model) {
-      this._getInverseParentMatrixInModelSpace(_matA);
+      this._getParentMatrixInModelSpace(_matA).getInverse(_matA);
       this.object.position.applyMatrix4(_matA);
     }
 

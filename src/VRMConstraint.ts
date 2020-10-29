@@ -37,7 +37,6 @@ export abstract class VRMConstraint {
    */
   public constructor(object: THREE.Object3D, modelRoot: THREE.Object3D) {
     this.object = object;
-    object.matrixAutoUpdate = false;
 
     this.modelRoot = modelRoot;
   }
@@ -47,18 +46,18 @@ export abstract class VRMConstraint {
   }
 
   /**
-   * Get the inverse of object matrix of the parent, in model space.
+   * Get the object matrix of the parent, in model space.
    * @param target Target matrix
    */
-  protected _getInverseParentMatrixInModelSpace(target: THREE.Matrix4): THREE.Matrix4 {
+  protected _getParentMatrixInModelSpace(target: THREE.Matrix4): THREE.Matrix4 {
     if (!this.object.parent) {
       target.identity();
     } else {
       this.object.parent.updateWorldMatrix(false, false);
       target.copy(this.object.parent.matrixWorld);
-      target.getInverse(target);
 
-      target.multiply(this.modelRoot.matrixWorld);
+      this._getMatrixWorldToModel(_matWorldToModel);
+      target.premultiply(_matWorldToModel);
     }
 
     return target;
