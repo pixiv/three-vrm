@@ -64,6 +64,7 @@
 
 			const haha = new THREE.Object3D();
 			haha.name = 'haha';
+			haha.scale.set(0.5, 0.5, 0.5);
 			haha.rotation.y = 1.0; // haha
 			modelRoot.add( haha );
 
@@ -98,12 +99,13 @@
 
 			const constraintAB = new VRMPositionConstraint( cubeB, modelRoot );
 			constraintAB.setSource( cubeA );
+			constraintAB.sourceSpace = 'LOCAL';
+			constraintAB.destinationSpace = 'LOCAL';
 			constraintAB.weight = 0.5;
 			constraintManager.addConstraint( constraintAB );
 
 			const constraintBC = new VRMPositionConstraint( cubeC, modelRoot );
-			constraintBC.setSource( cubeB );
-			constraintBC.weight = 0.5;
+			constraintBC.setSource( cubeA );
 			constraintManager.addConstraint( constraintBC );
 
 			// constraint helpers
