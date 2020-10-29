@@ -110,6 +110,7 @@ describe('VRMPositionConstraint', () => {
           scene.updateMatrixWorld();
 
           const actual = object.getWorldPosition(new Vector3());
+
           expect(actual).toBeCloseToVector3(expected);
         });
       });
