@@ -7,6 +7,7 @@ import { Xorshift } from './utils/Xorshift';
 import { toBeCloseToVector3 } from './matchers/toBeCloseToVector3';
 import { VRMConstraintSpace } from '../VRMConstraintSpace';
 import { Vector3 } from 'three';
+import { setRandomVector3 } from './utils/setRandomVector3';
 
 beforeEach(() => {
   expect.extend({ toBeCloseToVector3 });
@@ -44,7 +45,8 @@ describe('VRMPositionConstraint', () => {
     setRandomTransform(source, () => rng.gen());
     parent.add(source);
 
-    move = new THREE.Vector3(2.0 * rng.gen() - 1.0, 2.0 * rng.gen() - 1.0, 2.0 * rng.gen() - 1.0);
+    move = new THREE.Vector3();
+    setRandomVector3(move, () => rng.gen());
 
     constraint = new VRMPositionConstraint(object, modelRoot);
     constraint.setSource(source);

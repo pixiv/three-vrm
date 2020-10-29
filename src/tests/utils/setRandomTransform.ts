@@ -1,9 +1,10 @@
 import * as THREE from 'three';
 import { setRandomQuaternion } from './setRandomQuaternion';
+import { setRandomVector3 } from './setRandomVector3';
 
 export function setRandomTransform(object: THREE.Object3D, rng: () => number): typeof object {
   // apply random position
-  object.position.set(2.0 * rng() - 1.0, 2.0 * rng() - 1.0, 2.0 * rng() - 1.0);
+  setRandomVector3(object.position, rng);
 
   // apply random rotation
   setRandomQuaternion(object.quaternion, rng);
