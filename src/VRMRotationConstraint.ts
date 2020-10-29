@@ -63,7 +63,7 @@ export class VRMRotationConstraint extends VRMConstraint {
    * It's aware of its {@link sourceSpace}.
    * @param target Target quaternion
    */
-  private _getSourceQuat(target: THREE.Quaternion): THREE.Quaternion {
+  private _getSourceQuat(target: THREE.Quaternion): typeof target {
     target.copy(QUAT_IDENTITY);
 
     if (this._source) {

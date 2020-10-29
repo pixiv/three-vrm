@@ -70,7 +70,7 @@ export class VRMAimConstraint extends VRMConstraint {
    * It's aware of its {@link sourceSpace}.
    * @param target Target quaternion
    */
-  private _getAimQuat(target: THREE.Quaternion): THREE.Quaternion {
+  private _getAimQuat(target: THREE.Quaternion): typeof target {
     _v3GetRotationUp.copy(this.upVector).normalize();
 
     this._getSourcePosition(_v3GetRotationDir);
@@ -97,7 +97,7 @@ export class VRMAimConstraint extends VRMConstraint {
    * It's aware of its {@link sourceSpace}.
    * @param target Target quaternion
    */
-  private _getDestinationPosition(target: THREE.Vector3): THREE.Vector3 {
+  private _getDestinationPosition(target: THREE.Vector3): typeof target {
     target.set(0.0, 0.0, 0.0);
 
     this._getDestinationMatrix(_matA);
@@ -111,7 +111,7 @@ export class VRMAimConstraint extends VRMConstraint {
    * It's aware of its {@link sourceSpace}.
    * @param target Target quaternion
    */
-  private _getSourcePosition(target: THREE.Vector3): THREE.Vector3 {
+  private _getSourcePosition(target: THREE.Vector3): typeof target {
     target.set(0.0, 0.0, 0.0);
 
     if (this._source) {

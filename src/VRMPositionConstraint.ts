@@ -39,7 +39,7 @@ export class VRMPositionConstraint extends VRMConstraint {
    * It's aware of its {@link sourceSpace} and its {@link weight}.
    * @param target Target quaternion
    */
-  private _getSourceDiffPosition(target: THREE.Vector3): THREE.Vector3 {
+  private _getSourceDiffPosition(target: THREE.Vector3): typeof target {
     this._getSourcePosition(target);
     target.sub(this._v3InitSrc);
 
@@ -52,7 +52,7 @@ export class VRMPositionConstraint extends VRMConstraint {
    * It's aware of its {@link sourceSpace}.
    * @param target Target quaternion
    */
-  private _getSourcePosition(target: THREE.Vector3): THREE.Vector3 {
+  private _getSourcePosition(target: THREE.Vector3): typeof target {
     target.set(0.0, 0.0, 0.0);
 
     if (this._source) {
