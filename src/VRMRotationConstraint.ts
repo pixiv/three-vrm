@@ -1,11 +1,10 @@
 import * as THREE from 'three';
+import { decomposeRotation } from './utils/decomposeRotation';
 import { VRMConstraint } from './VRMConstraint';
 import { VRMConstraintSpace } from './VRMConstraintSpace';
 
 const QUAT_IDENTITY = new THREE.Quaternion(0, 0, 0, 1);
 
-const _v3A = new THREE.Vector3();
-const _v3B = new THREE.Vector3();
 const _matA = new THREE.Matrix4();
 const _quatA = new THREE.Quaternion();
 const _quatB = new THREE.Quaternion();
@@ -27,7 +26,7 @@ export class VRMRotationConstraint extends VRMConstraint {
       this.object.quaternion.copy(this._quatInitDst);
     } else {
       this._getParentMatrixInModelSpace(_matA);
-      _matA.decompose(_v3A, _quatA, _v3B);
+      decomposeRotation(_matA, _quatA);
       this.object.quaternion.copy(_quatA).inverse();
     }
 
@@ -69,7 +68,7 @@ export class VRMRotationConstraint extends VRMConstraint {
 
     if (this._source) {
       this._getSourceMatrix(_matA);
-      _matA.decompose(_v3A, target, _v3B);
+      decomposeRotation(_matA, target);
     }
 
     return target;

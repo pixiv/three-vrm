@@ -1,9 +1,8 @@
 import * as THREE from 'three';
+import { decomposePosition } from './utils/decomposePosition';
 import { VRMConstraint } from './VRMConstraint';
 import { VRMConstraintSpace } from './VRMConstraintSpace';
 
-const _v3A = new THREE.Vector3();
-const _quatA = new THREE.Quaternion();
 const _matA = new THREE.Matrix4();
 
 export class VRMPositionConstraint extends VRMConstraint {
@@ -58,7 +57,7 @@ export class VRMPositionConstraint extends VRMConstraint {
 
     if (this._source) {
       this._getSourceMatrix(_matA);
-      _matA.decompose(target, _quatA, _v3A);
+      decomposePosition(_matA, target);
     }
 
     return target;
