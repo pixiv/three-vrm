@@ -10,14 +10,8 @@ const QUAT_IDENTITY = new THREE.Quaternion(0, 0, 0, 1);
 const _quatA = new THREE.Quaternion();
 const _quatB = new THREE.Quaternion();
 const _matA = new THREE.Matrix4();
-const _v3UpdatePos = new THREE.Vector3();
-const _v3UpdateScale = new THREE.Vector3();
-const _v3GetRotationUp = new THREE.Vector3();
 const _v3GetRotationPos = new THREE.Vector3();
 const _v3GetRotationDir = new THREE.Vector3();
-const _v3GetRotationPlaneX = new THREE.Vector3();
-const _v3GetRotationPlaneY = new THREE.Vector3();
-const _quatGetRotation = new THREE.Quaternion();
 
 export class VRMAimConstraint extends VRMConstraint {
   /**
