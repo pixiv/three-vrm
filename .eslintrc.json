@@ -6,7 +6,7 @@
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
     "prettier/@typescript-eslint"
   ],
   "env": {
@@ -34,19 +34,19 @@
       {
         "selector": "memberLike",
         "modifiers": ["public"],
-        "format": ["camelCase"],
+        "format": ["camelCase", "UPPER_CASE"],
         "leadingUnderscore": "forbid"
       },
       {
         "selector": "memberLike",
         "modifiers": ["protected"],
-        "format": ["camelCase"],
+        "format": ["camelCase", "UPPER_CASE"],
         "leadingUnderscore": "require"
       },
       {
         "selector": "memberLike",
         "modifiers": ["private"],
-        "format": ["camelCase"],
+        "format": ["camelCase", "UPPER_CASE"],
         "leadingUnderscore": "require"
       },
       {
