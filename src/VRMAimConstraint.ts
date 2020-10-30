@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { decomposePosition } from './utils/decomposePosition';
+import { setAimQuaternion } from './utils/setAimQuaternion';
 import { VRMConstraint } from './VRMConstraint';
 import { VRMConstraintSpace } from './VRMConstraintSpace';
 
@@ -18,8 +19,29 @@ const _v3GetRotationPlaneY = new THREE.Vector3();
 const _quatGetRotation = new THREE.Quaternion();
 
 export class VRMAimConstraint extends VRMConstraint {
-  public aimVector = new THREE.Vector3(0.0, 0.0, 1.0);
-  public upVector = new THREE.Vector3(0.0, 1.0, 0.0);
+  /**
+   * Represents the aim vector used for reference of aim rotation.
+   * When set this, the vector will be normalized automatically.
+   */
+  private _aimVector = new THREE.Vector3(0.0, 0.0, 1.0);
+  public get aimVector(): THREE.Vector3 {
+    return this._aimVector;
+  }
+  public set aimVector(value: THREE.Vector3) {
+    this._aimVector = value.normalize();
+  }
+
+  /**
+   * Represents the up vector used for calculation of aim rotation.
+   * When set this, the vector will be normalized automatically.
+   */
+  private _upVector = new THREE.Vector3(0.0, 1.0, 0.0);
+  public get upVector(): THREE.Vector3 {
+    return this._upVector;
+  }
+  public set upVector(value: THREE.Vector3) {
+    this._upVector = value.normalize();
+  }
 
   private _quatInitAim = new THREE.Quaternion();
   private _quatInvInitAim = new THREE.Quaternion();
@@ -71,25 +93,13 @@ export class VRMAimConstraint extends VRMConstraint {
    * @param target Target quaternion
    */
   private _getAimQuat(target: THREE.Quaternion): typeof target {
-    _v3GetRotationUp.copy(this.upVector).normalize();
-
-    this._getSourcePosition(_v3GetRotationDir);
-    this._getDestinationPosition(_v3GetRotationPos);
-    _v3GetRotationDir.sub(_v3GetRotationPos).normalize();
-
-    const thetaAim = Math.asin(_v3GetRotationUp.dot(this.aimVector));
-    const thetaDir = Math.asin(_v3GetRotationUp.dot(_v3GetRotationDir));
-
-    _v3GetRotationPlaneX.crossVectors(_v3GetRotationUp, this.aimVector).normalize();
-    _v3GetRotationPlaneY.crossVectors(_v3GetRotationPlaneX, _v3GetRotationUp);
-
-    const phiDir = Math.atan2(_v3GetRotationPlaneX.dot(_v3GetRotationDir), _v3GetRotationPlaneY.dot(_v3GetRotationDir));
-
-    target.setFromAxisAngle(_v3GetRotationUp, phiDir);
-    _quatGetRotation.setFromAxisAngle(_v3GetRotationPlaneX, thetaAim - thetaDir);
-    target.multiply(_quatGetRotation);
-
-    return target;
+    return setAimQuaternion(
+      target,
+      this._getDestinationPosition(_v3GetRotationPos),
+      this._getSourcePosition(_v3GetRotationDir),
+      this._aimVector,
+      this._upVector
+    );
   }
 
   /**
