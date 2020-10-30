@@ -51,7 +51,7 @@ export class VRMAimConstraint extends VRMConstraint {
 
   public update(): void {
     if (this.destinationSpace === VRMConstraintSpace.Local) {
-      this.object.quaternion.copy(this._quatInitDst);
+      this.object.quaternion.copy(QUAT_IDENTITY);
     } else {
       this._getParentMatrixInModelSpace(_matA);
       decomposeRotation(_matA, _quatA);
@@ -63,8 +63,9 @@ export class VRMAimConstraint extends VRMConstraint {
 
     if (this.destinationSpace === VRMConstraintSpace.Model) {
       this.object.quaternion.multiply(_quatA);
-      this.object.quaternion.multiply(this._quatInitDst);
     }
+
+    this.object.quaternion.multiply(this._quatInitDst);
 
     this.object.updateMatrix();
   }

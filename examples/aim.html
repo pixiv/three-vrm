@@ -62,16 +62,24 @@
 			modelRoot.name = 'modelRoot';
 			scene.add( modelRoot );
 
-			const geometry = new THREE.BoxGeometry( 0.25, 0.25, 0.25 );
+			const parent = new THREE.Object3D();
+			parent.name = 'parent';
+			parent.rotation.y = Math.PI;
+			modelRoot.add( parent );
+
+			const geometryCone = new THREE.ConeBufferGeometry( 0.25, 0.5, 5 );
+			const geometryCube = new THREE.BoxGeometry( 0.25, 0.25, 0.25 );
 			const material = new THREE.MeshStandardMaterial( { color: 0xbbbbbb } );
 
-			const cubeA = new THREE.Mesh( geometry, material );
-			cubeA.name = 'cubeA';
-			modelRoot.add( cubeA );
+			const cone = new THREE.Mesh( geometryCone, material );
+			cone.rotation.x = Math.PI / 4.0;
+			cone.name = 'cone';
+			parent.add( cone );
 
-			const cubeB = new THREE.Mesh( geometry, material );
-			cubeB.name = 'cubeB';
-			modelRoot.add( cubeB );
+			const cube = new THREE.Mesh( geometryCube, material );
+			cube.name = 'cube';
+			cube.position.set( 0.0, 1.0, 1.0 );
+			parent.add( cube );
 
 			// helpers
 			const gridHelper = new THREE.GridHelper( 10, 10 );
@@ -85,10 +93,9 @@
 				autoRemoveCircularDependency: true
 			});
 
-			const constraint = new VRMAimConstraint(cubeA, modelRoot);
-			constraint.aimVector.set( 0.0, 0.0, -1.0 ).normalize();
-			constraint.setSource(cubeB);
-			constraint.weight = 0.5;
+			const constraint = new VRMAimConstraint(cone, modelRoot);
+			constraint.aimVector.set( 0.0, 0.0, 1.0 ).normalize();
+			constraint.setSource(cube);
 			constraintManager.addConstraint(constraint);
 
 			// constraint helpers
@@ -105,8 +112,6 @@
 			scene.updateMatrixWorld();
 			constraintManager.setInitState();
 
-			cubeB.position.set( 0.0, 0.5, -0.5 );
-
 			// animate
 			const clock = new THREE.Clock();
 
@@ -116,7 +121,7 @@
 
 				const deltaTime = clock.getDelta();
 
-				cubeB.position.x = 4.0 * Math.sin( clock.elapsedTime );
+				cube.position.x = 2.0 * Math.sin( clock.elapsedTime );
 
 				constraintManager.update();
 				helpers.forEach( ( helper ) => helper.update() );
