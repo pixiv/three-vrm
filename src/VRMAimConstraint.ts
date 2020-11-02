@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { decomposePosition } from './utils/decomposePosition';
 import { decomposeRotation } from './utils/decomposeRotation';
+import { quaternionFreezeAxes } from './utils/quaternionFreezeAxes';
 import { setAimQuaternion } from './utils/setAimQuaternion';
 import { VRMConstraint } from './VRMConstraint';
 import { VRMConstraintSpace } from './VRMConstraintSpace';
@@ -25,6 +26,8 @@ export class VRMAimConstraint extends VRMConstraint {
    * It must be normalized.
    */
   public readonly upVector = new THREE.Vector3(0.0, 1.0, 0.0);
+
+  public freezeAxes: [boolean, boolean, boolean] = [true, true, true];
 
   private readonly _quatInitAim = new THREE.Quaternion();
   private readonly _quatInvInitAim = new THREE.Quaternion();
@@ -60,14 +63,17 @@ export class VRMAimConstraint extends VRMConstraint {
 
   /**
    * Return a quaternion that represents a diff from the initial -> current orientation of the aim direction.
-   * It's aware of its {@link sourceSpace} and its {@link weight}.
+   * It's aware of its {@link sourceSpace}, {@link freezeAxes}, and {@link weight}.
    * @param target Target quaternion
    */
   private _getAimDiffQuat(target: THREE.Quaternion): typeof target {
     this._getAimQuat(target);
     target.multiply(this._quatInvInitAim);
 
+    quaternionFreezeAxes(target, this.freezeAxes);
+
     target.slerp(QUAT_IDENTITY, 1.0 - this.weight);
+
     return target;
   }
 
