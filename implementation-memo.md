@@ -13,7 +13,7 @@
 - そこに対してLocal SpaceもしくはModel Spaceで移動差分を足す
   - Model Spaceで移動差分を足す場合、以下の手順で行う:
     - Local Positionを移動差分に設定
-    - Model Spaceの親のinverseをそのLocal Positionに当てる
+    - Model Spaceの親のinverse **からTranslateを抜いたもの** をそのLocal Positionに当てる
     - 初期状態のLocal Positionをそこに足す
 
 ## Rotation Constraintの回転処理
