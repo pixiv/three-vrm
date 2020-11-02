@@ -16,31 +16,19 @@ const _v3GetRotationDir = new THREE.Vector3();
 export class VRMAimConstraint extends VRMConstraint {
   /**
    * Represents the aim vector used for reference of aim rotation.
-   * When set this, the vector will be normalized automatically.
+   * It must be normalized.
    */
-  private _aimVector = new THREE.Vector3(0.0, 0.0, 1.0);
-  public get aimVector(): THREE.Vector3 {
-    return this._aimVector;
-  }
-  public set aimVector(value: THREE.Vector3) {
-    this._aimVector = value.normalize();
-  }
+  public readonly aimVector = new THREE.Vector3(0.0, 0.0, 1.0);
 
   /**
    * Represents the up vector used for calculation of aim rotation.
-   * When set this, the vector will be normalized automatically.
+   * It must be normalized.
    */
-  private _upVector = new THREE.Vector3(0.0, 1.0, 0.0);
-  public get upVector(): THREE.Vector3 {
-    return this._upVector;
-  }
-  public set upVector(value: THREE.Vector3) {
-    this._upVector = value.normalize();
-  }
+  public readonly upVector = new THREE.Vector3(0.0, 1.0, 0.0);
 
-  private _quatInitAim = new THREE.Quaternion();
-  private _quatInvInitAim = new THREE.Quaternion();
-  private _quatInitDst = new THREE.Quaternion();
+  private readonly _quatInitAim = new THREE.Quaternion();
+  private readonly _quatInvInitAim = new THREE.Quaternion();
+  private readonly _quatInitDst = new THREE.Quaternion();
 
   public setInitState(): void {
     this._quatInitDst.copy(this.object.quaternion);
@@ -93,8 +81,8 @@ export class VRMAimConstraint extends VRMConstraint {
       target,
       this._getDestinationPosition(_v3GetRotationPos),
       this._getSourcePosition(_v3GetRotationDir),
-      this._aimVector,
-      this._upVector
+      this.aimVector,
+      this.upVector
     );
   }
 
