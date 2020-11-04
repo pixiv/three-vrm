@@ -109,7 +109,7 @@ export class VRMBlendShapeProxy {
    *
    * @example Manipulate a blend shape group using keyframe animation
    * ```js
-   * const trackName = vrm.blendShapeProxy.getBlendShapeTrackName( THREE.VRMSchema.BlendShapePresetName.Blink );
+   * const trackName = vrm.blendShapeProxy.getBlendShapeTrackName( VRMSchema.BlendShapePresetName.Blink );
    * const track = new THREE.NumberKeyframeTrack(
    *   name,
    *   [ 0.0, 0.5, 1.0 ], // times
