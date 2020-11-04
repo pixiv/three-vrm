@@ -39,6 +39,18 @@ jobs:
       - store_artifacts:
           path: examples
 
+  test:
+    docker: *docker
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - deps-{{ checksum "yarn.lock" }}
+            - deps-
+      - run:
+          name: Test
+          command: yarn test
+
   lint:
     docker: *docker
     steps:
@@ -71,6 +83,9 @@ workflows:
     jobs:
       - fetch
       - build:
+          requires:
+            - fetch
+      - test:
           requires:
             - fetch
       - lint:
