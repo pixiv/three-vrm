@@ -36,9 +36,9 @@ export class VRM {
    * ```
    * const scene = new THREE.Scene();
    *
-   * new THREE.GLTFLoader().load( 'models/three-vrm-girl.vrm', ( gltf ) => {
+   * new GLTFLoader().load( 'models/three-vrm-girl.vrm', ( gltf ) => {
    *
-   *   THREE.VRM.from( gltf ).then( ( vrm ) => {
+   *   VRM.from( gltf ).then( ( vrm ) => {
    *
    *     scene.add( vrm.scene );
    *

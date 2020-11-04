@@ -46,7 +46,7 @@ export class VRMImporter {
   }
 
   /**
-   * Receive a GLTF object retrieved from `THREE.GLTFLoader` and create a new [[VRM]] instance.
+   * Receive a GLTF object retrieved from `GLTFLoader` and create a new [[VRM]] instance.
    *
    * @param gltf A parsed result of GLTF taken from GLTFLoader
    */
