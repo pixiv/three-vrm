@@ -6,6 +6,8 @@
 
 - ふつうにLocal SpaceもしくはModel Spaceで位置を観測する
 - ふつうに現在の状態から初期状態を引くと移動差分が出来上がる
+- freezeAxesがあれば、freezeされていない軸を移動差分から取り除く
+- weightがあれば、移動差分をweight倍する
 
 ### Destinationへの移動の適用
 
@@ -29,6 +31,9 @@
   - 観測するSourceの回転は常にModel Space
   - 現在の回転に対して、初期回転のinverseをmultiplyする
     - 言い換えれば、シンプルにModel Spaceで観測し、初期状態からどう回転したかを差分とする
+- freezeAxesがあれば、freezeされていない軸の回転を取り除く
+  下記「回転におけるfreezeAxes」を参照
+- weightがあれば、単位クォータニオンに向けて(1.0 - weight)だけslerpする
 
 ### Destinationへの回転の適用
 
@@ -61,9 +66,17 @@
 ### Aim回転差分を求める
 
 - あらかじめ、Aim回転を求めておく
-- 現在のAim回転に初期のAim回転のInverseを当てる
+- 現在のAim回転に初期のAim回転のInverseをmultiplyする
+- freezeAxesがあれば、freezeされていない軸の回転を取り除く
+  下記「回転におけるfreezeAxes」を参照
+- weightがあれば、単位クォータニオンに向けて(1.0 - weight)だけslerpする
 
 ### Destinationへの回転の適用
 
 - Destinationの初期ローカル回転を記録する
 - それに対して上で求めた回転差分をpremultiplyする
+
+## 回転におけるfreezeAxes
+
+- 検討中
+- 現在、いったん対数クォータニオンにしてfreezeされていない軸の回転値を0倍する手法で実装してみています
