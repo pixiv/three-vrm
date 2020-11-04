@@ -26,7 +26,7 @@
   "scripts": {
     "version": "yarn all",
     "postpublish": "yarn gh-pages",
-    "all": "yarn && yarn lint && yarn clean && yarn build && yarn docs",
+    "all": "yarn && yarn test && yarn lint && yarn clean && yarn build && yarn docs",
     "dev": "webpack-dev-server --mode development",
     "clean": "rimraf docs lib ts*/ types",
     "build": "yarn build-dev && yarn build-prod && yarn build-types",
@@ -35,6 +35,7 @@
     "build-types": "tsc --emitDeclarationOnly && downlevel-dts types ts3.4/types",
     "docs": "typedoc --out docs --mode file --excludeNotExported",
     "gh-pages": "node ./bin/gh-pages.js",
+    "test": "echo There is no test for three-vrm",
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier \"src/**/*.{ts,tsx}\" --check",
     "lint-fix": "eslint \"src/**/*.{ts,tsx}\" --fix && prettier \"src/**/*.{ts,tsx}\" --write",
     "typedefgen": "node ./bin/typedefgen.js"

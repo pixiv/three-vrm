@@ -3,6 +3,15 @@
   "workspaces": [
     "packages/*"
   ],
+  "scripts": {
+    "all": "yarn && yarn test && yarn lint && yarn clean && yarn build && yarn docs",
+    "clean": "lerna run clean",
+    "build": "lerna run build",
+    "test": "lerna run test",
+    "lint": "lerna run lint",
+    "lint-fix": "lerna run lint-fix",
+    "docs": "lerna run docs"
+  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.6.1",
     "@typescript-eslint/parser": "^4.6.1",
