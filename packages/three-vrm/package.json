@@ -10,7 +10,7 @@
     "/types/",
     "LICENSE"
   ],
-  "main": "lib/three-vrm.module.js",
+  "main": "lib/three-vrm.min.js",
   "types": "types/index.d.ts",
   "typesVersions": {
     "<3.9": {
@@ -27,12 +27,12 @@
     "version": "yarn all",
     "postpublish": "yarn gh-pages",
     "all": "yarn && yarn test && yarn lint && yarn clean && yarn build && yarn docs",
-    "dev": "webpack-dev-server --mode development",
+    "dev": "cross-env NODE_ENV=development SERVE=1 rollup -w -c -o lib/three-vrm.js",
     "clean": "rimraf docs lib ts*/ types",
     "build": "yarn build-dev && yarn build-prod && yarn build-types",
-    "build-dev": "webpack --mode development",
-    "build-prod": "webpack --mode production",
-    "build-types": "tsc --emitDeclarationOnly && downlevel-dts types ts3.4/types",
+    "build-dev": "cross-env NODE_ENV=development rollup -c -o lib/three-vrm.js",
+    "build-prod": "cross-env NODE_ENV=production rollup -c -o lib/three-vrm.min.js",
+    "build-types": "tsc --declaration --declarationDir ./types --emitDeclarationOnly && downlevel-dts types ts3.4/types",
     "docs": "typedoc --out docs --mode file --excludeNotExported",
     "gh-pages": "node ./bin/gh-pages.js",
     "test": "echo There is no test for three-vrm",
@@ -47,24 +47,12 @@
     ]
   },
   "devDependencies": {
-    "@types/webpack": "^4.4.19",
-    "@types/webpack-dev-server": "^3.1.7",
-    "@types/webpack-merge": "^4.1.5",
     "downlevel-dts": "^0.6.0",
-    "fork-ts-checker-webpack-plugin": "^4.1.4",
     "gh-pages": "^3.1.0",
     "lint-staged": "10.4.2",
     "quicktype": "^15.0.258",
-    "raw-loader": "^4.0.1",
     "three": "^0.120.1",
-    "ts-loader": "^6.1.0",
-    "ts-node": "^8.4.1",
-    "typedoc": "^0.19.2",
-    "webpack": "^4.29.6",
-    "webpack-cli": "^3.3.0",
-    "webpack-dev-server": "^3.2.1",
-    "webpack-merge": "^4.2.1",
-    "worker-loader": "^2.0.0"
+    "typedoc": "^0.19.2"
   },
   "peerDependencies": {
     "three": "^0.120.1"
