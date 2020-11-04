@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "lib": ["es2018", "dom"],
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "declaration": true,
+    "removeComments": true,
+    "strict": true
+  }
+}

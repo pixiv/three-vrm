@@ -1,14 +1,17 @@
-import * as ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
-import * as path from 'path';
-import * as webpack from 'webpack';
-import * as merge from 'webpack-merge';
+/* eslint-disable */
 
-const base = (mode: 'production' | 'development'): webpack.Configuration => {
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
+const merge = require('webpack-merge');
+const { version } = require('./package.json');
+
+const base = (mode) => {
   const isProd = mode === 'production';
 
   const banner = isProd
     ? '(c) 2019 pixiv Inc. - https://github.com/pixiv/three-vrm/blob/master/LICENSE'
-    : `@pixiv/three-vrm v${require('./package.json').version}
+    : `@pixiv/three-vrm v${version}
 Use VRM on Three.js
 
 Copyright (c) 2019 pixiv Inc.
@@ -67,7 +70,7 @@ https://github.com/pixiv/three-vrm/blob/master/LICENSE`;
   };
 };
 
-export default (env: any, argv: any): webpack.Configuration[] => {
+module.exports = (env, argv) => {
   const isProd = argv.mode === 'production';
 
   return [
