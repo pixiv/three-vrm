@@ -10,11 +10,11 @@ const base = (mode) => {
   const isProd = mode === 'production';
 
   const banner = isProd
-    ? '(c) 2019 pixiv Inc. - https://github.com/pixiv/three-vrm/blob/master/LICENSE'
+    ? '(c) 2019-2020 pixiv Inc. - https://github.com/pixiv/three-vrm/blob/master/LICENSE'
     : `@pixiv/three-vrm v${version}
 Use VRM on Three.js
 
-Copyright (c) 2019 pixiv Inc.
+Copyright (c) 2019-2020 pixiv Inc.
 @pixiv/three-vrm is distributed under the MIT License
 https://github.com/pixiv/three-vrm/blob/master/LICENSE`;
 
