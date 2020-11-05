@@ -20,6 +20,7 @@ jobs:
           key: deps-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
+            - packages/three-vrm/node_modules
 
   build:
     docker: *docker
@@ -32,12 +33,6 @@ jobs:
       - run:
           name: Build
           command: yarn build
-      - store_artifacts:
-          path: lib
-      - store_artifacts:
-          path: types
-      - store_artifacts:
-          path: examples
 
   test:
     docker: *docker
@@ -74,8 +69,6 @@ jobs:
       - run:
           name: Docs
           command: yarn docs
-      - store_artifacts:
-          path: docs
 
 workflows:
   version: 2
