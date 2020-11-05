@@ -127,3 +127,7 @@ function processSomeVector(v: THREE.Vector3): number {
 
 - 3, Add a release note to https://github.com/pixiv/three-vrm/releases
   - Do not forget to upload builds!
+
+## When you add a new package to the repository
+
+- Do not forget to add a cache path for the new package!
