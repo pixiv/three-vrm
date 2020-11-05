@@ -1,6 +1,6 @@
 {
   "name": "@pixiv/three-vrm",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "VRM file loader for three.js.",
   "license": "MIT",
   "author": "pixiv",
@@ -52,7 +52,6 @@
       "git add"
     ]
   },
-  "dependencies": {},
   "devDependencies": {
     "@types/webpack": "^4.4.19",
     "@types/webpack-dev-server": "^3.1.7",
