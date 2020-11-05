@@ -8,6 +8,7 @@ The below should work:
 
 ```sh
 yarn
+cd packages/three-vrm
 yarn dev
 ```
 
@@ -15,17 +16,11 @@ Once you start the `yarn dev`, you can see examples at http://localhost:3000/exa
 
 ## Basic rules of the repository
 
-- Be respectful to contributor of this repository, or sometimes [Three.js](https://github.com/mrdoob/three.js/wiki/How-to-contribute-to-three.js) or [VRM spec](https://github.com/vrm-c/vrm-specification).
+- Be respectful to contributors of this repository, or sometimes [Three.js](https://github.com/mrdoob/three.js/wiki/How-to-contribute-to-three.js) or [VRM spec](https://github.com/vrm-c/vrm-specification).
 - Pull requests should not be toward `master` branch. Use `dev` branch as a base branch unless you have any specific reason.
 - Try to create a pull request per single patch or feature.
 - We are not bound of [Mr.doob's Code Style™](https://github.com/mrdoob/three.js/wiki/Mr.doob%27s-Code-Style%E2%84%A2) inside of `/src`, but you MUST follow the style inside of `/examples`
 - When you modified some API, make sure every example are working properly.
-
-## `typedefgen.js`
-
-`typedefgen.js` ( can be run via `yarn typedefgen` ) is a script that generates type definitions of GLTF and VRM schema automatically using [quicktype](https://quicktype.io/).
-However, names of each interfaces/enums are not good so you have to rename these names by your own hand.
-We usually don't have to generate these frequently.
 
 ## Syntax guidelines
 
@@ -114,16 +109,24 @@ function processSomeVector(v: THREE.Vector3): number {
 
 ## How to release
 
-- 1, Make sure you're on `master` branch, with latest changes from `dev`
+- 1, Make sure you're on `dev` branch
 
 - 2, Run the following:
 
   ```sh
-  npm version <newversion> # will also automatically runs build scripts
+  yarn lerna version <newversion> # will also automatically runs build scripts
+  yarn lerna publish from-git # will also automatically pushes some files into `gh-pages` branch
+
+  git switch master
+  git merge dev
   git push
-  git push --tags
-  npm publish # will also automatically pushes some files into `gh-pages` branch
   ```
 
 - 3, Add a release note to https://github.com/pixiv/three-vrm/releases
   - Do not forget to upload builds!
+
+## `typedefgen.js`
+
+`typedefgen.js` ( can be run via `yarn typedefgen` of `packages/three-vrm` ) is a script that generates type definitions of GLTF and VRM schema automatically using [quicktype](https://quicktype.io/).
+However, names of each interfaces/enums are not good so you have to rename these names by your own hand.
+We usually don't have to generate these frequently.
