@@ -28,7 +28,9 @@ export function toBeCloseToVector3(
 }
 
 declare global {
-  namespace jest { // eslint-disable-line
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace jest {
+    // eslint-disable-line
     interface Matchers<R> {
       toBeCloseToVector3(expected: THREE.Vector3, precision?: number): R;
     }

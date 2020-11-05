@@ -13,7 +13,13 @@ const _quatA = new THREE.Quaternion();
  * @param aim A reference vector of the aim vector. Must be normalized
  * @param up An up vector. Must be normalized
  */
-export function setAimQuaternion(target: THREE.Quaternion, from: THREE.Vector3, to: THREE.Vector3, aim: THREE.Vector3, up: THREE.Vector3): typeof target {
+export function setAimQuaternion<T extends THREE.Quaternion>(
+  target: T,
+  from: THREE.Vector3,
+  to: THREE.Vector3,
+  aim: THREE.Vector3,
+  up: THREE.Vector3,
+): T {
   // this is the target rotation
   _v3Dir.copy(to).sub(from).normalize();
 

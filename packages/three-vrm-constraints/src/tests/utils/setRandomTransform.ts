@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { setRandomQuaternion } from './setRandomQuaternion';
 import { setRandomVector3 } from './setRandomVector3';
 
-export function setRandomTransform(object: THREE.Object3D, rng: () => number): typeof object {
+export function setRandomTransform<T extends THREE.Object3D>(object: T, rng: () => number): T {
   // apply random position
   setRandomVector3(object.position, rng);
 

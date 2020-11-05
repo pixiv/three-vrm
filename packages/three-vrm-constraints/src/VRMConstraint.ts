@@ -49,7 +49,7 @@ export abstract class VRMConstraint {
    * Get the object matrix of the parent, in model space.
    * @param target Target matrix
    */
-  protected _getParentMatrixInModelSpace(target: THREE.Matrix4): typeof target {
+  protected _getParentMatrixInModelSpace<T extends THREE.Matrix4>(target: T): T {
     if (!this.object.parent) {
       target.identity();
     } else {
@@ -68,7 +68,7 @@ export abstract class VRMConstraint {
    * Intended to be used to absorb between different spaces.
    * @param target Target matrix
    */
-  protected _getDestinationMatrix(target: THREE.Matrix4): typeof target {
+  protected _getDestinationMatrix<T extends THREE.Matrix4>(target: T): T {
     if (this.destinationSpace === VRMConstraintSpace.Local) {
       this.object.updateMatrix();
       target.copy(this.object.matrix);
@@ -88,7 +88,7 @@ export abstract class VRMConstraint {
    * Intended to be used to absorb between different spaces.
    * @param target Target matrix
    */
-  protected _getSourceMatrix(target: THREE.Matrix4): typeof target {
+  protected _getSourceMatrix<T extends THREE.Matrix4>(target: T): T {
     if (!this._source) {
       throw new Error('There is no source specified');
     }
@@ -111,7 +111,7 @@ export abstract class VRMConstraint {
    * Create a matrix that converts world space into model space.
    * @param target Target matrix
    */
-  private _getMatrixWorldToModel(target: THREE.Matrix4): typeof target {
+  private _getMatrixWorldToModel<T extends THREE.Matrix4>(target: T): T {
     let inverseCacheProxy = this.modelRoot.userData.inverseCacheProxy as Matrix4InverseCache | undefined;
     if (!inverseCacheProxy) {
       inverseCacheProxy = this.modelRoot.userData.inverseCacheProxy = new Matrix4InverseCache(this.modelRoot.matrix);

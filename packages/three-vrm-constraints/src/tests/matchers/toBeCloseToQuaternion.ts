@@ -29,7 +29,9 @@ export function toBeCloseToQuaternion(
 }
 
 declare global {
-  namespace jest { // eslint-disable-line
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace jest {
+    // eslint-disable-line
     interface Matchers<R> {
       toBeCloseToQuaternion(expected: THREE.Quaternion, precision?: number): R;
     }

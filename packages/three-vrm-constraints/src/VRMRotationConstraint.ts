@@ -49,7 +49,7 @@ export class VRMRotationConstraint extends VRMConstraint {
    * It's aware of its {@link sourceSpace}, {@link freezeAxes}, and {@link weight}.
    * @param target Target quaternion
    */
-  private _getSourceDiffQuat(target: THREE.Quaternion): typeof target {
+  private _getSourceDiffQuat<T extends THREE.Quaternion>(target: T): T {
     this._getSourceQuat(target);
     if (this.sourceSpace === VRMConstraintSpace.Local) {
       target.premultiply(this._quatInvInitSrc);
@@ -69,7 +69,7 @@ export class VRMRotationConstraint extends VRMConstraint {
    * It's aware of its {@link sourceSpace}.
    * @param target Target quaternion
    */
-  private _getSourceQuat(target: THREE.Quaternion): typeof target {
+  private _getSourceQuat<T extends THREE.Quaternion>(target: T): T {
     target.copy(QUAT_IDENTITY);
 
     if (this._source) {

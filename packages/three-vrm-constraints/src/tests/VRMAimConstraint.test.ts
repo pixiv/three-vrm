@@ -90,7 +90,9 @@ describe('VRMAimConstraint', () => {
 
           destinationPos.copy(object.position);
 
-          const quatInvLookAtBefore = new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().lookAt(sourcePos, destinationPos, VEC3_UP)).inverse();
+          const quatInvLookAtBefore = new THREE.Quaternion()
+            .setFromRotationMatrix(new THREE.Matrix4().lookAt(sourcePos, destinationPos, VEC3_UP))
+            .inverse();
           quatLookAtDelta.setFromRotationMatrix(new THREE.Matrix4().lookAt(sourcePosAfter, destinationPos, VEC3_UP));
           quatLookAtDelta.multiply(quatInvLookAtBefore);
 
@@ -117,7 +119,9 @@ describe('VRMAimConstraint', () => {
 
           object.getWorldPosition(destinationPos);
 
-          const quatInvLookAtBefore = new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().lookAt(sourcePos, destinationPos, VEC3_UP)).inverse();
+          const quatInvLookAtBefore = new THREE.Quaternion()
+            .setFromRotationMatrix(new THREE.Matrix4().lookAt(sourcePos, destinationPos, VEC3_UP))
+            .inverse();
           quatLookAtDelta.setFromRotationMatrix(new THREE.Matrix4().lookAt(sourcePosAfter, destinationPos, VEC3_UP));
           quatLookAtDelta.multiply(quatInvLookAtBefore);
 
