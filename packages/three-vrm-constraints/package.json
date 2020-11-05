@@ -1,0 +1,70 @@
+{
+  "name": "@pixiv/three-vrm-constraints",
+  "version": "0.0.1",
+  "description": "Constraints module for @pixiv/three-vrm",
+  "license": "MIT",
+  "main": "lib/three-vrm-constraints.js",
+  "module": "lib/three-vrm-constraints.module.js",
+  "types": "types/index.d.ts",
+  "typesVersions": {
+    "<3.8": {
+      "*": [
+        "ts3.4/*"
+      ]
+    }
+  },
+  "scripts": {
+    "version": "yarn all",
+    "all": "yarn lint && yarn clean && yarn build && yarn docs",
+    "dev": "cross-env NODE_ENV=development SERVE=1 rollup -w -c -o lib/three-vrm-constraints.js",
+    "clean": "rimraf docs/ lib/ ts*/ types/",
+    "build": "yarn build-dev && yarn build-prod && yarn build-types",
+    "build-dev": "cross-env NODE_ENV=development rollup -c -o lib/three-vrm-constraints.js",
+    "build-prod": "cross-env NODE_ENV=production rollup -c -o lib/three-vrm-constraints.min.js",
+    "build-types": "tsc --declaration --declarationDir ./types --emitDeclarationOnly && downlevel-dts types ts3.4/types",
+    "docs": "typedoc --out docs --mode file --excludeNotExported",
+    "test": "jest",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier \"src/**/*.{ts,tsx}\" --check",
+    "lint-fix": "eslint \"src/**/*.{ts,tsx}\" --fix && prettier \"src/**/*.{ts,tsx}\" --write"
+  },
+  "files": [
+    "/lib/",
+    "/ts*/",
+    "/types/",
+    "LICENSE"
+  ],
+  "prettier": {
+    "endOfLine": "lf",
+    "tabWidth": 2,
+    "singleQuote": true,
+    "arrowParens": "always",
+    "trailingComma": "all",
+    "printWidth": 120
+  },
+  "peerDependencies": {
+    "three": "^0.117.1"
+  },
+  "devDependencies": {
+    "@rollup/plugin-replace": "^2.3.3",
+    "@rollup/plugin-typescript": "^6.1.0",
+    "@types/jest": "^26.0.13",
+    "@typescript-eslint/eslint-plugin": "^3.2.0",
+    "@typescript-eslint/parser": "^3.2.0",
+    "cross-env": "^7.0.2",
+    "downlevel-dts": "^0.5.0",
+    "eslint": "^7.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "jest": "^26.0.1",
+    "prettier": "^2.0.5",
+    "rollup": "^2.15.0",
+    "rollup-plugin-banner": "^0.2.1",
+    "rollup-plugin-serve": "^1.0.4",
+    "rollup-plugin-terser": "^6.1.0",
+    "three": "^0.117.1",
+    "ts-jest": "^26.1.0",
+    "ts-node": "^8.10.2",
+    "tslib": "^2.0.0",
+    "typedoc": "^0.17.7",
+    "typescript": "^3.9.5"
+  }
+}
