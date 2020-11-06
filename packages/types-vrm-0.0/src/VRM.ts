@@ -29,5 +29,5 @@ export interface VRM {
 
   secondaryAnimation?: SecondaryAnimation;
 
-  materialProperties?: Material;
+  materialProperties?: Material[];
 }
