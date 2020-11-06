@@ -22,6 +22,7 @@ jobs:
             - node_modules
             - packages/three-vrm/node_modules
             - packages/three-vrm-constraints/node_modules
+            - packages/types-vrmc-constraints-1.0/node_modules
 
   build:
     docker: *docker
