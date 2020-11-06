@@ -1,60 +1,59 @@
 /**
  * Human bone name.
  */
-export enum HumanoidBoneName {
-  Chest = 'chest',
-  Head = 'head',
-  Hips = 'hips',
-  Jaw = 'jaw',
-  LeftEye = 'leftEye',
-  LeftFoot = 'leftFoot',
-  LeftHand = 'leftHand',
-  LeftIndexDistal = 'leftIndexDistal',
-  LeftIndexIntermediate = 'leftIndexIntermediate',
-  LeftIndexProximal = 'leftIndexProximal',
-  LeftLittleDistal = 'leftLittleDistal',
-  LeftLittleIntermediate = 'leftLittleIntermediate',
-  LeftLittleProximal = 'leftLittleProximal',
-  LeftLowerArm = 'leftLowerArm',
-  LeftLowerLeg = 'leftLowerLeg',
-  LeftMiddleDistal = 'leftMiddleDistal',
-  LeftMiddleIntermediate = 'leftMiddleIntermediate',
-  LeftMiddleProximal = 'leftMiddleProximal',
-  LeftRingDistal = 'leftRingDistal',
-  LeftRingIntermediate = 'leftRingIntermediate',
-  LeftRingProximal = 'leftRingProximal',
-  LeftShoulder = 'leftShoulder',
-  LeftThumbDistal = 'leftThumbDistal',
-  LeftThumbIntermediate = 'leftThumbIntermediate',
-  LeftThumbProximal = 'leftThumbProximal',
-  LeftToes = 'leftToes',
-  LeftUpperArm = 'leftUpperArm',
-  LeftUpperLeg = 'leftUpperLeg',
-  Neck = 'neck',
-  RightEye = 'rightEye',
-  RightFoot = 'rightFoot',
-  RightHand = 'rightHand',
-  RightIndexDistal = 'rightIndexDistal',
-  RightIndexIntermediate = 'rightIndexIntermediate',
-  RightIndexProximal = 'rightIndexProximal',
-  RightLittleDistal = 'rightLittleDistal',
-  RightLittleIntermediate = 'rightLittleIntermediate',
-  RightLittleProximal = 'rightLittleProximal',
-  RightLowerArm = 'rightLowerArm',
-  RightLowerLeg = 'rightLowerLeg',
-  RightMiddleDistal = 'rightMiddleDistal',
-  RightMiddleIntermediate = 'rightMiddleIntermediate',
-  RightMiddleProximal = 'rightMiddleProximal',
-  RightRingDistal = 'rightRingDistal',
-  RightRingIntermediate = 'rightRingIntermediate',
-  RightRingProximal = 'rightRingProximal',
-  RightShoulder = 'rightShoulder',
-  RightThumbDistal = 'rightThumbDistal',
-  RightThumbIntermediate = 'rightThumbIntermediate',
-  RightThumbProximal = 'rightThumbProximal',
-  RightToes = 'rightToes',
-  RightUpperArm = 'rightUpperArm',
-  RightUpperLeg = 'rightUpperLeg',
-  Spine = 'spine',
-  UpperChest = 'upperChest',
-}
+export type HumanoidBoneName =
+  | 'chest'
+  | 'head'
+  | 'hips'
+  | 'jaw'
+  | 'leftEye'
+  | 'leftFoot'
+  | 'leftHand'
+  | 'leftIndexDistal'
+  | 'leftIndexIntermediate'
+  | 'leftIndexProximal'
+  | 'leftLittleDistal'
+  | 'leftLittleIntermediate'
+  | 'leftLittleProximal'
+  | 'leftLowerArm'
+  | 'leftLowerLeg'
+  | 'leftMiddleDistal'
+  | 'leftMiddleIntermediate'
+  | 'leftMiddleProximal'
+  | 'leftRingDistal'
+  | 'leftRingIntermediate'
+  | 'leftRingProximal'
+  | 'leftShoulder'
+  | 'leftThumbDistal'
+  | 'leftThumbIntermediate'
+  | 'leftThumbProximal'
+  | 'leftToes'
+  | 'leftUpperArm'
+  | 'leftUpperLeg'
+  | 'neck'
+  | 'rightEye'
+  | 'rightFoot'
+  | 'rightHand'
+  | 'rightIndexDistal'
+  | 'rightIndexIntermediate'
+  | 'rightIndexProximal'
+  | 'rightLittleDistal'
+  | 'rightLittleIntermediate'
+  | 'rightLittleProximal'
+  | 'rightLowerArm'
+  | 'rightLowerLeg'
+  | 'rightMiddleDistal'
+  | 'rightMiddleIntermediate'
+  | 'rightMiddleProximal'
+  | 'rightRingDistal'
+  | 'rightRingIntermediate'
+  | 'rightRingProximal'
+  | 'rightShoulder'
+  | 'rightThumbDistal'
+  | 'rightThumbIntermediate'
+  | 'rightThumbProximal'
+  | 'rightToes'
+  | 'rightUpperArm'
+  | 'rightUpperLeg'
+  | 'spine'
+  | 'upperChest';
