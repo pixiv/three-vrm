@@ -39,6 +39,9 @@
       "prettier --write"
     ]
   },
+  "dependencies": {
+    "@pixiv/types-vrmc-constraints-1.0": "0.0.1"
+  },
   "devDependencies": {
     "downlevel-dts": "^0.5.0",
     "three": "^0.117.1",
