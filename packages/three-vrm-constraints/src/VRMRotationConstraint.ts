@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import { decomposeRotation } from './utils/decomposeRotation';
 import { quaternionFreezeAxes } from './utils/quaternionFreezeAxes';
 import { VRMConstraint } from './VRMConstraint';
-import { VRMConstraintSpace } from './VRMConstraintSpace';
 
 const QUAT_IDENTITY = new THREE.Quaternion(0, 0, 0, 1);
 
@@ -25,7 +24,7 @@ export class VRMRotationConstraint extends VRMConstraint {
   }
 
   public update(): void {
-    if (this.destinationSpace === VRMConstraintSpace.Local) {
+    if (this.destinationSpace === 'LOCAL') {
       this.object.quaternion.copy(this._quatInitDst);
     } else {
       this._getParentMatrixInModelSpace(_matA);
@@ -36,7 +35,7 @@ export class VRMRotationConstraint extends VRMConstraint {
     this._getSourceDiffQuat(_quatB);
     this.object.quaternion.multiply(_quatB);
 
-    if (this.destinationSpace === VRMConstraintSpace.Model) {
+    if (this.destinationSpace === 'MODEL') {
       this.object.quaternion.multiply(_quatA);
       this.object.quaternion.multiply(this._quatInitDst);
     }
@@ -51,7 +50,7 @@ export class VRMRotationConstraint extends VRMConstraint {
    */
   private _getSourceDiffQuat<T extends THREE.Quaternion>(target: T): T {
     this._getSourceQuat(target);
-    if (this.sourceSpace === VRMConstraintSpace.Local) {
+    if (this.sourceSpace === 'LOCAL') {
       target.premultiply(this._quatInvInitSrc);
     } else {
       target.multiply(this._quatInvInitSrc);

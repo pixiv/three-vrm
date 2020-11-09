@@ -1,4 +1,1 @@
-export enum VRMConstraintSpace {
-  Local = 'LOCAL',
-  Model = 'MODEL',
-}
+export type VRMConstraintSpace = 'LOCAL' | 'MODEL';

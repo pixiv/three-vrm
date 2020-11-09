@@ -2,7 +2,6 @@
 
 import * as THREE from 'three';
 import { VRMConstraint } from '../VRMConstraint';
-import { VRMConstraintSpace } from '../VRMConstraintSpace';
 import { VRMMockedConstraint } from './VRMMockedConstraint';
 
 describe('VRMConstraint', () => {
@@ -60,7 +59,7 @@ describe('VRMConstraint', () => {
 
     describe('when its destination space is local', () => {
       beforeEach(() => {
-        constraint.destinationSpace = VRMConstraintSpace.Local;
+        constraint.destinationSpace = 'LOCAL';
       });
 
       it('must not have the parent of the object as a dependency', () => {
@@ -70,7 +69,7 @@ describe('VRMConstraint', () => {
 
     describe('when its destination space is model', () => {
       beforeEach(() => {
-        constraint.destinationSpace = VRMConstraintSpace.Model;
+        constraint.destinationSpace = 'MODEL';
       });
 
       it('must have the parent of the object as a dependency', () => {

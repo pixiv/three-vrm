@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import { Matrix4InverseCache } from './utils/Matrix4InverseCache';
-import { VRMConstraintSpace } from './VRMConstraintSpace';
 
 const _matWorldToModel = new THREE.Matrix4();
 
@@ -10,7 +9,7 @@ export abstract class VRMConstraint {
   public readonly object: THREE.Object3D;
 
   /**
-   * When {@link sourceSpace} / {@link destinationSpace} is {@link VRMConstraintSpace.Local}, these transforms will be cauculated relatively from this object.
+   * When {@link sourceSpace} / {@link destinationSpace} is {@link 'LOCAL'}, these transforms will be cauculated relatively from this object.
    */
   public readonly modelRoot: THREE.Object3D;
 
@@ -19,13 +18,13 @@ export abstract class VRMConstraint {
     return this._source;
   }
 
-  public sourceSpace = VRMConstraintSpace.Model;
-  public destinationSpace = VRMConstraintSpace.Model;
+  public sourceSpace = 'MODEL';
+  public destinationSpace = 'MODEL';
 
   public get dependencies(): Set<THREE.Object3D> {
     const deps = new Set<THREE.Object3D>();
     this._source && deps.add(this._source);
-    if (this.destinationSpace === VRMConstraintSpace.Model && this.object.parent) {
+    if (this.destinationSpace === 'MODEL' && this.object.parent) {
       deps.add(this.object.parent);
     }
     return deps;
@@ -33,7 +32,7 @@ export abstract class VRMConstraint {
 
   /**
    * @param object The destination object
-   * @param modelRoot When {@link sourceSpace} / {@link destinationSpace} is {@link VRMConstraintSpace.Local}, these transforms will be cauculated relatively from this object
+   * @param modelRoot When {@link sourceSpace} / {@link destinationSpace} is local, these transforms will be cauculated relatively from this object
    */
   public constructor(object: THREE.Object3D, modelRoot: THREE.Object3D) {
     this.object = object;
@@ -69,10 +68,10 @@ export abstract class VRMConstraint {
    * @param target Target matrix
    */
   protected _getDestinationMatrix<T extends THREE.Matrix4>(target: T): T {
-    if (this.destinationSpace === VRMConstraintSpace.Local) {
+    if (this.destinationSpace === 'LOCAL') {
       this.object.updateMatrix();
       target.copy(this.object.matrix);
-    } else if (this.destinationSpace === VRMConstraintSpace.Model) {
+    } else if (this.destinationSpace === 'MODEL') {
       this.object.updateWorldMatrix(false, false);
       target.copy(this.object.matrixWorld);
 
@@ -93,10 +92,10 @@ export abstract class VRMConstraint {
       throw new Error('There is no source specified');
     }
 
-    if (this.sourceSpace === VRMConstraintSpace.Local) {
+    if (this.sourceSpace === 'LOCAL') {
       this._source.updateMatrix();
       target.copy(this._source.matrix);
-    } else if (this.sourceSpace === VRMConstraintSpace.Model) {
+    } else if (this.sourceSpace === 'MODEL') {
       this._source.updateWorldMatrix(false, false);
       target.copy(this._source.matrixWorld);
 

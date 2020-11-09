@@ -4,7 +4,6 @@ import * as THREE from 'three';
 import { setRandomTransform } from './utils/setRandomTransform';
 import { Xorshift } from './utils/Xorshift';
 import { toBeCloseToQuaternion } from './matchers/toBeCloseToQuaternion';
-import { VRMConstraintSpace } from '../VRMConstraintSpace';
 import { VRMAimConstraint } from '../VRMAimConstraint';
 import { setRandomVector3 } from './utils/setRandomVector3';
 
@@ -56,14 +55,14 @@ describe('VRMAimConstraint', () => {
   });
 
   describe('update', () => {
-    describe.each([VRMConstraintSpace.Local, VRMConstraintSpace.Model])('When source space is %s', (sourceSpace) => {
+    describe.each(['LOCAL', 'MODEL'])('When source space is %s', (sourceSpace) => {
       const sourcePos = new THREE.Vector3();
       const sourcePosAfter = new THREE.Vector3();
 
       beforeEach(() => {
         constraint.sourceSpace = sourceSpace;
 
-        if (sourceSpace === VRMConstraintSpace.Local) {
+        if (sourceSpace === 'LOCAL') {
           sourcePos.copy(source.position);
 
           sourcePosAfter.copy(source.position).add(move);
@@ -86,7 +85,7 @@ describe('VRMAimConstraint', () => {
         const quatLookAtDelta = new THREE.Quaternion();
 
         beforeEach(() => {
-          constraint.destinationSpace = VRMConstraintSpace.Local;
+          constraint.destinationSpace = 'LOCAL';
 
           destinationPos.copy(object.position);
 
@@ -115,7 +114,7 @@ describe('VRMAimConstraint', () => {
         const quatLookAtDelta = new THREE.Quaternion();
 
         beforeEach(() => {
-          constraint.destinationSpace = VRMConstraintSpace.Model;
+          constraint.destinationSpace = 'MODEL';
 
           object.getWorldPosition(destinationPos);
 

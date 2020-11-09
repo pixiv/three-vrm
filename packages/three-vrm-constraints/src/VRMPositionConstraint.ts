@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import { decomposePosition } from './utils/decomposePosition';
 import { vector3FreezeAxes } from './utils/vector3FreezeAxes';
 import { VRMConstraint } from './VRMConstraint';
-import { VRMConstraintSpace } from './VRMConstraintSpace';
 
 const _matA = new THREE.Matrix4();
 
@@ -21,7 +20,7 @@ export class VRMPositionConstraint extends VRMConstraint {
   public update(): void {
     this._getSourceDiffPosition(this.object.position);
 
-    if (this.destinationSpace === VRMConstraintSpace.Model) {
+    if (this.destinationSpace === 'MODEL') {
       this._getParentMatrixInModelSpace(_matA).getInverse(_matA);
 
       // remove translation

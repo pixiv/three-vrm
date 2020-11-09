@@ -5,7 +5,6 @@ import { VRMPositionConstraint } from '../VRMPositionConstraint';
 import { setRandomTransform } from './utils/setRandomTransform';
 import { Xorshift } from './utils/Xorshift';
 import { toBeCloseToVector3 } from './matchers/toBeCloseToVector3';
-import { VRMConstraintSpace } from '../VRMConstraintSpace';
 import { Vector3 } from 'three';
 import { setRandomVector3 } from './utils/setRandomVector3';
 
@@ -55,7 +54,7 @@ describe('VRMPositionConstraint', () => {
   });
 
   describe('update', () => {
-    describe.each([VRMConstraintSpace.Local, VRMConstraintSpace.Model])('When source space is %s', (sourceSpace) => {
+    describe.each(['LOCAL', 'MODEL'])('When source space is %s', (sourceSpace) => {
       let sourceDelta = new THREE.Vector3();
 
       beforeEach(() => {
@@ -63,7 +62,7 @@ describe('VRMPositionConstraint', () => {
 
         sourceDelta = move.clone();
 
-        if (sourceSpace === VRMConstraintSpace.Model) {
+        if (sourceSpace === 'MODEL') {
           const positionBeforeMove = new THREE.Vector3();
           source.getWorldPosition(positionBeforeMove);
 
@@ -81,7 +80,7 @@ describe('VRMPositionConstraint', () => {
 
       describe('When destination space is LOCAL', () => {
         beforeEach(() => {
-          constraint.destinationSpace = VRMConstraintSpace.Local;
+          constraint.destinationSpace = 'LOCAL';
 
           constraint.setInitState();
         });
@@ -99,7 +98,7 @@ describe('VRMPositionConstraint', () => {
 
       describe('When destination space is MODEL', () => {
         beforeEach(() => {
-          constraint.destinationSpace = VRMConstraintSpace.Model;
+          constraint.destinationSpace = 'MODEL';
 
           constraint.setInitState();
         });

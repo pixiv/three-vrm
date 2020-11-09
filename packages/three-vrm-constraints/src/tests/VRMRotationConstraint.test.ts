@@ -4,7 +4,6 @@ import * as THREE from 'three';
 import { setRandomTransform } from './utils/setRandomTransform';
 import { Xorshift } from './utils/Xorshift';
 import { toBeCloseToQuaternion } from './matchers/toBeCloseToQuaternion';
-import { VRMConstraintSpace } from '../VRMConstraintSpace';
 import { VRMRotationConstraint } from '../VRMRotationConstraint';
 import { setRandomQuaternion } from './utils/setRandomQuaternion';
 
@@ -54,7 +53,7 @@ describe('VRMRotationConstraint', () => {
   });
 
   describe('update', () => {
-    describe.each([VRMConstraintSpace.Local, VRMConstraintSpace.Model])('When source space is %s', (sourceSpace) => {
+    describe.each(['LOCAL', 'MODEL'])('When source space is %s', (sourceSpace) => {
       let sourceDelta = new THREE.Quaternion();
 
       beforeEach(() => {
@@ -62,7 +61,7 @@ describe('VRMRotationConstraint', () => {
 
         sourceDelta = rot.clone();
 
-        if (sourceSpace === VRMConstraintSpace.Model) {
+        if (sourceSpace === 'MODEL') {
           const quatBeforeRotate = new THREE.Quaternion();
           source.getWorldQuaternion(quatBeforeRotate);
 
@@ -80,7 +79,7 @@ describe('VRMRotationConstraint', () => {
 
       describe('When destination space is LOCAL', () => {
         beforeEach(() => {
-          constraint.destinationSpace = VRMConstraintSpace.Local;
+          constraint.destinationSpace = 'LOCAL';
 
           constraint.setInitState();
         });
@@ -98,7 +97,7 @@ describe('VRMRotationConstraint', () => {
 
       describe('When destination space is MODEL', () => {
         beforeEach(() => {
-          constraint.destinationSpace = VRMConstraintSpace.Model;
+          constraint.destinationSpace = 'MODEL';
 
           constraint.setInitState();
         });
