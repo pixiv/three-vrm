@@ -26,7 +26,7 @@ export class VRMAimConstraint extends VRMConstraint {
    */
   public readonly upVector = new THREE.Vector3(0.0, 1.0, 0.0);
 
-  public freezeAxes: [boolean, boolean, boolean] = [true, true, true];
+  public freezeAxes: [boolean, boolean] = [true, true];
 
   private readonly _quatInitAim = new THREE.Quaternion();
   private readonly _quatInvInitAim = new THREE.Quaternion();
@@ -69,8 +69,6 @@ export class VRMAimConstraint extends VRMConstraint {
     this._getAimQuat(target);
     target.multiply(this._quatInvInitAim);
 
-    quaternionFreezeAxes(target, this.freezeAxes);
-
     target.slerp(QUAT_IDENTITY, 1.0 - this.weight);
 
     return target;
@@ -78,7 +76,7 @@ export class VRMAimConstraint extends VRMConstraint {
 
   /**
    * Return a current orientation of the aim direction.
-   * It's aware of its {@link sourceSpace}.
+   * It's aware of its {@link sourceSpace} and {@link freezeAxes}.
    * @param target Target quaternion
    */
   private _getAimQuat<T extends THREE.Quaternion>(target: T): T {
@@ -88,6 +86,7 @@ export class VRMAimConstraint extends VRMConstraint {
       this._getSourcePosition(_v3GetRotationDir),
       this.aimVector,
       this.upVector,
+      this.freezeAxes
     );
   }
 

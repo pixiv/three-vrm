@@ -19,6 +19,7 @@ export function setAimQuaternion<T extends THREE.Quaternion>(
   to: THREE.Vector3,
   aim: THREE.Vector3,
   up: THREE.Vector3,
+  freezeAxes: [boolean, boolean]
 ): T {
   // this is the target rotation
   _v3Dir.copy(to).sub(from).normalize();
@@ -36,8 +37,8 @@ export function setAimQuaternion<T extends THREE.Quaternion>(
   const phiDir = Math.atan2(_v3PlaneX.dot(_v3Dir), _v3PlaneY.dot(_v3Dir));
 
   // made a quaternion out of calculated phi and theta
-  target.setFromAxisAngle(up, phiDir);
-  _quatA.setFromAxisAngle(_v3PlaneX, thetaAim - thetaDir);
+  target.setFromAxisAngle(up, freezeAxes[0] ? phiDir : 0.0);
+  _quatA.setFromAxisAngle(_v3PlaneX, freezeAxes[1] ? (thetaAim - thetaDir) : 0.0);
   target.multiply(_quatA);
 
   return target;
