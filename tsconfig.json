@@ -6,6 +6,7 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "strict": true,
+    "baseUrl": ".",
     "paths": {
       "@pixiv/three-vrm": ["packages/three-vrm"],
       "@pixiv/three-vrm-constraints": ["packages/three-vrm-constraints"],
