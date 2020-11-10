@@ -35,11 +35,21 @@ jobs:
       - run:
           name: Build
           command: yarn build
+      - persist_to_workspace:
+          root: '.'
+          paths:
+            - packages/three-vrm/lib
+            - packages/three-vrm/types
+            - packages/three-vrm-constraints/lib
+            - packages/three-vrm-constraints/types
+            - packages/types-vrmc-constraints-1.0/types
 
   test:
     docker: *docker
     steps:
       - checkout
+      - attach_workspace:
+          at: '.'
       - restore_cache:
           keys:
             - deps-{{ checksum "yarn.lock" }}
@@ -52,6 +62,8 @@ jobs:
     docker: *docker
     steps:
       - checkout
+      - attach_workspace:
+          at: '.'
       - restore_cache:
           keys:
             - deps-{{ checksum "yarn.lock" }}
@@ -64,6 +76,8 @@ jobs:
     docker: *docker
     steps:
       - checkout
+      - attach_workspace:
+          at: '.'
       - restore_cache:
           keys:
             - deps-{{ checksum "yarn.lock" }}
@@ -82,10 +96,10 @@ workflows:
             - fetch
       - test:
           requires:
-            - fetch
+            - build
       - lint:
           requires:
-            - fetch
+            - build
       - docs:
           requires:
-            - fetch
+            - build
