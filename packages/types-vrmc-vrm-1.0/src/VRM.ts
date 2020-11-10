@@ -1,4 +1,4 @@
-import type { BlendShape } from './BlendShape';
+import type { Expression } from './Expression';
 import type { FirstPerson } from './FirstPerson';
 import type { Humanoid } from './Humanoid';
 import type { LookAt } from './LookAt';
@@ -15,5 +15,8 @@ export interface VRM {
 
   lookAt?: LookAt;
 
-  blendShape?: BlendShape;
+  /**
+   * Definitions of expressions
+   */
+  expressions?: Expression[];
 }

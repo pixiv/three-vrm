@@ -1,4 +1,4 @@
-export type BlendShapePresetName =
+export type ExpressionPreset =
   | 'custom'
   | 'aa'
   | 'ih'
@@ -6,11 +6,12 @@ export type BlendShapePresetName =
   | 'ee'
   | 'oh'
   | 'blink'
-  | 'joy'
+  | 'happy'
   | 'angry'
-  | 'sorrow'
-  | 'fun'
+  | 'sad'
+  | 'relaxed'
   | 'lookUp'
+  | 'surprised'
   | 'lookDown'
   | 'lookLeft'
   | 'lookRight'

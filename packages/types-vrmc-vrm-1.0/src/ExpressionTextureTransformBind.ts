@@ -1,4 +1,7 @@
-export interface BlendShapeMaterialUVBind {
+export interface ExpressionTextureTransformBind {
+  /**
+   * target material
+   */
   material?: number;
 
   /**
