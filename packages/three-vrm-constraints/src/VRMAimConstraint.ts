@@ -85,7 +85,7 @@ export class VRMAimConstraint extends VRMConstraint {
       this._getSourcePosition(_v3GetRotationDir),
       this.aimVector,
       this.upVector,
-      this.freezeAxes
+      this.freezeAxes,
     );
   }
 

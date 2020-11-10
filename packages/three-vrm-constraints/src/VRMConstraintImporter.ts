@@ -32,7 +32,8 @@ export class VRMConstraintImporter {
 
     // import constraints for each nodes
     threeNodes.forEach((node) => {
-      const extension: ConstraintSchema.Constraints | undefined = node.userData?.gltfExtensions?.['VRMC_constraints-1.0'];
+      const extension: ConstraintSchema.Constraints | undefined =
+        node.userData?.gltfExtensions?.['VRMC_constraints-1.0'];
 
       if (extension?.position) {
         const constraint = this._importPositionConstraint(node, threeNodes, gltf.scene, extension.position);
@@ -57,46 +58,89 @@ export class VRMConstraintImporter {
     return manager;
   }
 
-  private _importPositionConstraint(destination: THREE.Object3D, nodes: THREE.Object3D[], modelRoot: THREE.Object3D, position: ConstraintSchema.PositionConstraint): VRMPositionConstraint {
+  private _importPositionConstraint(
+    destination: THREE.Object3D,
+    nodes: THREE.Object3D[],
+    modelRoot: THREE.Object3D,
+    position: ConstraintSchema.PositionConstraint,
+  ): VRMPositionConstraint {
     const { source, sourceSpace, destinationSpace, weight, freezeAxes } = position;
     const constraint = new VRMPositionConstraint(destination, modelRoot);
 
     constraint.setSource(nodes[source]);
 
-    if ( sourceSpace ) {constraint.sourceSpace=sourceSpace;}
-    if ( destinationSpace ) {constraint.destinationSpace=destinationSpace;}
-    if ( weight ) {constraint.weight=weight;}
-    if ( freezeAxes ) {constraint.freezeAxes=freezeAxes;}
+    if (sourceSpace) {
+      constraint.sourceSpace = sourceSpace;
+    }
+    if (destinationSpace) {
+      constraint.destinationSpace = destinationSpace;
+    }
+    if (weight) {
+      constraint.weight = weight;
+    }
+    if (freezeAxes) {
+      constraint.freezeAxes = freezeAxes;
+    }
 
     return constraint;
   }
 
-  private _importRotationConstraint(destination: THREE.Object3D, nodes: THREE.Object3D[], modelRoot: THREE.Object3D, rotation: ConstraintSchema.RotationConstraint): VRMRotationConstraint {
+  private _importRotationConstraint(
+    destination: THREE.Object3D,
+    nodes: THREE.Object3D[],
+    modelRoot: THREE.Object3D,
+    rotation: ConstraintSchema.RotationConstraint,
+  ): VRMRotationConstraint {
     const { source, sourceSpace, destinationSpace, weight, freezeAxes } = rotation;
     const constraint = new VRMRotationConstraint(destination, modelRoot);
 
     constraint.setSource(nodes[source]);
 
-    if ( sourceSpace ) {constraint.sourceSpace=sourceSpace;}
-    if ( destinationSpace ) {constraint.destinationSpace=destinationSpace;}
-    if ( weight ) {constraint.weight=weight;}
-    if ( freezeAxes ) {constraint.freezeAxes=freezeAxes;}
+    if (sourceSpace) {
+      constraint.sourceSpace = sourceSpace;
+    }
+    if (destinationSpace) {
+      constraint.destinationSpace = destinationSpace;
+    }
+    if (weight) {
+      constraint.weight = weight;
+    }
+    if (freezeAxes) {
+      constraint.freezeAxes = freezeAxes;
+    }
 
     return constraint;
   }
 
-  private _importAimConstraint(destination: THREE.Object3D, nodes: THREE.Object3D[], modelRoot: THREE.Object3D, aim: ConstraintSchema.AimConstraint): VRMAimConstraint {
+  private _importAimConstraint(
+    destination: THREE.Object3D,
+    nodes: THREE.Object3D[],
+    modelRoot: THREE.Object3D,
+    aim: ConstraintSchema.AimConstraint,
+  ): VRMAimConstraint {
     const { source, aimVector, upVector, sourceSpace, destinationSpace, weight, freezeAxes } = aim;
     const constraint = new VRMAimConstraint(destination, modelRoot);
 
     constraint.setSource(nodes[source]);
 
-    if (aimVector) {constraint.aimVector.fromArray(aimVector).normalize();}
-    if (upVector) {constraint.upVector.fromArray(upVector).normalize();}
-    if ( sourceSpace ) {constraint.sourceSpace=sourceSpace;}
-    if ( destinationSpace ) {constraint.destinationSpace=destinationSpace;}
-    if ( weight ) {constraint.weight=weight;}
-    if ( freezeAxes ) {constraint.freezeAxes=freezeAxes;}
+    if (aimVector) {
+      constraint.aimVector.fromArray(aimVector).normalize();
+    }
+    if (upVector) {
+      constraint.upVector.fromArray(upVector).normalize();
+    }
+    if (sourceSpace) {
+      constraint.sourceSpace = sourceSpace;
+    }
+    if (destinationSpace) {
+      constraint.destinationSpace = destinationSpace;
+    }
+    if (weight) {
+      constraint.weight = weight;
+    }
+    if (freezeAxes) {
+      constraint.freezeAxes = freezeAxes;
+    }
 
     return constraint;
   }
