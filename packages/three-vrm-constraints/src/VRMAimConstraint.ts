@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import { decomposePosition } from './utils/decomposePosition';
 import { decomposeRotation } from './utils/decomposeRotation';
-import { quaternionFreezeAxes } from './utils/quaternionFreezeAxes';
 import { setAimQuaternion } from './utils/setAimQuaternion';
 import { VRMConstraint } from './VRMConstraint';
 
