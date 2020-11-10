@@ -1,7 +1,7 @@
 /**
- * Morph target values that make up the BlendShape
+ * Morph target value associated with a expression
  */
-export interface BlendShapeBind {
+export interface ExpressionMorphTargetBind {
   /**
    * The index of the node that attached to target mesh.
    */
