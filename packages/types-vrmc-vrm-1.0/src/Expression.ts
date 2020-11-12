@@ -15,15 +15,15 @@ export interface Expression {
   /**
    * Functions of Expression
    */
-  preset?: ExpressionPreset;
+  preset: ExpressionPreset;
 
   /**
-   * Specify a morph target. 'required' :   [  'mesh' ,  'index' ,  'weight'  ]
+   * Specify a morph target
    */
   morphTargetBinds?: ExpressionMorphTargetBind[];
 
   /**
-   * Material color animation references. 'required' :   [  'material' ,  'type' ,  'targetValue'  ]
+   * Material color animation references
    */
   materialColorBinds?: ExpressionMaterialColorBind[];
 
@@ -51,4 +51,7 @@ export interface Expression {
    * Disable Mouth when this Expression is enabled
    */
   ignoreMouth?: boolean;
+
+  extensions?: { [key: string]: { [key: string]: any } };
+  extras?: any;
 }

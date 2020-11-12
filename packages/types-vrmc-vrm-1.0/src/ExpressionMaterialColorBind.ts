@@ -4,12 +4,15 @@ export interface ExpressionMaterialColorBind {
   /**
    * target material
    */
-  material?: number;
+  material: number;
 
-  type?: ExpressionMaterialColorType;
+  type: ExpressionMaterialColorType;
 
   /**
    * target color
    */
-  targetValue?: number;
+  targetValue: [number, number, number, number];
+
+  extensions?: { [key: string]: { [key: string]: any } };
+  extras?: any;
 }

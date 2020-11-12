@@ -5,15 +5,18 @@ export interface ExpressionMorphTargetBind {
   /**
    * The index of the node that attached to target mesh.
    */
-  node?: number;
+  node: number;
 
   /**
    * The index of the morph target in the mesh.
    */
-  index?: number;
+  index: number;
 
   /**
    * The weight value of target morph target.
    */
-  weight?: number;
+  weight: number;
+
+  extensions?: { [key: string]: { [key: string]: any } };
+  extras?: any;
 }
