@@ -45,41 +45,45 @@ export interface Meta {
   /**
    * A person who can perform with this avatar
    */
-  avatarPermission?: 'OnlyAuthor' | 'ExplicitlyLicensedPerson' | 'Everyone';
+  avatarPermission?: 'onlyAuthor' | 'explicitlyLicensedPerson' | 'everyone';
 
   /**
-   * Perform violent acts with this avatar
+   * A flag that permits to use this avatar in excessively violent contents
    */
-  violentUsage?: boolean;
+  allowExcessivelyViolentUsage?: boolean;
 
   /**
-   * Perform sexual acts with this avatar
+   * A flag that permits to use this avatar in excessively sexual contents
    */
-  sexualUsage?: boolean;
-
-  gameUsage?: boolean;
+  allowExcessivelySexualUsage?: boolean;
 
   /**
-   * Commercial use
+   * An option that permits to use this avatar in commercial products
    */
   commercialUsage?:
-    | 'PersonalNonCommercialNonProfit'
-    | 'PersonalNonCommercialProfit'
-    | 'PersonalCommercial'
-    | 'Corporation';
-
-  politicalOrReligiousUsage?: boolean;
+    | 'personalNonProfit'
+    | 'personalProfit'
+    | 'corporation';
 
   /**
-   * Describe the URL links of license with regard to other permissions
+   * A flag that permits to use this avatar in political or religious contents
    */
-  otherPermissionUrl?: string;
+  allowPoliticalOrReligiousUsage?: boolean;
 
-  creditNotation?: 'Required' | 'Unnecessary' | 'Abandoned';
+  /**
+   * An option that forces or abandons to display the credit of this avatar
+   */
+  creditNotation?: 'required' | 'unnecessary' | 'abandoned';
 
+  /**
+   * A flag that permits to redistribute this avatar
+   */
   allowRedistribution?: boolean;
 
-  modify?: 'Prohibited' | 'Inherited' | 'NotInherited';
+  /**
+   * An option that controls the condition to modify this avatar
+   */
+  modification?: 'prohibited' | 'inherited' | 'notInherited';
 
   /**
    * Describe the URL links of other license
