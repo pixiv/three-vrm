@@ -1,1 +1,1 @@
-export type Space = 'MODEL' | 'LOCAL';
+export type Space = 'model' | 'local';
