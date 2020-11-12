@@ -54,7 +54,7 @@ describe('VRMPositionConstraint', () => {
   });
 
   describe('update', () => {
-    describe.each(['LOCAL', 'MODEL'])('When source space is %s', (sourceSpace) => {
+    describe.each(['local', 'model'])('When source space is %s', (sourceSpace) => {
       let sourceDelta = new THREE.Vector3();
 
       beforeEach(() => {
@@ -62,7 +62,7 @@ describe('VRMPositionConstraint', () => {
 
         sourceDelta = move.clone();
 
-        if (sourceSpace === 'MODEL') {
+        if (sourceSpace === 'model') {
           const positionBeforeMove = new THREE.Vector3();
           source.getWorldPosition(positionBeforeMove);
 
@@ -80,7 +80,7 @@ describe('VRMPositionConstraint', () => {
 
       describe('When destination space is LOCAL', () => {
         beforeEach(() => {
-          constraint.destinationSpace = 'LOCAL';
+          constraint.destinationSpace = 'local';
 
           constraint.setInitState();
         });
@@ -98,7 +98,7 @@ describe('VRMPositionConstraint', () => {
 
       describe('When destination space is MODEL', () => {
         beforeEach(() => {
-          constraint.destinationSpace = 'MODEL';
+          constraint.destinationSpace = 'model';
 
           constraint.setInitState();
         });

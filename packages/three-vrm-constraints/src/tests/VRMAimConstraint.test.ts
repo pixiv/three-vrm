@@ -55,14 +55,14 @@ describe('VRMAimConstraint', () => {
   });
 
   describe('update', () => {
-    describe.each(['LOCAL', 'MODEL'])('When source space is %s', (sourceSpace) => {
+    describe.each(['local', 'model'])('When source space is %s', (sourceSpace) => {
       const sourcePos = new THREE.Vector3();
       const sourcePosAfter = new THREE.Vector3();
 
       beforeEach(() => {
         constraint.sourceSpace = sourceSpace;
 
-        if (sourceSpace === 'LOCAL') {
+        if (sourceSpace === 'local') {
           sourcePos.copy(source.position);
 
           sourcePosAfter.copy(source.position).add(move);
@@ -85,7 +85,7 @@ describe('VRMAimConstraint', () => {
         const quatLookAtDelta = new THREE.Quaternion();
 
         beforeEach(() => {
-          constraint.destinationSpace = 'LOCAL';
+          constraint.destinationSpace = 'local';
 
           destinationPos.copy(object.position);
 
@@ -114,7 +114,7 @@ describe('VRMAimConstraint', () => {
         const quatLookAtDelta = new THREE.Quaternion();
 
         beforeEach(() => {
-          constraint.destinationSpace = 'MODEL';
+          constraint.destinationSpace = 'model';
 
           object.getWorldPosition(destinationPos);
 

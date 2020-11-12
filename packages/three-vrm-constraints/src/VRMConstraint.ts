@@ -9,7 +9,7 @@ export abstract class VRMConstraint {
   public readonly object: THREE.Object3D;
 
   /**
-   * When {@link sourceSpace} / {@link destinationSpace} is {@link 'LOCAL'}, these transforms will be cauculated relatively from this object.
+   * When {@link sourceSpace} / {@link destinationSpace} is model space, these transforms will be cauculated relatively from this object.
    */
   public readonly modelRoot: THREE.Object3D;
 
@@ -18,13 +18,13 @@ export abstract class VRMConstraint {
     return this._source;
   }
 
-  public sourceSpace = 'MODEL';
-  public destinationSpace = 'MODEL';
+  public sourceSpace = 'model';
+  public destinationSpace = 'model';
 
   public get dependencies(): Set<THREE.Object3D> {
     const deps = new Set<THREE.Object3D>();
     this._source && deps.add(this._source);
-    if (this.destinationSpace === 'MODEL' && this.object.parent) {
+    if (this.destinationSpace === 'model' && this.object.parent) {
       deps.add(this.object.parent);
     }
     return deps;
@@ -32,7 +32,7 @@ export abstract class VRMConstraint {
 
   /**
    * @param object The destination object
-   * @param modelRoot When {@link sourceSpace} / {@link destinationSpace} is local, these transforms will be cauculated relatively from this object
+   * @param modelRoot When {@link sourceSpace} / {@link destinationSpace} is model space, these transforms will be cauculated relatively from this object
    */
   public constructor(object: THREE.Object3D, modelRoot: THREE.Object3D) {
     this.object = object;
@@ -68,10 +68,10 @@ export abstract class VRMConstraint {
    * @param target Target matrix
    */
   protected _getDestinationMatrix<T extends THREE.Matrix4>(target: T): T {
-    if (this.destinationSpace === 'LOCAL') {
+    if (this.destinationSpace === 'local') {
       this.object.updateMatrix();
       target.copy(this.object.matrix);
-    } else if (this.destinationSpace === 'MODEL') {
+    } else if (this.destinationSpace === 'model') {
       this.object.updateWorldMatrix(false, false);
       target.copy(this.object.matrixWorld);
 
@@ -92,10 +92,10 @@ export abstract class VRMConstraint {
       throw new Error('There is no source specified');
     }
 
-    if (this.sourceSpace === 'LOCAL') {
+    if (this.sourceSpace === 'local') {
       this._source.updateMatrix();
       target.copy(this._source.matrix);
-    } else if (this.sourceSpace === 'MODEL') {
+    } else if (this.sourceSpace === 'model') {
       this._source.updateWorldMatrix(false, false);
       target.copy(this._source.matrixWorld);
 

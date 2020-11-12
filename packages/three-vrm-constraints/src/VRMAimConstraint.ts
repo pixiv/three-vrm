@@ -39,7 +39,7 @@ export class VRMAimConstraint extends VRMConstraint {
   }
 
   public update(): void {
-    if (this.destinationSpace === 'LOCAL') {
+    if (this.destinationSpace === 'local') {
       this.object.quaternion.copy(QUAT_IDENTITY);
     } else {
       this._getParentMatrixInModelSpace(_matA);
@@ -50,7 +50,7 @@ export class VRMAimConstraint extends VRMConstraint {
     this._getAimDiffQuat(_quatB);
     this.object.quaternion.multiply(_quatB);
 
-    if (this.destinationSpace === 'MODEL') {
+    if (this.destinationSpace === 'model') {
       this.object.quaternion.multiply(_quatA);
     }
 

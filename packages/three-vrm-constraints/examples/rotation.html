@@ -103,8 +103,8 @@
 			const constraintA = new VRMRotationConstraint(cubeConstrainedA, modelRoot);
 			constraintA.setSource(cubeA);
 			constraintA.weight = 0.5;
-			constraintA.sourceSpace = 'LOCAL';
-			constraintA.destinationSpace = 'LOCAL';
+			constraintA.sourceSpace = 'local';
+			constraintA.destinationSpace = 'local';
 			constraintManager.addConstraint(constraintA);
 
 			const constraintB = new VRMRotationConstraint(cubeConstrainedB, modelRoot);

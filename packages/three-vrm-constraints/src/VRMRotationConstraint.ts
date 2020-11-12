@@ -24,7 +24,7 @@ export class VRMRotationConstraint extends VRMConstraint {
   }
 
   public update(): void {
-    if (this.destinationSpace === 'LOCAL') {
+    if (this.destinationSpace === 'local') {
       this.object.quaternion.copy(this._quatInitDst);
     } else {
       this._getParentMatrixInModelSpace(_matA);
@@ -35,7 +35,7 @@ export class VRMRotationConstraint extends VRMConstraint {
     this._getSourceDiffQuat(_quatB);
     this.object.quaternion.multiply(_quatB);
 
-    if (this.destinationSpace === 'MODEL') {
+    if (this.destinationSpace === 'model') {
       this.object.quaternion.multiply(_quatA);
       this.object.quaternion.multiply(this._quatInitDst);
     }
@@ -50,7 +50,7 @@ export class VRMRotationConstraint extends VRMConstraint {
    */
   private _getSourceDiffQuat<T extends THREE.Quaternion>(target: T): T {
     this._getSourceQuat(target);
-    if (this.sourceSpace === 'LOCAL') {
+    if (this.sourceSpace === 'local') {
       target.premultiply(this._quatInvInitSrc);
     } else {
       target.multiply(this._quatInvInitSrc);

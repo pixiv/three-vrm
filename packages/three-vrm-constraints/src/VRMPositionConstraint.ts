@@ -20,7 +20,7 @@ export class VRMPositionConstraint extends VRMConstraint {
   public update(): void {
     this._getSourceDiffPosition(this.object.position);
 
-    if (this.destinationSpace === 'MODEL') {
+    if (this.destinationSpace === 'model') {
       this._getParentMatrixInModelSpace(_matA).getInverse(_matA);
 
       // remove translation

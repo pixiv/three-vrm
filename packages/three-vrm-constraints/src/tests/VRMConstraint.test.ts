@@ -59,7 +59,7 @@ describe('VRMConstraint', () => {
 
     describe('when its destination space is local', () => {
       beforeEach(() => {
-        constraint.destinationSpace = 'LOCAL';
+        constraint.destinationSpace = 'local';
       });
 
       it('must not have the parent of the object as a dependency', () => {
@@ -69,7 +69,7 @@ describe('VRMConstraint', () => {
 
     describe('when its destination space is model', () => {
       beforeEach(() => {
-        constraint.destinationSpace = 'MODEL';
+        constraint.destinationSpace = 'model';
       });
 
       it('must have the parent of the object as a dependency', () => {

@@ -53,7 +53,7 @@ describe('VRMRotationConstraint', () => {
   });
 
   describe('update', () => {
-    describe.each(['LOCAL', 'MODEL'])('When source space is %s', (sourceSpace) => {
+    describe.each(['local', 'model'])('When source space is %s', (sourceSpace) => {
       let sourceDelta = new THREE.Quaternion();
 
       beforeEach(() => {
@@ -61,7 +61,7 @@ describe('VRMRotationConstraint', () => {
 
         sourceDelta = rot.clone();
 
-        if (sourceSpace === 'MODEL') {
+        if (sourceSpace === 'model') {
           const quatBeforeRotate = new THREE.Quaternion();
           source.getWorldQuaternion(quatBeforeRotate);
 
@@ -79,7 +79,7 @@ describe('VRMRotationConstraint', () => {
 
       describe('When destination space is LOCAL', () => {
         beforeEach(() => {
-          constraint.destinationSpace = 'LOCAL';
+          constraint.destinationSpace = 'local';
 
           constraint.setInitState();
         });
@@ -97,7 +97,7 @@ describe('VRMRotationConstraint', () => {
 
       describe('When destination space is MODEL', () => {
         beforeEach(() => {
-          constraint.destinationSpace = 'MODEL';
+          constraint.destinationSpace = 'model';
 
           constraint.setInitState();
         });

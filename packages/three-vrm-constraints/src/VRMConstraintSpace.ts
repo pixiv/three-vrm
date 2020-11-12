@@ -1,1 +1,1 @@
-export type VRMConstraintSpace = 'LOCAL' | 'MODEL';
+export type VRMConstraintSpace = 'local' | 'model';
