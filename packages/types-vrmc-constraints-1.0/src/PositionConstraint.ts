@@ -1,4 +1,4 @@
-import type { Space } from './Space';
+import type { ConstraintsObjectSpace } from './ConstraintsObjectSpace';
 
 /**
  * A constraint that links the position with sources.
@@ -12,12 +12,12 @@ export interface PositionConstraint {
   /**
    * The source node will be evaluated in this space.
    */
-  sourceSpace?: Space;
+  sourceSpace?: ConstraintsObjectSpace;
 
   /**
    * The destination node will be evaluated in this space.
    */
-  destinationSpace?: Space;
+  destinationSpace?: ConstraintsObjectSpace;
 
   /**
    * Axes be constrained by this constraint, in X-Y-Z order.
