@@ -45,6 +45,11 @@
   - Model Spaceの親のinverse, 回転差分, Model Spaceの親, 初期状態のLocal、の順にmultiplyする
     - 言い換えれば、シンプルにModel Spaceで初期状態に対して回転差分を適用する
 
+## Rotation ConstraintにおけるfreezeAxes
+
+- 検討中
+- 現在、いったん対数クォータニオンにしてfreezeされていない軸の回転値を0倍する手法で実装してみています
+
 ## Aim Constraintの向きの決定
 
 - DestinationとSourceがごっちゃになりやすいので注意！
@@ -76,7 +81,33 @@
 - Destinationの初期ローカル回転を記録する
 - それに対して上で求めた回転差分をpremultiplyする
 
-## 回転におけるfreezeAxes
+## 依存関係を含むconstraint
 
-- 検討中
-- 現在、いったん対数クォータニオンにしてfreezeされていない軸の回転値を0倍する手法で実装してみています
+```
+let constraintsPending = empty set of Constraint
+let constraintsDone = empty set of Constraint
+
+function updateConstraint( constraint )
+  if not constraintsDone.has( constraint ) then
+    if constraintPending.has( constraint ) then
+      throw "Circular dependency detected"
+    end if
+
+    constraintsPending.add( constraint )
+    foreach dependency in constraint.dependencies do
+      updateConstraint( constraint )
+    end foreach
+    constraintsPending.delete( constraint )
+
+    process constraint
+
+    constraintsDone.add( constraint )
+  end if
+end function
+
+function updateConstraints
+  foreach constraint in constraints do
+    updateConstraint( constraint )
+  end foreach
+end function
+```
