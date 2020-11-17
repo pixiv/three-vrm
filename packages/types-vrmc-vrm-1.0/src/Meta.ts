@@ -60,10 +60,7 @@ export interface Meta {
   /**
    * An option that permits to use this avatar in commercial products
    */
-  commercialUsage?:
-    | 'personalNonProfit'
-    | 'personalProfit'
-    | 'corporation';
+  commercialUsage?: 'personalNonProfit' | 'personalProfit' | 'corporation';
 
   /**
    * A flag that permits to use this avatar in political or religious contents
