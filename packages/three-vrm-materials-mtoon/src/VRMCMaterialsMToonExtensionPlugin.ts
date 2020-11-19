@@ -29,28 +29,31 @@ export class VRMCMaterialsMToonExtensionPlugin {
     return VRMCMaterialsMToonExtensionPlugin.EXTENSION_NAME;
   }
 
-  public constructor(parser: GLTFParser, options: {
-    /**
-     * This value will be added to every meshes who have MaterialsMToon.
-     * The final renderOrder will be sum of this `renderOrderOffset` and `renderQueueOffsetNumber` for each materials.
-     * `0` by default.
-     */
-    renderOrderOffset?: number;
+  public constructor(
+    parser: GLTFParser,
+    options: {
+      /**
+       * This value will be added to every meshes who have MaterialsMToon.
+       * The final renderOrder will be sum of this `renderOrderOffset` and `renderQueueOffsetNumber` for each materials.
+       * `0` by default.
+       */
+      renderOrderOffset?: number;
 
-    /**
-     * All imported materials will call this their constructor.
-     * You will need to use this in order to call update for each materials.
-     * Update call is required to do uv animations.
-     */
-    onLoadMaterial?: (material: MToonMaterial) => void;
-  } = {}) {
+      /**
+       * All imported materials will call this their constructor.
+       * You will need to use this in order to call update for each materials.
+       * Update call is required to do uv animations.
+       */
+      onLoadMaterial?: (material: MToonMaterial) => void;
+    } = {},
+  ) {
     this._parser = parser;
 
     this.renderOrderOffset = options.renderOrderOffset ?? 0;
     this.onLoadMaterial = options.onLoadMaterial;
   }
 
-  public getMaterialType(materialIndex: number): (typeof THREE.Material) | null {
+  public getMaterialType(materialIndex: number): typeof THREE.Material | null {
     const parser = this._parser;
     const json = parser.json;
 
@@ -64,7 +67,10 @@ export class VRMCMaterialsMToonExtensionPlugin {
     return MToonMaterial;
   }
 
-  public async extendMaterialParams(materialIndex: number, materialParams: MToonMaterialParameters): Promise<MToonMaterialParameters> {
+  public async extendMaterialParams(
+    materialIndex: number,
+    materialParams: MToonMaterialParameters,
+  ): Promise<MToonMaterialParameters> {
     const parser = this._parser;
     const json = parser.json;
 
@@ -82,8 +88,12 @@ export class VRMCMaterialsMToonExtensionPlugin {
     materialParams.transparentWithZWrite = extension.transparentWithZWrite;
 
     materialParams.shadeFactor = extension.shadeFactor && new THREE.Color().fromArray(extension.shadeFactor);
-    if ( extension.shadeMultiplyTexture != null ) {
-      pending.push( ( parser as any).assignTexture( materialParams, 'shadeMultiplyTexture', { index: extension.shadeMultiplyTexture } ) );
+    if (extension.shadeMultiplyTexture != null) {
+      pending.push(
+        (parser as any).assignTexture(materialParams, 'shadeMultiplyTexture', {
+          index: extension.shadeMultiplyTexture,
+        }),
+      );
     }
 
     materialParams.shadingShiftFactor = extension.shadingShiftFactor;
@@ -91,13 +101,17 @@ export class VRMCMaterialsMToonExtensionPlugin {
     materialParams.lightColorAttenuationFactor = extension.lightColorAttenuationFactor;
     materialParams.giIntensityFactor = extension.giIntensityFactor;
 
-    if ( extension.additiveTexture != null ) {
-      pending.push( ( parser as any).assignTexture( materialParams, 'additiveTexture', { index: extension.additiveTexture } ) );
+    if (extension.additiveTexture != null) {
+      pending.push(
+        (parser as any).assignTexture(materialParams, 'additiveTexture', { index: extension.additiveTexture }),
+      );
     }
 
     materialParams.rimFactor = extension.rimFactor && new THREE.Color().fromArray(extension.rimFactor);
-    if ( extension.rimMultiplyTexture != null ) {
-      pending.push( ( parser as any).assignTexture( materialParams, 'rimMultiplyTexture', { index: extension.rimMultiplyTexture } ) );
+    if (extension.rimMultiplyTexture != null) {
+      pending.push(
+        (parser as any).assignTexture(materialParams, 'rimMultiplyTexture', { index: extension.rimMultiplyTexture }),
+      );
     }
     materialParams.rimLightingMixFactor = extension.rimLightingMixFactor;
     materialParams.rimFresnelPowerFactor = extension.rimFresnelPowerFactor;
@@ -105,16 +119,24 @@ export class VRMCMaterialsMToonExtensionPlugin {
 
     materialParams.outlineWidthMode = extension.outlineWidthMode as MToonMaterialOutlineWidthMode;
     materialParams.outlineWidthFactor = extension.outlineWidthFactor;
-    if ( extension.outlineWidthMultiplyTexture != null ) {
-      pending.push( ( parser as any).assignTexture( materialParams, 'outlineWidthMultiplyTexture', { index: extension.outlineWidthMultiplyTexture } ) );
+    if (extension.outlineWidthMultiplyTexture != null) {
+      pending.push(
+        (parser as any).assignTexture(materialParams, 'outlineWidthMultiplyTexture', {
+          index: extension.outlineWidthMultiplyTexture,
+        }),
+      );
     }
     materialParams.outlineScaledMaxDistanceFactor = extension.outlineScaledMaxDistanceFactor;
     materialParams.outlineColorMode = extension.outlineColorMode as MToonMaterialOutlineColorMode;
     materialParams.outlineFactor = extension.outlineFactor && new THREE.Color().fromArray(extension.outlineFactor);
     materialParams.outlineLightingMixFactor = extension.outlineLightingMixFactor;
 
-    if ( extension.uvAnimationMaskTexture != null ) {
-      pending.push( ( parser as any).assignTexture( materialParams, 'uvAnimationMaskTexture', { index: extension.uvAnimationMaskTexture } ) );
+    if (extension.uvAnimationMaskTexture != null) {
+      pending.push(
+        (parser as any).assignTexture(materialParams, 'uvAnimationMaskTexture', {
+          index: extension.uvAnimationMaskTexture,
+        }),
+      );
     }
     materialParams.uvAnimationScrollXSpeedFactor = extension.uvAnimationScrollXSpeedFactor;
     materialParams.uvAnimationScrollYSpeedFactor = extension.uvAnimationScrollYSpeedFactor;
@@ -154,7 +176,7 @@ export class VRMCMaterialsMToonExtensionPlugin {
       this._generateOutline(mesh, materialIndex);
     } else {
       const group = meshOrGroup as THREE.Group;
-      for (let i = 0; i < primitivesDef.length; i ++) {
+      for (let i = 0; i < primitivesDef.length; i++) {
         const mesh = group.children[i] as THREE.Mesh;
         const materialIndex = primitivesDef[i].material;
 
@@ -192,10 +214,7 @@ export class VRMCMaterialsMToonExtensionPlugin {
     }
 
     // Check whether we really have to prepare outline or not
-    if (
-      (extension.outlineWidthMode ?? 'none') === 'none' ||
-      (extension.outlineWidthFactor ?? 0.0) === 0.0
-    ) {
+    if ((extension.outlineWidthMode ?? 'none') === 'none' || (extension.outlineWidthFactor ?? 0.0) === 0.0) {
       return;
     }
 
@@ -217,9 +236,7 @@ export class VRMCMaterialsMToonExtensionPlugin {
 
     // make two geometry groups out of a same buffer
     const geometry = mesh.geometry as THREE.BufferGeometry; // mesh.geometry is guaranteed to be a BufferGeometry in GLTFLoader
-    const primitiveVertices = geometry.index
-      ? geometry.index.count
-      : geometry.attributes.position.count / 3;
+    const primitiveVertices = geometry.index ? geometry.index.count : geometry.attributes.position.count / 3;
     geometry.addGroup(0, primitiveVertices, 0);
     geometry.addGroup(0, primitiveVertices, 1);
   }
