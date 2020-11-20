@@ -96,7 +96,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
       THREE.UniformsLib.fog,
       THREE.UniformsLib.lights,
       {
-        color: { value: new THREE.Color(1.0, 1.0, 1.0) },
+        litFactor: { value: new THREE.Color(1.0, 1.0, 1.0) },
         colorAlpha: { value: 1.0 },
         shadeFactor: { value: new THREE.Color(0.97, 0.81, 0.86) },
         shadeMultiplyTexture: { value: null },
@@ -250,7 +250,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     }
     this.shouldApplyUniforms = false;
 
-    this.uniforms.color.value.copy(this.color);
+    this.uniforms.litFactor.value.copy(this.color);
     this.uniforms.opacity.value = this.opacity;
     this.uniforms.map.value = this.map;
     this.uniforms.normalMap.value = this.normalMap;

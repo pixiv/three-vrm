@@ -1,6 +1,6 @@
 // #define PHONG
 
-uniform vec3 color;
+uniform vec3 litFactor;
 
 uniform float opacity;
 
@@ -303,7 +303,7 @@ void main() {
     return;
   #endif
 
-  vec4 diffuseColor = vec4( color, opacity );
+  vec4 diffuseColor = vec4( litFactor, opacity );
   ReflectedLight reflectedLight = ReflectedLight( vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ) );
   vec3 totalEmissiveRadiance = emissive;
 
