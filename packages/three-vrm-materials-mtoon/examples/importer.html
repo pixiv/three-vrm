@@ -75,6 +75,8 @@
 
 			function load( url ) {
 
+				mtoonSet.clear();
+
 				loader.crossOrigin = 'anonymous';
 				loader.load(
 
@@ -82,8 +84,13 @@
 
 					( gltf ) => {
 
+						if ( currentGltf ) {
+
+							scene.remove( currentGltf.scene );
+
+						}
+
 						scene.add( gltf.scene );
-						console.log(scene);
 
 						console.log( gltf );
 
