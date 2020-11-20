@@ -49,6 +49,12 @@ export class MToonMaterial extends THREE.ShaderMaterial {
 
   public shouldApplyUniforms = true; // when this is true, applyUniforms effects
 
+  /**
+   * See: {@link MToonMaterialParameters.onLoadMaterial}.
+   * It will called also when it's copied.
+   */
+  public onLoadMaterial?: (material: MToonMaterial) => void;
+
   private _debugMode = MToonMaterialDebugMode.None;
   private _outlineWidthMode = MToonMaterialOutlineWidthMode.None;
   private _outlineColorMode = MToonMaterialOutlineColorMode.FixedColor;
@@ -70,7 +76,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     super();
 
     // have onLoadMaterial as a variable before it attempts to import this as a member
-    const onLoadMaterial = parameters.onLoadMaterial;
+    this.onLoadMaterial = parameters.onLoadMaterial;
     delete parameters.onLoadMaterial;
 
     // override depthWrite with transparentWithZWrite
@@ -131,7 +137,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this._applyUniforms();
 
     // == call onLoadMaterial ======================================================================
-    onLoadMaterial?.(this);
+    this.onLoadMaterial?.(this);
   }
 
   get debugMode(): MToonMaterialDebugMode {
@@ -233,6 +239,9 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.outlineColorMode = source.outlineColorMode;
 
     this.isOutline = source.isOutline;
+
+    this.onLoadMaterial = source.onLoadMaterial;
+    this.onLoadMaterial?.(this);
 
     return this;
   }
