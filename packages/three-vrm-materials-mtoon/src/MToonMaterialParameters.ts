@@ -11,8 +11,12 @@ export interface MToonMaterialParameters extends THREE.ShaderMaterialParameters 
   transparentWithZWrite?: boolean;
 
   color?: THREE.Color;
-  shadeFactor?: THREE.Color;
   map?: THREE.Texture;
+  normalMap?: THREE.Texture;
+  normalScale?: number;
+  emissive?: THREE.Color;
+  emissiveMap?: THREE.Texture;
+  shadeFactor?: THREE.Color;
   shadeMultiplyTexture?: THREE.Texture;
   shadingShiftFactor?: number;
   shadingToonyFactor?: number;
