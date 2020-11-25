@@ -24,6 +24,7 @@ jobs:
             - packages/types-vrm-0.0/node_modules
             - packages/types-vrmc-materals-mtoon-1.0/node_modules
             - packages/types-vrmc-node-collider-1.0/node_modules
+            - packages/types-vrmc-springbone-1.0/node_modules
             - packages/types-vrmc-vrm-1.0/node_modules
 
   build:
