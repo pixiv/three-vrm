@@ -39,6 +39,7 @@
     ]
   },
   "dependencies": {
+    "@pixiv/types-vrm-0.0": "0.0.1",
     "@pixiv/types-vrmc-materials-mtoon-1.0": "0.0.1"
   },
   "devDependencies": {
