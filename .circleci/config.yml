@@ -15,7 +15,7 @@ jobs:
           command: node -v
       - run:
           name: Fetch deps
-          command: yarn
+          command: yarn --frozen-lockfile
       - save_cache:
           key: deps-{{ checksum "yarn.lock" }}
           paths:
@@ -34,6 +34,9 @@ jobs:
             - deps-{{ checksum "yarn.lock" }}
             - deps-
       - run:
+          name: Fetch deps
+          command: yarn --frozen-lockfile
+      - run:
           name: Build
           command: yarn build
 
@@ -45,6 +48,9 @@ jobs:
           keys:
             - deps-{{ checksum "yarn.lock" }}
             - deps-
+      - run:
+          name: Fetch deps
+          command: yarn --frozen-lockfile
       - run:
           name: Test
           command: yarn test
@@ -58,6 +64,9 @@ jobs:
             - deps-{{ checksum "yarn.lock" }}
             - deps-
       - run:
+          name: Fetch deps
+          command: yarn --frozen-lockfile
+      - run:
           name: Lint
           command: yarn lint
 
@@ -69,6 +78,9 @@ jobs:
           keys:
             - deps-{{ checksum "yarn.lock" }}
             - deps-
+      - run:
+          name: Fetch deps
+          command: yarn --frozen-lockfile
       - run:
           name: Docs
           command: yarn docs
