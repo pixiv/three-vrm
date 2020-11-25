@@ -22,6 +22,7 @@ jobs:
             - node_modules
             - packages/three-vrm/node_modules
             - packages/types-vrm-0.0/node_modules
+            - packages/types-vrmc-materals-mtoon-1.0/node_modules
             - packages/types-vrmc-vrm-1.0/node_modules
 
   build:
