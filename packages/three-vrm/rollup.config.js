@@ -15,6 +15,7 @@ const licenseUri = 'https://github.com/pixiv/three-vrm/blob/master/LICENSE';
 // == envs =========================================================================================
 const NODE_ENV = process.env.NODE_ENV;
 const DEV = NODE_ENV === 'development';
+const ESM = process.env.ESM === '1';
 const SERVE = process.env.SERVE === '1';
 
 // == banner =======================================================================================
@@ -38,15 +39,16 @@ const serveOptions = {
 
 // == output =======================================================================================
 export default {
-  input: 'src/index.ts',
+  input: ESM ? 'src/index.ts' : 'src/assign.ts',
   output: {
-    format: 'esm',
+    format: ESM ? 'esm' : 'umd',
     banner: DEV ? bannerTextDev : null,
     sourcemap: DEV ? 'inline' : false,
+    globals: ESM ? undefined : {
+      three: 'THREE',
+    }
   },
-  external: {
-    three: 'three',
-  },
+  external: [ 'three' ],
   plugins: [
     string({
       include: ['**/*.frag', '**/*.vert'],
