@@ -14,33 +14,23 @@ Use [VRM](https://vrm.dev/) on [three.js](https://threejs.org/)
 
 ### from HTML
 
-From v0.6.0, You have to use [import maps](https://github.com/WICG/import-maps) to refer a Three.js from three-vrm.
-Since import map is still a draft, we are going to use [`es-module-shims`](https://github.com/guybedford/es-module-shims) to achieve this.
-For more information, please refer the "Import maps" section of this three.js document:
-https://threejs.org/docs/#manual/en/introduction/Installation
+You will need:
 
-In the example below, we are going to use the cdn [unpkg](https://unpkg.com). If you want to use either local or other cdns, please interpret them accordingly.
+- [Three.js build](https://github.com/mrdoob/three.js/blob/master/build/three.js)
+- [GLTFLoader](https://github.com/mrdoob/three.js/blob/master/examples/js/loaders/GLTFLoader.js)
+- [A build of @pixiv/three-vrm](https://github.com/pixiv/three-vrm/releases)
 
 Code like this:
 
 ```html
-<script defer src="https://unpkg.com/es-module-shims@0.7.1/dist/es-module-shims.js"></script>
-<script type="importmap-shim">
-	{
-		"imports": {
-			"three": "https://unpkg.com/three@0.120.1/build/three.module.js",
-			"three/examples/jsm/": "https://unpkg.com/three@0.120.1/examples/jsm/"
-		}
-	}
-</script>
-<script type="module-shim">
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { VRM } from '../lib/three-vrm.js';
+<script src="three.js"></script>
+<script src="GLTFLoader.js"></script>
+<script src="three-vrm.js"></script>
 
+<script>
 const scene = new THREE.Scene();
 
-const loader = new GLTFLoader();
+const loader = new THREE.GLTFLoader();
 loader.load(
 
 	// URL of the VRM you want to load
@@ -50,7 +40,7 @@ loader.load(
 	( gltf ) => {
 
 		// generate a VRM instance from gltf
-		VRM.from( gltf ).then( ( vrm ) => {
+		THREE.VRM.from( gltf ).then( ( vrm ) => {
 
 			// add the loaded vrm to the scene
 			scene.add( vrm.scene );
