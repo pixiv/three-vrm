@@ -12,6 +12,9 @@ const copyright = '(c) 2019-2020 pixiv Inc.';
 const licenseName = 'MIT License';
 const licenseUri = 'https://github.com/pixiv/three-vrm/blob/master/LICENSE';
 
+/* output name of the module */
+const name = 'THREE_VRM';
+
 // == envs =========================================================================================
 const NODE_ENV = process.env.NODE_ENV;
 const DEV = NODE_ENV === 'development';
@@ -32,6 +35,10 @@ const bannerTextDev = `/*!
 // uses `rollup-plugin-banner` in prod mode, since terser removes the `output.banner` one
 const bannerTextProd = `${copyright} - ${licenseUri}`;
 
+// == module =======================================================================================
+/* will be used to inject the stuff into THREE */
+const outro = `Object.assign(THREE, exports);`;
+
 // == serve ========================================================================================
 const serveOptions = {
   contentBase: '.',
@@ -39,14 +46,14 @@ const serveOptions = {
 
 // == output =======================================================================================
 export default {
-  input: ESM ? 'src/index.ts' : 'src/assign.ts',
+  input: 'src/index.ts',
   output: {
     format: ESM ? 'esm' : 'umd',
     banner: DEV ? bannerTextDev : null,
     sourcemap: DEV ? 'inline' : false,
-    globals: ESM ? undefined : {
-      three: 'THREE',
-    }
+    globals: ESM ? undefined : { three: 'THREE' },
+    name: ESM ? undefined : name,
+    outro: ESM ? undefined : outro,
   },
   external: [ 'three' ],
   plugins: [
