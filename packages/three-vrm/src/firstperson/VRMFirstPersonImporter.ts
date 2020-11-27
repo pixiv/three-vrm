@@ -1,7 +1,9 @@
+import * as VRMSchema from '@pixiv/types-vrm-0.0';
 import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
-import { VRMHumanoid } from '../humanoid';
-import { GLTFMesh, GLTFNode, VRMSchema } from '../types';
+import { VRMHumanoid } from '../humanoid/VRMHumanoid';
+import { VRMHumanoidBoneName } from '../humanoid/VRMHumanoidBoneName';
+import { GLTFMesh, GLTFNode } from '../types';
 import { VRMFirstPerson, VRMRendererFirstPersonFlags } from './VRMFirstPerson';
 
 /**
@@ -29,7 +31,7 @@ export class VRMFirstPersonImporter {
 
     let firstPersonBone: GLTFNode | null;
     if (firstPersonBoneIndex === undefined || firstPersonBoneIndex === -1) {
-      firstPersonBone = humanoid.getBoneNode(VRMSchema.HumanoidBoneName.Head);
+      firstPersonBone = humanoid.getBoneNode(VRMHumanoidBoneName.Head);
     } else {
       firstPersonBone = await gltf.parser.getDependency('node', firstPersonBoneIndex);
     }

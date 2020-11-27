@@ -1,8 +1,10 @@
+import * as VRMSchema from '@pixiv/types-vrm-0.0';
 import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
-import { GLTFMesh, GLTFPrimitive, VRMSchema } from '../types';
+import { GLTFMesh, GLTFPrimitive } from '../types';
 import { renameMaterialProperty } from '../utils/renameMaterialProperty';
 import { VRMBlendShapeGroup } from './VRMBlendShapeGroup';
+import { VRMBlendShapePresetName } from './VRMBlendShapePresetName';
 import { VRMBlendShapeProxy } from './VRMBlendShapeProxy';
 
 /**
@@ -45,7 +47,7 @@ export class VRMBlendShapeImporter {
         let presetName: VRMSchema.BlendShapePresetName | undefined;
         if (
           schemaGroup.presetName &&
-          schemaGroup.presetName !== VRMSchema.BlendShapePresetName.Unknown &&
+          schemaGroup.presetName !== VRMBlendShapePresetName.Unknown &&
           !blendShapePresetMap[schemaGroup.presetName]
         ) {
           presetName = schemaGroup.presetName;

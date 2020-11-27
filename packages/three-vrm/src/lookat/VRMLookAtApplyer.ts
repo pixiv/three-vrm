@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { VRMSchema } from '../types';
+import { VRMLookAtTypeName } from './VRMLookAtTypeName';
 
 /**
  * This class is used by [[VRMLookAtHead]], applies look at direction.
@@ -9,7 +9,7 @@ export abstract class VRMLookAtApplyer {
   /**
    * It represents its type of applier.
    */
-  public abstract readonly type: VRMSchema.FirstPersonLookAtTypeName;
+  public abstract readonly type: VRMLookAtTypeName;
 
   /**
    * Apply look at direction to its associated VRM model.

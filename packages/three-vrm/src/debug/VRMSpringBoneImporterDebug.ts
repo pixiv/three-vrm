@@ -1,8 +1,8 @@
+import * as VRMSchema from '@pixiv/types-vrm-0.0';
 import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRMSpringBoneImporter } from '../springbone/VRMSpringBoneImporter';
 import { VRMSpringBoneManagerDebug } from './VRMSpringBoneManagerDebug';
-import { VRMSchema } from '../types';
 import { VRMSpringBoneDebug } from './VRMSpringBoneDebug';
 import { VRMSpringBoneParameters } from '../springbone/VRMSpringBoneParameters';
 

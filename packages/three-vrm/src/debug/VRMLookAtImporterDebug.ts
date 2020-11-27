@@ -1,10 +1,10 @@
+import * as VRMSchema from '@pixiv/types-vrm-0.0';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRMBlendShapeProxy } from '../blendshape';
 import { VRMFirstPerson } from '../firstperson';
 import { VRMHumanoid } from '../humanoid';
 import { VRMLookAtHead } from '../lookat/VRMLookAtHead';
 import { VRMLookAtImporter } from '../lookat/VRMLookAtImporter';
-import { VRMSchema } from '../types';
 import { VRMLookAtHeadDebug } from './VRMLookAtHeadDebug';
 
 export class VRMLookAtImporterDebug extends VRMLookAtImporter {

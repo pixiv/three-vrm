@@ -1,10 +1,11 @@
 import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
-import { GLTFNode, VRMSchema } from '../types';
+import * as VRMSchema from '@pixiv/types-vrm-0.0';
 import { VRMSpringBone } from './VRMSpringBone';
 import { VRMSpringBoneColliderGroup, VRMSpringBoneColliderMesh } from './VRMSpringBoneColliderGroup';
 import { VRMSpringBoneGroup, VRMSpringBoneManager } from './VRMSpringBoneManager';
 import { VRMSpringBoneParameters } from './VRMSpringBoneParameters';
+import { GLTFNode } from '../types';
 
 const _v3A = new THREE.Vector3();
 
