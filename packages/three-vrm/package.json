@@ -11,6 +11,7 @@
     "LICENSE"
   ],
   "main": "lib/three-vrm.min.js",
+  "module": "lib/three-vrm.module.min.js",
   "types": "types/index.d.ts",
   "typesVersions": {
     "<3.9": {
