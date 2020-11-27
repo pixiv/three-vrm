@@ -64,7 +64,7 @@
     "webpack-cli": "^3.3.0",
     "webpack-dev-server": "^3.2.1",
     "webpack-merge": "^4.2.1",
-    "worker-loader": "^2.0.0"
+    "worker-loader": "^3.0.5"
   },
   "peerDependencies": {
     "three": "^0.123.0"
