@@ -3,6 +3,7 @@ export * from './VRMImporter';
 export * from './VRMUtils';
 export * from './blendshape';
 export * from './debug';
+export * from './enums';
 export * from './firstperson';
 export * from './humanoid';
 export * from './lookat';
