@@ -8,11 +8,16 @@ import { terser } from 'rollup-plugin-terser';
 import typescript from '@rollup/plugin-typescript';
 
 // == constants ====================================================================================
+/** copyright text */
 const copyright = '(c) 2019-2020 pixiv Inc.';
+
+/** name of the license */
 const licenseName = 'MIT License';
+
+/** url of the license */
 const licenseUri = 'https://github.com/pixiv/three-vrm/blob/master/LICENSE';
 
-/* output name of the module */
+/** output name of the module */
 const name = 'THREE_VRM';
 
 // == envs =========================================================================================
@@ -36,7 +41,7 @@ const bannerTextDev = `/*!
 const bannerTextProd = `${copyright} - ${licenseUri}`;
 
 // == module =======================================================================================
-/* will be used to inject the stuff into THREE */
+/** will be used to inject the stuff into THREE */
 const outro = `Object.assign(THREE, exports);`;
 
 // == serve ========================================================================================
