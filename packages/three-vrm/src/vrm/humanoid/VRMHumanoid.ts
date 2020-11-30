@@ -71,7 +71,7 @@ export class VRMHumanoid {
         _v3A.fromArray(restState.position).negate();
       }
       if (restState?.rotation) {
-        _quatA.fromArray(restState.rotation).inverse();
+        _quatA.fromArray(restState.rotation).invert();
       }
 
       // Get the position / rotation from the node

@@ -99,7 +99,7 @@ export class VRMLookAtHead {
     const lookAtDir = _v3C.copy(position).sub(headPosition).normalize();
 
     // Transform the direction into local coordinate from the first person bone
-    lookAtDir.applyQuaternion(getWorldQuaternionLite(this.firstPerson.firstPersonBone, _quat).inverse());
+    lookAtDir.applyQuaternion(getWorldQuaternionLite(this.firstPerson.firstPersonBone, _quat).invert());
 
     // convert the direction into euler
     target.x = Math.atan2(lookAtDir.y, Math.sqrt(lookAtDir.x * lookAtDir.x + lookAtDir.z * lookAtDir.z));
