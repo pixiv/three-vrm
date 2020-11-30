@@ -92,6 +92,7 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="vrmblendshapegroup.html#_binds" class="tsd-kind-icon">_binds</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="vrmblendshapegroup.html#_materialvalues" class="tsd-kind-icon">_material<wbr>Values</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="vrmblendshapegroup.html#animations" class="tsd-kind-icon">animations</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="vrmblendshapegroup.html#castshadow" class="tsd-kind-icon">cast<wbr>Shadow</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="vrmblendshapegroup.html#children" class="tsd-kind-icon">children</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="vrmblendshapegroup.html#customdepthmaterial" class="tsd-kind-icon">custom<wbr>Depth<wbr>Material</a></li>
@@ -138,6 +139,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="vrmblendshapegroup.html#applyquaternion" class="tsd-kind-icon">apply<wbr>Quaternion</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrmblendshapegroup.html#applyweight" class="tsd-kind-icon">apply<wbr>Weight</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="vrmblendshapegroup.html#attach" class="tsd-kind-icon">attach</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="vrmblendshapegroup.html#clear" class="tsd-kind-icon">clear</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrmblendshapegroup.html#clearappliedweight" class="tsd-kind-icon">clear<wbr>Applied<wbr>Weight</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="vrmblendshapegroup.html#clone" class="tsd-kind-icon">clone</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="vrmblendshapegroup.html#copy" class="tsd-kind-icon">copy</a></li>
@@ -194,7 +196,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides Object3D.__constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/342bfce8/packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts#L39">packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts:39</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/3c02783c/packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts#L39">packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts:39</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -216,7 +218,7 @@
 					<div class="tsd-signature tsd-kind-icon">_binds<span class="tsd-signature-symbol">:</span> <a href="../interfaces/vrmblendshapebind.html" class="tsd-signature-type">VRMBlendShapeBind</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/342bfce8/packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts#L38">packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts:38</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/3c02783c/packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts#L38">packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts:38</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -226,9 +228,30 @@
 					<div class="tsd-signature tsd-kind-icon">_material<wbr>Values<span class="tsd-signature-symbol">:</span> <a href="../interfaces/vrmblendshapematerialvalue.html" class="tsd-signature-type">VRMBlendShapeMaterialValue</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/342bfce8/packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts#L39">packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts:39</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/3c02783c/packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts#L39">packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts:39</a></li>
 						</ul>
 					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="animations" class="tsd-anchor"></a>
+					<h3>animations</h3>
+					<div class="tsd-signature tsd-kind-icon">animations<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">AnimationClip</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#animations">animations</a></p>
+						<ul>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:161</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Array with animation clips.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p>[]</p>
+							</dd>
+						</dl>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="castshadow" class="tsd-anchor"></a>
@@ -237,7 +260,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#castshadow">castShadow</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:138</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:137</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -258,7 +281,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#children">children</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:58</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:57</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -279,7 +302,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#customdepthmaterial">customDepthMaterial</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:170</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:175</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -298,7 +321,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#customdistancematerial">customDistanceMaterial</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:175</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:180</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -314,7 +337,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#frustumculled">frustumCulled</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:150</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:149</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -335,7 +358,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#id">id</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:30</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:29</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -350,7 +373,7 @@
 					<div class="tsd-signature tsd-kind-icon">is<wbr>Binary<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/342bfce8/packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts#L36">packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts:36</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/3c02783c/packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts#L36">packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts:36</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -361,7 +384,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#isobject3d">isObject3D</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:181</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:186</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -378,7 +401,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#layers">layers</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:127</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:126</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -396,7 +419,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#matrix">matrix</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:104</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:103</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -417,7 +440,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#matrixautoupdate">matrixAutoUpdate</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:116</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:115</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -438,7 +461,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#matrixworld">matrixWorld</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:110</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:109</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -459,7 +482,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#matrixworldneedsupdate">matrixWorldNeedsUpdate</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:122</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:121</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -480,7 +503,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#modelviewmatrix">modelViewMatrix</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:93</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:92</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -498,7 +521,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#name">name</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:41</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:40</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -519,7 +542,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#normalmatrix">normalMatrix</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:98</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:97</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -537,7 +560,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#onafterrender">onAfterRender</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:198</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:203</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -589,7 +612,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#onbeforerender">onBeforeRender</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:186</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:191</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -641,7 +664,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#parent">parent</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:52</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:51</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -662,7 +685,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#position">position</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:70</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:69</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -683,12 +706,12 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#quaternion">quaternion</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:82</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:81</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Global rotation.</p>
+							<p>Object&#39;s local rotation as a Quaternion.</p>
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>default</dt>
@@ -704,7 +727,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#receiveshadow">receiveShadow</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:144</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:143</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -725,7 +748,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#renderorder">renderOrder</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:156</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:155</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -746,7 +769,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#rotation">rotation</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:76</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:75</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -767,7 +790,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#scale">scale</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:88</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:87</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -788,7 +811,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#type">type</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:46</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:45</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -806,7 +829,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#up">up</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:64</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:63</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -827,7 +850,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#userdata">userData</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:162</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:167</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -856,7 +879,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#uuid">uuid</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:35</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:34</li>
 						</ul>
 					</aside>
 				</section>
@@ -867,7 +890,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#visible">visible</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:132</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:131</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -887,7 +910,7 @@
 					<div class="tsd-signature tsd-kind-icon">weight<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 0</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/342bfce8/packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts#L35">packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts:35</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/3c02783c/packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts#L35">packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts:35</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -898,7 +921,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#defaultmatrixautoupdate">DefaultMatrixAutoUpdate</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:208</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:213</li>
 						</ul>
 					</aside>
 				</section>
@@ -909,7 +932,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#defaultup">DefaultUp</a></p>
 						<ul>
-							<li>Defined in node_modules/three/src/core/Object3D.d.ts:207</li>
+							<li>Defined in node_modules/three/src/core/Object3D.d.ts:212</li>
 						</ul>
 					</aside>
 				</section>
@@ -927,7 +950,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#add">add</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:314</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:319</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -955,7 +978,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/342bfce8/packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts#L52">packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts:52</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/3c02783c/packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts#L52">packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts:52</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1045,7 +1068,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/342bfce8/packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts#L63">packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts:63</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/3c02783c/packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts#L63">packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts:63</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1083,7 +1106,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#applymatrix4">applyMatrix4</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:213</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:218</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1112,7 +1135,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#applyquaternion">applyQuaternion</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:215</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:220</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1135,7 +1158,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/342bfce8/packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts#L141">packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts:141</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/3c02783c/packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts#L141">packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts:141</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1159,7 +1182,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#attach">attach</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:324</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:334</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1177,6 +1200,29 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<a name="clear" class="tsd-anchor"></a>
+					<h3>clear</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">clear<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#clear">clear</a></p>
+								<ul>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:329</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Removes all child objects.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="clearappliedweight" class="tsd-anchor"></a>
 					<h3>clear<wbr>Applied<wbr>Weight</h3>
@@ -1187,7 +1233,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/342bfce8/packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts#L185">packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts:185</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/3c02783c/packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts#L185">packages/three-vrm/src/vrm/blendshape/VRMBlendShapeGroup.ts:185</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1210,7 +1256,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#clone">clone</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:372</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:382</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1234,7 +1280,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#copy">copy</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:379</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:389</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1302,7 +1348,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#getobjectbyid">getObjectById</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:330</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:340</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1334,7 +1380,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#getobjectbyname">getObjectByName</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:336</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:346</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1366,7 +1412,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#getobjectbyproperty">getObjectByProperty</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:338</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:348</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1393,7 +1439,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#getworlddirection">getWorldDirection</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:343</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:353</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1417,7 +1463,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#getworldposition">getWorldPosition</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:340</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:350</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1441,7 +1487,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#getworldquaternion">getWorldQuaternion</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:341</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:351</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1465,7 +1511,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#getworldscale">getWorldScale</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:342</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:352</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1545,7 +1591,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#localtoworld">localToWorld</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:297</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:302</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1577,7 +1623,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#lookat">lookAt</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:309</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:314</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1615,7 +1661,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#raycast">raycast</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:345</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:355</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1642,7 +1688,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#remove">remove</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:319</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:324</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1727,7 +1773,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#rotateonaxis">rotateOnAxis</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:242</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:247</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1765,7 +1811,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#rotateonworldaxis">rotateOnWorldAxis</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:249</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:254</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1803,7 +1849,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#rotatex">rotateX</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:255</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:260</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1831,7 +1877,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#rotatey">rotateY</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:261</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:266</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1859,7 +1905,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#rotatez">rotateZ</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:267</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:272</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1887,7 +1933,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#setrotationfromaxisangle">setRotationFromAxisAngle</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:220</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:225</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1914,7 +1960,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#setrotationfromeuler">setRotationFromEuler</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:225</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:230</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1938,7 +1984,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#setrotationfrommatrix">setRotationFromMatrix</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:230</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:235</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1962,7 +2008,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#setrotationfromquaternion">setRotationFromQuaternion</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:235</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:240</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1986,7 +2032,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#tojson">toJSON</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:365</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:375</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2010,7 +2056,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#translateonaxis">translateOnAxis</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:273</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:278</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2045,7 +2091,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#translatex">translateX</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:279</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:284</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2077,7 +2123,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#translatey">translateY</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:285</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:290</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2109,7 +2155,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#translatez">translateZ</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:291</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:296</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2141,7 +2187,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#traverse">traverse</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:347</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:357</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2183,7 +2229,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#traverseancestors">traverseAncestors</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:351</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:361</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2225,7 +2271,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#traversevisible">traverseVisible</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:349</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:359</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2267,7 +2313,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#updatematrix">updateMatrix</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:356</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:366</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2290,7 +2336,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#updatematrixworld">updateMatrixWorld</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:361</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:371</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2319,7 +2365,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#updateworldmatrix">updateWorldMatrix</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:363</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:373</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2346,7 +2392,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrmblendshapegroup.html">VRMBlendShapeGroup</a>.<a href="vrmblendshapegroup.html#worldtolocal">worldToLocal</a></p>
 								<ul>
-									<li>Defined in node_modules/three/src/core/Object3D.d.ts:303</li>
+									<li>Defined in node_modules/three/src/core/Object3D.d.ts:308</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2392,6 +2438,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="vrmblendshapegroup.html#_materialvalues" class="tsd-kind-icon">_material<wbr>Values</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="vrmblendshapegroup.html#animations" class="tsd-kind-icon">animations</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="vrmblendshapegroup.html#castshadow" class="tsd-kind-icon">cast<wbr>Shadow</a>
@@ -2515,6 +2564,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="vrmblendshapegroup.html#attach" class="tsd-kind-icon">attach</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="vrmblendshapegroup.html#clear" class="tsd-kind-icon">clear</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="vrmblendshapegroup.html#clearappliedweight" class="tsd-kind-icon">clear<wbr>Applied<wbr>Weight</a>
