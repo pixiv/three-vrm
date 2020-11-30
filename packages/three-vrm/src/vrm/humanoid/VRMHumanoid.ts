@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { GLTFNode, RawVector3, RawVector4, VRMPose, VRMSchema } from '../types';
+import { quatInvertCompat } from '../utils/quatInvertCompat';
 import { VRMHumanBone } from './VRMHumanBone';
 import { VRMHumanBoneArray } from './VRMHumanBoneArray';
 import { VRMHumanBones } from './VRMHumanBones';
@@ -71,7 +72,7 @@ export class VRMHumanoid {
         _v3A.fromArray(restState.position).negate();
       }
       if (restState?.rotation) {
-        _quatA.fromArray(restState.rotation).invert();
+        quatInvertCompat(_quatA.fromArray(restState.rotation));
       }
 
       // Get the position / rotation from the node
