@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { getWorldQuaternionLite } from './utils/getWorldQuaternionLite';
+import { mat4InvertCompat } from './utils/mat4InvertCompat';
 import { Matrix4InverseCache } from './utils/Matrix4InverseCache';
 import { VRMSpringBoneSettings } from './VRMSpringBoneSettings';
 // based on
@@ -282,7 +283,7 @@ export class VRMSpringBone {
     // Apply rotation, convert vector3 thing into actual quaternion
     // Original UniVRM is doing world unit calculus at here but we're gonna do this on local unit
     // since Three.js is not good at world coordination stuff
-    const initialCenterSpaceMatrixInv = _matA.getInverse(_matB.multiply(this._initialLocalMatrix));
+    const initialCenterSpaceMatrixInv = mat4InvertCompat(_matA.copy(_matB.multiply(this._initialLocalMatrix)));
     const applyRotation = _quatA.setFromUnitVectors(
       this._boneAxis,
       _v3A.copy(this._nextTail).applyMatrix4(initialCenterSpaceMatrixInv).normalize(),
@@ -307,12 +308,10 @@ export class VRMSpringBone {
     //   const colliderCenterSpacePosition = _v3A.setFromMatrixPosition(_matA);
     //   const colliderRadius = collider.geometry.boundingSphere!.radius; // the bounding sphere is guaranteed to be exist by VRMSpringBoneImporter._createColliderMesh
     //   const r = this.radius + colliderRadius;
-
     //   if (tail.distanceToSquared(colliderCenterSpacePosition) <= r * r) {
     //     // ヒット。Colliderの半径方向に押し出す
     //     const normal = _v3B.subVectors(tail, colliderCenterSpacePosition).normalize();
     //     const posFromCollider = _v3C.addVectors(colliderCenterSpacePosition, normal.multiplyScalar(r));
-
     //     // normalize bone length
     //     tail.copy(
     //       posFromCollider
