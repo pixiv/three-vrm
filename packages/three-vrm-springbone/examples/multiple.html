@@ -58,9 +58,11 @@
 
 				const cube = new THREE.Mesh( geometry, material );
 				cube.name = `cube[${ i }]`;
-				cube.position.set( 0.0, 0.5 - 0.25 * i, 0.0 );
+				cube.position.set( 0.0, i === 0 ? 0.5 : -0.25, 0.0 );
 				cubes.push( cube );
-				scene.add( cube );
+
+				const parent = i === 0 ? scene : cubes[ i - 1 ];
+				parent.add( cube );
 
 			}
 
@@ -80,8 +82,6 @@
 				springBones.push( springBone );
 
 			}
-
-			console.log( springBones );
 
 			// animate
 			const clock = new THREE.Clock();
