@@ -1,6 +1,9 @@
 import * as THREE from 'three';
 import { VRMNodeColliderShape } from './VRMNodeColliderShape';
 
+const _v3A = new THREE.Vector3();
+const _v3B = new THREE.Vector3();
+
 export class VRMNodeColliderShapeCapsule extends VRMNodeColliderShape {
   public get type(): 'capsule' {
     return 'capsule';
@@ -35,13 +38,29 @@ export class VRMNodeColliderShapeCapsule extends VRMNodeColliderShape {
     objectRadius: number,
     target: THREE.Vector3,
   ): number {
-    throw new Error('TODO');
+    _v3A.copy(this.offset).applyMatrix4(colliderMatrix); // transformed head
+    _v3B.copy(this.tail).applyMatrix4(colliderMatrix); // transformed tail
+    _v3B.sub(_v3A); // from head to tail
+    const lengthSqCapsule = _v3B.lengthSq();
 
-    // target.copy( this.offset ).applyMatrix4( colliderMatrix ); // transformed offset
-    // target.negate().add( objectPosition ); // a vector from collider center to object position
-    // const radius = objectRadius + this.radius;
-    // const distanceSq = target.lengthSq() - radius * radius;
-    // target.normalize();
-    // return distanceSq;
+    target.copy(objectPosition).sub(_v3A); // from head to object
+    const dot = _v3B.dot(target); // dot product of offsetToTail and offsetToObject
+
+    if (dot <= 0.0) {
+      // if object is near from the head
+      // do nothing, use the current value directly
+    } else if (lengthSqCapsule <= dot) {
+      // if object is near from the tail
+      target.sub(_v3B); // from tail to object
+    } else {
+      // if object is between two ends
+      _v3B.multiplyScalar(dot / lengthSqCapsule); // from head to the nearest point of the shaft
+      target.sub(_v3B); // from the shaft point to object
+    }
+
+    const radius = objectRadius + this.radius;
+    const distanceSq = target.lengthSq() - radius * radius;
+    target.normalize();
+    return distanceSq;
   }
 }
