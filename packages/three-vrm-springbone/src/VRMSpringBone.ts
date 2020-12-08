@@ -1,8 +1,10 @@
 import * as THREE from 'three';
+import { VRMNodeCollider } from '@pixiv/three-vrm-node-collider';
 import { getWorldQuaternionLite } from './utils/getWorldQuaternionLite';
 import { mat4InvertCompat } from './utils/mat4InvertCompat';
 import { Matrix4InverseCache } from './utils/Matrix4InverseCache';
 import { VRMSpringBoneSettings } from './VRMSpringBoneSettings';
+
 // based on
 // http://rocketjump.skr.jp/unity3d/109/
 // https://github.com/dwango/UniVRM/blob/master/Scripts/SpringBone/VRMSpringBone.cs
@@ -36,7 +38,7 @@ export class VRMSpringBone {
   /**
    * Collider groups attached to this bone.
    */
-  // public colliders: VRMSpringBoneColliderMesh[];
+  public colliders: VRMNodeCollider[];
 
   /**
    * An Object3D attached to this bone.
@@ -153,7 +155,12 @@ export class VRMSpringBone {
    * @param bone An Object3D that will be attached to this bone
    * @param params Several parameters related to behavior of the spring bone
    */
-  constructor(bone: THREE.Object3D, radius = 0.0, settings: Partial<VRMSpringBoneSettings> = {}) {
+  constructor(
+    bone: THREE.Object3D,
+    radius = 0.0,
+    settings: Partial<VRMSpringBoneSettings> = {},
+    colliders: VRMNodeCollider[] = [],
+  ) {
     this.bone = bone; // uniVRMでの parent
     this.bone.matrixAutoUpdate = false; // updateにより計算されるのでthree.js内での自動処理は不要
 
@@ -166,7 +173,7 @@ export class VRMSpringBone {
       dragForce: settings.dragForce ?? 0.4,
     };
 
-    // this.colliders = params.colliders ?? [];
+    this.colliders = colliders;
 
     this._centerSpacePosition.setFromMatrixPosition(this.bone.matrixWorld);
 
@@ -302,26 +309,25 @@ export class VRMSpringBone {
    * @param tail The tail you want to process
    */
   private _collision(tail: THREE.Vector3): void {
-    // this.colliders.forEach((collider) => {
-    //   this._getMatrixWorldToCenter(_matA);
-    //   _matA.multiply(collider.matrixWorld);
-    //   const colliderCenterSpacePosition = _v3A.setFromMatrixPosition(_matA);
-    //   const colliderRadius = collider.geometry.boundingSphere!.radius; // the bounding sphere is guaranteed to be exist by VRMSpringBoneImporter._createColliderMesh
-    //   const r = this.radius + colliderRadius;
-    //   if (tail.distanceToSquared(colliderCenterSpacePosition) <= r * r) {
-    //     // ヒット。Colliderの半径方向に押し出す
-    //     const normal = _v3B.subVectors(tail, colliderCenterSpacePosition).normalize();
-    //     const posFromCollider = _v3C.addVectors(colliderCenterSpacePosition, normal.multiplyScalar(r));
-    //     // normalize bone length
-    //     tail.copy(
-    //       posFromCollider
-    //         .sub(this._centerSpacePosition)
-    //         .normalize()
-    //         .multiplyScalar(this._centerSpaceBoneLength)
-    //         .add(this._centerSpacePosition),
-    //     );
-    //   }
-    // });
+    this.colliders.forEach((collider) => {
+      this._getMatrixWorldToCenter(_matA);
+      _matA.multiply(collider.matrixWorld);
+
+      const distSq = collider.shape.calculateCollision(_matA, tail, this.radius, _v3A);
+
+      if (distSq < 0.0) {
+        // hit
+        const dist = Math.sqrt(-distSq);
+        tail.add(_v3A.multiplyScalar(dist));
+
+        // normalize bone length
+        tail
+          .sub(this._centerSpacePosition)
+          .normalize()
+          .multiplyScalar(this._centerSpaceBoneLength)
+          .add(this._centerSpacePosition);
+      }
+    });
   }
 
   /**
