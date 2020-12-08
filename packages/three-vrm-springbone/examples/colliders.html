@@ -77,12 +77,22 @@
 			// collider
 			const colliders = [];
 
-			const colliderShape = new THREE.VRMNodeColliderShapeSphere( { radius: 0.4 } );
+			const colliderShape = new THREE.VRMNodeColliderShapeCapsule( {
+
+				radius: 0.2,
+				offset: new THREE.Vector3( -0.5, -0.5, 1.0 ),
+				tail: new THREE.Vector3( 0.5, 0.5, -1.0 ),
+
+			} );
 
 			const collider = new THREE.VRMNodeCollider( colliderShape );
 			scene.add( collider );
 
 			colliders.push( collider );
+
+			// collider helper
+			const colliderHelper =  new THREE.VRMNodeColliderHelper( collider );
+			scene.add( colliderHelper );
 
 			// spring bone
 			const springBones = [];
@@ -107,6 +117,8 @@
 
 				cubes[ 0 ].position.x = Math.sin( Math.PI * clock.elapsedTime );
 
+				collider.position.x = Math.sin( clock.elapsedTime );
+
 				if ( shouldReset ) {
 
 					shouldReset = false;
@@ -115,6 +127,8 @@
 				}
 
 				springBones.forEach( ( springBone ) => springBone.update( deltaTime ) );
+
+				colliderHelper.update();
 
 				renderer.render( scene, camera );
 
