@@ -148,6 +148,9 @@ export class VRMSpringBone {
    * Initial state of the position of its child.
    */
   private _initialLocalChildPosition = new THREE.Vector3();
+  public get initialLocalChildPosition(): THREE.Vector3 {
+    return this._initialLocalChildPosition;
+  }
 
   /**
    * Create a new VRMSpringBone.

@@ -78,10 +78,21 @@
 
 			for ( let i = 1; i < 5; i ++ ) {
 
-				const springBone = new THREE.VRMSpringBone( cubes[ i ] );
+				const springBone = new THREE.VRMSpringBone( cubes[ i ], 0.01 );
 				springBones.push( springBone );
 
 			}
+
+			// helpers
+			const springBoneHelpers = [];
+
+			springBones.forEach( ( bone ) => {
+
+				const helper = new THREE.VRMSpringBoneHelper( bone );
+				scene.add( helper );
+				springBoneHelpers.push( helper );
+
+			} );
 
 			// animate
 			const clock = new THREE.Clock();
@@ -103,6 +114,8 @@
 				}
 
 				springBones.forEach( ( springBone ) => springBone.update( deltaTime ) );
+
+				springBoneHelpers.forEach( ( helper ) => helper.update() );
 
 				renderer.render( scene, camera );
 

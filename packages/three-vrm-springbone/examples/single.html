@@ -75,7 +75,11 @@
 			scene.add( axesHelper );
 
 			// spring bone
-			const springBone = new THREE.VRMSpringBone( cubeB );
+			const springBone = new THREE.VRMSpringBone( cubeB, 0.01 );
+
+			// helper
+			const springBoneHelper = new THREE.VRMSpringBoneHelper( springBone );
+			scene.add( springBoneHelper );
 
 			// animate
 			const clock = new THREE.Clock();
@@ -97,6 +101,8 @@
 				}
 
 				springBone.update( deltaTime );
+
+				springBoneHelper.update();
 
 				renderer.render( scene, camera );
 
