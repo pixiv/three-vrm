@@ -8,7 +8,7 @@ export abstract class VRMNodeColliderShape {
   public abstract get type(): string;
 
   /**
-   * Calculate a **SQUARED** distance and a direction from the collider to a target object.
+   * Calculate a distance and a direction from the collider to a target object.
    * It's hit if the distance is negative.
    * The direction will be contained in the given target vector.
    *

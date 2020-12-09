@@ -59,8 +59,8 @@ export class VRMNodeColliderShapeCapsule extends VRMNodeColliderShape {
     }
 
     const radius = objectRadius + this.radius;
-    const distanceSq = target.lengthSq() - radius * radius;
+    const distance = target.length() - radius;
     target.normalize();
-    return distanceSq;
+    return distance;
   }
 }

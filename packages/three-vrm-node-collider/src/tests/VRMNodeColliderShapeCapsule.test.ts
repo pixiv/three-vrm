@@ -38,9 +38,9 @@ describe('VRMNodeColliderShapeCapsule', () => {
       const objectRadius = 1.0;
 
       const dir = new THREE.Vector3();
-      const distSq = shape.calculateCollision(colliderMatrix, objectPosition, objectRadius, dir);
+      const dist = shape.calculateCollision(colliderMatrix, objectPosition, objectRadius, dir);
 
-      expect(distSq).toBeCloseTo(-2.0);
+      expect(dist).toBeCloseTo(-0.585786); // sqrt(2) - 2
       expect(dir).toBeCloseToVector3(new THREE.Vector3(1.0, 1.0, 0.0).normalize());
     });
 
@@ -63,7 +63,7 @@ describe('VRMNodeColliderShapeCapsule', () => {
         const dir = new THREE.Vector3();
         const distSq = shape.calculateCollision(colliderMatrix, objectPosition, objectRadius, dir);
 
-        expect(distSq).toBeCloseTo(-2.0);
+        expect(distSq).toBeCloseTo(-0.585786); // sqrt(2) - 2
         expect(dir).toBeCloseToVector3(new THREE.Vector3(-1.0, 0.0, 1.0).normalize());
       });
 
@@ -75,19 +75,7 @@ describe('VRMNodeColliderShapeCapsule', () => {
         const dir = new THREE.Vector3();
         const distSq = shape.calculateCollision(colliderMatrix, objectPosition, objectRadius, dir);
 
-        expect(distSq).toBeCloseTo(2.0);
-        expect(dir).toBeCloseToVector3(new THREE.Vector3(2.0, -1.0, -1.0).normalize());
-      });
-
-      it('must calculate a collision properly, object is near the tail', () => {
-        const colliderMatrix = new THREE.Matrix4();
-        const objectPosition = new THREE.Vector3(3.0, 0.0, 0.0);
-        const objectRadius = 1.0;
-
-        const dir = new THREE.Vector3();
-        const distSq = shape.calculateCollision(colliderMatrix, objectPosition, objectRadius, dir);
-
-        expect(distSq).toBeCloseTo(2.0);
+        expect(distSq).toBeCloseTo(0.44949); // sqrt(6) - 2
         expect(dir).toBeCloseToVector3(new THREE.Vector3(2.0, -1.0, -1.0).normalize());
       });
 
@@ -99,8 +87,8 @@ describe('VRMNodeColliderShapeCapsule', () => {
         const dir = new THREE.Vector3();
         const distSq = shape.calculateCollision(colliderMatrix, objectPosition, objectRadius, dir);
 
-        expect(distSq).toBeCloseTo(-3.666666667);
-        expect(dir).toBeCloseToVector3(new THREE.Vector3(0.577, -0.577, -0.577).normalize());
+        expect(distSq).toBeCloseTo(-1.42265); // sqrt(3) / 3 - 2
+        expect(dir).toBeCloseToVector3(new THREE.Vector3(1.0, -1.0, -1.0).normalize());
       });
     });
   });

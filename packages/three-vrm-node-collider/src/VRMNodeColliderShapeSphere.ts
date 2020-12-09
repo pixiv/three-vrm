@@ -32,8 +32,8 @@ export class VRMNodeColliderShapeSphere extends VRMNodeColliderShape {
     target.copy(this.offset).applyMatrix4(colliderMatrix); // transformed offset
     target.negate().add(objectPosition); // a vector from collider center to object position
     const radius = objectRadius + this.radius;
-    const distanceSq = target.lengthSq() - radius * radius;
+    const distance = target.length() - radius;
     target.normalize();
-    return distanceSq;
+    return distance;
   }
 }

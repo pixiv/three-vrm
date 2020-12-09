@@ -35,7 +35,7 @@ describe('VRMNodeColliderShapeSphere', () => {
       const dir = new THREE.Vector3();
       const distSq = shape.calculateCollision(colliderMatrix, objectPosition, objectRadius, dir);
 
-      expect(distSq).toBeCloseTo(-2.0);
+      expect(distSq).toBeCloseTo(-0.585786); // sqrt(2) - 2
       expect(dir).toBeCloseToVector3(new THREE.Vector3(1.0, 1.0, 0.0).normalize());
     });
 
@@ -52,7 +52,7 @@ describe('VRMNodeColliderShapeSphere', () => {
       const dir = new THREE.Vector3();
       const distSq = shape.calculateCollision(colliderMatrix, objectPosition, objectRadius, dir);
 
-      expect(distSq).toBeCloseTo(-1.0);
+      expect(distSq).toBeCloseTo(-0.267949); // sqrt(3) - 2
       expect(dir).toBeCloseToVector3(new THREE.Vector3(1.0, 1.0, 1.0).normalize());
     });
 
@@ -69,7 +69,7 @@ describe('VRMNodeColliderShapeSphere', () => {
       const dir = new THREE.Vector3();
       const distSq = shape.calculateCollision(colliderMatrix, objectPosition, objectRadius, dir);
 
-      expect(distSq).toBeCloseTo(-3.0);
+      expect(distSq).toBeCloseTo(-1.0);
       expect(dir).toBeCloseToVector3(new THREE.Vector3(-1.0, 0.0, 0.0).normalize());
     });
   });

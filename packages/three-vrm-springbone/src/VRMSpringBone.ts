@@ -316,12 +316,11 @@ export class VRMSpringBone {
       this._getMatrixWorldToCenter(_matA);
       _matA.multiply(collider.matrixWorld);
 
-      const distSq = collider.shape.calculateCollision(_matA, tail, this.radius, _v3A);
+      const dist = collider.shape.calculateCollision(_matA, tail, this.radius, _v3A);
 
-      if (distSq < 0.0) {
+      if (dist < 0.0) {
         // hit
-        const dist = Math.sqrt(-distSq);
-        tail.add(_v3A.multiplyScalar(dist));
+        tail.add(_v3A.multiplyScalar(-dist));
 
         // normalize bone length
         tail
