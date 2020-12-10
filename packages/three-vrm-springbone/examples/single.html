@@ -74,12 +74,19 @@
 			const axesHelper = new THREE.AxesHelper( 5 );
 			scene.add( axesHelper );
 
-			// spring bone
+			// spring bones
+			const springBoneManager = new THREE.VRMSpringBoneManager();
+
 			const springBone = new THREE.VRMSpringBone( cubeB, 0.01 );
+			springBoneManager.addSpringBone( springBone );
 
 			// helper
 			const springBoneHelper = new THREE.VRMSpringBoneHelper( springBone );
 			scene.add( springBoneHelper );
+
+			// init spring bones
+			scene.updateMatrixWorld();
+			springBoneManager.setInitState();
 
 			// animate
 			const clock = new THREE.Clock();
@@ -96,11 +103,11 @@
 				if ( shouldReset ) {
 
 					shouldReset = false;
-					springBone.reset();
+					springBoneManager.reset();
 
 				}
 
-				springBone.update( deltaTime );
+				springBoneManager.update( deltaTime );
 
 				springBoneHelper.update();
 

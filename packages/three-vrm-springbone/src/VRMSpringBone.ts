@@ -70,7 +70,7 @@ export class VRMSpringBone {
    * Length of the bone in relative space unit. Will be used for normalization in update loop.
    * It's same as local unit length unless there are scale transformation in world matrix.
    */
-  protected _centerSpaceBoneLength: number;
+  protected _centerSpaceBoneLength = 0.0;
 
   /**
    * Position of this bone in relative space, kind of a temporary variable.
@@ -177,12 +177,20 @@ export class VRMSpringBone {
     };
 
     this.colliders = colliders;
+  }
 
+  /**
+   * Set the initial state of this spring bone.
+   * You might want to call {@link VRMSpringBoneManager.setInitState} instead.
+   */
+  public setInitState(): void {
+    // remember initial position of itself
     this._centerSpacePosition.setFromMatrixPosition(this.bone.matrixWorld);
 
     this._initialLocalMatrix.copy(this.bone.matrix);
     this._initialLocalRotation.copy(this.bone.quaternion);
 
+    // see initial position of its local child
     if (this.bone.children.length === 0) {
       // 末端のボーン。子ボーンがいないため「自分の少し先」が子ボーンということにする
       // https://github.com/dwango/UniVRM/blob/master/Assets/VRM/UniVRM/Scripts/SpringBone/VRMSpringBone.cs#L246
@@ -192,10 +200,12 @@ export class VRMSpringBone {
       this._initialLocalChildPosition.copy(firstChild.position);
     }
 
+    // copy the child position to tails
     this.bone.localToWorld(this._currentTail.copy(this._initialLocalChildPosition));
     this._prevTail.copy(this._currentTail);
     this._nextTail.copy(this._currentTail);
 
+    // set initial states that are related to local child position
     this._boneAxis.copy(this._initialLocalChildPosition).normalize();
     this._centerSpaceBoneLength = _v3A
       .copy(this._initialLocalChildPosition)

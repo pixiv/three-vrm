@@ -73,26 +73,30 @@
 			const axesHelper = new THREE.AxesHelper( 5 );
 			scene.add( axesHelper );
 
-			// spring bone
-			const springBones = [];
+			// spring bones
+			const springBoneManager = new THREE.VRMSpringBoneManager();
 
 			for ( let i = 1; i < 5; i ++ ) {
 
 				const springBone = new THREE.VRMSpringBone( cubes[ i ], 0.01 );
-				springBones.push( springBone );
+				springBoneManager.addSpringBone( springBone );
 
 			}
 
 			// helpers
 			const springBoneHelpers = [];
 
-			springBones.forEach( ( bone ) => {
+			springBoneManager.springBones.forEach( ( bone ) => {
 
 				const helper = new THREE.VRMSpringBoneHelper( bone );
 				scene.add( helper );
 				springBoneHelpers.push( helper );
 
 			} );
+
+			// init spring bones
+			scene.updateMatrixWorld();
+			springBoneManager.setInitState();
 
 			// animate
 			const clock = new THREE.Clock();
@@ -109,11 +113,11 @@
 				if ( shouldReset ) {
 
 					shouldReset = false;
-					springBones.forEach( ( springBone ) => springBone.reset() );
+					springBoneManager.reset();
 
 				}
 
-				springBones.forEach( ( springBone ) => springBone.update( deltaTime ) );
+				springBoneManager.update( deltaTime );
 
 				springBoneHelpers.forEach( ( helper ) => helper.update() );
 
