@@ -2,10 +2,11 @@
 
 import * as THREE from 'three';
 import { VRMNodeColliderShapeCapsule } from '../VRMNodeColliderShapeCapsule';
+import { toBeCloseToArray } from './matchers/toBeCloseToArray';
 import { toBeCloseToVector3 } from './matchers/toBeCloseToVector3';
 
 beforeEach(() => {
-  expect.extend({ toBeCloseToVector3 });
+  expect.extend({ toBeCloseToArray, toBeCloseToVector3 });
 });
 
 describe('VRMNodeColliderShapeCapsule', () => {
@@ -42,6 +43,24 @@ describe('VRMNodeColliderShapeCapsule', () => {
 
       expect(dist).toBeCloseTo(-0.585786); // sqrt(2) - 2
       expect(dir).toBeCloseToVector3(new THREE.Vector3(1.0, 1.0, 0.0).normalize());
+    });
+
+    it('must not modify the input values', () => {
+      const shape = new VRMNodeColliderShapeCapsule({
+        radius: 1.0,
+      });
+
+      const colliderMatrix = new THREE.Matrix4().makeTranslation(1.0, 0.0, 0.0);
+      const prevColliderMatrix = colliderMatrix.clone();
+      const objectPosition = new THREE.Vector3(2.0, 1.0, 0.0);
+      const prevObjectPosition = objectPosition.clone();
+      const objectRadius = 1.0;
+
+      const dir = new THREE.Vector3();
+      shape.calculateCollision(colliderMatrix, objectPosition, objectRadius, dir);
+
+      expect(colliderMatrix.elements).toBeCloseToArray(prevColliderMatrix.elements);
+      expect(objectPosition).toBeCloseToVector3(prevObjectPosition);
     });
 
     describe('when offset and tail is specified', () => {
