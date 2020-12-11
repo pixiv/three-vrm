@@ -184,6 +184,9 @@ export class VRMSpringBone {
    * You might want to call {@link VRMSpringBoneManager.setInitState} instead.
    */
   public setInitState(): void {
+    this.bone.updateMatrix();
+    this.bone.updateWorldMatrix(false, false);
+
     // remember initial position of itself
     this._centerSpacePosition.setFromMatrixPosition(this.bone.matrixWorld);
 
