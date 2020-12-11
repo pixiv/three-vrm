@@ -87,83 +87,15 @@
       "normalized": false
     }
   ],
-  "textures": [
-    {
-      "sampler": 0,
-      "source": 0
-    },
-    {
-      "sampler": 1,
-      "source": 1
-    },
-    {
-      "sampler": 2,
-      "source": 2
-    },
-    {
-      "sampler": 3,
-      "source": 3
-    }
-  ],
-  "images": [
-    {
-      "uri": "black.png"
-    },
-    {
-      "uri": "white.png"
-    },
-    {
-      "uri": "uv-grid.png"
-    },
-    {
-      "uri": "normal-perlin.png"
-    }
-  ],
-  "samplers": [
-    {
-      "magFilter": 9729,
-      "minFilter": 9987,
-      "wrapS": 10497,
-      "wrapT": 10497
-    },
-    {
-      "magFilter": 9729,
-      "minFilter": 9987,
-      "wrapS": 10497,
-      "wrapT": 10497
-    },
-    {
-      "magFilter": 9729,
-      "minFilter": 9987,
-      "wrapS": 10497,
-      "wrapT": 10497
-    },
-    {
-      "magFilter": 9729,
-      "minFilter": 9987,
-      "wrapS": 10497,
-      "wrapT": 10497
-    }
-  ],
   "materials": [
     {
       "name": "Cube Material",
       "pbrMetallicRoughness": {
         "baseColorFactor": [ 1, 1, 1, 1 ],
-        "baseColorTexture": {
-          "index": 2,
-          "texCoord": 0
-        },
         "metallicFactor": 0,
         "roughnessFactor": 0.5
       },
       "alphaMode": "OPAQUE",
-      "alphaCutoff": 0.5,
-      "normalTexture": {
-        "scale": 0.1,
-        "index": 3,
-        "texCoord": 0
-      },
       "doubleSided": false
     }
   ],
@@ -186,10 +118,13 @@
   ],
   "nodes": [
     {
-      "name": "Cube A",
+      "name": "CubeA",
+      "children": [
+        1
+      ],
       "translation": [
         0,
-        1,
+        2,
         0
       ],
       "rotation": [
@@ -199,15 +134,18 @@
         1
       ],
       "scale": [
-        1,
-        1,
-        1
+        0.5,
+        0.5,
+        0.5
       ],
       "mesh": 0,
       "extras": {}
     },
     {
-      "name": "Cube A",
+      "name": "CubeB",
+      "children": [
+        2
+      ],
       "translation": [
         0,
         -1,
@@ -226,6 +164,111 @@
       ],
       "mesh": 0,
       "extras": {}
+    },
+    {
+      "name": "CubeC",
+      "children": [
+        3
+      ],
+      "translation": [
+        0,
+        -1,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "mesh": 0,
+      "extras": {}
+    },
+    {
+      "name": "CubeD",
+      "children": [
+        4
+      ],
+      "translation": [
+        0,
+        -1,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "mesh": 0,
+      "extras": {}
+    },
+    {
+      "name": "CubeE",
+      "translation": [
+        0,
+        -1,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "mesh": 0,
+      "extras": {}
+    },
+    {
+      "name": "Collider",
+      "translation": [
+        0.5,
+        1,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "extensions": {
+        "VRMC_node_collider-1.0": {
+          "shapes": [
+            {
+              "sphere": {
+                "offset": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "radius": 0.5
+              }
+            }
+          ]
+        }
+      },
+      "extras": {}
     }
   ],
   "scene": 0,
@@ -233,13 +276,39 @@
     {
       "nodes": [
         0,
-        1
+        5
       ]
     }
   ],
   "extensionsUsed": [
-    "VRMC_springBone-1.0"
+    "VRMC_springBone-1.0",
+    "VRMC_node_collider-1.0"
   ],
-  "extensions": {},
+  "extensions": {
+    "VRMC_springBone-1.0": {
+      "settings": [
+        {
+          "stiffness": 4.0,
+          "gravityPower": 0.0,
+          "gravityDir": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "dragForce": 0.4
+        }
+      ],
+      "springs": [
+        {
+          "setting": 0,
+          "springRoot": 1,
+          "hitRadius": 0.02,
+          "colliders": [
+            5
+          ]
+        }
+      ]
+    }
+  },
   "extras": {}
 }
