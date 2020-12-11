@@ -30,6 +30,8 @@ export class VRMSpringBoneHelper extends THREE.Group {
   }
 
   public update(): void {
+    this.springBone.bone.updateWorldMatrix(true, false);
+
     this.matrix.copy(this.springBone.bone.matrixWorld);
 
     this._geometry.update();

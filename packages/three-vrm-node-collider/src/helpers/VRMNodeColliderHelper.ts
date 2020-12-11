@@ -40,6 +40,8 @@ export class VRMNodeColliderHelper extends THREE.Group {
   }
 
   public update(): void {
+    this.collider.updateWorldMatrix(true, false);
+
     this.matrix.copy(this.collider.matrixWorld);
 
     this._geometry.update();
