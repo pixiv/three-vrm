@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
-import { GLTFMesh, GLTFPrimitive, VRMSchema } from '../types';
+import { GLTFPrimitive, VRMSchema } from '../types';
+import { extractGLTFMesh } from '../utils/extractGLTFMesh';
 import { renameMaterialProperty } from '../utils/renameMaterialProperty';
 import { VRMBlendShapeGroup } from './VRMBlendShapeGroup';
 import { VRMBlendShapeProxy } from './VRMBlendShapeProxy';
@@ -63,17 +64,12 @@ export class VRMBlendShapeImporter {
               return;
             }
 
-            const morphMeshes: GLTFMesh = await gltf.parser.getDependency('mesh', bind.mesh);
-            const primitives: GLTFPrimitive[] =
-              morphMeshes.type === 'Group'
-                ? (morphMeshes.children as Array<GLTFPrimitive>)
-                : [morphMeshes as GLTFPrimitive];
+            const morphMeshes: GLTFPrimitive[] = await extractGLTFMesh(gltf, bind.mesh);
             const morphTargetIndex = bind.index;
             if (
-              !primitives.every(
-                (primitive) =>
-                  Array.isArray(primitive.morphTargetInfluences) &&
-                  morphTargetIndex < primitive.morphTargetInfluences.length,
+              !morphMeshes.every(
+                (mesh) =>
+                  Array.isArray(mesh.morphTargetInfluences) && morphTargetIndex < mesh.morphTargetInfluences.length,
               )
             ) {
               console.warn(
@@ -83,7 +79,7 @@ export class VRMBlendShapeImporter {
             }
 
             group.addBind({
-              meshes: primitives,
+              meshes: morphMeshes,
               morphTargetIndex,
               weight: bind.weight || 100,
             });

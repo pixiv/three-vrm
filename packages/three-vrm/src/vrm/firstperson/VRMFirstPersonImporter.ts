@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRMHumanoid } from '../humanoid';
-import { GLTFMesh, GLTFNode, VRMSchema } from '../types';
+import { GLTFNode, GLTFPrimitive, VRMSchema } from '../types';
+import { extractGLTFMeshes } from '../utils/extractGLTFMesh';
 import { VRMFirstPerson, VRMRendererFirstPersonFlags } from './VRMFirstPerson';
 
 /**
@@ -48,12 +49,12 @@ export class VRMFirstPersonImporter {
       : new THREE.Vector3(0.0, 0.06, 0.0); // fallback, taken from UniVRM implementation
 
     const meshAnnotations: VRMRendererFirstPersonFlags[] = [];
-    const meshes: GLTFMesh[] = await gltf.parser.getDependencies('mesh');
-    meshes.forEach((mesh, meshIndex) => {
+    const meshes: GLTFPrimitive[][] = await extractGLTFMeshes(gltf);
+    meshes.forEach((primitives, meshIndex) => {
       const flag = schemaFirstPerson.meshAnnotations
         ? schemaFirstPerson.meshAnnotations.find((a) => a.mesh === meshIndex)
         : undefined;
-      meshAnnotations.push(new VRMRendererFirstPersonFlags(flag?.firstPersonFlag, mesh));
+      meshAnnotations.push(new VRMRendererFirstPersonFlags(flag?.firstPersonFlag, primitives));
     });
 
     return new VRMFirstPerson(firstPersonBone, firstPersonBoneOffset, meshAnnotations);

@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
-import { GLTFMesh, GLTFPrimitive, GLTFSchema, VRMSchema } from '../types';
+import { GLTFSchema, VRMSchema } from '../types';
+import { extractGLTFMeshes } from '../utils/extractGLTFMesh';
 import { MToonMaterial, MToonMaterialOutlineWidthMode, MToonMaterialRenderMode } from './MToonMaterial';
 import { VRMUnlitMaterial, VRMUnlitMaterialRenderType } from './VRMUnlitMaterial';
 
@@ -66,15 +67,13 @@ export class VRMMaterialImporter {
       return null;
     }
 
-    const meshesMap: GLTFMesh[] = await gltf.parser.getDependencies('mesh');
+    const meshesMap = await extractGLTFMeshes(gltf);
     const materialList: { [vrmMaterialIndex: number]: { surface: THREE.Material; outline?: THREE.Material } } = {};
     const materials: THREE.Material[] = []; // result
 
     await Promise.all(
-      meshesMap.map(async (mesh, meshIndex) => {
+      meshesMap.map(async (primitives, meshIndex) => {
         const schemaMesh: GLTFSchema.Mesh = gltf.parser.json.meshes![meshIndex];
-        const primitives: GLTFPrimitive[] =
-          mesh.type === 'Group' ? (mesh.children as GLTFPrimitive[]) : [mesh as GLTFPrimitive];
 
         await Promise.all(
           primitives.map(async (primitive, primitiveIndex) => {
