@@ -338,7 +338,7 @@ export class VRMMaterialImporter {
     }
 
     // TODO: f (https://github.com/dwango/UniVRM/issues/172)
-    if (vrmProps.keywordMap!._ALPHATEST_ON && params.blendMode === MToonMaterialRenderMode.Opaque) {
+    if (vrmProps.keywordMap?._ALPHATEST_ON && params.blendMode === MToonMaterialRenderMode.Opaque) {
       params.blendMode = MToonMaterialRenderMode.Cutout;
     }
 
