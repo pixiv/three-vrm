@@ -456,6 +456,9 @@ void main() {
 
   vec3 col = reflectedLight.directDiffuse + reflectedLight.indirectDiffuse;
 
+  // The "comment out if you want to PBR absolutely" line
+  col = min(col, lit);
+
   #if defined( OUTLINE ) && defined( OUTLINE_COLOR_MIXED )
     gl_FragColor = vec4(
       outlineColor.rgb * mix( vec3( 1.0 ), col, outlineLightingMix ),
