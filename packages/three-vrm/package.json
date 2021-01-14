@@ -33,7 +33,7 @@
     "build-dev": "webpack --mode development",
     "build-prod": "webpack --mode production",
     "build-types": "tsc --emitDeclarationOnly && downlevel-dts types ts3.4/types",
-    "docs": "typedoc --out docs --mode file --excludeNotExported",
+    "docs": "typedoc --entryPoints ./src/index.ts --out docs",
     "gh-pages": "node ./bin/gh-pages.js",
     "test": "echo There is no test for three-vrm",
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier \"src/**/*.{ts,tsx}\" --check",
