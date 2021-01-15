@@ -1,6 +1,6 @@
 {
   "name": "@pixiv/three-vrm",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "description": "VRM file loader for three.js.",
   "license": "MIT",
   "author": "pixiv",
@@ -36,7 +36,7 @@
     "build-moduledev": "cross-env NODE_ENV=development ESM=1 rollup -c -o lib/three-vrm.module.js",
     "build-moduleprod": "cross-env NODE_ENV=production ESM=1 rollup -c -o lib/three-vrm.module.min.js",
     "build-types": "tsc --declaration --declarationDir ./types --emitDeclarationOnly && downlevel-dts types ts3.4/types",
-    "docs": "typedoc --out docs --mode file --excludeNotExported",
+    "docs": "typedoc --entryPoints ./src/index.ts --out docs",
     "gh-pages": "node ./bin/gh-pages.js",
     "test": "echo There is no test for three-vrm",
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier \"src/**/*.{ts,tsx}\" --check",
@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "gh-pages": "^3.1.0",
-    "lint-staged": "10.5.2",
+    "lint-staged": "10.5.3",
     "quicktype": "^15.0.258",
     "three": "^0.123.0"
   },

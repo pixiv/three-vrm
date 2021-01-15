@@ -2,7 +2,7 @@ import * as VRMSchema from '@pixiv/types-vrm-0.0';
 import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { GLTFMesh, GLTFPrimitive } from '../types';
-import { MToonMaterial, MToonMaterialOutlineWidthMode, MToonMaterialRenderMode } from './MToonMaterial';
+import { MToonMaterial, MToonMaterialOutlineWidthMode } from './MToonMaterial';
 import { VRMUnlitMaterial, VRMUnlitMaterialRenderType } from './VRMUnlitMaterial';
 
 /**
@@ -336,11 +336,6 @@ export class VRMMaterialImporter {
 
         params[newName] = new THREE.Vector4(...vrmProps.vectorProperties[name]);
       }
-    }
-
-    // TODO: f (https://github.com/dwango/UniVRM/issues/172)
-    if (vrmProps.keywordMap!._ALPHATEST_ON && params.blendMode === MToonMaterialRenderMode.Opaque) {
-      params.blendMode = MToonMaterialRenderMode.Cutout;
     }
 
     // set whether it needs skinning and morphing or not

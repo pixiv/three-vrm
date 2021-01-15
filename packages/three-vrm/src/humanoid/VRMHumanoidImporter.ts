@@ -31,7 +31,7 @@ export class VRMHumanoidImporter {
     if (schemaHumanoid.humanBones) {
       await Promise.all(
         schemaHumanoid.humanBones.map(async (bone) => {
-          if (!bone.bone || !bone.node) {
+          if (!bone.bone || bone.node == null) {
             return;
           }
 
