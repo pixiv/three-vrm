@@ -21,6 +21,7 @@ jobs:
           paths:
             - node_modules
             - packages/three-vrm/node_modules
+            - packages/three-vrm-core/node_modules
             - packages/types-vrm-0.0/node_modules
             - packages/types-vrmc-constraints/node_modules
             - packages/types-vrmc-materals-mtoon-1.0/node_modules
