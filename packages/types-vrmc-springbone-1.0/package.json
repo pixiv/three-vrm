@@ -23,7 +23,7 @@
     "all": "yarn && yarn lint && yarn clean && yarn build && yarn docs",
     "clean": "rimraf docs/ ts*/ types/",
     "build": "tsc --declaration --declarationDir ./types --emitDeclarationOnly && downlevel-dts types ts3.4/types",
-    "docs": "typedoc --out docs --mode file --excludeNotExported",
+    "docs": "typedoc --entryPoints ./src/index.ts --out docs",
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier \"src/**/*.{ts,tsx}\" --check",
     "lint-fix": "eslint \"src/**/*.{ts,tsx}\" --fix && prettier \"src/**/*.{ts,tsx}\" --write"
   },
