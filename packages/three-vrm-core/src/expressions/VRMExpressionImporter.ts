@@ -2,7 +2,7 @@ import type * as V0VRM from '@pixiv/types-vrm-0.0';
 import type * as V1VRMSchema from '@pixiv/types-vrmc-vrm-1.0';
 import * as THREE from 'three';
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
-import { extractGLTFMesh } from '../utils/extractGLTFMesh';
+import { gltfExtractPrimitivesFromNode } from '../utils/gltfExtractPrimitivesFromNode';
 import { VRMExpression } from './VRMExpression';
 import { VRMExpressionManager } from './VRMExpressionManager';
 import type { VRMExpressionPreset } from './VRMExpressionPreset';
@@ -108,10 +108,7 @@ export class VRMExpressionImporter {
             return;
           }
 
-          const schemaNode = gltf.parser.json.nodes?.[bind.node];
-          const meshIndex = schemaNode?.mesh;
-
-          const primitives = await extractGLTFMesh(gltf, meshIndex);
+          const primitives = await gltfExtractPrimitivesFromNode(gltf, bind.node);
           const morphTargetIndex = bind.index;
 
           // check if the mesh has the target morph target
@@ -236,34 +233,46 @@ export class VRMExpressionImporter {
               return;
             }
 
-            const primitives = await extractGLTFMesh(gltf, bind.mesh);
+            const nodesUsingMesh: number[] = [];
+            (gltf.parser.json.nodes as any[]).forEach((node, i) => {
+              if (node.mesh === bind.mesh) {
+                nodesUsingMesh.push(i);
+              }
+            });
+
             const morphTargetIndex = bind.index;
 
-            // check if the mesh has the target morph target
-            if (
-              !primitives.every(
-                (primitive) =>
-                  Array.isArray(primitive.morphTargetInfluences) &&
-                  morphTargetIndex < primitive.morphTargetInfluences.length,
-              )
-            ) {
-              console.warn(
-                `VRMBlendShapeImporter: ${schemaGroup.name} attempts to index ${morphTargetIndex}th morph but not found.`,
-              );
-              return;
-            }
+            await Promise.all(
+              nodesUsingMesh.map(async (nodeIndex) => {
+                const primitives = await gltfExtractPrimitivesFromNode(gltf, nodeIndex);
 
-            expression.addMorphTargetBind({
-              primitives,
-              index: morphTargetIndex,
-              weight: 0.01 * (bind.weight ?? 100), // narrowing the range from [ 0.0 - 100.0 ] to [ 0.0 - 1.0 ]
-            });
+                // check if the mesh has the target morph target
+                if (
+                  !primitives.every(
+                    (primitive) =>
+                      Array.isArray(primitive.morphTargetInfluences) &&
+                      morphTargetIndex < primitive.morphTargetInfluences.length,
+                  )
+                ) {
+                  console.warn(
+                    `VRMBlendShapeImporter: ${schemaGroup.name} attempts to index ${morphTargetIndex}th morph but not found.`,
+                  );
+                  return;
+                }
+
+                expression.addMorphTargetBind({
+                  primitives,
+                  index: morphTargetIndex,
+                  weight: 0.01 * (bind.weight ?? 100), // narrowing the range from [ 0.0 - 100.0 ] to [ 0.0 - 1.0 ]
+                });
+              }),
+            );
           });
         }
 
         const materialValues = schemaGroup.materialValues;
-        if (materialValues) {
-          console.warn('Material binds of VRM0.0 is not supported. Setup the model in VRM 1.0 and try again');
+        if (materialValues && materialValues.length !== 0) {
+          console.warn('Material binds of VRM 0.0 are not supported. Setup the model in VRM 1.0 and try again');
         }
 
         manager.registerExpression(nameOrPresetName, v1PresetName, expression);
