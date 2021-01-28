@@ -3,6 +3,7 @@ import type { VRMMeta } from './VRMMeta';
 import type { VRMMetaImporterOptions } from './VRMMetaImporterOptions';
 import type * as V1VRMSchema from '@pixiv/types-vrmc-vrm-1.0';
 import * as THREE from 'three';
+import { resolveURL } from '../utils/resolveURL';
 
 /**
  * An importer that imports a {@link VRMMeta} from a VRM extension of a GLTF.
@@ -111,7 +112,7 @@ export class VRMMetaImporter {
     }
 
     const loader = new THREE.ImageLoader();
-    return await loader.loadAsync(sourceURI).catch((error) => {
+    return await loader.loadAsync(resolveURL(sourceURI, (gltf.parser as any).options.path)).catch((error) => {
       console.error(error);
       console.warn('Failed to load a thumbnail image');
       return null;
