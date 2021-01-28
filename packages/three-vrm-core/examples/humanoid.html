@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>three-vrm example</title>
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+		/>
+		<style>
+			body {
+				margin: 0;
+			}
+			canvas {
+				display: block;
+			}
+		</style>
+	</head>
+
+	<body>
+		<script src="https://unpkg.com/three@0.123.0/build/three.js"></script>
+		<script src="https://unpkg.com/three@0.123.0/examples/js/loaders/GLTFLoader.js"></script>
+		<script src="https://unpkg.com/three@0.123.0/examples/js/controls/OrbitControls.js"></script>
+		<script src="../lib/three-vrm-core.js"></script>
+		<script>
+			// renderer
+			const renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			renderer.setPixelRatio( window.devicePixelRatio );
+			document.body.appendChild( renderer.domElement );
+
+			// camera
+			const camera = new THREE.PerspectiveCamera( 30.0, window.innerWidth / window.innerHeight, 0.1, 20.0 );
+			camera.position.set( 0.0, 1.0, 5.0 );
+
+			// camera controls
+			const controls = new THREE.OrbitControls( camera, renderer.domElement );
+			controls.screenSpacePanning = true;
+			controls.target.set( 0.0, 1.0, 0.0 );
+			controls.update();
+
+			// scene
+			const scene = new THREE.Scene();
+
+			// light
+			const light = new THREE.DirectionalLight( 0xffffff );
+			light.position.set( 1.0, 1.0, 1.0 ).normalize();
+			scene.add( light );
+
+			// gltf and vrm
+			let currentHumanoid = undefined;
+			const loader = new THREE.GLTFLoader();
+			loader.crossOrigin = 'anonymous';
+			loader.load(
+
+				// URL of the VRM you want to load
+				'./models/cube.gltf',
+
+				// called when the resource is loaded
+				( gltf ) => {
+
+					// put the model to the scene
+					scene.add( gltf.scene );
+
+					// import a VRM humanoid information from gltf
+					const importer = new THREE_VRM_CORE.VRMHumanoidImporter();
+
+					importer.import( gltf ).then( ( humanoid ) => {
+
+						currentHumanoid = humanoid;
+
+					} );
+
+				},
+
+				// called while loading is progressing
+				( progress ) => console.log( 'Loading model...', 100.0 * ( progress.loaded / progress.total ), '%' ),
+
+				// called when loading has errors
+				( error ) => console.error( error )
+
+			);
+
+			// helpers
+			const gridHelper = new THREE.GridHelper( 10, 10 );
+			scene.add( gridHelper );
+
+			const axesHelper = new THREE.AxesHelper( 5 );
+			scene.add( axesHelper );
+
+			// animate
+			const clock = new THREE.Clock();
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				const deltaTime = clock.getDelta();
+
+				if ( currentHumanoid ) {
+
+					// tweak bones
+					const s = 0.25 * Math.PI * Math.sin( Math.PI * clock.elapsedTime );
+					currentHumanoid.getBoneNode( 'head' ).rotation.y = s;
+					currentHumanoid.getBoneNode( 'leftUpperArm' ).rotation.z = s;
+					currentHumanoid.getBoneNode( 'rightUpperArm' ).rotation.x = s;
+
+				}
+
+				renderer.render( scene, camera );
+
+			}
+
+			animate();
+		</script>
+	</body>
+</html>
