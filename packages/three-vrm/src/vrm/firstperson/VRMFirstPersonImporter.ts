@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRMHumanoid } from '../humanoid';
-import { GLTFNode, GLTFPrimitive, VRMSchema } from '../types';
-import { extractGLTFMeshes } from '../utils/extractGLTFMesh';
+import { GLTFNode, GLTFSchema, VRMSchema } from '../types';
+import { gltfExtractPrimitivesFromNodes } from '../utils/gltfExtractPrimitivesFromNode';
 import { VRMFirstPerson, VRMRendererFirstPersonFlags } from './VRMFirstPerson';
 
 /**
@@ -49,10 +49,13 @@ export class VRMFirstPersonImporter {
       : new THREE.Vector3(0.0, 0.06, 0.0); // fallback, taken from UniVRM implementation
 
     const meshAnnotations: VRMRendererFirstPersonFlags[] = [];
-    const meshes: GLTFPrimitive[][] = await extractGLTFMeshes(gltf);
-    meshes.forEach((primitives, meshIndex) => {
+    const nodePrimitivesArray = await gltfExtractPrimitivesFromNodes(gltf);
+
+    Array.from(nodePrimitivesArray.entries()).forEach(([nodeIndex, primitives]) => {
+      const schemaNode: GLTFSchema.Node = gltf.parser.json.nodes[nodeIndex];
+
       const flag = schemaFirstPerson.meshAnnotations
-        ? schemaFirstPerson.meshAnnotations.find((a) => a.mesh === meshIndex)
+        ? schemaFirstPerson.meshAnnotations.find((a) => a.mesh === schemaNode.mesh)
         : undefined;
       meshAnnotations.push(new VRMRendererFirstPersonFlags(flag?.firstPersonFlag, primitives));
     });

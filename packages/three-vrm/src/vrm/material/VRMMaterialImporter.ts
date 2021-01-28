@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { GLTFSchema, VRMSchema } from '../types';
-import { extractGLTFMeshes } from '../utils/extractGLTFMesh';
+import { gltfExtractPrimitivesFromNodes } from '../utils/gltfExtractPrimitivesFromNode';
 import { MToonMaterial, MToonMaterialOutlineWidthMode, MToonMaterialRenderMode } from './MToonMaterial';
 import { VRMUnlitMaterial, VRMUnlitMaterialRenderType } from './VRMUnlitMaterial';
 
@@ -67,13 +67,14 @@ export class VRMMaterialImporter {
       return null;
     }
 
-    const meshesMap = await extractGLTFMeshes(gltf);
+    const nodePrimitivesArray = await gltfExtractPrimitivesFromNodes(gltf);
     const materialList: { [vrmMaterialIndex: number]: { surface: THREE.Material; outline?: THREE.Material } } = {};
     const materials: THREE.Material[] = []; // result
 
     await Promise.all(
-      meshesMap.map(async (primitives, meshIndex) => {
-        const schemaMesh: GLTFSchema.Mesh = gltf.parser.json.meshes![meshIndex];
+      Array.from(nodePrimitivesArray.entries()).map(async ([nodeIndex, primitives]) => {
+        const schemaNode: GLTFSchema.Node = gltf.parser.json.nodes[nodeIndex];
+        const schemaMesh: GLTFSchema.Mesh = gltf.parser.json.meshes[schemaNode.mesh!];
 
         await Promise.all(
           primitives.map(async (primitive, primitiveIndex) => {
