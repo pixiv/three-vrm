@@ -36,7 +36,10 @@ void main() {
 
   // #include <uv_vertex>
   #if defined( USE_MAP ) || defined( USE_SHADETEXTURE ) || defined( USE_NORMALMAP ) || defined( USE_RECEIVESHADOWTEXTURE ) || defined( USE_SHADINGGRADETEXTURE ) || defined( USE_RIMTEXTURE ) || defined( USE_EMISSIVEMAP ) || defined( USE_OUTLINEWIDTHTEXTURE ) || defined( USE_UVANIMMASKTEXTURE )
-    vUv = vec2( mainTex_ST.p * uv.x + mainTex_ST.s, mainTex_ST.q * uv.y + mainTex_ST.t );
+    vUv = uv;
+    vUv.y = 1.0 - vUv.y; // uv.y is opposite from UniVRM's
+    vUv = mainTex_ST.st + mainTex_ST.pq * vUv;
+    vUv.y = 1.0 - vUv.y; // reverting the previous flip
   #endif
 
   #include <uv2_vertex>
