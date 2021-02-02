@@ -49,9 +49,9 @@ export class VRMFirstPersonImporter {
       : new THREE.Vector3(0.0, 0.06, 0.0); // fallback, taken from UniVRM implementation
 
     const meshAnnotations: VRMRendererFirstPersonFlags[] = [];
-    const nodePrimitivesArray = await gltfExtractPrimitivesFromNodes(gltf);
+    const nodePrimitivesMap = await gltfExtractPrimitivesFromNodes(gltf);
 
-    Array.from(nodePrimitivesArray.entries()).forEach(([nodeIndex, primitives]) => {
+    Array.from(nodePrimitivesMap.entries()).forEach(([nodeIndex, primitives]) => {
       const schemaNode: GLTFSchema.Node = gltf.parser.json.nodes[nodeIndex];
 
       const flag = schemaFirstPerson.meshAnnotations

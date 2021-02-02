@@ -67,12 +67,12 @@ export class VRMMaterialImporter {
       return null;
     }
 
-    const nodePrimitivesArray = await gltfExtractPrimitivesFromNodes(gltf);
+    const nodePrimitivesMap = await gltfExtractPrimitivesFromNodes(gltf);
     const materialList: { [vrmMaterialIndex: number]: { surface: THREE.Material; outline?: THREE.Material } } = {};
     const materials: THREE.Material[] = []; // result
 
     await Promise.all(
-      Array.from(nodePrimitivesArray.entries()).map(async ([nodeIndex, primitives]) => {
+      Array.from(nodePrimitivesMap.entries()).map(async ([nodeIndex, primitives]) => {
         const schemaNode: GLTFSchema.Node = gltf.parser.json.nodes[nodeIndex];
         const schemaMesh: GLTFSchema.Mesh = gltf.parser.json.meshes[schemaNode.mesh!];
 
