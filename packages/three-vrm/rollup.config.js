@@ -14,7 +14,7 @@ const copyright = '(c) 2019-2021 pixiv Inc.';
 const licenseName = 'MIT License';
 
 /** url of the license */
-const licenseUri = 'https://github.com/pixiv/three-vrm/blob/master/LICENSE';
+const licenseUri = 'https://github.com/pixiv/three-vrm/blob/release/LICENSE';
 
 /** output name of the module */
 const name = 'THREE_VRM';
