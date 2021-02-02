@@ -1,11 +1,10 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
+    "target": "es6",
+    "module": "es6",
     "lib": ["es2018", "dom"],
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "declaration": true,
     "strict": true
   }
 }
