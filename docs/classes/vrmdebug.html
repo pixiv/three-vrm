@@ -7,6 +7,7 @@
 	<meta name="description" content="Documentation for @pixiv/three-vrm">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
+	<script async src="../assets/js/search.js" id="search-script"></script>
 </head>
 <body>
 <header>
@@ -51,7 +52,7 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../globals.html">Globals</a>
+					<a href="../modules.html">@pixiv/three-vrm</a>
 				</li>
 				<li>
 					<a href="vrmdebug.html">VRMDebug</a>
@@ -67,7 +68,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p><a href="../interfaces/vrmschema.vrm.html">VRM</a> but it has some useful gizmos.</p>
+						<p><a href="vrm.html">VRM</a> but it has some useful gizmos.</p>
 					</div>
 				</div>
 			</section>
@@ -75,7 +76,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="vrm.html" class="tsd-signature-type">VRM</a>
+						<a href="vrm.html" class="tsd-signature-type" data-tsd-kind="Class">VRM</a>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">VRMDebug</span>
@@ -91,10 +92,10 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite"><a href="vrmdebug.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><a href="vrmdebug.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section tsd-is-inherited">
+						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="vrmdebug.html#blendshapeproxy" class="tsd-kind-icon">blend<wbr>Shape<wbr>Proxy</a></li>
@@ -120,18 +121,18 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Constructors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new VRMDebug<span class="tsd-signature-symbol">(</span>params<span class="tsd-signature-symbol">: </span><a href="../interfaces/vrmparameters.html" class="tsd-signature-type">VRMParameters</a>, debugOption<span class="tsd-signature-symbol">?: </span><a href="../interfaces/vrmdebugoptions.html" class="tsd-signature-type">VRMDebugOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="vrmdebug.html" class="tsd-signature-type">VRMDebug</a></li>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">new VRMDebug<span class="tsd-signature-symbol">(</span>params<span class="tsd-signature-symbol">: </span><a href="../interfaces/vrmparameters.html" class="tsd-signature-type" data-tsd-kind="Interface">VRMParameters</a>, debugOption<span class="tsd-signature-symbol">?: </span><a href="../interfaces/vrmdebugoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">VRMDebugOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="vrmdebug.html" class="tsd-signature-type" data-tsd-kind="Class">VRMDebug</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides <a href="vrm.html">VRM</a>.<a href="vrm.html#constructor">constructor</a></p>
+								<p>Inherited from <a href="vrm.html">VRM</a>.<a href="vrm.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/1b595bbe/packages/three-vrm/src/vrm/debug/VRMDebug.ts#L30">packages/three-vrm/src/vrm/debug/VRMDebug.ts:30</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a1d0905d/packages/three-vrm/src/debug/VRMDebug.ts#L30">packages/three-vrm/src/debug/VRMDebug.ts:30</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -142,37 +143,33 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>params: <a href="../interfaces/vrmparameters.html" class="tsd-signature-type">VRMParameters</a></h5>
+									<h5>params: <a href="../interfaces/vrmparameters.html" class="tsd-signature-type" data-tsd-kind="Interface">VRMParameters</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p><a href="../interfaces/vrmparameters.html">VRMParameters</a> that represents components of the VRM</p>
-										</div>
+										<p><a href="../interfaces/vrmparameters.html">VRMParameters</a> that represents components of the VRM</p>
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> debugOption: <a href="../interfaces/vrmdebugoptions.html" class="tsd-signature-type">VRMDebugOptions</a><span class="tsd-signature-symbol"> = {}</span></h5>
+									<h5>debugOption: <a href="../interfaces/vrmdebugoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">VRMDebugOptions</a><span class="tsd-signature-symbol"> = ...</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>Options for VRMDebug features</p>
-										</div>
+										<p>Options for VRMDebug features</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="vrmdebug.html" class="tsd-signature-type">VRMDebug</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="vrmdebug.html" class="tsd-signature-type" data-tsd-kind="Class">VRMDebug</a></h4>
 						</li>
 					</ul>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="blendshapeproxy" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> blend<wbr>Shape<wbr>Proxy</h3>
-					<div class="tsd-signature tsd-kind-icon">blend<wbr>Shape<wbr>Proxy<span class="tsd-signature-symbol">:</span> <a href="vrmblendshapeproxy.html" class="tsd-signature-type">VRMBlendShapeProxy</a></div>
+					<div class="tsd-signature tsd-kind-icon">blend<wbr>Shape<wbr>Proxy<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="vrmblendshapeproxy.html" class="tsd-signature-type" data-tsd-kind="Class">VRMBlendShapeProxy</a></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrm.html">VRM</a>.<a href="vrm.html#blendshapeproxy">blendShapeProxy</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/1b595bbe/packages/three-vrm/src/vrm/VRM.ts#L74">packages/three-vrm/src/vrm/VRM.ts:74</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a1d0905d/packages/three-vrm/src/VRM.ts#L74">packages/three-vrm/src/VRM.ts:74</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -185,11 +182,11 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="firstperson" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> first<wbr>Person</h3>
-					<div class="tsd-signature tsd-kind-icon">first<wbr>Person<span class="tsd-signature-symbol">:</span> <a href="vrmfirstperson.html" class="tsd-signature-type">VRMFirstPerson</a></div>
+					<div class="tsd-signature tsd-kind-icon">first<wbr>Person<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="vrmfirstperson.html" class="tsd-signature-type" data-tsd-kind="Class">VRMFirstPerson</a></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrm.html">VRM</a>.<a href="vrm.html#firstperson">firstPerson</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/1b595bbe/packages/three-vrm/src/vrm/VRM.ts#L80">packages/three-vrm/src/vrm/VRM.ts:80</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a1d0905d/packages/three-vrm/src/VRM.ts#L80">packages/three-vrm/src/VRM.ts:80</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -202,11 +199,11 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="humanoid" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> humanoid</h3>
-					<div class="tsd-signature tsd-kind-icon">humanoid<span class="tsd-signature-symbol">:</span> <a href="vrmhumanoid.html" class="tsd-signature-type">VRMHumanoid</a></div>
+					<div class="tsd-signature tsd-kind-icon">humanoid<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="vrmhumanoid.html" class="tsd-signature-type" data-tsd-kind="Class">VRMHumanoid</a></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrm.html">VRM</a>.<a href="vrm.html#humanoid">humanoid</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/1b595bbe/packages/three-vrm/src/vrm/VRM.ts#L68">packages/three-vrm/src/vrm/VRM.ts:68</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a1d0905d/packages/three-vrm/src/VRM.ts#L68">packages/three-vrm/src/VRM.ts:68</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -224,11 +221,11 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="lookat" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> look<wbr>At</h3>
-					<div class="tsd-signature tsd-kind-icon">look<wbr>At<span class="tsd-signature-symbol">:</span> <a href="vrmlookathead.html" class="tsd-signature-type">VRMLookAtHead</a></div>
+					<div class="tsd-signature tsd-kind-icon">look<wbr>At<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="vrmlookathead.html" class="tsd-signature-type" data-tsd-kind="Class">VRMLookAtHead</a></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrm.html">VRM</a>.<a href="vrm.html#lookat">lookAt</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/1b595bbe/packages/three-vrm/src/vrm/VRM.ts#L86">packages/three-vrm/src/vrm/VRM.ts:86</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a1d0905d/packages/three-vrm/src/VRM.ts#L86">packages/three-vrm/src/VRM.ts:86</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -241,11 +238,11 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="materials" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> materials</h3>
-					<div class="tsd-signature tsd-kind-icon">materials<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Material</span><span class="tsd-signature-symbol">[]</span></div>
+					<div class="tsd-signature tsd-kind-icon">materials<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Material</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrm.html">VRM</a>.<a href="vrm.html#materials">materials</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/1b595bbe/packages/three-vrm/src/vrm/VRM.ts#L92">packages/three-vrm/src/vrm/VRM.ts:92</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a1d0905d/packages/three-vrm/src/VRM.ts#L92">packages/three-vrm/src/VRM.ts:92</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -258,11 +255,11 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="meta" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> meta</h3>
-					<div class="tsd-signature tsd-kind-icon">meta<span class="tsd-signature-symbol">:</span> <a href="../interfaces/vrmmeta.html" class="tsd-signature-type">VRMMeta</a></div>
+					<div class="tsd-signature tsd-kind-icon">meta<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/vrmmeta.html" class="tsd-signature-type" data-tsd-kind="Interface">VRMMeta</a></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrm.html">VRM</a>.<a href="vrm.html#meta">meta</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/1b595bbe/packages/three-vrm/src/vrm/VRM.ts#L98">packages/three-vrm/src/vrm/VRM.ts:98</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a1d0905d/packages/three-vrm/src/VRM.ts#L98">packages/three-vrm/src/VRM.ts:98</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -279,7 +276,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrm.html">VRM</a>.<a href="vrm.html#scene">scene</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/1b595bbe/packages/three-vrm/src/vrm/VRM.ts#L60">packages/three-vrm/src/vrm/VRM.ts:60</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a1d0905d/packages/three-vrm/src/VRM.ts#L60">packages/three-vrm/src/VRM.ts:60</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -291,11 +288,11 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="springbonemanager" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> spring<wbr>Bone<wbr>Manager</h3>
-					<div class="tsd-signature tsd-kind-icon">spring<wbr>Bone<wbr>Manager<span class="tsd-signature-symbol">:</span> <a href="vrmspringbonemanager.html" class="tsd-signature-type">VRMSpringBoneManager</a></div>
+					<div class="tsd-signature tsd-kind-icon">spring<wbr>Bone<wbr>Manager<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="vrmspringbonemanager.html" class="tsd-signature-type" data-tsd-kind="Class">VRMSpringBoneManager</a></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="vrm.html">VRM</a>.<a href="vrm.html#springbonemanager">springBoneManager</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/1b595bbe/packages/three-vrm/src/vrm/VRM.ts#L104">packages/three-vrm/src/vrm/VRM.ts:104</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a1d0905d/packages/three-vrm/src/VRM.ts#L104">packages/three-vrm/src/VRM.ts:104</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -319,7 +316,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="vrm.html">VRM</a>.<a href="vrm.html#dispose">dispose</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/1b595bbe/packages/three-vrm/src/vrm/VRM.ts#L154">packages/three-vrm/src/vrm/VRM.ts:154</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a1d0905d/packages/three-vrm/src/VRM.ts#L154">packages/three-vrm/src/VRM.ts:154</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -342,7 +339,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="vrm.html">VRM</a>.<a href="vrm.html#update">update</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/1b595bbe/packages/three-vrm/src/vrm/debug/VRMDebug.ts#L51">packages/three-vrm/src/vrm/debug/VRMDebug.ts:51</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a1d0905d/packages/three-vrm/src/debug/VRMDebug.ts#L51">packages/three-vrm/src/debug/VRMDebug.ts:51</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -359,14 +356,14 @@
 					<a name="from" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> from</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">from<span class="tsd-signature-symbol">(</span>gltf<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GLTF</span>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/vrmimporteroptions.html" class="tsd-signature-type">VRMImporterOptions</a>, debugOption<span class="tsd-signature-symbol">?: </span><a href="../interfaces/vrmdebugoptions.html" class="tsd-signature-type">VRMDebugOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="vrm.html" class="tsd-signature-type">VRM</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">from<span class="tsd-signature-symbol">(</span>gltf<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GLTF</span>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/vrmimporteroptions.html" class="tsd-signature-type" data-tsd-kind="Interface">VRMImporterOptions</a>, debugOption<span class="tsd-signature-symbol">?: </span><a href="../interfaces/vrmdebugoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">VRMDebugOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="vrm.html" class="tsd-signature-type" data-tsd-kind="Class">VRM</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides <a href="vrm.html">VRM</a>.<a href="vrm.html#from">from</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/1b595bbe/packages/three-vrm/src/vrm/debug/VRMDebug.ts#L23">packages/three-vrm/src/vrm/debug/VRMDebug.ts:23</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a1d0905d/packages/three-vrm/src/debug/VRMDebug.ts#L23">packages/three-vrm/src/debug/VRMDebug.ts:23</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -384,19 +381,19 @@
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> options: <a href="../interfaces/vrmimporteroptions.html" class="tsd-signature-type">VRMImporterOptions</a><span class="tsd-signature-symbol"> = {}</span></h5>
+									<h5>options: <a href="../interfaces/vrmimporteroptions.html" class="tsd-signature-type" data-tsd-kind="Interface">VRMImporterOptions</a><span class="tsd-signature-symbol"> = ...</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Options that will be used in importer</p>
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> debugOption: <a href="../interfaces/vrmdebugoptions.html" class="tsd-signature-type">VRMDebugOptions</a><span class="tsd-signature-symbol"> = {}</span></h5>
+									<h5>debugOption: <a href="../interfaces/vrmdebugoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">VRMDebugOptions</a><span class="tsd-signature-symbol"> = ...</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Options for VRMDebug features</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="vrm.html" class="tsd-signature-type">VRM</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="vrm.html" class="tsd-signature-type" data-tsd-kind="Class">VRM</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -405,8 +402,8 @@
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">
 				<ul>
-					<li class="globals  ">
-						<a href="../globals.html"><em>Globals</em></a>
+					<li class=" ">
+						<a href="../modules.html">Exports</a>
 					</li>
 				</ul>
 			</nav>
@@ -417,7 +414,7 @@
 					<li class="current tsd-kind-class">
 						<a href="vrmdebug.html" class="tsd-kind-icon">VRMDebug</a>
 						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
 								<a href="vrmdebug.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">

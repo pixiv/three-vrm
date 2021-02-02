@@ -7,6 +7,7 @@
 	<meta name="description" content="Documentation for @pixiv/three-vrm">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
+	<script async src="../assets/js/search.js" id="search-script"></script>
 </head>
 <body>
 <header>
@@ -51,7 +52,7 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../globals.html">Globals</a>
+					<a href="../modules.html">@pixiv/three-vrm</a>
 				</li>
 				<li>
 					<a href="vrmpose.html">VRMPose</a>
@@ -74,15 +75,16 @@
 					<dl class="tsd-comment-tags">
 						<dt>example</dt>
 						<dd><p>An example of VRMPose interface</p>
-							<pre><code class="language-js">{
-  [HumanBone.LeftUpperLeg] : {
-    <span class="hljs-attr">rotation</span>: [  <span class="hljs-number">0.000</span>,  <span class="hljs-number">0.000</span>, -<span class="hljs-number">0.454</span>,  <span class="hljs-number">0.891</span> ],
-    <span class="hljs-attr">position</span>: [  <span class="hljs-number">0.000</span>,  <span class="hljs-number">0.000</span>,  <span class="hljs-number">0.000</span> ] <span class="hljs-comment">// position is not required though</span>
-  },
-  [HumanBone.LeftLowerLeg] : {
-    <span class="hljs-attr">rotation</span>: [ -<span class="hljs-number">0.454</span>,  <span class="hljs-number">0.000</span>,  <span class="hljs-number">0.000</span>,  <span class="hljs-number">0.891</span> ]
-  },
-}</code></pre>
+							<pre><code class="language-js"><span style="color: #000000">{</span>
+<span style="color: #000000">  [</span><span style="color: #001080">HumanBone</span><span style="color: #000000">.</span><span style="color: #001080">LeftUpperLeg</span><span style="color: #000000">] : {</span>
+<span style="color: #000000">    </span><span style="color: #001080">rotation:</span><span style="color: #000000"> [  </span><span style="color: #098658">0.000</span><span style="color: #000000">,  </span><span style="color: #098658">0.000</span><span style="color: #000000">, -</span><span style="color: #098658">0.454</span><span style="color: #000000">,  </span><span style="color: #098658">0.891</span><span style="color: #000000"> ],</span>
+<span style="color: #000000">    </span><span style="color: #001080">position:</span><span style="color: #000000"> [  </span><span style="color: #098658">0.000</span><span style="color: #000000">,  </span><span style="color: #098658">0.000</span><span style="color: #000000">,  </span><span style="color: #098658">0.000</span><span style="color: #000000"> ] </span><span style="color: #008000">// position is not required though</span>
+<span style="color: #000000">  },</span>
+<span style="color: #000000">  [</span><span style="color: #001080">HumanBone</span><span style="color: #000000">.</span><span style="color: #001080">LeftLowerLeg</span><span style="color: #000000">] : {</span>
+<span style="color: #000000">    </span><span style="color: #001080">rotation:</span><span style="color: #000000"> [ -</span><span style="color: #098658">0.454</span><span style="color: #000000">,  </span><span style="color: #098658">0.000</span><span style="color: #000000">,  </span><span style="color: #098658">0.000</span><span style="color: #000000">,  </span><span style="color: #098658">0.891</span><span style="color: #000000"> ]</span>
+<span style="color: #000000">  },</span>
+<span style="color: #000000">}</span>
+</code></pre>
 						</dd>
 					</dl>
 				</div>
@@ -97,35 +99,21 @@
 			</section>
 			<section class="tsd-panel tsd-kind-interface">
 				<h3 class="tsd-before-signature">Indexable</h3>
-				<div class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">[</span>boneName: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><a href="vrmposetransform.html" class="tsd-signature-type">VRMPoseTransform</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></div>
+				<div class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">[</span>boneName: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><a href="vrmposetransform.html" class="tsd-signature-type" data-tsd-kind="Interface">VRMPoseTransform</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></div>
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
 						<p>Represents a pose that VRM can do.</p>
 					</div>
 					<p>See [[HumanBone]] for complete list of bone names.
 					Note that certain VRM models might not have every bones defined in [[HumanBone]].</p>
-					<dl class="tsd-comment-tags">
-						<dt>example</dt>
-						<dd><p>An example of VRMPose interface</p>
-							<pre><code class="language-js">{
-  [HumanBone.LeftUpperLeg] : {
-    <span class="hljs-attr">rotation</span>: [  <span class="hljs-number">0.000</span>,  <span class="hljs-number">0.000</span>, -<span class="hljs-number">0.454</span>,  <span class="hljs-number">0.891</span> ],
-    <span class="hljs-attr">position</span>: [  <span class="hljs-number">0.000</span>,  <span class="hljs-number">0.000</span>,  <span class="hljs-number">0.000</span> ] <span class="hljs-comment">// position is not required though</span>
-  },
-  [HumanBone.LeftLowerLeg] : {
-    <span class="hljs-attr">rotation</span>: [ -<span class="hljs-number">0.454</span>,  <span class="hljs-number">0.000</span>,  <span class="hljs-number">0.000</span>,  <span class="hljs-number">0.891</span> ]
-  },
-}</code></pre>
-						</dd>
-					</dl>
 				</div>
 			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">
 				<ul>
-					<li class="globals  ">
-						<a href="../globals.html"><em>Globals</em></a>
+					<li class=" ">
+						<a href="../modules.html">Exports</a>
 					</li>
 				</ul>
 			</nav>

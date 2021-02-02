@@ -7,6 +7,7 @@
 	<meta name="description" content="Documentation for @pixiv/three-vrm">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
+	<script async src="../assets/js/search.js" id="search-script"></script>
 </head>
 <body>
 <header>
@@ -51,7 +52,7 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../globals.html">Globals</a>
+					<a href="../modules.html">@pixiv/three-vrm</a>
 				</li>
 				<li>
 					<a href="vrmmaterialimporter.html">VRMMaterialImporter</a>
@@ -115,13 +116,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new VRMMaterial<wbr>Importer<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/vrmmaterialimporteroptions.html" class="tsd-signature-type">VRMMaterialImporterOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="vrmmaterialimporter.html" class="tsd-signature-type">VRMMaterialImporter</a></li>
+						<li class="tsd-signature tsd-kind-icon">new VRMMaterial<wbr>Importer<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/vrmmaterialimporteroptions.html" class="tsd-signature-type" data-tsd-kind="Interface">VRMMaterialImporterOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="vrmmaterialimporter.html" class="tsd-signature-type" data-tsd-kind="Class">VRMMaterialImporter</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/1b595bbe/packages/three-vrm/src/vrm/material/VRMMaterialImporter.ts#L35">packages/three-vrm/src/vrm/material/VRMMaterialImporter.ts:35</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a1d0905d/packages/three-vrm/src/material/VRMMaterialImporter.ts#L36">packages/three-vrm/src/material/VRMMaterialImporter.ts:36</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -132,15 +133,13 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> options: <a href="../interfaces/vrmmaterialimporteroptions.html" class="tsd-signature-type">VRMMaterialImporterOptions</a><span class="tsd-signature-symbol"> = {}</span></h5>
+									<h5>options: <a href="../interfaces/vrmmaterialimporteroptions.html" class="tsd-signature-type" data-tsd-kind="Interface">VRMMaterialImporterOptions</a><span class="tsd-signature-symbol"> = ...</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>Options of the VRMMaterialImporter</p>
-										</div>
+										<p>Options of the VRMMaterialImporter</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="vrmmaterialimporter.html" class="tsd-signature-type">VRMMaterialImporter</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="vrmmaterialimporter.html" class="tsd-signature-type" data-tsd-kind="Class">VRMMaterialImporter</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -153,17 +152,17 @@
 					<div class="tsd-signature tsd-kind-icon">_encoding<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">TextureEncoding</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/1b595bbe/packages/three-vrm/src/vrm/material/VRMMaterialImporter.ts#L34">packages/three-vrm/src/vrm/material/VRMMaterialImporter.ts:34</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a1d0905d/packages/three-vrm/src/material/VRMMaterialImporter.ts#L35">packages/three-vrm/src/material/VRMMaterialImporter.ts:35</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="_requestenvmap" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> <span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> _request<wbr>Env<wbr>Map</h3>
-					<div class="tsd-signature tsd-kind-icon">_request<wbr>Env<wbr>Map<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Texture</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span></div>
+					<div class="tsd-signature tsd-kind-icon">_request<wbr>Env<wbr>Map<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Texture</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/1b595bbe/packages/three-vrm/src/vrm/material/VRMMaterialImporter.ts#L35">packages/three-vrm/src/vrm/material/VRMMaterialImporter.ts:35</a></li>
+							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a1d0905d/packages/three-vrm/src/material/VRMMaterialImporter.ts#L36">packages/three-vrm/src/material/VRMMaterialImporter.ts:36</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -180,7 +179,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/1b595bbe/packages/three-vrm/src/vrm/material/VRMMaterialImporter.ts#L252">packages/three-vrm/src/vrm/material/VRMMaterialImporter.ts:252</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a1d0905d/packages/three-vrm/src/material/VRMMaterialImporter.ts#L252">packages/three-vrm/src/material/VRMMaterialImporter.ts:252</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -197,13 +196,13 @@
 					<a name="_extractmaterialproperties" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _extract<wbr>Material<wbr>Properties</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
-						<li class="tsd-signature tsd-kind-icon">_extract<wbr>Material<wbr>Properties<span class="tsd-signature-symbol">(</span>originalMaterial<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Material</span>, vrmProps<span class="tsd-signature-symbol">: </span><a href="../interfaces/vrmschema.material.html" class="tsd-signature-type">Material</a>, gltf<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GLTF</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">_extract<wbr>Material<wbr>Properties<span class="tsd-signature-symbol">(</span>originalMaterial<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Material</span>, vrmProps<span class="tsd-signature-symbol">: </span><a href="../interfaces/vrmschema.material.html" class="tsd-signature-type" data-tsd-kind="Interface">Material</a>, gltf<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GLTF</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/1b595bbe/packages/three-vrm/src/vrm/material/VRMMaterialImporter.ts#L284">packages/three-vrm/src/vrm/material/VRMMaterialImporter.ts:284</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a1d0905d/packages/three-vrm/src/material/VRMMaterialImporter.ts#L284">packages/three-vrm/src/material/VRMMaterialImporter.ts:284</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -212,7 +211,7 @@
 									<h5>originalMaterial: <span class="tsd-signature-type">Material</span></h5>
 								</li>
 								<li>
-									<h5>vrmProps: <a href="../interfaces/vrmschema.material.html" class="tsd-signature-type">Material</a></h5>
+									<h5>vrmProps: <a href="../interfaces/vrmschema.material.html" class="tsd-signature-type" data-tsd-kind="Interface">Material</a></h5>
 								</li>
 								<li>
 									<h5>gltf: <span class="tsd-signature-type">GLTF</span></h5>
@@ -232,7 +231,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/1b595bbe/packages/three-vrm/src/vrm/material/VRMMaterialImporter.ts#L238">packages/three-vrm/src/vrm/material/VRMMaterialImporter.ts:238</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a1d0905d/packages/three-vrm/src/material/VRMMaterialImporter.ts#L238">packages/three-vrm/src/material/VRMMaterialImporter.ts:238</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -249,13 +248,13 @@
 					<a name="convertgltfmaterials" class="tsd-anchor"></a>
 					<h3>convertGLTFMaterials</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">convertGLTFMaterials<span class="tsd-signature-symbol">(</span>gltf<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GLTF</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Material</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">convertGLTFMaterials<span class="tsd-signature-symbol">(</span>gltf<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GLTF</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Material</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/1b595bbe/packages/three-vrm/src/vrm/material/VRMMaterialImporter.ts#L58">packages/three-vrm/src/vrm/material/VRMMaterialImporter.ts:58</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a1d0905d/packages/three-vrm/src/material/VRMMaterialImporter.ts#L59">packages/three-vrm/src/material/VRMMaterialImporter.ts:59</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -272,7 +271,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Material</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Material</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -280,13 +279,13 @@
 					<a name="createvrmmaterials" class="tsd-anchor"></a>
 					<h3>createVRMMaterials</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">createVRMMaterials<span class="tsd-signature-symbol">(</span>originalMaterial<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Material</span>, vrmProps<span class="tsd-signature-symbol">: </span><a href="../interfaces/vrmschema.material.html" class="tsd-signature-type">Material</a>, gltf<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GLTF</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>outline<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">THREE.Material</span><span class="tsd-signature-symbol">; </span>surface<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Material</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">createVRMMaterials<span class="tsd-signature-symbol">(</span>originalMaterial<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Material</span>, vrmProps<span class="tsd-signature-symbol">: </span><a href="../interfaces/vrmschema.material.html" class="tsd-signature-type" data-tsd-kind="Interface">Material</a>, gltf<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GLTF</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>outline<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Material</span><span class="tsd-signature-symbol">; </span>surface<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Material</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/1b595bbe/packages/three-vrm/src/vrm/material/VRMMaterialImporter.ts#L154">packages/three-vrm/src/vrm/material/VRMMaterialImporter.ts:154</a></li>
+									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/a1d0905d/packages/three-vrm/src/material/VRMMaterialImporter.ts#L154">packages/three-vrm/src/material/VRMMaterialImporter.ts:154</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -295,13 +294,13 @@
 									<h5>originalMaterial: <span class="tsd-signature-type">Material</span></h5>
 								</li>
 								<li>
-									<h5>vrmProps: <a href="../interfaces/vrmschema.material.html" class="tsd-signature-type">Material</a></h5>
+									<h5>vrmProps: <a href="../interfaces/vrmschema.material.html" class="tsd-signature-type" data-tsd-kind="Interface">Material</a></h5>
 								</li>
 								<li>
 									<h5>gltf: <span class="tsd-signature-type">GLTF</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>outline<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">THREE.Material</span><span class="tsd-signature-symbol">; </span>surface<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Material</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>outline<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Material</span><span class="tsd-signature-symbol">; </span>surface<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Material</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -310,8 +309,8 @@
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">
 				<ul>
-					<li class="globals  ">
-						<a href="../globals.html"><em>Globals</em></a>
+					<li class=" ">
+						<a href="../modules.html">Exports</a>
 					</li>
 				</ul>
 			</nav>

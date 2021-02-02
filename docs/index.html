@@ -7,6 +7,7 @@
 	<meta name="description" content="Documentation for @pixiv/three-vrm">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
+	<script async src="assets/js/search.js" id="search-script"></script>
 </head>
 <body>
 <header>
@@ -49,12 +50,7 @@
 	</div>
 	<div class="tsd-page-title">
 		<div class="container">
-			<ul class="tsd-breadcrumb">
-				<li>
-					<a href="globals.html">Globals</a>
-				</li>
-			</ul>
-			<h1>@pixiv/three-vrm</h1>
+			<h1>Project @pixiv/three-vrm</h1>
 		</div>
 	</div>
 </header>
@@ -80,87 +76,94 @@
 				<ul>
 					<li><a href="https://github.com/mrdoob/three.js/blob/master/build/three.js">Three.js build</a></li>
 					<li><a href="https://github.com/mrdoob/three.js/blob/master/examples/js/loaders/GLTFLoader.js">GLTFLoader</a></li>
-					<li><a href="https://github.com/pixiv/three-vrm/releases">A build of @pixiv/three-vrm</a></li>
+					<li><a href="https://unpkg.com/browse/@pixiv/three-vrm/lib/">A build of @pixiv/three-vrm</a><ul>
+							<li><code>.module</code> ones are ESM, otherwise it&#39;s UMD and injects its modules into global <code>THREE</code></li>
+							<li><code>.min</code> ones are minified (for production), otherwise it&#39;s not minified and it comes with source maps</li>
+						</ul>
+					</li>
 				</ul>
 				<p>Code like this:</p>
-				<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;three.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;GLTFLoader.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;three-vrm.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+				<pre><code class="language-html"><span style="color: #800000">&lt;script</span><span style="color: #000000FF"> </span><span style="color: #FF0000">src</span><span style="color: #000000FF">=</span><span style="color: #0000FF">&quot;three.js&quot;</span><span style="color: #800000">&gt;&lt;/script&gt;</span>
+<span style="color: #800000">&lt;script</span><span style="color: #000000FF"> </span><span style="color: #FF0000">src</span><span style="color: #000000FF">=</span><span style="color: #0000FF">&quot;GLTFLoader.js&quot;</span><span style="color: #800000">&gt;&lt;/script&gt;</span>
+<span style="color: #800000">&lt;script</span><span style="color: #000000FF"> </span><span style="color: #FF0000">src</span><span style="color: #000000FF">=</span><span style="color: #0000FF">&quot;three-vrm.js&quot;</span><span style="color: #800000">&gt;&lt;/script&gt;</span>
 
-<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-<span class="hljs-keyword">const</span> scene = <span class="hljs-keyword">new</span> THREE.Scene();
+<span style="color: #800000">&lt;script&gt;</span>
+<span style="color: #0000FF">const</span><span style="color: #000000FF"> </span><span style="color: #0070C1">scene</span><span style="color: #000000FF"> </span><span style="color: #000000">=</span><span style="color: #000000FF"> </span><span style="color: #0000FF">new</span><span style="color: #000000FF"> </span><span style="color: #267F99">THREE</span><span style="color: #000000FF">.</span><span style="color: #267F99">Scene</span><span style="color: #000000FF">();</span>
 
-<span class="hljs-keyword">const</span> loader = <span class="hljs-keyword">new</span> THREE.GLTFLoader();
-loader.load(
+<span style="color: #0000FF">const</span><span style="color: #000000FF"> </span><span style="color: #0070C1">loader</span><span style="color: #000000FF"> </span><span style="color: #000000">=</span><span style="color: #000000FF"> </span><span style="color: #0000FF">new</span><span style="color: #000000FF"> </span><span style="color: #267F99">THREE</span><span style="color: #000000FF">.</span><span style="color: #267F99">GLTFLoader</span><span style="color: #000000FF">();</span>
+<span style="color: #001080">loader</span><span style="color: #000000FF">.</span><span style="color: #795E26">load</span><span style="color: #000000FF">(</span>
 
-    <span class="hljs-comment">// URL of the VRM you want to load</span>
-    <span class="hljs-string">&#x27;/models/three-vrm-girl.vrm&#x27;</span>,
+<span style="color: #000000FF">    </span><span style="color: #008000">// URL of the VRM you want to load</span>
+<span style="color: #000000FF">    </span><span style="color: #A31515">&#039;/models/three-vrm-girl.vrm&#039;</span><span style="color: #000000FF">,</span>
 
-    <span class="hljs-comment">// called when the resource is loaded</span>
-    <span class="hljs-function">(<span class="hljs-params"> gltf </span>) =&gt;</span> {
+<span style="color: #000000FF">    </span><span style="color: #008000">// called when the resource is loaded</span>
+<span style="color: #000000FF">    ( </span><span style="color: #001080">gltf</span><span style="color: #000000FF"> ) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000FF"> {</span>
 
-        <span class="hljs-comment">// generate a VRM instance from gltf</span>
-        THREE.VRM.from( gltf ).then( <span class="hljs-function">(<span class="hljs-params"> vrm </span>) =&gt;</span> {
+<span style="color: #000000FF">        </span><span style="color: #008000">// generate a VRM instance from gltf</span>
+<span style="color: #000000FF">        </span><span style="color: #0070C1">THREE</span><span style="color: #000000FF">.</span><span style="color: #0070C1">VRM</span><span style="color: #000000FF">.</span><span style="color: #795E26">from</span><span style="color: #000000FF">( </span><span style="color: #001080">gltf</span><span style="color: #000000FF"> ).</span><span style="color: #795E26">then</span><span style="color: #000000FF">( ( </span><span style="color: #001080">vrm</span><span style="color: #000000FF"> ) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000FF"> {</span>
 
-            <span class="hljs-comment">// add the loaded vrm to the scene</span>
-            scene.add( vrm.scene );
+<span style="color: #000000FF">            </span><span style="color: #008000">// add the loaded vrm to the scene</span>
+<span style="color: #000000FF">            </span><span style="color: #001080">scene</span><span style="color: #000000FF">.</span><span style="color: #795E26">add</span><span style="color: #000000FF">( </span><span style="color: #001080">vrm</span><span style="color: #000000FF">.</span><span style="color: #001080">scene</span><span style="color: #000000FF"> );</span>
 
-            <span class="hljs-comment">// deal with vrm features</span>
-            <span class="hljs-built_in">console</span>.log( vrm );
+<span style="color: #000000FF">            </span><span style="color: #008000">// deal with vrm features</span>
+<span style="color: #000000FF">            </span><span style="color: #001080">console</span><span style="color: #000000FF">.</span><span style="color: #795E26">log</span><span style="color: #000000FF">( </span><span style="color: #001080">vrm</span><span style="color: #000000FF"> );</span>
 
-        } );
+<span style="color: #000000FF">        } );</span>
 
-    },
+<span style="color: #000000FF">    },</span>
 
-    <span class="hljs-comment">// called while loading is progressing</span>
-    <span class="hljs-function">(<span class="hljs-params"> progress </span>) =&gt;</span> <span class="hljs-built_in">console</span>.log( <span class="hljs-string">&#x27;Loading model...&#x27;</span>, <span class="hljs-number">100.0</span> * ( progress.loaded / progress.total ), <span class="hljs-string">&#x27;%&#x27;</span> ),
+<span style="color: #000000FF">    </span><span style="color: #008000">// called while loading is progressing</span>
+<span style="color: #000000FF">    ( </span><span style="color: #001080">progress</span><span style="color: #000000FF"> ) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000FF"> </span><span style="color: #001080">console</span><span style="color: #000000FF">.</span><span style="color: #795E26">log</span><span style="color: #000000FF">( </span><span style="color: #A31515">&#039;Loading model...&#039;</span><span style="color: #000000FF">, </span><span style="color: #098658">100.0</span><span style="color: #000000FF"> </span><span style="color: #000000">*</span><span style="color: #000000FF"> ( </span><span style="color: #001080">progress</span><span style="color: #000000FF">.</span><span style="color: #001080">loaded</span><span style="color: #000000FF"> </span><span style="color: #000000">/</span><span style="color: #000000FF"> </span><span style="color: #001080">progress</span><span style="color: #000000FF">.</span><span style="color: #001080">total</span><span style="color: #000000FF"> ), </span><span style="color: #A31515">&#039;%&#039;</span><span style="color: #000000FF"> ),</span>
 
-    <span class="hljs-comment">// called when loading has errors</span>
-    <span class="hljs-function">(<span class="hljs-params"> error </span>) =&gt;</span> <span class="hljs-built_in">console</span>.error( error )
+<span style="color: #000000FF">    </span><span style="color: #008000">// called when loading has errors</span>
+<span style="color: #000000FF">    ( </span><span style="color: #001080">error</span><span style="color: #000000FF"> ) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000FF"> </span><span style="color: #001080">console</span><span style="color: #000000FF">.</span><span style="color: #795E26">error</span><span style="color: #000000FF">( </span><span style="color: #001080">error</span><span style="color: #000000FF"> )</span>
 
-);
-</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<span style="color: #000000FF">);</span>
+<span style="color: #800000">&lt;/script&gt;</span>
+</code></pre>
 				<a href="#via-npm" id="via-npm" style="color: inherit; text-decoration: none;">
 					<h3>via npm</h3>
 				</a>
 				<p>Install <a href="https://www.npmjs.com/package/three"><code>three</code></a> and <a href="https://www.npmjs.com/package/@pixiv/three-vrm"><code>@pixiv/three-vrm</code></a> :</p>
-				<pre><code class="language-sh">npm install three @pixiv/three-vrm</code></pre>
+				<pre><code class="language-sh"><span style="color: #000000">npm install three @pixiv/three-vrm</span>
+</code></pre>
 				<p>Code like this:</p>
-				<pre><code class="language-javascript"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> THREE <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;three&#x27;</span>;
-<span class="hljs-keyword">import</span> { GLTFLoader } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;three/examples/jsm/loaders/GLTFLoader&#x27;</span>;
-<span class="hljs-keyword">import</span> { VRM } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@pixiv/three-vrm&#x27;</span>;
+				<pre><code class="language-javascript"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #0000FF">*</span><span style="color: #000000"> </span><span style="color: #AF00DB">as</span><span style="color: #000000"> </span><span style="color: #001080">THREE</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;three&#039;</span><span style="color: #000000">;</span>
+<span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">GLTFLoader</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;three/examples/jsm/loaders/GLTFLoader&#039;</span><span style="color: #000000">;</span>
+<span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">VRM</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@pixiv/three-vrm&#039;</span><span style="color: #000000">;</span>
 
-<span class="hljs-keyword">const</span> scene = <span class="hljs-keyword">new</span> THREE.Scene();
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">scene</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #267F99">THREE</span><span style="color: #000000">.</span><span style="color: #267F99">Scene</span><span style="color: #000000">();</span>
 
-<span class="hljs-keyword">const</span> loader = <span class="hljs-keyword">new</span> GLTFLoader();
-loader.load(
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">loader</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #267F99">GLTFLoader</span><span style="color: #000000">();</span>
+<span style="color: #001080">loader</span><span style="color: #000000">.</span><span style="color: #795E26">load</span><span style="color: #000000">(</span>
 
-    <span class="hljs-comment">// URL of the VRM you want to load</span>
-    <span class="hljs-string">&#x27;/models/three-vrm-girl.vrm&#x27;</span>,
+<span style="color: #000000">    </span><span style="color: #008000">// URL of the VRM you want to load</span>
+<span style="color: #000000">    </span><span style="color: #A31515">&#039;/models/three-vrm-girl.vrm&#039;</span><span style="color: #000000">,</span>
 
-    <span class="hljs-comment">// called when the resource is loaded</span>
-    <span class="hljs-function">(<span class="hljs-params"> gltf </span>) =&gt;</span> {
+<span style="color: #000000">    </span><span style="color: #008000">// called when the resource is loaded</span>
+<span style="color: #000000">    ( </span><span style="color: #001080">gltf</span><span style="color: #000000"> ) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
 
-        <span class="hljs-comment">// generate a VRM instance from gltf</span>
-        VRM.from( gltf ).then( <span class="hljs-function">(<span class="hljs-params"> vrm </span>) =&gt;</span> {
+<span style="color: #000000">        </span><span style="color: #008000">// generate a VRM instance from gltf</span>
+<span style="color: #000000">        </span><span style="color: #0070C1">VRM</span><span style="color: #000000">.</span><span style="color: #795E26">from</span><span style="color: #000000">( </span><span style="color: #001080">gltf</span><span style="color: #000000"> ).</span><span style="color: #795E26">then</span><span style="color: #000000">( ( </span><span style="color: #001080">vrm</span><span style="color: #000000"> ) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
 
-            <span class="hljs-comment">// add the loaded vrm to the scene</span>
-            scene.add( vrm.scene );
+<span style="color: #000000">            </span><span style="color: #008000">// add the loaded vrm to the scene</span>
+<span style="color: #000000">            </span><span style="color: #001080">scene</span><span style="color: #000000">.</span><span style="color: #795E26">add</span><span style="color: #000000">( </span><span style="color: #001080">vrm</span><span style="color: #000000">.</span><span style="color: #001080">scene</span><span style="color: #000000"> );</span>
 
-            <span class="hljs-comment">// deal with vrm features</span>
-            <span class="hljs-built_in">console</span>.log( vrm );
+<span style="color: #000000">            </span><span style="color: #008000">// deal with vrm features</span>
+<span style="color: #000000">            </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">( </span><span style="color: #001080">vrm</span><span style="color: #000000"> );</span>
 
-        } );
+<span style="color: #000000">        } );</span>
 
-    },
+<span style="color: #000000">    },</span>
 
-    <span class="hljs-comment">// called while loading is progressing</span>
-    <span class="hljs-function">(<span class="hljs-params"> progress </span>) =&gt;</span> <span class="hljs-built_in">console</span>.log( <span class="hljs-string">&#x27;Loading model...&#x27;</span>, <span class="hljs-number">100.0</span> * ( progress.loaded / progress.total ), <span class="hljs-string">&#x27;%&#x27;</span> ),
+<span style="color: #000000">    </span><span style="color: #008000">// called while loading is progressing</span>
+<span style="color: #000000">    ( </span><span style="color: #001080">progress</span><span style="color: #000000"> ) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">( </span><span style="color: #A31515">&#039;Loading model...&#039;</span><span style="color: #000000">, </span><span style="color: #098658">100.0</span><span style="color: #000000"> * ( </span><span style="color: #001080">progress</span><span style="color: #000000">.</span><span style="color: #001080">loaded</span><span style="color: #000000"> / </span><span style="color: #001080">progress</span><span style="color: #000000">.</span><span style="color: #001080">total</span><span style="color: #000000"> ), </span><span style="color: #A31515">&#039;%&#039;</span><span style="color: #000000"> ),</span>
 
-    <span class="hljs-comment">// called when loading has errors</span>
-    <span class="hljs-function">(<span class="hljs-params"> error </span>) =&gt;</span> <span class="hljs-built_in">console</span>.error( error )
+<span style="color: #000000">    </span><span style="color: #008000">// called when loading has errors</span>
+<span style="color: #000000">    ( </span><span style="color: #001080">error</span><span style="color: #000000"> ) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">error</span><span style="color: #000000">( </span><span style="color: #001080">error</span><span style="color: #000000"> )</span>
 
-);</code></pre>
+<span style="color: #000000">);</span>
+</code></pre>
 				<a href="#contributing" id="contributing" style="color: inherit; text-decoration: none;">
 					<h2>Contributing</h2>
 				</a>
@@ -174,8 +177,8 @@ loader.load(
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">
 				<ul>
-					<li class="globals  ">
-						<a href="globals.html"><em>Globals</em></a>
+					<li class=" ">
+						<a href="modules.html">Exports</a>
 					</li>
 					<li class=" tsd-kind-namespace">
 						<a href="modules/gltfschema.html">GLTFSchema</a>
@@ -187,9 +190,6 @@ loader.load(
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-enum">
-						<a href="enums/firstpersonflag.html" class="tsd-kind-icon">First<wbr>Person<wbr>Flag</a>
-					</li>
 					<li class=" tsd-kind-enum">
 						<a href="enums/mtoonmaterialcullmode.html" class="tsd-kind-icon">MToon<wbr>Material<wbr>Cull<wbr>Mode</a>
 					</li>
@@ -206,16 +206,10 @@ loader.load(
 						<a href="enums/mtoonmaterialrendermode.html" class="tsd-kind-icon">MToon<wbr>Material<wbr>Render<wbr>Mode</a>
 					</li>
 					<li class=" tsd-kind-enum">
-						<a href="enums/vrmblendshapematerialvaluetype.html" class="tsd-kind-icon">VRMBlend<wbr>Shape<wbr>Material<wbr>Value<wbr>Type</a>
-					</li>
-					<li class=" tsd-kind-enum">
 						<a href="enums/vrmunlitmaterialrendertype.html" class="tsd-kind-icon">VRMUnlit<wbr>Material<wbr>Render<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/mtoonmaterial.html" class="tsd-kind-icon">MToon<wbr>Material</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/matrix4inversecache.html" class="tsd-kind-icon">Matrix4<wbr>Inverse<wbr>Cache</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/vrm.html" class="tsd-kind-icon">VRM</a>
@@ -254,9 +248,6 @@ loader.load(
 						<a href="classes/vrmimporter.html" class="tsd-kind-icon">VRMImporter</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="classes/vrmimporterdebug.html" class="tsd-kind-icon">VRMImporter<wbr>Debug</a>
-					</li>
-					<li class=" tsd-kind-class">
 						<a href="classes/vrmlookatapplyer.html" class="tsd-kind-icon">VRMLook<wbr>AtApplyer</a>
 					</li>
 					<li class=" tsd-kind-class">
@@ -269,13 +260,7 @@ loader.load(
 						<a href="classes/vrmlookathead.html" class="tsd-kind-icon">VRMLook<wbr>AtHead</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="classes/vrmlookatheaddebug.html" class="tsd-kind-icon">VRMLook<wbr>AtHead<wbr>Debug</a>
-					</li>
-					<li class=" tsd-kind-class">
 						<a href="classes/vrmlookatimporter.html" class="tsd-kind-icon">VRMLook<wbr>AtImporter</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/vrmlookatimporterdebug.html" class="tsd-kind-icon">VRMLook<wbr>AtImporter<wbr>Debug</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/vrmmaterialimporter.html" class="tsd-kind-icon">VRMMaterial<wbr>Importer</a>
@@ -300,9 +285,6 @@ loader.load(
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/vrmspringbonemanager.html" class="tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Manager</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/vrmspringbonemanagerdebug.html" class="tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Manager<wbr>Debug</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/vrmunlitmaterial.html" class="tsd-kind-icon">VRMUnlit<wbr>Material</a>
@@ -359,166 +341,31 @@ loader.load(
 						<a href="interfaces/vrmunlitmaterialparameters.html" class="tsd-kind-icon">VRMUnlit<wbr>Material<wbr>Parameters</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#gltfmesh" class="tsd-kind-icon">GLTFMesh</a>
+						<a href="modules.html#gltfmesh" class="tsd-kind-icon">GLTFMesh</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#gltfnode" class="tsd-kind-icon">GLTFNode</a>
+						<a href="modules.html#gltfnode" class="tsd-kind-icon">GLTFNode</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#gltfprimitive" class="tsd-kind-icon">GLTFPrimitive</a>
+						<a href="modules.html#gltfprimitive" class="tsd-kind-icon">GLTFPrimitive</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#rawvector3" class="tsd-kind-icon">Raw<wbr>Vector3</a>
+						<a href="modules.html#rawvector3" class="tsd-kind-icon">Raw<wbr>Vector3</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#rawvector4" class="tsd-kind-icon">Raw<wbr>Vector4</a>
+						<a href="modules.html#rawvector4" class="tsd-kind-icon">Raw<wbr>Vector4</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#vrmhumanbonearray" class="tsd-kind-icon">VRMHuman<wbr>Bone<wbr>Array</a>
+						<a href="modules.html#vrmhumanbones" class="tsd-kind-icon">VRMHuman<wbr>Bones</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#vrmhumanbones" class="tsd-kind-icon">VRMHuman<wbr>Bones</a>
+						<a href="modules.html#vrmspringbonecollidermesh" class="tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Collider<wbr>Mesh</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#vrmspringbonecollidermesh" class="tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Collider<wbr>Mesh</a>
-					</li>
-					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#vrmspringbonegroup" class="tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Group</a>
-					</li>
-					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#vrmspringbonegroupdebug" class="tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Group<wbr>Debug</a>
+						<a href="modules.html#vrmspringbonegroup" class="tsd-kind-icon">VRMSpring<wbr>Bone<wbr>Group</a>
 					</li>
 					<li class=" tsd-kind-variable">
-						<a href="globals.html#deg2rad" class="tsd-kind-icon">DEG2RAD</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#identity_matrix4" class="tsd-kind-icon">IDENTITY_<wbr>MATRIX4</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#identity_quaternion" class="tsd-kind-icon">IDENTITY_<wbr>QUATERNION</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#tau" class="tsd-kind-icon">TAU</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#vector3_front" class="tsd-kind-icon">VECTOR3_<wbr>FRONT</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#vrm_gizmo_render_order" class="tsd-kind-icon">VRM_<wbr>GIZMO_<wbr>RENDER_<wbr>ORDER</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#_camera" class="tsd-kind-icon">_camera</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#_collidergizmomaterial" class="tsd-kind-icon">_collider<wbr>Gizmo<wbr>Material</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#_collidermaterial" class="tsd-kind-icon">_collider<wbr>Material</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#_color" class="tsd-kind-icon">_color</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#_euler" class="tsd-kind-icon">_euler</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#_mata" class="tsd-kind-icon">_matA</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#_matb" class="tsd-kind-icon">_matB</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#_plane" class="tsd-kind-icon">_plane</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#_position" class="tsd-kind-icon">_position</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#_quat" class="tsd-kind-icon">_quat</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#_quata" class="tsd-kind-icon">_quatA</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#_rotation" class="tsd-kind-icon">_rotation</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#_scale" class="tsd-kind-icon">_scale</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#_scene" class="tsd-kind-icon">_scene</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#_v2" class="tsd-kind-icon">_v2</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#_v2a" class="tsd-kind-icon">_v2A</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#_v3" class="tsd-kind-icon">_v3</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#_v3a" class="tsd-kind-icon">_v3A</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#_v3b" class="tsd-kind-icon">_v3B</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#_v3c" class="tsd-kind-icon">_v3C</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#_v4" class="tsd-kind-icon">_v4</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#deepdispose" class="tsd-kind-icon">deep<wbr>Dispose</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#dispose" class="tsd-kind-icon">dispose</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#disposematerial" class="tsd-kind-icon">dispose<wbr>Material</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#evaluatecurve" class="tsd-kind-icon">evaluate<wbr>Curve</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#extractthumbnailblob" class="tsd-kind-icon">extract<wbr>Thumbnail<wbr>Blob</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#getencodingcomponents" class="tsd-kind-icon">get<wbr>Encoding<wbr>Components</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#gettexeldecodingfunction" class="tsd-kind-icon">get<wbr>Texel<wbr>Decoding<wbr>Function</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#getworldpositionlite" class="tsd-kind-icon">get<wbr>World<wbr>Position<wbr>Lite</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#getworldquaternionlite" class="tsd-kind-icon">get<wbr>World<wbr>Quaternion<wbr>Lite</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#getworldscalelite" class="tsd-kind-icon">get<wbr>World<wbr>Scale<wbr>Lite</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#hermitespline" class="tsd-kind-icon">hermite<wbr>Spline</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#linstep" class="tsd-kind-icon">linstep</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="globals.html#mat4invertcompat" class="tsd-kind-icon">mat4<wbr>Invert<wbr>Compat</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="globals.html#quatinvertcompat" class="tsd-kind-icon">quat<wbr>Invert<wbr>Compat</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#removeunnecessaryjoints" class="tsd-kind-icon">remove<wbr>Unnecessary<wbr>Joints</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#renamematerialproperty" class="tsd-kind-icon">rename<wbr>Material<wbr>Property</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#saturate" class="tsd-kind-icon">saturate</a>
+						<a href="modules.html#vrm_gizmo_render_order" class="tsd-kind-icon">VRM_<wbr>GIZMO_<wbr>RENDER_<wbr>ORDER</a>
 					</li>
 				</ul>
 			</nav>
