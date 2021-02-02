@@ -108,7 +108,7 @@ export class VRMExpressionImporter {
             return;
           }
 
-          const primitives = await gltfExtractPrimitivesFromNode(gltf, bind.node);
+          const primitives = (await gltfExtractPrimitivesFromNode(gltf, bind.node))!;
           const morphTargetIndex = bind.index;
 
           // check if the mesh has the target morph target
@@ -244,7 +244,7 @@ export class VRMExpressionImporter {
 
             await Promise.all(
               nodesUsingMesh.map(async (nodeIndex) => {
-                const primitives = await gltfExtractPrimitivesFromNode(gltf, nodeIndex);
+                const primitives = (await gltfExtractPrimitivesFromNode(gltf, nodeIndex))!;
 
                 // check if the mesh has the target morph target
                 if (

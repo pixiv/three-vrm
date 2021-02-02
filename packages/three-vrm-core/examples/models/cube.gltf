@@ -532,7 +532,27 @@
             }
           ]
         }
-      ]
+      ],
+      "firstPerson": {
+        "meshAnnotations": [
+          {
+            "node": 16,
+            "firstPersonType": "thirdPersonOnly"
+          },
+          {
+            "node": 17,
+            "firstPersonType": "thirdPersonOnly"
+          },
+          {
+            "node": 18,
+            "firstPersonType": "thirdPersonOnly"
+          },
+          {
+            "node": 19,
+            "firstPersonType": "thirdPersonOnly"
+          }
+        ]
+      }
     }
   },
   "extras": {}
