@@ -2,6 +2,7 @@ export * from './Expression';
 export * from './ExpressionMaterialColorBind';
 export * from './ExpressionMaterialColorType';
 export * from './ExpressionMorphTargetBind';
+export * from './ExpressionOverrideType';
 export * from './ExpressionPreset';
 export * from './ExpressionTextureTransformBind';
 export * from './FirstPerson';

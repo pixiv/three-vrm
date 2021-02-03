@@ -1,5 +1,6 @@
 import type { ExpressionMaterialColorBind } from './ExpressionMaterialColorBind';
 import type { ExpressionMorphTargetBind } from './ExpressionMorphTargetBind';
+import type { ExpressionOverrideType } from './ExpressionOverrideType';
 import type { ExpressionPreset } from './ExpressionPreset';
 import type { ExpressionTextureTransformBind } from './ExpressionTextureTransformBind';
 
@@ -38,19 +39,19 @@ export interface Expression {
   isBinary?: boolean;
 
   /**
-   * Disable Blink when this Expression is enabled
+   * Override values of Blink expressions when this Expression is enabled
    */
-  ignoreBlink?: boolean;
+  overrideBlink?: ExpressionOverrideType;
 
   /**
-   * Disable LookAt when this Expression is enabled
+   * Override values of LookAt expressions when this Expression is enabled
    */
-  ignoreLookAt?: boolean;
+  overrideLookAt?: ExpressionOverrideType;
 
   /**
-   * Disable Mouth when this Expression is enabled
+   * Override values of Mouth expressions when this Expression is enabled
    */
-  ignoreMouth?: boolean;
+  overrideMouth?: ExpressionOverrideType;
 
   extensions?: { [key: string]: { [key: string]: any } };
   extras?: any;
