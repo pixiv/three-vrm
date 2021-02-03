@@ -3,6 +3,7 @@ import type { VRMExpressionMaterialColorBind } from './VRMExpressionMaterialColo
 import type { VRMExpressionMaterialColorBindState } from './VRMExpressionMaterialColorBindState';
 import type { VRMExpressionMaterialColorType } from './VRMExpressionMaterialColorType';
 import type { VRMExpressionMorphTargetBind } from './VRMExpressionMorphTargetBind';
+import type { VRMExpressionOverrideType } from './VRMExpressionOverrideType';
 import type { VRMExpressionTextureTransformBind } from './VRMExpressionTextureTransformBind';
 import type { VRMExpressionTextureTransformBindState } from './VRMExpressionTextureTransformBindState';
 
@@ -65,23 +66,65 @@ export class VRMExpression extends THREE.Object3D {
   public isBinary = false;
 
   /**
-   * Disable Blink when this Expression is enabled.
+   * Specify how the expression overrides blink expressions.
    */
-  public ignoreBlink = false;
+  public overrideBlink: VRMExpressionOverrideType = 'none';
 
   /**
-   * Disable LookAt when this Expression is enabled.
+   * Specify how the expression overrides lookAt expressions.
    */
-  public ignoreLookAt = false;
+  public overrideLookAt: VRMExpressionOverrideType = 'none';
 
   /**
-   * Disable Mouth when this Expression is enabled.
+   * Specify how the expression overrides mouth expressions.
    */
-  public ignoreMouth = false;
+  public overrideMouth: VRMExpressionOverrideType = 'none';
 
   private _materialColorBinds: (VRMExpressionMaterialColorBind & VRMExpressionMaterialColorBindState)[] = [];
   private _morphTargetBinds: VRMExpressionMorphTargetBind[] = [];
   private _textureTransformBinds: (VRMExpressionTextureTransformBind & VRMExpressionTextureTransformBindState)[] = [];
+
+  /**
+   * A value represents how much it should override blink expressions.
+   * `0.0` == no override at all, `1.0` == completely block the expressions.
+   */
+  public get overrideBlinkAmount(): number {
+    if (this.overrideBlink === 'block') {
+      return 0.0 < this.weight ? 1.0 : 0.0;
+    } else if (this.overrideBlink === 'blend') {
+      return this.weight;
+    } else {
+      return 0.0;
+    }
+  }
+
+  /**
+   * A value represents how much it should override lookAt expressions.
+   * `0.0` == no override at all, `1.0` == completely block the expressions.
+   */
+  public get overrideLookAtAmount(): number {
+    if (this.overrideLookAt === 'block') {
+      return 0.0 < this.weight ? 1.0 : 0.0;
+    } else if (this.overrideLookAt === 'blend') {
+      return this.weight;
+    } else {
+      return 0.0;
+    }
+  }
+
+  /**
+   * A value represents how much it should override mouth expressions.
+   * `0.0` == no override at all, `1.0` == completely block the expressions.
+   */
+  public get overrideMouthAmount(): number {
+    if (this.overrideMouth === 'block') {
+      return 0.0 < this.weight ? 1.0 : 0.0;
+    } else if (this.overrideMouth === 'blend') {
+      return this.weight;
+    } else {
+      return 0.0;
+    }
+  }
 
   constructor(expressionName: string) {
     super();
@@ -176,8 +219,16 @@ export class VRMExpression extends THREE.Object3D {
    * Apply weight to every assigned blend shapes.
    * Should be called every frame.
    */
-  public applyWeight(): void {
-    const w = this.isBinary ? (this.weight === 0.0 ? 0.0 : 1.0) : this.weight;
+  public applyWeight(options?: {
+    /**
+     * Multiplies a value to its weight to apply.
+     * Intended to be used for overriding an expression weight by another expression.
+     * See also: {@link overrideBlink}, {@link overrideLookAt}, {@link overrideMouth}
+     */
+    multiplier?: number;
+  }): void {
+    let actualWeight = this.isBinary ? (this.weight === 0.0 ? 0.0 : 1.0) : this.weight;
+    actualWeight *= options?.multiplier ?? 1.0;
 
     this._morphTargetBinds.forEach((bind) => {
       bind.primitives.forEach((mesh) => {
@@ -185,7 +236,7 @@ export class VRMExpression extends THREE.Object3D {
           return;
         } // TODO: we should kick this at `addBind`
 
-        mesh.morphTargetInfluences[bind.index] += w * bind.weight;
+        mesh.morphTargetInfluences[bind.index] += actualWeight * bind.weight;
       });
     });
 
@@ -195,7 +246,7 @@ export class VRMExpression extends THREE.Object3D {
         return;
       } // TODO: we should kick this at `addMaterialValue`
 
-      target.add(_color.copy(bind.deltaValue).multiplyScalar(w));
+      target.add(_color.copy(bind.deltaValue).multiplyScalar(actualWeight));
 
       if (typeof (bind.material as any).shouldApplyUniforms === 'boolean') {
         (bind.material as any).shouldApplyUniforms = true;
@@ -209,8 +260,8 @@ export class VRMExpression extends THREE.Object3D {
           return;
         } // TODO: we should kick this at `addMaterialValue`
 
-        target.offset.add(_v2.copy(property.deltaOffset).multiplyScalar(w));
-        target.repeat.add(_v2.copy(property.deltaScaling).multiplyScalar(w));
+        target.offset.add(_v2.copy(property.deltaOffset).multiplyScalar(actualWeight));
+        target.repeat.add(_v2.copy(property.deltaScaling).multiplyScalar(actualWeight));
 
         target.needsUpdate = true;
       });

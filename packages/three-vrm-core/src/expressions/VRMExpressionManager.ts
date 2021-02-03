@@ -4,6 +4,26 @@ import type { VRMExpression } from './VRMExpression';
 
 export class VRMExpressionManager {
   /**
+   * A set of presets that will be overridden by {@link VRMExpression.overrideBlink}.
+   */
+  private static readonly _blinkPresetSet = new Set<VRMExpressionPreset>(['blink', 'blinkLeft', 'blinkRight']);
+
+  /**
+   * A set of presets that will be overridden by {@link VRMExpression.overrideLookAt}.
+   */
+  private static readonly _lookAtPresetSet = new Set<VRMExpressionPreset>([
+    'lookLeft',
+    'lookRight',
+    'lookUp',
+    'lookDown',
+  ]);
+
+  /**
+   * A set of presets that will be overridden by {@link VRMExpression.overrideMouth}.
+   */
+  private static readonly _mouthPresetSet = new Set<VRMExpressionPreset>(['aa', 'ee', 'ih', 'oh', 'ou']);
+
+  /**
    * A map from name to {@link VRMExpression}.
    */
   public readonly expressionMap: { [name: string]: VRMExpression } = {};
@@ -17,6 +37,24 @@ export class VRMExpressionManager {
    * A list of name of custom expressions.
    */
   public readonly customExpressionNames: string[] = [];
+
+  /**
+   * A set of blink expressions.
+   * See also: {@link _blinkPresets}
+   */
+  private readonly _blinkExpressionSet = new Set<VRMExpression>();
+
+  /**
+   * A set of lookAt expressions.
+   * See also: {@link _lookAtPresets}
+   */
+  private readonly _lookAtExpressionSet = new Set<VRMExpression>();
+
+  /**
+   * A set of mouth expressions.
+   * See also: {@link _mouthPresets}
+   */
+  private readonly _mouthExpressionSet = new Set<VRMExpression>();
 
   /**
    * Create a new {@link VRMExpressionManager}.
@@ -58,6 +96,19 @@ export class VRMExpressionManager {
 
     if (presetName !== 'custom') {
       this.expressionPresetMap[presetName] = name;
+
+      // add overridden expressions to corresponding sets
+      if (VRMExpressionManager._blinkPresetSet.has(presetName)) {
+        this._blinkExpressionSet.add(expression);
+      }
+
+      if (VRMExpressionManager._lookAtPresetSet.has(presetName)) {
+        this._lookAtExpressionSet.add(expression);
+      }
+
+      if (VRMExpressionManager._mouthPresetSet.has(presetName)) {
+        this._mouthExpressionSet.add(expression);
+      }
     } else {
       this.customExpressionNames.push(name);
     }
@@ -122,12 +173,56 @@ export class VRMExpressionManager {
    * Update every expressions.
    */
   public update(): void {
+    // see how much we should override certain expressions
+    const weightMultipliers = this._calculateWeightMultipliers();
+
+    // reset expression binds first
     Object.values(this.expressionMap).forEach((expression) => {
       expression.clearAppliedWeight();
     });
 
+    // then apply binds
     Object.values(this.expressionMap).forEach((expression) => {
-      expression.applyWeight();
+      let multiplier = 1.0;
+
+      if (this._blinkExpressionSet.has(expression)) {
+        multiplier *= weightMultipliers.blink;
+      }
+
+      if (this._lookAtExpressionSet.has(expression)) {
+        multiplier *= weightMultipliers.lookAt;
+      }
+
+      if (this._mouthExpressionSet.has(expression)) {
+        multiplier *= weightMultipliers.mouth;
+      }
+
+      expression.applyWeight({ multiplier });
     });
+  }
+
+  /**
+   * Calculate sum of override amounts to see how much we should multiply weights of certain expressions.
+   */
+  private _calculateWeightMultipliers(): {
+    blink: number;
+    lookAt: number;
+    mouth: number;
+  } {
+    let blink = 1.0;
+    let lookAt = 1.0;
+    let mouth = 1.0;
+
+    Object.values(this.expressionMap).forEach((expression) => {
+      blink -= expression.overrideBlinkAmount;
+      lookAt -= expression.overrideLookAtAmount;
+      mouth -= expression.overrideMouthAmount;
+    });
+
+    blink = Math.max(0.0, blink);
+    lookAt = Math.max(0.0, lookAt);
+    mouth = Math.max(0.0, mouth);
+
+    return { blink, lookAt, mouth };
   }
 }
