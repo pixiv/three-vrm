@@ -99,9 +99,9 @@ export class VRMExpressionImporter {
         gltf.scene.add(expression);
 
         expression.isBinary = schemaExpression.isBinary ?? false;
-        expression.ignoreBlink = schemaExpression.ignoreBlink ?? false;
-        expression.ignoreLookAt = schemaExpression.ignoreLookAt ?? false;
-        expression.ignoreMouth = schemaExpression.ignoreMouth ?? false;
+        expression.overrideBlink = schemaExpression.overrideBlink ?? 'none';
+        expression.overrideLookAt = schemaExpression.overrideLookAt ?? 'none';
+        expression.overrideMouth = schemaExpression.overrideMouth ?? 'none';
 
         schemaExpression.morphTargetBinds?.forEach(async (bind) => {
           if (bind.node === undefined || bind.index === undefined) {
