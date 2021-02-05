@@ -1,7 +1,7 @@
 import * as VRMSchema from '@pixiv/types-vrm-0.0';
 import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
-import { GLTFMesh, GLTFPrimitive } from '../types';
+import { gltfExtractPrimitivesFromNode } from '../utils/gltfExtractPrimitivesFromNode';
 import { renameMaterialProperty } from '../utils/renameMaterialProperty';
 import { VRMBlendShapeGroup } from './VRMBlendShapeGroup';
 import { VRMBlendShapePresetName } from './VRMBlendShapePresetName';
@@ -65,30 +65,41 @@ export class VRMBlendShapeImporter {
               return;
             }
 
-            const morphMeshes: GLTFMesh = await gltf.parser.getDependency('mesh', bind.mesh);
-            const primitives: GLTFPrimitive[] =
-              morphMeshes.type === 'Group'
-                ? (morphMeshes.children as Array<GLTFPrimitive>)
-                : [morphMeshes as GLTFPrimitive];
-            const morphTargetIndex = bind.index;
-            if (
-              !primitives.every(
-                (primitive) =>
-                  Array.isArray(primitive.morphTargetInfluences) &&
-                  morphTargetIndex < primitive.morphTargetInfluences.length,
-              )
-            ) {
-              console.warn(
-                `VRMBlendShapeImporter: ${schemaGroup.name} attempts to index ${morphTargetIndex}th morph but not found.`,
-              );
-              return;
-            }
-
-            group.addBind({
-              meshes: primitives,
-              morphTargetIndex,
-              weight: bind.weight || 100,
+            const nodesUsingMesh: number[] = [];
+            const nodes: any[] = gltf.parser.json.nodes;
+            nodes.forEach((node, i) => {
+              if (node.mesh === bind.mesh) {
+                nodesUsingMesh.push(i);
+              }
             });
+
+            const morphTargetIndex = bind.index;
+
+            await Promise.all(
+              nodesUsingMesh.map(async (nodeIndex) => {
+                const primitives = (await gltfExtractPrimitivesFromNode(gltf, nodeIndex))!;
+
+                // check if the mesh has the target morph target
+                if (
+                  !primitives.every(
+                    (primitive) =>
+                      Array.isArray(primitive.morphTargetInfluences) &&
+                      morphTargetIndex < primitive.morphTargetInfluences.length,
+                  )
+                ) {
+                  console.warn(
+                    `VRMBlendShapeImporter: ${schemaGroup.name} attempts to index ${morphTargetIndex}th morph but not found.`,
+                  );
+                  return;
+                }
+
+                group.addBind({
+                  meshes: primitives,
+                  morphTargetIndex,
+                  weight: bind.weight ?? 100,
+                });
+              }),
+            );
           });
         }
 
