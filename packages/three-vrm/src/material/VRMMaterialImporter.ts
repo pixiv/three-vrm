@@ -1,7 +1,7 @@
 import * as VRMSchema from '@pixiv/types-vrm-0.0';
 import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
-import { GLTFMesh, GLTFPrimitive } from '../types';
+import { gltfExtractPrimitivesFromNodes } from '../utils/gltfExtractPrimitivesFromNode';
 import { MToonMaterial, MToonMaterialOutlineWidthMode } from './MToonMaterial';
 import { VRMUnlitMaterial, VRMUnlitMaterialRenderType } from './VRMUnlitMaterial';
 
@@ -67,15 +67,14 @@ export class VRMMaterialImporter {
       return null;
     }
 
-    const meshesMap: GLTFMesh[] = await gltf.parser.getDependencies('mesh');
+    const nodePrimitivesMap = await gltfExtractPrimitivesFromNodes(gltf);
     const materialList: { [vrmMaterialIndex: number]: { surface: THREE.Material; outline?: THREE.Material } } = {};
     const materials: THREE.Material[] = []; // result
 
     await Promise.all(
-      meshesMap.map(async (mesh, meshIndex) => {
-        const schemaMesh = gltf.parser.json.meshes![meshIndex];
-        const primitives: GLTFPrimitive[] =
-          mesh.type === 'Group' ? (mesh.children as GLTFPrimitive[]) : [mesh as GLTFPrimitive];
+      Array.from(nodePrimitivesMap.entries()).map(async ([nodeIndex, primitives]) => {
+        const schemaNode: any = gltf.parser.json.nodes[nodeIndex];
+        const schemaMesh: any = gltf.parser.json.meshes[schemaNode.mesh!];
 
         await Promise.all(
           primitives.map(async (primitive, primitiveIndex) => {

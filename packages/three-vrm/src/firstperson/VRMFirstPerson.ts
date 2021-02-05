@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { GLTFMesh, GLTFNode } from '../types';
+import { GLTFNode, GLTFPrimitive } from '../types';
 import { getWorldQuaternionLite } from '../utils/math';
 
 const VECTOR3_FRONT = Object.freeze(new THREE.Vector3(0.0, 0.0, -1.0));
@@ -37,9 +37,9 @@ export class VRMRendererFirstPersonFlags {
   public firstPersonFlag: FirstPersonFlag;
 
   /**
-   * A mesh of the annotation entry.
+   * A mesh primitives of the annotation entry.
    */
-  public mesh: GLTFMesh;
+  public primitives: GLTFPrimitive[];
 
   /**
    * Create a new mesh annotation.
@@ -47,9 +47,9 @@ export class VRMRendererFirstPersonFlags {
    * @param firstPersonFlag A [[FirstPersonFlag]] of the annotation entry
    * @param node A node of the annotation entry.
    */
-  constructor(firstPersonFlag: string | undefined, mesh: GLTFMesh) {
+  constructor(firstPersonFlag: string | undefined, primitives: GLTFPrimitive[]) {
     this.firstPersonFlag = VRMRendererFirstPersonFlags._parseFirstPersonFlag(firstPersonFlag);
-    this.mesh = mesh;
+    this.primitives = primitives;
   }
 }
 
@@ -177,13 +177,15 @@ export class VRMFirstPerson {
 
     this._meshAnnotations.forEach((item) => {
       if (item.firstPersonFlag === FirstPersonFlag.FirstPersonOnly) {
-        item.mesh.layers.set(this._firstPersonOnlyLayer);
-        item.mesh.traverse((child) => child.layers.set(this._firstPersonOnlyLayer));
+        item.primitives.forEach((primitive) => {
+          primitive.layers.set(this._firstPersonOnlyLayer);
+        });
       } else if (item.firstPersonFlag === FirstPersonFlag.ThirdPersonOnly) {
-        item.mesh.layers.set(this._thirdPersonOnlyLayer);
-        item.mesh.traverse((child) => child.layers.set(this._thirdPersonOnlyLayer));
+        item.primitives.forEach((primitive) => {
+          primitive.layers.set(this._thirdPersonOnlyLayer);
+        });
       } else if (item.firstPersonFlag === FirstPersonFlag.Auto) {
-        this._createHeadlessModel(item.mesh);
+        this._createHeadlessModel(item.primitives);
       }
     });
   }
@@ -225,10 +227,7 @@ export class VRMFirstPerson {
     return count;
   }
 
-  private _createErasedMesh(
-    src: THREE.SkinnedMesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>,
-    erasingBonesIndex: number[],
-  ): THREE.SkinnedMesh {
+  private _createErasedMesh(src: THREE.SkinnedMesh, erasingBonesIndex: number[]): THREE.SkinnedMesh {
     const dst = new THREE.SkinnedMesh(src.geometry.clone(), src.material);
     dst.name = `${src.name}(erase)`;
     dst.frustumCulled = src.frustumCulled;
@@ -269,10 +268,7 @@ export class VRMFirstPerson {
     return dst;
   }
 
-  private _createHeadlessModelForSkinnedMesh(
-    parent: THREE.Object3D,
-    mesh: THREE.SkinnedMesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>,
-  ): void {
+  private _createHeadlessModelForSkinnedMesh(parent: THREE.Object3D, mesh: THREE.SkinnedMesh): void {
     const eraseBoneIndexes: number[] = [];
     mesh.skeleton.bones.forEach((bone, index) => {
       if (this._isEraseTarget(bone)) eraseBoneIndexes.push(index);
@@ -289,36 +285,25 @@ export class VRMFirstPerson {
     parent.add(newMesh);
   }
 
-  private _createHeadlessModel(node: GLTFNode): void {
-    if (node.type === 'Group') {
-      node.layers.set(this._thirdPersonOnlyLayer);
-      if (this._isEraseTarget(node)) {
-        node.traverse((child) => child.layers.set(this._thirdPersonOnlyLayer));
+  private _createHeadlessModel(primitives: GLTFPrimitive[]): void {
+    primitives.forEach((primitive) => {
+      if (primitive.type === 'SkinnedMesh') {
+        const skinnedMesh = primitive as THREE.SkinnedMesh;
+        this._createHeadlessModelForSkinnedMesh(skinnedMesh.parent!, skinnedMesh);
       } else {
-        const parent = new THREE.Group();
-        parent.name = `_headless_${node.name}`;
-        parent.layers.set(this._firstPersonOnlyLayer);
-        node.parent!.add(parent);
-        node.children
-          .filter((child) => child.type === 'SkinnedMesh')
-          .forEach((child) => {
-            const skinnedMesh = child as THREE.SkinnedMesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>;
-            this._createHeadlessModelForSkinnedMesh(parent, skinnedMesh);
-          });
+        if (this._isEraseTarget(primitive)) {
+          primitive.layers.set(this._thirdPersonOnlyLayer);
+        }
       }
-    } else if (node.type === 'SkinnedMesh') {
-      const skinnedMesh = node as THREE.SkinnedMesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>;
-      this._createHeadlessModelForSkinnedMesh(node.parent!, skinnedMesh);
-    } else {
-      if (this._isEraseTarget(node)) {
-        node.layers.set(this._thirdPersonOnlyLayer);
-        node.traverse((child) => child.layers.set(this._thirdPersonOnlyLayer));
-      }
-    }
+    });
   }
 
+  /**
+   * It just checks whether the node or its parent is the first person bone or not.
+   * @param bone The target bone
+   */
   private _isEraseTarget(bone: GLTFNode): boolean {
-    if (bone.name === this._firstPersonBone.name) {
+    if (bone === this._firstPersonBone) {
       return true;
     } else if (!bone.parent) {
       return false;

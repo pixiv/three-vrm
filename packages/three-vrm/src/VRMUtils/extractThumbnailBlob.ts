@@ -4,10 +4,8 @@ import { VRM } from '../VRM';
 const _v2A = new THREE.Vector2();
 
 const _camera = new THREE.OrthographicCamera(-1, 1, -1, 1, -1, 1);
-const _plane = new THREE.Mesh(
-  new THREE.PlaneBufferGeometry(2, 2),
-  new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide }),
-);
+const _material = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
+const _plane = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), _material);
 const _scene = new THREE.Scene();
 _scene.add(_plane);
 
@@ -36,13 +34,13 @@ export function extractThumbnailBlob(renderer: THREE.WebGLRenderer, vrm: VRM, si
   renderer.setSize(size, size, false);
 
   // assign the texture to plane
-  _plane.material.map = texture;
+  _material.map = texture;
 
   // render
   renderer.render(_scene, _camera);
 
   // unassign the texture
-  _plane.material.map = null;
+  _material.map = null;
 
   // get blob
   if (canvas instanceof OffscreenCanvas) {
