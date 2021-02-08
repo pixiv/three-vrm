@@ -1055,14 +1055,6 @@
     "@typescript-eslint/typescript-estree" "4.14.2"
     debug "^4.1.1"
 
-"@typescript-eslint/scope-manager@4.14.0":
-  version "4.14.0"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/scope-manager/-/scope-manager-4.14.0.tgz#55a4743095d684e1f7b7180c4bac2a0a3727f517"
-  integrity sha512-/J+LlRMdbPh4RdL4hfP1eCwHN5bAhFAGOTsvE6SxsrM/47XQiPSgF5MDgLyp/i9kbZV9Lx80DW0OpPkzL+uf8Q==
-  dependencies:
-    "@typescript-eslint/types" "4.14.0"
-    "@typescript-eslint/visitor-keys" "4.14.0"
-
 "@typescript-eslint/scope-manager@4.14.2":
   version "4.14.2"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/scope-manager/-/scope-manager-4.14.2.tgz#64cbc9ca64b60069aae0c060b2bf81163243b266"
@@ -1071,29 +1063,10 @@
     "@typescript-eslint/types" "4.14.2"
     "@typescript-eslint/visitor-keys" "4.14.2"
 
-"@typescript-eslint/types@4.14.0":
-  version "4.14.0"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/types/-/types-4.14.0.tgz#d8a8202d9b58831d6fd9cee2ba12f8a5a5dd44b6"
-  integrity sha512-VsQE4VvpldHrTFuVPY1ZnHn/Txw6cZGjL48e+iBxTi2ksa9DmebKjAeFmTVAYoSkTk7gjA7UqJ7pIsyifTsI4A==
-
 "@typescript-eslint/types@4.14.2":
   version "4.14.2"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/types/-/types-4.14.2.tgz#d96da62be22dc9dc6a06647f3633815350fb3174"
   integrity sha512-LltxawRW6wXy4Gck6ZKlBD05tCHQUj4KLn4iR69IyRiDHX3d3NCAhO+ix5OR2Q+q9bjCrHE/HKt+riZkd1At8Q==
-
-"@typescript-eslint/typescript-estree@4.14.0":
-  version "4.14.0"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/typescript-estree/-/typescript-estree-4.14.0.tgz#4bcd67486e9acafc3d0c982b23a9ab8ac8911ed7"
-  integrity sha512-wRjZ5qLao+bvS2F7pX4qi2oLcOONIB+ru8RGBieDptq/SudYwshveORwCVU4/yMAd4GK7Fsf8Uq1tjV838erag==
-  dependencies:
-    "@typescript-eslint/types" "4.14.0"
-    "@typescript-eslint/visitor-keys" "4.14.0"
-    debug "^4.1.1"
-    globby "^11.0.1"
-    is-glob "^4.0.1"
-    lodash "^4.17.15"
-    semver "^7.3.2"
-    tsutils "^3.17.1"
 
 "@typescript-eslint/typescript-estree@4.14.2":
   version "4.14.2"
@@ -1108,14 +1081,6 @@
     lodash "^4.17.15"
     semver "^7.3.2"
     tsutils "^3.17.1"
-
-"@typescript-eslint/visitor-keys@4.14.0":
-  version "4.14.0"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/visitor-keys/-/visitor-keys-4.14.0.tgz#b1090d9d2955b044b2ea2904a22496849acbdf54"
-  integrity sha512-MeHHzUyRI50DuiPgV9+LxcM52FCJFYjJiWHtXlbyC27b80mfOwKeiKI+MHOTEpcpfmoPFm/vvQS88bYIx6PZTA==
-  dependencies:
-    "@typescript-eslint/types" "4.14.0"
-    eslint-visitor-keys "^2.0.0"
 
 "@typescript-eslint/visitor-keys@4.14.2":
   version "4.14.2"
@@ -3885,13 +3850,6 @@ json-stringify-safe@^5.0.1, json-stringify-safe@~5.0.1:
   resolved "https://registry.yarnpkg.com/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz#1296a2d58fd45f19a0f6ce01d65701e2c735b6eb"
   integrity sha1-Epai1Y/UXxmg9s4B1lcB4sc1tus=
 
-json5@^2.1.0:
-  version "2.1.3"
-  resolved "https://registry.yarnpkg.com/json5/-/json5-2.1.3.tgz#c9b0f7fa9233bfe5807fe66fcf3a5617ed597d43"
-  integrity sha512-KXPvOm8K9IJKFM0bmdn8QXh7udDh1g/giieX0NLCaMnb4hEiVFqnop2ImTXCc5e0/oHz3LTqmHGtExn5hfMkOA==
-  dependencies:
-    minimist "^1.2.5"
-
 jsonfile@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/jsonfile/-/jsonfile-4.0.0.tgz#8771aae0799b64076b76640fca058f9c10e33ecb"
@@ -4283,10 +4241,10 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
-marked@^1.2.8:
-  version "1.2.8"
-  resolved "https://registry.yarnpkg.com/marked/-/marked-1.2.8.tgz#5008ece15cfa43e653e85845f3525af4beb6bdd4"
-  integrity sha512-lzmFjGnzWHkmbk85q/ILZjFoHHJIQGF+SxGEfIdGk/XhiTPhqGs37gbru6Kkd48diJnEyYwnG67nru0Z2gQtuQ==
+marked@^1.2.9:
+  version "1.2.9"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-1.2.9.tgz#53786f8b05d4c01a2a5a76b7d1ec9943d29d72dc"
+  integrity sha512-H8lIX2SvyitGX+TRdtS06m1jHMijKN/XjfH6Ooii9fvxMlh8QdqBfBDkGUpMWH2kQNrtixjzYUa3SH8ROTgRRw==
 
 mem@^4.0.0:
   version "4.3.0"
@@ -5942,29 +5900,12 @@ shelljs@^0.8.3, shelljs@^0.8.4:
     interpret "^1.0.0"
     rechoir "^0.6.2"
 
-shiki-languages@^0.2.7:
-  version "0.2.7"
-  resolved "https://registry.yarnpkg.com/shiki-languages/-/shiki-languages-0.2.7.tgz#7230b675b96d37a36ac1bf995525375ce69f3924"
-  integrity sha512-REmakh7pn2jCn9GDMRSK36oDgqhh+rSvJPo77sdWTOmk44C5b0XlYPwJZcFOMJWUZJE0c7FCbKclw4FLwUKLRw==
-  dependencies:
-    vscode-textmate "^5.2.0"
-
-shiki-themes@^0.2.7:
-  version "0.2.7"
-  resolved "https://registry.yarnpkg.com/shiki-themes/-/shiki-themes-0.2.7.tgz#6e04451d832152e0fc969876a7bd926b3963c1f2"
-  integrity sha512-ZMmboDYw5+SEpugM8KGUq3tkZ0vXg+k60XX6NngDK7gc1Sv6YLUlanpvG3evm57uKJvfXsky/S5MzSOTtYKLjA==
-  dependencies:
-    json5 "^2.1.0"
-    vscode-textmate "^5.2.0"
-
-shiki@^0.2.7:
-  version "0.2.7"
-  resolved "https://registry.yarnpkg.com/shiki/-/shiki-0.2.7.tgz#d2547548ed8742673730e1e4bbe792a77c445540"
-  integrity sha512-bwVc7cdtYYHEO9O+XJ8aNOskKRfaQd5Y4ovLRfbQkmiLSUaR+bdlssbZUUhbQ0JAFMYcTcJ5tjG5KtnufttDHQ==
+shiki@^0.9.2:
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/shiki/-/shiki-0.9.2.tgz#b9e660b750d38923275765c4dc4c92b23877b115"
+  integrity sha512-BjUCxVbxMnvjs8jC4b+BQ808vwjJ9Q8NtLqPwXShZ307HdXiDFYP968ORSVfaTNNSWYDBYdMnVKJ0fYNsoZUBA==
   dependencies:
     onigasm "^2.2.5"
-    shiki-languages "^0.2.7"
-    shiki-themes "^0.2.7"
     vscode-textmate "^5.2.0"
 
 signal-exit@^3.0.0, signal-exit@^3.0.2:
@@ -6734,20 +6675,20 @@ typedoc-default-themes@^0.12.7:
   integrity sha512-0XAuGEqID+gon1+fhi4LycOEFM+5Mvm2PjwaiVZNAzU7pn3G2DEpsoXnFOPlLDnHY6ZW0BY0nO7ur9fHOFkBLQ==
 
 typedoc@^0.20.14:
-  version "0.20.20"
-  resolved "https://registry.yarnpkg.com/typedoc/-/typedoc-0.20.20.tgz#0f0915fb73e7371fc2cf8c74b6a3207dcf5c3dda"
-  integrity sha512-qXB40ttDGaqv6q6UIiAVqOpX/GlXoBur0lB4g9fePoYjfwa6OsPkoYufLtsjEaBB0EokShR2aIoI5GX4RB83cw==
+  version "0.20.23"
+  resolved "https://registry.yarnpkg.com/typedoc/-/typedoc-0.20.23.tgz#963fcb53b4e0f28c50b2e155721766cf53196105"
+  integrity sha512-RBXuM0MJ2V/7eGg4YrDEmV1bn/ypa3Wx6AO1B0mUBHEQJaOIKEEnNI0Su75J6q7dkB5ksZvGNgsGjvfWL8Myjg==
   dependencies:
     colors "^1.4.0"
     fs-extra "^9.1.0"
     handlebars "^4.7.6"
     lodash "^4.17.20"
     lunr "^2.3.9"
-    marked "^1.2.8"
+    marked "^1.2.9"
     minimatch "^3.0.0"
     progress "^2.0.3"
     shelljs "^0.8.4"
-    shiki "^0.2.7"
+    shiki "^0.9.2"
     typedoc-default-themes "^0.12.7"
 
 typescript@^4.0.5, typescript@^4.1.0-dev.20201026:
