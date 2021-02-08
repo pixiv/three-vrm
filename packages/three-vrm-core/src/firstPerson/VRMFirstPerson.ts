@@ -17,6 +17,9 @@ export class VRMFirstPerson {
    */
   public static readonly DEFAULT_THIRDPERSON_ONLY_LAYER = 10;
 
+  /**
+   * Its associated {@link VRMHumanoid}.
+   */
   public readonly humanoid: VRMHumanoid;
   public readonly meshAnnotations: VRMFirstPersonMeshAnnotation[];
 
