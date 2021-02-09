@@ -2,26 +2,77 @@ import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import type { GLTFPrimitive, GLTFSchema } from '../types';
 
 function extractPrimitivesInternal(gltf: GLTF, nodeIndex: number, node: THREE.Object3D): GLTFPrimitive[] | null {
+  /**
+   * Let's list up every possible patterns that parsed gltf nodes with a mesh can have,,,
+   *
+   * "*" indicates that those meshes should be listed up using this function
+   *
+   * ### A node with a (mesh, a signle primitive)
+   *
+   * - `THREE.Mesh`: The only primitive of the mesh *
+   *
+   * ### A node with a (mesh, multiple primitives)
+   *
+   * - `THREE.Group`: The root of the mesh
+   *   - `THREE.Mesh`: A primitive of the mesh *
+   *   - `THREE.Mesh`: A primitive of the mesh (2) *
+   *
+   * ### A node with a (mesh, multiple primitives) AND (a child with a mesh, a single primitive)
+   *
+   * - `THREE.Group`: The root of the mesh
+   *   - `THREE.Mesh`: A primitive of the mesh *
+   *   - `THREE.Mesh`: A primitive of the mesh (2) *
+   *   - `THREE.Mesh`: A primitive of a MESH OF THE CHILD
+   *
+   * ### A node with a (mesh, multiple primitives) AND (a child with a mesh, multiple primitives)
+   *
+   * - `THREE.Group`: The root of the mesh
+   *   - `THREE.Mesh`: A primitive of the mesh *
+   *   - `THREE.Mesh`: A primitive of the mesh (2) *
+   *   - `THREE.Group`: The root of a MESH OF THE CHILD
+   *     - `THREE.Mesh`: A primitive of the mesh of the child
+   *     - `THREE.Mesh`: A primitive of the mesh of the child (2)
+   *
+   * ### A node with a (mesh, multiple primitives) BUT the node is a bone
+   *
+   * - `THREE.Bone`: The root of the node, as a bone
+   *   - `THREE.Group`: The root of the mesh
+   *     - `THREE.Mesh`: A primitive of the mesh *
+   *     - `THREE.Mesh`: A primitive of the mesh (2) *
+   *
+   * ### A node with a (mesh, multiple primitives) AND (a child with a mesh, multiple primitives) BUT the node is a bone
+   *
+   * - `THREE.Bone`: The root of the node, as a bone
+   *   - `THREE.Group`: The root of the mesh
+   *     - `THREE.Mesh`: A primitive of the mesh *
+   *     - `THREE.Mesh`: A primitive of the mesh (2) *
+   *   - `THREE.Group`: The root of a MESH OF THE CHILD
+   *     - `THREE.Mesh`: A primitive of the mesh of the child
+   *     - `THREE.Mesh`: A primitive of the mesh of the child (2)
+   *
+   * ...I will take a strategy that traverses the root of the node and take first (primitiveCount) meshes.
+   */
+
+  // Make sure that the node has a mesh
   const schemaNode: GLTFSchema.Node = gltf.parser.json.nodes[nodeIndex];
   const meshIndex = schemaNode.mesh;
   if (meshIndex == null) {
     return null;
   }
 
+  // How many primitives the mesh has?
   const schemaMesh: GLTFSchema.Mesh = gltf.parser.json.meshes[meshIndex];
+  const primitiveCount = schemaMesh.primitives.length;
 
+  // Traverse the node and take first (primitiveCount) meshes
   const primitives: GLTFPrimitive[] = [];
-
-  if ((node as any).isMesh) {
-    primitives.push(node as GLTFPrimitive);
-  } else {
-    const primitivesCount = schemaMesh.primitives.length;
-
-    // assuming first (primitivesCount) children are its primitives
-    for (let i = 0; i < primitivesCount; i++) {
-      primitives.push(node.children[i] as GLTFPrimitive);
+  node.traverse((object) => {
+    if (primitives.length < primitiveCount) {
+      if ((object as any).isMesh) {
+        primitives.push(object as GLTFPrimitive);
+      }
     }
-  }
+  });
 
   return primitives;
 }
