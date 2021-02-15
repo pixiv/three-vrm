@@ -25,7 +25,7 @@
     "downlevel-dts": "^0.7.0",
     "eslint": "^7.12.1",
     "eslint-config-prettier": "^7.1.0",
-    "husky": "^4.3.0",
+    "husky": "^5.0.9",
     "lerna": "^3.22.1",
     "prettier": "^2.1.2",
     "rimraf": "^3.0.2",
