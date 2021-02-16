@@ -147,10 +147,7 @@ export class VRMFirstPerson {
     return count;
   }
 
-  private _createErasedMesh(
-    src: THREE.SkinnedMesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>,
-    erasingBonesIndex: number[],
-  ): THREE.SkinnedMesh {
+  private _createErasedMesh(src: THREE.SkinnedMesh, erasingBonesIndex: number[]): THREE.SkinnedMesh {
     const dst = new THREE.SkinnedMesh(src.geometry.clone(), src.material);
     dst.name = `${src.name}(erase)`;
     dst.frustumCulled = src.frustumCulled;
@@ -191,10 +188,7 @@ export class VRMFirstPerson {
     return dst;
   }
 
-  private _createHeadlessModelForSkinnedMesh(
-    parent: THREE.Object3D,
-    mesh: THREE.SkinnedMesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>,
-  ): void {
+  private _createHeadlessModelForSkinnedMesh(parent: THREE.Object3D, mesh: THREE.SkinnedMesh): void {
     const eraseBoneIndexes: number[] = [];
     mesh.skeleton.bones.forEach((bone, index) => {
       if (this._isEraseTarget(bone)) eraseBoneIndexes.push(index);
@@ -224,12 +218,12 @@ export class VRMFirstPerson {
         node.children
           .filter((child) => child.type === 'SkinnedMesh')
           .forEach((child) => {
-            const skinnedMesh = child as THREE.SkinnedMesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>;
+            const skinnedMesh = child as THREE.SkinnedMesh;
             this._createHeadlessModelForSkinnedMesh(parent, skinnedMesh);
           });
       }
     } else if (node.type === 'SkinnedMesh') {
-      const skinnedMesh = node as THREE.SkinnedMesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>;
+      const skinnedMesh = node as THREE.SkinnedMesh;
       this._createHeadlessModelForSkinnedMesh(node.parent!, skinnedMesh);
     } else {
       if (this._isEraseTarget(node)) {
