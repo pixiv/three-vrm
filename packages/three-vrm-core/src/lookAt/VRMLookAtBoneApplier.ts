@@ -70,8 +70,8 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
    * @param angle An input angle
    */
   public lookAt(angle: THREE.Euler): void {
-    const srcX = angle.x;
-    const srcY = angle.y;
+    const srcX = (angle.x * 180.0) / Math.PI;
+    const srcY = (angle.y * 180.0) / Math.PI;
 
     const leftEye = this.humanoid.getBoneNode('leftEye');
     const rightEye = this.humanoid.getBoneNode('rightEye');
@@ -79,15 +79,15 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
     // left
     if (leftEye) {
       if (srcX < 0.0) {
-        _eulerA.x = -this.lookAtVerticalDown.map(-srcX);
+        _eulerA.x = (-this.lookAtVerticalDown.map(-srcX) / 180.0) * Math.PI;
       } else {
-        _eulerA.x = this.lookAtVerticalUp.map(srcX);
+        _eulerA.x = (this.lookAtVerticalUp.map(srcX) / 180.0) * Math.PI;
       }
 
       if (srcY < 0.0) {
-        _eulerA.y = -this.lookAtHorizontalInner.map(-srcY);
+        _eulerA.y = (-this.lookAtHorizontalInner.map(-srcY) / 180.0) * Math.PI;
       } else {
-        _eulerA.y = this.lookAtHorizontalOuter.map(srcY);
+        _eulerA.y = (this.lookAtHorizontalOuter.map(srcY) / 180.0) * Math.PI;
       }
 
       leftEye.quaternion.setFromEuler(_eulerA);
@@ -96,15 +96,15 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
     // right
     if (rightEye) {
       if (srcX < 0.0) {
-        _eulerA.x = -this.lookAtVerticalDown.map(-srcX);
+        _eulerA.x = (-this.lookAtVerticalDown.map(-srcX) / 180.0) * Math.PI;
       } else {
-        _eulerA.x = this.lookAtVerticalUp.map(srcX);
+        _eulerA.x = (this.lookAtVerticalUp.map(srcX) / 180.0) * Math.PI;
       }
 
       if (srcY < 0.0) {
-        _eulerA.y = -this.lookAtHorizontalOuter.map(-srcY);
+        _eulerA.y = (-this.lookAtHorizontalOuter.map(-srcY) / 180.0) * Math.PI;
       } else {
-        _eulerA.y = this.lookAtHorizontalInner.map(srcY);
+        _eulerA.y = (this.lookAtHorizontalInner.map(srcY) / 180.0) * Math.PI;
       }
 
       rightEye.quaternion.setFromEuler(_eulerA);

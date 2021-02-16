@@ -4,12 +4,11 @@ import { getWorldQuaternionLite } from '../utils/getWorldQuaternionLite';
 import { quatInvertCompat } from '../utils/quatInvertCompat';
 import type { VRMLookAtApplier } from './VRMLookAtApplier';
 
-const VECTOR3_FRONT = Object.freeze(new THREE.Vector3(0.0, 0.0, -1.0));
-
 const _v3A = new THREE.Vector3();
 const _v3B = new THREE.Vector3();
 const _v3C = new THREE.Vector3();
 const _quatA = new THREE.Quaternion();
+const _quatB = new THREE.Quaternion();
 
 /**
  * A class controls eye gaze movements of a VRM.
@@ -45,6 +44,13 @@ export class VRMLookAt {
    */
   public target?: THREE.Object3D;
 
+  /**
+   * The front direction of the face.
+   * Intended to be used for VRM 0.0 compat (VRM 0.0 models are facing Z- instead of Z+).
+   * You usually don't want to touch this.
+   */
+  public faceFront = new THREE.Vector3(0.0, 0.0, 1.0);
+
   protected _euler: THREE.Euler = new THREE.Euler(0.0, 0.0, 0.0, 'YZX');
 
   /**
@@ -78,7 +84,8 @@ export class VRMLookAt {
     const head = this.humanoid.getBoneNode('head')!;
 
     const rot = getWorldQuaternionLite(head, _quatA);
-    return target.copy(VECTOR3_FRONT).applyEuler(this._euler).applyQuaternion(rot);
+
+    return target.copy(this.faceFront).applyEuler(this._euler).applyQuaternion(rot);
   }
 
   /**
@@ -113,17 +120,21 @@ export class VRMLookAt {
 
   protected _calcEuler(target: THREE.Euler, position: THREE.Vector3): THREE.Euler {
     const head = this.humanoid.getBoneNode('head')!;
-    const headPosition = this.getLookAtWorldPosition(_v3B);
 
-    // Look at direction in world coordinate
-    const lookAtDir = _v3C.copy(position).sub(headPosition).normalize();
+    // Look at direction in local coordinate
+    const headRotInv = quatInvertCompat(getWorldQuaternionLite(head, _quatA));
+    const headPos = this.getLookAtWorldPosition(_v3B);
+    const lookAtDir = _v3C.copy(position).sub(headPos).applyQuaternion(headRotInv).normalize();
+
+    // calculate the rotation
+    const rotLocal = _quatB.setFromUnitVectors(this.faceFront, lookAtDir);
 
     // Transform the direction into local coordinate from the first person bone
-    lookAtDir.applyQuaternion(quatInvertCompat(getWorldQuaternionLite(head, _quatA)));
+    _v3C.set(0.0, 0.0, 1.0).applyQuaternion(rotLocal);
 
     // convert the direction into euler
-    target.x = Math.atan2(lookAtDir.y, Math.sqrt(lookAtDir.x * lookAtDir.x + lookAtDir.z * lookAtDir.z));
-    target.y = Math.atan2(-lookAtDir.x, -lookAtDir.z);
+    target.x = Math.atan2(-_v3C.y, Math.sqrt(_v3C.x * _v3C.x + _v3C.z * _v3C.z));
+    target.y = Math.atan2(_v3C.x, _v3C.z);
 
     return target;
   }

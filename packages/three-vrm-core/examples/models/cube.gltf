@@ -278,7 +278,7 @@
     },
     {
       "name": "Head",
-      "children": [ 16, 17, 18, 19 ],
+      "children": [ 16, 17, 19, 21 ],
       "translation": [ 0, 0.4, 0 ],
       "rotation": [ 0, 0, 0, 1 ],
       "scale": [ 1, 1, 1 ]
@@ -384,14 +384,26 @@
     },
     {
       "name": "LeftEye",
-      "translation": [ 0.1, 0.25, 0.01 ],
+      "children": [ 18 ],
+      "translation": [ 0.1, 0.25, 0.0 ],
+      "rotation": [ 0, 0, 0, 1 ]
+    },
+    {
+      "name": "LeftEyeMesh",
+      "translation": [ 0.0, 0.0, 0.01 ],
       "rotation": [ 0, 0, 0, 1 ],
       "scale": [ 0.5, 0.5, 0.5 ],
       "mesh": 1
     },
     {
       "name": "RightEye",
-      "translation": [ -0.1, 0.25, 0.01 ],
+      "children": [ 20 ],
+      "translation": [ -0.1, 0.25, 0.0 ],
+      "rotation": [ 0, 0, 0, 1 ]
+    },
+    {
+      "name": "RightEyeMesh",
+      "translation": [ 0.0, 0.0, 0.01 ],
       "rotation": [ 0, 0, 0, 1 ],
       "scale": [ 0.5, 0.5, 0.5 ],
       "mesh": 1
@@ -479,6 +491,12 @@
           },
           "rightHand": {
             "node": 15
+          },
+          "leftEye": {
+            "node": 17
+          },
+          "rightEye": {
+            "node": 19
           }
         }
       },
@@ -488,7 +506,7 @@
           "preset": "aa",
           "morphTargetBinds": [
             {
-              "node": 19,
+              "node": 21,
               "index": 1,
               "weight": 3
             }
@@ -499,12 +517,12 @@
           "preset": "blink",
           "morphTargetBinds": [
             {
-              "node": 17,
+              "node": 18,
               "index": 1,
               "weight": -0.75
             },
             {
-              "node": 18,
+              "node": 20,
               "index": 1,
               "weight": -0.75
             }
@@ -515,7 +533,7 @@
           "preset": "blinkLeft",
           "morphTargetBinds": [
             {
-              "node": 17,
+              "node": 18,
               "index": 1,
               "weight": -0.75
             }
@@ -526,7 +544,7 @@
           "preset": "blinkRight",
           "morphTargetBinds": [
             {
-              "node": 18,
+              "node": 20,
               "index": 1,
               "weight": -0.75
             }
@@ -540,18 +558,38 @@
             "firstPersonType": "thirdPersonOnly"
           },
           {
-            "node": 17,
-            "firstPersonType": "thirdPersonOnly"
-          },
-          {
             "node": 18,
             "firstPersonType": "thirdPersonOnly"
           },
           {
-            "node": 19,
+            "node": 20,
+            "firstPersonType": "thirdPersonOnly"
+          },
+          {
+            "node": 21,
             "firstPersonType": "thirdPersonOnly"
           }
         ]
+      },
+      "lookAt": {
+        "offsetFromHeadBone": [ 0.0, 0.25, 0.01 ],
+        "lookAtType": "bone",
+        "lookAtHorizontalInner": {
+          "inputMaxValue": 90.0,
+          "outputScale": 10.0
+        },
+        "lookAtHorizontalOuter": {
+          "inputMaxValue": 90.0,
+          "outputScale": 10.0
+        },
+        "lookAtVerticalDown": {
+          "inputMaxValue": 90.0,
+          "outputScale": 10.0
+        },
+        "lookAtVerticalUp": {
+          "inputMaxValue": 90.0,
+          "outputScale": 10.0
+        }
       }
     }
   },

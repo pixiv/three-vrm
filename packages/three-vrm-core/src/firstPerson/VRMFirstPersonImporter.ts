@@ -8,14 +8,14 @@ import type { VRMFirstPersonMeshAnnotation } from './VRMFirstPersonMeshAnnotatio
 import type { VRMFirstPersonMeshAnnotationType } from './VRMFirstPersonMeshAnnotationType';
 
 /**
- * An importer that imports a [[VRMFirstPerson]] from a VRM extension of a GLTF.
+ * An importer that imports a {@link VRMFirstPerson} from a VRM extension of a GLTF.
  */
 export class VRMFirstPersonImporter {
   /**
-   * Import a [[VRMFirstPerson]] from a VRM.
+   * Import a {@link VRMFirstPerson} from a VRM.
    *
    * @param gltf A parsed result of GLTF taken from GLTFLoader
-   * @param humanoid A [[VRMHumanoid]] instance that represents the VRM
+   * @param humanoid A {@link VRMHumanoid} instance that represents the VRM
    */
   public async import(gltf: GLTF, humanoid: VRMHumanoid): Promise<VRMFirstPerson | null> {
     const v1Result = await this._v1Import(gltf, humanoid);
@@ -57,7 +57,7 @@ export class VRMFirstPersonImporter {
 
       meshAnnotations.push({
         meshes: primitives,
-        firstPersonType: annotation?.firstPersonType ?? 'both'
+        firstPersonType: annotation?.firstPersonType ?? 'both',
       });
     });
 
@@ -87,7 +87,7 @@ export class VRMFirstPersonImporter {
 
       meshAnnotations.push({
         meshes: primitives,
-        firstPersonType: this._convertV0FlagToV1Type(flag?.firstPersonFlag)
+        firstPersonType: this._convertV0FlagToV1Type(flag?.firstPersonFlag),
       });
     });
 
@@ -100,7 +100,7 @@ export class VRMFirstPersonImporter {
     } else if (flag === 'ThirdPersonOnly') {
       return 'thirdPersonOnly';
     } else if (flag === 'Auto') {
-      return 'auto'
+      return 'auto';
     } else {
       return 'both';
     }
