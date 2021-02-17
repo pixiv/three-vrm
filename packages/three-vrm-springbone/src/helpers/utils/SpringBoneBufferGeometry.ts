@@ -1,14 +1,14 @@
 import * as THREE from 'three';
-import { VRMSpringBone } from '../../VRMSpringBone';
+import { VRMSpringBoneJoint } from '../../VRMSpringBoneJoint';
 
 export class SpringBoneBufferGeometry extends THREE.BufferGeometry {
   private readonly _attrPos: THREE.BufferAttribute;
   private readonly _attrIndex: THREE.BufferAttribute;
-  private readonly _springBone: VRMSpringBone;
+  private readonly _springBone: VRMSpringBoneJoint;
   private _currentRadius = 0;
   private readonly _currentTail = new THREE.Vector3();
 
-  public constructor(springBone: VRMSpringBone) {
+  public constructor(springBone: VRMSpringBoneJoint) {
     super();
 
     this._springBone = springBone;

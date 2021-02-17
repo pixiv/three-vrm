@@ -286,23 +286,34 @@
   ],
   "extensions": {
     "VRMC_springBone-1.0": {
-      "settings": [
-        {
-          "stiffness": 4.0,
-          "gravityPower": 0.0,
-          "gravityDir": [
-            0.0,
-            -1.0,
-            0.0
-          ],
-          "dragForce": 0.4
-        }
-      ],
       "springs": [
         {
-          "setting": 0,
-          "springRoot": 1,
-          "hitRadius": 0.02,
+          "joints": [
+            {
+              "node": 1,
+              "hitRadius": 0.02,
+              "stiffness": 4.0,
+              "gravityPower": 0.0,
+              "gravityDir": [ 0.0, -1.0, 0.0 ],
+              "dragForce": 0.4
+            },
+            {
+              "node": 2,
+              "hitRadius": 0.02,
+              "stiffness": 4.0,
+              "gravityPower": 0.0,
+              "gravityDir": [ 0.0, -1.0, 0.0 ],
+              "dragForce": 0.4
+            },
+            {
+              "node": 3,
+              "hitRadius": 0.02,
+              "stiffness": 4.0,
+              "gravityPower": 0.0,
+              "gravityDir": [ 0.0, -1.0, 0.0 ],
+              "dragForce": 0.4
+            }
+          ],
           "colliders": [
             5
           ]

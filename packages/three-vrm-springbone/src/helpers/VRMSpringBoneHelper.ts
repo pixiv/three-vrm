@@ -1,13 +1,13 @@
 import * as THREE from 'three';
-import { VRMSpringBone } from '../VRMSpringBone';
+import { VRMSpringBoneJoint } from '../VRMSpringBoneJoint';
 import { SpringBoneBufferGeometry } from './utils/SpringBoneBufferGeometry';
 
 export class VRMSpringBoneHelper extends THREE.Group {
-  public readonly springBone: VRMSpringBone;
+  public readonly springBone: VRMSpringBoneJoint;
   private readonly _geometry: SpringBoneBufferGeometry;
   private readonly _line: THREE.LineSegments;
 
-  public constructor(springBone: VRMSpringBone) {
+  public constructor(springBone: VRMSpringBoneJoint) {
     super();
     this.matrixAutoUpdate = false;
 

@@ -102,7 +102,7 @@
 
 			for ( let i = 1; i < 5; i ++ ) {
 
-				const springBone = new THREE.VRMSpringBone( cubes[ i ], 0.01 );
+				const springBone = new THREE.VRMSpringBoneJoint( cubes[ i ], 0.01 );
 				springBone.colliders = colliders;
 				springBoneManager.addSpringBone( springBone );
 

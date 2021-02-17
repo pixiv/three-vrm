@@ -1,3 +1,5 @@
+import type { SpringBoneJoint } from './SpringBoneJoint';
+
 /**
  * A bone group of VRMCSpringBone.
  */
@@ -8,22 +10,12 @@ export interface SpringBoneSpring {
   name?: string;
 
   /**
-   * The index of spring settings
+   * Joints of the spring. Except for the first element, a previous joint of the array must be an ancestor of the joint.
    */
-  setting: number;
+  joints: SpringBoneJoint[];
 
   /**
-   * The node index of spring root
-   */
-  springRoot: number;
-
-  /**
-   * The radius of spring sphere
-   */
-  hitRadius: number;
-
-  /**
-   * Colliders that detect collision with nodes start from springRoot
+   * Colliders that detect collision with this spring.
    */
   colliders?: number[];
 }

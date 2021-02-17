@@ -3,7 +3,7 @@ import * as V0VRM from '@pixiv/types-vrm-0.0';
 import * as V1SpringBoneSchema from '@pixiv/types-vrmc-springbone-1.0';
 import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
-import { VRMSpringBone } from './VRMSpringBone';
+import { VRMSpringBoneJoint } from './VRMSpringBoneJoint';
 import { VRMSpringBoneManager } from './VRMSpringBoneManager';
 import { VRMSpringBoneSettings } from './VRMSpringBoneSettings';
 
@@ -58,17 +58,7 @@ export class VRMSpringBoneImporter {
     }
 
     extension.springs?.forEach((schemaSpring) => {
-      const rootIndex = schemaSpring.springRoot;
-      const root = threeNodes[rootIndex];
-
-      // prepare setting
-      const schemaSetting = extension.settings?.[schemaSpring.setting];
-      const setting: Partial<VRMSpringBoneSettings> = {
-        dragForce: schemaSetting?.dragForce,
-        gravityPower: schemaSetting?.gravityPower,
-        stiffness: schemaSetting?.stiffness,
-        gravityDir: new THREE.Vector3().fromArray(schemaSetting?.gravityDir ?? [0.0, 1.0, 0.0]),
-      };
+      const joints = schemaSpring.joints;
 
       // prepare colliders
       const colliders: VRMNodeCollider[] = [];
@@ -79,9 +69,21 @@ export class VRMSpringBoneImporter {
         }
       });
 
-      // create spring bones
-      root.traverse((node) => {
-        const spring = new VRMSpringBone(node, schemaSpring.hitRadius, setting, colliders);
+      joints.forEach((joint) => {
+        // prepare node
+        const nodeIndex = joint.node;
+        const node = threeNodes[nodeIndex];
+
+        // prepare setting
+        const setting: Partial<VRMSpringBoneSettings> = {
+          dragForce: joint.dragForce,
+          gravityPower: joint.gravityPower,
+          stiffness: joint.stiffness,
+          gravityDir: new THREE.Vector3().fromArray(joint.gravityDir ?? [0.0, 1.0, 0.0]),
+        };
+
+        // create spring bones
+        const spring = new VRMSpringBoneJoint(node, joint.hitRadius, setting, colliders);
         manager.addSpringBone(spring);
       });
     });
@@ -149,7 +151,7 @@ export class VRMSpringBoneImporter {
 
         // create spring bones
         root.traverse((node) => {
-          const spring = new VRMSpringBone(node, group.hitRadius, setting, colliders);
+          const spring = new VRMSpringBoneJoint(node, group.hitRadius, setting, colliders);
           manager.addSpringBone(spring);
         });
       });

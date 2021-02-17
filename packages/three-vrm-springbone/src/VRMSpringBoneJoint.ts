@@ -21,10 +21,10 @@ const _matA = new THREE.Matrix4();
 const _matB = new THREE.Matrix4();
 
 /**
- * A class represents a single spring bone of a VRM.
+ * A class represents a single joint of a spring bone.
  * It should be managed by a [[VRMSpringBoneManager]].
  */
-export class VRMSpringBone {
+export class VRMSpringBoneJoint {
   /**
    * Radius of the bone, will be used for collision.
    */
