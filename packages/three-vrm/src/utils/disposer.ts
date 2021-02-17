@@ -15,7 +15,7 @@ function disposeMaterial(material: THREE.Material): void {
 }
 
 function dispose(object3D: THREE.Object3D): void {
-  const geometry: THREE.Geometry = (object3D as any).geometry;
+  const geometry: THREE.BufferGeometry | undefined = (object3D as any).geometry;
   if (geometry) {
     geometry.dispose();
   }
