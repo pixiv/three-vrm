@@ -86,10 +86,11 @@ export class VRMSpringBoneImporter {
         await Promise.all(
           vrmBoneGroup.bones.map(async (nodeIndex) => {
             // VRMの情報から「揺れモノ」ボーンのルートが取れる
-            const springRootBone: GLTFNode = await gltf.parser.getDependency('node', nodeIndex);
+            const springRootBone: GLTFNode | null = await gltf.parser.getDependency('node', nodeIndex);
 
+            const centerIndex = vrmBoneGroup.center === -1 ? null : vrmBoneGroup.center;
             const center: GLTFNode =
-              vrmBoneGroup.center! !== -1 ? await gltf.parser.getDependency('node', vrmBoneGroup.center!) : null;
+              centerIndex != null ? await gltf.parser.getDependency('node', vrmBoneGroup.center!) : null;
 
             // it's weird but there might be cases we can't find the root bone
             if (!springRootBone) {

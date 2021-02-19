@@ -261,9 +261,8 @@ export class VRMFirstPerson {
     geometry.setIndex(newTriangle);
 
     // mtoon material includes onBeforeRender. this is unsupported at SkinnedMesh#clone
-    if (src.onBeforeRender) {
-      dst.onBeforeRender = src.onBeforeRender;
-    }
+    dst.onBeforeRender = src.onBeforeRender;
+
     dst.bind(new THREE.Skeleton(src.skeleton.bones, src.skeleton.boneInverses), new THREE.Matrix4());
     return dst;
   }

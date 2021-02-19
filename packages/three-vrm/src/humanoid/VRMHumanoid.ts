@@ -50,7 +50,7 @@ export class VRMHumanoid {
   public getPose(): VRMPose {
     const pose: VRMPose = {};
     Object.keys(this.humanBones).forEach((vrmBoneName) => {
-      const node = this.getBoneNode(vrmBoneName as VRMSchema.HumanoidBoneName)!;
+      const node = this.getBoneNode(vrmBoneName as VRMSchema.HumanoidBoneName);
 
       // Ignore when there are no bone on the VRMHumanoid
       if (!node) {
@@ -143,7 +143,7 @@ export class VRMHumanoid {
    * @param name Name of the bone you want
    */
   public getBone(name: VRMSchema.HumanoidBoneName): VRMHumanBone | undefined {
-    return this.humanBones[name][0] || undefined;
+    return this.humanBones[name][0] ?? undefined;
   }
 
   /**

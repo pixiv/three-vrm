@@ -41,7 +41,7 @@ export class VRMMaterialImporter {
    * @param options Options of the VRMMaterialImporter
    */
   constructor(options: VRMMaterialImporterOptions = {}) {
-    this._encoding = options.encoding || THREE.LinearEncoding;
+    this._encoding = options.encoding ?? THREE.LinearEncoding;
     if (this._encoding !== THREE.LinearEncoding && this._encoding !== THREE.sRGBEncoding) {
       console.warn(
         'The specified color encoding might not work properly with VRMMaterialImporter. You might want to use THREE.sRGBEncoding instead.',
@@ -68,7 +68,7 @@ export class VRMMaterialImporter {
     }
 
     const nodePrimitivesMap = await gltfExtractPrimitivesFromNodes(gltf);
-    const materialList: { [vrmMaterialIndex: number]: { surface: THREE.Material; outline?: THREE.Material } } = {};
+    const materialIndexMaterialsMap = new Map<number, { surface: THREE.Material; outline?: THREE.Material }>();
     const materials: THREE.Material[] = []; // result
 
     await Promise.all(
@@ -79,15 +79,6 @@ export class VRMMaterialImporter {
         await Promise.all(
           primitives.map(async (primitive, primitiveIndex) => {
             const schemaPrimitive = schemaMesh.primitives[primitiveIndex];
-
-            // some glTF might have both `node.mesh` and `node.children` at once
-            // and GLTFLoader handles both mesh primitives and "children" in glTF as "children" in THREE
-            // It seems GLTFLoader handles primitives first then handles "children" in glTF (it's lucky!)
-            // so we should ignore (primitives.length)th and following children of `mesh.children`
-            // TODO: sanitize this after GLTFLoader plugin system gets introduced : https://github.com/mrdoob/three.js/pull/18421
-            if (!schemaPrimitive) {
-              return;
-            }
 
             const primitiveGeometry = primitive.geometry;
             const primitiveVertices = primitiveGeometry.index
@@ -103,8 +94,8 @@ export class VRMMaterialImporter {
             // create / push to cache (or pop from cache) vrm materials
             const vrmMaterialIndex = schemaPrimitive.material!;
 
-            let props = materialProperties[vrmMaterialIndex];
-            if (!props) {
+            let props = materialProperties[vrmMaterialIndex] as VRMSchema.Material | undefined;
+            if (props == null) {
               console.warn(
                 `VRMMaterialImporter: There are no material definition for material #${vrmMaterialIndex} on VRM extension.`,
               );
@@ -112,11 +103,12 @@ export class VRMMaterialImporter {
             }
 
             let vrmMaterials: { surface: THREE.Material; outline?: THREE.Material };
-            if (materialList[vrmMaterialIndex]) {
-              vrmMaterials = materialList[vrmMaterialIndex];
+            const vrmMaterialsAlreadyLoaded = materialIndexMaterialsMap.get(vrmMaterialIndex);
+            if (vrmMaterialsAlreadyLoaded != null) {
+              vrmMaterials = vrmMaterialsAlreadyLoaded;
             } else {
               vrmMaterials = await this.createVRMMaterials(primitive.material[0], props, gltf);
-              materialList[vrmMaterialIndex] = vrmMaterials;
+              materialIndexMaterialsMap.set(vrmMaterialIndex, vrmMaterials);
 
               materials.push(vrmMaterials.surface);
               if (vrmMaterials.outline) {
@@ -136,7 +128,7 @@ export class VRMMaterialImporter {
             }
 
             // render order
-            primitive.renderOrder = props.renderQueue || 2000;
+            primitive.renderOrder = props.renderQueue ?? 2000;
 
             // outline ("2 pass shading using groups" trick here)
             if (vrmMaterials.outline) {

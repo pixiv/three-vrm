@@ -74,7 +74,7 @@ export class VRMBlendShapeGroup extends THREE.Object3D {
       // property has not been found
       return;
     }
-    value = args.defaultValue || value;
+    value = args.defaultValue ?? value;
 
     let type: VRMBlendShapeMaterialValueType;
     let defaultValue: number | THREE.Vector2 | THREE.Vector3 | THREE.Vector4 | THREE.Color;

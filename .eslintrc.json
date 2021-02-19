@@ -20,6 +20,9 @@
     "no-console": ["error", { "allow": ["info", "warn", "error"] }], // do not leave console.log
     "require-atomic-updates": ["off"], // the rule is kinda buggy
     "@typescript-eslint/no-unnecessary-type-assertion": ["error"], // we don't need unnecessary type assertions
+    "@typescript-eslint/strict-boolean-expressions": ["error", { // ban dangerous boolean expressions
+      "allowAny": true // Three.js requires so many use of `any` s
+    }],
     "@typescript-eslint/naming-convention": [
       "error",
       {
