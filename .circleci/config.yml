@@ -3,7 +3,7 @@ version: 2
 jobs:
   fetch:
     docker: &docker
-      - image: circleci/node:12.7.0
+      - image: circleci/node:14.6.0
     steps:
       - checkout
       - restore_cache:
@@ -20,6 +20,7 @@ jobs:
           key: deps-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
+            - packages/three-vrm/node_modules
 
   build:
     docker: *docker
@@ -32,10 +33,18 @@ jobs:
       - run:
           name: Build
           command: yarn build
-      - store_artifacts:
-          path: lib
-      - store_artifacts:
-          path: examples
+
+  test:
+    docker: *docker
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - deps-{{ checksum "yarn.lock" }}
+            - deps-
+      - run:
+          name: Test
+          command: yarn test
 
   lint:
     docker: *docker
@@ -49,6 +58,18 @@ jobs:
           name: Lint
           command: yarn lint
 
+  docs:
+    docker: *docker
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - deps-{{ checksum "yarn.lock" }}
+            - deps-
+      - run:
+          name: Docs
+          command: yarn docs
+
 workflows:
   version: 2
   inspection:
@@ -57,6 +78,12 @@ workflows:
       - build:
           requires:
             - fetch
+      - test:
+          requires:
+            - fetch
       - lint:
+          requires:
+            - fetch
+      - docs:
           requires:
             - fetch

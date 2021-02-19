@@ -18,7 +18,9 @@ You will need:
 
 - [Three.js build](https://github.com/mrdoob/three.js/blob/master/build/three.js)
 - [GLTFLoader](https://github.com/mrdoob/three.js/blob/master/examples/js/loaders/GLTFLoader.js)
-- [A build of @pixiv/three-vrm](https://github.com/pixiv/three-vrm/releases)
+- [A build of @pixiv/three-vrm](https://unpkg.com/browse/@pixiv/three-vrm/lib/)
+	- `.module` ones are ESM, otherwise it's UMD and injects its modules into global `THREE`
+	- `.min` ones are minified (for production), otherwise it's not minified and it comes with source maps
 
 Code like this:
 

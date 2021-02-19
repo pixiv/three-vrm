@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>three-vrm example</title>
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+		/>
+		<style>
+			body {
+				margin: 0;
+			}
+			canvas {
+				display: block;
+			}
+		</style>
+	</head>
+
+	<body>
+		<script src="https://unpkg.com/three@0.125.2/build/three.js"></script>
+		<script src="https://unpkg.com/three@0.125.2/examples/js/loaders/GLTFLoader.js"></script>
+		<script src="https://unpkg.com/three@0.125.2/examples/js/controls/OrbitControls.js"></script>
+		<script src="../lib/three-vrm.js"></script>
+		<script>
+			// renderer
+			const renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			renderer.setPixelRatio( window.devicePixelRatio );
+			document.body.appendChild( renderer.domElement );
+
+			// camera
+			const camera = new THREE.PerspectiveCamera( 30.0, window.innerWidth / window.innerHeight, 0.1, 20.0 );
+			camera.position.set( 0.0, 1.0, 5.0 );
+
+			// camera controls
+			const controls = new THREE.OrbitControls( camera, renderer.domElement );
+			controls.screenSpacePanning = true;
+			controls.target.set( 0.0, 1.0, 0.0 );
+			controls.update();
+
+			// scene
+			const scene = new THREE.Scene();
+
+			// light
+			const light = new THREE.DirectionalLight( 0xffffff );
+			light.position.set( 1.0, 1.0, 1.0 ).normalize();
+			scene.add( light );
+
+			// gltf and vrm
+			let currentVrm = undefined;
+			let currentMixer = undefined;
+			const loader = new THREE.GLTFLoader();
+			loader.crossOrigin = 'anonymous';
+			loader.load(
+
+				'./models/three-vrm-girl.vrm',
+
+				( gltf ) => {
+
+					THREE.VRMUtils.removeUnnecessaryJoints( gltf.scene );
+
+					THREE.VRM.from( gltf ).then( ( vrm ) => {
+
+						scene.add( vrm.scene );
+						currentVrm = vrm;
+
+						vrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.Hips ).rotation.y = Math.PI;
+
+						prepareAnimation( vrm );
+
+						console.log( vrm );
+
+					} );
+
+				},
+
+				( progress ) => console.log( 'Loading model...', 100.0 * ( progress.loaded / progress.total ), '%' ),
+
+				( error ) => console.error( error )
+
+			);
+
+			// animation
+			function prepareAnimation( vrm ) {
+
+				currentMixer = new THREE.AnimationMixer( vrm.scene );
+
+				const quatA = new THREE.Quaternion( 0.0, 0.0, 0.0, 1.0 );
+				const quatB = new THREE.Quaternion( 0.0, 0.0, 0.0, 1.0 );
+				quatB.setFromEuler( new THREE.Euler( 0.0, 0.0, 0.25 * Math.PI ) );
+
+				const armTrack = new THREE.QuaternionKeyframeTrack(
+					vrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.LeftUpperArm ).name + '.quaternion', // name
+					[ 0.0, 0.5, 1.0 ], // times
+					[ ...quatA.toArray(), ...quatB.toArray(), ...quatA.toArray() ] // values
+				);
+
+				const blinkTrack = new THREE.NumberKeyframeTrack(
+					vrm.blendShapeProxy.getBlendShapeTrackName( THREE.VRMSchema.BlendShapePresetName.Blink ), // name
+					[ 0.0, 0.5, 1.0 ], // times
+					[ 0.0, 1.0, 0.0 ] // values
+				);
+
+				const clip = new THREE.AnimationClip( 'blink', 1.0, [ armTrack, blinkTrack ] );
+				const action = currentMixer.clipAction( clip );
+				action.play();
+
+			}
+
+			// helpers
+			const gridHelper = new THREE.GridHelper( 10, 10 );
+			scene.add( gridHelper );
+
+			const axesHelper = new THREE.AxesHelper( 5 );
+			scene.add( axesHelper );
+
+			// animate
+			const clock = new THREE.Clock();
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				const deltaTime = clock.getDelta();
+
+				if ( currentVrm ) {
+
+					currentVrm.update( deltaTime );
+
+				}
+
+				if ( currentMixer ) {
+
+					currentMixer.update( deltaTime );
+
+				}
+
+				renderer.render( scene, camera );
+
+			}
+
+			animate();
+		</script>
+	</body>
+</html>

@@ -1,84 +1,41 @@
 {
-  "name": "@pixiv/three-vrm",
-  "version": "0.2.0",
-  "description": "VRM file loader for three.js.",
-  "license": "MIT",
-  "author": "pixiv",
-  "files": [
-    "lib",
-    "types",
-    "LICENSE"
+  "private": true,
+  "workspaces": [
+    "packages/*"
   ],
-  "main": "lib/three-vrm.module.js",
-  "types": "types/index.d.ts",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/pixiv/three-vrm.git"
-  },
   "scripts": {
-    "version": "yarn all",
-    "postpublish": "yarn gh-pages",
-    "all": "yarn clean && yarn build && yarn docs",
-    "dev": "webpack-dev-server --mode development",
-    "clean": "rimraf docs lib types",
-    "build": "yarn build-dev && yarn build-prod && yarn build-types",
-    "build-dev": "webpack --mode development",
-    "build-prod": "webpack --mode production",
-    "build-types": "tsc --emitDeclarationOnly",
-    "docs": "typedoc --out docs --mode file --excludeNotExported",
-    "gh-pages": "node ./bin/gh-pages.js",
-    "lint": "eslint \"src/**/*.{ts,tsx}\"",
-    "typedefgen": "node ./bin/typedefgen.js"
+    "all": "yarn && yarn test && yarn lint && yarn clean && yarn build && yarn docs",
+    "clean": "lerna run clean",
+    "build": "lerna run build",
+    "test": "lerna run test",
+    "lint": "lerna run lint",
+    "lint-fix": "lerna run lint-fix",
+    "docs": "lerna run docs"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "yarn lerna exec yarn lint-staged"
     }
   },
-  "lint-staged": {
-    "src/**/*.{ts,tsx}": [
-      "eslint --fix",
-      "git add"
-    ]
-  },
-  "prettier": {
-    "endOfLine": "lf",
-    "tabWidth": 2,
-    "singleQuote": true,
-    "arrowParens": "always",
-    "trailingComma": "all",
-    "printWidth": 120
-  },
-  "dependencies": {},
   "devDependencies": {
-    "@types/webpack": "^4.4.19",
-    "@types/webpack-dev-server": "^3.1.7",
-    "@types/webpack-merge": "^4.1.5",
-    "@typescript-eslint/eslint-plugin": "^2.1.0",
-    "@typescript-eslint/parser": "^2.1.0",
-    "eslint": "^6.3.0",
-    "eslint-config-prettier": "^6.2.0",
-    "eslint-plugin-prettier": "^3.1.0",
-    "fork-ts-checker-webpack-plugin": "^3.1.0",
-    "gh-pages": "^2.1.1",
-    "husky": "^3.0.5",
-    "lint-staged": "9.4.3",
-    "prettier": "^1.18.2",
-    "quicktype": "^15.0.199",
-    "raw-loader": "^3.1.0",
-    "rimraf": "^3.0.0",
-    "three": "^0.111.0",
-    "ts-loader": "^6.1.0",
-    "ts-node": "^8.4.1",
-    "typedoc": "^0.15.0",
-    "typescript": "^3.1.6",
-    "webpack": "^4.29.6",
-    "webpack-cli": "^3.3.0",
-    "webpack-dev-server": "^3.2.1",
-    "webpack-merge": "^4.2.1",
-    "worker-loader": "^2.0.0"
+    "@rollup/plugin-typescript": "^8.1.1",
+    "@typescript-eslint/eslint-plugin": "^4.6.1",
+    "@typescript-eslint/parser": "^4.6.1",
+    "cross-env": "^7.0.2",
+    "downlevel-dts": "^0.7.0",
+    "eslint": "^7.12.1",
+    "eslint-config-prettier": "^7.1.0",
+    "husky": "^4.3.0",
+    "lerna": "^3.22.1",
+    "prettier": "^2.1.2",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.33.1",
+    "rollup-plugin-serve": "^1.1.0",
+    "rollup-plugin-string": "^3.0.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "tslib": "^2.0.3",
+    "typedoc": "^0.20.14",
+    "typescript": "^4.0.5"
   },
-  "peerDependencies": {
-    "three": "^0.110.0"
-  }
+  "name": "three-vrm"
 }
