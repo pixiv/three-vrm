@@ -8,4 +8,7 @@ export interface SpringBone {
    * An array of springs.
    */
   springs?: SpringBoneSpring[];
+
+  extensions?: { [name: string]: any };
+  extras?: any;
 }
