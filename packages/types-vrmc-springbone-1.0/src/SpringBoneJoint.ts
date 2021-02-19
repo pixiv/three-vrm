@@ -31,4 +31,7 @@ export interface SpringBoneJoint {
    * Air resistance. Deceleration force.
    */
   dragForce: number;
+
+  extensions?: { [name: string]: any };
+  extras?: any;
 }
