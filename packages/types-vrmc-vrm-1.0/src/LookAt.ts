@@ -9,7 +9,7 @@ export interface LookAt {
    */
   offsetFromHeadBone?: number[];
 
-  lookAtType?: 'bone' | 'blendShape';
+  lookAtType?: 'bone' | 'expression';
 
   /**
    * Horizontal inward movement. The left eye moves right. The right eye moves left.
