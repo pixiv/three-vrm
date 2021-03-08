@@ -9,7 +9,7 @@ import { MToonMaterialOutlineColorMode } from './MToonMaterialOutlineColorMode';
 import { colorFromArray } from './utils/colorFromArray';
 
 export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
-  public static EXTENSION_NAME = 'VRMC_materials_mtoon-1.0';
+  public static EXTENSION_NAME = 'VRMC_materials_mtoon-1.0_draft';
 
   /**
    * This value will be added to every meshes who have MaterialsMToon.
