@@ -1,3 +1,3 @@
 export * from './SpringBone';
-export * from './SpringBoneSetting';
+export * from './SpringBoneJoint';
 export * from './SpringBoneSpring';

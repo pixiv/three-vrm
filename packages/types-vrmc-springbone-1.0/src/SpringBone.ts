@@ -1,4 +1,3 @@
-import type { SpringBoneSetting } from './SpringBoneSetting';
 import type { SpringBoneSpring } from './SpringBoneSpring';
 
 /**
@@ -6,12 +5,10 @@ import type { SpringBoneSpring } from './SpringBoneSpring';
  */
 export interface SpringBone {
   /**
-   * An array of settings.
-   */
-  settings?: SpringBoneSetting[];
-
-  /**
    * An array of springs.
    */
   springs?: SpringBoneSpring[];
+
+  extensions?: { [name: string]: any };
+  extras?: any;
 }
