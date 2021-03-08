@@ -59,6 +59,7 @@
 			camera.add( lookAtTarget );
 
 			// gltf and vrm
+			let currentExpressionManager = undefined;
 			let currentLookAt = undefined;
 			const loader = new THREE.GLTFLoader();
 			loader.crossOrigin = 'anonymous';
@@ -81,6 +82,8 @@
 					humanoidImporter.import( gltf ).then( ( humanoid ) => {
 
 						expressionImporter.import( gltf ).then( ( expressions ) => {
+
+							currentExpressionManager = expressions;
 
 							lookAtImporter.import( gltf, humanoid, expressions ).then( ( lookAt ) => {
 
@@ -123,6 +126,7 @@
 				if ( currentLookAt ) {
 
 					currentLookAt.update( deltaTime );
+					currentExpressionManager.update( deltaTime );
 
 				}
 
