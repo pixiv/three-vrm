@@ -54,7 +54,7 @@ export class VRMLookAtImporter {
       return null;
     }
 
-    const defaultOutputScale = schemaLookAt.lookAtType === 'blendShape' ? 1.0 : 10.0;
+    const defaultOutputScale = schemaLookAt.lookAtType === 'expression' ? 1.0 : 10.0;
 
     const mapHI = this._v1ImportRangeMap(schemaLookAt.lookAtHorizontalInner, defaultOutputScale);
     const mapHO = this._v1ImportRangeMap(schemaLookAt.lookAtHorizontalOuter, defaultOutputScale);
@@ -63,7 +63,7 @@ export class VRMLookAtImporter {
 
     let applier;
 
-    if (schemaLookAt.lookAtType === 'blendShape') {
+    if (schemaLookAt.lookAtType === 'expression') {
       applier = new VRMLookAtExpressionApplier(expressions, mapHI, mapHO, mapVD, mapVU);
     } else {
       applier = new VRMLookAtBoneApplier(humanoid, mapHI, mapHO, mapVD, mapVU);
