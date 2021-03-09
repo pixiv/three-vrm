@@ -63,7 +63,7 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
     this._removeUnlitExtension();
   }
 
-  public getMaterialType(materialIndex: number): typeof THREE.Material | null {
+  public getMaterialType(materialIndex: number): (typeof THREE.Material) | null {
     const v1Extension = this._v1GetMToonExtension(materialIndex);
     if (v1Extension) {
       return MToonMaterial;
