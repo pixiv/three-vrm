@@ -143,18 +143,19 @@ export class VRMHumanoid {
    * @param name Name of the bone you want
    */
   public getBone(name: VRMSchema.HumanoidBoneName): VRMHumanBone | undefined {
-    return this.humanBones[name][0] || undefined;
+    return this.humanBones[name][0] ?? undefined;
   }
 
   /**
    * Return bones bound to a specified [[HumanBone]], as an array of [[VRMHumanBone]].
+   * If there are no bones bound to the specified HumanBone, it will return an empty array.
    *
    * See also: [[VRMHumanoid.getBone]]
    *
    * @param name Name of the bone you want
    */
   public getBones(name: VRMSchema.HumanoidBoneName): VRMHumanBone[] {
-    return this.humanBones[name];
+    return this.humanBones[name] ?? [];
   }
 
   /**
@@ -170,13 +171,14 @@ export class VRMHumanoid {
 
   /**
    * Return bones bound to a specified [[HumanBone]], as an array of THREE.Object3D.
+   * If there are no bones bound to the specified HumanBone, it will return an empty array.
    *
    * See also: [[VRMHumanoid.getBoneNode]]
    *
    * @param name Name of the bone you want
    */
   public getBoneNodes(name: VRMSchema.HumanoidBoneName): GLTFNode[] {
-    return this.humanBones[name].map((bone) => bone.node);
+    return this.humanBones[name]?.map((bone) => bone.node) ?? [];
   }
 
   /**
