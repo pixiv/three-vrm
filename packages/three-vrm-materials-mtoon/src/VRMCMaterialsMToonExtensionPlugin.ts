@@ -16,7 +16,7 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
   ];
 
   /**
-   * This value will be added to every meshes who have MaterialsMToon.
+   * This value will be added to `renderOrder` of every meshes who have MaterialsMToon.
    * The final renderOrder will be sum of this `renderOrderOffset` and `renderQueueOffsetNumber` for each materials.
    * `0` by default.
    */
