@@ -155,7 +155,7 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
     if (extension.shadeMultiplyTexture != null) {
       pending.push(
         (parser as any).assignTexture(materialParams, 'shadeMultiplyTexture', {
-          index: extension.shadeMultiplyTexture,
+          index: extension.shadeMultiplyTexture.index,
         }),
       );
     }
@@ -167,14 +167,14 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
 
     if (extension.additiveTexture != null) {
       pending.push(
-        (parser as any).assignTexture(materialParams, 'additiveTexture', { index: extension.additiveTexture }),
+        (parser as any).assignTexture(materialParams, 'additiveTexture', { index: extension.additiveTexture.index }),
       );
     }
 
     materialParams.rimFactor = extension.rimFactor && new THREE.Color().fromArray(extension.rimFactor);
     if (extension.rimMultiplyTexture != null) {
       pending.push(
-        (parser as any).assignTexture(materialParams, 'rimMultiplyTexture', { index: extension.rimMultiplyTexture }),
+        (parser as any).assignTexture(materialParams, 'rimMultiplyTexture', { index: extension.rimMultiplyTexture.index }),
       );
     }
     materialParams.rimLightingMixFactor = extension.rimLightingMixFactor;
@@ -186,7 +186,7 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
     if (extension.outlineWidthMultiplyTexture != null) {
       pending.push(
         (parser as any).assignTexture(materialParams, 'outlineWidthMultiplyTexture', {
-          index: extension.outlineWidthMultiplyTexture,
+          index: extension.outlineWidthMultiplyTexture.index,
         }),
       );
     }
@@ -198,7 +198,7 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
     if (extension.uvAnimationMaskTexture != null) {
       pending.push(
         (parser as any).assignTexture(materialParams, 'uvAnimationMaskTexture', {
-          index: extension.uvAnimationMaskTexture,
+          index: extension.uvAnimationMaskTexture.index,
         }),
       );
     }

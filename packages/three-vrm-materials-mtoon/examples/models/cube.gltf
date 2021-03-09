@@ -171,25 +171,39 @@
           "transparentWithZWrite": false,
           "renderQueueOffsetNumber": 0,
           "shadeFactor": [ 0.9, 0.5, 0.4 ],
-          "shadeMultiplyTexture": 2,
+          "shadeMultiplyTexture": {
+            "index": 2,
+            "texCoord": 0
+          },
           "shadingShiftFactor": 0.0,
           "shadingToonyFactor": 0.5,
           "lightColorAttenuationFactor": 0.0,
           "giIntensityFactor": 0.0,
-          "additiveTexture": 0,
+          "additiveTexture": {
+            "index": 0
+          },
           "rimFactor": [ 0.0, 0.0, 0.0 ],
-          "rimMultiplyTexture": 1,
+          "rimMultiplyTexture": {
+            "index": 1,
+            "texCoord": 0
+          },
           "rimLightingMixFactor": 0.0,
           "rimFresnelPowerFactor": 5.0,
           "rimLiftFactor": 0.0,
           "outlineWidthMode": "worldCoordinates",
           "outlineWidthFactor": 2.0,
-          "outlineWidthMultiplyTexture": 1,
+          "outlineWidthMultiplyTexture": {
+            "index": 1,
+            "texCoord": 0
+          },
           "outlineScaledMaxDistanceFactor": 1.0,
           "outlineColorMode": "fixedColor",
           "outlineFactor": [ 1.0, 0.5, 0.0 ],
           "outlineLightingMixFactor": 0.0,
-          "uvAnimationMaskTexture": 1,
+          "uvAnimationMaskTexture": {
+            "index": 1,
+            "texCoord": 0
+          },
           "uvAnimationScrollXSpeedFactor": 0.0,
           "uvAnimationScrollYSpeedFactor": 0.0,
           "uvAnimationRotationSpeedFactor": 0.0
