@@ -25,7 +25,13 @@ export interface MaterialsMToon {
   /**
    *
    */
-  shadeMultiplyTexture?: number;
+  shadeMultiplyTexture?: {
+    index?: number;
+    texCoord?: number;
+
+    extensions?: { [name: string]: any };
+    extras?: any;
+  };
 
   /**
    * Lighting
@@ -50,7 +56,12 @@ export interface MaterialsMToon {
   /**
    * MatCap
    */
-  additiveTexture?: number;
+  additiveTexture?: {
+    index?: number;
+
+    extensions?: { [name: string]: any };
+    extras?: any;
+  };
 
   /**
    * Rim
@@ -60,7 +71,13 @@ export interface MaterialsMToon {
   /**
    *
    */
-  rimMultiplyTexture?: number;
+  rimMultiplyTexture?: {
+    index?: number;
+    texCoord?: number;
+
+    extensions?: { [name: string]: any };
+    extras?: any;
+  };
 
   /**
    *
@@ -90,7 +107,13 @@ export interface MaterialsMToon {
   /**
    *
    */
-  outlineWidthMultiplyTexture?: number;
+  outlineWidthMultiplyTexture?: {
+    index?: number;
+    texCoord?: number;
+
+    extensions?: { [name: string]: any };
+    extras?: any;
+  };
 
   /**
    *
@@ -115,7 +138,13 @@ export interface MaterialsMToon {
   /**
    *
    */
-  uvAnimationMaskTexture?: number;
+  uvAnimationMaskTexture?: {
+    index?: number;
+    texCoord?: number;
+
+    extensions?: { [name: string]: any };
+    extras?: any;
+  };
 
   /**
    *
