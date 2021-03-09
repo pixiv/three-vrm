@@ -9,7 +9,12 @@ import { MToonMaterialOutlineColorMode } from './MToonMaterialOutlineColorMode';
 import { colorFromArray } from './utils/colorFromArray';
 
 export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
-  public static EXTENSION_NAME = 'VRMC_materials_mtoon-1.0_draft';
+  public static EXTENSION_NAME = 'VRMC_materials_mtoon-1.0';
+
+  public static EXTENSION_NAME_CANDIDATES = [
+    'VRMC_materials_mtoon-1.0',
+    'VRMC_materials_mtoon-1.0_draft',
+  ];
 
   /**
    * This value will be added to every meshes who have MaterialsMToon.
@@ -145,9 +150,15 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
     const json = parser.json;
 
     const materialDef = json.materials[materialIndex];
-    const extension: V1MToonSchema.MaterialsMToon | undefined = materialDef.extensions?.[this.name];
 
-    return extension;
+    for (const nameCandidate of VRMCMaterialsMToonExtensionPlugin.EXTENSION_NAME_CANDIDATES) {
+      const extension: V1MToonSchema.MaterialsMToon | undefined = materialDef.extensions?.[nameCandidate];
+      if (extension != null) {
+        return extension;
+      }
+    }
+
+    return undefined;
   }
 
   private _v0GetMToonProperties(materialIndex: number): V0Material | undefined {
