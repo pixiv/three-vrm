@@ -55,6 +55,10 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
     this.onLoadMaterial = options.onLoadMaterial;
   }
 
+  public async beforeRoot(): Promise<void> {
+    this._removeUnlitExtension();
+  }
+
   public getMaterialType(materialIndex: number): typeof THREE.Material | null {
     const v1Extension = this._v1GetMToonExtension(materialIndex);
     if (v1Extension) {
@@ -111,6 +115,29 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
     }
 
     return meshOrGroup;
+  }
+
+  /**
+   * Delete use of `KHR_materials_unlit` from its `materials` and `extensionsUsed`.
+   *
+   * Since GLTFLoader have so many hardcoded procedure related to `KHR_materials_unlit`
+   * we have to delete the extension before we start to parse the glTF.
+   */
+  private _removeUnlitExtension(): void {
+    const parser = this._parser;
+    const json = parser.json;
+
+    const extensionUsedUnlitIndex = json.extensionsUsed.indexOf('KHR_materials_unlit');
+    if (extensionUsedUnlitIndex) {
+      json.extensionsUsed.splice(extensionUsedUnlitIndex, 1);
+    }
+
+    const materialDefs: any[] = json.materials;
+    materialDefs.map((materialDef) => {
+      if (materialDef.extensions?.['KHR_materials_unlit']) {
+        delete materialDef.extensions['KHR_materials_unlit'];
+      }
+    });
   }
 
   private _v1GetMToonExtension(materialIndex: number): V1MToonSchema.MaterialsMToon | undefined {
