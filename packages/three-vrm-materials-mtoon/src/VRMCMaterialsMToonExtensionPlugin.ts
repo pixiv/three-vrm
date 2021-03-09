@@ -60,7 +60,8 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
   }
 
   public async beforeRoot(): Promise<void> {
-    this._removeUnlitExtension();
+    this._v1RemoveUnlitExtension();
+    this._v0RemoveUnlitExtension();
   }
 
   public getMaterialType(materialIndex: number): (typeof THREE.Material) | null {
@@ -122,23 +123,40 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
   }
 
   /**
-   * Delete use of `KHR_materials_unlit` from its `materials` and `extensionsUsed`.
+   * Delete use of `KHR_materials_unlit` from its `materials` if the material is using MToon.
    *
    * Since GLTFLoader have so many hardcoded procedure related to `KHR_materials_unlit`
    * we have to delete the extension before we start to parse the glTF.
    */
-  private _removeUnlitExtension(): void {
+  private _v1RemoveUnlitExtension(): void {
     const parser = this._parser;
     const json = parser.json;
 
-    const extensionUsedUnlitIndex = json.extensionsUsed.indexOf('KHR_materials_unlit');
-    if (extensionUsedUnlitIndex) {
-      json.extensionsUsed.splice(extensionUsedUnlitIndex, 1);
-    }
+    const materialDefs: any[] = json.materials;
+    materialDefs.map((materialDef, iMaterial) => {
+      const extension = this._v1GetMToonExtension(iMaterial);
+
+      if (extension && materialDef.extensions?.['KHR_materials_unlit']) {
+        delete materialDef.extensions['KHR_materials_unlit'];
+      }
+    });
+  }
+
+  /**
+   * Delete use of `KHR_materials_unlit` from its `materials` if the material is using MToon.
+   *
+   * Since GLTFLoader have so many hardcoded procedure related to `KHR_materials_unlit`
+   * we have to delete the extension before we start to parse the glTF.
+   */
+  private _v0RemoveUnlitExtension(): void {
+    const parser = this._parser;
+    const json = parser.json;
 
     const materialDefs: any[] = json.materials;
-    materialDefs.map((materialDef) => {
-      if (materialDef.extensions?.['KHR_materials_unlit']) {
+    materialDefs.map((materialDef, iMaterial) => {
+      const properties = this._v0GetMToonProperties(iMaterial);
+
+      if (properties && materialDef.extensions?.['KHR_materials_unlit']) {
         delete materialDef.extensions['KHR_materials_unlit'];
       }
     });
