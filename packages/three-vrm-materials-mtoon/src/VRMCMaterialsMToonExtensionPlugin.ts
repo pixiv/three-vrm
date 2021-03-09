@@ -6,7 +6,6 @@ import { MToonMaterial } from './MToonMaterial';
 import type { MToonMaterialParameters } from './MToonMaterialParameters';
 import { MToonMaterialOutlineWidthMode } from './MToonMaterialOutlineWidthMode';
 import { MToonMaterialOutlineColorMode } from './MToonMaterialOutlineColorMode';
-import { colorFromArray } from './utils/colorFromArray';
 
 export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
   public static EXTENSION_NAME = 'VRMC_materials_mtoon-1.0';
@@ -177,202 +176,97 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
     extension: V1MToonSchema.MaterialsMToon,
     materialParams: MToonMaterialParameters,
   ): Promise<void> {
-    const parser = this._parser;
-
     materialParams.onLoadMaterial = this.onLoadMaterial;
 
     // Removing material params that is not required to supress warnings.
     delete (materialParams as THREE.MeshStandardMaterialParameters).metalness;
     delete (materialParams as THREE.MeshStandardMaterialParameters).roughness;
 
-    const pending: Promise<any>[] = [];
-
-    materialParams.transparentWithZWrite = extension.transparentWithZWrite;
-
-    materialParams.shadeFactor = extension.shadeFactor && new THREE.Color().fromArray(extension.shadeFactor);
-    if (extension.shadeMultiplyTexture != null) {
-      pending.push(
-        (parser as any).assignTexture(materialParams, 'shadeMultiplyTexture', {
-          index: extension.shadeMultiplyTexture.index,
-        }),
-      );
-    }
-
-    materialParams.shadingShiftFactor = extension.shadingShiftFactor;
-    materialParams.shadingToonyFactor = extension.shadingToonyFactor;
-    materialParams.lightColorAttenuationFactor = extension.lightColorAttenuationFactor;
-    materialParams.giIntensityFactor = extension.giIntensityFactor;
-
-    if (extension.additiveTexture != null) {
-      pending.push(
-        (parser as any).assignTexture(materialParams, 'additiveTexture', { index: extension.additiveTexture.index }),
-      );
-    }
-
-    materialParams.rimFactor = extension.rimFactor && new THREE.Color().fromArray(extension.rimFactor);
-    if (extension.rimMultiplyTexture != null) {
-      pending.push(
-        (parser as any).assignTexture(materialParams, 'rimMultiplyTexture', { index: extension.rimMultiplyTexture.index }),
-      );
-    }
-    materialParams.rimLightingMixFactor = extension.rimLightingMixFactor;
-    materialParams.rimFresnelPowerFactor = extension.rimFresnelPowerFactor;
-    materialParams.rimLiftFactor = extension.rimLiftFactor;
-
-    materialParams.outlineWidthMode = extension.outlineWidthMode as MToonMaterialOutlineWidthMode;
-    materialParams.outlineWidthFactor = extension.outlineWidthFactor;
-    if (extension.outlineWidthMultiplyTexture != null) {
-      pending.push(
-        (parser as any).assignTexture(materialParams, 'outlineWidthMultiplyTexture', {
-          index: extension.outlineWidthMultiplyTexture.index,
-        }),
-      );
-    }
-    materialParams.outlineScaledMaxDistanceFactor = extension.outlineScaledMaxDistanceFactor;
-    materialParams.outlineColorMode = extension.outlineColorMode as MToonMaterialOutlineColorMode;
-    materialParams.outlineFactor = extension.outlineFactor && new THREE.Color().fromArray(extension.outlineFactor);
-    materialParams.outlineLightingMixFactor = extension.outlineLightingMixFactor;
-
-    if (extension.uvAnimationMaskTexture != null) {
-      pending.push(
-        (parser as any).assignTexture(materialParams, 'uvAnimationMaskTexture', {
-          index: extension.uvAnimationMaskTexture.index,
-        }),
-      );
-    }
-    materialParams.uvAnimationScrollXSpeedFactor = extension.uvAnimationScrollXSpeedFactor;
-    materialParams.uvAnimationScrollYSpeedFactor = extension.uvAnimationScrollYSpeedFactor;
-    materialParams.uvAnimationRotationSpeedFactor = extension.uvAnimationRotationSpeedFactor;
-
-    await Promise.all(pending);
-
-    if (materialParams.shadeMultiplyTexture) {
-      materialParams.shadeMultiplyTexture.encoding = THREE.sRGBEncoding;
-    }
-
-    if (materialParams.additiveTexture) {
-      materialParams.additiveTexture.encoding = THREE.sRGBEncoding;
-    }
-
-    if (materialParams.rimMultiplyTexture) {
-      materialParams.rimMultiplyTexture.encoding = THREE.sRGBEncoding;
-    }
+    await Promise.all([
+      this._assignPrimitive(materialParams, 'transparentWithZWrite', extension.transparentWithZWrite),
+      this._assignColor(materialParams, 'shadeFactor', extension.shadeFactor),
+      this._assignTexture(materialParams, 'shadeMultiplyTexture', extension.shadeMultiplyTexture?.index, true),
+      this._assignPrimitive(materialParams, 'shadingShiftFactor', extension.shadingShiftFactor),
+      this._assignPrimitive(materialParams, 'shadingToonyFactor', extension.shadingToonyFactor),
+      this._assignPrimitive(materialParams, 'lightColorAttenuationFactor', extension.lightColorAttenuationFactor),
+      this._assignPrimitive(materialParams, 'giIntensityFactor', extension.giIntensityFactor),
+      this._assignTexture(materialParams, 'additiveTexture', extension.additiveTexture?.index, true),
+      this._assignColor(materialParams, 'rimFactor', extension.rimFactor),
+      this._assignTexture(materialParams, 'rimMultiplyTexture', extension.rimMultiplyTexture?.index, true),
+      this._assignPrimitive(materialParams, 'rimLightingMixFactor', extension.rimLightingMixFactor),
+      this._assignPrimitive(materialParams, 'rimFresnelPowerFactor', extension.rimFresnelPowerFactor),
+      this._assignPrimitive(materialParams, 'rimLiftFactor', extension.rimLiftFactor),
+      this._assignPrimitive(materialParams, 'outlineWidthMode', extension.outlineWidthMode as MToonMaterialOutlineWidthMode),
+      this._assignPrimitive(materialParams, 'outlineWidthFactor', extension.outlineWidthFactor),
+      this._assignTexture(materialParams, 'outlineWidthMultiplyTexture', extension.outlineWidthMultiplyTexture?.index, false),
+      this._assignPrimitive(materialParams, 'outlineScaledMaxDistanceFactor', extension.outlineScaledMaxDistanceFactor),
+      this._assignPrimitive(materialParams, 'outlineColorMode', extension.outlineColorMode as MToonMaterialOutlineColorMode),
+      this._assignColor(materialParams, 'outlineFactor', extension.outlineFactor),
+      this._assignPrimitive(materialParams, 'outlineLightingMixFactor', extension.outlineLightingMixFactor),
+      this._assignTexture(materialParams, 'uvAnimationMaskTexture', extension.uvAnimationMaskTexture?.index, false),
+      this._assignPrimitive(materialParams, 'uvAnimationScrollXSpeedFactor', extension.uvAnimationScrollXSpeedFactor),
+      this._assignPrimitive(materialParams, 'uvAnimationScrollYSpeedFactor', extension.uvAnimationScrollYSpeedFactor),
+      this._assignPrimitive(materialParams, 'uvAnimationRotationSpeedFactor', extension.uvAnimationRotationSpeedFactor),
+    ]);
   }
 
   private async _v0ExtendMaterialParams(
     properties: V0Material,
     materialParams: MToonMaterialParameters,
   ): Promise<void> {
-    const parser = this._parser;
-
     materialParams.onLoadMaterial = this.onLoadMaterial;
 
     // Removing material params that is not required to supress warnings.
     delete (materialParams as THREE.MeshStandardMaterialParameters).metalness;
     delete (materialParams as THREE.MeshStandardMaterialParameters).roughness;
 
-    const pending: Promise<any>[] = [];
-
-    materialParams.color = colorFromArray(properties.vectorProperties?.[ '_Color' ])?.convertSRGBToLinear();
-    if (properties.textureProperties?.['_MainTex'] != null) {
-      pending.push(
-        (parser as any).assignTexture(materialParams, 'map', { index: properties.textureProperties['_MainTex'] }),
-      );
-    }
-
-    if (properties.textureProperties?.['_BumpMap'] != null) {
-      pending.push(
-        (parser as any).assignTexture(materialParams, 'normalMap', { index: properties.textureProperties['_BumpMap'] }),
-      );
-      materialParams.normalScale = properties.textureProperties?.['_BumpScale'];
-    }
-
-    materialParams.emissive = colorFromArray(properties.vectorProperties?.[ '_EmissionColor' ])?.convertSRGBToLinear();
-    if (properties.textureProperties?.['_EmissionMap'] != null) {
-      pending.push(
-        (parser as any).assignTexture(materialParams, 'emissiveMap', { index: properties.textureProperties['_EmissionMap'] }),
-      );
-    }
-
     const isTransparent = properties.keywordMap?.['_ALPHABLEND_ON'] ?? false;
     const enabledZWrite = properties.floatProperties?.['_ZWrite'] === 1;
-    materialParams.transparentWithZWrite = enabledZWrite && isTransparent;
+    const transparentWithZWrite = enabledZWrite && isTransparent;
 
-    materialParams.shadeFactor = colorFromArray(properties.vectorProperties?.[ '_ShadeColor' ])?.convertSRGBToLinear();
-    if (properties.textureProperties?.['_ShadeTexture'] != null) {
-      pending.push(
-        (parser as any).assignTexture(materialParams, 'shadeMultiplyTexture', {
-          index: properties.textureProperties['_ShadeTexture'],
-        }),
-      );
-    }
-
-    materialParams.shadingShiftFactor = properties.floatProperties?.['_ShadeShift'];
-    materialParams.shadingToonyFactor = properties.floatProperties?.['_ShadeToony'];
-    materialParams.lightColorAttenuationFactor = properties.floatProperties?.['_LightColorAttenuation'];
-    materialParams.giIntensityFactor = properties.floatProperties?.['_IndirectLightIntensity'];
-
-    if (properties.textureProperties?.['_SphereAdd'] != null) {
-      pending.push(
-        (parser as any).assignTexture(materialParams, 'additiveTexture', { index: properties.textureProperties['_SphereAdd'] }),
-      );
-    }
-
-    materialParams.rimFactor = colorFromArray(properties.vectorProperties?.['_RimColor'])?.convertSRGBToLinear();
-    if (properties.textureProperties?.['_RimTexture'] != null) {
-      pending.push(
-        (parser as any).assignTexture(materialParams, 'rimMultiplyTexture', { index: properties.textureProperties['_RimTexture'] }),
-      );
-    }
-    materialParams.rimLightingMixFactor = properties.floatProperties?.['_RimLightingMix'];
-    materialParams.rimFresnelPowerFactor = properties.floatProperties?.['_RimFresnelPower'];
-    materialParams.rimLiftFactor = properties.floatProperties?.['_RimLift'];
-
-    materialParams.outlineWidthMode = [
+    const outlineWidthMode = [
       MToonMaterialOutlineWidthMode.None,
       MToonMaterialOutlineWidthMode.WorldCoordinates,
       MToonMaterialOutlineWidthMode.ScreenCoordinates
     ][properties.floatProperties?.['_OutlineWidthMode'] ?? 0];
-    materialParams.outlineWidthFactor = properties.floatProperties?.['_OutlineWidth'];
-    if (properties.textureProperties?.['_OutlineWidthTexture'] != null) {
-      pending.push(
-        (parser as any).assignTexture(materialParams, 'outlineWidthMultiplyTexture', {
-          index: properties.textureProperties['_OutlineWidthTexture'],
-        }),
-      );
-    }
-    materialParams.outlineScaledMaxDistanceFactor = properties.floatProperties?.['_OutlineWidth'];
-    materialParams.outlineColorMode = [
+
+    const outlineColorMode = [
       MToonMaterialOutlineColorMode.FixedColor,
       MToonMaterialOutlineColorMode.MixedLighting
     ][properties.floatProperties?.['_OutlineColorMode'] ?? 0];
-    materialParams.outlineFactor = colorFromArray(properties.vectorProperties?.['_OutlineColor'])?.convertSRGBToLinear();
-    materialParams.outlineLightingMixFactor = properties.floatProperties?.['_OutlineLightingMix'];
 
-    if (properties.textureProperties?.['_UvAnimMaskTexture'] != null) {
-      pending.push(
-        (parser as any).assignTexture(materialParams, 'uvAnimationMaskTexture', {
-          index: properties.textureProperties['_UvAnimMaskTexture'],
-        }),
-      );
-    }
-    materialParams.uvAnimationScrollXSpeedFactor = properties.floatProperties?.['_UvAnimScrollX'];
-    materialParams.uvAnimationScrollYSpeedFactor = properties.floatProperties?.['_UvAnimScrollY'];
-    materialParams.uvAnimationRotationSpeedFactor = properties.floatProperties?.['_UvAnimRotation'];
-
-    await Promise.all(pending);
-
-    if (materialParams.shadeMultiplyTexture) {
-      materialParams.shadeMultiplyTexture.encoding = THREE.sRGBEncoding;
-    }
-
-    if (materialParams.additiveTexture) {
-      materialParams.additiveTexture.encoding = THREE.sRGBEncoding;
-    }
-
-    if (materialParams.rimMultiplyTexture) {
-      materialParams.rimMultiplyTexture.encoding = THREE.sRGBEncoding;
-    }
+    await Promise.all([
+      this._assignColor(materialParams, 'color', properties.vectorProperties?.['_Color'], true),
+      this._assignTexture(materialParams, 'map', properties.textureProperties?.['_MainTex'], true),
+      this._assignTexture(materialParams, 'normalMap', properties.textureProperties?.['_BumpMap'], false),
+      this._assignPrimitive(materialParams, 'normalScale', properties.floatProperties?.['_BumpScale']),
+      this._assignColor(materialParams, 'emissive', properties.vectorProperties?.['_EmissionColor'], true),
+      this._assignTexture(materialParams, 'emissiveMap', properties.textureProperties?.['_EmissionMap'], true),
+      this._assignPrimitive(materialParams, 'transparentWithZWrite', transparentWithZWrite),
+      this._assignColor(materialParams, 'shadeFactor', properties.vectorProperties?.['_ShadeColor'], true),
+      this._assignTexture(materialParams, 'shadeMultiplyTexture', properties.textureProperties?.['_ShadeTexture'], true),
+      this._assignPrimitive(materialParams, 'shadingShiftFactor', properties.floatProperties?.['_ShadeShift']),
+      this._assignPrimitive(materialParams, 'shadingToonyFactor', properties.floatProperties?.['_ShadeToony']),
+      this._assignPrimitive(materialParams, 'lightColorAttenuationFactor', properties.floatProperties?.['_LightColorAttenuation']),
+      this._assignPrimitive(materialParams, 'giIntensityFactor', properties.floatProperties?.['_IndirectLightIntensity']),
+      this._assignTexture(materialParams, 'additiveTexture', properties.textureProperties?.['_SphereAdd'], true),
+      this._assignColor(materialParams, 'rimFactor', properties.vectorProperties?.['_RimColor'], true),
+      this._assignTexture(materialParams, 'rimMultiplyTexture', properties.textureProperties?.['_RimTexture'], true),
+      this._assignPrimitive(materialParams, 'rimLightingMixFactor', properties.floatProperties?.['_RimLightingMix']),
+      this._assignPrimitive(materialParams, 'rimFresnelPowerFactor', properties.floatProperties?.['_RimFresnelPower']),
+      this._assignPrimitive(materialParams, 'rimLiftFactor', properties.floatProperties?.['_RimLift']),
+      this._assignPrimitive(materialParams, 'outlineWidthMode', outlineWidthMode),
+      this._assignPrimitive(materialParams, 'outlineWidthFactor', properties.floatProperties?.['_OutlineWidth']),
+      this._assignTexture(materialParams, 'outlineWidthMultiplyTexture', properties.textureProperties?.['_OutlineWidthTexture'], false),
+      this._assignPrimitive(materialParams, 'outlineScaledMaxDistanceFactor', properties.floatProperties?.['_OutlineScaledMaxDistance']),
+      this._assignPrimitive(materialParams, 'outlineColorMode', outlineColorMode),
+      this._assignColor(materialParams, 'outlineFactor', properties.vectorProperties?.['_OutlineColor'], true),
+      this._assignPrimitive(materialParams, 'outlineLightingMixFactor', properties.floatProperties?.['_OutlineLightingMix']),
+      this._assignTexture(materialParams, 'uvAnimationMaskTexture', properties.textureProperties?.['_UvAnimMaskTexture'], false),
+      this._assignPrimitive(materialParams, 'uvAnimationScrollXSpeedFactor', properties.floatProperties?.['_UvAnimScrollX']),
+      this._assignPrimitive(materialParams, 'uvAnimationScrollYSpeedFactor', properties.floatProperties?.['_UvAnimScrollY']),
+      this._assignPrimitive(materialParams, 'uvAnimationRotationSpeedFactor', properties.floatProperties?.['_UvAnimRotation']),
+    ]);
   }
 
   private _setupPrimitive(
@@ -478,5 +372,45 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
     const primitiveVertices = geometry.index ? geometry.index.count : geometry.attributes.position.count / 3;
     geometry.addGroup(0, primitiveVertices, 0);
     geometry.addGroup(0, primitiveVertices, 1);
+  }
+
+  private async _assignPrimitive<T extends keyof MToonMaterialParameters>(
+    materialParams: MToonMaterialParameters,
+    key: T,
+    value: MToonMaterialParameters[T],
+  ): Promise<void> {
+    if (value != null) {
+      materialParams[key] = value;
+    }
+  }
+
+  private async _assignColor<T extends keyof MToonMaterialParameters>(
+    materialParams: MToonMaterialParameters,
+    key: T,
+    value: number[] | undefined,
+    convertSRGBToLinear?: boolean,
+  ): Promise<void> {
+    if (value != null) {
+      materialParams[key] = new THREE.Color().fromArray(value);
+
+      if (convertSRGBToLinear) {
+        materialParams[key].convertSRGBToLinear();
+      }
+    }
+  }
+
+  private async _assignTexture<T extends keyof MToonMaterialParameters>(
+    materialParams: MToonMaterialParameters,
+    key: T,
+    index: number | undefined,
+    isColorTexture: boolean
+  ): Promise<void> {
+    if (index != null) {
+      await (this._parser as any).assignTexture(materialParams, key, { index });
+
+      if (isColorTexture) {
+        materialParams[key].encoding = THREE.sRGBEncoding;
+      }
+    }
   }
 }
