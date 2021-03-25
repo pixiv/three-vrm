@@ -38,6 +38,15 @@ export interface MaterialsMToon {
    */
   shadingShiftFactor?: number;
 
+  shadingShiftTexture?: {
+    index: number;
+    texCoord?: number;
+    scale?: number;
+
+    extensions?: { [name: string]: any };
+    extras?: any;
+  };
+
   /**
    *
    */
