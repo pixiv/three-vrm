@@ -26,7 +26,7 @@ export interface MaterialsMToon {
    *
    */
   shadeMultiplyTexture?: {
-    index?: number;
+    index: number;
     texCoord?: number;
 
     extensions?: { [name: string]: any };
@@ -66,7 +66,7 @@ export interface MaterialsMToon {
    * MatCap
    */
   additiveTexture?: {
-    index?: number;
+    index: number;
 
     extensions?: { [name: string]: any };
     extras?: any;
@@ -81,7 +81,7 @@ export interface MaterialsMToon {
    *
    */
   rimMultiplyTexture?: {
-    index?: number;
+    index: number;
     texCoord?: number;
 
     extensions?: { [name: string]: any };
@@ -117,7 +117,7 @@ export interface MaterialsMToon {
    *
    */
   outlineWidthMultiplyTexture?: {
-    index?: number;
+    index: number;
     texCoord?: number;
 
     extensions?: { [name: string]: any };
@@ -148,7 +148,7 @@ export interface MaterialsMToon {
    *
    */
   uvAnimationMaskTexture?: {
-    index?: number;
+    index: number;
     texCoord?: number;
 
     extensions?: { [name: string]: any };
