@@ -76,7 +76,7 @@ void main() {
 
     #ifdef OUTLINE_WIDTH_WORLD
       float worldNormalLength = length( transformedNormal );
-      vec3 outlineOffset = 0.01 * outlineWidthFactor * outlineTex * worldNormalLength * objectNormal;
+      vec3 outlineOffset = outlineWidthFactor * outlineTex * worldNormalLength * objectNormal;
       gl_Position = projectionMatrix * modelViewMatrix * vec4( outlineOffset + transformed, 1.0 );
     #endif
 
@@ -85,7 +85,7 @@ void main() {
       vec2 projectedNormal = normalize( clipNormal.xy );
       projectedNormal *= min( gl_Position.w, outlineScaledMaxDistanceFactor );
       projectedNormal.x *= projectionMatrix[ 0 ].x / projectionMatrix[ 1 ].y;
-      gl_Position.xy += 0.01 * outlineWidthFactor * outlineTex * projectedNormal.xy;
+      gl_Position.xy += 2.0 * outlineWidthFactor * outlineTex * projectedNormal.xy;
     #endif
 
     gl_Position.z += 1E-6 * gl_Position.w; // anti-artifact magic
