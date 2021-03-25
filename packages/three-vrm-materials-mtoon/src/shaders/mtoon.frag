@@ -299,7 +299,7 @@ void main() {
 
     float uvAnimMask = 1.0;
     #ifdef USE_UVANIMATIONMASKTEXTURE
-      uvAnimMask = texture2D( uvAnimationMaskTexture, uv ).x;
+      uvAnimMask = texture2D( uvAnimationMaskTexture, uv ).b;
     #endif
 
     uv = uv + vec2( uvAnimationScrollXOffset, uvAnimationScrollYOffset ) * uvAnimMask;

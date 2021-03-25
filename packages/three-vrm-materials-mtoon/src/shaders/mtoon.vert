@@ -71,7 +71,7 @@ void main() {
 
   #ifdef OUTLINE
     #ifdef USE_OUTLINEWIDTHMULTIPLYTEXTURE
-      outlineTex = texture2D( outlineWidthMultiplyTexture, vUv ).r;
+      outlineTex = texture2D( outlineWidthMultiplyTexture, vUv ).g;
     #endif
 
     #ifdef OUTLINE_WIDTH_WORLD
