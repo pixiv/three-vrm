@@ -9,7 +9,7 @@ varying vec3 vViewPosition;
 #include <common>
 
 // #include <uv_pars_vertex>
-#if defined( USE_MAP ) || defined( USE_SHADETEXTURE ) || defined( USE_NORMALMAP ) || defined( USE_RECEIVESHADOWTEXTURE ) || defined( USE_SHADINGGRADETEXTURE ) || defined( USE_RIMTEXTURE ) || defined( USE_EMISSIVEMAP ) || defined( USE_OUTLINEWIDTHMULTIPLYTEXTURE ) || defined( USE_UVANIMATIONMASKTEXTURE )
+#if defined( USE_MAP ) || defined( USE_SHADEMULTIPLYTEXTURE ) || defined( USE_SHADINGSHIFTTEXTURE ) || defined( USE_NORMALMAP ) || defined( USE_RIMMULTIPLYTEXTURE ) || defined( USE_EMISSIVEMAP ) || defined( USE_OUTLINEWIDTHMULTIPLYTEXTURE ) || defined( USE_UVANIMATIONMASKTEXTURE )
   varying vec2 vUv;
   uniform mat3 uvTransform;
 #endif
@@ -35,7 +35,7 @@ uniform float outlineScaledMaxDistanceFactor;
 void main() {
 
   // #include <uv_vertex>
-  #if defined( USE_MAP ) || defined( USE_SHADETEXTURE ) || defined( USE_NORMALMAP ) || defined( USE_RECEIVESHADOWTEXTURE ) || defined( USE_SHADINGGRADETEXTURE ) || defined( USE_RIMTEXTURE ) || defined( USE_EMISSIVEMAP ) || defined( USE_OUTLINEWIDTHMULTIPLYTEXTURE ) || defined( USE_UVANIMATIONMASKTEXTURE )
+  #if defined( USE_MAP ) || defined( USE_SHADEMULTIPLYTEXTURE ) || defined( USE_SHADINGSHIFTTEXTURE ) || defined( USE_NORMALMAP ) || defined( USE_RIMMULTIPLYTEXTURE ) || defined( USE_EMISSIVEMAP ) || defined( USE_OUTLINEWIDTHMULTIPLYTEXTURE ) || defined( USE_UVANIMATIONMASKTEXTURE )
     vUv = ( uvTransform * vec3( uv, 1 ) ).xy;
   #endif
 

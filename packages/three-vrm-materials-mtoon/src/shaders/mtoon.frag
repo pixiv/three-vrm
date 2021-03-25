@@ -11,6 +11,12 @@ uniform vec3 shadeFactor;
 
 uniform float shadingShiftFactor;
 uniform float shadingToonyFactor;
+
+#ifdef USE_SHADINGSHIFTTEXTURE
+  uniform sampler2D shadingShiftTexture;
+  uniform float shadingShiftTextureScale;
+#endif
+
 uniform float lightColorAttenuationFactor;
 uniform float giIntensityFactor;
 
@@ -45,7 +51,7 @@ uniform float uvAnimationRotationPhase;
 #include <color_pars_fragment>
 
 // #include <uv_pars_fragment>
-#if defined( USE_MAP ) || defined( USE_SHADEMULTIPLYTEXTURE ) || defined( USE_NORMALMAP ) || defined( USE_RIMMULTIPLYTEXTURE ) || defined( USE_EMISSIVEMAP ) || defined( USE_OUTLINEWIDTHMULTIPLYTEXTURE ) || defined( USE_UVANIMATIONMASKTEXTURE )
+#if defined( USE_MAP ) || defined( USE_SHADEMULTIPLYTEXTURE ) || defined( USE_SHADINGSHIFTTEXTURE ) || defined( USE_NORMALMAP ) || defined( USE_RIMMULTIPLYTEXTURE ) || defined( USE_EMISSIVEMAP ) || defined( USE_OUTLINEWIDTHMULTIPLYTEXTURE ) || defined( USE_UVANIMATIONMASKTEXTURE )
   varying vec2 vUv;
 #endif
 
@@ -145,18 +151,20 @@ varying vec3 vViewPosition;
 #include <clipping_planes_pars_fragment>
 
 // == lighting stuff ===========================================================
-float getLightIntensity(
+float linearstep( float a, float b, float t ) {
+  return clamp( ( t - a ) / ( b - a ), 0.0, 1.0 );
+}
+
+float getShading(
   const in IncidentLight directLight,
   const in GeometricContext geometry,
-  const in float shadow
+  const in float shadow,
+  const in float shadingShift
 ) {
-  float lightIntensity = dot( geometry.normal, directLight.direction );
-  lightIntensity = 0.5 + 0.5 * lightIntensity;
-  lightIntensity = lightIntensity * shadow;
-  lightIntensity = lightIntensity * 2.0 - 1.0;
-  return shadingToonyFactor == 1.0
-    ? step( shadingShiftFactor, lightIntensity )
-    : smoothstep( shadingShiftFactor, shadingShiftFactor + ( 1.0 - shadingToonyFactor ), lightIntensity );
+  float shading = dot( geometry.normal, directLight.direction );
+  shading = shading + shadingShift;
+  shading = linearstep( -1.0 + shadingToonyFactor, 1.0 - shadingToonyFactor, shading );
+  return shading;
 }
 
 vec3 getLighting( const in vec3 lightColor ) {
@@ -197,6 +205,11 @@ vec3 calcDirectDiffuse(
   IncidentLight directLight;
   vec3 lightingSum = vec3( 0.0 );
 
+  float shadingShift = shadingShiftFactor;
+  #ifdef USE_SHADINGSHIFTTEXTURE
+    shadingShift = shadingShift + texture2D( shadingShiftTexture, uv ).r * shadingShiftTextureScale;
+  #endif
+
   #if ( NUM_POINT_LIGHTS > 0 )
     PointLight pointLight;
 
@@ -211,7 +224,7 @@ vec3 calcDirectDiffuse(
       #endif
 
       float shadow = 0.5 + 0.5 * atten;
-      float lightIntensity = getLightIntensity( directLight, geometry, shadow );
+      float lightIntensity = getShading( directLight, geometry, shadow, shadingShift );
       vec3 lighting = getLighting( directLight.color );
       reflectedLight.directDiffuse += getDiffuse( lit, shade, lightIntensity, lighting );
       lightingSum += lighting;
@@ -233,7 +246,7 @@ vec3 calcDirectDiffuse(
       #endif
 
       float shadow = 0.5 + 0.5 * atten;
-      float lightIntensity = getLightIntensity( directLight, geometry, shadow );
+      float lightIntensity = getShading( directLight, geometry, shadow, shadingShift );
       vec3 lighting = getLighting( directLight.color );
       reflectedLight.directDiffuse += getDiffuse( lit, shade, lightIntensity, lighting );
       lightingSum += lighting;
@@ -255,7 +268,7 @@ vec3 calcDirectDiffuse(
       #endif
 
       float shadow = 0.5 + 0.5 * atten;
-      float lightIntensity = getLightIntensity( directLight, geometry, shadow );
+      float lightIntensity = getShading( directLight, geometry, shadow, shadingShift );
       vec3 lighting = getLighting( directLight.color );
       reflectedLight.directDiffuse += getDiffuse( lit, shade, lightIntensity, lighting );
       lightingSum += lighting;
@@ -281,7 +294,7 @@ void main() {
 
   vec2 uv = vec2(0.5, 0.5);
 
-  #if defined( USE_MAP ) || defined( USE_SHADEMULTIPLYTEXTURE ) || defined( USE_NORMALMAP ) || defined( USE_RIMMULTIPLYTEXTURE ) || defined( USE_EMISSIVEMAP ) || defined( USE_OUTLINEWIDTHMULTIPLYTEXTURE ) || defined( USE_UVANIMATIONMASKTEXTURE )
+  #if defined( USE_MAP ) || defined( USE_SHADEMULTIPLYTEXTURE ) || defined( USE_SHADINGSHIFTTEXTURE ) || defined( USE_NORMALMAP ) || defined( USE_RIMMULTIPLYTEXTURE ) || defined( USE_EMISSIVEMAP ) || defined( USE_OUTLINEWIDTHMULTIPLYTEXTURE ) || defined( USE_UVANIMATIONMASKTEXTURE )
     uv = vUv;
 
     float uvAnimMask = 1.0;
@@ -297,7 +310,7 @@ void main() {
 
   #ifdef DEBUG_UV
     gl_FragColor = vec4( 0.0, 0.0, 0.0, 1.0 );
-    #if defined( USE_MAP ) || defined( USE_SHADEMULTIPLYTEXTURE ) || defined( USE_NORMALMAP ) || defined( USE_RIMMULTIPLYTEXTURE ) || defined( USE_EMISSIVEMAP ) || defined( USE_OUTLINEWIDTHMULTIPLYTEXTURE ) || defined( USE_UVANIMATIONMASKTEXTURE )
+    #if defined( USE_MAP ) || defined( USE_SHADEMULTIPLYTEXTURE ) || defined( USE_SHADINGSHIFTTEXTURE ) || defined( USE_NORMALMAP ) || defined( USE_RIMMULTIPLYTEXTURE ) || defined( USE_EMISSIVEMAP ) || defined( USE_OUTLINEWIDTHMULTIPLYTEXTURE ) || defined( USE_UVANIMATIONMASKTEXTURE )
       gl_FragColor = vec4( uv, 0.0, 1.0 );
     #endif
     return;

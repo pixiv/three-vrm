@@ -205,6 +205,8 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
       this._assignColor(materialParams, 'shadeFactor', extension.shadeFactor),
       this._assignTexture(materialParams, 'shadeMultiplyTexture', extension.shadeMultiplyTexture?.index, true),
       this._assignPrimitive(materialParams, 'shadingShiftFactor', extension.shadingShiftFactor),
+      this._assignTexture(materialParams, 'shadingShiftTexture', extension.shadingShiftTexture?.index, true),
+      this._assignPrimitive(materialParams, 'shadingShiftTextureScale', extension.shadingShiftTexture?.scale),
       this._assignPrimitive(materialParams, 'shadingToonyFactor', extension.shadingToonyFactor),
       this._assignPrimitive(materialParams, 'lightColorAttenuationFactor', extension.lightColorAttenuationFactor),
       this._assignPrimitive(materialParams, 'giIntensityFactor', extension.giIntensityFactor),

@@ -19,6 +19,8 @@ export interface MToonMaterialParameters extends THREE.ShaderMaterialParameters 
   shadeFactor?: THREE.Color;
   shadeMultiplyTexture?: THREE.Texture;
   shadingShiftFactor?: number;
+  shadingShiftTexture?: THREE.Texture;
+  shadingShiftTextureScale?: number;
   shadingToonyFactor?: number;
   lightColorAttenuationFactor?: number;
   giIntensityFactor?: number;

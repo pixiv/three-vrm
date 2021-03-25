@@ -28,6 +28,8 @@ export class MToonMaterial extends THREE.ShaderMaterial {
   public shadeFactor = new THREE.Color(0.97, 0.81, 0.86);
   public shadeMultiplyTexture: THREE.Texture | null = null;
   public shadingShiftFactor = 0.0;
+  public shadingShiftTexture: THREE.Texture | null = null;
+  public shadingShiftTextureScale = 1.0;
   public shadingToonyFactor = 0.9;
   public lightColorAttenuationFactor = 0.0;
   public giIntensityFactor = 0.1;
@@ -107,6 +109,8 @@ export class MToonMaterial extends THREE.ShaderMaterial {
         shadeFactor: { value: new THREE.Color(0.97, 0.81, 0.86) },
         shadeMultiplyTexture: { value: null },
         shadingShiftFactor: { value: 0.0 },
+        shadingShiftTexture: { value: null },
+        shadingShiftTextureScale: { value: null },
         shadingToonyFactor: { value: 0.9 },
         lightColorAttenuationFactor: { value: 0.0 },
         giIntensityFactor: { value: 0.1 },
@@ -215,6 +219,8 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.shadeFactor.copy(source.shadeFactor);
     this.shadeMultiplyTexture = source.shadeMultiplyTexture;
     this.shadingShiftFactor = source.shadingShiftFactor;
+    this.shadingShiftTexture = source.shadingShiftTexture;
+    this.shadingShiftTextureScale = source.shadingShiftTextureScale;
     this.shadingToonyFactor = source.shadingToonyFactor;
     this.lightColorAttenuationFactor = source.lightColorAttenuationFactor;
     this.giIntensityFactor = source.giIntensityFactor;
@@ -269,6 +275,8 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.uniforms.shadeFactor.value.copy(this.shadeFactor);
     this.uniforms.shadeMultiplyTexture.value = this.shadeMultiplyTexture;
     this.uniforms.shadingShiftFactor.value = this.shadingShiftFactor;
+    this.uniforms.shadingShiftTexture.value = this.shadingShiftTexture;
+    this.uniforms.shadingShiftTextureScale.value = this.shadingShiftTextureScale;
     this.uniforms.shadingToonyFactor.value = this.shadingToonyFactor;
     this.uniforms.lightColorAttenuationFactor.value = this.lightColorAttenuationFactor;
     this.uniforms.giIntensityFactor.value = this.giIntensityFactor;
@@ -290,6 +298,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.defines = {
       OUTLINE: this._isOutline,
       USE_SHADEMULTIPLYTEXTURE: this.shadeMultiplyTexture !== null,
+      USE_SHADINGSHIFTTEXTURE: this.shadingShiftTexture !== null,
       USE_ADDITIVETEXTURE: this.additiveTexture !== null,
       USE_RIMMULTIPLYTEXTURE: this.rimMultiplyTexture !== null,
       USE_OUTLINEWIDTHMULTIPLYTEXTURE: this.outlineWidthMultiplyTexture !== null,
