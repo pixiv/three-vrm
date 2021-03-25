@@ -46,7 +46,6 @@
 
 			// light
 			const light = new THREE.DirectionalLight( 0xffffff );
-			light.position.set( 1.0, 2.0, 3.0 ).normalize();
 			scene.add( light );
 
 			// gltf and vrm
@@ -114,6 +113,11 @@
 				requestAnimationFrame( animate );
 
 				const delta = clock.getDelta();
+
+				const theta = clock.elapsedTime;
+				const cosTheta = Math.cos( theta );
+				const sinTheta = Math.sin( theta );
+				light.position.set( cosTheta, 2.0, sinTheta ).normalize();
 
 				for ( const material of mtoonSet ) {
 
