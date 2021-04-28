@@ -530,6 +530,10 @@ export class MToonMaterial extends THREE.ShaderMaterial {
 
   private _updateShaderCode(): void {
     this.defines = {
+      // Temporary compat against shader change @ Three.js r126
+      // See: #21205, #21307, #21299
+      THREE_VRM_THREE_REVISION_126: parseInt(THREE.REVISION) >= 126,
+
       OUTLINE: this._isOutline,
       BLENDMODE_OPAQUE: this._blendMode === MToonMaterialRenderMode.Opaque,
       BLENDMODE_CUTOUT: this._blendMode === MToonMaterialRenderMode.Cutout,
