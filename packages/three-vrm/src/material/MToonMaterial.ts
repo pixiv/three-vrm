@@ -529,6 +529,16 @@ export class MToonMaterial extends THREE.ShaderMaterial {
   }
 
   private _updateShaderCode(): void {
+    const useUvInVert = this.outlineWidthTexture !== null;
+    const useUvInFrag = (
+      this.map !== null ||
+      this.shadeTexture !== null ||
+      this.receiveShadowTexture !== null ||
+      this.shadingGradeTexture !== null ||
+      this.rimTexture !== null ||
+      this.uvAnimMaskTexture !== null
+    );
+
     this.defines = {
       // Temporary compat against shader change @ Three.js r126
       // See: #21205, #21307, #21299
@@ -540,6 +550,8 @@ export class MToonMaterial extends THREE.ShaderMaterial {
       BLENDMODE_TRANSPARENT:
         this._blendMode === MToonMaterialRenderMode.Transparent ||
         this._blendMode === MToonMaterialRenderMode.TransparentWithZWrite,
+      MTOON_USE_UV: useUvInVert || useUvInFrag, // we can't use `USE_UV` , it will be redefined in WebGLProgram.js
+      MTOON_UVS_VERTEX_ONLY: useUvInVert && ( !useUvInFrag ),
       USE_SHADETEXTURE: this.shadeTexture !== null,
       USE_RECEIVESHADOWTEXTURE: this.receiveShadowTexture !== null,
       USE_SHADINGGRADETEXTURE: this.shadingGradeTexture !== null,
