@@ -4,7 +4,6 @@ import * as THREE from 'three';
 import { getTexelDecodingFunction } from './getTexelDecodingFunction';
 import vertexShader from './shaders/mtoon.vert';
 import fragmentShader from './shaders/mtoon.frag';
-import fragmentShaderDepth from './shaders/mtoon-depth.frag';
 
 const TAU = 2.0 * Math.PI;
 
@@ -62,7 +61,6 @@ export interface MToonParameters extends THREE.ShaderMaterialParameters {
   zWrite?: number; // _ZWrite (will be renamed to depthWrite)
 
   isOutline?: boolean;
-  isDepth?: boolean;
 
   /**
    * Specify the encoding of input uniform colors.
@@ -192,7 +190,6 @@ export class MToonMaterial extends THREE.ShaderMaterial {
   // public zWrite = 1.0; // _ZWrite (will be converted to depthWrite)
 
   private _isOutline = false;
-  private _isDepth = false;
 
   private _uvAnimOffsetX = 0.0;
   private _uvAnimOffsetY = 0.0;
@@ -409,16 +406,6 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this._updateCullFace();
   }
 
-  get isDepth(): boolean {
-    return this._isDepth;
-  }
-
-  set isDepth(b: boolean) {
-    this._isDepth = b;
-
-    this._updateShaderCode();
-  }
-
   /**
    * Update this material.
    * Usually this will be called via [[VRM.update]] so you don't have to call this manually.
@@ -480,7 +467,6 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.outlineCullMode = source.outlineCullMode;
 
     this.isOutline = source.isOutline;
-    this.isDepth = source.isDepth;
 
     return this;
   }
@@ -559,7 +545,6 @@ export class MToonMaterial extends THREE.ShaderMaterial {
       THREE_VRM_THREE_REVISION_126: parseInt(THREE.REVISION) >= 126,
 
       OUTLINE: this._isOutline,
-      MTOON_DEPTH: this._isDepth,
       BLENDMODE_OPAQUE: this._blendMode === MToonMaterialRenderMode.Opaque,
       BLENDMODE_CUTOUT: this._blendMode === MToonMaterialRenderMode.Cutout,
       BLENDMODE_TRANSPARENT:
@@ -597,7 +582,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
 
     // == generate shader code =================================================
     this.vertexShader = vertexShader;
-    this.fragmentShader = encodings + (this._isDepth ? fragmentShaderDepth : fragmentShader);
+    this.fragmentShader = encodings + fragmentShader;
 
     // == set needsUpdate flag =================================================
     this.needsUpdate = true;
