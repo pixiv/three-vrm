@@ -30,6 +30,10 @@ varying vec3 vViewPosition;
 #include <logdepthbuf_pars_vertex>
 #include <clipping_planes_pars_vertex>
 
+#ifdef MTOON_DEPTH
+  varying vec2 vHighPrecisionZW;
+#endif
+
 #ifdef USE_OUTLINEWIDTHTEXTURE
   uniform sampler2D outlineWidthTexture;
 #endif
@@ -104,4 +108,7 @@ void main() {
   #include <shadowmap_vertex>
   #include <fog_vertex>
 
+  #ifdef MTOON_DEPTH
+    vHighPrecisionZW = gl_Position.zw;
+  #endif
 }

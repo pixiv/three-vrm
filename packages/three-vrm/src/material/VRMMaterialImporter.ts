@@ -111,7 +111,11 @@ export class VRMMaterialImporter {
               props = { shader: 'VRM_USE_GLTFSHADER' }; // fallback
             }
 
-            let vrmMaterials: { surface: THREE.Material; outline?: THREE.Material };
+            let vrmMaterials: {
+              surface: THREE.Material;
+              outline?: THREE.Material;
+              depth?: THREE.Material;
+            };
             if (materialList[vrmMaterialIndex]) {
               vrmMaterials = materialList[vrmMaterialIndex];
             } else {
@@ -143,6 +147,11 @@ export class VRMMaterialImporter {
               primitive.material[1] = vrmMaterials.outline;
               primitiveGeometry.addGroup(0, primitiveVertices, 1);
             }
+
+            // depth map
+            if (vrmMaterials.depth) {
+              // primitive.customDepthMaterial = vrmMaterials.depth;
+            }
           }),
         );
       }),
@@ -158,9 +167,11 @@ export class VRMMaterialImporter {
   ): Promise<{
     surface: THREE.Material;
     outline?: THREE.Material;
+    depth?: THREE.Material;
   }> {
     let newSurface: THREE.Material | undefined;
     let newOutline: THREE.Material | undefined;
+    let newDepth: THREE.Material | undefined;
 
     if (vrmProps.shader === 'VRM/MToon') {
       const params = await this._extractMaterialProperties(originalMaterial, vrmProps, gltf);
@@ -189,6 +200,13 @@ export class VRMMaterialImporter {
       if (params.outlineWidthMode !== MToonMaterialOutlineWidthMode.None) {
         params.isOutline = true;
         newOutline = new MToonMaterial(params);
+      }
+
+      // depth
+      {
+        params.isOutline = false;
+        params.isDepth = true;
+        newDepth = new MToonMaterial(params);
       }
     } else if (vrmProps.shader === 'VRM/UnlitTexture') {
       // this is very legacy
@@ -232,6 +250,7 @@ export class VRMMaterialImporter {
     return {
       surface: newSurface,
       outline: newOutline,
+      depth: newDepth,
     };
   }
 
