@@ -9,25 +9,25 @@ export interface LookAt {
    */
   offsetFromHeadBone?: number[];
 
-  lookAtType?: 'bone' | 'expression';
+  type?: 'bone' | 'expression';
 
   /**
    * Horizontal inward movement. The left eye moves right. The right eye moves left.
    */
-  lookAtHorizontalInner?: LookAtRangeMap;
+  rangeMapHorizontalInner?: LookAtRangeMap;
 
   /**
    * Horizontal outward movement. The left eye moves left. The right eye moves right.
    */
-  lookAtHorizontalOuter?: LookAtRangeMap;
+  rangeMapHorizontalOuter?: LookAtRangeMap;
 
   /**
    * Vertical downward movement. Both eyes move upwards
    */
-  lookAtVerticalDown?: LookAtRangeMap;
+  rangeMapVerticalDown?: LookAtRangeMap;
 
   /**
    * Vertical upward movement. Both eyes move downwards
    */
-  lookAtVerticalUp?: LookAtRangeMap;
+  rangeMapVerticalUp?: LookAtRangeMap;
 }
