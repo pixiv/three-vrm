@@ -11,4 +11,7 @@ export interface FirstPersonMeshAnnotation {
    * How the camera interprets the mesh.
    */
   firstPersonType?: 'auto' | 'both' | 'thirdPersonOnly' | 'firstPersonOnly';
+
+  extensions?: { [key: string]: { [key: string]: any } };
+  extras?: any;
 }
