@@ -30,4 +30,7 @@ export interface LookAt {
    * Vertical upward movement. Both eyes move downwards
    */
   rangeMapVerticalUp?: LookAtRangeMap;
+
+  extensions?: { [key: string]: { [key: string]: any } };
+  extras?: any;
 }
