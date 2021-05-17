@@ -86,4 +86,7 @@ export interface Meta {
    * Describe the URL links of other license
    */
   otherLicenseUrl?: string;
+
+  extensions?: { [key: string]: { [key: string]: any } };
+  extras?: any;
 }
