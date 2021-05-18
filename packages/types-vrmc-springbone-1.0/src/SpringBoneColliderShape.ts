@@ -7,4 +7,7 @@ import type { SpringBoneColliderCapsule } from './SpringBoneColliderCapsule';
 export interface SpringBoneColliderShape {
   sphere?: SpringBoneColliderSphere;
   capsule?: SpringBoneColliderCapsule;
+
+  extensions?: { [name: string]: any };
+  extras?: any;
 }
