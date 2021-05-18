@@ -1,10 +1,10 @@
-import type { NodeColliderSphere } from './SpringBoneColliderSphere';
-import type { NodeColliderCapsule } from './SpringBoneColliderCapsule';
+import type { SpringBoneColliderSphere } from './SpringBoneColliderSphere';
+import type { SpringBoneColliderCapsule } from './SpringBoneColliderCapsule';
 
 /**
  * Shape of collider. Have one of sphere and capsule
  */
-export interface NodeColliderShape {
-  sphere?: NodeColliderSphere;
-  capsule?: NodeColliderCapsule;
+export interface SpringBoneColliderShape {
+  sphere?: SpringBoneColliderSphere;
+  capsule?: SpringBoneColliderCapsule;
 }

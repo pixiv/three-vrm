@@ -1,8 +1,8 @@
-import type { NodeColliderShape } from './SpringBoneColliderShape';
+import type { SpringBoneColliderShape } from './SpringBoneColliderShape';
 
 /**
  * collider definition for SpringBone
  */
-export interface NodeCollider {
-  shapes?: NodeColliderShape[];
+export interface SpringBoneCollider {
+  shapes?: SpringBoneColliderShape[];
 }
