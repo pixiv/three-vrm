@@ -1,5 +1,6 @@
-import type { MaterialsMToonOutlineColorMode } from './MaterialsMToonOutlineColorMode';
 import type { MaterialsMToonOutlineWidthMode } from './MaterialsMToonOutlineWidthMode';
+import type { MaterialsMToonShadingShiftTextureInfo } from './MaterialsMToonShadingShiftTextureInfo';
+import type { MaterialsMToonTextureInfo } from './MaterialsMToonTextureInfo';
 
 export interface MaterialsMToon {
   /**
@@ -20,12 +21,12 @@ export interface MaterialsMToon {
   /**
    *
    */
-  shadeFactor?: number[];
+  shadeColorFactor?: number[];
 
   /**
    *
    */
-  shadeMultiplyTexture?: number;
+  shadeMultiplyTexture?: MaterialsMToonTextureInfo;
 
   /**
    * Lighting
@@ -35,12 +36,12 @@ export interface MaterialsMToon {
   /**
    *
    */
-  shadingToonyFactor?: number;
+  shadingShiftTexture: MaterialsMToonShadingShiftTextureInfo;
 
   /**
    *
    */
-  lightColorAttenuationFactor?: number;
+  shadingToonyFactor?: number;
 
   /**
    *
@@ -50,17 +51,17 @@ export interface MaterialsMToon {
   /**
    * MatCap
    */
-  additiveTexture?: number;
+  matcapTexture?: MaterialsMToonTextureInfo;
 
   /**
    * Rim
    */
-  rimFactor?: number[];
+  parametricRimColorFactor?: number[];
 
   /**
    *
    */
-  rimMultiplyTexture?: number;
+  rimMultiplyTexture?: MaterialsMToonTextureInfo;
 
   /**
    *
@@ -70,12 +71,12 @@ export interface MaterialsMToon {
   /**
    *
    */
-  rimFresnelPowerFactor?: number;
+  parametricRimFresnelPowerFactor?: number;
 
   /**
    *
    */
-  rimLiftFactor?: number;
+  parametricRimLiftFactor?: number;
 
   /**
    * Outline
@@ -90,22 +91,12 @@ export interface MaterialsMToon {
   /**
    *
    */
-  outlineWidthMultiplyTexture?: number;
+  outlineWidthMultiplyTexture?: MaterialsMToonTextureInfo;
 
   /**
    *
    */
-  outlineScaledMaxDistanceFactor?: number;
-
-  /**
-   *
-   */
-  outlineColorMode?: MaterialsMToonOutlineColorMode;
-
-  /**
-   *
-   */
-  outlineFactor?: number[];
+  outlineColorFactor?: number[];
 
   /**
    *
@@ -115,7 +106,7 @@ export interface MaterialsMToon {
   /**
    *
    */
-  uvAnimationMaskTexture?: number;
+  uvAnimationMaskTexture?: MaterialsMToonTextureInfo;
 
   /**
    *
@@ -131,4 +122,7 @@ export interface MaterialsMToon {
    *
    */
   uvAnimationRotationSpeedFactor?: number;
+
+  extensions?: { [name: string]: any };
+  extras?: any;
 }
