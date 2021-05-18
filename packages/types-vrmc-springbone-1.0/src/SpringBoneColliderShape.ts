@@ -1,5 +1,5 @@
-import type { NodeColliderSphere } from './NodeColliderSphere';
-import type { NodeColliderCapsule } from './NodeColliderCapsule';
+import type { NodeColliderSphere } from './SpringBoneColliderSphere';
+import type { NodeColliderCapsule } from './SpringBoneColliderCapsule';
 
 /**
  * Shape of collider. Have one of sphere and capsule

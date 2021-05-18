@@ -1,4 +1,4 @@
-import type { NodeColliderShape } from './NodeColliderShape';
+import type { NodeColliderShape } from './SpringBoneColliderShape';
 
 /**
  * collider definition for SpringBone
