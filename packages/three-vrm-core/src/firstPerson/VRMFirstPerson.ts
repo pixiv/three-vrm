@@ -239,7 +239,7 @@ export class VRMFirstPerson {
     } else if (!bone.parent) {
       return false;
     } else {
-      return this._isEraseTarget(bone.parent!);
+      return this._isEraseTarget(bone.parent);
     }
   }
 }
