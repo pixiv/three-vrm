@@ -11,4 +11,7 @@ export interface LookAtRangeMap {
    * Degree for LookAtType.bone ,  Weight for LookAtType.blendShape
    */
   outputScale?: number;
+
+  extensions?: { [key: string]: { [key: string]: any } };
+  extras?: any;
 }

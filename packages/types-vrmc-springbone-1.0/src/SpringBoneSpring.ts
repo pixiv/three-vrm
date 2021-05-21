@@ -15,6 +15,11 @@ export interface SpringBoneSpring {
   joints: SpringBoneJoint[];
 
   /**
+   * Indices of ColliderGroups that detect collision with this spring.
+   */
+  colliderGroups?: number[];
+
+  /**
    * Colliders that detect collision with this spring.
    */
   colliders?: number[];
