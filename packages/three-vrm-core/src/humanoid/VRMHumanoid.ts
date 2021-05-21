@@ -155,10 +155,23 @@ export class VRMHumanoid {
 
   /**
    * Reset the humanoid to its rest pose.
-   * Identical to `this.setPose({})`.
    */
   public resetPose(): void {
-    this.setPose({});
+    Object.entries(this.restPose).forEach(([boneName, rest]) => {
+      const node = this.getBoneNode(boneName as VRMHumanBoneName);
+
+      if (!node) {
+        return;
+      }
+
+      if (rest?.position) {
+        node.position.fromArray(rest.position);
+      }
+
+      if (rest?.rotation) {
+        node.quaternion.fromArray(rest.rotation);
+      }
+    });
   }
 
   /**
