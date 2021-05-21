@@ -68,6 +68,7 @@ export class VRMMetaImporter {
       allowExcessivelySexualUsage: schemaMeta.allowExcessivelySexualUsage,
       commercialUsage: schemaMeta.commercialUsage,
       allowPoliticalOrReligiousUsage: schemaMeta.allowPoliticalOrReligiousUsage,
+      allowAntisocialOrHateUsage: schemaMeta.allowAntisocialOrHateUsage,
       creditNotation: schemaMeta.creditNotation,
       allowRedistribution: schemaMeta.allowRedistribution,
       modification: schemaMeta.modification,

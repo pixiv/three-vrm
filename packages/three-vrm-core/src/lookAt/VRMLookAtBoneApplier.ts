@@ -13,7 +13,7 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
   /**
    * Represent its type of applier.
    */
-  public static readonly lookAtType = 'bone';
+  public static readonly type = 'bone';
 
   /**
    * Its associated {@link VRMHumanoid}.
@@ -23,45 +23,45 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
   /**
    * A {@link VRMLookAtRangeMap} for horizontal inward movement. The left eye moves right. The right eye moves left.
    */
-  public lookAtHorizontalInner: VRMLookAtRangeMap;
+  public rangeMapHorizontalInner: VRMLookAtRangeMap;
 
   /**
    * A {@link VRMLookAtRangeMap} for horizontal outward movement. The left eye moves left. The right eye moves right.
    */
-  public lookAtHorizontalOuter: VRMLookAtRangeMap;
+  public rangeMapHorizontalOuter: VRMLookAtRangeMap;
 
   /**
    * A {@link VRMLookAtRangeMap} for vertical downward movement. Both eyes move upwards.
    */
-  public lookAtVerticalDown: VRMLookAtRangeMap;
+  public rangeMapVerticalDown: VRMLookAtRangeMap;
 
   /**
    * A {@link VRMLookAtRangeMap} for vertical upward movement. Both eyes move downwards.
    */
-  public lookAtVerticalUp: VRMLookAtRangeMap;
+  public rangeMapVerticalUp: VRMLookAtRangeMap;
 
   /**
    * Create a new {@link VRMLookAtBoneApplier}.
    *
    * @param humanoid A {@link VRMHumanoid}
-   * @param lookAtHorizontalInner A {@link VRMLookAtRangeMap} used for inner transverse direction
-   * @param lookAtHorizontalOuter A {@link VRMLookAtRangeMap} used for outer transverse direction
-   * @param lookAtVerticalDown A {@link VRMLookAtRangeMap} used for down direction
-   * @param lookAtVerticalUp A {@link VRMLookAtRangeMap} used for up direction
+   * @param rangeMapHorizontalInner A {@link VRMLookAtRangeMap} used for inner transverse direction
+   * @param rangeMapHorizontalOuter A {@link VRMLookAtRangeMap} used for outer transverse direction
+   * @param rangeMapVerticalDown A {@link VRMLookAtRangeMap} used for down direction
+   * @param rangeMapVerticalUp A {@link VRMLookAtRangeMap} used for up direction
    */
   public constructor(
     humanoid: VRMHumanoid,
-    lookAtHorizontalInner: VRMLookAtRangeMap,
-    lookAtHorizontalOuter: VRMLookAtRangeMap,
-    lookAtVerticalDown: VRMLookAtRangeMap,
-    lookAtVerticalUp: VRMLookAtRangeMap,
+    rangeMapHorizontalInner: VRMLookAtRangeMap,
+    rangeMapHorizontalOuter: VRMLookAtRangeMap,
+    rangeMapVerticalDown: VRMLookAtRangeMap,
+    rangeMapVerticalUp: VRMLookAtRangeMap,
   ) {
     this.humanoid = humanoid;
 
-    this.lookAtHorizontalInner = lookAtHorizontalInner;
-    this.lookAtHorizontalOuter = lookAtHorizontalOuter;
-    this.lookAtVerticalDown = lookAtVerticalDown;
-    this.lookAtVerticalUp = lookAtVerticalUp;
+    this.rangeMapHorizontalInner = rangeMapHorizontalInner;
+    this.rangeMapHorizontalOuter = rangeMapHorizontalOuter;
+    this.rangeMapVerticalDown = rangeMapVerticalDown;
+    this.rangeMapVerticalUp = rangeMapVerticalUp;
   }
 
   /**
@@ -79,15 +79,15 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
     // left
     if (leftEye) {
       if (srcX < 0.0) {
-        _eulerA.x = (-this.lookAtVerticalDown.map(-srcX) / 180.0) * Math.PI;
+        _eulerA.x = (-this.rangeMapVerticalDown.map(-srcX) / 180.0) * Math.PI;
       } else {
-        _eulerA.x = (this.lookAtVerticalUp.map(srcX) / 180.0) * Math.PI;
+        _eulerA.x = (this.rangeMapVerticalUp.map(srcX) / 180.0) * Math.PI;
       }
 
       if (srcY < 0.0) {
-        _eulerA.y = (-this.lookAtHorizontalInner.map(-srcY) / 180.0) * Math.PI;
+        _eulerA.y = (-this.rangeMapHorizontalInner.map(-srcY) / 180.0) * Math.PI;
       } else {
-        _eulerA.y = (this.lookAtHorizontalOuter.map(srcY) / 180.0) * Math.PI;
+        _eulerA.y = (this.rangeMapHorizontalOuter.map(srcY) / 180.0) * Math.PI;
       }
 
       leftEye.quaternion.setFromEuler(_eulerA);
@@ -96,15 +96,15 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
     // right
     if (rightEye) {
       if (srcX < 0.0) {
-        _eulerA.x = (-this.lookAtVerticalDown.map(-srcX) / 180.0) * Math.PI;
+        _eulerA.x = (-this.rangeMapVerticalDown.map(-srcX) / 180.0) * Math.PI;
       } else {
-        _eulerA.x = (this.lookAtVerticalUp.map(srcX) / 180.0) * Math.PI;
+        _eulerA.x = (this.rangeMapVerticalUp.map(srcX) / 180.0) * Math.PI;
       }
 
       if (srcY < 0.0) {
-        _eulerA.y = (-this.lookAtHorizontalOuter.map(-srcY) / 180.0) * Math.PI;
+        _eulerA.y = (-this.rangeMapHorizontalOuter.map(-srcY) / 180.0) * Math.PI;
       } else {
-        _eulerA.y = (this.lookAtHorizontalInner.map(srcY) / 180.0) * Math.PI;
+        _eulerA.y = (this.rangeMapHorizontalInner.map(srcY) / 180.0) * Math.PI;
       }
 
       rightEye.quaternion.setFromEuler(_eulerA);

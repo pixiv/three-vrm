@@ -54,16 +54,16 @@ export class VRMLookAtImporter {
       return null;
     }
 
-    const defaultOutputScale = schemaLookAt.lookAtType === 'expression' ? 1.0 : 10.0;
+    const defaultOutputScale = schemaLookAt.type === 'expression' ? 1.0 : 10.0;
 
-    const mapHI = this._v1ImportRangeMap(schemaLookAt.lookAtHorizontalInner, defaultOutputScale);
-    const mapHO = this._v1ImportRangeMap(schemaLookAt.lookAtHorizontalOuter, defaultOutputScale);
-    const mapVD = this._v1ImportRangeMap(schemaLookAt.lookAtVerticalDown, defaultOutputScale);
-    const mapVU = this._v1ImportRangeMap(schemaLookAt.lookAtVerticalUp, defaultOutputScale);
+    const mapHI = this._v1ImportRangeMap(schemaLookAt.rangeMapHorizontalInner, defaultOutputScale);
+    const mapHO = this._v1ImportRangeMap(schemaLookAt.rangeMapHorizontalOuter, defaultOutputScale);
+    const mapVD = this._v1ImportRangeMap(schemaLookAt.rangeMapVerticalDown, defaultOutputScale);
+    const mapVU = this._v1ImportRangeMap(schemaLookAt.rangeMapVerticalUp, defaultOutputScale);
 
     let applier;
 
-    if (schemaLookAt.lookAtType === 'expression') {
+    if (schemaLookAt.type === 'expression') {
       applier = new VRMLookAtExpressionApplier(expressions, mapHI, mapHO, mapVD, mapVU);
     } else {
       applier = new VRMLookAtBoneApplier(humanoid, mapHI, mapHO, mapVD, mapVU);

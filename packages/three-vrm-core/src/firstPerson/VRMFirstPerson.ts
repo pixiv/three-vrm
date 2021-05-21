@@ -97,13 +97,13 @@ export class VRMFirstPerson {
 
     this.meshAnnotations.forEach((item) => {
       item.meshes.forEach((mesh) => {
-        if (item.firstPersonType === 'firstPersonOnly') {
+        if (item.type === 'firstPersonOnly') {
           mesh.layers.set(this._firstPersonOnlyLayer);
           mesh.traverse((child) => child.layers.set(this._firstPersonOnlyLayer));
-        } else if (item.firstPersonType === 'thirdPersonOnly') {
+        } else if (item.type === 'thirdPersonOnly') {
           mesh.layers.set(this._thirdPersonOnlyLayer);
           mesh.traverse((child) => child.layers.set(this._thirdPersonOnlyLayer));
-        } else if (item.firstPersonType === 'auto') {
+        } else if (item.type === 'auto') {
           this._createHeadlessModel(mesh);
         }
       });

@@ -57,7 +57,7 @@ export class VRMFirstPersonImporter {
 
       meshAnnotations.push({
         meshes: primitives,
-        firstPersonType: annotation?.firstPersonType ?? 'both',
+        type: annotation?.type ?? 'both',
       });
     });
 
@@ -87,7 +87,7 @@ export class VRMFirstPersonImporter {
 
       meshAnnotations.push({
         meshes: primitives,
-        firstPersonType: this._convertV0FlagToV1Type(flag?.firstPersonFlag),
+        type: this._convertV0FlagToV1Type(flag?.firstPersonFlag),
       });
     });
 

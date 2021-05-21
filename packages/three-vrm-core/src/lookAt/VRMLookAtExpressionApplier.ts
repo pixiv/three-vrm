@@ -11,7 +11,7 @@ export class VRMLookAtExpressionApplier implements VRMLookAtApplier {
   /**
    * Represent its type of applier.
    */
-  public static readonly lookAtType = 'expression';
+  public static readonly type = 'expression';
 
   /**
    * Its associated {@link VRMExpressionManager}.
@@ -20,47 +20,47 @@ export class VRMLookAtExpressionApplier implements VRMLookAtApplier {
 
   /**
    * It won't be used in expression applier.
-   * See also: {@link lookAtHorizontalOuter}
+   * See also: {@link rangeMapHorizontalOuter}
    */
-  public lookAtHorizontalInner: VRMLookAtRangeMap;
+  public rangeMapHorizontalInner: VRMLookAtRangeMap;
 
   /**
    * A {@link VRMLookAtRangeMap} for horizontal movement. Both eyes move left or right.
    */
-  public lookAtHorizontalOuter: VRMLookAtRangeMap;
+  public rangeMapHorizontalOuter: VRMLookAtRangeMap;
 
   /**
    * A {@link VRMLookAtRangeMap} for vertical downward movement. Both eyes move upwards.
    */
-  public lookAtVerticalDown: VRMLookAtRangeMap;
+  public rangeMapVerticalDown: VRMLookAtRangeMap;
 
   /**
    * A {@link VRMLookAtRangeMap} for vertical upward movement. Both eyes move downwards.
    */
-  public lookAtVerticalUp: VRMLookAtRangeMap;
+  public rangeMapVerticalUp: VRMLookAtRangeMap;
 
   /**
    * Create a new {@link VRMLookAtExpressionApplier}.
    *
    * @param expressions A {@link VRMExpressionManager}
-   * @param lookAtHorizontalInner A {@link VRMLookAtRangeMap} used for inner transverse direction
-   * @param lookAtHorizontalOuter A {@link VRMLookAtRangeMap} used for outer transverse direction
-   * @param lookAtVerticalDown A {@link VRMLookAtRangeMap} used for down direction
-   * @param lookAtVerticalUp A {@link VRMLookAtRangeMap} used for up direction
+   * @param rangeMapHorizontalInner A {@link VRMLookAtRangeMap} used for inner transverse direction
+   * @param rangeMapHorizontalOuter A {@link VRMLookAtRangeMap} used for outer transverse direction
+   * @param rangeMapVerticalDown A {@link VRMLookAtRangeMap} used for down direction
+   * @param rangeMapVerticalUp A {@link VRMLookAtRangeMap} used for up direction
    */
   public constructor(
     expressions: VRMExpressionManager,
-    lookAtHorizontalInner: VRMLookAtRangeMap,
-    lookAtHorizontalOuter: VRMLookAtRangeMap,
-    lookAtVerticalDown: VRMLookAtRangeMap,
-    lookAtVerticalUp: VRMLookAtRangeMap,
+    rangeMapHorizontalInner: VRMLookAtRangeMap,
+    rangeMapHorizontalOuter: VRMLookAtRangeMap,
+    rangeMapVerticalDown: VRMLookAtRangeMap,
+    rangeMapVerticalUp: VRMLookAtRangeMap,
   ) {
     this.expressions = expressions;
 
-    this.lookAtHorizontalInner = lookAtHorizontalInner;
-    this.lookAtHorizontalOuter = lookAtHorizontalOuter;
-    this.lookAtVerticalDown = lookAtVerticalDown;
-    this.lookAtVerticalUp = lookAtVerticalUp;
+    this.rangeMapHorizontalInner = rangeMapHorizontalInner;
+    this.rangeMapHorizontalOuter = rangeMapHorizontalOuter;
+    this.rangeMapVerticalDown = rangeMapVerticalDown;
+    this.rangeMapVerticalUp = rangeMapVerticalUp;
   }
 
   /**
@@ -74,18 +74,18 @@ export class VRMLookAtExpressionApplier implements VRMLookAtApplier {
 
     if (srcX < 0.0) {
       this.expressions.setValue('lookUp', 0.0);
-      this.expressions.setValue('lookDown', this.lookAtVerticalDown.map(-srcX));
+      this.expressions.setValue('lookDown', this.rangeMapVerticalDown.map(-srcX));
     } else {
       this.expressions.setValue('lookDown', 0.0);
-      this.expressions.setValue('lookUp', this.lookAtVerticalUp.map(srcX));
+      this.expressions.setValue('lookUp', this.rangeMapVerticalUp.map(srcX));
     }
 
     if (srcY < 0.0) {
       this.expressions.setValue('lookLeft', 0.0);
-      this.expressions.setValue('lookRight', this.lookAtHorizontalOuter.map(-srcY));
+      this.expressions.setValue('lookRight', this.rangeMapHorizontalOuter.map(-srcY));
     } else {
       this.expressions.setValue('lookRight', 0.0);
-      this.expressions.setValue('lookLeft', this.lookAtHorizontalOuter.map(srcY));
+      this.expressions.setValue('lookLeft', this.rangeMapHorizontalOuter.map(srcY));
     }
   }
 }

@@ -443,7 +443,7 @@
         "allowPoliticalOrReligiousUsage": true,
         "creditNotation": "unnecessary",
         "allowRedistribution": true,
-        "modification": "notInherited"
+        "modification": "allowModificationRedistribution"
       },
       "humanoid": {
         "humanBones": {
@@ -555,38 +555,38 @@
         "meshAnnotations": [
           {
             "node": 16,
-            "firstPersonType": "thirdPersonOnly"
+            "type": "thirdPersonOnly"
           },
           {
             "node": 18,
-            "firstPersonType": "thirdPersonOnly"
+            "type": "thirdPersonOnly"
           },
           {
             "node": 20,
-            "firstPersonType": "thirdPersonOnly"
+            "type": "thirdPersonOnly"
           },
           {
             "node": 21,
-            "firstPersonType": "thirdPersonOnly"
+            "type": "thirdPersonOnly"
           }
         ]
       },
       "lookAt": {
         "offsetFromHeadBone": [ 0.0, 0.25, 0.01 ],
-        "lookAtType": "bone",
-        "lookAtHorizontalInner": {
+        "type": "bone",
+        "rangeMapHorizontalInner": {
           "inputMaxValue": 90.0,
           "outputScale": 10.0
         },
-        "lookAtHorizontalOuter": {
+        "rangeMapHorizontalOuter": {
           "inputMaxValue": 90.0,
           "outputScale": 10.0
         },
-        "lookAtVerticalDown": {
+        "rangeMapVerticalDown": {
           "inputMaxValue": 90.0,
           "outputScale": 10.0
         },
-        "lookAtVerticalUp": {
+        "rangeMapVerticalUp": {
           "inputMaxValue": 90.0,
           "outputScale": 10.0
         }

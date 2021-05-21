@@ -2,5 +2,5 @@ import type { VRMFirstPersonMeshAnnotationType } from './VRMFirstPersonMeshAnnot
 
 export interface VRMFirstPersonMeshAnnotation {
   meshes: THREE.Mesh[];
-  firstPersonType: VRMFirstPersonMeshAnnotationType;
+  type: VRMFirstPersonMeshAnnotationType;
 }

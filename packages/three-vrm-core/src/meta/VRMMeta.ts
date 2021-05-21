@@ -38,51 +38,55 @@ export interface VRMMeta {
   thirdPartyLicenses?: string;
 
   /**
-   * An image of the thumbnail image of the avatar model.
-   * It must be square. Preferable resolution is 1024 x 1024.
+   * An image of the thumbnail image of the model.
    * This is for the application to use as an icon.
    */
   thumbnailImage?: HTMLImageElement;
 
   /**
-   * A person who can perform with this avatar.
+   * A person who can perform as an avatar with this model.
    */
-  avatarPermission?: 'onlyAuthor' | 'explicitlyLicensedPerson' | 'everyone';
+  avatarPermission?: 'onlyAuthor' | 'onlySeparatelyLicensedPerson' | 'everyone';
 
   /**
-   * A flag that permits to use this avatar in excessively violent contents.
+   * A flag that permits to use this model in excessively violent contents.
    */
   allowExcessivelyViolentUsage?: boolean;
 
   /**
-   * A flag that permits to use this avatar in excessively sexual contents.
+   * A flag that permits to use this model in excessively sexual contents.
    */
   allowExcessivelySexualUsage?: boolean;
 
   /**
-   * An option that permits to use this avatar in commercial products.
+   * An option that permits to use this model in commercial products.
    */
   commercialUsage?: 'personalNonProfit' | 'personalProfit' | 'corporation';
 
   /**
-   * A flag that permits to use this avatar in political or religious contents.
+   * A flag that permits to use this model in political or religious contents.
    */
   allowPoliticalOrReligiousUsage?: boolean;
 
   /**
-   * An option that forces or abandons to display the credit of this avatar.
+   * A flag that permits to use this model in contents contain anti-social activities or hate speeches.
    */
-  creditNotation?: 'required' | 'unnecessary' | 'abandoned';
+  allowAntisocialOrHateUsage?: boolean;
 
   /**
-   * A flag that permits to redistribute this avatar.
+   * An option that forces or abandons to display the credit of this model.
+   */
+  creditNotation?: 'required' | 'unnecessary';
+
+  /**
+   * A flag that permits to redistribute this model.
    */
   allowRedistribution?: boolean;
 
   /**
-   * An option that controls the condition to modify this avatar.
+   * An option that controls the condition to modify this model.
    */
-  modification?: 'prohibited' | 'inherited' | 'notInherited';
+  modification?: 'prohibited' | 'allowModification' | 'allowModificationRedistribution';
 
   /**
    * Describe the URL links of other license.
