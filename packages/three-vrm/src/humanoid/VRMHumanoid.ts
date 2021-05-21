@@ -133,7 +133,21 @@ export class VRMHumanoid {
    * Reset the humanoid to its rest pose.
    */
   public resetPose(): void {
-    this.setPose({});
+    Object.entries(this.restPose).forEach(([boneName, rest]) => {
+      const node = this.getBoneNode(boneName as VRMHumanoidBoneName);
+
+      if (!node) {
+        return;
+      }
+
+      if (rest?.position) {
+        node.position.fromArray(rest.position);
+      }
+
+      if (rest?.rotation) {
+        node.quaternion.fromArray(rest.rotation);
+      }
+    });
   }
 
   /**
@@ -144,18 +158,19 @@ export class VRMHumanoid {
    * @param name Name of the bone you want
    */
   public getBone(name: VRMHumanoidBoneName): VRMHumanBone | undefined {
-    return this.humanBones[name][0] || undefined;
+    return this.humanBones[name][0] ?? undefined;
   }
 
   /**
    * Return bones bound to a specified [[HumanBone]], as an array of [[VRMHumanBone]].
+   * If there are no bones bound to the specified HumanBone, it will return an empty array.
    *
    * See also: [[VRMHumanoid.getBone]]
    *
    * @param name Name of the bone you want
    */
   public getBones(name: VRMHumanoidBoneName): VRMHumanBone[] {
-    return this.humanBones[name];
+    return this.humanBones[name] ?? [];
   }
 
   /**
@@ -171,13 +186,14 @@ export class VRMHumanoid {
 
   /**
    * Return bones bound to a specified [[HumanBone]], as an array of THREE.Object3D.
+   * If there are no bones bound to the specified HumanBone, it will return an empty array.
    *
    * See also: [[VRMHumanoid.getBoneNode]]
    *
    * @param name Name of the bone you want
    */
   public getBoneNodes(name: VRMHumanoidBoneName): GLTFNode[] {
-    return this.humanBones[name].map((bone) => bone.node);
+    return this.humanBones[name]?.map((bone) => bone.node) ?? [];
   }
 
   /**

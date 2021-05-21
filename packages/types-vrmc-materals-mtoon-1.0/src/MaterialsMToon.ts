@@ -1,5 +1,6 @@
-import type { MaterialsMToonOutlineColorMode } from './MaterialsMToonOutlineColorMode';
 import type { MaterialsMToonOutlineWidthMode } from './MaterialsMToonOutlineWidthMode';
+import type { MaterialsMToonShadingShiftTextureInfo } from './MaterialsMToonShadingShiftTextureInfo';
+import type { MaterialsMToonTextureInfo } from './MaterialsMToonTextureInfo';
 
 export interface MaterialsMToon {
   /**
@@ -20,32 +21,22 @@ export interface MaterialsMToon {
   /**
    *
    */
-  shadeFactor?: number[];
+  shadeColorFactor?: number[];
 
   /**
    *
    */
-  shadeMultiplyTexture?: {
-    index: number;
-    texCoord?: number;
-
-    extensions?: { [name: string]: any };
-    extras?: any;
-  };
+  shadeMultiplyTexture?: MaterialsMToonTextureInfo;
 
   /**
    * Lighting
    */
   shadingShiftFactor?: number;
 
-  shadingShiftTexture?: {
-    index: number;
-    texCoord?: number;
-    scale?: number;
-
-    extensions?: { [name: string]: any };
-    extras?: any;
-  };
+  /**
+   *
+   */
+  shadingShiftTexture: MaterialsMToonShadingShiftTextureInfo;
 
   /**
    *
@@ -55,38 +46,22 @@ export interface MaterialsMToon {
   /**
    *
    */
-  lightColorAttenuationFactor?: number;
-
-  /**
-   *
-   */
   giIntensityFactor?: number;
 
   /**
    * MatCap
    */
-  additiveTexture?: {
-    index: number;
-
-    extensions?: { [name: string]: any };
-    extras?: any;
-  };
+  matcapTexture?: MaterialsMToonTextureInfo;
 
   /**
    * Rim
    */
-  rimFactor?: number[];
+  parametricRimColorFactor?: number[];
 
   /**
    *
    */
-  rimMultiplyTexture?: {
-    index: number;
-    texCoord?: number;
-
-    extensions?: { [name: string]: any };
-    extras?: any;
-  };
+  rimMultiplyTexture?: MaterialsMToonTextureInfo;
 
   /**
    *
@@ -96,12 +71,12 @@ export interface MaterialsMToon {
   /**
    *
    */
-  rimFresnelPowerFactor?: number;
+  parametricRimFresnelPowerFactor?: number;
 
   /**
    *
    */
-  rimLiftFactor?: number;
+  parametricRimLiftFactor?: number;
 
   /**
    * Outline
@@ -116,28 +91,12 @@ export interface MaterialsMToon {
   /**
    *
    */
-  outlineWidthMultiplyTexture?: {
-    index: number;
-    texCoord?: number;
-
-    extensions?: { [name: string]: any };
-    extras?: any;
-  };
+  outlineWidthMultiplyTexture?: MaterialsMToonTextureInfo;
 
   /**
    *
    */
-  outlineScaledMaxDistanceFactor?: number;
-
-  /**
-   *
-   */
-  outlineColorMode?: MaterialsMToonOutlineColorMode;
-
-  /**
-   *
-   */
-  outlineFactor?: number[];
+  outlineColorFactor?: number[];
 
   /**
    *
@@ -147,13 +106,7 @@ export interface MaterialsMToon {
   /**
    *
    */
-  uvAnimationMaskTexture?: {
-    index: number;
-    texCoord?: number;
-
-    extensions?: { [name: string]: any };
-    extras?: any;
-  };
+  uvAnimationMaskTexture?: MaterialsMToonTextureInfo;
 
   /**
    *
@@ -169,4 +122,7 @@ export interface MaterialsMToon {
    *
    */
   uvAnimationRotationSpeedFactor?: number;
+
+  extensions?: { [name: string]: any };
+  extras?: any;
 }

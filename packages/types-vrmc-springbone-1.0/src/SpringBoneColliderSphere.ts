@@ -1,4 +1,4 @@
-export interface NodeColliderSphere {
+export interface SpringBoneColliderSphere {
   /**
    * The sphere center. vector3
    */
