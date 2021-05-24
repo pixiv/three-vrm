@@ -2,8 +2,5 @@
   "extends": "../../tsconfig.json",
   "include": [
     "./src"
-  ],
-  "exclude": [
-    "**/tests/**"
   ]
 }

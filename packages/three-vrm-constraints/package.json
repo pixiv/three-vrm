@@ -21,14 +21,16 @@
   },
   "scripts": {
     "version": "yarn all",
-    "all": "yarn && yarn lint && yarn clean && yarn build && yarn docs",
+    "all": "yarn && yarn test && yarn lint && yarn clean && yarn build && yarn docs",
     "dev": "cross-env NODE_ENV=development SERVE=1 rollup -w -c -o lib/three-vrm-constraints.js",
     "clean": "rimraf docs/ lib/ ts*/ types/",
-    "build": "yarn build-dev && yarn build-prod && yarn build-types",
+    "build": "yarn build-dev && yarn build-prod && yarn build-moduledev && yarn build-moduleprod && yarn build-types",
     "build-dev": "cross-env NODE_ENV=development rollup -c -o lib/three-vrm-constraints.js",
     "build-prod": "cross-env NODE_ENV=production rollup -c -o lib/three-vrm-constraints.min.js",
-    "build-types": "tsc --declaration --declarationDir ./types --emitDeclarationOnly && downlevel-dts types ts3.4/types",
-    "docs": "typedoc --out docs --mode file --excludeNotExported",
+    "build-moduledev": "cross-env NODE_ENV=development ESM=1 rollup -c -o lib/three-vrm-constraints.module.js",
+    "build-moduleprod": "cross-env NODE_ENV=production ESM=1 rollup -c -o lib/three-vrm-constraints.module.min.js",
+    "build-types": "tsc --project ./tsconfig.build-types.json && downlevel-dts types ts3.4/types",
+    "docs": "typedoc --entryPoints ./src/index.ts --out docs",
     "test": "jest",
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier \"src/**/*.{ts,tsx}\" --check",
     "lint-fix": "eslint \"src/**/*.{ts,tsx}\" --fix && prettier \"src/**/*.{ts,tsx}\" --write"
@@ -43,11 +45,11 @@
     "@pixiv/types-vrmc-constraints-1.0": "0.0.1"
   },
   "devDependencies": {
-    "downlevel-dts": "^0.5.0",
-    "three": "^0.117.1",
-    "typedoc": "^0.17.7"
+    "@types/three": "^0.126.0",
+    "lint-staged": "10.5.4",
+    "three": "^0.126.1"
   },
   "peerDependencies": {
-    "three": "^0.117.1"
+    "three": "^0.126.1"
   }
 }
