@@ -6,6 +6,7 @@ import { Xorshift } from './utils/Xorshift';
 import { toBeCloseToQuaternion } from './matchers/toBeCloseToQuaternion';
 import { VRMRotationConstraint } from '../VRMRotationConstraint';
 import { setRandomQuaternion } from './utils/setRandomQuaternion';
+import { quatInvertCompat } from '../utils/quatInvertCompat';
 
 beforeEach(() => {
   expect.extend({ toBeCloseToQuaternion });
@@ -69,10 +70,10 @@ describe('VRMRotationConstraint', () => {
           source.updateWorldMatrix(false, false);
 
           source.getWorldQuaternion(sourceDelta);
-          sourceDelta.multiply(quatBeforeRotate.clone().inverse());
+          sourceDelta.multiply(quatInvertCompat(quatBeforeRotate.clone()));
 
           // revert
-          source.quaternion.multiply(rot.clone().inverse());
+          source.quaternion.multiply(quatInvertCompat(rot.clone()));
           source.updateWorldMatrix(false, false);
         }
       });

@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { decomposePosition } from './utils/decomposePosition';
 import { decomposeRotation } from './utils/decomposeRotation';
+import { quatInvertCompat } from './utils/quatInvertCompat';
 import { setAimQuaternion } from './utils/setAimQuaternion';
 import { VRMConstraint } from './VRMConstraint';
 
@@ -35,7 +36,7 @@ export class VRMAimConstraint extends VRMConstraint {
     this._quatInitDst.copy(this.object.quaternion);
 
     this._getAimQuat(this._quatInitAim);
-    this._quatInvInitAim.copy(this._quatInitAim).inverse();
+    quatInvertCompat(this._quatInvInitAim.copy(this._quatInitAim));
   }
 
   public update(): void {
@@ -44,7 +45,7 @@ export class VRMAimConstraint extends VRMConstraint {
     } else {
       this._getParentMatrixInModelSpace(_matA);
       decomposeRotation(_matA, _quatA);
-      this.object.quaternion.copy(_quatA).inverse();
+      quatInvertCompat(this.object.quaternion.copy(_quatA));
     }
 
     this._getAimDiffQuat(_quatB);

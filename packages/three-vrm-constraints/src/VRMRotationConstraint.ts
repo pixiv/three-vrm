@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { decomposeRotation } from './utils/decomposeRotation';
 import { quaternionFreezeAxes } from './utils/quaternionFreezeAxes';
+import { quatInvertCompat } from './utils/quatInvertCompat';
 import { VRMConstraint } from './VRMConstraint';
 
 const QUAT_IDENTITY = new THREE.Quaternion(0, 0, 0, 1);
@@ -20,7 +21,7 @@ export class VRMRotationConstraint extends VRMConstraint {
     this._quatInitDst.copy(this.object.quaternion);
 
     this._getSourceQuat(this._quatInitSrc);
-    this._quatInvInitSrc.copy(this._quatInitSrc).inverse();
+    quatInvertCompat(this._quatInvInitSrc.copy(this._quatInitSrc));
   }
 
   public update(): void {
@@ -29,7 +30,7 @@ export class VRMRotationConstraint extends VRMConstraint {
     } else {
       this._getParentMatrixInModelSpace(_matA);
       decomposeRotation(_matA, _quatA);
-      this.object.quaternion.copy(_quatA).inverse();
+      quatInvertCompat(this.object.quaternion.copy(_quatA));
     }
 
     this._getSourceDiffQuat(_quatB);

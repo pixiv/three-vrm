@@ -6,6 +6,7 @@ import { Xorshift } from './utils/Xorshift';
 import { toBeCloseToQuaternion } from './matchers/toBeCloseToQuaternion';
 import { VRMAimConstraint } from '../VRMAimConstraint';
 import { setRandomVector3 } from './utils/setRandomVector3';
+import { quatInvertCompat } from '../utils/quatInvertCompat';
 
 const VEC3_UP = new THREE.Vector3(0.0, 1.0, 0.0);
 
@@ -89,10 +90,11 @@ describe('VRMAimConstraint', () => {
 
           destinationPos.copy(object.position);
 
-          const quatInvLookAtBefore = new THREE.Quaternion()
-            .setFromRotationMatrix(new THREE.Matrix4().lookAt(sourcePos, destinationPos, VEC3_UP))
-            .inverse();
-          quatLookAtDelta.setFromRotationMatrix(new THREE.Matrix4().lookAt(sourcePosAfter, destinationPos, VEC3_UP));
+          const quatInvLookAtBefore = new THREE.Quaternion();
+          quatInvLookAtBefore.setFromRotationMatrix(new THREE.Matrix4().lookAt(sourcePos, destinationPos, VEC3_UP));
+          quatInvertCompat(quatInvLookAtBefore);
+
+            quatLookAtDelta.setFromRotationMatrix(new THREE.Matrix4().lookAt(sourcePosAfter, destinationPos, VEC3_UP));
           quatLookAtDelta.multiply(quatInvLookAtBefore);
 
           constraint.setInitState();
@@ -118,9 +120,9 @@ describe('VRMAimConstraint', () => {
 
           object.getWorldPosition(destinationPos);
 
-          const quatInvLookAtBefore = new THREE.Quaternion()
-            .setFromRotationMatrix(new THREE.Matrix4().lookAt(sourcePos, destinationPos, VEC3_UP))
-            .inverse();
+          const quatInvLookAtBefore = new THREE.Quaternion();
+          quatInvLookAtBefore.setFromRotationMatrix(new THREE.Matrix4().lookAt(sourcePos, destinationPos, VEC3_UP));
+          quatInvertCompat(quatInvLookAtBefore);
           quatLookAtDelta.setFromRotationMatrix(new THREE.Matrix4().lookAt(sourcePosAfter, destinationPos, VEC3_UP));
           quatLookAtDelta.multiply(quatInvLookAtBefore);
 

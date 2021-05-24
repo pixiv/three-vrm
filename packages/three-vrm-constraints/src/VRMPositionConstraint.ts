@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { decomposePosition } from './utils/decomposePosition';
+import { mat4InvertCompat } from './utils/mat4InvertCompat';
 import { vector3FreezeAxes } from './utils/vector3FreezeAxes';
 import { VRMConstraint } from './VRMConstraint';
 
@@ -21,7 +22,7 @@ export class VRMPositionConstraint extends VRMConstraint {
     this._getSourceDiffPosition(this.object.position);
 
     if (this.destinationSpace === 'model') {
-      this._getParentMatrixInModelSpace(_matA).getInverse(_matA);
+      mat4InvertCompat(this._getParentMatrixInModelSpace(_matA));
 
       // remove translation
       _matA.elements[12] = 0;
