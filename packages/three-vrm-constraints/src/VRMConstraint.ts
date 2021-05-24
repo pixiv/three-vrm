@@ -77,6 +77,8 @@ export abstract class VRMConstraint {
 
       this._getMatrixWorldToModel(_matWorldToModel);
       target.premultiply(_matWorldToModel);
+    } else {
+      throw new Error(`VRMConstraint: Unknown destinationSpace ${this.destinationSpace} detected`);
     }
 
     return target;
@@ -101,6 +103,8 @@ export abstract class VRMConstraint {
 
       this._getMatrixWorldToModel(_matWorldToModel);
       target.premultiply(_matWorldToModel);
+    } else {
+      throw new Error(`VRMConstraint: Unknown sourceSpace ${this.sourceSpace} detected`);
     }
 
     return target;
