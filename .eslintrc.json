@@ -3,6 +3,9 @@
     "@typescript-eslint"
   ],
   "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -16,6 +19,7 @@
     "curly": ["error", "multi-line"], // if statements without curly are evil
     "no-console": ["error", { "allow": ["info", "warn", "error"] }], // do not leave console.log
     "require-atomic-updates": ["off"], // the rule is kinda buggy
+    "@typescript-eslint/no-unnecessary-type-assertion": ["error"], // we don't need unnecessary type assertions
     "@typescript-eslint/naming-convention": [
       "error",
       {
