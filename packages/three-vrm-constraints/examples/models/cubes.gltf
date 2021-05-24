@@ -321,8 +321,8 @@
         "VRMC_constraints-1.0": {
           "position": {
             "source": 0,
-            "sourceSpace": "MODEL",
-            "destinationSpace": "MODEL",
+            "sourceSpace": "model",
+            "destinationSpace": "model",
             "freezeAxes": [true, true, true],
             "weight": 1.0
           }
@@ -353,8 +353,8 @@
         "VRMC_constraints-1.0": {
           "rotation": {
             "source": 0,
-            "sourceSpace": "MODEL",
-            "destinationSpace": "MODEL",
+            "sourceSpace": "model",
+            "destinationSpace": "model",
             "freezeAxes": [true, true, true],
             "weight": 1.0
           }
