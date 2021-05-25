@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import { VRMNodeColliderShape } from './VRMSpringBoneColliderShape';
+import { VRMSpringBoneColliderShape } from './VRMSpringBoneColliderShape';
 
-export class VRMNodeColliderShapeSphere extends VRMNodeColliderShape {
+export class VRMSpringBoneColliderShapeSphere extends VRMSpringBoneColliderShape {
   public get type(): 'sphere' {
     return 'sphere';
   }

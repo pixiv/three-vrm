@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 import * as THREE from 'three';
-import { VRMNodeColliderShapeSphere } from '../VRMSpringBoneColliderShapeSphere';
+import { VRMSpringBoneColliderShapeSphere } from '../VRMSpringBoneColliderShapeSphere';
 import { toBeCloseToArray } from './matchers/toBeCloseToArray';
 import { toBeCloseToVector3 } from './matchers/toBeCloseToVector3';
 
@@ -9,23 +9,23 @@ beforeEach(() => {
   expect.extend({ toBeCloseToArray, toBeCloseToVector3 });
 });
 
-describe('VRMNodeColliderShapeSphere', () => {
+describe('VRMSpringBoneColliderShapeSphere', () => {
   it('must be instantiated properly', () => {
-    const shape = new VRMNodeColliderShapeSphere({
+    const shape = new VRMSpringBoneColliderShapeSphere({
       radius: 1.0,
       offset: new THREE.Vector3(0.0, 0.0, 0.0),
     });
-    expect(shape).toBeInstanceOf(VRMNodeColliderShapeSphere);
+    expect(shape).toBeInstanceOf(VRMSpringBoneColliderShapeSphere);
   });
 
   it('must fallback its offset to (0.0, 0.0, 0.0) if not specified', () => {
-    const shape = new VRMNodeColliderShapeSphere();
+    const shape = new VRMSpringBoneColliderShapeSphere();
     expect(shape.offset).toBeCloseToVector3(new THREE.Vector3(0.0, 0.0, 0.0));
   });
 
   describe('calculateCollision', () => {
     it('must calculate a collision properly', () => {
-      const shape = new VRMNodeColliderShapeSphere({
+      const shape = new VRMSpringBoneColliderShapeSphere({
         radius: 1.0,
       });
 
@@ -41,7 +41,7 @@ describe('VRMNodeColliderShapeSphere', () => {
     });
 
     it('must not modify the input values', () => {
-      const shape = new VRMNodeColliderShapeSphere({
+      const shape = new VRMSpringBoneColliderShapeSphere({
         radius: 1.0,
       });
 
@@ -59,7 +59,7 @@ describe('VRMNodeColliderShapeSphere', () => {
     });
 
     it('must calculate a collision properly, with an offset', () => {
-      const shape = new VRMNodeColliderShapeSphere({
+      const shape = new VRMSpringBoneColliderShapeSphere({
         radius: 1.0,
         offset: new THREE.Vector3(0.0, 0.0, -1.0),
       });
@@ -76,7 +76,7 @@ describe('VRMNodeColliderShapeSphere', () => {
     });
 
     it('must calculate a collision properly, with an offset nad a rotation', () => {
-      const shape = new VRMNodeColliderShapeSphere({
+      const shape = new VRMSpringBoneColliderShapeSphere({
         radius: 1.0,
         offset: new THREE.Vector3(0.0, 1.0, 1.0),
       });

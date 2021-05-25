@@ -1,8 +1,8 @@
-import { VRMNodeCollider } from '@pixiv/three-vrm-node-collider';
 import * as V0VRM from '@pixiv/types-vrm-0.0';
 import * as V1SpringBoneSchema from '@pixiv/types-vrmc-springbone-1.0';
 import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+import { VRMSpringBoneCollider } from './VRMSpringBoneCollider';
 import { VRMSpringBoneJoint } from './VRMSpringBoneJoint';
 import { VRMSpringBoneManager } from './VRMSpringBoneManager';
 import { VRMSpringBoneSettings } from './VRMSpringBoneSettings';
@@ -23,7 +23,7 @@ export class VRMSpringBoneImporter {
    */
   public async import(
     gltf: GLTF,
-    collidersMap?: Map<number, Set<VRMNodeCollider>>,
+    collidersMap?: Map<number, Set<VRMSpringBoneCollider>>,
   ): Promise<VRMSpringBoneManager | null> {
     const v1Result = await this._v1Import(gltf, collidersMap);
     if (v1Result != null) {
@@ -40,7 +40,7 @@ export class VRMSpringBoneImporter {
 
   private async _v1Import(
     gltf: GLTF,
-    collidersMap?: Map<number, Set<VRMNodeCollider>>,
+    collidersMap?: Map<number, Set<VRMSpringBoneCollider>>,
   ): Promise<VRMSpringBoneManager | null> {
     // early abort if it doesn't use spring bones
     const isSpringBoneUsed = gltf.parser.json.extensionsUsed.indexOf('VRMC_springBone-1.0') !== -1;
@@ -61,7 +61,7 @@ export class VRMSpringBoneImporter {
       const joints = schemaSpring.joints;
 
       // prepare colliders
-      const colliders: VRMNodeCollider[] = [];
+      const colliders: VRMSpringBoneCollider[] = [];
       schemaSpring.colliders?.forEach((index) => {
         const set = collidersMap?.get(index);
         if (set) {
@@ -97,7 +97,7 @@ export class VRMSpringBoneImporter {
 
   private async _v0Import(
     gltf: GLTF,
-    collidersMap?: Map<number, Set<VRMNodeCollider>>,
+    collidersMap?: Map<number, Set<VRMSpringBoneCollider>>,
   ): Promise<VRMSpringBoneManager | null> {
     // early abort if it doesn't use vrm
     const isVRMUsed = gltf.parser.json.extensionsUsed.indexOf('VRM') !== -1;
@@ -141,7 +141,7 @@ export class VRMSpringBoneImporter {
         };
 
         // prepare colliders
-        const colliders: VRMNodeCollider[] = [];
+        const colliders: VRMSpringBoneCollider[] = [];
         group.colliderGroups?.forEach((index) => {
           const set = collidersMap?.get(index);
           if (set) {

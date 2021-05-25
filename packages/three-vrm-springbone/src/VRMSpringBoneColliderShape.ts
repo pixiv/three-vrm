@@ -1,7 +1,7 @@
 /**
  * Represents a shape of a collider.
  */
-export abstract class VRMNodeColliderShape {
+export abstract class VRMSpringBoneColliderShape {
   /**
    * The type of the shape.
    */

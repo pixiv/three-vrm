@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { VRMNodeColliderShapeCapsule } from '../../VRMSpringBoneColliderShapeCapsule';
+import { VRMSpringBoneColliderShapeCapsule } from '../../VRMSpringBoneColliderShapeCapsule';
 import { ColliderShapeBufferGeometry } from './ColliderShapeBufferGeometry';
 
 const _vecA = new THREE.Vector3();
@@ -7,12 +7,12 @@ const _vecA = new THREE.Vector3();
 export class ColliderShapeCapsuleBufferGeometry extends THREE.BufferGeometry implements ColliderShapeBufferGeometry {
   private readonly _attrPos: THREE.BufferAttribute;
   private readonly _attrIndex: THREE.BufferAttribute;
-  private readonly _shape: VRMNodeColliderShapeCapsule;
+  private readonly _shape: VRMSpringBoneColliderShapeCapsule;
   private _currentRadius = 0;
   private readonly _currentOffset = new THREE.Vector3();
   private readonly _currentTail = new THREE.Vector3();
 
-  public constructor(shape: VRMNodeColliderShapeCapsule) {
+  public constructor(shape: VRMSpringBoneColliderShapeCapsule) {
     super();
 
     this._shape = shape;

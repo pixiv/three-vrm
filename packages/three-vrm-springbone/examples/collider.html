@@ -80,7 +80,7 @@
 			// collider
 			const colliders = [];
 
-			const colliderShape = new THREE.VRMNodeColliderShapeCapsule( {
+			const colliderShape = new THREE.VRMSpringBoneColliderShapeCapsule( {
 
 				radius: 0.2,
 				offset: new THREE.Vector3( -0.5, -0.5, 1.0 ),
@@ -88,13 +88,13 @@
 
 			} );
 
-			const collider = new THREE.VRMNodeCollider( colliderShape );
+			const collider = new THREE.VRMSpringBoneCollider( colliderShape );
 			scene.add( collider );
 
 			colliders.push( collider );
 
 			// collider helper
-			const colliderHelper =  new THREE.VRMNodeColliderHelper( collider );
+			const colliderHelper =  new THREE.VRMSpringBoneColliderHelper( collider );
 			scene.add( colliderHelper );
 
 			// spring bone

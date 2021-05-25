@@ -1,28 +1,28 @@
 import * as THREE from 'three';
-import { VRMNodeCollider } from '../VRMSpringBoneCollider';
-import { VRMNodeColliderShapeCapsule } from '../VRMSpringBoneColliderShapeCapsule';
-import { VRMNodeColliderShapeSphere } from '../VRMSpringBoneColliderShapeSphere';
+import { VRMSpringBoneCollider } from '../VRMSpringBoneCollider';
+import { VRMSpringBoneColliderShapeCapsule } from '../VRMSpringBoneColliderShapeCapsule';
+import { VRMSpringBoneColliderShapeSphere } from '../VRMSpringBoneColliderShapeSphere';
 import { ColliderShapeBufferGeometry } from './utils/ColliderShapeBufferGeometry';
 import { ColliderShapeCapsuleBufferGeometry } from './utils/ColliderShapeCapsuleBufferGeometry';
 import { ColliderShapeSphereBufferGeometry } from './utils/ColliderShapeSphereBufferGeometry';
 
-export class VRMNodeColliderHelper extends THREE.Group {
-  public readonly collider: VRMNodeCollider;
+export class VRMSpringBoneColliderHelper extends THREE.Group {
+  public readonly collider: VRMSpringBoneCollider;
   private readonly _geometry: ColliderShapeBufferGeometry;
   private readonly _line: THREE.LineSegments;
 
-  public constructor(collider: VRMNodeCollider) {
+  public constructor(collider: VRMSpringBoneCollider) {
     super();
     this.matrixAutoUpdate = false;
 
     this.collider = collider;
 
-    if (this.collider.shape instanceof VRMNodeColliderShapeSphere) {
+    if (this.collider.shape instanceof VRMSpringBoneColliderShapeSphere) {
       this._geometry = new ColliderShapeSphereBufferGeometry(this.collider.shape);
-    } else if (this.collider.shape instanceof VRMNodeColliderShapeCapsule) {
+    } else if (this.collider.shape instanceof VRMSpringBoneColliderShapeCapsule) {
       this._geometry = new ColliderShapeCapsuleBufferGeometry(this.collider.shape);
     } else {
-      throw new Error('VRMNodeColliderHelper: Unknown collider shape type detected');
+      throw new Error('VRMSpringBoneColliderHelper: Unknown collider shape type detected');
     }
 
     const material = new THREE.LineBasicMaterial({

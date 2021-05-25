@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 import * as THREE from 'three';
-import { VRMNodeColliderShapeCapsule } from '../VRMSpringBoneColliderShapeCapsule';
+import { VRMSpringBoneColliderShapeCapsule } from '../VRMSpringBoneColliderShapeCapsule';
 import { toBeCloseToArray } from './matchers/toBeCloseToArray';
 import { toBeCloseToVector3 } from './matchers/toBeCloseToVector3';
 
@@ -9,28 +9,28 @@ beforeEach(() => {
   expect.extend({ toBeCloseToArray, toBeCloseToVector3 });
 });
 
-describe('VRMNodeColliderShapeCapsule', () => {
+describe('VRMSpringBoneColliderShapeCapsule', () => {
   it('must be instantiated properly', () => {
-    const shape = new VRMNodeColliderShapeCapsule({
+    const shape = new VRMSpringBoneColliderShapeCapsule({
       radius: 1.0,
       offset: new THREE.Vector3(0.0, 0.0, 0.0),
     });
-    expect(shape).toBeInstanceOf(VRMNodeColliderShapeCapsule);
+    expect(shape).toBeInstanceOf(VRMSpringBoneColliderShapeCapsule);
   });
 
   it('must fallback its offset to (0.0, 0.0, 0.0) if not specified', () => {
-    const shape = new VRMNodeColliderShapeCapsule();
+    const shape = new VRMSpringBoneColliderShapeCapsule();
     expect(shape.offset).toBeCloseToVector3(new THREE.Vector3(0.0, 0.0, 0.0));
   });
 
   it('must fallback its tail to (0.0, 0.0, 0.0) if not specified', () => {
-    const shape = new VRMNodeColliderShapeCapsule();
+    const shape = new VRMSpringBoneColliderShapeCapsule();
     expect(shape.tail).toBeCloseToVector3(new THREE.Vector3(0.0, 0.0, 0.0));
   });
 
   describe('calculateCollision', () => {
     it('must calculate a collision properly', () => {
-      const shape = new VRMNodeColliderShapeCapsule({
+      const shape = new VRMSpringBoneColliderShapeCapsule({
         radius: 1.0,
       });
 
@@ -46,7 +46,7 @@ describe('VRMNodeColliderShapeCapsule', () => {
     });
 
     it('must not modify the input values', () => {
-      const shape = new VRMNodeColliderShapeCapsule({
+      const shape = new VRMSpringBoneColliderShapeCapsule({
         radius: 1.0,
       });
 
@@ -64,10 +64,10 @@ describe('VRMNodeColliderShapeCapsule', () => {
     });
 
     describe('when offset and tail is specified', () => {
-      let shape: VRMNodeColliderShapeCapsule;
+      let shape: VRMSpringBoneColliderShapeCapsule;
 
       beforeEach(() => {
-        shape = new VRMNodeColliderShapeCapsule({
+        shape = new VRMSpringBoneColliderShapeCapsule({
           radius: 1.0,
           offset: new THREE.Vector3(-1.0, 0.0, 0.0),
           tail: new THREE.Vector3(1.0, 1.0, 1.0),

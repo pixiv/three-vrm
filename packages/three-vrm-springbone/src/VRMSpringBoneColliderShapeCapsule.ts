@@ -1,10 +1,10 @@
 import * as THREE from 'three';
-import { VRMNodeColliderShape } from './VRMSpringBoneColliderShape';
+import { VRMSpringBoneColliderShape } from './VRMSpringBoneColliderShape';
 
 const _v3A = new THREE.Vector3();
 const _v3B = new THREE.Vector3();
 
-export class VRMNodeColliderShapeCapsule extends VRMNodeColliderShape {
+export class VRMSpringBoneColliderShapeCapsule extends VRMSpringBoneColliderShape {
   public get type(): 'capsule' {
     return 'capsule';
   }

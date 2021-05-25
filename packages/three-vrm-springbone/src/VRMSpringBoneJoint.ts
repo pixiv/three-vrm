@@ -1,8 +1,8 @@
 import * as THREE from 'three';
-import { VRMNodeCollider } from '@pixiv/three-vrm-node-collider';
 import { getWorldQuaternionLite } from './utils/getWorldQuaternionLite';
 import { mat4InvertCompat } from './utils/mat4InvertCompat';
 import { Matrix4InverseCache } from './utils/Matrix4InverseCache';
+import { VRMSpringBoneCollider } from './VRMSpringBoneCollider';
 import { VRMSpringBoneSettings } from './VRMSpringBoneSettings';
 
 // based on
@@ -38,7 +38,7 @@ export class VRMSpringBoneJoint {
   /**
    * Collider groups attached to this bone.
    */
-  public colliders: VRMNodeCollider[];
+  public colliders: VRMSpringBoneCollider[];
 
   /**
    * An Object3D attached to this bone.
@@ -162,7 +162,7 @@ export class VRMSpringBoneJoint {
     bone: THREE.Object3D,
     radius = 0.0,
     settings: Partial<VRMSpringBoneSettings> = {},
-    colliders: VRMNodeCollider[] = [],
+    colliders: VRMSpringBoneCollider[] = [],
   ) {
     this.bone = bone; // uniVRMでの parent
     this.bone.matrixAutoUpdate = false; // updateにより計算されるのでthree.js内での自動処理は不要

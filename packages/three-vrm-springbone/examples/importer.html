@@ -52,11 +52,11 @@
 			// gltf and vrm
 			let currentGltf = null;
 			let currentSpringBoneManager = null;
-			let currentNodeColliderHelpers = null;
+			let currentSpringBoneColliderHelpers = null;
 			let currentSpringBoneHelpers = null;
 
 			const springBoneImporter = new THREE.VRMSpringBoneImporter();
-			const nodeColliderImporter = new THREE.VRMNodeColliderImporter();
+			const springBoneColliderImporter = new THREE.VRMSpringBoneColliderImporter();
 
 			const loader = new THREE.GLTFLoader();
 
@@ -75,7 +75,7 @@
 
 						currentGltf = gltf;
 
-						const promiseColliders = nodeColliderImporter.import( gltf );
+						const promiseColliders = springBoneColliderImporter.import( gltf );
 
 						promiseColliders.then( ( colliders ) => {
 
@@ -89,9 +89,9 @@
 
 								const flattenedColliders = Array.from( colliders.values() ).map( ( groups ) => Array.from( groups ) ).flat();
 
-								currentNodeColliderHelpers = flattenedColliders.map( ( collider ) => {
+								currentSpringBoneColliderHelpers = flattenedColliders.map( ( collider ) => {
 
-									const helper = new THREE.VRMNodeColliderHelper( collider );
+									const helper = new THREE.VRMSpringBoneColliderHelper( collider );
 									helper.renderOrder = 10000;
 									scene.add( helper );
 									return helper;
@@ -140,7 +140,7 @@
 
 				const delta = clock.getDelta();
 
-				if ( currentGltf && currentSpringBoneManager && currentNodeColliderHelpers && currentSpringBoneHelpers ) {
+				if ( currentGltf && currentSpringBoneManager && currentSpringBoneColliderHelpers && currentSpringBoneHelpers ) {
 
 					currentGltf.scene.position.x = Math.sin( Math.PI * clock.elapsedTime );
 
@@ -153,7 +153,7 @@
 
 					currentSpringBoneManager.update( delta );
 
-					currentNodeColliderHelpers.forEach( ( helper ) => helper.update() );
+					currentSpringBoneColliderHelpers.forEach( ( helper ) => helper.update() );
 
 					currentSpringBoneHelpers.forEach( ( helper ) => helper.update() );
 
