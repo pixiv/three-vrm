@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import { VRMNodeCollider } from '../VRMNodeCollider';
-import { VRMNodeColliderShapeCapsule } from '../VRMNodeColliderShapeCapsule';
-import { VRMNodeColliderShapeSphere } from '../VRMNodeColliderShapeSphere';
+import { VRMNodeCollider } from '../VRMSpringBoneCollider';
+import { VRMNodeColliderShapeCapsule } from '../VRMSpringBoneColliderShapeCapsule';
+import { VRMNodeColliderShapeSphere } from '../VRMSpringBoneColliderShapeSphere';
 import { ColliderShapeBufferGeometry } from './utils/ColliderShapeBufferGeometry';
 import { ColliderShapeCapsuleBufferGeometry } from './utils/ColliderShapeCapsuleBufferGeometry';
 import { ColliderShapeSphereBufferGeometry } from './utils/ColliderShapeSphereBufferGeometry';

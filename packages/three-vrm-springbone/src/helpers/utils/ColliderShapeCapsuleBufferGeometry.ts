@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { VRMNodeColliderShapeCapsule } from '../../VRMNodeColliderShapeCapsule';
+import { VRMNodeColliderShapeCapsule } from '../../VRMSpringBoneColliderShapeCapsule';
 import { ColliderShapeBufferGeometry } from './ColliderShapeBufferGeometry';
 
 const _vecA = new THREE.Vector3();

@@ -2,9 +2,9 @@ import * as V0VRM from '@pixiv/types-vrm-0.0';
 import * as V1NodeColliderSchema from '@pixiv/types-vrmc-node-collider-1.0';
 import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
-import { VRMNodeCollider } from './VRMNodeCollider';
-import { VRMNodeColliderShapeCapsule } from './VRMNodeColliderShapeCapsule';
-import { VRMNodeColliderShapeSphere } from './VRMNodeColliderShapeSphere';
+import { VRMNodeCollider } from './VRMSpringBoneCollider';
+import { VRMNodeColliderShapeCapsule } from '@pixiv/three-vrm-node-collider/src/VRMNodeColliderShapeCapsule';
+import { VRMNodeColliderShapeSphere } from '@pixiv/three-vrm-node-collider/src/VRMNodeColliderShapeSphere';
 
 export class VRMNodeColliderImporter {
   /**

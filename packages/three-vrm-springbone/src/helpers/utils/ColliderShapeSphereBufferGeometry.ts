@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { VRMNodeColliderShapeSphere } from '../../VRMNodeColliderShapeSphere';
+import { VRMNodeColliderShapeSphere } from '../../VRMSpringBoneColliderShapeSphere';
 import { ColliderShapeBufferGeometry } from './ColliderShapeBufferGeometry';
 
 export class ColliderShapeSphereBufferGeometry extends THREE.BufferGeometry implements ColliderShapeBufferGeometry {

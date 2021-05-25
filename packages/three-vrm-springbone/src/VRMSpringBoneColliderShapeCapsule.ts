@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { VRMNodeColliderShape } from './VRMNodeColliderShape';
+import { VRMNodeColliderShape } from './VRMSpringBoneColliderShape';
 
 const _v3A = new THREE.Vector3();
 const _v3B = new THREE.Vector3();

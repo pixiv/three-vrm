@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 import * as THREE from 'three';
-import { VRMNodeColliderShapeSphere } from '../VRMNodeColliderShapeSphere';
+import { VRMNodeColliderShapeSphere } from '../VRMSpringBoneColliderShapeSphere';
 import { toBeCloseToArray } from './matchers/toBeCloseToArray';
 import { toBeCloseToVector3 } from './matchers/toBeCloseToVector3';
 

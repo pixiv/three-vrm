@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { VRMNodeColliderShape } from './VRMNodeColliderShape';
+import { VRMNodeColliderShape } from './VRMSpringBoneColliderShape';
 
 /**
  * Represents a collider of a VRM.
