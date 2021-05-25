@@ -43,7 +43,6 @@
   },
   "dependencies": {
     "@pixiv/types-vrm-0.0": "0.0.1",
-    "@pixiv/three-vrm-node-collider": "0.0.1",
     "@pixiv/types-vrmc-springbone-1.0": "0.0.1"
   },
   "devDependencies": {
