@@ -42,8 +42,7 @@
     ]
   },
   "dependencies": {
-    "@pixiv/types-vrm-0.0": "0.0.1",
-    "@pixiv/types-vrmc-node-collider-1.0": "0.0.1"
+    "@pixiv/types-vrm-0.0": "0.0.1"
   },
   "devDependencies": {
     "lint-staged": "10.4.2",

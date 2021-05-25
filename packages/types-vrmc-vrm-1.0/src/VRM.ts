@@ -19,4 +19,7 @@ export interface VRM {
    * Definitions of expressions
    */
   expressions?: Expression[];
+
+  extensions?: { [key: string]: { [key: string]: any } };
+  extras?: any;
 }

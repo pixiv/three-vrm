@@ -18,7 +18,7 @@ export function removeUnnecessaryJoints(root: THREE.Object3D): void {
     }
 
     const mesh = obj as THREE.SkinnedMesh;
-    const geometry = mesh.geometry as THREE.BufferGeometry;
+    const geometry = mesh.geometry;
     const attribute = geometry.getAttribute('skinIndex') as THREE.BufferAttribute;
 
     // look for existing skeleton

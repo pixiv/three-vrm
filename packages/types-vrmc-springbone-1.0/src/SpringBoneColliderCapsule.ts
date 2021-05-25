@@ -1,4 +1,4 @@
-export interface NodeColliderCapsule {
+export interface SpringBoneColliderCapsule {
   /**
    * The capsule head. vector3
    */
