@@ -30,7 +30,7 @@
     "build-moduledev": "cross-env NODE_ENV=development ESM=1 rollup -c -o lib/three-vrm-springbone.module.js",
     "build-moduleprod": "cross-env NODE_ENV=production ESM=1 rollup -c -o lib/three-vrm-springbone.module.min.js",
     "build-types": "tsc --declaration --declarationDir ./types --emitDeclarationOnly && downlevel-dts types ts3.4/types",
-    "docs": "typedoc --out docs --mode file --excludeNotExported",
+    "docs": "typedoc --entryPoints ./src/index.ts --out docs",
     "test": "jest",
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier \"src/**/*.{ts,tsx}\" --check",
     "lint-fix": "eslint \"src/**/*.{ts,tsx}\" --fix && prettier \"src/**/*.{ts,tsx}\" --write"
