@@ -79,23 +79,7 @@
 
 							currentSpringBoneManager = manager;
 
-							const collidersSet = new Set();
-
-							Array.from( manager.springBones ).forEach( ( bone ) => {
-
-								bone.colliderGroups.forEach( ( colliderGroup ) => {
-
-									colliderGroup.colliders.forEach( ( collider ) => {
-
-										collidersSet.add( collider );
-
-									} );
-
-								} );
-
-							} );
-
-							currentSpringBoneColliderHelpers = Array.from( collidersSet ).map( ( collider ) => {
+							currentSpringBoneColliderHelpers = manager.colliders.map( ( collider ) => {
 
 								const helper = new THREE.VRMSpringBoneColliderHelper( collider );
 								helper.renderOrder = 10000;
