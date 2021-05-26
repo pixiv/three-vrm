@@ -3,6 +3,9 @@ import * as V1SpringBoneSchema from '@pixiv/types-vrmc-springbone-1.0';
 import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRMSpringBoneCollider } from './VRMSpringBoneCollider';
+import { VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';
+import { VRMSpringBoneColliderShapeCapsule } from './VRMSpringBoneColliderShapeCapsule';
+import { VRMSpringBoneColliderShapeSphere } from './VRMSpringBoneColliderShapeSphere';
 import { VRMSpringBoneJoint } from './VRMSpringBoneJoint';
 import { VRMSpringBoneManager } from './VRMSpringBoneManager';
 import { VRMSpringBoneSettings } from './VRMSpringBoneSettings';
@@ -21,16 +24,13 @@ export class VRMSpringBoneImporter {
    *
    * @param gltf A parsed result of GLTF taken from GLTFLoader
    */
-  public async import(
-    gltf: GLTF,
-    collidersMap?: Map<number, Set<VRMSpringBoneCollider>>,
-  ): Promise<VRMSpringBoneManager | null> {
-    const v1Result = await this._v1Import(gltf, collidersMap);
+  public async import(gltf: GLTF): Promise<VRMSpringBoneManager | null> {
+    const v1Result = await this._v1Import(gltf);
     if (v1Result != null) {
       return v1Result;
     }
 
-    const v0Result = await this._v0Import(gltf, collidersMap);
+    const v0Result = await this._v0Import(gltf);
     if (v0Result != null) {
       return v0Result;
     }
@@ -38,10 +38,7 @@ export class VRMSpringBoneImporter {
     return null;
   }
 
-  private async _v1Import(
-    gltf: GLTF,
-    collidersMap?: Map<number, Set<VRMSpringBoneCollider>>,
-  ): Promise<VRMSpringBoneManager | null> {
+  private async _v1Import(gltf: GLTF): Promise<VRMSpringBoneManager | null> {
     // early abort if it doesn't use spring bones
     const isSpringBoneUsed = gltf.parser.json.extensionsUsed.indexOf('VRMC_springBone-1.0') !== -1;
     if (!isSpringBoneUsed) {
@@ -57,19 +54,64 @@ export class VRMSpringBoneImporter {
       return null;
     }
 
-    extension.springs?.forEach((schemaSpring) => {
-      const joints = schemaSpring.joints;
+    const colliders = extension.colliders?.map((schemaCollider, iCollider) => {
+      const node = threeNodes[schemaCollider.node!];
+      const schemaShape = schemaCollider.shape!;
+
+      if (schemaShape.sphere) {
+        return this._importSphereCollider(node, {
+          offset: new THREE.Vector3().fromArray(schemaShape.sphere.offset ?? [0.0, 0.0, 0.0]),
+          radius: schemaShape.sphere.radius ?? 0.0,
+        });
+      } else if (schemaShape.capsule) {
+        return this._importCapsuleCollider(node, {
+          offset: new THREE.Vector3().fromArray(schemaShape.capsule.offset ?? [0.0, 0.0, 0.0]),
+          radius: schemaShape.capsule.radius ?? 0.0,
+          tail: new THREE.Vector3().fromArray(schemaShape.capsule.tail ?? [0.0, 0.0, 0.0]),
+        });
+      }
+
+      throw new Error(`VRMSpringBoneImporter: The collider #${iCollider} has no valid shape`);
+    });
+
+    const colliderGroups = extension.colliderGroups?.map(
+      (schemaColliderGroup, iColliderGroup): VRMSpringBoneColliderGroup => {
+        const cols = (schemaColliderGroup.colliders ?? []).map((iCollider) => {
+          const col = colliders?.[iCollider];
+
+          if (col == null) {
+            throw new Error(
+              `VRMSpringBoneImporter: The colliderGroup #${iColliderGroup} attempted to use a collider #${iCollider} but not found`,
+            );
+          }
+
+          return col;
+        });
+
+        return {
+          colliders: cols,
+          name: schemaColliderGroup.name,
+        };
+      },
+    );
+
+    extension.springs?.forEach((schemaSpring, iSpring) => {
+      const schemaJoints = schemaSpring.joints;
 
       // prepare colliders
-      const colliders: VRMSpringBoneCollider[] = [];
-      schemaSpring.colliders?.forEach((index) => {
-        const set = collidersMap?.get(index);
-        if (set) {
-          colliders.push(...Array.from(set));
+      const colliderGroupsForSpring = schemaSpring.colliderGroups?.map((iColliderGroup) => {
+        const group = colliderGroups?.[iColliderGroup];
+
+        if (group == null) {
+          throw new Error(
+            `VRMSpringBoneImporter: The spring #${iSpring} attempted to use a colliderGroup ${iColliderGroup} but not found`,
+          );
         }
+
+        return group;
       });
 
-      joints.forEach((joint) => {
+      schemaJoints.forEach((joint) => {
         // prepare node
         const nodeIndex = joint.node;
         const node = threeNodes[nodeIndex];
@@ -83,7 +125,7 @@ export class VRMSpringBoneImporter {
         };
 
         // create spring bones
-        const spring = new VRMSpringBoneJoint(node, joint.hitRadius, setting, colliders);
+        const spring = new VRMSpringBoneJoint(node, joint.hitRadius, setting, colliderGroupsForSpring);
         manager.addSpringBone(spring);
       });
     });
@@ -95,10 +137,7 @@ export class VRMSpringBoneImporter {
     return manager;
   }
 
-  private async _v0Import(
-    gltf: GLTF,
-    collidersMap?: Map<number, Set<VRMSpringBoneCollider>>,
-  ): Promise<VRMSpringBoneManager | null> {
+  private async _v0Import(gltf: GLTF): Promise<VRMSpringBoneManager | null> {
     // early abort if it doesn't use vrm
     const isVRMUsed = gltf.parser.json.extensionsUsed.indexOf('VRM') !== -1;
     if (!isVRMUsed) {
@@ -107,8 +146,13 @@ export class VRMSpringBoneImporter {
 
     // early abort if it doesn't have bone groups
     const extension: V0VRM.VRM | undefined = gltf.parser.json.extensions?.['VRM'];
-    const boneGroups = extension?.secondaryAnimation?.boneGroups;
-    if (!boneGroups) {
+    const schemaSecondaryAnimation = extension?.secondaryAnimation;
+    if (!schemaSecondaryAnimation) {
+      return null;
+    }
+
+    const schemaBoneGroups = schemaSecondaryAnimation?.boneGroups;
+    if (!schemaBoneGroups) {
       return null;
     }
 
@@ -116,9 +160,28 @@ export class VRMSpringBoneImporter {
 
     const threeNodes: THREE.Object3D[] = await gltf.parser.getDependencies('node');
 
+    const colliderGroups = schemaSecondaryAnimation.colliderGroups?.map(
+      (schemaColliderGroup): VRMSpringBoneColliderGroup => {
+        const node = threeNodes[schemaColliderGroup.node!];
+        const colliders = (schemaColliderGroup.colliders ?? []).map((schemaCollider, iCollider) => {
+          const offset = new THREE.Vector3(0.0, 0.0, 0.0);
+          if (schemaCollider.offset) {
+            offset.set(schemaCollider.offset.x ?? 0.0, schemaCollider.offset.y ?? 0.0, schemaCollider.offset.z ?? 0.0);
+          }
+
+          return this._importSphereCollider(node, {
+            offset,
+            radius: schemaCollider.radius ?? 0.0,
+          });
+        });
+
+        return { colliders };
+      },
+    );
+
     // import spring bones for each spring bone groups
-    boneGroups?.forEach((group) => {
-      const rootIndices = group.bones;
+    schemaBoneGroups?.forEach((schemaBoneGroup, iBoneGroup) => {
+      const rootIndices = schemaBoneGroup.bones;
       if (!rootIndices) {
         return;
       }
@@ -128,30 +191,38 @@ export class VRMSpringBoneImporter {
 
         // prepare setting
         const gravityDir = new THREE.Vector3();
-        if (group.gravityDir) {
-          gravityDir.set(group.gravityDir.x ?? 0.0, group.gravityDir.y ?? 0.0, group.gravityDir.z ?? 0.0);
+        if (schemaBoneGroup.gravityDir) {
+          gravityDir.set(
+            schemaBoneGroup.gravityDir.x ?? 0.0,
+            schemaBoneGroup.gravityDir.y ?? 0.0,
+            schemaBoneGroup.gravityDir.z ?? 0.0,
+          );
         } else {
           gravityDir.set(0.0, -1.0, 0.0);
         }
         const setting: Partial<VRMSpringBoneSettings> = {
-          dragForce: group.dragForce,
-          gravityPower: group.gravityPower,
-          stiffness: group.stiffiness,
+          dragForce: schemaBoneGroup.dragForce,
+          gravityPower: schemaBoneGroup.gravityPower,
+          stiffness: schemaBoneGroup.stiffiness,
           gravityDir,
         };
 
         // prepare colliders
-        const colliders: VRMSpringBoneCollider[] = [];
-        group.colliderGroups?.forEach((index) => {
-          const set = collidersMap?.get(index);
-          if (set) {
-            colliders.push(...Array.from(set));
+        const colliderGroupsForSpring = schemaBoneGroup.colliderGroups?.map((iColliderGroup) => {
+          const group = colliderGroups?.[iColliderGroup];
+
+          if (group == null) {
+            throw new Error(
+              `VRMSpringBoneImporter: The spring #${iBoneGroup} attempted to use a colliderGroup ${iColliderGroup} but not found`,
+            );
           }
+
+          return group;
         });
 
         // create spring bones
         root.traverse((node) => {
-          const spring = new VRMSpringBoneJoint(node, group.hitRadius, setting, colliders);
+          const spring = new VRMSpringBoneJoint(node, schemaBoneGroup.hitRadius, setting, colliderGroupsForSpring);
           manager.addSpringBone(spring);
         });
       });
@@ -162,5 +233,42 @@ export class VRMSpringBoneImporter {
     manager.setInitState();
 
     return manager;
+  }
+
+  private _importSphereCollider(
+    destination: THREE.Object3D,
+    params: {
+      offset: THREE.Vector3;
+      radius: number;
+    },
+  ): VRMSpringBoneCollider {
+    const { offset, radius } = params;
+
+    const shape = new VRMSpringBoneColliderShapeSphere({ offset, radius });
+
+    const collider = new VRMSpringBoneCollider(shape);
+
+    destination.add(collider);
+
+    return collider;
+  }
+
+  private _importCapsuleCollider(
+    destination: THREE.Object3D,
+    params: {
+      offset: THREE.Vector3;
+      radius: number;
+      tail: THREE.Vector3;
+    },
+  ): VRMSpringBoneCollider {
+    const { offset, radius, tail } = params;
+
+    const shape = new VRMSpringBoneColliderShapeCapsule({ offset, radius, tail });
+
+    const collider = new VRMSpringBoneCollider(shape);
+
+    destination.add(collider);
+
+    return collider;
   }
 }

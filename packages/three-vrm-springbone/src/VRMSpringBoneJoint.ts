@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { getWorldQuaternionLite } from './utils/getWorldQuaternionLite';
 import { mat4InvertCompat } from './utils/mat4InvertCompat';
 import { Matrix4InverseCache } from './utils/Matrix4InverseCache';
-import { VRMSpringBoneCollider } from './VRMSpringBoneCollider';
+import { VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';
 import { VRMSpringBoneSettings } from './VRMSpringBoneSettings';
 
 // based on
@@ -38,7 +38,7 @@ export class VRMSpringBoneJoint {
   /**
    * Collider groups attached to this bone.
    */
-  public colliders: VRMSpringBoneCollider[];
+  public colliderGroups: VRMSpringBoneColliderGroup[];
 
   /**
    * An Object3D attached to this bone.
@@ -162,7 +162,7 @@ export class VRMSpringBoneJoint {
     bone: THREE.Object3D,
     radius = 0.0,
     settings: Partial<VRMSpringBoneSettings> = {},
-    colliders: VRMSpringBoneCollider[] = [],
+    colliderGroups: VRMSpringBoneColliderGroup[] = [],
   ) {
     this.bone = bone; // uniVRMでの parent
     this.bone.matrixAutoUpdate = false; // updateにより計算されるのでthree.js内での自動処理は不要
@@ -176,7 +176,7 @@ export class VRMSpringBoneJoint {
       dragForce: settings.dragForce ?? 0.4,
     };
 
-    this.colliders = colliders;
+    this.colliderGroups = colliderGroups;
   }
 
   /**
@@ -325,23 +325,25 @@ export class VRMSpringBoneJoint {
    * @param tail The tail you want to process
    */
   private _collision(tail: THREE.Vector3): void {
-    this.colliders.forEach((collider) => {
-      this._getMatrixWorldToCenter(_matA);
-      _matA.multiply(collider.matrixWorld);
+    this.colliderGroups.forEach((colliderGroup) => {
+      colliderGroup.colliders.forEach((collider) => {
+        this._getMatrixWorldToCenter(_matA);
+        _matA.multiply(collider.matrixWorld);
 
-      const dist = collider.shape.calculateCollision(_matA, tail, this.radius, _v3A);
+        const dist = collider.shape.calculateCollision(_matA, tail, this.radius, _v3A);
 
-      if (dist < 0.0) {
-        // hit
-        tail.add(_v3A.multiplyScalar(-dist));
+        if (dist < 0.0) {
+          // hit
+          tail.add(_v3A.multiplyScalar(-dist));
 
-        // normalize bone length
-        tail
-          .sub(this._centerSpacePosition)
-          .normalize()
-          .multiplyScalar(this._centerSpaceBoneLength)
-          .add(this._centerSpacePosition);
-      }
+          // normalize bone length
+          tail
+            .sub(this._centerSpacePosition)
+            .normalize()
+            .multiplyScalar(this._centerSpaceBoneLength)
+            .add(this._centerSpacePosition);
+        }
+      });
     });
   }
 
