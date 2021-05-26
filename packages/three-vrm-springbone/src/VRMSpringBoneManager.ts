@@ -1,11 +1,33 @@
 import type * as THREE from 'three';
 import type { VRMSpringBoneJoint } from './VRMSpringBoneJoint';
 import { traverseAncestorsFromRoot } from './utils/traverseAncestorsFromRoot';
+import { VRMSpringBoneCollider } from './VRMSpringBoneCollider';
+import { VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';
 
 export class VRMSpringBoneManager {
   private _springBones = new Set<VRMSpringBoneJoint>();
   public get springBones(): Set<VRMSpringBoneJoint> {
     return this._springBones;
+  }
+
+  public get colliderGroups(): VRMSpringBoneColliderGroup[] {
+    const set = new Set<VRMSpringBoneColliderGroup>();
+    this._springBones.forEach( ( springBone ) => {
+      springBone.colliderGroups.forEach( ( colliderGroup ) => {
+        set.add( colliderGroup );
+      } );
+    } );
+    return Array.from( set );
+  }
+
+  public get colliders(): VRMSpringBoneCollider[] {
+    const set = new Set<VRMSpringBoneCollider>();
+    this.colliderGroups.forEach( ( colliderGroup ) => {
+      colliderGroup.colliders.forEach( ( collider ) => {
+        set.add( collider );
+      } );
+    } );
+    return Array.from( set );
   }
 
   private _objectSpringBonesMap = new Map<THREE.Object3D, Set<VRMSpringBoneJoint>>();
