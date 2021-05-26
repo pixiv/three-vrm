@@ -252,22 +252,6 @@
         1,
         1
       ],
-      "extensions": {
-        "VRMC_node_collider-1.0": {
-          "shapes": [
-            {
-              "sphere": {
-                "offset": [
-                  0.0,
-                  0.0,
-                  0.0
-                ],
-                "radius": 0.5
-              }
-            }
-          ]
-        }
-      },
       "extras": {}
     }
   ],
@@ -281,11 +265,30 @@
     }
   ],
   "extensionsUsed": [
-    "VRMC_springBone-1.0",
-    "VRMC_node_collider-1.0"
+    "VRMC_springBone-1.0"
   ],
   "extensions": {
     "VRMC_springBone-1.0": {
+      "colliders": [
+        {
+          "node": 5,
+          "shape": {
+            "sphere": {
+              "offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "radius": 0.5
+            }
+          }
+        }
+      ],
+      "colliderGroups": [
+        {
+          "colliders": [ 0 ]
+        }
+      ],
       "springs": [
         {
           "joints": [
@@ -314,9 +317,7 @@
               "dragForce": 0.4
             }
           ],
-          "colliders": [
-            5
-          ]
+          "colliderGroups": [ 0 ]
         }
       ]
     }

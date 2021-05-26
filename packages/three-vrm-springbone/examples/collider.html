@@ -22,7 +22,6 @@
 		<script src="https://unpkg.com/three@0.125.2/build/three.js"></script>
 		<script src="https://unpkg.com/three@0.125.2/examples/js/loaders/GLTFLoader.js"></script>
 		<script src="https://unpkg.com/three@0.125.2/examples/js/controls/OrbitControls.js"></script>
-		<script src="../../three-vrm-node-collider//lib/three-vrm-node-collider.js"></script>
 		<script src="../lib/three-vrm-springbone.js"></script>
 		<script>
 			// renderer
@@ -103,7 +102,7 @@
 			for ( let i = 1; i < 5; i ++ ) {
 
 				const springBone = new THREE.VRMSpringBoneJoint( cubes[ i ], 0.01 );
-				springBone.colliders = colliders;
+				springBone.colliderGroups = [ { colliders } ];
 				springBoneManager.addSpringBone( springBone );
 
 			}

@@ -22,7 +22,6 @@
 		<script src="https://unpkg.com/three@0.125.2/build/three.js"></script>
 		<script src="https://unpkg.com/three@0.125.2/examples/js/loaders/GLTFLoader.js"></script>
 		<script src="https://unpkg.com/three@0.125.2/examples/js/controls/OrbitControls.js"></script>
-		<script src="../../three-vrm-node-collider//lib/three-vrm-node-collider.js"></script>
 		<script src="../lib/three-vrm-springbone.js"></script>
 		<script>
 			// renderer
@@ -56,7 +55,6 @@
 			let currentSpringBoneHelpers = null;
 
 			const springBoneImporter = new THREE.VRMSpringBoneImporter();
-			const springBoneColliderImporter = new THREE.VRMSpringBoneColliderImporter();
 
 			const loader = new THREE.GLTFLoader();
 
@@ -75,37 +73,43 @@
 
 						currentGltf = gltf;
 
-						const promiseColliders = springBoneColliderImporter.import( gltf );
+						const promiseManager = springBoneImporter.import( gltf );
 
-						promiseColliders.then( ( colliders ) => {
+						promiseManager.then( ( manager ) => {
 
-							const promiseManager = springBoneImporter.import( gltf, colliders );
+							currentSpringBoneManager = manager;
 
-							promiseManager.then( ( manager ) => {
+							const collidersSet = new Set();
 
-								console.log( manager );
+							Array.from( manager.springBones ).forEach( ( bone ) => {
 
-								currentSpringBoneManager = manager;
+								bone.colliderGroups.forEach( ( colliderGroup ) => {
 
-								const flattenedColliders = Array.from( colliders.values() ).map( ( groups ) => Array.from( groups ) ).flat();
+									colliderGroup.colliders.forEach( ( collider ) => {
 
-								currentSpringBoneColliderHelpers = flattenedColliders.map( ( collider ) => {
+										collidersSet.add( collider );
 
-									const helper = new THREE.VRMSpringBoneColliderHelper( collider );
-									helper.renderOrder = 10000;
-									scene.add( helper );
-									return helper;
+									} );
 
 								} );
 
-								currentSpringBoneHelpers = Array.from( manager.springBones ).map( ( constraint ) => {
+							} );
 
-									const helper = new THREE.VRMSpringBoneHelper( constraint );
-									helper.renderOrder = 10000;
-									scene.add( helper );
-									return helper;
+							currentSpringBoneColliderHelpers = Array.from( collidersSet ).map( ( collider ) => {
 
-								} );
+								const helper = new THREE.VRMSpringBoneColliderHelper( collider );
+								helper.renderOrder = 10000;
+								scene.add( helper );
+								return helper;
+
+							} );
+
+							currentSpringBoneHelpers = Array.from( manager.springBones ).map( ( constraint ) => {
+
+								const helper = new THREE.VRMSpringBoneHelper( constraint );
+								helper.renderOrder = 10000;
+								scene.add( helper );
+								return helper;
 
 							} );
 
