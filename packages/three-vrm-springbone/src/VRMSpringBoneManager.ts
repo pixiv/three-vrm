@@ -12,22 +12,22 @@ export class VRMSpringBoneManager {
 
   public get colliderGroups(): VRMSpringBoneColliderGroup[] {
     const set = new Set<VRMSpringBoneColliderGroup>();
-    this._springBones.forEach( ( springBone ) => {
-      springBone.colliderGroups.forEach( ( colliderGroup ) => {
-        set.add( colliderGroup );
-      } );
-    } );
-    return Array.from( set );
+    this._springBones.forEach((springBone) => {
+      springBone.colliderGroups.forEach((colliderGroup) => {
+        set.add(colliderGroup);
+      });
+    });
+    return Array.from(set);
   }
 
   public get colliders(): VRMSpringBoneCollider[] {
     const set = new Set<VRMSpringBoneCollider>();
-    this.colliderGroups.forEach( ( colliderGroup ) => {
-      colliderGroup.colliders.forEach( ( collider ) => {
-        set.add( collider );
-      } );
-    } );
-    return Array.from( set );
+    this.colliderGroups.forEach((colliderGroup) => {
+      colliderGroup.colliders.forEach((collider) => {
+        set.add(collider);
+      });
+    });
+    return Array.from(set);
   }
 
   private _objectSpringBonesMap = new Map<THREE.Object3D, Set<VRMSpringBoneJoint>>();
