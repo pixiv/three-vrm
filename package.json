@@ -10,12 +10,8 @@
     "test": "lerna run test",
     "lint": "lerna run lint",
     "lint-fix": "lerna run lint-fix",
-    "docs": "lerna run docs"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn lerna exec yarn lint-staged"
-    }
+    "docs": "lerna run docs",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.1.1",
@@ -25,7 +21,7 @@
     "downlevel-dts": "^0.7.0",
     "eslint": "^7.12.1",
     "eslint-config-prettier": "^7.1.0",
-    "husky": "^4.3.0",
+    "husky": "^6.0.0",
     "lerna": "^3.22.1",
     "prettier": "^2.1.2",
     "rimraf": "^3.0.2",
