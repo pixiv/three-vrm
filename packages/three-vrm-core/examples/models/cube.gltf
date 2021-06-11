@@ -70,14 +70,14 @@
       "componentType": 5126,
       "count": 24,
       "max": [
-        0.5,
-        0.5,
-        0.5
+        0.0625,
+        0.0625,
+        0.0625
       ],
       "min": [
-        -0.5,
-        -0.5,
-        -0.5
+        -0.0625,
+        -0.0625,
+        -0.0625
       ],
       "normalized": false
     },
@@ -116,12 +116,12 @@
       "componentType": 5126,
       "count": 24,
       "max": [
-        0.5,
+        0.0625,
         0.0,
         0.0
       ],
       "min": [
-        -0.5,
+        -0.0625,
         -0.0,
         -0.0
       ],
@@ -136,12 +136,12 @@
       "count": 24,
       "max": [
         0.0,
-        0.5,
+        0.0625,
         0.0
       ],
       "min": [
         -0.0,
-        -0.5,
+        -0.0625,
         -0.0
       ],
       "normalized": false
@@ -441,6 +441,7 @@
         "allowExcessivelySexualUsage": true,
         "commercialUsage": "corporation",
         "allowPoliticalOrReligiousUsage": true,
+        "allowAntisocialOrHateUsage": false,
         "creditNotation": "unnecessary",
         "allowRedistribution": true,
         "modification": "allowModificationRedistribution"
