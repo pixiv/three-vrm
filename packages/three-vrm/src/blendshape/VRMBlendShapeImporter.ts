@@ -45,9 +45,9 @@ export class VRMBlendShapeImporter {
 
         let presetName: VRMSchema.BlendShapePresetName | undefined;
         if (
-          schemaGroup.presetName &&
+          schemaGroup.presetName != null &&
           schemaGroup.presetName !== VRMSchema.BlendShapePresetName.Unknown &&
-          !blendShapePresetMap[schemaGroup.presetName]
+          blendShapePresetMap[schemaGroup.presetName] == null
         ) {
           presetName = schemaGroup.presetName;
           blendShapePresetMap[schemaGroup.presetName] = name;
@@ -56,7 +56,7 @@ export class VRMBlendShapeImporter {
         const group = new VRMBlendShapeGroup(name);
         gltf.scene.add(group);
 
-        group.isBinary = schemaGroup.isBinary || false;
+        group.isBinary = schemaGroup.isBinary ?? false;
 
         if (schemaGroup.binds) {
           schemaGroup.binds.forEach(async (bind) => {

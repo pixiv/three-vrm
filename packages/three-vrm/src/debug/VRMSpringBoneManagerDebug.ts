@@ -18,7 +18,7 @@ export type VRMSpringBoneGroupDebug = VRMSpringBoneDebug[];
 
 export class VRMSpringBoneManagerDebug extends VRMSpringBoneManager {
   public setupHelper(scene: THREE.Object3D, debugOption: VRMDebugOptions): void {
-    if (debugOption.disableSpringBoneHelper) return;
+    if (debugOption.disableSpringBoneHelper ?? false) return;
 
     this.springBoneGroupList.forEach((springBoneGroup) => {
       springBoneGroup.forEach((springBone) => {

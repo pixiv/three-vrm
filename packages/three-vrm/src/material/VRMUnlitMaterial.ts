@@ -49,9 +49,9 @@ export class VRMUnlitMaterial extends THREE.ShaderMaterial {
     parameters.fog = true;
     parameters.clipping = true;
 
-    parameters.skinning = parameters.skinning || false;
-    parameters.morphTargets = parameters.morphTargets || false;
-    parameters.morphNormals = parameters.morphNormals || false;
+    parameters.skinning = parameters.skinning ?? false;
+    parameters.morphTargets = parameters.morphTargets ?? false;
+    parameters.morphNormals = parameters.morphNormals ?? false;
 
     // == uniforms =============================================================
     parameters.uniforms = THREE.UniformsUtils.merge([

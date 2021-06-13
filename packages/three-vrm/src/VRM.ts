@@ -140,10 +140,8 @@ export class VRM {
     }
 
     if (this.materials) {
-      this.materials.forEach((material: any) => {
-        if (material.updateVRMMaterials) {
-          material.updateVRMMaterials(delta);
-        }
+      this.materials.forEach((material) => {
+        (material as any).updateVRMMaterials?.(delta);
       });
     }
   }
@@ -152,10 +150,7 @@ export class VRM {
    * Dispose everything about the VRM instance.
    */
   public dispose(): void {
-    const scene = this.scene;
-    if (scene) {
-      deepDispose(scene);
-    }
+    deepDispose(this.scene);
 
     this.meta?.texture?.dispose();
   }

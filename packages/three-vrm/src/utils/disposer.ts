@@ -3,8 +3,7 @@
 import * as THREE from 'three';
 
 function disposeMaterial(material: THREE.Material): void {
-  Object.keys(material).forEach((propertyName) => {
-    const value = (material as any)[propertyName];
+  Object.values(material).forEach((value) => {
     if (value?.isTexture) {
       const texture = value as THREE.Texture;
       texture.dispose();
@@ -20,11 +19,11 @@ function dispose(object3D: THREE.Object3D): void {
     geometry.dispose();
   }
 
-  const material: THREE.Material | THREE.Material[] = (object3D as any).material;
+  const material: THREE.Material | THREE.Material[] | undefined = (object3D as any).material;
   if (material) {
     if (Array.isArray(material)) {
       material.forEach((material: THREE.Material) => disposeMaterial(material));
-    } else if (material) {
+    } else {
       disposeMaterial(material);
     }
   }

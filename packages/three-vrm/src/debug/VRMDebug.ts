@@ -39,11 +39,11 @@ export class VRMDebug extends VRM {
     super(params);
 
     // Gizmoを展開
-    if (!debugOption.disableBoxHelper) {
+    if (!(debugOption.disableBoxHelper ?? false)) {
       this.scene.add(new THREE.BoxHelper(this.scene));
     }
 
-    if (!debugOption.disableSkeletonHelper) {
+    if (!(debugOption.disableSkeletonHelper ?? false)) {
       this.scene.add(new THREE.SkeletonHelper(this.scene));
     }
   }
