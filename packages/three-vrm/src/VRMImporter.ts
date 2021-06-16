@@ -1,21 +1,25 @@
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
-import { VRMBlendShapeImporter } from './blendshape';
-import { VRMFirstPersonImporter } from './firstperson';
-import { VRMHumanoidImporter } from './humanoid/VRMHumanoidImporter';
-import { VRMLookAtImporter } from './lookat/VRMLookAtImporter';
-import { VRMMaterialImporter } from './material';
-import { VRMMetaImporter } from './meta/VRMMetaImporter';
-import { VRMSpringBoneImporter } from './springbone/VRMSpringBoneImporter';
+import {
+  VRMExpressionImporter,
+  VRMFirstPersonImporter,
+  VRMHumanoidImporter,
+  VRMLookAtImporter,
+  VRMMetaImporter,
+} from '@pixiv/three-vrm-core';
+import { VRMCMaterialsMToonExtensionPlugin } from '@pixiv/three-vrm-materials-mtoon';
+import { VRMSpringBoneImporter } from '@pixiv/three-vrm-springbone';
+import { VRMConstraintImporter } from '@pixiv/three-vrm-constraints';
 import { VRM } from './VRM';
 
 export interface VRMImporterOptions {
   metaImporter?: VRMMetaImporter;
   lookAtImporter?: VRMLookAtImporter;
   humanoidImporter?: VRMHumanoidImporter;
-  blendShapeImporter?: VRMBlendShapeImporter;
+  expressionImporter?: VRMExpressionImporter;
   firstPersonImporter?: VRMFirstPersonImporter;
-  materialImporter?: VRMMaterialImporter;
+  vrmcMaterialsMToonExtensionPlugin?: VRMCMaterialsMToonExtensionPlugin;
   springBoneImporter?: VRMSpringBoneImporter;
+  constraintImporter?: VRMConstraintImporter;
 }
 
 /**
@@ -23,12 +27,13 @@ export interface VRMImporterOptions {
  */
 export class VRMImporter {
   protected readonly _metaImporter: VRMMetaImporter;
-  protected readonly _blendShapeImporter: VRMBlendShapeImporter;
+  protected readonly _expressionImporter: VRMExpressionImporter;
   protected readonly _lookAtImporter: VRMLookAtImporter;
   protected readonly _humanoidImporter: VRMHumanoidImporter;
   protected readonly _firstPersonImporter: VRMFirstPersonImporter;
-  protected readonly _materialImporter: VRMMaterialImporter;
+  protected readonly _vrmcMaterialsMToonExtensionPlugin: VRMCMaterialsMToonExtensionPlugin;
   protected readonly _springBoneImporter: VRMSpringBoneImporter;
+  protected readonly _constraintImporter: VRMConstraintImporter;
 
   /**
    * Create a new VRMImporter.
@@ -36,13 +41,15 @@ export class VRMImporter {
    * @param options [[VRMImporterOptions]], optionally contains importers for each component
    */
   public constructor(options: VRMImporterOptions = {}) {
-    this._metaImporter = options.metaImporter || new VRMMetaImporter();
-    this._blendShapeImporter = options.blendShapeImporter || new VRMBlendShapeImporter();
-    this._lookAtImporter = options.lookAtImporter || new VRMLookAtImporter();
-    this._humanoidImporter = options.humanoidImporter || new VRMHumanoidImporter();
-    this._firstPersonImporter = options.firstPersonImporter || new VRMFirstPersonImporter();
-    this._materialImporter = options.materialImporter || new VRMMaterialImporter();
-    this._springBoneImporter = options.springBoneImporter || new VRMSpringBoneImporter();
+    this._metaImporter = options.metaImporter ?? new VRMMetaImporter();
+    this._expressionImporter = options.expressionImporter ?? new VRMExpressionImporter();
+    this._lookAtImporter = options.lookAtImporter ?? new VRMLookAtImporter();
+    this._humanoidImporter = options.humanoidImporter ?? new VRMHumanoidImporter();
+    this._firstPersonImporter = options.firstPersonImporter ?? new VRMFirstPersonImporter();
+    this._vrmcMaterialsMToonExtensionPlugin =
+      options.vrmcMaterialsMToonExtensionPlugin ?? new VRMCMaterialsMToonExtensionPlugin();
+    this._springBoneImporter = options.springBoneImporter ?? new VRMSpringBoneImporter();
+    this._constraintImporter = options.constraintImporter ?? new VRMConstraintImporter();
   }
 
   /**
@@ -66,22 +73,24 @@ export class VRMImporter {
       }
     });
 
-    const meta = (await this._metaImporter.import(gltf)) || undefined;
+    const meta = (await this._metaImporter.import(gltf)) ?? undefined;
 
-    const materials = (await this._materialImporter.convertGLTFMaterials(gltf)) || undefined;
+    const materials = (await this._vrmcMaterialsMToonExtensionPlugin.convertGLTFMaterials(gltf)) ?? undefined;
 
-    const humanoid = (await this._humanoidImporter.import(gltf)) || undefined;
+    const humanoid = (await this._humanoidImporter.import(gltf)) ?? undefined;
 
-    const firstPerson = humanoid ? (await this._firstPersonImporter.import(gltf, humanoid)) || undefined : undefined;
+    const firstPerson = humanoid ? (await this._firstPersonImporter.import(gltf, humanoid)) ?? undefined : undefined;
 
-    const blendShapeProxy = (await this._blendShapeImporter.import(gltf)) || undefined;
+    const expressionManager = (await this._expressionImporter.import(gltf)) ?? undefined;
 
     const lookAt =
-      firstPerson && blendShapeProxy && humanoid
-        ? (await this._lookAtImporter.import(gltf, firstPerson, blendShapeProxy, humanoid)) || undefined
+      firstPerson && expressionManager && humanoid
+        ? (await this._lookAtImporter.import(gltf, firstPerson, expressionManager, humanoid)) ?? undefined
         : undefined;
 
-    const springBoneManager = (await this._springBoneImporter.import(gltf)) || undefined;
+    const springBoneManager = (await this._springBoneImporter.import(gltf)) ?? undefined;
+
+    const constraintManager = (await this._expressionImporter.import(gltf)) ?? undefined;
 
     return new VRM({
       scene: gltf.scene,
@@ -89,9 +98,10 @@ export class VRMImporter {
       materials,
       humanoid,
       firstPerson,
-      blendShapeProxy,
+      expressionManager,
       lookAt,
       springBoneManager,
+      constraintManager,
     });
   }
 }

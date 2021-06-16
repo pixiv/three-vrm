@@ -1,13 +1,10 @@
 import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
-import { VRMBlendShapeProxy } from './blendshape';
-import { VRMFirstPerson } from './firstperson';
-import { VRMHumanoid } from './humanoid';
-import { VRMLookAtHead } from './lookat';
-import { VRMMeta } from './meta/VRMMeta';
-import { VRMSpringBoneManager } from './springbone';
 import { deepDispose } from './utils/disposer';
 import { VRMImporter, VRMImporterOptions } from './VRMImporter';
+import { VRMExpressionManager, VRMFirstPerson, VRMHumanoid, VRMLookAt, VRMMeta } from '@pixiv/three-vrm-core';
+import { VRMSpringBoneManager } from '@pixiv/three-vrm-springbone';
+import { VRMConstraintManager } from 'packages/three-vrm-constraints/types';
 
 /**
  * Parameters for a [[VRM]] class.
@@ -15,11 +12,12 @@ import { VRMImporter, VRMImporterOptions } from './VRMImporter';
 export interface VRMParameters {
   scene: THREE.Scene | THREE.Group; // COMPAT: `GLTF.scene` is going to be `THREE.Group` in r114
   humanoid?: VRMHumanoid;
-  blendShapeProxy?: VRMBlendShapeProxy;
+  expressionManager?: VRMExpressionManager;
   firstPerson?: VRMFirstPerson;
-  lookAt?: VRMLookAtHead;
+  lookAt?: VRMLookAt;
   materials?: THREE.Material[];
   springBoneManager?: VRMSpringBoneManager;
+  constraintManager?: VRMConstraintManager;
   meta?: VRMMeta;
 }
 
@@ -71,7 +69,7 @@ export class VRM {
    * Contains [[VRMBlendShapeProxy]] of the VRM.
    * You might want to control these facial expressions via [[VRMBlendShapeProxy.setValue]].
    */
-  public readonly blendShapeProxy?: VRMBlendShapeProxy;
+  public readonly expressionManager?: VRMExpressionManager;
 
   /**
    * Contains [[VRMFirstPerson]] of the VRM.
@@ -83,7 +81,7 @@ export class VRM {
    * Contains [[VRMLookAtHead]] of the VRM.
    * You might want to use [[VRMLookAtHead.target]] to control the eye direction of your VRMs.
    */
-  public readonly lookAt?: VRMLookAtHead;
+  public readonly lookAt?: VRMLookAt;
 
   /**
    * Contains materials of the VRM.
@@ -104,6 +102,12 @@ export class VRM {
   public readonly springBoneManager?: VRMSpringBoneManager;
 
   /**
+   * A [[VRMConstraintManager]] manipulates all constraints attached on the VRM.
+   * Usually you don't have to care about this property.
+   */
+  public readonly constraintManager?: VRMConstraintManager;
+
+  /**
    * Create a new VRM instance.
    *
    * @param params [[VRMParameters]] that represents components of the VRM
@@ -111,11 +115,12 @@ export class VRM {
   public constructor(params: VRMParameters) {
     this.scene = params.scene;
     this.humanoid = params.humanoid;
-    this.blendShapeProxy = params.blendShapeProxy;
+    this.expressionManager = params.expressionManager;
     this.firstPerson = params.firstPerson;
     this.lookAt = params.lookAt;
     this.materials = params.materials;
     this.springBoneManager = params.springBoneManager;
+    this.constraintManager = params.constraintManager;
     this.meta = params.meta;
   }
 
@@ -131,12 +136,16 @@ export class VRM {
       this.lookAt.update(delta);
     }
 
-    if (this.blendShapeProxy) {
-      this.blendShapeProxy.update();
+    if (this.expressionManager) {
+      this.expressionManager.update();
+    }
+
+    if (this.constraintManager) {
+      this.constraintManager.update();
     }
 
     if (this.springBoneManager) {
-      this.springBoneManager.lateUpdate(delta);
+      this.springBoneManager.update(delta);
     }
 
     if (this.materials) {
@@ -156,7 +165,5 @@ export class VRM {
     if (scene) {
       deepDispose(scene);
     }
-
-    this.meta?.texture?.dispose();
   }
 }
