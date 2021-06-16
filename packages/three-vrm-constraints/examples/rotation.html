@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>three-vrm-constraints example - rotation.html</title>
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+		/>
+		<style>
+			body {
+				margin: 0;
+			}
+			canvas {
+				display: block;
+			}
+		</style>
+	</head>
+
+	<body>
+		<script src="https://unpkg.com/three@0.126.1/build/three.js"></script>
+		<script src="https://unpkg.com/three@0.126.1/examples/js/controls/OrbitControls.js"></script>
+		<script src="../lib/three-vrm-constraints.js"></script>
+		<script>
+			// renderer
+			const renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			renderer.setPixelRatio( window.devicePixelRatio );
+			document.body.appendChild( renderer.domElement );
+
+			// camera
+			const camera = new THREE.PerspectiveCamera( 30.0, window.innerWidth / window.innerHeight, 0.1, 20.0 );
+			camera.position.set( 0.0, 0.0, 5.0 );
+
+			// camera controls
+			const controls = new THREE.OrbitControls( camera, renderer.domElement );
+			controls.screenSpacePanning = true;
+			controls.target.set( 0.0, 0.0, 0.0 );
+			controls.update();
+
+			// scene
+			const scene = new THREE.Scene();
+
+			// light
+			const light = new THREE.DirectionalLight( 0xffffff );
+			light.position.set( 1.0, 2.0, 3.0 ).normalize();
+			scene.add( light );
+
+			// objects
+			const modelRoot = new THREE.Object3D();
+			modelRoot.name = 'modelRoot';
+			scene.add( modelRoot );
+
+			const parent = new THREE.Object3D();
+			parent.name = 'parent';
+			parent.rotation.set( 0.0, 0.0, Math.PI / 2.0 );
+			modelRoot.add( parent );
+
+			const geometry = new THREE.BoxGeometry( 0.25, 0.25, 0.25 );
+			const material = new THREE.MeshNormalMaterial();
+
+			const cubeA = new THREE.Mesh( geometry, material );
+			cubeA.name = 'cubeA';
+			cubeA.rotation.set( 0.0, Math.PI / 4.0, 0.0 );
+			cubeA.position.set( -0.5, 0.0, 0.0 );
+			parent.add( cubeA );
+
+			const cubeConstrainedA = new THREE.Mesh( geometry, material );
+			cubeConstrainedA.name = 'cubeConstrainedA';
+			cubeConstrainedA.position.set( 0.0, 0.0, 0.0 );
+			// cubeConstrainedA.rotation.set( 0.0, Math.PI / 4.0, 0.0 );
+			parent.add( cubeConstrainedA );
+
+			const cubeConstrainedB = new THREE.Mesh( geometry, material );
+			cubeConstrainedB.name = 'cubeConstrainedB';
+			cubeConstrainedB.position.set( 0.5, 0.0, 0.0 );
+			//cubeConstrainedB.rotation.set( 0.0, Math.PI / 4.0, 0.0 );
+			parent.add( cubeConstrainedB );
+
+			// helpers
+			const gridHelper = new THREE.GridHelper( 10, 10 );
+			scene.add( gridHelper );
+
+			const axesHelper = new THREE.AxesHelper( 5 );
+			scene.add( axesHelper );
+
+			// constraints
+			const constraintManager = new THREE.VRMConstraintManager({
+				autoRemoveCircularDependency: true
+			});
+
+			const constraintA = new THREE.VRMRotationConstraint(cubeConstrainedA, modelRoot);
+			constraintA.setSource(cubeA);
+			constraintA.weight = 0.5;
+			constraintA.sourceSpace = 'local';
+			constraintA.destinationSpace = 'local';
+			constraintManager.addConstraint(constraintA);
+
+			const constraintB = new THREE.VRMRotationConstraint(cubeConstrainedB, modelRoot);
+			constraintB.setSource(cubeA);
+			constraintManager.addConstraint(constraintB);
+
+			// constraint helpers
+			const helpers = Array.from( constraintManager.constraints ).map( ( constraint ) => {
+
+				const helper = new THREE.VRMConstraintHelper( constraint );
+				helper.renderOrder = 10000;
+				scene.add( helper );
+				return helper;
+
+			} );
+
+			// init constraints
+			scene.updateMatrixWorld();
+			constraintManager.setInitState();
+
+			// animate
+			const clock = new THREE.Clock();
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				const deltaTime = clock.getDelta();
+
+				cubeA.rotation.z = Math.sin( Math.PI * clock.elapsedTime );
+
+				constraintManager.update();
+				helpers.forEach( ( helper ) => helper.update() );
+
+				renderer.render( scene, camera );
+
+			}
+
+			animate();
+		</script>
+	</body>
+</html>

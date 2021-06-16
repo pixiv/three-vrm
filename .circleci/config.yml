@@ -22,8 +22,9 @@ jobs:
             - node_modules
             - packages/three-vrm/node_modules
             - packages/three-vrm-core/node_modules
+            - packages/three-vrm-constraints/node_modules
             - packages/types-vrm-0.0/node_modules
-            - packages/types-vrmc-constraints/node_modules
+            - packages/types-vrmc-constraints-1.0/node_modules
             - packages/types-vrmc-materals-mtoon-1.0/node_modules
             - packages/types-vrmc-node-collider-1.0/node_modules
             - packages/types-vrmc-springbone-1.0/node_modules
@@ -43,11 +44,21 @@ jobs:
       - run:
           name: Build
           command: yarn build
+      - persist_to_workspace:
+          root: '.'
+          paths:
+            - packages/three-vrm/lib
+            - packages/three-vrm/types
+            - packages/three-vrm-constraints/lib
+            - packages/three-vrm-constraints/types
+            - packages/types-vrmc-constraints-1.0/types
 
   test:
     docker: *docker
     steps:
       - checkout
+      - attach_workspace:
+          at: '.'
       - restore_cache:
           keys:
             - deps-{{ checksum "yarn.lock" }}
@@ -63,6 +74,8 @@ jobs:
     docker: *docker
     steps:
       - checkout
+      - attach_workspace:
+          at: '.'
       - restore_cache:
           keys:
             - deps-{{ checksum "yarn.lock" }}
@@ -78,6 +91,8 @@ jobs:
     docker: *docker
     steps:
       - checkout
+      - attach_workspace:
+          at: '.'
       - restore_cache:
           keys:
             - deps-{{ checksum "yarn.lock" }}
@@ -99,10 +114,10 @@ workflows:
             - fetch
       - test:
           requires:
-            - fetch
+            - build
       - lint:
           requires:
-            - fetch
+            - build
       - docs:
           requires:
-            - fetch
+            - build
