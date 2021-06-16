@@ -3,3 +3,5 @@
 /packages/*/node_modules/
 /packages/*/ts*/
 /packages/*/types/
+
+jest.config.js
