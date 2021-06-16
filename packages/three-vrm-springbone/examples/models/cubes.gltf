@@ -315,6 +315,9 @@
               "gravityPower": 0.0,
               "gravityDir": [ 0.0, -1.0, 0.0 ],
               "dragForce": 0.4
+            },
+            {
+              "node": 4
             }
           ],
           "colliderGroups": [ 0 ]

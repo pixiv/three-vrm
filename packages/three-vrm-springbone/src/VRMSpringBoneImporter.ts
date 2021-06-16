@@ -111,23 +111,30 @@ export class VRMSpringBoneImporter {
         return group;
       });
 
+      let prevJoint: V1SpringBoneSchema.SpringBoneJoint | undefined;
       schemaJoints.forEach((joint) => {
-        // prepare node
-        const nodeIndex = joint.node;
-        const node = threeNodes[nodeIndex];
+        if (prevJoint) {
+          // prepare node
+          const nodeIndex = prevJoint.node;
+          const node = threeNodes[nodeIndex];
+          const childIndex = joint.node;
+          const child = threeNodes[childIndex];
 
-        // prepare setting
-        const setting: Partial<VRMSpringBoneSettings> = {
-          hitRadius: joint.hitRadius,
-          dragForce: joint.dragForce,
-          gravityPower: joint.gravityPower,
-          stiffness: joint.stiffness,
-          gravityDir: new THREE.Vector3().fromArray(joint.gravityDir ?? [0.0, 1.0, 0.0]),
-        };
+          // prepare setting
+          const setting: Partial<VRMSpringBoneSettings> = {
+            hitRadius: prevJoint.hitRadius,
+            dragForce: prevJoint.dragForce,
+            gravityPower: prevJoint.gravityPower,
+            stiffness: prevJoint.stiffness,
+            gravityDir: new THREE.Vector3().fromArray(prevJoint.gravityDir ?? [0.0, 1.0, 0.0]),
+          };
 
-        // create spring bones
-        const spring = new VRMSpringBoneJoint(node, setting, colliderGroupsForSpring);
-        manager.addSpringBone(spring);
+          // create spring bones
+          const spring = new VRMSpringBoneJoint(node, child, setting, colliderGroupsForSpring);
+          manager.addSpringBone(spring);
+        }
+
+        prevJoint = joint;
       });
     });
 
@@ -224,7 +231,8 @@ export class VRMSpringBoneImporter {
 
         // create spring bones
         root.traverse((node) => {
-          const spring = new VRMSpringBoneJoint(node, setting, colliderGroupsForSpring);
+          const child: THREE.Object3D | null = node.children[0] ?? null;
+          const spring = new VRMSpringBoneJoint(node, child, setting, colliderGroupsForSpring);
           manager.addSpringBone(spring);
         });
       });
