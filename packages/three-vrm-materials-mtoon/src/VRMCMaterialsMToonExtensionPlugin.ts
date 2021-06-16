@@ -5,15 +5,11 @@ import type { GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GL
 import { MToonMaterial } from './MToonMaterial';
 import type { MToonMaterialParameters } from './MToonMaterialParameters';
 import { MToonMaterialOutlineWidthMode } from './MToonMaterialOutlineWidthMode';
-import { MToonMaterialOutlineColorMode } from './MToonMaterialOutlineColorMode';
 
 export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
   public static EXTENSION_NAME = 'VRMC_materials_mtoon-1.0';
 
-  public static EXTENSION_NAME_CANDIDATES = [
-    'VRMC_materials_mtoon-1.0',
-    'VRMC_materials_mtoon-1.0_draft',
-  ];
+  public static EXTENSION_NAME_CANDIDATES = ['VRMC_materials_mtoon-1.0', 'VRMC_materials_mtoon-1.0_draft'];
 
   /**
    * This value will be added to `renderOrder` of every meshes who have MaterialsMToon.
@@ -64,7 +60,7 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
     this._v0RemoveUnlitExtension();
   }
 
-  public getMaterialType(materialIndex: number): (typeof THREE.Material) | null {
+  public getMaterialType(materialIndex: number): typeof THREE.Material | null {
     const v1Extension = this._v1GetMToonExtension(materialIndex);
     if (v1Extension) {
       return MToonMaterial;
@@ -78,10 +74,7 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
     return null;
   }
 
-  public extendMaterialParams(
-    materialIndex: number,
-    materialParams: MToonMaterialParameters,
-  ): Promise<any> | null {
+  public extendMaterialParams(materialIndex: number, materialParams: MToonMaterialParameters): Promise<any> | null {
     const extension = this._v1GetMToonExtension(materialIndex);
     if (extension) {
       return this._v1ExtendMaterialParams(extension, materialParams);
@@ -182,10 +175,10 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
     const parser = this._parser;
     const json = parser.json;
 
-    const v0VRMExtension: V0VRM | undefined = json.extensions?.[ 'VRM' ];
-    const v0MaterialProperties: V0Material | undefined = v0VRMExtension?.materialProperties?.[ materialIndex ];
+    const v0VRMExtension: V0VRM | undefined = json.extensions?.['VRM'];
+    const v0MaterialProperties: V0Material | undefined = v0VRMExtension?.materialProperties?.[materialIndex];
 
-    if ( v0MaterialProperties?.shader === 'VRM/MToon' ) {
+    if (v0MaterialProperties?.shader === 'VRM/MToon') {
       return v0MaterialProperties;
     }
   }
@@ -202,26 +195,36 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
 
     await Promise.all([
       this._assignPrimitive(materialParams, 'transparentWithZWrite', extension.transparentWithZWrite),
-      this._assignColor(materialParams, 'shadeFactor', extension.shadeFactor),
+      this._assignColor(materialParams, 'shadeColorFactor', extension.shadeColorFactor),
       this._assignTexture(materialParams, 'shadeMultiplyTexture', extension.shadeMultiplyTexture?.index, true),
       this._assignPrimitive(materialParams, 'shadingShiftFactor', extension.shadingShiftFactor),
       this._assignTexture(materialParams, 'shadingShiftTexture', extension.shadingShiftTexture?.index, true),
       this._assignPrimitive(materialParams, 'shadingShiftTextureScale', extension.shadingShiftTexture?.scale),
       this._assignPrimitive(materialParams, 'shadingToonyFactor', extension.shadingToonyFactor),
-      this._assignPrimitive(materialParams, 'lightColorAttenuationFactor', extension.lightColorAttenuationFactor),
       this._assignPrimitive(materialParams, 'giIntensityFactor', extension.giIntensityFactor),
-      this._assignTexture(materialParams, 'additiveTexture', extension.additiveTexture?.index, true),
-      this._assignColor(materialParams, 'rimFactor', extension.rimFactor),
+      this._assignTexture(materialParams, 'matcapTexture', extension.matcapTexture?.index, true),
+      this._assignColor(materialParams, 'parametricRimColorFactor', extension.parametricRimColorFactor),
       this._assignTexture(materialParams, 'rimMultiplyTexture', extension.rimMultiplyTexture?.index, true),
       this._assignPrimitive(materialParams, 'rimLightingMixFactor', extension.rimLightingMixFactor),
-      this._assignPrimitive(materialParams, 'rimFresnelPowerFactor', extension.rimFresnelPowerFactor),
-      this._assignPrimitive(materialParams, 'rimLiftFactor', extension.rimLiftFactor),
-      this._assignPrimitive(materialParams, 'outlineWidthMode', extension.outlineWidthMode as MToonMaterialOutlineWidthMode),
+      this._assignPrimitive(
+        materialParams,
+        'parametricRimFresnelPowerFactor',
+        extension.parametricRimFresnelPowerFactor,
+      ),
+      this._assignPrimitive(materialParams, 'parametricRimLiftFactor', extension.parametricRimLiftFactor),
+      this._assignPrimitive(
+        materialParams,
+        'outlineWidthMode',
+        extension.outlineWidthMode as MToonMaterialOutlineWidthMode,
+      ),
       this._assignPrimitive(materialParams, 'outlineWidthFactor', extension.outlineWidthFactor),
-      this._assignTexture(materialParams, 'outlineWidthMultiplyTexture', extension.outlineWidthMultiplyTexture?.index, false),
-      this._assignPrimitive(materialParams, 'outlineScaledMaxDistanceFactor', extension.outlineScaledMaxDistanceFactor),
-      this._assignPrimitive(materialParams, 'outlineColorMode', extension.outlineColorMode as MToonMaterialOutlineColorMode),
-      this._assignColor(materialParams, 'outlineFactor', extension.outlineFactor),
+      this._assignTexture(
+        materialParams,
+        'outlineWidthMultiplyTexture',
+        extension.outlineWidthMultiplyTexture?.index,
+        false,
+      ),
+      this._assignColor(materialParams, 'outlineColorFactor', extension.outlineColorFactor),
       this._assignPrimitive(materialParams, 'outlineLightingMixFactor', extension.outlineLightingMixFactor),
       this._assignTexture(materialParams, 'uvAnimationMaskTexture', extension.uvAnimationMaskTexture?.index, false),
       this._assignPrimitive(materialParams, 'uvAnimationScrollXSpeedFactor', extension.uvAnimationScrollXSpeedFactor),
@@ -247,13 +250,8 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
     const outlineWidthMode = [
       MToonMaterialOutlineWidthMode.None,
       MToonMaterialOutlineWidthMode.WorldCoordinates,
-      MToonMaterialOutlineWidthMode.ScreenCoordinates
+      MToonMaterialOutlineWidthMode.ScreenCoordinates,
     ][properties.floatProperties?.['_OutlineWidthMode'] ?? 0];
-
-    const outlineColorMode = [
-      MToonMaterialOutlineColorMode.FixedColor,
-      MToonMaterialOutlineColorMode.MixedLighting
-    ][properties.floatProperties?.['_OutlineColorMode'] ?? 0];
 
     await Promise.all([
       this._assignColor(materialParams, 'color', properties.vectorProperties?.['_Color'], true),
@@ -263,36 +261,71 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
       this._assignColor(materialParams, 'emissive', properties.vectorProperties?.['_EmissionColor'], true),
       this._assignTexture(materialParams, 'emissiveMap', properties.textureProperties?.['_EmissionMap'], true),
       this._assignPrimitive(materialParams, 'transparentWithZWrite', transparentWithZWrite),
-      this._assignColor(materialParams, 'shadeFactor', properties.vectorProperties?.['_ShadeColor'], true),
-      this._assignTexture(materialParams, 'shadeMultiplyTexture', properties.textureProperties?.['_ShadeTexture'], true),
+      this._assignColor(materialParams, 'shadeColorFactor', properties.vectorProperties?.['_ShadeColor'], true),
+      this._assignTexture(
+        materialParams,
+        'shadeMultiplyTexture',
+        properties.textureProperties?.['_ShadeTexture'],
+        true,
+      ),
       this._assignPrimitive(materialParams, 'shadingShiftFactor', properties.floatProperties?.['_ShadeShift']),
       this._assignPrimitive(materialParams, 'shadingToonyFactor', properties.floatProperties?.['_ShadeToony']),
-      this._assignPrimitive(materialParams, 'lightColorAttenuationFactor', properties.floatProperties?.['_LightColorAttenuation']),
-      this._assignPrimitive(materialParams, 'giIntensityFactor', properties.floatProperties?.['_IndirectLightIntensity']),
-      this._assignTexture(materialParams, 'additiveTexture', properties.textureProperties?.['_SphereAdd'], true),
-      this._assignColor(materialParams, 'rimFactor', properties.vectorProperties?.['_RimColor'], true),
+      this._assignPrimitive(
+        materialParams,
+        'giIntensityFactor',
+        properties.floatProperties?.['_IndirectLightIntensity'],
+      ),
+      this._assignTexture(materialParams, 'matcapTexture', properties.textureProperties?.['_SphereAdd'], true),
+      this._assignColor(materialParams, 'parametricRimColorFactor', properties.vectorProperties?.['_RimColor'], true),
       this._assignTexture(materialParams, 'rimMultiplyTexture', properties.textureProperties?.['_RimTexture'], true),
       this._assignPrimitive(materialParams, 'rimLightingMixFactor', properties.floatProperties?.['_RimLightingMix']),
-      this._assignPrimitive(materialParams, 'rimFresnelPowerFactor', properties.floatProperties?.['_RimFresnelPower']),
-      this._assignPrimitive(materialParams, 'rimLiftFactor', properties.floatProperties?.['_RimLift']),
+      this._assignPrimitive(
+        materialParams,
+        'parametricRimFresnelPowerFactor',
+        properties.floatProperties?.['_RimFresnelPower'],
+      ),
+      this._assignPrimitive(materialParams, 'parametricRimLiftFactor', properties.floatProperties?.['_RimLift']),
       this._assignPrimitive(materialParams, 'outlineWidthMode', outlineWidthMode),
       this._assignPrimitive(materialParams, 'outlineWidthFactor', properties.floatProperties?.['_OutlineWidth']),
-      this._assignTexture(materialParams, 'outlineWidthMultiplyTexture', properties.textureProperties?.['_OutlineWidthTexture'], false),
-      this._assignPrimitive(materialParams, 'outlineScaledMaxDistanceFactor', properties.floatProperties?.['_OutlineScaledMaxDistance']),
-      this._assignPrimitive(materialParams, 'outlineColorMode', outlineColorMode),
-      this._assignColor(materialParams, 'outlineFactor', properties.vectorProperties?.['_OutlineColor'], true),
-      this._assignPrimitive(materialParams, 'outlineLightingMixFactor', properties.floatProperties?.['_OutlineLightingMix']),
-      this._assignTexture(materialParams, 'uvAnimationMaskTexture', properties.textureProperties?.['_UvAnimMaskTexture'], false),
-      this._assignPrimitive(materialParams, 'uvAnimationScrollXSpeedFactor', properties.floatProperties?.['_UvAnimScrollX']),
-      this._assignPrimitive(materialParams, 'uvAnimationScrollYSpeedFactor', properties.floatProperties?.['_UvAnimScrollY']),
-      this._assignPrimitive(materialParams, 'uvAnimationRotationSpeedFactor', properties.floatProperties?.['_UvAnimRotation']),
+      this._assignTexture(
+        materialParams,
+        'outlineWidthMultiplyTexture',
+        properties.textureProperties?.['_OutlineWidthTexture'],
+        false,
+      ),
+      this._assignColor(materialParams, 'outlineColorFactor', properties.vectorProperties?.['_OutlineColor'], true),
+      this._assignPrimitive(
+        materialParams,
+        'outlineLightingMixFactor',
+        properties.floatProperties?.['_OutlineColorMode'] === 0
+          ? 0.0
+          : properties.floatProperties?.['_OutlineLightingMix'],
+      ),
+      this._assignTexture(
+        materialParams,
+        'uvAnimationMaskTexture',
+        properties.textureProperties?.['_UvAnimMaskTexture'],
+        false,
+      ),
+      this._assignPrimitive(
+        materialParams,
+        'uvAnimationScrollXSpeedFactor',
+        properties.floatProperties?.['_UvAnimScrollX'],
+      ),
+      this._assignPrimitive(
+        materialParams,
+        'uvAnimationScrollYSpeedFactor',
+        properties.floatProperties?.['_UvAnimScrollY'],
+      ),
+      this._assignPrimitive(
+        materialParams,
+        'uvAnimationRotationSpeedFactor',
+        properties.floatProperties?.['_UvAnimRotation'],
+      ),
     ]);
   }
 
-  private _setupPrimitive(
-    mesh: THREE.Mesh,
-    materialIndex: number,
-  ): void {
+  private _setupPrimitive(mesh: THREE.Mesh, materialIndex: number): void {
     const v1Extension = this._v1GetMToonExtension(materialIndex);
     if (v1Extension) {
       this._v1SetRenderOrder(mesh, v1Extension);
@@ -340,7 +373,7 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
     mesh.material.push(outlineMaterial);
 
     // make two geometry groups out of a same buffer
-    const geometry = mesh.geometry as THREE.BufferGeometry; // mesh.geometry is guaranteed to be a BufferGeometry in GLTFLoader
+    const geometry = mesh.geometry; // mesh.geometry is guaranteed to be a BufferGeometry in GLTFLoader
     const primitiveVertices = geometry.index ? geometry.index.count : geometry.attributes.position.count / 3;
     geometry.addGroup(0, primitiveVertices, 0);
     geometry.addGroup(0, primitiveVertices, 1);
@@ -367,7 +400,10 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
 
   private _v0GenerateOutline(mesh: THREE.Mesh, properties: V0Material): void {
     // Check whether we really have to prepare outline or not
-    if (((properties.floatProperties?.['_OutlineWidthMode'] ?? 0) === 0) || ((properties.floatProperties?.['_OutlineWidth'] ?? 0.0) === 0.0)) {
+    if (
+      (properties.floatProperties?.['_OutlineWidthMode'] ?? 0) === 0 ||
+      (properties.floatProperties?.['_OutlineWidth'] ?? 0.0) === 0.0
+    ) {
       return;
     }
 
@@ -388,7 +424,7 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
     mesh.material.push(outlineMaterial);
 
     // make two geometry groups out of a same buffer
-    const geometry = mesh.geometry as THREE.BufferGeometry; // mesh.geometry is guaranteed to be a BufferGeometry in GLTFLoader
+    const geometry = mesh.geometry; // mesh.geometry is guaranteed to be a BufferGeometry in GLTFLoader
     const primitiveVertices = geometry.index ? geometry.index.count : geometry.attributes.position.count / 3;
     geometry.addGroup(0, primitiveVertices, 0);
     geometry.addGroup(0, primitiveVertices, 1);
@@ -423,7 +459,7 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
     materialParams: MToonMaterialParameters,
     key: T,
     index: number | undefined,
-    isColorTexture: boolean
+    isColorTexture: boolean,
   ): Promise<void> {
     if (index != null) {
       await (this._parser as any).assignTexture(materialParams, key, { index });
