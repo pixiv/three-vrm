@@ -118,6 +118,7 @@ export class VRMSpringBoneImporter {
 
         // prepare setting
         const setting: Partial<VRMSpringBoneSettings> = {
+          hitRadius: joint.hitRadius,
           dragForce: joint.dragForce,
           gravityPower: joint.gravityPower,
           stiffness: joint.stiffness,
@@ -125,7 +126,7 @@ export class VRMSpringBoneImporter {
         };
 
         // create spring bones
-        const spring = new VRMSpringBoneJoint(node, joint.hitRadius, setting, colliderGroupsForSpring);
+        const spring = new VRMSpringBoneJoint(node, setting, colliderGroupsForSpring);
         manager.addSpringBone(spring);
       });
     });
@@ -201,6 +202,7 @@ export class VRMSpringBoneImporter {
           gravityDir.set(0.0, -1.0, 0.0);
         }
         const setting: Partial<VRMSpringBoneSettings> = {
+          hitRadius: schemaBoneGroup.hitRadius,
           dragForce: schemaBoneGroup.dragForce,
           gravityPower: schemaBoneGroup.gravityPower,
           stiffness: schemaBoneGroup.stiffiness,
@@ -222,7 +224,7 @@ export class VRMSpringBoneImporter {
 
         // create spring bones
         root.traverse((node) => {
-          const spring = new VRMSpringBoneJoint(node, schemaBoneGroup.hitRadius, setting, colliderGroupsForSpring);
+          const spring = new VRMSpringBoneJoint(node, setting, colliderGroupsForSpring);
           manager.addSpringBone(spring);
         });
       });

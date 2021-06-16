@@ -26,11 +26,6 @@ const _matB = new THREE.Matrix4();
  */
 export class VRMSpringBoneJoint {
   /**
-   * Radius of the bone, will be used for collision.
-   */
-  public radius: number;
-
-  /**
    * Settings of the bone.
    */
   public settings: VRMSpringBoneSettings;
@@ -160,16 +155,14 @@ export class VRMSpringBoneJoint {
    */
   constructor(
     bone: THREE.Object3D,
-    radius = 0.0,
     settings: Partial<VRMSpringBoneSettings> = {},
     colliderGroups: VRMSpringBoneColliderGroup[] = [],
   ) {
     this.bone = bone; // uniVRMでの parent
     this.bone.matrixAutoUpdate = false; // updateにより計算されるのでthree.js内での自動処理は不要
 
-    this.radius = radius;
-
     this.settings = {
+      hitRadius: settings.hitRadius ?? 0.0,
       stiffness: settings.stiffness ?? 1.0,
       gravityPower: settings.gravityPower ?? 0.0,
       gravityDir: settings.gravityDir?.clone() ?? new THREE.Vector3(0.0, -1.0, 0.0),
@@ -330,7 +323,7 @@ export class VRMSpringBoneJoint {
         this._getMatrixWorldToCenter(_matA);
         _matA.multiply(collider.matrixWorld);
 
-        const dist = collider.shape.calculateCollision(_matA, tail, this.radius, _v3A);
+        const dist = collider.shape.calculateCollision(_matA, tail, this.settings.hitRadius, _v3A);
 
         if (dist < 0.0) {
           // hit
