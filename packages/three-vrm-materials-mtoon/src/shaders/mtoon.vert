@@ -30,7 +30,6 @@ varying vec3 vViewPosition;
 #endif
 
 uniform float outlineWidthFactor;
-uniform float outlineScaledMaxDistanceFactor;
 
 void main() {
 
@@ -83,7 +82,6 @@ void main() {
     #ifdef OUTLINE_WIDTH_SCREEN
       vec3 clipNormal = ( projectionMatrix * modelViewMatrix * vec4( objectNormal, 0.0 ) ).xyz;
       vec2 projectedNormal = normalize( clipNormal.xy );
-      projectedNormal *= min( gl_Position.w, outlineScaledMaxDistanceFactor );
       projectedNormal.x *= projectionMatrix[ 0 ].x / projectionMatrix[ 1 ].y;
       gl_Position.xy += 2.0 * outlineWidthFactor * outlineTex * projectedNormal.xy;
     #endif

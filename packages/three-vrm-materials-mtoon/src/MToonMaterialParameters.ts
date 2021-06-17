@@ -1,6 +1,5 @@
 import type { MToonMaterial } from './MToonMaterial';
 import type { MToonMaterialDebugMode } from './MToonMaterialDebugMode';
-import type { MToonMaterialOutlineColorMode } from './MToonMaterialOutlineColorMode';
 import type { MToonMaterialOutlineWidthMode } from './MToonMaterialOutlineWidthMode';
 
 export interface MToonMaterialParameters extends THREE.ShaderMaterialParameters {
@@ -16,26 +15,23 @@ export interface MToonMaterialParameters extends THREE.ShaderMaterialParameters 
   normalScale?: number;
   emissive?: THREE.Color;
   emissiveMap?: THREE.Texture;
-  shadeFactor?: THREE.Color;
+  shadeColorFactor?: THREE.Color;
   shadeMultiplyTexture?: THREE.Texture;
   shadingShiftFactor?: number;
   shadingShiftTexture?: THREE.Texture;
   shadingShiftTextureScale?: number;
   shadingToonyFactor?: number;
-  lightColorAttenuationFactor?: number;
   giIntensityFactor?: number;
-  additiveTexture?: THREE.Texture;
-  rimFactor?: THREE.Color;
+  matcapTexture?: THREE.Texture;
+  parametricRimColorFactor?: THREE.Color;
   rimMultiplyTexture?: THREE.Texture;
   rimLightingMixFactor?: number;
-  rimFresnelPowerFactor?: number;
-  rimLiftFactor?: number;
+  parametricRimFresnelPowerFactor?: number;
+  parametricRimLiftFactor?: number;
   outlineWidthMode?: MToonMaterialOutlineWidthMode;
   outlineWidthFactor?: number;
   outlineWidthMultiplyTexture?: THREE.Texture;
-  outlineScaledMaxDistanceFactor?: number;
-  outlineColorMode?: MToonMaterialOutlineColorMode;
-  outlineFactor?: THREE.Color;
+  outlineColorFactor?: THREE.Color;
   outlineLightingMixFactor?: number;
   uvAnimationMaskTexture?: THREE.Texture;
   uvAnimationScrollXSpeedFactor?: number;

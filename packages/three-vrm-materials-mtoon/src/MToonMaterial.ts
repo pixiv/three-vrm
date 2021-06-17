@@ -6,7 +6,6 @@ import vertexShader from './shaders/mtoon.vert';
 import fragmentShader from './shaders/mtoon.frag';
 import { MToonMaterialDebugMode } from './MToonMaterialDebugMode';
 import { MToonMaterialOutlineWidthMode } from './MToonMaterialOutlineWidthMode';
-import { MToonMaterialOutlineColorMode } from './MToonMaterialOutlineColorMode';
 import type { MToonMaterialParameters } from './MToonMaterialParameters';
 
 const TAU = 2.0 * Math.PI;
@@ -25,24 +24,22 @@ export class MToonMaterial extends THREE.ShaderMaterial {
   public normalScale = new THREE.Vector2(1.0, 1.0);
   public emissive = new THREE.Color(0.0, 0.0, 0.0);
   public emissiveMap: THREE.Texture | null = null;
-  public shadeFactor = new THREE.Color(0.97, 0.81, 0.86);
+  public shadeColorFactor = new THREE.Color(0.97, 0.81, 0.86);
   public shadeMultiplyTexture: THREE.Texture | null = null;
   public shadingShiftFactor = 0.0;
   public shadingShiftTexture: THREE.Texture | null = null;
   public shadingShiftTextureScale = 1.0;
   public shadingToonyFactor = 0.9;
-  public lightColorAttenuationFactor = 0.0;
   public giIntensityFactor = 0.1;
-  public additiveTexture: THREE.Texture | null = null;
-  public rimFactor = new THREE.Color(0.0, 0.0, 0.0);
+  public matcapTexture: THREE.Texture | null = null;
+  public parametricRimColorFactor = new THREE.Color(0.0, 0.0, 0.0);
   public rimMultiplyTexture: THREE.Texture | null = null;
   public rimLightingMixFactor = 0.0;
-  public rimFresnelPowerFactor = 1.0;
-  public rimLiftFactor = 0.0;
+  public parametricRimFresnelPowerFactor = 1.0;
+  public parametricRimLiftFactor = 0.0;
   public outlineWidthFactor = 0.5;
   public outlineWidthMultiplyTexture: THREE.Texture | null = null;
-  public outlineScaledMaxDistanceFactor = 1.0;
-  public outlineFactor = new THREE.Color(0.0, 0.0, 0.0);
+  public outlineColorFactor = new THREE.Color(0.0, 0.0, 0.0);
   public outlineLightingMixFactor = 1.0;
   public uvAnimationMaskTexture: THREE.Texture | null = null;
   public uvAnimationScrollXSpeedFactor = 0.0;
@@ -59,7 +56,6 @@ export class MToonMaterial extends THREE.ShaderMaterial {
 
   private _debugMode = MToonMaterialDebugMode.None;
   private _outlineWidthMode = MToonMaterialOutlineWidthMode.None;
-  private _outlineColorMode = MToonMaterialOutlineColorMode.FixedColor;
 
   private _isOutline = false;
 
@@ -106,25 +102,23 @@ export class MToonMaterial extends THREE.ShaderMaterial {
       {
         litFactor: { value: new THREE.Color(1.0, 1.0, 1.0) },
         colorAlpha: { value: 1.0 },
-        shadeFactor: { value: new THREE.Color(0.97, 0.81, 0.86) },
+        shadeColorFactor: { value: new THREE.Color(0.97, 0.81, 0.86) },
         shadeMultiplyTexture: { value: null },
         shadingShiftFactor: { value: 0.0 },
         shadingShiftTexture: { value: null },
         shadingShiftTextureScale: { value: null },
         shadingToonyFactor: { value: 0.9 },
-        lightColorAttenuationFactor: { value: 0.0 },
         giIntensityFactor: { value: 0.1 },
-        additiveTexture: { value: null },
-        rimFactor: { value: new THREE.Color(0.0, 0.0, 0.0) },
+        matcapTexture: { value: null },
+        parametricRimColorFactor: { value: new THREE.Color(0.0, 0.0, 0.0) },
         rimMultiplyTexture: { value: null },
         rimLightingMixFactor: { value: 0.0 },
-        rimFresnelPowerFactor: { value: 1.0 },
-        rimLiftFactor: { value: 0.0 },
+        parametricRimFresnelPowerFactor: { value: 1.0 },
+        parametricRimLiftFactor: { value: 0.0 },
         emissive: { value: new THREE.Color(0.0, 0.0, 0.0) },
         outlineWidthMultiplyTexture: { value: null },
         outlineWidthFactor: { value: 0.5 },
-        outlineScaledMaxDistanceFactor: { value: 1.0 },
-        outlineFactor: { value: new THREE.Color(0.0, 0.0, 0.0) },
+        outlineColorFactor: { value: new THREE.Color(0.0, 0.0, 0.0) },
         outlineLightingMixFactor: { value: 1.0 },
         uvAnimationMaskTexture: { value: null },
         uvAnimationScrollXOffset: { value: 0.0 },
@@ -160,16 +154,6 @@ export class MToonMaterial extends THREE.ShaderMaterial {
 
   set outlineWidthMode(m: MToonMaterialOutlineWidthMode) {
     this._outlineWidthMode = m;
-
-    this._updateShaderCode();
-  }
-
-  get outlineColorMode(): MToonMaterialOutlineColorMode {
-    return this._outlineColorMode;
-  }
-
-  set outlineColorMode(m: MToonMaterialOutlineColorMode) {
-    this._outlineColorMode = m;
 
     this._updateShaderCode();
   }
@@ -216,24 +200,22 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.normalScale.copy(this.normalScale);
     this.emissive.copy(source.emissive);
     this.emissiveMap = source.emissiveMap;
-    this.shadeFactor.copy(source.shadeFactor);
+    this.shadeColorFactor.copy(source.shadeColorFactor);
     this.shadeMultiplyTexture = source.shadeMultiplyTexture;
     this.shadingShiftFactor = source.shadingShiftFactor;
     this.shadingShiftTexture = source.shadingShiftTexture;
     this.shadingShiftTextureScale = source.shadingShiftTextureScale;
     this.shadingToonyFactor = source.shadingToonyFactor;
-    this.lightColorAttenuationFactor = source.lightColorAttenuationFactor;
     this.giIntensityFactor = source.giIntensityFactor;
-    this.additiveTexture = source.additiveTexture;
-    this.rimFactor.copy(source.rimFactor);
+    this.matcapTexture = source.matcapTexture;
+    this.parametricRimColorFactor.copy(source.parametricRimColorFactor);
     this.rimMultiplyTexture = source.rimMultiplyTexture;
     this.rimLightingMixFactor = source.rimLightingMixFactor;
-    this.rimFresnelPowerFactor = source.rimFresnelPowerFactor;
-    this.rimLiftFactor = source.rimLiftFactor;
+    this.parametricRimFresnelPowerFactor = source.parametricRimFresnelPowerFactor;
+    this.parametricRimLiftFactor = source.parametricRimLiftFactor;
     this.outlineWidthMultiplyTexture = source.outlineWidthMultiplyTexture;
     this.outlineWidthFactor = source.outlineWidthFactor;
-    this.outlineScaledMaxDistanceFactor = source.outlineScaledMaxDistanceFactor;
-    this.outlineFactor.copy(source.outlineFactor);
+    this.outlineColorFactor.copy(source.outlineColorFactor);
     this.outlineLightingMixFactor = source.outlineLightingMixFactor;
     this.uvAnimationMaskTexture = source.uvAnimationMaskTexture;
     this.uvAnimationScrollXSpeedFactor = source.uvAnimationScrollXSpeedFactor;
@@ -242,7 +224,6 @@ export class MToonMaterial extends THREE.ShaderMaterial {
 
     this.debugMode = source.debugMode;
     this.outlineWidthMode = source.outlineWidthMode;
-    this.outlineColorMode = source.outlineColorMode;
 
     this.isOutline = source.isOutline;
 
@@ -272,24 +253,22 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.uniforms.normalScale.value.copy(this.normalScale);
     this.uniforms.emissive.value.copy(this.emissive);
     this.uniforms.emissiveMap.value = this.emissiveMap;
-    this.uniforms.shadeFactor.value.copy(this.shadeFactor);
+    this.uniforms.shadeColorFactor.value.copy(this.shadeColorFactor);
     this.uniforms.shadeMultiplyTexture.value = this.shadeMultiplyTexture;
     this.uniforms.shadingShiftFactor.value = this.shadingShiftFactor;
     this.uniforms.shadingShiftTexture.value = this.shadingShiftTexture;
     this.uniforms.shadingShiftTextureScale.value = this.shadingShiftTextureScale;
     this.uniforms.shadingToonyFactor.value = this.shadingToonyFactor;
-    this.uniforms.lightColorAttenuationFactor.value = this.lightColorAttenuationFactor;
     this.uniforms.giIntensityFactor.value = this.giIntensityFactor;
-    this.uniforms.additiveTexture.value = this.additiveTexture;
-    this.uniforms.rimFactor.value.copy(this.rimFactor);
+    this.uniforms.matcapTexture.value = this.matcapTexture;
+    this.uniforms.parametricRimColorFactor.value.copy(this.parametricRimColorFactor);
     this.uniforms.rimMultiplyTexture.value = this.rimMultiplyTexture;
     this.uniforms.rimLightingMixFactor.value = this.rimLightingMixFactor;
-    this.uniforms.rimFresnelPowerFactor.value = this.rimFresnelPowerFactor;
-    this.uniforms.rimLiftFactor.value = this.rimLiftFactor;
+    this.uniforms.parametricRimFresnelPowerFactor.value = this.parametricRimFresnelPowerFactor;
+    this.uniforms.parametricRimLiftFactor.value = this.parametricRimLiftFactor;
     this.uniforms.outlineWidthMultiplyTexture.value = this.outlineWidthMultiplyTexture;
     this.uniforms.outlineWidthFactor.value = this.outlineWidthFactor;
-    this.uniforms.outlineScaledMaxDistanceFactor.value = this.outlineScaledMaxDistanceFactor;
-    this.uniforms.outlineFactor.value.copy(this.outlineFactor);
+    this.uniforms.outlineColorFactor.value.copy(this.outlineColorFactor);
     this.uniforms.outlineLightingMixFactor.value = this.outlineLightingMixFactor;
     this.uniforms.uvAnimationMaskTexture.value = this.uvAnimationMaskTexture;
   }
@@ -303,7 +282,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
       OUTLINE: this._isOutline,
       USE_SHADEMULTIPLYTEXTURE: this.shadeMultiplyTexture !== null,
       USE_SHADINGSHIFTTEXTURE: this.shadingShiftTexture !== null,
-      USE_ADDITIVETEXTURE: this.additiveTexture !== null,
+      USE_ADDITIVETEXTURE: this.matcapTexture !== null,
       USE_RIMMULTIPLYTEXTURE: this.rimMultiplyTexture !== null,
       USE_OUTLINEWIDTHMULTIPLYTEXTURE: this.outlineWidthMultiplyTexture !== null,
       USE_UVANIMATIONMASKTEXTURE: this.uvAnimationMaskTexture !== null,
@@ -312,14 +291,12 @@ export class MToonMaterial extends THREE.ShaderMaterial {
       DEBUG_UV: this._debugMode === 'uv',
       OUTLINE_WIDTH_WORLD: this._outlineWidthMode === MToonMaterialOutlineWidthMode.WorldCoordinates,
       OUTLINE_WIDTH_SCREEN: this._outlineWidthMode === MToonMaterialOutlineWidthMode.ScreenCoordinates,
-      OUTLINE_COLOR_FIXED: this._outlineColorMode === MToonMaterialOutlineColorMode.FixedColor,
-      OUTLINE_COLOR_MIXED: this._outlineColorMode === MToonMaterialOutlineColorMode.MixedLighting,
     };
 
     // == texture encodings ========================================================================
     const encodings =
-      (this.additiveTexture !== null
-        ? getTexelDecodingFunction('additiveTextureTexelToLinear', this.additiveTexture.encoding) + '\n'
+      (this.matcapTexture !== null
+        ? getTexelDecodingFunction('matcapTextureTexelToLinear', this.matcapTexture.encoding) + '\n'
         : '') +
       (this.shadeMultiplyTexture !== null
         ? getTexelDecodingFunction('shadeMultiplyTextureTexelToLinear', this.shadeMultiplyTexture.encoding) + '\n'

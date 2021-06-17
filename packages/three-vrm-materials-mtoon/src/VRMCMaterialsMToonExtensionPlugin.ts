@@ -5,7 +5,6 @@ import type { GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GL
 import { MToonMaterial } from './MToonMaterial';
 import type { MToonMaterialParameters } from './MToonMaterialParameters';
 import { MToonMaterialOutlineWidthMode } from './MToonMaterialOutlineWidthMode';
-import { MToonMaterialOutlineColorMode } from './MToonMaterialOutlineColorMode';
 
 export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
   public static EXTENSION_NAME = 'VRMC_materials_mtoon-1.0';
@@ -196,20 +195,23 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
 
     await Promise.all([
       this._assignPrimitive(materialParams, 'transparentWithZWrite', extension.transparentWithZWrite),
-      this._assignColor(materialParams, 'shadeFactor', extension.shadeFactor),
+      this._assignColor(materialParams, 'shadeColorFactor', extension.shadeColorFactor),
       this._assignTexture(materialParams, 'shadeMultiplyTexture', extension.shadeMultiplyTexture?.index, true),
       this._assignPrimitive(materialParams, 'shadingShiftFactor', extension.shadingShiftFactor),
       this._assignTexture(materialParams, 'shadingShiftTexture', extension.shadingShiftTexture?.index, true),
       this._assignPrimitive(materialParams, 'shadingShiftTextureScale', extension.shadingShiftTexture?.scale),
       this._assignPrimitive(materialParams, 'shadingToonyFactor', extension.shadingToonyFactor),
-      this._assignPrimitive(materialParams, 'lightColorAttenuationFactor', extension.lightColorAttenuationFactor),
       this._assignPrimitive(materialParams, 'giIntensityFactor', extension.giIntensityFactor),
-      this._assignTexture(materialParams, 'additiveTexture', extension.additiveTexture?.index, true),
-      this._assignColor(materialParams, 'rimFactor', extension.rimFactor),
+      this._assignTexture(materialParams, 'matcapTexture', extension.matcapTexture?.index, true),
+      this._assignColor(materialParams, 'parametricRimColorFactor', extension.parametricRimColorFactor),
       this._assignTexture(materialParams, 'rimMultiplyTexture', extension.rimMultiplyTexture?.index, true),
       this._assignPrimitive(materialParams, 'rimLightingMixFactor', extension.rimLightingMixFactor),
-      this._assignPrimitive(materialParams, 'rimFresnelPowerFactor', extension.rimFresnelPowerFactor),
-      this._assignPrimitive(materialParams, 'rimLiftFactor', extension.rimLiftFactor),
+      this._assignPrimitive(
+        materialParams,
+        'parametricRimFresnelPowerFactor',
+        extension.parametricRimFresnelPowerFactor,
+      ),
+      this._assignPrimitive(materialParams, 'parametricRimLiftFactor', extension.parametricRimLiftFactor),
       this._assignPrimitive(
         materialParams,
         'outlineWidthMode',
@@ -222,13 +224,7 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
         extension.outlineWidthMultiplyTexture?.index,
         false,
       ),
-      this._assignPrimitive(materialParams, 'outlineScaledMaxDistanceFactor', extension.outlineScaledMaxDistanceFactor),
-      this._assignPrimitive(
-        materialParams,
-        'outlineColorMode',
-        extension.outlineColorMode as MToonMaterialOutlineColorMode,
-      ),
-      this._assignColor(materialParams, 'outlineFactor', extension.outlineFactor),
+      this._assignColor(materialParams, 'outlineColorFactor', extension.outlineColorFactor),
       this._assignPrimitive(materialParams, 'outlineLightingMixFactor', extension.outlineLightingMixFactor),
       this._assignTexture(materialParams, 'uvAnimationMaskTexture', extension.uvAnimationMaskTexture?.index, false),
       this._assignPrimitive(materialParams, 'uvAnimationScrollXSpeedFactor', extension.uvAnimationScrollXSpeedFactor),
@@ -257,10 +253,6 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
       MToonMaterialOutlineWidthMode.ScreenCoordinates,
     ][properties.floatProperties?.['_OutlineWidthMode'] ?? 0];
 
-    const outlineColorMode = [MToonMaterialOutlineColorMode.FixedColor, MToonMaterialOutlineColorMode.MixedLighting][
-      properties.floatProperties?.['_OutlineColorMode'] ?? 0
-    ];
-
     await Promise.all([
       this._assignColor(materialParams, 'color', properties.vectorProperties?.['_Color'], true),
       this._assignTexture(materialParams, 'map', properties.textureProperties?.['_MainTex'], true),
@@ -269,7 +261,7 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
       this._assignColor(materialParams, 'emissive', properties.vectorProperties?.['_EmissionColor'], true),
       this._assignTexture(materialParams, 'emissiveMap', properties.textureProperties?.['_EmissionMap'], true),
       this._assignPrimitive(materialParams, 'transparentWithZWrite', transparentWithZWrite),
-      this._assignColor(materialParams, 'shadeFactor', properties.vectorProperties?.['_ShadeColor'], true),
+      this._assignColor(materialParams, 'shadeColorFactor', properties.vectorProperties?.['_ShadeColor'], true),
       this._assignTexture(
         materialParams,
         'shadeMultiplyTexture',
@@ -280,20 +272,19 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
       this._assignPrimitive(materialParams, 'shadingToonyFactor', properties.floatProperties?.['_ShadeToony']),
       this._assignPrimitive(
         materialParams,
-        'lightColorAttenuationFactor',
-        properties.floatProperties?.['_LightColorAttenuation'],
-      ),
-      this._assignPrimitive(
-        materialParams,
         'giIntensityFactor',
         properties.floatProperties?.['_IndirectLightIntensity'],
       ),
-      this._assignTexture(materialParams, 'additiveTexture', properties.textureProperties?.['_SphereAdd'], true),
-      this._assignColor(materialParams, 'rimFactor', properties.vectorProperties?.['_RimColor'], true),
+      this._assignTexture(materialParams, 'matcapTexture', properties.textureProperties?.['_SphereAdd'], true),
+      this._assignColor(materialParams, 'parametricRimColorFactor', properties.vectorProperties?.['_RimColor'], true),
       this._assignTexture(materialParams, 'rimMultiplyTexture', properties.textureProperties?.['_RimTexture'], true),
       this._assignPrimitive(materialParams, 'rimLightingMixFactor', properties.floatProperties?.['_RimLightingMix']),
-      this._assignPrimitive(materialParams, 'rimFresnelPowerFactor', properties.floatProperties?.['_RimFresnelPower']),
-      this._assignPrimitive(materialParams, 'rimLiftFactor', properties.floatProperties?.['_RimLift']),
+      this._assignPrimitive(
+        materialParams,
+        'parametricRimFresnelPowerFactor',
+        properties.floatProperties?.['_RimFresnelPower'],
+      ),
+      this._assignPrimitive(materialParams, 'parametricRimLiftFactor', properties.floatProperties?.['_RimLift']),
       this._assignPrimitive(materialParams, 'outlineWidthMode', outlineWidthMode),
       this._assignPrimitive(materialParams, 'outlineWidthFactor', properties.floatProperties?.['_OutlineWidth']),
       this._assignTexture(
@@ -302,17 +293,13 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
         properties.textureProperties?.['_OutlineWidthTexture'],
         false,
       ),
-      this._assignPrimitive(
-        materialParams,
-        'outlineScaledMaxDistanceFactor',
-        properties.floatProperties?.['_OutlineScaledMaxDistance'],
-      ),
-      this._assignPrimitive(materialParams, 'outlineColorMode', outlineColorMode),
-      this._assignColor(materialParams, 'outlineFactor', properties.vectorProperties?.['_OutlineColor'], true),
+      this._assignColor(materialParams, 'outlineColorFactor', properties.vectorProperties?.['_OutlineColor'], true),
       this._assignPrimitive(
         materialParams,
         'outlineLightingMixFactor',
-        properties.floatProperties?.['_OutlineLightingMix'],
+        properties.floatProperties?.['_OutlineColorMode'] === 0
+          ? 0.0
+          : properties.floatProperties?.['_OutlineLightingMix'],
       ),
       this._assignTexture(
         materialParams,

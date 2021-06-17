@@ -4,7 +4,7 @@ uniform vec3 litFactor;
 
 uniform float opacity;
 
-uniform vec3 shadeFactor;
+uniform vec3 shadeColorFactor;
 #ifdef USE_SHADEMULTIPLYTEXTURE
   uniform sampler2D shadeMultiplyTexture;
 #endif
@@ -17,24 +17,23 @@ uniform float shadingToonyFactor;
   uniform float shadingShiftTextureScale;
 #endif
 
-uniform float lightColorAttenuationFactor;
 uniform float giIntensityFactor;
 
-uniform vec3 rimFactor;
+uniform vec3 parametricRimColorFactor;
 #ifdef USE_RIMMULTIPLYTEXTURE
   uniform sampler2D rimMultiplyTexture;
 #endif
 uniform float rimLightingMixFactor;
-uniform float rimFresnelPowerFactor;
-uniform float rimLiftFactor;
+uniform float parametricRimFresnelPowerFactor;
+uniform float parametricRimLiftFactor;
 
 #ifdef USE_ADDITIVETEXTURE
-  uniform sampler2D additiveTexture;
+  uniform sampler2D matcapTexture;
 #endif
 
 uniform vec3 emissive;
 
-uniform vec3 outlineFactor;
+uniform vec3 outlineColorFactor;
 uniform float outlineLightingMixFactor;
 
 #ifdef USE_UVANIMATIONMASKTEXTURE
@@ -205,11 +204,6 @@ float getShading(
 
 vec3 getLighting( const in vec3 lightColor ) {
   vec3 lighting = lightColor;
-  lighting = mix(
-    lighting,
-    vec3( max( 0.001, max( lighting.x, max( lighting.y, lighting.z ) ) ) ),
-    lightColorAttenuationFactor
-  );
 
   #ifndef PHYSICALLY_CORRECT_LIGHTS
     lighting *= PI;
@@ -371,12 +365,6 @@ void main() {
 
   #include <alphatest_fragment>
 
-  #if defined( OUTLINE ) && defined( OUTLINE_COLOR_FIXED ) // omitting DebugMode
-    gl_FragColor = vec4( outlineFactor, diffuseColor.a );
-    postCorrection();
-    return;
-  #endif
-
   // #include <specularmap_fragment>
   #include <normal_fragment_begin>
 
@@ -456,7 +444,7 @@ void main() {
   // #include <lights_phong_fragment>
   // #include <lights_fragment_begin>
   vec3 lit = diffuseColor.rgb;
-  vec3 shade = shadeFactor;
+  vec3 shade = shadeColorFactor;
   #ifdef USE_SHADEMULTIPLYTEXTURE
     shade *= shadeMultiplyTextureTexelToLinear( texture2D( shadeMultiplyTexture, uv ) ).rgb;
   #endif
@@ -495,9 +483,9 @@ void main() {
 
   vec3 col = reflectedLight.directDiffuse + reflectedLight.indirectDiffuse;
 
-  #if defined( OUTLINE ) && defined( OUTLINE_COLOR_MIXED )
+  #if defined( OUTLINE )
     gl_FragColor = vec4(
-      outlineFactor.rgb * mix( vec3( 1.0 ), col, outlineLightingMixFactor ),
+      outlineColorFactor.rgb * mix( vec3( 1.0 ), col, outlineLightingMixFactor ),
       diffuseColor.a
     );
     postCorrection();
@@ -513,7 +501,7 @@ void main() {
   // -- MToon: parametric rim lighting -----------------------------------------
   vec3 viewDir = normalize( vViewPosition );
   vec3 rimMix = mix(vec3(1.0), lighting + giIntensityFactor * irradiance, rimLightingMixFactor);
-  vec3 rim = rimFactor * pow( saturate( 1.0 - dot( viewDir, normal ) + rimLiftFactor ), rimFresnelPowerFactor );
+  vec3 rim = parametricRimColorFactor * pow( saturate( 1.0 - dot( viewDir, normal ) + parametricRimLiftFactor ), parametricRimFresnelPowerFactor );
   #ifdef USE_RIMMULTIPLYTEXTURE
     rim *= rimMultiplyTextureTexelToLinear( texture2D( rimMultiplyTexture, uv ) ).rgb;
   #endif
@@ -525,7 +513,7 @@ void main() {
       vec3 x = normalize( vec3( viewDir.z, 0.0, -viewDir.x ) );
       vec3 y = cross( viewDir, x ); // guaranteed to be normalized
       vec2 sphereUv = 0.5 + 0.5 * vec2( dot( x, normal ), -dot( y, normal ) );
-      vec3 matcap = additiveTextureTexelToLinear( texture2D( additiveTexture, sphereUv ) ).xyz;
+      vec3 matcap = matcapTextureTexelToLinear( texture2D( matcapTexture, sphereUv ) ).xyz;
       col += matcap;
     }
   #endif
