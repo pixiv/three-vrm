@@ -90,7 +90,7 @@ export class VRMImporter {
 
     const springBoneManager = (await this._springBoneImporter.import(gltf)) ?? undefined;
 
-    const constraintManager = (await this._expressionImporter.import(gltf)) ?? undefined;
+    const constraintManager = (await this._constraintImporter.import(gltf)) ?? undefined;
 
     return new VRM({
       scene: gltf.scene,
