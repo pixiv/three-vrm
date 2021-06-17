@@ -1,4 +1,9 @@
 export interface VRMSpringBoneSettings {
+  /**
+   * Radius of the bone, will be used for collision.
+   */
+  hitRadius: number;
+
   stiffness: number;
   gravityPower: number;
   gravityDir: THREE.Vector3;

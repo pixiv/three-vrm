@@ -76,9 +76,9 @@
 			// spring bones
 			const springBoneManager = new THREE.VRMSpringBoneManager();
 
-			for ( let i = 1; i < 5; i ++ ) {
+			for ( let i = 1; i < 4; i ++ ) {
 
-				const springBone = new THREE.VRMSpringBoneJoint( cubes[ i ], 0.01 );
+				const springBone = new THREE.VRMSpringBoneJoint( cubes[ i ], cubes[ i + 1 ], { hitRadius: 0.01 } );
 				springBoneManager.addSpringBone( springBone );
 
 			}

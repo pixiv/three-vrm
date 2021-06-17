@@ -26,11 +26,6 @@ const _matB = new THREE.Matrix4();
  */
 export class VRMSpringBoneJoint {
   /**
-   * Radius of the bone, will be used for collision.
-   */
-  public radius: number;
-
-  /**
    * Settings of the bone.
    */
   public settings: VRMSpringBoneSettings;
@@ -44,6 +39,12 @@ export class VRMSpringBoneJoint {
    * An Object3D attached to this bone.
    */
   public readonly bone: THREE.Object3D;
+
+  /**
+   * An Object3D that will be used as a tail of this spring bone.
+   * It can be null when the spring bone is imported from VRM 0.0.
+   */
+  public readonly child: THREE.Object3D | null;
 
   /**
    * Current position of child tail, in world unit. Will be used for verlet integration.
@@ -156,20 +157,23 @@ export class VRMSpringBoneJoint {
    * Create a new VRMSpringBone.
    *
    * @param bone An Object3D that will be attached to this bone
-   * @param params Several parameters related to behavior of the spring bone
+   * @param child An Object3D that will be used as a tail of this spring bone. It can be null when the spring bone is imported from VRM 0.0
+   * @param settings Several parameters related to behavior of the spring bone
+   * @param colliderGroups Collider groups that will be collided with this spring bone
    */
   constructor(
     bone: THREE.Object3D,
-    radius = 0.0,
+    child: THREE.Object3D | null,
     settings: Partial<VRMSpringBoneSettings> = {},
     colliderGroups: VRMSpringBoneColliderGroup[] = [],
   ) {
     this.bone = bone; // uniVRMでの parent
     this.bone.matrixAutoUpdate = false; // updateにより計算されるのでthree.js内での自動処理は不要
 
-    this.radius = radius;
+    this.child = child;
 
     this.settings = {
+      hitRadius: settings.hitRadius ?? 0.0,
       stiffness: settings.stiffness ?? 1.0,
       gravityPower: settings.gravityPower ?? 0.0,
       gravityDir: settings.gravityDir?.clone() ?? new THREE.Vector3(0.0, -1.0, 0.0),
@@ -194,13 +198,12 @@ export class VRMSpringBoneJoint {
     this._initialLocalRotation.copy(this.bone.quaternion);
 
     // see initial position of its local child
-    if (this.bone.children.length === 0) {
+    if (this.child) {
+      this._initialLocalChildPosition.copy(this.child.position);
+    } else {
       // 末端のボーン。子ボーンがいないため「自分の少し先」が子ボーンということにする
       // https://github.com/dwango/UniVRM/blob/master/Assets/VRM/UniVRM/Scripts/SpringBone/VRMSpringBone.cs#L246
-      this._initialLocalChildPosition.copy(this.bone.position).normalize().multiplyScalar(0.07); // magic number! derives from original source
-    } else {
-      const firstChild = this.bone.children[0];
-      this._initialLocalChildPosition.copy(firstChild.position);
+      this._initialLocalChildPosition.copy(this.bone.position).normalize().multiplyScalar(0.07); // magic number! derives from original UniVRM source
     }
 
     // copy the child position to tails
@@ -330,7 +333,7 @@ export class VRMSpringBoneJoint {
         this._getMatrixWorldToCenter(_matA);
         _matA.multiply(collider.matrixWorld);
 
-        const dist = collider.shape.calculateCollision(_matA, tail, this.radius, _v3A);
+        const dist = collider.shape.calculateCollision(_matA, tail, this.settings.hitRadius, _v3A);
 
         if (dist < 0.0) {
           // hit

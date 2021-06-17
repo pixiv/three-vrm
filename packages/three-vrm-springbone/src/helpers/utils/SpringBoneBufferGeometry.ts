@@ -26,8 +26,8 @@ export class SpringBoneBufferGeometry extends THREE.BufferGeometry {
   public update(): void {
     let shouldUpdateGeometry = false;
 
-    if (this._currentRadius !== this._springBone.radius) {
-      this._currentRadius = this._springBone.radius;
+    if (this._currentRadius !== this._springBone.settings.hitRadius) {
+      this._currentRadius = this._springBone.settings.hitRadius;
       shouldUpdateGeometry = true;
     }
 
