@@ -5,6 +5,7 @@ import type { GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GL
 import { MToonMaterial } from './MToonMaterial';
 import type { MToonMaterialParameters } from './MToonMaterialParameters';
 import { MToonMaterialOutlineWidthMode } from './MToonMaterialOutlineWidthMode';
+import { GLTFMToonMaterialParamsAssignHelper } from './GLTFMToonMaterialParamsAssignHelper';
 
 export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
   public static EXTENSION_NAME = 'VRMC_materials_mtoon-1.0';
@@ -193,44 +194,33 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
     delete (materialParams as THREE.MeshStandardMaterialParameters).metalness;
     delete (materialParams as THREE.MeshStandardMaterialParameters).roughness;
 
-    await Promise.all([
-      this._assignPrimitive(materialParams, 'transparentWithZWrite', extension.transparentWithZWrite),
-      this._assignColor(materialParams, 'shadeColorFactor', extension.shadeColorFactor),
-      this._assignTexture(materialParams, 'shadeMultiplyTexture', extension.shadeMultiplyTexture?.index, true),
-      this._assignPrimitive(materialParams, 'shadingShiftFactor', extension.shadingShiftFactor),
-      this._assignTexture(materialParams, 'shadingShiftTexture', extension.shadingShiftTexture?.index, true),
-      this._assignPrimitive(materialParams, 'shadingShiftTextureScale', extension.shadingShiftTexture?.scale),
-      this._assignPrimitive(materialParams, 'shadingToonyFactor', extension.shadingToonyFactor),
-      this._assignPrimitive(materialParams, 'giIntensityFactor', extension.giIntensityFactor),
-      this._assignTexture(materialParams, 'matcapTexture', extension.matcapTexture?.index, true),
-      this._assignColor(materialParams, 'parametricRimColorFactor', extension.parametricRimColorFactor),
-      this._assignTexture(materialParams, 'rimMultiplyTexture', extension.rimMultiplyTexture?.index, true),
-      this._assignPrimitive(materialParams, 'rimLightingMixFactor', extension.rimLightingMixFactor),
-      this._assignPrimitive(
-        materialParams,
-        'parametricRimFresnelPowerFactor',
-        extension.parametricRimFresnelPowerFactor,
-      ),
-      this._assignPrimitive(materialParams, 'parametricRimLiftFactor', extension.parametricRimLiftFactor),
-      this._assignPrimitive(
-        materialParams,
-        'outlineWidthMode',
-        extension.outlineWidthMode as MToonMaterialOutlineWidthMode,
-      ),
-      this._assignPrimitive(materialParams, 'outlineWidthFactor', extension.outlineWidthFactor),
-      this._assignTexture(
-        materialParams,
-        'outlineWidthMultiplyTexture',
-        extension.outlineWidthMultiplyTexture?.index,
-        false,
-      ),
-      this._assignColor(materialParams, 'outlineColorFactor', extension.outlineColorFactor),
-      this._assignPrimitive(materialParams, 'outlineLightingMixFactor', extension.outlineLightingMixFactor),
-      this._assignTexture(materialParams, 'uvAnimationMaskTexture', extension.uvAnimationMaskTexture?.index, false),
-      this._assignPrimitive(materialParams, 'uvAnimationScrollXSpeedFactor', extension.uvAnimationScrollXSpeedFactor),
-      this._assignPrimitive(materialParams, 'uvAnimationScrollYSpeedFactor', extension.uvAnimationScrollYSpeedFactor),
-      this._assignPrimitive(materialParams, 'uvAnimationRotationSpeedFactor', extension.uvAnimationRotationSpeedFactor),
-    ]);
+    const assignHelper = new GLTFMToonMaterialParamsAssignHelper(this._parser, materialParams);
+
+    assignHelper.assignPrimitive('transparentWithZWrite', extension.transparentWithZWrite);
+    assignHelper.assignColor('shadeColorFactor', extension.shadeColorFactor);
+    assignHelper.assignTexture('shadeMultiplyTexture', extension.shadeMultiplyTexture, true);
+    assignHelper.assignPrimitive('shadingShiftFactor', extension.shadingShiftFactor);
+    assignHelper.assignTexture('shadingShiftTexture', extension.shadingShiftTexture, true);
+    assignHelper.assignPrimitive('shadingShiftTextureScale', extension.shadingShiftTexture?.scale);
+    assignHelper.assignPrimitive('shadingToonyFactor', extension.shadingToonyFactor);
+    assignHelper.assignPrimitive('giIntensityFactor', extension.giIntensityFactor);
+    assignHelper.assignTexture('matcapTexture', extension.matcapTexture, true);
+    assignHelper.assignColor('parametricRimColorFactor', extension.parametricRimColorFactor);
+    assignHelper.assignTexture('rimMultiplyTexture', extension.rimMultiplyTexture, true);
+    assignHelper.assignPrimitive('rimLightingMixFactor', extension.rimLightingMixFactor);
+    assignHelper.assignPrimitive('parametricRimFresnelPowerFactor', extension.parametricRimFresnelPowerFactor);
+    assignHelper.assignPrimitive('parametricRimLiftFactor', extension.parametricRimLiftFactor);
+    assignHelper.assignPrimitive('outlineWidthMode', extension.outlineWidthMode as MToonMaterialOutlineWidthMode);
+    assignHelper.assignPrimitive('outlineWidthFactor', extension.outlineWidthFactor);
+    assignHelper.assignTexture('outlineWidthMultiplyTexture', extension.outlineWidthMultiplyTexture, false);
+    assignHelper.assignColor('outlineColorFactor', extension.outlineColorFactor);
+    assignHelper.assignPrimitive('outlineLightingMixFactor', extension.outlineLightingMixFactor);
+    assignHelper.assignTexture('uvAnimationMaskTexture', extension.uvAnimationMaskTexture, false);
+    assignHelper.assignPrimitive('uvAnimationScrollXSpeedFactor', extension.uvAnimationScrollXSpeedFactor);
+    assignHelper.assignPrimitive('uvAnimationScrollYSpeedFactor', extension.uvAnimationScrollYSpeedFactor);
+    assignHelper.assignPrimitive('uvAnimationRotationSpeedFactor', extension.uvAnimationRotationSpeedFactor);
+
+    await assignHelper.pending;
   }
 
   private async _v0ExtendMaterialParams(
@@ -253,76 +243,46 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
       MToonMaterialOutlineWidthMode.ScreenCoordinates,
     ][properties.floatProperties?.['_OutlineWidthMode'] ?? 0];
 
-    await Promise.all([
-      this._assignColor(materialParams, 'color', properties.vectorProperties?.['_Color'], true),
-      this._assignTexture(materialParams, 'map', properties.textureProperties?.['_MainTex'], true),
-      this._assignTexture(materialParams, 'normalMap', properties.textureProperties?.['_BumpMap'], false),
-      this._assignPrimitive(materialParams, 'normalScale', properties.floatProperties?.['_BumpScale']),
-      this._assignColor(materialParams, 'emissive', properties.vectorProperties?.['_EmissionColor'], true),
-      this._assignTexture(materialParams, 'emissiveMap', properties.textureProperties?.['_EmissionMap'], true),
-      this._assignPrimitive(materialParams, 'transparentWithZWrite', transparentWithZWrite),
-      this._assignColor(materialParams, 'shadeColorFactor', properties.vectorProperties?.['_ShadeColor'], true),
-      this._assignTexture(
-        materialParams,
-        'shadeMultiplyTexture',
-        properties.textureProperties?.['_ShadeTexture'],
-        true,
-      ),
-      this._assignPrimitive(materialParams, 'shadingShiftFactor', properties.floatProperties?.['_ShadeShift']),
-      this._assignPrimitive(materialParams, 'shadingToonyFactor', properties.floatProperties?.['_ShadeToony']),
-      this._assignPrimitive(
-        materialParams,
-        'giIntensityFactor',
-        properties.floatProperties?.['_IndirectLightIntensity'],
-      ),
-      this._assignTexture(materialParams, 'matcapTexture', properties.textureProperties?.['_SphereAdd'], true),
-      this._assignColor(materialParams, 'parametricRimColorFactor', properties.vectorProperties?.['_RimColor'], true),
-      this._assignTexture(materialParams, 'rimMultiplyTexture', properties.textureProperties?.['_RimTexture'], true),
-      this._assignPrimitive(materialParams, 'rimLightingMixFactor', properties.floatProperties?.['_RimLightingMix']),
-      this._assignPrimitive(
-        materialParams,
-        'parametricRimFresnelPowerFactor',
-        properties.floatProperties?.['_RimFresnelPower'],
-      ),
-      this._assignPrimitive(materialParams, 'parametricRimLiftFactor', properties.floatProperties?.['_RimLift']),
-      this._assignPrimitive(materialParams, 'outlineWidthMode', outlineWidthMode),
-      this._assignPrimitive(materialParams, 'outlineWidthFactor', properties.floatProperties?.['_OutlineWidth']),
-      this._assignTexture(
-        materialParams,
-        'outlineWidthMultiplyTexture',
-        properties.textureProperties?.['_OutlineWidthTexture'],
-        false,
-      ),
-      this._assignColor(materialParams, 'outlineColorFactor', properties.vectorProperties?.['_OutlineColor'], true),
-      this._assignPrimitive(
-        materialParams,
-        'outlineLightingMixFactor',
-        properties.floatProperties?.['_OutlineColorMode'] === 0
-          ? 0.0
-          : properties.floatProperties?.['_OutlineLightingMix'],
-      ),
-      this._assignTexture(
-        materialParams,
-        'uvAnimationMaskTexture',
-        properties.textureProperties?.['_UvAnimMaskTexture'],
-        false,
-      ),
-      this._assignPrimitive(
-        materialParams,
-        'uvAnimationScrollXSpeedFactor',
-        properties.floatProperties?.['_UvAnimScrollX'],
-      ),
-      this._assignPrimitive(
-        materialParams,
-        'uvAnimationScrollYSpeedFactor',
-        properties.floatProperties?.['_UvAnimScrollY'],
-      ),
-      this._assignPrimitive(
-        materialParams,
-        'uvAnimationRotationSpeedFactor',
-        properties.floatProperties?.['_UvAnimRotation'],
-      ),
-    ]);
+    const assignHelper = new GLTFMToonMaterialParamsAssignHelper(this._parser, materialParams);
+
+    assignHelper.assignColor('color', properties.vectorProperties?.['_Color'], true);
+    assignHelper.assignTexture('map', properties.textureProperties?.['_MainTex'], true);
+    assignHelper.assignTexture('normalMap', properties.textureProperties?.['_BumpMap'], false);
+    assignHelper.assignPrimitive('normalScale', properties.floatProperties?.['_BumpScale']);
+    assignHelper.assignColor('emissive', properties.vectorProperties?.['_EmissionColor'], true);
+    assignHelper.assignTexture('emissiveMap', properties.textureProperties?.['_EmissionMap'], true);
+    assignHelper.assignPrimitive('transparentWithZWrite', transparentWithZWrite);
+    assignHelper.assignColor('shadeColorFactor', properties.vectorProperties?.['_ShadeColor'], true);
+    assignHelper.assignTexture('shadeMultiplyTexture', properties.textureProperties?.['_ShadeTexture'], true);
+    assignHelper.assignPrimitive('shadingShiftFactor', properties.floatProperties?.['_ShadeShift']);
+    assignHelper.assignPrimitive('shadingToonyFactor', properties.floatProperties?.['_ShadeToony']);
+    assignHelper.assignPrimitive('giIntensityFactor', properties.floatProperties?.['_IndirectLightIntensity']);
+    assignHelper.assignTexture('matcapTexture', properties.textureProperties?.['_SphereAdd'], true);
+    assignHelper.assignColor('parametricRimColorFactor', properties.vectorProperties?.['_RimColor'], true);
+    assignHelper.assignTexture('rimMultiplyTexture', properties.textureProperties?.['_RimTexture'], true);
+    assignHelper.assignPrimitive('rimLightingMixFactor', properties.floatProperties?.['_RimLightingMix']);
+    assignHelper.assignPrimitive('parametricRimFresnelPowerFactor', properties.floatProperties?.['_RimFresnelPower']);
+    assignHelper.assignPrimitive('parametricRimLiftFactor', properties.floatProperties?.['_RimLift']);
+    assignHelper.assignPrimitive('outlineWidthMode', outlineWidthMode);
+    assignHelper.assignPrimitive('outlineWidthFactor', properties.floatProperties?.['_OutlineWidth']);
+    assignHelper.assignTexture(
+      'outlineWidthMultiplyTexture',
+      properties.textureProperties?.['_OutlineWidthTexture'],
+      false,
+    );
+    assignHelper.assignColor('outlineColorFactor', properties.vectorProperties?.['_OutlineColor'], true);
+    assignHelper.assignPrimitive(
+      'outlineLightingMixFactor',
+      properties.floatProperties?.['_OutlineColorMode'] === 0
+        ? 0.0
+        : properties.floatProperties?.['_OutlineLightingMix'],
+    );
+    assignHelper.assignTexture('uvAnimationMaskTexture', properties.textureProperties?.['_UvAnimMaskTexture'], false);
+    assignHelper.assignPrimitive('uvAnimationScrollXSpeedFactor', properties.floatProperties?.['_UvAnimScrollX']);
+    assignHelper.assignPrimitive('uvAnimationScrollYSpeedFactor', properties.floatProperties?.['_UvAnimScrollY']);
+    assignHelper.assignPrimitive('uvAnimationRotationSpeedFactor', properties.floatProperties?.['_UvAnimRotation']);
+
+    await assignHelper.pending;
   }
 
   private _setupPrimitive(mesh: THREE.Mesh, materialIndex: number): void {
