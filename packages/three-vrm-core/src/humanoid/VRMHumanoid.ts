@@ -16,13 +16,13 @@ export class VRMHumanoid {
    * A {@link VRMHumanBones} that contains all the human bones of the VRM.
    * You might want to get these bones using {@link VRMHumanoid.getBone}.
    */
-  public readonly humanBones: VRMHumanBones;
+  public humanBones: VRMHumanBones;
 
   /**
    * A {@link VRMPose} that is its default state.
    * Note that it's not compatible with {@link setPose} and {@link getPose}, since it contains non-relative values of each local transforms.
    */
-  public readonly restPose: VRMPose;
+  public restPose: VRMPose;
 
   /**
    * Create a new {@link VRMHumanoid}.
@@ -32,6 +32,26 @@ export class VRMHumanoid {
     this.humanBones = humanBones;
 
     this.restPose = this.getAbsolutePose();
+  }
+
+  /**
+   * Copy the given {@link VRMHumanoid} into this one.
+   * @param source The {@link VRMHumanoid} you want to copy
+   * @returns this
+   */
+  public copy(source: VRMHumanoid): this {
+    this.humanBones = source.humanBones;
+    this.restPose = source.restPose;
+
+    return this;
+  }
+
+  /**
+   * Returns a clone of this {@link VRMHumanoid}.
+   * @returns Copied {@link VRMHumanoid}
+   */
+  public clone(): VRMHumanoid {
+    return new VRMHumanoid(this.humanBones).copy(this);
   }
 
   /**

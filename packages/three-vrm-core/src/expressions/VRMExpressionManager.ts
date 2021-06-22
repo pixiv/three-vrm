@@ -83,6 +83,39 @@ export class VRMExpressionManager {
   }
 
   /**
+   * Copy the given {@link VRMExpressionManager} into this one.
+   * @param source The {@link VRMExpressionManager} you want to copy
+   * @returns this
+   */
+  public copy(source: VRMExpressionManager): this {
+    // first unregister all the expression it has
+    const expressions = this._expressions.concat();
+    expressions.forEach((expression) => {
+      this.unregisterExpression(expression);
+    });
+
+    // then register all the expression of the source
+    source._expressions.forEach((expression) => {
+      this.registerExpression(expression);
+    });
+
+    // copy remaining members
+    this.blinkExpressionNames = source.blinkExpressionNames.concat();
+    this.lookAtExpressionNames = source.lookAtExpressionNames.concat();
+    this.mouthExpressionNames = source.mouthExpressionNames.concat();
+
+    return this;
+  }
+
+  /**
+   * Returns a clone of this {@link VRMExpressionManager}.
+   * @returns Copied {@link VRMExpressionManager}
+   */
+  public clone(): VRMExpressionManager {
+    return new VRMExpressionManager().copy(this);
+  }
+
+  /**
    * Return a registered expression.
    * If it cannot find an expression, it will return `null` instead.
    *

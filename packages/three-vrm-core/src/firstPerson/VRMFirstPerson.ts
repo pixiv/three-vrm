@@ -21,12 +21,7 @@ export class VRMFirstPerson {
    * Its associated {@link VRMHumanoid}.
    */
   public readonly humanoid: VRMHumanoid;
-  public readonly meshAnnotations: VRMFirstPersonMeshAnnotation[];
-
-  /**
-   * It will be used to create a model that mesh annotation type are 'auto' for the first person only layer.
-   */
-  private readonly _humanoidHeadNode: THREE.Object3D | null;
+  public meshAnnotations: VRMFirstPersonMeshAnnotation[];
 
   private _firstPersonOnlyLayer = VRMFirstPerson.DEFAULT_FIRSTPERSON_ONLY_LAYER;
   private _thirdPersonOnlyLayer = VRMFirstPerson.DEFAULT_THIRDPERSON_ONLY_LAYER;
@@ -42,8 +37,33 @@ export class VRMFirstPerson {
   public constructor(humanoid: VRMHumanoid, meshAnnotations: VRMFirstPersonMeshAnnotation[]) {
     this.humanoid = humanoid;
     this.meshAnnotations = meshAnnotations;
+  }
 
-    this._humanoidHeadNode = humanoid.getBoneNode('head');
+  /**
+   * Copy the given {@link VRMFirstPerson} into this one.
+   * {@link humanoid} must be same as the source one.
+   * @param source The {@link VRMFirstPerson} you want to copy
+   * @returns this
+   */
+  public copy(source: VRMFirstPerson): this {
+    if (this.humanoid !== source.humanoid) {
+      throw new Error('VRMFirstPerson: humanoid must be same in order to copy');
+    }
+
+    this.meshAnnotations = source.meshAnnotations.map((annotation) => ({
+      meshes: annotation.meshes.concat(),
+      type: annotation.type,
+    }));
+
+    return this;
+  }
+
+  /**
+   * Returns a clone of this {@link VRMFirstPerson}.
+   * @returns Copied {@link VRMFirstPerson}
+   */
+  public clone(): VRMFirstPerson {
+    return new VRMFirstPerson(this.humanoid, this.meshAnnotations).copy(this);
   }
 
   /**
@@ -76,7 +96,7 @@ export class VRMFirstPerson {
    * In this method, it assigns layers for every meshes based on mesh annotations.
    * You must call this method first before you use the layer feature.
    *
-   * This is an equivalent of [VRMFirstPerson.Setup](https://github.com/vrm-c/UniVRM/blob/master/Assets/VRM/UniVRM/Scripts/FirstPerson/VRMFirstPerson.cs) of the UniVRM.
+   * This is an equivalent of [VRMFirstPerson.Setup](https://github.com/vrm-c/UniVRM/blob/73a5bd8fcddaa2a7a8735099a97e63c9db3e5ea0/Assets/VRM/Runtime/FirstPerson/VRMFirstPerson.cs#L295-L299) of the UniVRM.
    *
    * The `cameraLayer` parameter specifies which layer will be assigned for `FirstPersonOnly` / `ThirdPersonOnly`.
    * In UniVRM, we specified those by naming each desired layer as `FIRSTPERSON_ONLY_LAYER` / `THIRDPERSON_ONLY_LAYER`
@@ -91,7 +111,6 @@ export class VRMFirstPerson {
     if (this._initializedLayers) {
       return;
     }
-    this._initializedLayers = true;
     this._firstPersonOnlyLayer = firstPersonOnlyLayer;
     this._thirdPersonOnlyLayer = thirdPersonOnlyLayer;
 
@@ -108,6 +127,8 @@ export class VRMFirstPerson {
         }
       });
     });
+
+    this._initializedLayers = true;
   }
 
   private _excludeTriangles(triangles: number[], bws: number[][], skinIndex: number[][], exclude: number[]): number {
@@ -234,7 +255,7 @@ export class VRMFirstPerson {
   }
 
   private _isEraseTarget(bone: THREE.Object3D): boolean {
-    if (bone === this._humanoidHeadNode) {
+    if (bone === this.humanoid.getBoneNode('head')) {
       return true;
     } else if (!bone.parent) {
       return false;
