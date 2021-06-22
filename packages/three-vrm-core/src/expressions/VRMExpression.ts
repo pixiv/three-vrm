@@ -13,7 +13,7 @@ const _color = new THREE.Color();
 // animationMixer の監視対象は、Scene の中に入っている必要がある。
 // そのため、表示オブジェクトではないけれど、Object3D を継承して Scene に投入できるようにする。
 export class VRMExpression extends THREE.Object3D {
-  public static materialColorTypePropertyNameMap: {
+  public materialColorTypePropertyNameMap: {
     [distinguisher: string]: { [type in VRMExpressionMaterialColorType]?: string };
   } = {
     isMeshStandardMaterial: {
@@ -32,7 +32,7 @@ export class VRMExpression extends THREE.Object3D {
     },
   };
 
-  public static textureTransformPropertyNamesMap: { [distinguisher: string]: string[] } = {
+  public textureTransformPropertyNamesMap: { [distinguisher: string]: string[] } = {
     isMeshStandardMaterial: [
       'map',
       'emissiveMap',
@@ -145,7 +145,7 @@ export class VRMExpression extends THREE.Object3D {
   public addMaterialColorBind(bind: VRMExpressionMaterialColorBind): void {
     const { material, type } = bind;
 
-    const propertyNameMap = Object.entries(VRMExpression.materialColorTypePropertyNameMap).find(([distinguisher]) => {
+    const propertyNameMap = Object.entries(this.materialColorTypePropertyNameMap).find(([distinguisher]) => {
       return (material as any)[distinguisher] === true;
     })?.[1];
     const propertyName = propertyNameMap?.[type];
@@ -175,7 +175,7 @@ export class VRMExpression extends THREE.Object3D {
   public addTextureTransformBind(bind: VRMExpressionTextureTransformBind): void {
     const { material } = bind;
 
-    const propertyNames = Object.entries(VRMExpression.textureTransformPropertyNamesMap).find(([distinguisher]) => {
+    const propertyNames = Object.entries(this.textureTransformPropertyNamesMap).find(([distinguisher]) => {
       return (material as any)[distinguisher] === true;
     })?.[1];
 
