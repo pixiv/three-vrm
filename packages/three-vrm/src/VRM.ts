@@ -1,7 +1,5 @@
 import * as THREE from 'three';
-import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { deepDispose } from './utils/disposer';
-import { VRMImporter, VRMImporterOptions } from './VRMImporter';
 import { VRMExpressionManager, VRMFirstPerson, VRMHumanoid, VRMLookAt, VRMMeta } from '@pixiv/three-vrm-core';
 import { VRMSpringBoneManager } from '@pixiv/three-vrm-springbone';
 import { VRMConstraintManager } from 'packages/three-vrm-constraints/types';
@@ -26,32 +24,6 @@ export interface VRMParameters {
  * See the documentation of [[VRM.from]] for the most basic use of VRM.
  */
 export class VRM {
-  /**
-   * Create a new VRM from a parsed result of GLTF taken from GLTFLoader.
-   * It's probably a thing what you want to get started with VRMs.
-   *
-   * @example Most basic use of VRM
-   * ```
-   * const scene = new THREE.Scene();
-   *
-   * new THREE.GLTFLoader().load( 'models/three-vrm-girl.vrm', ( gltf ) => {
-   *
-   *   THREE.VRM.from( gltf ).then( ( vrm ) => {
-   *
-   *     scene.add( vrm.scene );
-   *
-   *   } );
-   *
-   * } );
-   * ```
-   *
-   * @param gltf A parsed GLTF object taken from GLTFLoader
-   * @param options Options that will be used in importer
-   */
-  public static async from(gltf: GLTF, options: VRMImporterOptions = {}): Promise<VRM> {
-    const importer = new VRMImporter(options);
-    return await importer.import(gltf);
-  }
   /**
    * `THREE.Scene` or `THREE.Group` (depends on your three.js revision) that contains the entire VRM.
    */

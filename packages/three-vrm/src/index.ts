@@ -1,4 +1,8 @@
-export * from './VRM';
-export * from './VRMImporter';
+export { VRM, VRMParameters } from './VRM';
+export { VRMPlugin } from './VRMPlugin';
+export { VRMPluginOptions } from './VRMPluginOptions';
+
 export * from './VRMUtils';
-export * from './types';
+
+export * from '@pixiv/three-vrm-core';
+export * from '@pixiv/three-vrm-materials-mtoon';

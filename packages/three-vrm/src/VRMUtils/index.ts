@@ -1,4 +1,3 @@
-import { extractThumbnailBlob } from './extractThumbnailBlob';
 import { removeUnnecessaryJoints } from './removeUnnecessaryJoints';
 
 export class VRMUtils {
@@ -6,6 +5,5 @@ export class VRMUtils {
     // this class is not meant to be instantiated
   }
 
-  public static extractThumbnailBlob = extractThumbnailBlob;
   public static removeUnnecessaryJoints = removeUnnecessaryJoints;
 }
