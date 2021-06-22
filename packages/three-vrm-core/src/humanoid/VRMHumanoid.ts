@@ -4,8 +4,6 @@ import type { VRMHumanBone } from './VRMHumanBone';
 import type { VRMHumanBones } from './VRMHumanBones';
 import type { VRMHumanBoneName } from './VRMHumanBoneName';
 import type { VRMPose } from './VRMPose';
-import type { RawVector3 } from '../utils/RawVector3';
-import type { RawVector4 } from '../utils/RawVector4';
 
 const _v3A = new THREE.Vector3();
 const _quatA = new THREE.Quaternion();
@@ -59,8 +57,8 @@ export class VRMHumanoid {
 
       // Convert to raw arrays
       pose[vrmBoneName] = {
-        position: _v3A.toArray() as RawVector3,
-        rotation: _quatA.toArray() as RawVector4,
+        position: _v3A.toArray() as [number, number, number],
+        rotation: _quatA.toArray() as [number, number, number, number],
       };
     });
 
@@ -102,8 +100,8 @@ export class VRMHumanoid {
 
       // Convert to raw arrays
       pose[boneName] = {
-        position: _v3A.toArray() as RawVector3,
-        rotation: _quatA.toArray() as RawVector4,
+        position: _v3A.toArray() as [number, number, number],
+        rotation: _quatA.toArray() as [number, number, number, number],
       };
     });
 
