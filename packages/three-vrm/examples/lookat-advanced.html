@@ -29,26 +29,24 @@
 			const _v3A = new THREE.Vector3();
 
 			// extended lookat
-			class VRMSmoothLookAtHead extends THREE.VRMLookAtHead {
+			class VRMSmoothLookAt extends THREE.VRMLookAt {
 
-				constructor( firstPerson, applyer ) {
+				constructor( humanoid, applier ) {
 
-					super( firstPerson, applyer );
+					super( humanoid, applier );
 
 					this.smoothFactor = 10.0;
 
 					this.horizontalLimit = Math.PI / 4.0;
 					this.verticalLimit = Math.PI / 4.0;
 
-					this._eulerTo = new THREE.Euler( 0.0, 0.0, 0.0, THREE.VRMLookAtHead.EULER_ORDER );
+					this._eulerTo = new THREE.Euler( 0.0, 0.0, 0.0, THREE.VRMLookAt.EULER_ORDER );
 
 				}
 
 				update( delta ) {
 
 					if ( this.target && this.autoUpdate ) {
-
-						if ( ! this.applyer ) return;
 
 						this._calcEuler( this._eulerTo, this.target.getWorldPosition( _v3A ) );
 
@@ -69,7 +67,7 @@
 						this._euler.x += ( this._eulerTo.x - this._euler.x ) * k;
 						this._euler.y += ( this._eulerTo.y - this._euler.y ) * k;
 
-						this.applyer.lookAt( this._euler );
+						this.applier.lookAt( this._euler );
 
 					}
 
@@ -77,26 +75,9 @@
 
 			}
 
-			// extended lookat importer
-			class VRMSmoothLookAtImporter extends THREE.VRMLookAtImporter {
-
-				import( gltf, firstPerson, blendShapeProxy, humanBodyBones ) {
-
-					const vrmExt = gltf.parser.json.extensions && gltf.parser.json.extensions.VRM;
-					if ( ! vrmExt ) return null;
-
-					const schemaFirstPerson = vrmExt.firstPerson;
-					if ( ! schemaFirstPerson ) return null;
-
-					const applyer = this._importApplyer( schemaFirstPerson, blendShapeProxy, humanBodyBones );
-					return new VRMSmoothLookAtHead( firstPerson, applyer || undefined );
-
-				}
-
-			}
-
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
+			renderer.outputEncoding = THREE.sRGBEncoding;
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			renderer.setPixelRatio( window.devicePixelRatio );
 			document.body.appendChild( renderer.domElement );
@@ -123,27 +104,36 @@
 			let currentVrm = undefined;
 			const loader = new THREE.GLTFLoader();
 			loader.crossOrigin = 'anonymous';
+
+			loader.register( ( parser ) => {
+
+				return new THREE.VRMPlugin( parser );
+
+			} );
+
 			loader.load(
 
 				'./models/three-vrm-girl.vrm',
 
 				( gltf ) => {
 
+					const vrm = gltf.userData.vrm;
+
 					THREE.VRMUtils.removeUnnecessaryJoints( gltf.scene );
 
-					const lookAtImporter = new VRMSmoothLookAtImporter();
-					THREE.VRM.from( gltf, { lookAtImporter } ).then( ( vrm ) => {
+					// replace the lookAt to our extended one
+					const smoothLookAt = new VRMSmoothLookAt( vrm.humanoid, vrm.lookAt.applier );
+					smoothLookAt.copy( vrm.lookAt );
+					vrm.lookAt = smoothLookAt;
 
-						scene.add( vrm.scene );
-						currentVrm = vrm;
+					scene.add( vrm.scene );
+					currentVrm = vrm;
 
-						vrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.Hips ).rotation.y = Math.PI;
+					vrm.humanoid.getBoneNode( THREE.VRMHumanBoneName.Hips ).rotation.y = Math.PI;
 
-						vrm.lookAt.target = camera;
+					vrm.lookAt.target = camera;
 
-						console.log( vrm );
-
-					} );
+					console.log( vrm );
 
 				},
 

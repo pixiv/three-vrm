@@ -26,6 +26,7 @@
 		<script>
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
+			renderer.outputEncoding = THREE.sRGBEncoding;
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			renderer.setPixelRatio( window.devicePixelRatio );
 			document.body.appendChild( renderer.domElement );
@@ -51,6 +52,13 @@
 			// gltf and vrm
 			const loader = new THREE.GLTFLoader();
 			loader.crossOrigin = 'anonymous';
+
+			loader.register( ( parser ) => {
+
+				return new THREE.VRMPlugin( parser );
+
+			} );
+
 			loader.load(
 
 				// URL of the VRM you want to load
@@ -59,18 +67,15 @@
 				// called when the resource is loaded
 				( gltf ) => {
 
+					const vrm = gltf.userData.vrm;
+
 					// calling this function greatly improves the performance
 					THREE.VRMUtils.removeUnnecessaryJoints( gltf.scene );
 
-					// generate VRM instance from gltf
-					THREE.VRM.from( gltf ).then( ( vrm ) => {
+					console.log( vrm );
+					scene.add( vrm.scene );
 
-						console.log( vrm );
-						scene.add( vrm.scene );
-
-						vrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.Hips ).rotation.y = Math.PI;
-
-					} );
+					vrm.humanoid.getBoneNode( THREE.VRMHumanBoneName.Hips ).rotation.y = Math.PI;
 
 				},
 
