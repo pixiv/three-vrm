@@ -14,6 +14,8 @@ const _quatB = new THREE.Quaternion();
  * A class controls eye gaze movements of a VRM.
  */
 export class VRMLookAt {
+  public static readonly EULER_ORDER = 'YXZ'; // yaw-pitch-roll
+
   /**
    * The origin of LookAt. Position offset from the head bone.
    */
@@ -51,7 +53,7 @@ export class VRMLookAt {
    */
   public faceFront = new THREE.Vector3(0.0, 0.0, 1.0);
 
-  protected _euler: THREE.Euler = new THREE.Euler(0.0, 0.0, 0.0, 'YZX');
+  protected _euler: THREE.Euler = new THREE.Euler(0.0, 0.0, 0.0, VRMLookAt.EULER_ORDER);
 
   /**
    * Create a new {@link VRMLookAt}.
