@@ -14,7 +14,7 @@ export class VRMHumanoidPlugin implements GLTFLoaderPlugin {
   }
 
   public async afterRoot(gltf: GLTF): Promise<void> {
-    const expression = await this.importer.import(gltf);
-    gltf.userData.vrmHumanoid = expression;
+    const humanoid = await this.importer.import(gltf);
+    gltf.userData.vrmHumanoid = humanoid;
   }
 }

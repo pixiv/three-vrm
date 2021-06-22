@@ -14,7 +14,7 @@ export class VRMExpressionPlugin implements GLTFLoaderPlugin {
   }
 
   public async afterRoot(gltf: GLTF): Promise<void> {
-    const expression = await this.importer.import(gltf);
-    gltf.userData.vrmExpressions = expression;
+    const expressionManager = await this.importer.import(gltf);
+    gltf.userData.vrmExpressionManager = expressionManager;
   }
 }
