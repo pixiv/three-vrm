@@ -6,17 +6,17 @@ export class VRMExpressionManager {
   /**
    * A set of name or preset name of expressions that will be overridden by {@link VRMExpression.overrideBlink}.
    */
-  public blinkExpressions = ['blink', 'blinkLeft', 'blinkRight'];
+  public blinkExpressionNames = ['blink', 'blinkLeft', 'blinkRight'];
 
   /**
    * A set of name or preset name of expressions that will be overridden by {@link VRMExpression.overrideLookAt}.
    */
-  public lookAtExpressions = ['lookLeft', 'lookRight', 'lookUp', 'lookDown'];
+  public lookAtExpressionNames = ['lookLeft', 'lookRight', 'lookUp', 'lookDown'];
 
   /**
    * A set of name or preset name of expressions that will be overridden by {@link VRMExpression.overrideMouth}.
    */
-  public mouthExpressions = ['aa', 'ee', 'ih', 'oh', 'ou'];
+  public mouthExpressionNames = ['aa', 'ee', 'ih', 'oh', 'ou'];
 
   /**
    * A set of {@link VRMExpression}.
@@ -222,15 +222,15 @@ export class VRMExpressionManager {
       const name = expression.expressionName;
       const presetName = expression.presetName;
 
-      if (this.blinkExpressions.indexOf(presetName) !== -1 || this.blinkExpressions.indexOf(name) !== -1) {
+      if (this.blinkExpressionNames.indexOf(presetName) !== -1 || this.blinkExpressionNames.indexOf(name) !== -1) {
         multiplier *= weightMultipliers.blink;
       }
 
-      if (this.lookAtExpressions.indexOf(presetName) !== -1 || this.lookAtExpressions.indexOf(name) !== -1) {
+      if (this.lookAtExpressionNames.indexOf(presetName) !== -1 || this.lookAtExpressionNames.indexOf(name) !== -1) {
         multiplier *= weightMultipliers.lookAt;
       }
 
-      if (this.mouthExpressions.indexOf(presetName) !== -1 || this.mouthExpressions.indexOf(name) !== -1) {
+      if (this.mouthExpressionNames.indexOf(presetName) !== -1 || this.mouthExpressionNames.indexOf(name) !== -1) {
         multiplier *= weightMultipliers.mouth;
       }
 
