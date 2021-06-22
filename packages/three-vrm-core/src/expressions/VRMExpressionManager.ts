@@ -4,57 +4,76 @@ import type { VRMExpression } from './VRMExpression';
 
 export class VRMExpressionManager {
   /**
-   * A set of presets that will be overridden by {@link VRMExpression.overrideBlink}.
+   * A set of name or preset name of expressions that will be overridden by {@link VRMExpression.overrideBlink}.
    */
-  private static readonly _blinkPresetSet = new Set<VRMExpressionPreset>(['blink', 'blinkLeft', 'blinkRight']);
+  public blinkExpressions = ['blink', 'blinkLeft', 'blinkRight'];
 
   /**
-   * A set of presets that will be overridden by {@link VRMExpression.overrideLookAt}.
+   * A set of name or preset name of expressions that will be overridden by {@link VRMExpression.overrideLookAt}.
    */
-  private static readonly _lookAtPresetSet = new Set<VRMExpressionPreset>([
-    'lookLeft',
-    'lookRight',
-    'lookUp',
-    'lookDown',
-  ]);
+  public lookAtExpressions = ['lookLeft', 'lookRight', 'lookUp', 'lookDown'];
 
   /**
-   * A set of presets that will be overridden by {@link VRMExpression.overrideMouth}.
+   * A set of name or preset name of expressions that will be overridden by {@link VRMExpression.overrideMouth}.
    */
-  private static readonly _mouthPresetSet = new Set<VRMExpressionPreset>(['aa', 'ee', 'ih', 'oh', 'ou']);
+  public mouthExpressions = ['aa', 'ee', 'ih', 'oh', 'ou'];
 
   /**
-   * A map from name to {@link VRMExpression}.
+   * A set of {@link VRMExpression}.
+   * When you want to register expressions, use {@link registerExpression}
    */
-  public readonly expressionMap: { [name: string]: VRMExpression } = {};
+  private _expressions: VRMExpression[] = [];
+  public get expressions(): VRMExpression[] {
+    return this._expressions.concat();
+  }
 
   /**
-   * A map from {@link VRMExpressionPreset} to custom name.
+   * A map from name to expression.
    */
-  public readonly expressionPresetMap: { [presetName in VRMExpressionPreset]?: string } = {};
+  private _expressionMap: { [name: string]: VRMExpression } = {};
+  public get expressionMap(): { [name: string]: VRMExpression } {
+    return Object.assign({}, this._expressionMap);
+  }
 
   /**
-   * A list of name of custom expressions.
+   * A map from preset name to expression.
    */
-  public readonly customExpressionNames: string[] = [];
+  private _presetExpressionMap: { [presetName in VRMExpressionPreset]?: VRMExpression } = {};
+  public get presetExpressionMap(): { [presetName in VRMExpressionPreset]?: VRMExpression } {
+    return Object.assign({}, this._presetExpressionMap);
+  }
 
   /**
-   * A set of blink expressions.
-   * See also: {@link _blinkPresets}
+   * A map from preset name to name.
    */
-  private readonly _blinkExpressionSet = new Set<VRMExpression>();
+  private _presetNameToNameMap: { [presetName in VRMExpressionPreset]?: string } = {};
+  public get presetNameToNameMap(): { [presetName in VRMExpressionPreset]?: string } {
+    return Object.assign({}, this._presetNameToNameMap);
+  }
 
   /**
-   * A set of lookAt expressions.
-   * See also: {@link _lookAtPresets}
+   * A map from name to preset name.
    */
-  private readonly _lookAtExpressionSet = new Set<VRMExpression>();
+  private _nameToPresetNameMap: { [name: string]: VRMExpressionPreset } = {};
+  public get nameToPresetNameMap(): { [name: string]: VRMExpressionPreset } {
+    return Object.assign({}, this._nameToPresetNameMap);
+  }
 
   /**
-   * A set of mouth expressions.
-   * See also: {@link _mouthPresets}
+   * A set of custom expressions.
    */
-  private readonly _mouthExpressionSet = new Set<VRMExpression>();
+  private _customExpressions: VRMExpression[] = [];
+  public get customExpressions(): VRMExpression[] {
+    return this._customExpressions.concat();
+  }
+
+  /**
+   * A set of custom expression names.
+   */
+  private _customExpressionNames: string[] = [];
+  public get customExpressionNames(): string[] {
+    return this._customExpressionNames.concat();
+  }
 
   /**
    * Create a new {@link VRMExpressionManager}.
@@ -69,10 +88,8 @@ export class VRMExpressionManager {
    *
    * @param name Name or preset name of the expression
    */
-  public getExpression(name: string | VRMExpressionPreset): VRMExpression | null {
-    const nameToRefer = this.expressionPresetMap[name as VRMExpressionPreset] ?? name;
-
-    const expression = this.expressionMap[nameToRefer];
+  public getExpression(name: string): VRMExpression | null {
+    const expression = this._expressionMap[name];
     if (expression != null) {
       return expression;
     }
@@ -83,34 +100,52 @@ export class VRMExpressionManager {
   /**
    * Register an expression.
    *
-   * @param name Name of the expression. It can be either custom name or preset name.
-   * @param presetName Preset name of the expression.
    * @param expression {@link VRMExpression} that describes the expression
    */
-  public registerExpression(
-    name: VRMExpressionPreset | string,
-    presetName: VRMExpressionPreset,
-    expression: VRMExpression,
-  ): void {
-    this.expressionMap[name] = expression;
+  public registerExpression(expression: VRMExpression): void {
+    this._expressions.push(expression);
 
-    if (presetName !== 'custom') {
-      this.expressionPresetMap[presetName] = name;
+    this._expressionMap[expression.expressionName] = expression;
+    this._nameToPresetNameMap[expression.expressionName] = expression.presetName;
 
-      // add overridden expressions to corresponding sets
-      if (VRMExpressionManager._blinkPresetSet.has(presetName)) {
-        this._blinkExpressionSet.add(expression);
+    if (expression.presetName === 'custom') {
+      this._customExpressions.push(expression);
+      this._customExpressionNames.push(expression.presetName);
+    } else {
+      this._presetExpressionMap[expression.presetName] = expression;
+      this._presetNameToNameMap[expression.presetName] = expression.expressionName;
+    }
+  }
+
+  /**
+   * Unregister an expression.
+   *
+   * @param expression The expression you want to unregister
+   */
+  public unregisterExpression(expression: VRMExpression): void {
+    const index = this._expressions.indexOf(expression);
+    if (index === -1) {
+      console.warn('VRMExpressionManager: The specified expressions is not registered');
+    }
+
+    this._expressions.splice(index, 1);
+
+    delete this._expressionMap[expression.expressionName];
+    delete this._nameToPresetNameMap[expression.expressionName];
+
+    if (expression.presetName === 'custom') {
+      {
+        const index = this._customExpressions.indexOf(expression);
+        this._customExpressions.splice(index, 1);
       }
 
-      if (VRMExpressionManager._lookAtPresetSet.has(presetName)) {
-        this._lookAtExpressionSet.add(expression);
-      }
-
-      if (VRMExpressionManager._mouthPresetSet.has(presetName)) {
-        this._mouthExpressionSet.add(expression);
+      {
+        const index = this._customExpressionNames.indexOf(expression.presetName);
+        this._customExpressionNames.splice(index, 1);
       }
     } else {
-      this.customExpressionNames.push(name);
+      delete this._presetExpressionMap[expression.presetName];
+      delete this._presetNameToNameMap[expression.presetName];
     }
   }
 
@@ -177,23 +212,25 @@ export class VRMExpressionManager {
     const weightMultipliers = this._calculateWeightMultipliers();
 
     // reset expression binds first
-    Object.values(this.expressionMap).forEach((expression) => {
+    this._expressions.forEach((expression) => {
       expression.clearAppliedWeight();
     });
 
     // then apply binds
-    Object.values(this.expressionMap).forEach((expression) => {
+    this._expressions.forEach((expression) => {
       let multiplier = 1.0;
+      const name = expression.expressionName;
+      const presetName = expression.presetName;
 
-      if (this._blinkExpressionSet.has(expression)) {
+      if (this.blinkExpressions.indexOf(presetName) !== -1 || this.blinkExpressions.indexOf(name) !== -1) {
         multiplier *= weightMultipliers.blink;
       }
 
-      if (this._lookAtExpressionSet.has(expression)) {
+      if (this.lookAtExpressions.indexOf(presetName) !== -1 || this.lookAtExpressions.indexOf(name) !== -1) {
         multiplier *= weightMultipliers.lookAt;
       }
 
-      if (this._mouthExpressionSet.has(expression)) {
+      if (this.mouthExpressions.indexOf(presetName) !== -1 || this.mouthExpressions.indexOf(name) !== -1) {
         multiplier *= weightMultipliers.mouth;
       }
 
@@ -213,7 +250,7 @@ export class VRMExpressionManager {
     let lookAt = 1.0;
     let mouth = 1.0;
 
-    Object.values(this.expressionMap).forEach((expression) => {
+    this._expressions.forEach((expression) => {
       blink -= expression.overrideBlinkAmount;
       lookAt -= expression.overrideLookAtAmount;
       mouth -= expression.overrideMouthAmount;

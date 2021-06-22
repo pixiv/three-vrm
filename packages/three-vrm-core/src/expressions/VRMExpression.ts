@@ -4,6 +4,7 @@ import type { VRMExpressionMaterialColorBindState } from './VRMExpressionMateria
 import type { VRMExpressionMaterialColorType } from './VRMExpressionMaterialColorType';
 import type { VRMExpressionMorphTargetBind } from './VRMExpressionMorphTargetBind';
 import type { VRMExpressionOverrideType } from './VRMExpressionOverrideType';
+import type { VRMExpressionPreset } from './VRMExpressionPreset';
 import type { VRMExpressionTextureTransformBind } from './VRMExpressionTextureTransformBind';
 import type { VRMExpressionTextureTransformBindState } from './VRMExpressionTextureTransformBindState';
 
@@ -54,6 +55,17 @@ export class VRMExpression extends THREE.Object3D {
       'uvAnimationMaskTexture',
     ],
   };
+
+  /**
+   * Name of this expression.
+   * Distinguished with `name` since `name` will be conflicted with Object3D.
+   */
+  public expressionName: string;
+
+  /**
+   * Preset name of this expression.
+   */
+  public presetName: VRMExpressionPreset;
 
   /**
    * The current weight of the expression.
@@ -126,10 +138,13 @@ export class VRMExpression extends THREE.Object3D {
     }
   }
 
-  constructor(expressionName: string) {
+  constructor(expressionName: string, presetName: VRMExpressionPreset) {
     super();
 
     this.name = `VRMExpression_${expressionName}`;
+    this.expressionName = expressionName;
+
+    this.presetName = presetName;
 
     // traverse 時の救済手段として Object3D ではないことを明示しておく
     this.type = 'VRMExpression';
