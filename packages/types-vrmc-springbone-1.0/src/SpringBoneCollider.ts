@@ -6,7 +6,7 @@ import type { SpringBoneColliderShape } from './SpringBoneColliderShape';
 export interface SpringBoneCollider {
   node?: number;
 
-  shapes?: SpringBoneColliderShape;
+  shape?: SpringBoneColliderShape;
 
   extensions?: { [key: string]: { [key: string]: any } };
   extras?: any;
