@@ -121,10 +121,15 @@ export class VRMExpressionManager {
    *
    * @param name Name or preset name of the expression
    */
-  public getExpression(name: string): VRMExpression | null {
-    const expression = this._expressionMap[name];
-    if (expression != null) {
-      return expression;
+  public getExpression(name: VRMExpressionPreset | string): VRMExpression | null {
+    const expressionByPresetName = this._presetExpressionMap[name as VRMExpressionPreset];
+    if (expressionByPresetName != null) {
+      return expressionByPresetName;
+    }
+
+    const expressionByName = this._expressionMap[name];
+    if (expressionByName != null) {
+      return expressionByName;
     }
 
     return null;
