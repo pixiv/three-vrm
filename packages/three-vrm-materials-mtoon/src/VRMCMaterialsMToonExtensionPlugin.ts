@@ -246,26 +246,31 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
     const assignHelper = new GLTFMToonMaterialParamsAssignHelper(this._parser, materialParams);
 
     assignHelper.assignColor('color', properties.vectorProperties?.['_Color'], true);
-    assignHelper.assignTexture('map', properties.textureProperties?.['_MainTex'], true);
-    assignHelper.assignTexture('normalMap', properties.textureProperties?.['_BumpMap'], false);
+    assignHelper.assignTextureByIndex('map', properties.textureProperties?.['_MainTex'], true);
+    assignHelper.assignTextureByIndex('normalMap', properties.textureProperties?.['_BumpMap'], false);
     assignHelper.assignPrimitive('normalScale', properties.floatProperties?.['_BumpScale']);
     assignHelper.assignColor('emissive', properties.vectorProperties?.['_EmissionColor'], true);
-    assignHelper.assignTexture('emissiveMap', properties.textureProperties?.['_EmissionMap'], true);
+    assignHelper.assignTextureByIndex('emissiveMap', properties.textureProperties?.['_EmissionMap'], true);
     assignHelper.assignPrimitive('transparentWithZWrite', transparentWithZWrite);
     assignHelper.assignColor('shadeColorFactor', properties.vectorProperties?.['_ShadeColor'], true);
-    assignHelper.assignTexture('shadeMultiplyTexture', properties.textureProperties?.['_ShadeTexture'], true);
+    assignHelper.assignTextureByIndex('shadeMultiplyTexture', properties.textureProperties?.['_ShadeTexture'], true);
     assignHelper.assignPrimitive('shadingShiftFactor', properties.floatProperties?.['_ShadeShift']);
     assignHelper.assignPrimitive('shadingToonyFactor', properties.floatProperties?.['_ShadeToony']);
     assignHelper.assignPrimitive('giIntensityFactor', properties.floatProperties?.['_IndirectLightIntensity']);
-    assignHelper.assignTexture('matcapTexture', properties.textureProperties?.['_SphereAdd'], true);
+    assignHelper.assignTextureByIndex('matcapTexture', properties.textureProperties?.['_SphereAdd'], true);
     assignHelper.assignColor('parametricRimColorFactor', properties.vectorProperties?.['_RimColor'], true);
-    assignHelper.assignTexture('rimMultiplyTexture', properties.textureProperties?.['_RimTexture'], true);
+    assignHelper.assignTextureByIndex('rimMultiplyTexture', properties.textureProperties?.['_RimTexture'], true);
     assignHelper.assignPrimitive('rimLightingMixFactor', properties.floatProperties?.['_RimLightingMix']);
     assignHelper.assignPrimitive('parametricRimFresnelPowerFactor', properties.floatProperties?.['_RimFresnelPower']);
     assignHelper.assignPrimitive('parametricRimLiftFactor', properties.floatProperties?.['_RimLift']);
     assignHelper.assignPrimitive('outlineWidthMode', outlineWidthMode);
-    assignHelper.assignPrimitive('outlineWidthFactor', properties.floatProperties?.['_OutlineWidth']);
-    assignHelper.assignTexture(
+    assignHelper.assignPrimitive(
+      'outlineWidthFactor',
+      properties.floatProperties?.['_OutlineWidth'] != null
+        ? 0.01 * properties.floatProperties?.['_OutlineWidth']
+        : undefined,
+    );
+    assignHelper.assignTextureByIndex(
       'outlineWidthMultiplyTexture',
       properties.textureProperties?.['_OutlineWidthTexture'],
       false,
@@ -277,7 +282,11 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
         ? 0.0
         : properties.floatProperties?.['_OutlineLightingMix'],
     );
-    assignHelper.assignTexture('uvAnimationMaskTexture', properties.textureProperties?.['_UvAnimMaskTexture'], false);
+    assignHelper.assignTextureByIndex(
+      'uvAnimationMaskTexture',
+      properties.textureProperties?.['_UvAnimMaskTexture'],
+      false,
+    );
     assignHelper.assignPrimitive('uvAnimationScrollXSpeedFactor', properties.floatProperties?.['_UvAnimScrollX']);
     assignHelper.assignPrimitive('uvAnimationScrollYSpeedFactor', properties.floatProperties?.['_UvAnimScrollY']);
     assignHelper.assignPrimitive('uvAnimationRotationSpeedFactor', properties.floatProperties?.['_UvAnimRotation']);
