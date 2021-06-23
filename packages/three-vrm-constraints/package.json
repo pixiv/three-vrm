@@ -10,7 +10,8 @@
     "/types/",
     "LICENSE"
   ],
-  "main": "lib/three-vrm-constraints.min.js",
+  "main": "lib/three-vrm-constraints.js",
+  "module": "lib/three-vrm-constraints.module.js",
   "types": "types/index.d.ts",
   "typesVersions": {
     "<3.9": {
