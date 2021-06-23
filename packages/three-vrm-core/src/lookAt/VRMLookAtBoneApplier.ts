@@ -1,6 +1,6 @@
 import { VRMHumanoid } from '../humanoid';
 import * as THREE from 'three';
-import { VRMLookAtApplier } from './VRMLookAtApplier';
+import type { VRMLookAtApplier } from './VRMLookAtApplier';
 import { VRMLookAtRangeMap } from './VRMLookAtRangeMap';
 
 const _eulerA = new THREE.Euler(0.0, 0.0, 0.0, 'YXZ');

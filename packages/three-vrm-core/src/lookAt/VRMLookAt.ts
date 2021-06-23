@@ -14,6 +14,8 @@ const _quatB = new THREE.Quaternion();
  * A class controls eye gaze movements of a VRM.
  */
 export class VRMLookAt {
+  public static readonly EULER_ORDER = 'YXZ'; // yaw-pitch-roll
+
   /**
    * The origin of LookAt. Position offset from the head bone.
    */
@@ -27,7 +29,7 @@ export class VRMLookAt {
   /**
    * The {@link VRMLookAtApplier} of the LookAt.
    */
-  public readonly applier: VRMLookAtApplier;
+  public applier: VRMLookAtApplier;
 
   /**
    * If this is true, the LookAt will be updated automatically by calling {@link update}, towarding the direction to the {@link target}.
@@ -51,7 +53,7 @@ export class VRMLookAt {
    */
   public faceFront = new THREE.Vector3(0.0, 0.0, 1.0);
 
-  protected _euler: THREE.Euler = new THREE.Euler(0.0, 0.0, 0.0, 'YZX');
+  protected _euler: THREE.Euler = new THREE.Euler(0.0, 0.0, 0.0, VRMLookAt.EULER_ORDER);
 
   /**
    * Create a new {@link VRMLookAt}.
@@ -62,6 +64,45 @@ export class VRMLookAt {
   public constructor(humanoid: VRMHumanoid, applier: VRMLookAtApplier) {
     this.humanoid = humanoid;
     this.applier = applier;
+  }
+
+  /**
+   * Copy the given {@link VRMLookAt} into this one.
+   * {@link humanoid} must be same as the source one.
+   * {@link applier} will reference the same instance as the source one.
+   * @param source The {@link VRMLookAt} you want to copy
+   * @returns this
+   */
+  public copy(source: VRMLookAt): this {
+    if (this.humanoid !== source.humanoid) {
+      throw new Error('VRMLookAt: humanoid must be same in order to copy');
+    }
+
+    this.offsetFromHeadBone.copy(source.offsetFromHeadBone);
+    this.applier = source.applier;
+    this.autoUpdate = source.autoUpdate;
+    this.target = source.target;
+    this.faceFront.copy(source.faceFront);
+
+    return this;
+  }
+
+  /**
+   * Returns a clone of this {@link VRMLookAt}.
+   * Note that {@link humanoid} and {@link applier} will reference the same instance as this one.
+   * @returns Copied {@link VRMLookAt}
+   */
+  public clone(): VRMLookAt {
+    return new VRMLookAt(this.humanoid, this.applier).copy(this);
+  }
+
+  /**
+   * Reset the lookAt direction to initial direction.
+   */
+  public reset(): void {
+    this._euler.set(0.0, 0.0, 0.0);
+
+    this.applier.lookAt(this._euler);
   }
 
   /**
@@ -97,9 +138,7 @@ export class VRMLookAt {
   public lookAt(position: THREE.Vector3): void {
     this._calcEuler(this._euler, position);
 
-    if (this.applier) {
-      this.applier.lookAt(this._euler);
-    }
+    this.applier.lookAt(this._euler);
   }
 
   /**
@@ -112,9 +151,7 @@ export class VRMLookAt {
     if (this.target && this.autoUpdate) {
       this.lookAt(this.target.getWorldPosition(_v3A));
 
-      if (this.applier) {
-        this.applier.lookAt(this._euler);
-      }
+      this.applier.lookAt(this._euler);
     }
   }
 

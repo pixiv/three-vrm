@@ -1,6 +1,6 @@
 import { VRMExpressionManager } from '../expressions';
 import * as THREE from 'three';
-import { VRMLookAtApplier } from './VRMLookAtApplier';
+import type { VRMLookAtApplier } from './VRMLookAtApplier';
 import { VRMLookAtRangeMap } from './VRMLookAtRangeMap';
 
 /**
