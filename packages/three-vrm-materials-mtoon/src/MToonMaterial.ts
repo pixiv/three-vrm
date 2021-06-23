@@ -54,8 +54,8 @@ export class MToonMaterial extends THREE.ShaderMaterial {
    */
   public onLoadMaterial?: (material: MToonMaterial) => void;
 
-  private _debugMode = MToonMaterialDebugMode.None;
-  private _outlineWidthMode = MToonMaterialOutlineWidthMode.None;
+  private _debugMode: MToonMaterialDebugMode = MToonMaterialDebugMode.None;
+  private _outlineWidthMode: MToonMaterialOutlineWidthMode = MToonMaterialOutlineWidthMode.None;
 
   private _isOutline = false;
 
