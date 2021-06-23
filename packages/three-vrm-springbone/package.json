@@ -10,7 +10,8 @@
     "/types/",
     "LICENSE"
   ],
-  "main": "lib/three-vrm-springbone.min.js",
+  "main": "lib/three-vrm-springbone.js",
+  "module": "lib/three-vrm-springbone.module.js",
   "types": "types/index.d.ts",
   "typesVersions": {
     "<3.9": {
