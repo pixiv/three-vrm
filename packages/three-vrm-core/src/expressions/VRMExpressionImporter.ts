@@ -95,7 +95,7 @@ export class VRMExpressionImporter {
           }
         }
 
-        const expression = new VRMExpression(nameOrPresetName);
+        const expression = new VRMExpression(nameOrPresetName, presetName);
         gltf.scene.add(expression);
 
         expression.isBinary = schemaExpression.isBinary ?? false;
@@ -171,7 +171,7 @@ export class VRMExpressionImporter {
           });
         }
 
-        manager.registerExpression(nameOrPresetName, presetName, expression);
+        manager.registerExpression(expression);
       }),
     );
 
@@ -221,7 +221,7 @@ export class VRMExpressionImporter {
           }
         }
 
-        const expression = new VRMExpression(nameOrPresetName);
+        const expression = new VRMExpression(nameOrPresetName, v1PresetName);
         gltf.scene.add(expression);
 
         expression.isBinary = schemaGroup.isBinary ?? false;
@@ -275,7 +275,7 @@ export class VRMExpressionImporter {
           console.warn('Material binds of VRM 0.0 are not supported. Setup the model in VRM 1.0 and try again');
         }
 
-        manager.registerExpression(nameOrPresetName, v1PresetName, expression);
+        manager.registerExpression(expression);
       }),
     );
 
