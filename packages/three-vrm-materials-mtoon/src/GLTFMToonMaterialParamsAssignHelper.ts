@@ -61,4 +61,12 @@ export class GLTFMToonMaterialParamsAssignHelper {
 
     return promise;
   }
+
+  public async assignTextureByIndex<T extends keyof MToonMaterialParameters>(
+    key: T,
+    textureIndex: number | undefined,
+    isColorTexture: boolean,
+  ): Promise<void> {
+    return this.assignTexture(key, textureIndex != null ? { index: textureIndex } : undefined, isColorTexture);
+  }
 }
