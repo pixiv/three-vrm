@@ -9,7 +9,7 @@ varying vec3 vViewPosition;
 #include <common>
 
 // #include <uv_pars_vertex>
-#if defined( USE_MAP ) || defined( USE_SHADEMULTIPLYTEXTURE ) || defined( USE_SHADINGSHIFTTEXTURE ) || defined( USE_NORMALMAP ) || defined( USE_RIMMULTIPLYTEXTURE ) || defined( USE_EMISSIVEMAP ) || defined( USE_OUTLINEWIDTHMULTIPLYTEXTURE ) || defined( USE_UVANIMATIONMASKTEXTURE )
+#ifdef MTOON_USE_UV
   varying vec2 vUv;
   uniform mat3 uvTransform;
 #endif
@@ -34,7 +34,7 @@ uniform float outlineWidthFactor;
 void main() {
 
   // #include <uv_vertex>
-  #if defined( USE_MAP ) || defined( USE_SHADEMULTIPLYTEXTURE ) || defined( USE_SHADINGSHIFTTEXTURE ) || defined( USE_NORMALMAP ) || defined( USE_RIMMULTIPLYTEXTURE ) || defined( USE_EMISSIVEMAP ) || defined( USE_OUTLINEWIDTHMULTIPLYTEXTURE ) || defined( USE_UVANIMATIONMASKTEXTURE )
+  #ifdef MTOON_USE_UV
     vUv = ( uvTransform * vec3( uv, 1 ) ).xy;
   #endif
 

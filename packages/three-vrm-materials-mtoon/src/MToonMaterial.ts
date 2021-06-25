@@ -274,12 +274,22 @@ export class MToonMaterial extends THREE.ShaderMaterial {
   }
 
   private _updateShaderCode(): void {
+    const useUvInVert = this.outlineWidthMultiplyTexture !== null;
+    const useUvInFrag =
+      this.map !== null ||
+      this.shadeMultiplyTexture !== null ||
+      this.shadingShiftTexture !== null ||
+      this.rimMultiplyTexture !== null ||
+      this.uvAnimationMaskTexture !== null;
+
     this.defines = {
       // Temporary compat against shader change @ Three.js r126
       // See: #21205, #21307, #21299
       THREE_VRM_THREE_REVISION_126: parseInt(THREE.REVISION) >= 126,
 
       OUTLINE: this._isOutline,
+      MTOON_USE_UV: useUvInVert || useUvInFrag, // we can't use `USE_UV` , it will be redefined in WebGLProgram.js
+      MTOON_UVS_VERTEX_ONLY: useUvInVert && !useUvInFrag,
       USE_SHADEMULTIPLYTEXTURE: this.shadeMultiplyTexture !== null,
       USE_SHADINGSHIFTTEXTURE: this.shadingShiftTexture !== null,
       USE_MATCAPTEXTURE: this.matcapTexture !== null,
