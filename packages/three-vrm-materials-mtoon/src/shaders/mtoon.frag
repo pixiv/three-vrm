@@ -60,8 +60,9 @@ uniform float uvAnimationRotationPhase;
 #include <aomap_pars_fragment>
 // #include <lightmap_pars_fragment>
 #include <emissivemap_pars_fragment>
+// #include <envmap_common_pars_fragment>
 // #include <envmap_pars_fragment>
-// #include <gradientmap_pars_fragment>
+// #include <cube_uv_reflection_fragment>
 #include <fog_pars_fragment>
 #include <bsdfs>
 #include <lights_pars_begin>
@@ -73,6 +74,77 @@ varying vec3 vViewPosition;
   varying vec3 vNormal;
 #endif
 
+struct MToonMaterial {
+  vec3 diffuseColor;
+  vec3 shadeColor;
+  float shadingShift;
+};
+
+float linearstep( float a, float b, float t ) {
+  return clamp( ( t - a ) / ( b - a ), 0.0, 1.0 );
+}
+
+/**
+ * Convert NdotL into toon shading factor using shadingShift and shadingToony
+ */
+float getShading(
+  const in float dotNL,
+  const in float shadow,
+  const in float shadingShift
+) {
+  float shading = dotNL;
+  shading = shading + shadingShift;
+  shading = linearstep( -1.0 + shadingToonyFactor, 1.0 - shadingToonyFactor, shading );
+  shading *= shadow;
+  return shading;
+}
+
+/**
+ * Mix diffuseColor and shadeColor using shading factor and light color
+ */
+vec3 getDiffuse(
+  const in MToonMaterial material,
+  const in float shading,
+  in vec3 lightColor
+) {
+  #ifdef DEBUG_LITSHADERATE
+    return vec3( BRDF_Diffuse_Lambert( shading * lightColor ) );
+  #endif
+
+  #ifndef PHYSICALLY_CORRECT_LIGHTS
+    lightColor *= PI;
+  #endif
+
+  return lightColor * BRDF_Diffuse_Lambert( mix( material.shadeColor, material.diffuseColor, shading ) );
+}
+
+void RE_Direct_MToon( const in IncidentLight directLight, const in GeometricContext geometry, const in MToonMaterial material, const in float shadow, inout ReflectedLight reflectedLight ) {
+  float dotNL = saturate( dot( geometry.normal, directLight.direction ) );
+  vec3 irradiance = dotNL * directLight.color;
+
+  #ifndef PHYSICALLY_CORRECT_LIGHTS
+    irradiance *= PI;
+  #endif
+
+  float shading = getShading( dotNL, shadow, material.shadingShift );
+
+  // toon shaded diffuse
+  reflectedLight.directDiffuse += getDiffuse( material, shading, directLight.color );
+
+  // directSpecular will be used for rim lighting, not an actual specular
+  reflectedLight.directSpecular += irradiance;
+}
+
+void RE_IndirectDiffuse_MToon( const in vec3 irradiance, const in GeometricContext geometry, const in MToonMaterial material, inout ReflectedLight reflectedLight ) {
+  // indirect diffuse will be use diffuseColor, no shadeColor involved
+  reflectedLight.indirectDiffuse += irradiance * BRDF_Diffuse_Lambert( material.diffuseColor );
+
+  // directSpecular will be used for rim lighting, not an actual specular
+  reflectedLight.directSpecular += irradiance;
+}
+
+#define RE_Direct RE_Direct_MToon
+#define RE_IndirectDiffuse RE_IndirectDiffuse_MToon
 #define Material_LightProbeLOD( material ) (0)
 
 #include <shadowmap_pars_fragment>
@@ -184,130 +256,6 @@ varying vec3 vViewPosition;
 // #include <specularmap_pars_fragment>
 #include <logdepthbuf_pars_fragment>
 #include <clipping_planes_pars_fragment>
-
-// == lighting stuff ===========================================================
-float linearstep( float a, float b, float t ) {
-  return clamp( ( t - a ) / ( b - a ), 0.0, 1.0 );
-}
-
-float getShading(
-  const in IncidentLight directLight,
-  const in GeometricContext geometry,
-  const in float shadow,
-  const in float shadingShift
-) {
-  float shading = dot( geometry.normal, directLight.direction );
-  shading = shading + shadingShift;
-  shading = linearstep( -1.0 + shadingToonyFactor, 1.0 - shadingToonyFactor, shading );
-  return shading;
-}
-
-vec3 getLighting( const in vec3 lightColor ) {
-  vec3 lighting = lightColor;
-
-  #ifndef PHYSICALLY_CORRECT_LIGHTS
-    lighting *= PI;
-  #endif
-
-  return lighting;
-}
-
-vec3 getDiffuse(
-  const in vec3 lit,
-  const in vec3 shade,
-  const in float lightIntensity,
-  const in vec3 lighting
-) {
-  #ifdef DEBUG_LITSHADERATE
-    return vec3( BRDF_Diffuse_Lambert( lightIntensity * lighting ) );
-  #endif
-
-  return lighting * BRDF_Diffuse_Lambert( mix( shade, lit, lightIntensity ) );
-}
-
-vec3 calcDirectDiffuse(
-  const in vec2 uv,
-  const in vec3 lit,
-  const in vec3 shade,
-  in GeometricContext geometry,
-  inout ReflectedLight reflectedLight
-) {
-  IncidentLight directLight;
-  vec3 lightingSum = vec3( 0.0 );
-
-  float shadingShift = shadingShiftFactor;
-  #ifdef USE_SHADINGSHIFTTEXTURE
-    shadingShift = shadingShift + texture2D( shadingShiftTexture, uv ).r * shadingShiftTextureScale;
-  #endif
-
-  #if ( NUM_POINT_LIGHTS > 0 )
-    PointLight pointLight;
-
-    #pragma unroll_loop_start
-    for ( int i = 0; i < NUM_POINT_LIGHTS; i ++ ) {
-      pointLight = pointLights[ i ];
-      getPointDirectLightIrradiance( pointLight, geometry, directLight );
-
-      float atten = 1.0;
-      #ifdef USE_SHADOWMAP
-        atten = all( bvec2( pointLight.shadow, directLight.visible ) ) ? getPointShadow( pointShadowMap[ i ], pointLight.shadowMapSize, pointLight.shadowBias, pointLight.shadowRadius, vPointShadowCoord[ i ], pointLight.shadowCameraNear, pointLight.shadowCameraFar ) : 1.0;
-      #endif
-
-      float shadow = 0.5 + 0.5 * atten;
-      float lightIntensity = getShading( directLight, geometry, shadow, shadingShift );
-      vec3 lighting = getLighting( directLight.color );
-      reflectedLight.directDiffuse += getDiffuse( lit, shade, lightIntensity, lighting );
-      lightingSum += lighting;
-    }
-    #pragma unroll_loop_end
-  #endif
-
-  #if ( NUM_SPOT_LIGHTS > 0 )
-    SpotLight spotLight;
-
-    #pragma unroll_loop_start
-    for ( int i = 0; i < NUM_SPOT_LIGHTS; i ++ ) {
-      spotLight = spotLights[ i ];
-      getSpotDirectLightIrradiance( spotLight, geometry, directLight );
-
-      float atten = 1.0;
-      #ifdef USE_SHADOWMAP
-        atten = all( bvec2( spotLight.shadow, directLight.visible ) ) ? getShadow( spotShadowMap[ i ], spotLight.shadowMapSize, spotLight.shadowBias, spotLight.shadowRadius, vSpotShadowCoord[ i ] ) : 1.0;
-      #endif
-
-      float shadow = 0.5 + 0.5 * atten;
-      float lightIntensity = getShading( directLight, geometry, shadow, shadingShift );
-      vec3 lighting = getLighting( directLight.color );
-      reflectedLight.directDiffuse += getDiffuse( lit, shade, lightIntensity, lighting );
-      lightingSum += lighting;
-    }
-    #pragma unroll_loop_end
-  #endif
-
-  #if ( NUM_DIR_LIGHTS > 0 )
-    DirectionalLight directionalLight;
-
-    #pragma unroll_loop_start
-    for ( int i = 0; i < NUM_DIR_LIGHTS; i ++ ) {
-      directionalLight = directionalLights[ i ];
-      getDirectionalDirectLightIrradiance( directionalLight, geometry, directLight );
-
-      float atten = 1.0;
-      #ifdef USE_SHADOWMAP
-        atten = all( bvec2( directionalLight.shadow, directLight.visible ) ) ? getShadow( directionalShadowMap[ i ], directionalLight.shadowMapSize, directionalLight.shadowBias, directionalLight.shadowRadius, vDirectionalShadowCoord[ i ] ) : 1.0;
-      #endif
-
-      float shadow = 0.5 + 0.5 * atten;
-      float lightIntensity = getShading( directLight, geometry, shadow, shadingShift );
-      vec3 lighting = getLighting( directLight.color );
-      reflectedLight.directDiffuse += getDiffuse( lit, shade, lightIntensity, lighting );
-      lightingSum += lighting;
-    }
-    #pragma unroll_loop_end
-  #endif
-
-  return lightingSum;
-}
 
 // == post correction ==========================================================
 void postCorrection() {
@@ -442,41 +390,167 @@ void main() {
   // -- MToon: lighting --------------------------------------------------------
   // accumulation
   // #include <lights_phong_fragment>
-  // #include <lights_fragment_begin>
-  vec3 lit = diffuseColor.rgb;
-  vec3 shade = shadeColorFactor;
+  MToonMaterial material;
+
+  material.diffuseColor = diffuseColor.rgb;
+
+  material.shadeColor = shadeColorFactor;
   #ifdef USE_SHADEMULTIPLYTEXTURE
-    shade *= shadeMultiplyTextureTexelToLinear( texture2D( shadeMultiplyTexture, uv ) ).rgb;
+    material.shadeColor *= shadeMultiplyTextureTexelToLinear( texture2D( shadeMultiplyTexture, uv ) ).rgb;
   #endif
+
+  material.shadingShift = shadingShiftFactor;
+  #ifdef USE_SHADINGSHIFTTEXTURE
+    material.shadingShift += texture2D( shadingShiftTexture, uv ).r * shadingShiftTextureScale;
+  #endif
+
+  // #include <lights_fragment_begin>
+
+  // MToon Specific changes:
+  // Since we want to take shadows into account of shading instead of irradiance,
+  // we had to modify the codes that multiplies the results of shadowmap into color of direct lights.
 
   GeometricContext geometry;
 
   geometry.position = - vViewPosition;
   geometry.normal = normal;
-  geometry.viewDir = normalize( vViewPosition );
+  geometry.viewDir = ( isOrthographic ) ? vec3( 0, 0, 1 ) : normalize( vViewPosition );
 
-  vec3 lighting = calcDirectDiffuse( uv, diffuseColor.rgb, shade, geometry, reflectedLight );
+  #ifdef CLEARCOAT
 
-  vec3 irradiance = getAmbientLightIrradiance( ambientLightColor );
-  #if ( NUM_HEMI_LIGHTS > 0 )
+    geometry.clearcoatNormal = clearcoatNormal;
+
+  #endif
+
+  IncidentLight directLight;
+
+  #if ( NUM_POINT_LIGHTS > 0 ) && defined( RE_Direct )
+
+    PointLight pointLight;
+    #if defined( USE_SHADOWMAP ) && NUM_POINT_LIGHT_SHADOWS > 0
+    PointLightShadow pointLightShadow;
+    #endif
+
     #pragma unroll_loop_start
-    for ( int i = 0; i < NUM_HEMI_LIGHTS; i ++ ) {
-      irradiance += getHemisphereLightIrradiance( hemisphereLights[ i ], geometry );
+    for ( int i = 0; i < NUM_POINT_LIGHTS; i ++ ) {
+
+      pointLight = pointLights[ i ];
+
+      getPointDirectLightIrradiance( pointLight, geometry, directLight );
+
+      float shadow = 1.0;
+      #if defined( USE_SHADOWMAP ) && ( UNROLLED_LOOP_INDEX < NUM_POINT_LIGHT_SHADOWS )
+      pointLightShadow = pointLightShadows[ i ];
+      shadow = all( bvec2( directLight.visible, receiveShadow ) ) ? getPointShadow( pointShadowMap[ i ], pointLightShadow.shadowMapSize, pointLightShadow.shadowBias, pointLightShadow.shadowRadius, vPointShadowCoord[ i ], pointLightShadow.shadowCameraNear, pointLightShadow.shadowCameraFar ) : 1.0;
+      #endif
+
+      RE_Direct( directLight, geometry, material, shadow, reflectedLight );
+
     }
     #pragma unroll_loop_end
+
   #endif
 
-  // #include <lights_fragment_maps>
-  #ifdef USE_LIGHTMAP
-    vec3 lightMapIrradiance = texture2D( lightMap, vUv2 ).rgb * lightMapIntensity;
-    #ifndef PHYSICALLY_CORRECT_LIGHTS
-      lightMapIrradiance *= PI; // factor of PI should not be present; included here to prevent breakage
+  #if ( NUM_SPOT_LIGHTS > 0 ) && defined( RE_Direct )
+
+    SpotLight spotLight;
+    #if defined( USE_SHADOWMAP ) && NUM_SPOT_LIGHT_SHADOWS > 0
+    SpotLightShadow spotLightShadow;
     #endif
-    irradiance += lightMapIrradiance;
+
+    #pragma unroll_loop_start
+    for ( int i = 0; i < NUM_SPOT_LIGHTS; i ++ ) {
+
+      spotLight = spotLights[ i ];
+
+      getSpotDirectLightIrradiance( spotLight, geometry, directLight );
+
+      float shadow = 1.0;
+      #if defined( USE_SHADOWMAP ) && ( UNROLLED_LOOP_INDEX < NUM_SPOT_LIGHT_SHADOWS )
+      spotLightShadow = spotLightShadows[ i ];
+      shadow = all( bvec2( directLight.visible, receiveShadow ) ) ? getShadow( spotShadowMap[ i ], spotLightShadow.shadowMapSize, spotLightShadow.shadowBias, spotLightShadow.shadowRadius, vSpotShadowCoord[ i ] ) : 1.0;
+      #endif
+
+      RE_Direct( directLight, geometry, material, shadow, reflectedLight );
+
+    }
+    #pragma unroll_loop_end
+
   #endif
 
-  // #include <lights_fragment_end>
-  reflectedLight.indirectDiffuse += giIntensityFactor * irradiance * BRDF_Diffuse_Lambert( lit );
+  #if ( NUM_DIR_LIGHTS > 0 ) && defined( RE_Direct )
+
+    DirectionalLight directionalLight;
+    #if defined( USE_SHADOWMAP ) && NUM_DIR_LIGHT_SHADOWS > 0
+    DirectionalLightShadow directionalLightShadow;
+    #endif
+
+    #pragma unroll_loop_start
+    for ( int i = 0; i < NUM_DIR_LIGHTS; i ++ ) {
+
+      directionalLight = directionalLights[ i ];
+
+      getDirectionalDirectLightIrradiance( directionalLight, geometry, directLight );
+
+      float shadow = 1.0;
+      #if defined( USE_SHADOWMAP ) && ( UNROLLED_LOOP_INDEX < NUM_DIR_LIGHT_SHADOWS )
+      directionalLightShadow = directionalLightShadows[ i ];
+      shadow = all( bvec2( directLight.visible, receiveShadow ) ) ? getShadow( directionalShadowMap[ i ], directionalLightShadow.shadowMapSize, directionalLightShadow.shadowBias, directionalLightShadow.shadowRadius, vDirectionalShadowCoord[ i ] ) : 1.0;
+      #endif
+
+      RE_Direct( directLight, geometry, material, shadow, reflectedLight );
+
+    }
+    #pragma unroll_loop_end
+
+  #endif
+
+  // #if ( NUM_RECT_AREA_LIGHTS > 0 ) && defined( RE_Direct_RectArea )
+
+  //   RectAreaLight rectAreaLight;
+
+  //   #pragma unroll_loop_start
+  //   for ( int i = 0; i < NUM_RECT_AREA_LIGHTS; i ++ ) {
+
+  //     rectAreaLight = rectAreaLights[ i ];
+  //     RE_Direct_RectArea( rectAreaLight, geometry, material, reflectedLight );
+
+  //   }
+  //   #pragma unroll_loop_end
+
+  // #endif
+
+  #if defined( RE_IndirectDiffuse )
+
+    vec3 iblIrradiance = vec3( 0.0 );
+
+    vec3 irradiance = getAmbientLightIrradiance( ambientLightColor );
+
+    irradiance += getLightProbeIrradiance( lightProbe, geometry );
+
+    #if ( NUM_HEMI_LIGHTS > 0 )
+
+      #pragma unroll_loop_start
+      for ( int i = 0; i < NUM_HEMI_LIGHTS; i ++ ) {
+
+        irradiance += getHemisphereLightIrradiance( hemisphereLights[ i ], geometry );
+
+      }
+      #pragma unroll_loop_end
+
+    #endif
+
+  #endif
+
+  // #if defined( RE_IndirectSpecular )
+
+  //   vec3 radiance = vec3( 0.0 );
+  //   vec3 clearcoatRadiance = vec3( 0.0 );
+
+  // #endif
+
+  #include <lights_fragment_maps>
+  #include <lights_fragment_end>
 
   // modulation
   #include <aomap_fragment>
@@ -498,25 +572,27 @@ void main() {
     return;
   #endif
 
-  // -- MToon: parametric rim lighting -----------------------------------------
+  // -- MToon: rim lighting -----------------------------------------
   vec3 viewDir = normalize( vViewPosition );
-  vec3 rimMix = mix(vec3(1.0), lighting + giIntensityFactor * irradiance, rimLightingMixFactor);
-  vec3 rim = parametricRimColorFactor * pow( saturate( 1.0 - dot( viewDir, normal ) + parametricRimLiftFactor ), parametricRimFresnelPowerFactor );
-  #ifdef USE_RIMMULTIPLYTEXTURE
-    rim *= rimMultiplyTextureTexelToLinear( texture2D( rimMultiplyTexture, uv ) ).rgb;
-  #endif
-  col += rim;
+  vec3 rimMix = mix( vec3( 1.0 ), reflectedLight.directSpecular, 1.0 );
 
-  // -- MToon: additive matcap -------------------------------------------------
+  vec3 rim = parametricRimColorFactor * pow( saturate( 1.0 - dot( viewDir, normal ) + parametricRimLiftFactor ), parametricRimFresnelPowerFactor );
+
   #ifdef USE_ADDITIVETEXTURE
     {
       vec3 x = normalize( vec3( viewDir.z, 0.0, -viewDir.x ) );
       vec3 y = cross( viewDir, x ); // guaranteed to be normalized
       vec2 sphereUv = 0.5 + 0.5 * vec2( dot( x, normal ), -dot( y, normal ) );
       vec3 matcap = matcapTextureTexelToLinear( texture2D( matcapTexture, sphereUv ) ).xyz;
-      col += matcap;
+      rim += matcap;
     }
   #endif
+
+  #ifdef USE_RIMMULTIPLYTEXTURE
+    rim *= rimMultiplyTextureTexelToLinear( texture2D( rimMultiplyTexture, uv ) ).rgb;
+  #endif
+
+  col += rimMix * rim;
 
   // -- MToon: Emission --------------------------------------------------------
   col += totalEmissiveRadiance;
