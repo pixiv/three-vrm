@@ -282,7 +282,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
       OUTLINE: this._isOutline,
       USE_SHADEMULTIPLYTEXTURE: this.shadeMultiplyTexture !== null,
       USE_SHADINGSHIFTTEXTURE: this.shadingShiftTexture !== null,
-      USE_ADDITIVETEXTURE: this.matcapTexture !== null,
+      USE_MATCAPTEXTURE: this.matcapTexture !== null,
       USE_RIMMULTIPLYTEXTURE: this.rimMultiplyTexture !== null,
       USE_OUTLINEWIDTHMULTIPLYTEXTURE: this.outlineWidthMultiplyTexture !== null,
       USE_UVANIMATIONMASKTEXTURE: this.uvAnimationMaskTexture !== null,

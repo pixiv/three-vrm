@@ -27,7 +27,7 @@ uniform float rimLightingMixFactor;
 uniform float parametricRimFresnelPowerFactor;
 uniform float parametricRimLiftFactor;
 
-#ifdef USE_ADDITIVETEXTURE
+#ifdef USE_MATCAPTEXTURE
   uniform sampler2D matcapTexture;
 #endif
 
@@ -578,7 +578,7 @@ void main() {
 
   vec3 rim = parametricRimColorFactor * pow( saturate( 1.0 - dot( viewDir, normal ) + parametricRimLiftFactor ), parametricRimFresnelPowerFactor );
 
-  #ifdef USE_ADDITIVETEXTURE
+  #ifdef USE_MATCAPTEXTURE
     {
       vec3 x = normalize( vec3( viewDir.z, 0.0, -viewDir.x ) );
       vec3 y = cross( viewDir, x ); // guaranteed to be normalized
