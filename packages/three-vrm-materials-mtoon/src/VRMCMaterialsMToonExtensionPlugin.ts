@@ -96,7 +96,7 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
     const meshDef = json.meshes[meshIndex];
     const primitivesDef = meshDef.primitives;
 
-    const meshOrGroup: THREE.Group | THREE.Mesh | THREE.SkinnedMesh = await (parser as any).loadMesh(meshIndex);
+    const meshOrGroup = await parser.loadMesh(meshIndex);
 
     if (primitivesDef.length === 1) {
       const mesh = meshOrGroup as THREE.Mesh;
@@ -300,6 +300,15 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
     await assignHelper.pending;
   }
 
+  /**
+   * This will do two processes that is required to render MToon properly.
+   *
+   * - Set render order
+   * - Generate outline
+   *
+   * @param mesh A target GLTF primitive
+   * @param materialIndex The material index of the primitive
+   */
   private _setupPrimitive(mesh: THREE.Mesh, materialIndex: number): void {
     const v1Extension = this._v1GetMToonExtension(materialIndex);
     if (v1Extension) {
@@ -403,45 +412,5 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
     const primitiveVertices = geometry.index ? geometry.index.count : geometry.attributes.position.count / 3;
     geometry.addGroup(0, primitiveVertices, 0);
     geometry.addGroup(0, primitiveVertices, 1);
-  }
-
-  private async _assignPrimitive<T extends keyof MToonMaterialParameters>(
-    materialParams: MToonMaterialParameters,
-    key: T,
-    value: MToonMaterialParameters[T],
-  ): Promise<void> {
-    if (value != null) {
-      materialParams[key] = value;
-    }
-  }
-
-  private async _assignColor<T extends keyof MToonMaterialParameters>(
-    materialParams: MToonMaterialParameters,
-    key: T,
-    value: number[] | undefined,
-    convertSRGBToLinear?: boolean,
-  ): Promise<void> {
-    if (value != null) {
-      materialParams[key] = new THREE.Color().fromArray(value);
-
-      if (convertSRGBToLinear) {
-        materialParams[key].convertSRGBToLinear();
-      }
-    }
-  }
-
-  private async _assignTexture<T extends keyof MToonMaterialParameters>(
-    materialParams: MToonMaterialParameters,
-    key: T,
-    index: number | undefined,
-    isColorTexture: boolean,
-  ): Promise<void> {
-    if (index != null) {
-      await (this._parser as any).assignTexture(materialParams, key, { index });
-
-      if (isColorTexture) {
-        materialParams[key].encoding = THREE.sRGBEncoding;
-      }
-    }
   }
 }
