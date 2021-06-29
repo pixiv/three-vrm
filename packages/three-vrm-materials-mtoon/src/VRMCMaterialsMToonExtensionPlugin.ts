@@ -237,12 +237,6 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
     const enabledZWrite = properties.floatProperties?.['_ZWrite'] === 1;
     const transparentWithZWrite = enabledZWrite && isTransparent;
 
-    const outlineWidthMode = [
-      MToonMaterialOutlineWidthMode.None,
-      MToonMaterialOutlineWidthMode.WorldCoordinates,
-      MToonMaterialOutlineWidthMode.ScreenCoordinates,
-    ][properties.floatProperties?.['_OutlineWidthMode'] ?? 0];
-
     const assignHelper = new GLTFMToonMaterialParamsAssignHelper(this._parser, materialParams);
 
     assignHelper.assignColor('color', properties.vectorProperties?.['_Color'], true);
@@ -254,8 +248,15 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
     assignHelper.assignPrimitive('transparentWithZWrite', transparentWithZWrite);
     assignHelper.assignColor('shadeColorFactor', properties.vectorProperties?.['_ShadeColor'], true);
     assignHelper.assignTextureByIndex('shadeMultiplyTexture', properties.textureProperties?.['_ShadeTexture'], true);
-    assignHelper.assignPrimitive('shadingShiftFactor', properties.floatProperties?.['_ShadeShift']);
-    assignHelper.assignPrimitive('shadingToonyFactor', properties.floatProperties?.['_ShadeToony']);
+
+    // convert v0 shade shift / shade toony
+    let shadingShift = properties.floatProperties?.['_ShadeShift'] ?? 0.0;
+    let shadingToony = properties.floatProperties?.['_ShadeToony'] ?? 0.9;
+    shadingToony = THREE.MathUtils.lerp(shadingToony, 1.0, 0.5 + 0.5 * shadingShift);
+    shadingShift = -shadingShift - (1.0 - shadingToony);
+    assignHelper.assignPrimitive('shadingShiftFactor', shadingShift);
+    assignHelper.assignPrimitive('shadingToonyFactor', shadingToony);
+
     assignHelper.assignPrimitive('giIntensityFactor', properties.floatProperties?.['_IndirectLightIntensity']);
     assignHelper.assignTextureByIndex('matcapTexture', properties.textureProperties?.['_SphereAdd'], true);
     assignHelper.assignColor('parametricRimColorFactor', properties.vectorProperties?.['_RimColor'], true);
@@ -263,13 +264,18 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
     assignHelper.assignPrimitive('rimLightingMixFactor', properties.floatProperties?.['_RimLightingMix']);
     assignHelper.assignPrimitive('parametricRimFresnelPowerFactor', properties.floatProperties?.['_RimFresnelPower']);
     assignHelper.assignPrimitive('parametricRimLiftFactor', properties.floatProperties?.['_RimLift']);
+
+    const outlineWidthMode = [
+      MToonMaterialOutlineWidthMode.None,
+      MToonMaterialOutlineWidthMode.WorldCoordinates,
+      MToonMaterialOutlineWidthMode.ScreenCoordinates,
+    ][properties.floatProperties?.['_OutlineWidthMode'] ?? 0];
     assignHelper.assignPrimitive('outlineWidthMode', outlineWidthMode);
-    assignHelper.assignPrimitive(
-      'outlineWidthFactor',
-      properties.floatProperties?.['_OutlineWidth'] != null
-        ? 0.01 * properties.floatProperties?.['_OutlineWidth']
-        : undefined,
-    );
+
+    // v0 outlineWidthFactor is in centimeter
+    let outlineWidthFactor = properties.floatProperties?.['_OutlineWidth'] ?? 0.0;
+    outlineWidthFactor = 0.01 * outlineWidthFactor;
+    assignHelper.assignPrimitive('outlineWidthFactor', outlineWidthFactor);
     assignHelper.assignTextureByIndex(
       'outlineWidthMultiplyTexture',
       properties.textureProperties?.['_OutlineWidthTexture'],
