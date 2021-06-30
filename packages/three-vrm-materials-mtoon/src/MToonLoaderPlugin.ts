@@ -120,7 +120,7 @@ export class MToonLoaderPlugin implements GLTFLoaderPlugin {
    * Since GLTFLoader have so many hardcoded procedure related to `KHR_materials_unlit`
    * we have to delete the extension before we start to parse the glTF.
    */
-  private _v1RemoveUnlitExtension(): void {
+  protected _v1RemoveUnlitExtension(): void {
     const parser = this._parser;
     const json = parser.json;
 
@@ -140,7 +140,7 @@ export class MToonLoaderPlugin implements GLTFLoaderPlugin {
    * Since GLTFLoader have so many hardcoded procedure related to `KHR_materials_unlit`
    * we have to delete the extension before we start to parse the glTF.
    */
-  private _v0RemoveUnlitExtension(): void {
+  protected _v0RemoveUnlitExtension(): void {
     const parser = this._parser;
     const json = parser.json;
 
@@ -154,7 +154,7 @@ export class MToonLoaderPlugin implements GLTFLoaderPlugin {
     });
   }
 
-  private _v1GetMToonExtension(materialIndex: number): V1MToonSchema.MaterialsMToon | undefined {
+  protected _v1GetMToonExtension(materialIndex: number): V1MToonSchema.MaterialsMToon | undefined {
     const parser = this._parser;
     const json = parser.json;
 
@@ -169,7 +169,7 @@ export class MToonLoaderPlugin implements GLTFLoaderPlugin {
     return undefined;
   }
 
-  private _v0GetMToonProperties(materialIndex: number): V0Material | undefined {
+  protected _v0GetMToonProperties(materialIndex: number): V0Material | undefined {
     const parser = this._parser;
     const json = parser.json;
 
@@ -181,7 +181,7 @@ export class MToonLoaderPlugin implements GLTFLoaderPlugin {
     }
   }
 
-  private async _v1ExtendMaterialParams(
+  protected async _v1ExtendMaterialParams(
     extension: V1MToonSchema.MaterialsMToon,
     materialParams: MToonMaterialParameters,
   ): Promise<void> {
@@ -220,7 +220,7 @@ export class MToonLoaderPlugin implements GLTFLoaderPlugin {
     await assignHelper.pending;
   }
 
-  private async _v0ExtendMaterialParams(
+  protected async _v0ExtendMaterialParams(
     properties: V0Material,
     materialParams: MToonMaterialParameters,
   ): Promise<void> {
@@ -317,7 +317,7 @@ export class MToonLoaderPlugin implements GLTFLoaderPlugin {
    * @param mesh A target GLTF primitive
    * @param materialIndex The material index of the primitive
    */
-  private _setupPrimitive(mesh: THREE.Mesh, materialIndex: number): void {
+  protected _setupPrimitive(mesh: THREE.Mesh, materialIndex: number): void {
     const v1Extension = this._v1GetMToonExtension(materialIndex);
     if (v1Extension) {
       this._v1SetRenderOrder(mesh, v1Extension);
@@ -335,14 +335,14 @@ export class MToonLoaderPlugin implements GLTFLoaderPlugin {
     }
   }
 
-  private _v1SetRenderOrder(mesh: THREE.Mesh, extension: V1MToonSchema.MaterialsMToon): void {
+  protected _v1SetRenderOrder(mesh: THREE.Mesh, extension: V1MToonSchema.MaterialsMToon): void {
     // transparentWithZWrite ranges from 0 to +9
     // mere transparent ranges from -9 to 0
     const enabledZWrite = extension.transparentWithZWrite;
     mesh.renderOrder = (enabledZWrite ? 0 : 19) + this.renderOrderOffset + (extension.renderQueueOffsetNumber ?? 0);
   }
 
-  private _v1GenerateOutline(mesh: THREE.Mesh, extension: V1MToonSchema.MaterialsMToon): void {
+  protected _v1GenerateOutline(mesh: THREE.Mesh, extension: V1MToonSchema.MaterialsMToon): void {
     // Check whether we really have to prepare outline or not
     if ((extension.outlineWidthMode ?? 'none') === 'none' || (extension.outlineWidthFactor ?? 0.0) === 0.0) {
       return;
@@ -371,7 +371,7 @@ export class MToonLoaderPlugin implements GLTFLoaderPlugin {
     geometry.addGroup(0, primitiveVertices, 1);
   }
 
-  private _v0SetRenderOrder(mesh: THREE.Mesh, properties: V0Material): void {
+  protected _v0SetRenderOrder(mesh: THREE.Mesh, properties: V0Material): void {
     const isTransparent = properties.keywordMap?.['_ALPHABLEND_ON'] ?? false;
     const enabledZWrite = properties.floatProperties?.['_ZWrite'] === 1;
 
@@ -390,7 +390,7 @@ export class MToonLoaderPlugin implements GLTFLoaderPlugin {
     mesh.renderOrder = (enabledZWrite ? 0 : 19) + this.renderOrderOffset + offset;
   }
 
-  private _v0GenerateOutline(mesh: THREE.Mesh, properties: V0Material): void {
+  protected _v0GenerateOutline(mesh: THREE.Mesh, properties: V0Material): void {
     // Check whether we really have to prepare outline or not
     if (
       (properties.floatProperties?.['_OutlineWidthMode'] ?? 0) === 0 ||
