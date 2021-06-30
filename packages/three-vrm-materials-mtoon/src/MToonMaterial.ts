@@ -56,8 +56,9 @@ export class MToonMaterial extends THREE.ShaderMaterial {
 
   /**
    * When this is `true`, vertex colors will be ignored.
+   * `true` by default.
    */
-  private _ignoreVertexColor = false;
+  private _ignoreVertexColor = true;
 
   private _debugMode: MToonMaterialDebugMode = MToonMaterialDebugMode.None;
   private _outlineWidthMode: MToonMaterialOutlineWidthMode = MToonMaterialOutlineWidthMode.None;

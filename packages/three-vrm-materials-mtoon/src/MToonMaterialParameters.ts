@@ -40,6 +40,7 @@ export interface MToonMaterialParameters extends THREE.ShaderMaterialParameters 
 
   /**
    * When this is `true`, vertex colors will be ignored.
+   * `true` by default.
    */
   ignoreVertexColor?: boolean;
 
