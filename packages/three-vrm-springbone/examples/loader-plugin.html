@@ -54,9 +54,16 @@
 
 			const loader = new THREE.GLTFLoader();
 
+			const loaderPluginOptions = {
+
+				jointHelperRoot: scene,
+				colliderHelperRoot: scene,
+
+			};
+
 			loader.register( ( parser ) => {
 
-				return new THREE_VRM_SPRINGBONE.VRMSpringBoneLoaderPlugin( parser );
+				return new THREE_VRM_SPRINGBONE.VRMSpringBoneLoaderPlugin( parser, loaderPluginOptions );
 
 			} );
 
