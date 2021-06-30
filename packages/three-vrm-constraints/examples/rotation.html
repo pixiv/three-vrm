@@ -86,28 +86,26 @@
 			scene.add( axesHelper );
 
 			// constraints
-			const constraintManager = new THREE.VRMConstraintManager({
+			const constraintManager = new THREE_VRM_CONSTRAINTS.VRMConstraintManager({
 				autoRemoveCircularDependency: true
 			});
 
-			const constraintA = new THREE.VRMRotationConstraint(cubeConstrainedA, modelRoot);
+			const constraintA = new THREE_VRM_CONSTRAINTS.VRMRotationConstraint(cubeConstrainedA, modelRoot);
 			constraintA.setSource(cubeA);
 			constraintA.weight = 0.5;
 			constraintA.sourceSpace = 'local';
 			constraintA.destinationSpace = 'local';
 			constraintManager.addConstraint(constraintA);
 
-			const constraintB = new THREE.VRMRotationConstraint(cubeConstrainedB, modelRoot);
+			const constraintB = new THREE_VRM_CONSTRAINTS.VRMRotationConstraint(cubeConstrainedB, modelRoot);
 			constraintB.setSource(cubeA);
 			constraintManager.addConstraint(constraintB);
 
 			// constraint helpers
-			const helpers = Array.from( constraintManager.constraints ).map( ( constraint ) => {
+			Array.from( constraintManager.constraints ).forEach( ( constraint ) => {
 
-				const helper = new THREE.VRMConstraintHelper( constraint );
-				helper.renderOrder = 10000;
+				const helper = new THREE_VRM_CONSTRAINTS.VRMConstraintHelper( constraint );
 				scene.add( helper );
-				return helper;
 
 			} );
 
@@ -127,7 +125,6 @@
 				cubeA.rotation.z = Math.sin( Math.PI * clock.elapsedTime );
 
 				constraintManager.update();
-				helpers.forEach( ( helper ) => helper.update() );
 
 				renderer.render( scene, camera );
 

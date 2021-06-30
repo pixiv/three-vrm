@@ -29,7 +29,7 @@ export class VRMConstraintHelper extends THREE.Group {
     this.constraint = constraint;
   }
 
-  public update(): void {
+  public updateMatrixWorld(force?: boolean): void {
     _v3A.setFromMatrixPosition(this.constraint.object.matrixWorld);
     this._attrPosition.setXYZ(0, _v3A.x, _v3A.y, _v3A.z);
 
@@ -39,5 +39,7 @@ export class VRMConstraintHelper extends THREE.Group {
     this._attrPosition.setXYZ(1, _v3A.x, _v3A.y, _v3A.z);
 
     this._attrPosition.needsUpdate = true;
+
+    super.updateMatrixWorld(force);
   }
 }
