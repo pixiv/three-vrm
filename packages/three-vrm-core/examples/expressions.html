@@ -50,9 +50,17 @@
 			scene.add( light );
 
 			// gltf and vrm
-			let currentExpressionManager = undefined;
+			let currentGltf = undefined;
+
 			const loader = new THREE.GLTFLoader();
 			loader.crossOrigin = 'anonymous';
+
+			loader.register( ( parser ) => {
+
+				return new THREE_VRM_CORE.VRMExpressionLoaderPlugin( parser );
+
+			} );
+
 			loader.load(
 
 				// URL of the VRM you want to load
@@ -65,14 +73,7 @@
 					scene.add( gltf.scene );
 					console.log( gltf );
 
-					// import a VRM expressions information from gltf
-					const importer = new THREE_VRM_CORE.VRMExpressionImporter();
-
-					importer.import( gltf ).then( ( expressionManager ) => {
-
-						currentExpressionManager = expressionManager;
-
-					} );
+					currentGltf = gltf;
 
 				},
 
@@ -100,14 +101,16 @@
 
 				const deltaTime = clock.getDelta();
 
-				if ( currentExpressionManager ) {
+				if ( currentGltf ) {
+
+					const expressionManager = currentGltf.userData.vrmExpressionManager;
 
 					// tweak expressions
 					const s = Math.sin( Math.PI * clock.elapsedTime );
-					currentExpressionManager.setValue( 'aa', 0.5 + 0.5 * s );
-					currentExpressionManager.setValue( 'blinkLeft', 0.5 - 0.5 * s );
+					expressionManager.setValue( 'aa', 0.5 + 0.5 * s );
+					expressionManager.setValue( 'blinkLeft', 0.5 - 0.5 * s );
 
-					currentExpressionManager.update();
+					expressionManager.update();
 
 				}
 

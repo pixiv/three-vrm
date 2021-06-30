@@ -50,9 +50,17 @@
 			scene.add( light );
 
 			// gltf and vrm
-			let currentHumanoid = undefined;
+			let currentGltf = undefined;
+
 			const loader = new THREE.GLTFLoader();
 			loader.crossOrigin = 'anonymous';
+
+			loader.register( ( parser ) => {
+
+				return new THREE_VRM_CORE.VRMHumanoidLoaderPlugin( parser );
+
+			} );
+
 			loader.load(
 
 				// URL of the VRM you want to load
@@ -63,15 +71,9 @@
 
 					// put the model to the scene
 					scene.add( gltf.scene );
+					console.log( gltf );
 
-					// import a VRM humanoid information from gltf
-					const importer = new THREE_VRM_CORE.VRMHumanoidImporter();
-
-					importer.import( gltf ).then( ( humanoid ) => {
-
-						currentHumanoid = humanoid;
-
-					} );
+					currentGltf = gltf;
 
 				},
 
@@ -99,13 +101,15 @@
 
 				const deltaTime = clock.getDelta();
 
-				if ( currentHumanoid ) {
+				if ( currentGltf ) {
+
+					const humanoid = currentGltf.userData.vrmHumanoid;
 
 					// tweak bones
 					const s = 0.25 * Math.PI * Math.sin( Math.PI * clock.elapsedTime );
-					currentHumanoid.getBoneNode( 'head' ).rotation.y = s;
-					currentHumanoid.getBoneNode( 'leftUpperArm' ).rotation.z = s;
-					currentHumanoid.getBoneNode( 'rightUpperArm' ).rotation.x = s;
+					humanoid.getBoneNode( 'head' ).rotation.y = s;
+					humanoid.getBoneNode( 'leftUpperArm' ).rotation.z = s;
+					humanoid.getBoneNode( 'rightUpperArm' ).rotation.x = s;
 
 				}
 

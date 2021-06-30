@@ -1,24 +1,47 @@
-import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+import type { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
 import type { VRMMeta } from './VRMMeta';
-import type { VRMMetaImporterOptions } from './VRMMetaImporterOptions';
+import type { VRMMetaLoaderPluginOptions } from './VRMMetaLoaderPluginOptions';
 import type * as V1VRMSchema from '@pixiv/types-vrmc-vrm-1.0';
 import * as THREE from 'three';
 import { resolveURL } from '../utils/resolveURL';
 
 /**
- * An importer that imports a {@link VRMMeta} from a VRM extension of a GLTF.
+ * A plugin of GLTFLoader that imports a {@link VRMMeta} from a VRM extension of a GLTF.
  */
-export class VRMMetaImporter {
+export class VRMMetaLoaderPlugin implements GLTFLoaderPlugin {
+  public readonly parser: GLTFParser;
+
   /**
    * If `false`, it won't load its thumbnail image ({@link VRMMeta.thumbnailImage}). `true` by default.
    */
   public needThumbnailImage: boolean;
 
-  constructor(options?: VRMMetaImporterOptions) {
+  public get name(): string {
+    // We should use the extension name instead but we have multiple plugins for an extension...
+    return 'VRMMetaLoaderPlugin';
+  }
+
+  public constructor(parser: GLTFParser, options?: VRMMetaLoaderPluginOptions) {
+    this.parser = parser;
+
     this.needThumbnailImage = options?.needThumbnailImage ?? true;
   }
 
-  public async import(gltf: GLTF): Promise<VRMMeta | null> {
+  public async afterRoot(gltf: GLTF): Promise<void> {
+    // this might be called twice or more by its dependants!
+
+    if (gltf.userData.promiseVrmMeta == null) {
+      gltf.userData.promiseVrmMeta = (async () => {
+        return await this._import(gltf);
+      })();
+
+      gltf.userData.vrmMeta = await gltf.userData.promiseVrmMeta;
+    }
+
+    await gltf.userData.promiseVrmMeta;
+  }
+
+  protected async _import(gltf: GLTF): Promise<VRMMeta | null> {
     const v1Result = await this._v1Import(gltf);
     if (v1Result != null) {
       return v1Result;
@@ -32,14 +55,14 @@ export class VRMMetaImporter {
     return null;
   }
 
-  private async _v1Import(gltf: GLTF): Promise<VRMMeta | null> {
+  protected async _v1Import(gltf: GLTF): Promise<VRMMeta | null> {
     // early abort if it doesn't use vrm
-    const isVRMUsed = gltf.parser.json.extensionsUsed.indexOf('VRMC_vrm-1.0_draft') !== -1;
+    const isVRMUsed = this.parser.json.extensionsUsed.indexOf('VRMC_vrm') !== -1;
     if (!isVRMUsed) {
       return null;
     }
 
-    const extension: V1VRMSchema.VRM | undefined = gltf.parser.json.extensions?.['VRMC_vrm-1.0_draft'];
+    const extension: V1VRMSchema.VRM | undefined = this.parser.json.extensions?.['VRMC_vrm'];
     if (!extension) {
       return null;
     }
@@ -76,9 +99,9 @@ export class VRMMetaImporter {
     };
   }
 
-  private async _v0Import(gltf: GLTF): Promise<VRMMeta | null> {
+  protected async _v0Import(gltf: GLTF): Promise<VRMMeta | null> {
     // early abort if it doesn't use vrm
-    const isVRMUsed = gltf.parser.json.extensionsUsed.indexOf('VRM') !== -1;
+    const isVRMUsed = this.parser.json.extensionsUsed.indexOf('VRM') !== -1;
     if (!isVRMUsed) {
       return null;
     }
@@ -88,8 +111,8 @@ export class VRMMetaImporter {
     return null;
   }
 
-  private async _extractGLTFImage(gltf: GLTF, index: number): Promise<HTMLImageElement | null> {
-    const source = gltf.parser.json.images?.[index];
+  protected async _extractGLTFImage(gltf: GLTF, index: number): Promise<HTMLImageElement | null> {
+    const source = this.parser.json.images?.[index];
     if (source == null) {
       console.warn(`Attempt to use images[${index}] of glTF as a thumbnail but the image doesn't exist`);
       return null;
@@ -102,7 +125,7 @@ export class VRMMetaImporter {
 
     // Load the binary as a blob
     if (source.bufferView != null) {
-      const bufferView = await gltf.parser.getDependency('bufferView', source.bufferView);
+      const bufferView = await this.parser.getDependency('bufferView', source.bufferView);
       const blob = new Blob([bufferView], { type: source.mimeType });
       sourceURI = URL.createObjectURL(blob);
     }
@@ -113,7 +136,7 @@ export class VRMMetaImporter {
     }
 
     const loader = new THREE.ImageLoader();
-    return await loader.loadAsync(resolveURL(sourceURI, (gltf.parser as any).options.path)).catch((error) => {
+    return await loader.loadAsync(resolveURL(sourceURI, (this.parser as any).options.path)).catch((error) => {
       console.error(error);
       console.warn('Failed to load a thumbnail image');
       return null;

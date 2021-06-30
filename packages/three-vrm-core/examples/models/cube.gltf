@@ -425,10 +425,10 @@
     }
   ],
   "extensionsUsed": [
-    "VRMC_vrm-1.0_draft"
+    "VRMC_vrm"
   ],
   "extensions": {
-    "VRMC_vrm-1.0_draft": {
+    "VRMC_vrm": {
       "meta": {
         "name": "Cube",
         "version": "1.0.0",

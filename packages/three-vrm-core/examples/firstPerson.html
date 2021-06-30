@@ -55,9 +55,23 @@
 			scene.add( light );
 
 			// gltf and vrm
-			let currentFirstPerson = undefined;
+			let currentGltf = undefined;
+
 			const loader = new THREE.GLTFLoader();
 			loader.crossOrigin = 'anonymous';
+
+			loader.register( ( parser ) => {
+
+				return new THREE_VRM_CORE.VRMHumanoidLoaderPlugin( parser );
+
+			} );
+
+			loader.register( ( parser ) => {
+
+				return new THREE_VRM_CORE.VRMFirstPersonLoaderPlugin( parser );
+
+			} );
+
 			loader.load(
 
 				// URL of the VRM you want to load
@@ -68,26 +82,16 @@
 
 					// put the model to the scene
 					scene.add( gltf.scene );
+					console.log( gltf );
 
-					// import a VRM first person information from gltf
-					const humanoidImporter = new THREE_VRM_CORE.VRMHumanoidImporter();
-					const firstPersonImporter = new THREE_VRM_CORE.VRMFirstPersonImporter();
+					currentGltf = gltf;
 
-					humanoidImporter.import( gltf ).then( ( humanoid ) => {
+					// generate first person meshes
+					const firstPerson = gltf.userData.vrmFirstPerson;
+					firstPerson.setup();
 
-						firstPersonImporter.import( gltf, humanoid ).then( ( firstPerson ) => {
-
-							currentFirstPerson = firstPerson;
-
-							// generate first person meshes
-							firstPerson.setup();
-
-							// set to first person layer mode
-							toggleLayer( true );
-
-						} );
-
-					} );
+					// set to first person layer mode
+					toggleLayer( true );
 
 				},
 
@@ -132,17 +136,19 @@
 
 				}
 
-				if ( currentFirstPerson ) {
+				if ( currentGltf ) {
+
+					const firstPerson = currentGltf.userData.vrmFirstPerson;
 
 					if ( isFirstPerson ) {
 
-						camera.layers.enable( currentFirstPerson.firstPersonOnlyLayer );
-						camera.layers.disable( currentFirstPerson.thirdPersonOnlyLayer );
+						camera.layers.enable( firstPerson.firstPersonOnlyLayer );
+						camera.layers.disable( firstPerson.thirdPersonOnlyLayer );
 
 					} else {
 
-						camera.layers.disable( currentFirstPerson.firstPersonOnlyLayer );
-						camera.layers.enable( currentFirstPerson.thirdPersonOnlyLayer );
+						camera.layers.disable( firstPerson.firstPersonOnlyLayer );
+						camera.layers.enable( firstPerson.thirdPersonOnlyLayer );
 
 					}
 

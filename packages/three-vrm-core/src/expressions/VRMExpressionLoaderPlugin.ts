@@ -1,17 +1,17 @@
 import type * as V0VRM from '@pixiv/types-vrm-0.0';
 import type * as V1VRMSchema from '@pixiv/types-vrmc-vrm-1.0';
 import * as THREE from 'three';
-import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
 import { gltfExtractPrimitivesFromNode } from '../utils/gltfExtractPrimitivesFromNode';
 import { VRMExpression } from './VRMExpression';
 import { VRMExpressionManager } from './VRMExpressionManager';
 import type { VRMExpressionPreset } from './VRMExpressionPreset';
 
 /**
- * An importer that imports a {@link VRMExpressionManager} from a VRM extension of a GLTF.
+ * A plugin of GLTFLoader that imports a {@link VRMExpressionManager} from a VRM extension of a GLTF.
  */
-export class VRMExpressionImporter {
-  static readonly v0v1PresetNameMap: { [v0Name in V0VRM.BlendShapePresetName]: VRMExpressionPreset } = {
+export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
+  public static readonly v0v1PresetNameMap: { [v0Name in V0VRM.BlendShapePresetName]: VRMExpressionPreset } = {
     unknown: 'custom',
     a: 'aa',
     e: 'ee',
@@ -34,12 +34,37 @@ export class VRMExpressionImporter {
     neutral: 'neutral',
   };
 
+  public readonly parser: GLTFParser;
+
+  public get name(): string {
+    // We should use the extension name instead but we have multiple plugins for an extension...
+    return 'VRMExpressionLoaderPlugin';
+  }
+
+  public constructor(parser: GLTFParser) {
+    this.parser = parser;
+  }
+
+  public async afterRoot(gltf: GLTF): Promise<void> {
+    // this might be called twice or more by its dependants!
+
+    if (gltf.userData.promiseVrmExpressionManager == null) {
+      gltf.userData.promiseVrmExpressionManager = (async () => {
+        return await this._import(gltf);
+      })();
+
+      gltf.userData.vrmExpressionManager = await gltf.userData.promiseVrmExpressionManager;
+    }
+
+    await gltf.userData.promiseVrmExpressionManager;
+  }
+
   /**
    * Import a {@link VRMExpressionManager} from a VRM.
    *
    * @param gltf A parsed result of GLTF taken from GLTFLoader
    */
-  public async import(gltf: GLTF): Promise<VRMExpressionManager | null> {
+  protected async _import(gltf: GLTF): Promise<VRMExpressionManager | null> {
     const v1Result = await this._v1Import(gltf);
     if (v1Result) {
       return v1Result;
@@ -53,14 +78,14 @@ export class VRMExpressionImporter {
     return null;
   }
 
-  private async _v1Import(gltf: GLTF): Promise<VRMExpressionManager | null> {
+  protected async _v1Import(gltf: GLTF): Promise<VRMExpressionManager | null> {
     // early abort if it doesn't use vrm
-    const isVRMUsed = gltf.parser.json.extensionsUsed.indexOf('VRMC_vrm-1.0_draft') !== -1;
+    const isVRMUsed = this.parser.json.extensionsUsed.indexOf('VRMC_vrm') !== -1;
     if (!isVRMUsed) {
       return null;
     }
 
-    const extension: V1VRMSchema.VRM | undefined = gltf.parser.json.extensions?.['VRMC_vrm-1.0_draft'];
+    const extension: V1VRMSchema.VRM | undefined = this.parser.json.extensions?.['VRMC_vrm'];
     if (!extension) {
       return null;
     }
@@ -144,7 +169,7 @@ export class VRMExpressionImporter {
 
           schemaExpression.materialColorBinds?.forEach(async (bind) => {
             const materials = gltfMaterials.filter((material) => {
-              return gltf.parser.associations.get(material)?.index === bind.material;
+              return this.parser.associations.get(material)?.index === bind.material;
             });
 
             materials.forEach((material) => {
@@ -158,7 +183,7 @@ export class VRMExpressionImporter {
 
           schemaExpression.textureTransformBinds?.forEach(async (bind) => {
             const materials = gltfMaterials.filter((material) => {
-              return gltf.parser.associations.get(material)?.index === bind.material;
+              return this.parser.associations.get(material)?.index === bind.material;
             });
 
             materials.forEach((material) => {
@@ -178,9 +203,9 @@ export class VRMExpressionImporter {
     return manager;
   }
 
-  private async _v0Import(gltf: GLTF): Promise<VRMExpressionManager | null> {
+  protected async _v0Import(gltf: GLTF): Promise<VRMExpressionManager | null> {
     // early abort if it doesn't use vrm
-    const vrmExt: V0VRM.VRM | undefined = gltf.parser.json.extensions?.VRM;
+    const vrmExt: V0VRM.VRM | undefined = this.parser.json.extensions?.VRM;
     if (!vrmExt) {
       return null;
     }
@@ -202,7 +227,7 @@ export class VRMExpressionImporter {
     await Promise.all(
       schemaBlendShapeGroups.map(async (schemaGroup) => {
         const v0PresetName = schemaGroup.presetName;
-        const v1PresetName = VRMExpressionImporter.v0v1PresetNameMap[v0PresetName ?? 'unknown'];
+        const v1PresetName = VRMExpressionLoaderPlugin.v0v1PresetNameMap[v0PresetName ?? 'unknown'];
         const name = schemaGroup.name;
 
         if (name === undefined && v1PresetName === 'custom') {
@@ -234,7 +259,7 @@ export class VRMExpressionImporter {
             }
 
             const nodesUsingMesh: number[] = [];
-            (gltf.parser.json.nodes as any[]).forEach((node, i) => {
+            (this.parser.json.nodes as any[]).forEach((node, i) => {
               if (node.mesh === bind.mesh) {
                 nodesUsingMesh.push(i);
               }
