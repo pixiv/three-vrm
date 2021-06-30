@@ -79,11 +79,11 @@
 			scene.add( axesHelper );
 
 			// constraints
-			const constraintManager = new THREE.VRMConstraintManager({
+			const constraintManager = new THREE_VRM_CONSTRAINTS.VRMConstraintManager({
 				autoRemoveCircularDependency: true
 			});
 
-			const constraint = new THREE.VRMAimConstraint(cone, modelRoot);
+			const constraint = new THREE_VRM_CONSTRAINTS.VRMAimConstraint(cone, modelRoot);
 			constraint.aimVector.set( 0.0, 0.0, 1.0 ).normalize();
 			constraint.setSource(cube);
 			constraintManager.addConstraint(constraint);
@@ -91,7 +91,7 @@
 			// constraint helpers
 			Array.from( constraintManager.constraints ).forEach( ( constraint ) => {
 
-				const helper = new THREE.VRMConstraintHelper( constraint );
+				const helper = new THREE_VRM_CONSTRAINTS.VRMConstraintHelper( constraint );
 				scene.add( helper );
 
 			} );
