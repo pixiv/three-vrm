@@ -4,7 +4,7 @@ import { VRMLookAtImporter } from './VRMLookAtImporter';
 /**
  * A plugin of GLTFLoader that imports a {@link VRMLookAt} from a VRM extension of a GLTF.
  */
-export class VRMLookAtPlugin implements GLTFLoaderPlugin {
+export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
   public readonly parser: GLTFParser;
   public readonly importer: VRMLookAtImporter;
 

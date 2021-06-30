@@ -4,7 +4,7 @@ import { VRMMetaImporter } from './VRMMetaImporter';
 /**
  * A plugin of GLTFLoader that imports a {@link VRMMeta} from a VRM extension of a GLTF.
  */
-export class VRMMetaPlugin implements GLTFLoaderPlugin {
+export class VRMMetaLoaderPlugin implements GLTFLoaderPlugin {
   public readonly parser: GLTFParser;
   public readonly importer: VRMMetaImporter;
 

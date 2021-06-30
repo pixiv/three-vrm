@@ -4,7 +4,7 @@ import { VRMHumanoidImporter } from './VRMHumanoidImporter';
 /**
  * A plugin of GLTFLoader that imports a {@link VRMHumanoid} from a VRM extension of a GLTF.
  */
-export class VRMHumanoidPlugin implements GLTFLoaderPlugin {
+export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
   public readonly parser: GLTFParser;
   public readonly importer: VRMHumanoidImporter;
 

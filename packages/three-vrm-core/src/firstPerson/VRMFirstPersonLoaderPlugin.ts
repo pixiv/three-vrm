@@ -4,7 +4,7 @@ import { VRMFirstPersonImporter } from './VRMFirstPersonImporter';
 /**
  * A plugin of GLTFLoader that imports a {@link VRMFirstPerson} from a VRM extension of a GLTF.
  */
-export class VRMFirstPersonPlugin implements GLTFLoaderPlugin {
+export class VRMFirstPersonLoaderPlugin implements GLTFLoaderPlugin {
   public readonly parser: GLTFParser;
   public readonly importer: VRMFirstPersonImporter;
 

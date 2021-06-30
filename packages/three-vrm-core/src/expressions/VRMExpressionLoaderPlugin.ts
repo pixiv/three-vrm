@@ -4,7 +4,7 @@ import { VRMExpressionImporter } from './VRMExpressionImporter';
 /**
  * A plugin of GLTFLoader that imports a {@link VRMExpressionManager} from a VRM extension of a GLTF.
  */
-export class VRMExpressionPlugin implements GLTFLoaderPlugin {
+export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
   public readonly parser: GLTFParser;
   public readonly importer: VRMExpressionImporter;
 
