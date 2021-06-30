@@ -76,6 +76,7 @@
 						if ( currentGltf ) {
 
 							scene.remove( currentGltf.scene );
+							disposeScene( currentGltf.scene );
 
 						}
 
@@ -96,6 +97,88 @@
 			}
 
 			load( './models/cube.gltf' );
+
+			function disposeMaterial( material ) {
+
+				Object.values( material ).forEach( ( property ) => {
+
+					if ( property?.isTexture ) {
+
+						property.dispose();
+
+					}
+
+				} );
+
+				if ( material.uniforms ) {
+
+					Object.values( material.uniforms ).forEach( ( uniform ) => {
+
+						const value = uniform?.value;
+
+						if ( value?.isTexture ) {
+
+							value.dispose();
+
+						}
+
+					} );
+
+				}
+
+				material.dispose();
+
+			}
+
+			function disposeMesh( mesh ) {
+
+				const geometry = mesh.geometry;
+
+				if ( geometry ) {
+
+					geometry.dispose();
+
+				}
+
+				const skeleton = mesh.skeleton;
+
+				if ( skeleton ) {
+
+					skeleton.dispose();
+
+				}
+
+				const materialOrMaterials = mesh.material;
+
+				if ( Array.isArray( materialOrMaterials ) ) {
+
+					materialOrMaterials.forEach( ( material ) => {
+
+						disposeMaterial( material );
+
+					} );
+
+				} else {
+
+					disposeMaterial( materialOrMaterials );
+
+				}
+
+			}
+
+			function disposeScene( scene ) {
+
+				scene.traverse( ( object ) => {
+
+					if ( object.isMesh ) {
+
+						disposeMesh( object );
+
+					}
+
+				} );
+
+			}
 
 			// helpers
 			const gridHelper = new THREE.GridHelper( 10, 10 );
