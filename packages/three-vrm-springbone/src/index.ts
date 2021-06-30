@@ -5,6 +5,6 @@ export * from './VRMSpringBoneColliderShape';
 export * from './VRMSpringBoneColliderShapeCapsule';
 export * from './VRMSpringBoneColliderShapeSphere';
 export * from './VRMSpringBoneJoint';
-export * from './VRMSpringBoneImporter';
+export * from './VRMSpringBoneLoaderPlugin';
 export * from './VRMSpringBoneManager';
 export * from './VRMSpringBoneSettings';

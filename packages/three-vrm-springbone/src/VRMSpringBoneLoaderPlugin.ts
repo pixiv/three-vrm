@@ -1,7 +1,7 @@
 import * as V0VRM from '@pixiv/types-vrm-0.0';
 import * as V1SpringBoneSchema from '@pixiv/types-vrmc-springbone-1.0';
 import * as THREE from 'three';
-import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRMSpringBoneCollider } from './VRMSpringBoneCollider';
 import { VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';
 import { VRMSpringBoneColliderShapeCapsule } from './VRMSpringBoneColliderShapeCapsule';
@@ -10,12 +10,32 @@ import { VRMSpringBoneJoint } from './VRMSpringBoneJoint';
 import { VRMSpringBoneManager } from './VRMSpringBoneManager';
 import { VRMSpringBoneSettings } from './VRMSpringBoneSettings';
 
-export class VRMSpringBoneImporter {
-  /**
-   * Create a new VRMSpringBoneImporter.
-   */
-  constructor() {
-    // do nothing
+export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
+  public static readonly EXTENSION_NAME = 'VRMC_springBone';
+
+  public readonly parser: GLTFParser;
+
+  public get name(): string {
+    return VRMSpringBoneLoaderPlugin.EXTENSION_NAME;
+  }
+
+  public constructor(parser: GLTFParser) {
+    this.parser = parser;
+  }
+
+  public async afterRoot(gltf: GLTF): Promise<void> {
+    // this might be called twice or more by its dependants!
+
+    if (gltf.userData.promiseVrmSpringBoneManager == null) {
+      gltf.userData.promiseVrmSpringBoneManager = (async () => {
+        // load the lookAt
+        return await this._import(gltf);
+      })();
+
+      gltf.userData.vrmSpringBoneManager = await gltf.userData.promiseVrmSpringBoneManager;
+    }
+
+    await gltf.userData.promiseVrmSpringBoneManager;
   }
 
   /**
@@ -24,7 +44,7 @@ export class VRMSpringBoneImporter {
    *
    * @param gltf A parsed result of GLTF taken from GLTFLoader
    */
-  public async import(gltf: GLTF): Promise<VRMSpringBoneManager | null> {
+  protected async _import(gltf: GLTF): Promise<VRMSpringBoneManager | null> {
     const v1Result = await this._v1Import(gltf);
     if (v1Result != null) {
       return v1Result;
@@ -38,7 +58,7 @@ export class VRMSpringBoneImporter {
     return null;
   }
 
-  private async _v1Import(gltf: GLTF): Promise<VRMSpringBoneManager | null> {
+  protected async _v1Import(gltf: GLTF): Promise<VRMSpringBoneManager | null> {
     // early abort if it doesn't use spring bones
     const isSpringBoneUsed = gltf.parser.json.extensionsUsed.indexOf('VRMC_springBone-1.0') !== -1;
     if (!isSpringBoneUsed) {
@@ -71,7 +91,7 @@ export class VRMSpringBoneImporter {
         });
       }
 
-      throw new Error(`VRMSpringBoneImporter: The collider #${iCollider} has no valid shape`);
+      throw new Error(`VRMSpringBoneLoaderPlugin: The collider #${iCollider} has no valid shape`);
     });
 
     const colliderGroups = extension.colliderGroups?.map(
@@ -81,7 +101,7 @@ export class VRMSpringBoneImporter {
 
           if (col == null) {
             throw new Error(
-              `VRMSpringBoneImporter: The colliderGroup #${iColliderGroup} attempted to use a collider #${iCollider} but not found`,
+              `VRMSpringBoneLoaderPlugin: The colliderGroup #${iColliderGroup} attempted to use a collider #${iCollider} but not found`,
             );
           }
 
@@ -104,7 +124,7 @@ export class VRMSpringBoneImporter {
 
         if (group == null) {
           throw new Error(
-            `VRMSpringBoneImporter: The spring #${iSpring} attempted to use a colliderGroup ${iColliderGroup} but not found`,
+            `VRMSpringBoneLoaderPlugin: The spring #${iSpring} attempted to use a colliderGroup ${iColliderGroup} but not found`,
           );
         }
 
@@ -145,7 +165,7 @@ export class VRMSpringBoneImporter {
     return manager;
   }
 
-  private async _v0Import(gltf: GLTF): Promise<VRMSpringBoneManager | null> {
+  protected async _v0Import(gltf: GLTF): Promise<VRMSpringBoneManager | null> {
     // early abort if it doesn't use vrm
     const isVRMUsed = gltf.parser.json.extensionsUsed.indexOf('VRM') !== -1;
     if (!isVRMUsed) {
@@ -222,7 +242,7 @@ export class VRMSpringBoneImporter {
 
           if (group == null) {
             throw new Error(
-              `VRMSpringBoneImporter: The spring #${iBoneGroup} attempted to use a colliderGroup ${iColliderGroup} but not found`,
+              `VRMSpringBoneLoaderPlugin: The spring #${iBoneGroup} attempted to use a colliderGroup ${iColliderGroup} but not found`,
             );
           }
 
@@ -245,7 +265,7 @@ export class VRMSpringBoneImporter {
     return manager;
   }
 
-  private _importSphereCollider(
+  protected _importSphereCollider(
     destination: THREE.Object3D,
     params: {
       offset: THREE.Vector3;
@@ -263,7 +283,7 @@ export class VRMSpringBoneImporter {
     return collider;
   }
 
-  private _importCapsuleCollider(
+  protected _importCapsuleCollider(
     destination: THREE.Object3D,
     params: {
       offset: THREE.Vector3;
