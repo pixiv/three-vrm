@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { VRMSpringBoneJoint } from '../VRMSpringBoneJoint';
 import { SpringBoneBufferGeometry } from './utils/SpringBoneBufferGeometry';
 
-export class VRMSpringBoneHelper extends THREE.Group {
+export class VRMSpringBoneJointHelper extends THREE.Group {
   public readonly springBone: VRMSpringBoneJoint;
   private readonly _geometry: SpringBoneBufferGeometry;
   private readonly _line: THREE.LineSegments;
@@ -29,11 +29,13 @@ export class VRMSpringBoneHelper extends THREE.Group {
     this._geometry.dispose();
   }
 
-  public update(): void {
+  public updateMatrixWorld(force: boolean): void {
     this.springBone.bone.updateWorldMatrix(true, false);
 
     this.matrix.copy(this.springBone.bone.matrixWorld);
 
     this._geometry.update();
+
+    super.updateMatrixWorld(force);
   }
 }

@@ -39,11 +39,13 @@ export class VRMSpringBoneColliderHelper extends THREE.Group {
     this._geometry.dispose();
   }
 
-  public update(): void {
+  public updateMatrixWorld(force: boolean): void {
     this.collider.updateWorldMatrix(true, false);
 
     this.matrix.copy(this.collider.matrixWorld);
 
     this._geometry.update();
+
+    super.updateMatrixWorld(force);
   }
 }

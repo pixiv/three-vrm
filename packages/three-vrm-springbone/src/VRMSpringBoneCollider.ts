@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { VRMSpringBoneColliderShape } from './VRMSpringBoneColliderShape';
+import type { VRMSpringBoneColliderShape } from './VRMSpringBoneColliderShape';
 
 /**
  * Represents a collider of a VRM.

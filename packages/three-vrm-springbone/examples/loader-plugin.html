@@ -51,12 +51,21 @@
 			// gltf and vrm
 			let currentGltf = null;
 			let currentSpringBoneManager = null;
-			let currentSpringBoneColliderHelpers = null;
-			let currentSpringBoneHelpers = null;
-
-			const springBoneImporter = new THREE.VRMSpringBoneImporter();
 
 			const loader = new THREE.GLTFLoader();
+
+			const loaderPluginOptions = {
+
+				jointHelperRoot: scene,
+				colliderHelperRoot: scene,
+
+			};
+
+			loader.register( ( parser ) => {
+
+				return new THREE_VRM_SPRINGBONE.VRMSpringBoneLoaderPlugin( parser, loaderPluginOptions );
+
+			} );
 
 			function load( url ) {
 
@@ -68,36 +77,11 @@
 					( gltf ) => {
 
 						scene.add( gltf.scene );
-
 						console.log( gltf );
 
 						currentGltf = gltf;
 
-						const promiseManager = springBoneImporter.import( gltf );
-
-						promiseManager.then( ( manager ) => {
-
-							currentSpringBoneManager = manager;
-
-							currentSpringBoneColliderHelpers = manager.colliders.map( ( collider ) => {
-
-								const helper = new THREE.VRMSpringBoneColliderHelper( collider );
-								helper.renderOrder = 10000;
-								scene.add( helper );
-								return helper;
-
-							} );
-
-							currentSpringBoneHelpers = Array.from( manager.springBones ).map( ( constraint ) => {
-
-								const helper = new THREE.VRMSpringBoneHelper( constraint );
-								helper.renderOrder = 10000;
-								scene.add( helper );
-								return helper;
-
-							} );
-
-						} );
+						const springBoneManager = gltf.vrmSpringBoneManager;
 
 					},
 
@@ -120,7 +104,7 @@
 
 			// animate
 			const clock = new THREE.Clock();
-			let shouldReset = true;
+			let shouldReset = true; // reset in the very first frame
 
 			function animate() {
 
@@ -128,22 +112,20 @@
 
 				const delta = clock.getDelta();
 
-				if ( currentGltf && currentSpringBoneManager && currentSpringBoneColliderHelpers && currentSpringBoneHelpers ) {
+				if ( currentGltf ) {
+
+					const manager = currentGltf.userData.vrmSpringBoneManager;
 
 					currentGltf.scene.position.x = Math.sin( Math.PI * clock.elapsedTime );
 
 					if ( shouldReset ) {
 
 						shouldReset = false;
-						currentSpringBoneManager.reset();
+						manager.reset();
 
 					}
 
-					currentSpringBoneManager.update( delta );
-
-					currentSpringBoneColliderHelpers.forEach( ( helper ) => helper.update() );
-
-					currentSpringBoneHelpers.forEach( ( helper ) => helper.update() );
+					manager.update( delta );
 
 				}
 

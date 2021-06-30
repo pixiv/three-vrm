@@ -108,13 +108,10 @@
 			}
 
 			// helpers
-			const springBoneHelpers = [];
-
 			springBoneManager.springBones.forEach( ( bone ) => {
 
-				const helper = new THREE.VRMSpringBoneHelper( bone );
+				const helper = new THREE.VRMSpringBoneJointHelper( bone );
 				scene.add( helper );
-				springBoneHelpers.push( helper );
 
 			} );
 
@@ -144,10 +141,6 @@
 				}
 
 				springBoneManager.update( deltaTime );
-
-				colliderHelper.update();
-
-				springBoneHelpers.forEach( ( helper ) => helper.update() );
 
 				renderer.render( scene, camera );
 
