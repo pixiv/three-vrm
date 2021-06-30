@@ -8,9 +8,7 @@ import { MToonMaterialOutlineWidthMode } from './MToonMaterialOutlineWidthMode';
 import { GLTFMToonMaterialParamsAssignHelper } from './GLTFMToonMaterialParamsAssignHelper';
 
 export class MToonLoaderPlugin implements GLTFLoaderPlugin {
-  public static EXTENSION_NAME = 'VRMC_materials_mtoon-1.0';
-
-  public static EXTENSION_NAME_CANDIDATES = ['VRMC_materials_mtoon-1.0', 'VRMC_materials_mtoon-1.0_draft'];
+  public static EXTENSION_NAME = 'VRMC_materials_mtoon';
 
   /**
    * This value will be added to `renderOrder` of every meshes who have MaterialsMToon.
@@ -162,11 +160,10 @@ export class MToonLoaderPlugin implements GLTFLoaderPlugin {
 
     const materialDef = json.materials[materialIndex];
 
-    for (const nameCandidate of MToonLoaderPlugin.EXTENSION_NAME_CANDIDATES) {
-      const extension: V1MToonSchema.MaterialsMToon | undefined = materialDef.extensions?.[nameCandidate];
-      if (extension != null) {
-        return extension;
-      }
+    const extension: V1MToonSchema.MaterialsMToon | undefined =
+      materialDef.extensions?.[MToonLoaderPlugin.EXTENSION_NAME];
+    if (extension != null) {
+      return extension;
     }
 
     return undefined;
