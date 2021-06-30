@@ -201,7 +201,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
    */
   public update(delta: number): void {
     this._uvAnimationScrollXOffset = this._uvAnimationScrollXOffset + delta * this.uvAnimationScrollXSpeedFactor;
-    this._uvAnimationScrollYOffset = this._uvAnimationScrollYOffset - delta * this.uvAnimationScrollYSpeedFactor; // Negative since t axis of uvs are opposite from Unity's one
+    this._uvAnimationScrollYOffset = this._uvAnimationScrollYOffset + delta * this.uvAnimationScrollYSpeedFactor;
     this._uvAnimationRotationPhase = this._uvAnimationRotationPhase + delta * this.uvAnimationRotationSpeedFactor;
 
     this._applyUniforms();

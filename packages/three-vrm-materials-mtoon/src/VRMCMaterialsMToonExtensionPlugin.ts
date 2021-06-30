@@ -242,7 +242,12 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
     assignHelper.assignColor('color', properties.vectorProperties?.['_Color'], true);
     assignHelper.assignTextureByIndex('map', properties.textureProperties?.['_MainTex'], true);
     assignHelper.assignTextureByIndex('normalMap', properties.textureProperties?.['_BumpMap'], false);
-    assignHelper.assignPrimitive('normalScale', properties.floatProperties?.['_BumpScale']);
+
+    const normalScale = properties.floatProperties?.['_BumpScale']
+      ? new THREE.Vector2(properties.floatProperties?.['_BumpScale'], -properties.floatProperties?.['_BumpScale'])
+      : undefined;
+    assignHelper.assignPrimitive('normalScale', normalScale);
+
     assignHelper.assignColor('emissive', properties.vectorProperties?.['_EmissionColor'], true);
     assignHelper.assignTextureByIndex('emissiveMap', properties.textureProperties?.['_EmissionMap'], true);
     assignHelper.assignPrimitive('transparentWithZWrite', transparentWithZWrite);
@@ -294,7 +299,13 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
       false,
     );
     assignHelper.assignPrimitive('uvAnimationScrollXSpeedFactor', properties.floatProperties?.['_UvAnimScrollX']);
-    assignHelper.assignPrimitive('uvAnimationScrollYSpeedFactor', properties.floatProperties?.['_UvAnimScrollY']);
+
+    const uvAnimationScrollYSpeedFactor =
+      properties.floatProperties?.['_UvAnimScrollY'] != null
+        ? -properties.floatProperties?.['_UvAnimScrollY']
+        : undefined;
+    assignHelper.assignPrimitive('uvAnimationScrollYSpeedFactor', uvAnimationScrollYSpeedFactor);
+
     assignHelper.assignPrimitive('uvAnimationRotationSpeedFactor', properties.floatProperties?.['_UvAnimRotation']);
 
     // in VRM0.0, vertex colors should be ignored
