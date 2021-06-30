@@ -54,6 +54,11 @@ export class MToonMaterial extends THREE.ShaderMaterial {
    */
   public onLoadMaterial?: (material: MToonMaterial) => void;
 
+  /**
+   * When this is `true`, vertex colors will be ignored.
+   */
+  private _ignoreVertexColor = false;
+
   private _debugMode: MToonMaterialDebugMode = MToonMaterialDebugMode.None;
   private _outlineWidthMode: MToonMaterialOutlineWidthMode = MToonMaterialOutlineWidthMode.None;
 
@@ -136,6 +141,19 @@ export class MToonMaterial extends THREE.ShaderMaterial {
 
     // == call onLoadMaterial ======================================================================
     this.onLoadMaterial?.(this);
+  }
+
+  /**
+   * When this is `true`, vertex colors will be ignored.
+   */
+  public get ignoreVertexColor(): boolean {
+    return this._ignoreVertexColor;
+  }
+
+  public set ignoreVertexColor(value: boolean) {
+    this._ignoreVertexColor = value;
+
+    this._updateShaderCode();
   }
 
   get debugMode(): MToonMaterialDebugMode {
@@ -222,6 +240,8 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.uvAnimationScrollYSpeedFactor = source.uvAnimationScrollYSpeedFactor;
     this.uvAnimationRotationSpeedFactor = source.uvAnimationRotationSpeedFactor;
 
+    this.ignoreVertexColor = source.ignoreVertexColor;
+
     this.debugMode = source.debugMode;
     this.outlineWidthMode = source.outlineWidthMode;
 
@@ -296,6 +316,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
       USE_RIMMULTIPLYTEXTURE: this.rimMultiplyTexture !== null,
       USE_OUTLINEWIDTHMULTIPLYTEXTURE: this.outlineWidthMultiplyTexture !== null,
       USE_UVANIMATIONMASKTEXTURE: this.uvAnimationMaskTexture !== null,
+      IGNORE_VERTEX_COLOR: this._ignoreVertexColor === true,
       DEBUG_NORMAL: this._debugMode === 'normal',
       DEBUG_LITSHADERATE: this._debugMode === 'litShadeRate',
       DEBUG_UV: this._debugMode === 'uv',

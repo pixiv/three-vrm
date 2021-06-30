@@ -12,7 +12,7 @@ export interface MToonMaterialParameters extends THREE.ShaderMaterialParameters 
   color?: THREE.Color;
   map?: THREE.Texture;
   normalMap?: THREE.Texture;
-  normalScale?: number;
+  normalScale?: THREE.Vector2;
   emissive?: THREE.Color;
   emissiveMap?: THREE.Texture;
   shadeColorFactor?: THREE.Color;
@@ -37,6 +37,11 @@ export interface MToonMaterialParameters extends THREE.ShaderMaterialParameters 
   uvAnimationScrollXSpeedFactor?: number;
   uvAnimationScrollYSpeedFactor?: number;
   uvAnimationRotationSpeedFactor?: number;
+
+  /**
+   * When this is `true`, vertex colors will be ignored.
+   */
+  ignoreVertexColor?: boolean;
 
   debugMode?: MToonMaterialDebugMode | number;
 

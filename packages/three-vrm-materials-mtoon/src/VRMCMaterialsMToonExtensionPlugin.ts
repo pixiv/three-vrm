@@ -297,6 +297,9 @@ export class VRMCMaterialsMToonExtensionPlugin implements GLTFLoaderPlugin {
     assignHelper.assignPrimitive('uvAnimationScrollYSpeedFactor', properties.floatProperties?.['_UvAnimScrollY']);
     assignHelper.assignPrimitive('uvAnimationRotationSpeedFactor', properties.floatProperties?.['_UvAnimRotation']);
 
+    // in VRM0.0, vertex colors should be ignored
+    assignHelper.assignPrimitive('ignoreVertexColor', true);
+
     await assignHelper.pending;
   }
 

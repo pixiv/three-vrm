@@ -307,7 +307,10 @@ void main() {
     diffuseColor *= texelColor;
   #endif
 
-  #include <color_fragment>
+  // #include <color_fragment>
+  #if ( defined( USE_COLOR ) && !defined( IGNORE_VERTEX_COLOR ) )
+    diffuseColor.rgb *= vColor;
+  #endif
 
   // #include <alphamap_fragment>
 
@@ -397,6 +400,10 @@ void main() {
   material.shadeColor = shadeColorFactor;
   #ifdef USE_SHADEMULTIPLYTEXTURE
     material.shadeColor *= shadeMultiplyTextureTexelToLinear( texture2D( shadeMultiplyTexture, uv ) ).rgb;
+  #endif
+
+  #if ( defined( USE_COLOR ) && !defined( IGNORE_VERTEX_COLOR ) )
+    material.shadeColor.rgb *= vColor;
   #endif
 
   material.shadingShift = shadingShiftFactor;
