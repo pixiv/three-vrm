@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { deepDispose } from './utils/disposer';
 import { VRMExpressionManager, VRMFirstPerson, VRMHumanoid, VRMLookAt, VRMMeta } from '@pixiv/three-vrm-core';
 import { VRMSpringBoneManager } from '@pixiv/three-vrm-springbone';
 import { VRMConstraintManager } from 'packages/three-vrm-constraints/types';
@@ -126,16 +125,6 @@ export class VRM {
           material.updateVRMMaterials(delta);
         }
       });
-    }
-  }
-
-  /**
-   * Dispose everything about the VRM instance.
-   */
-  public dispose(): void {
-    const scene = this.scene;
-    if (scene) {
-      deepDispose(scene);
     }
   }
 }
