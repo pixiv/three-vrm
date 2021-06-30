@@ -56,7 +56,7 @@
 
 			loader.register( ( parser ) => {
 
-				return new THREE.VRMPlugin( parser );
+				return new THREE_VRM.VRMLoaderPlugin( parser );
 
 			} );
 
@@ -68,12 +68,12 @@
 
 					const vrm = gltf.userData.vrm;
 
-					THREE.VRMUtils.removeUnnecessaryJoints( gltf.scene );
+					THREE_VRM.VRMUtils.removeUnnecessaryJoints( gltf.scene );
 
 					scene.add( vrm.scene );
 					currentVrm = vrm;
 
-					vrm.humanoid.getBoneNode( THREE.VRMHumanBoneName.Hips ).rotation.y = Math.PI;
+					vrm.humanoid.getBoneNode( THREE_VRM.VRMHumanBoneName.Hips ).rotation.y = Math.PI;
 
 					console.log( vrm );
 
@@ -105,9 +105,9 @@
 
 					// tweak bones
 					const s = 0.25 * Math.PI * Math.sin( Math.PI * clock.elapsedTime );
-					currentVrm.humanoid.getBoneNode( THREE.VRMHumanBoneName.Neck ).rotation.y = s;
-					currentVrm.humanoid.getBoneNode( THREE.VRMHumanBoneName.LeftUpperArm ).rotation.z = s;
-					currentVrm.humanoid.getBoneNode( THREE.VRMHumanBoneName.RightUpperArm ).rotation.x = s;
+					currentVrm.humanoid.getBoneNode( THREE_VRM.VRMHumanBoneName.Neck ).rotation.y = s;
+					currentVrm.humanoid.getBoneNode( THREE_VRM.VRMHumanBoneName.LeftUpperArm ).rotation.z = s;
+					currentVrm.humanoid.getBoneNode( THREE_VRM.VRMHumanBoneName.RightUpperArm ).rotation.x = s;
 
 					// update vrm
 					currentVrm.update( deltaTime );

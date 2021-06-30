@@ -57,7 +57,7 @@
 
 			loader.register( ( parser ) => {
 
-				return new THREE.VRMPlugin( parser );
+				return new THREE_VRM.VRMLoaderPlugin( parser );
 
 			} );
 
@@ -69,12 +69,12 @@
 
 					const vrm = gltf.userData.vrm;
 
-					THREE.VRMUtils.removeUnnecessaryJoints( gltf.scene );
+					THREE_VRM.VRMUtils.removeUnnecessaryJoints( gltf.scene );
 
 					scene.add( vrm.scene );
 					currentVrm = vrm;
 
-					vrm.humanoid.getBoneNode( THREE.VRMHumanBoneName.Hips ).rotation.y = Math.PI;
+					vrm.humanoid.getBoneNode( THREE_VRM.VRMHumanBoneName.Hips ).rotation.y = Math.PI;
 
 					prepareAnimation( vrm );
 
@@ -98,13 +98,13 @@
 				quatB.setFromEuler( new THREE.Euler( 0.0, 0.0, 0.25 * Math.PI ) );
 
 				const armTrack = new THREE.QuaternionKeyframeTrack(
-					vrm.humanoid.getBoneNode( THREE.VRMHumanBoneName.LeftUpperArm ).name + '.quaternion', // name
+					vrm.humanoid.getBoneNode( THREE_VRM.VRMHumanBoneName.LeftUpperArm ).name + '.quaternion', // name
 					[ 0.0, 0.5, 1.0 ], // times
 					[ ...quatA.toArray(), ...quatB.toArray(), ...quatA.toArray() ] // values
 				);
 
 				const blinkTrack = new THREE.NumberKeyframeTrack(
-					vrm.expressionManager.getExpressionTrackName( THREE.VRMExpressionPreset.Blink ), // name
+					vrm.expressionManager.getExpressionTrackName( THREE_VRM.VRMExpressionPreset.Blink ), // name
 					[ 0.0, 0.5, 1.0 ], // times
 					[ 0.0, 1.0, 0.0 ] // values
 				);

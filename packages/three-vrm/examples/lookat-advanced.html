@@ -29,7 +29,7 @@
 			const _v3A = new THREE.Vector3();
 
 			// extended lookat
-			class VRMSmoothLookAt extends THREE.VRMLookAt {
+			class VRMSmoothLookAt extends THREE_VRM.VRMLookAt {
 
 				constructor( humanoid, applier ) {
 
@@ -40,7 +40,7 @@
 					this.horizontalLimit = Math.PI / 4.0;
 					this.verticalLimit = Math.PI / 4.0;
 
-					this._eulerTo = new THREE.Euler( 0.0, 0.0, 0.0, THREE.VRMLookAt.EULER_ORDER );
+					this._eulerTo = new THREE.Euler( 0.0, 0.0, 0.0, THREE_VRM.VRMLookAt.EULER_ORDER );
 
 				}
 
@@ -107,7 +107,7 @@
 
 			loader.register( ( parser ) => {
 
-				return new THREE.VRMPlugin( parser );
+				return new THREE_VRM.VRMLoaderPlugin( parser );
 
 			} );
 
@@ -119,7 +119,7 @@
 
 					const vrm = gltf.userData.vrm;
 
-					THREE.VRMUtils.removeUnnecessaryJoints( gltf.scene );
+					THREE_VRM.VRMUtils.removeUnnecessaryJoints( gltf.scene );
 
 					// replace the lookAt to our extended one
 					const smoothLookAt = new VRMSmoothLookAt( vrm.humanoid, vrm.lookAt.applier );
@@ -129,7 +129,7 @@
 					scene.add( vrm.scene );
 					currentVrm = vrm;
 
-					vrm.humanoid.getBoneNode( THREE.VRMHumanBoneName.Hips ).rotation.y = Math.PI;
+					vrm.humanoid.getBoneNode( THREE_VRM.VRMHumanBoneName.Hips ).rotation.y = Math.PI;
 
 					vrm.lookAt.target = camera;
 

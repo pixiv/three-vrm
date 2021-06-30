@@ -55,7 +55,7 @@
 
 			loader.register( ( parser ) => {
 
-				return new THREE.VRMPlugin( parser );
+				return new THREE_VRM.VRMLoaderPlugin( parser );
 
 			} );
 
@@ -70,12 +70,12 @@
 					const vrm = gltf.userData.vrm;
 
 					// calling this function greatly improves the performance
-					THREE.VRMUtils.removeUnnecessaryJoints( gltf.scene );
+					THREE_VRM.VRMUtils.removeUnnecessaryJoints( gltf.scene );
 
 					console.log( vrm );
 					scene.add( vrm.scene );
 
-					vrm.humanoid.getBoneNode( THREE.VRMHumanBoneName.Hips ).rotation.y = Math.PI;
+					vrm.humanoid.getBoneNode( THREE_VRM.VRMHumanBoneName.Hips ).rotation.y = Math.PI;
 
 				},
 

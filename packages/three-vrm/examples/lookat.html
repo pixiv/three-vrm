@@ -60,7 +60,7 @@
 
 			loader.register( ( parser ) => {
 
-				return new THREE.VRMPlugin( parser );
+				return new THREE_VRM.VRMLoaderPlugin( parser );
 
 			} );
 
@@ -72,12 +72,12 @@
 
 					const vrm = gltf.userData.vrm;
 
-					THREE.VRMUtils.removeUnnecessaryJoints( gltf.scene );
+					THREE_VRM.VRMUtils.removeUnnecessaryJoints( gltf.scene );
 
 					scene.add( vrm.scene );
 					currentVrm = vrm;
 
-					vrm.humanoid.getBoneNode( THREE.VRMHumanBoneName.Hips ).rotation.y = Math.PI;
+					vrm.humanoid.getBoneNode( THREE_VRM.VRMHumanBoneName.Hips ).rotation.y = Math.PI;
 
 					vrm.lookAt.target = lookAtTarget;
 
