@@ -45,7 +45,7 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
 
     if (gltf.userData.promiseVrmSpringBoneManager == null) {
       gltf.userData.promiseVrmSpringBoneManager = (async () => {
-        // load the lookAt
+        // load the spring bones
         return await this._import(gltf);
       })();
 
