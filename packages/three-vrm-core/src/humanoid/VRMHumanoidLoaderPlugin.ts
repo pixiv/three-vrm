@@ -54,12 +54,12 @@ export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
 
   protected async _v1Import(gltf: GLTF): Promise<VRMHumanoid | null> {
     // early abort if it doesn't use vrm
-    const isVRMUsed = this.parser.json.extensionsUsed.indexOf('VRMC_vrm-1.0') !== -1;
+    const isVRMUsed = this.parser.json.extensionsUsed.indexOf('VRMC_vrm') !== -1;
     if (!isVRMUsed) {
       return null;
     }
 
-    const extension: V1VRMSchema.VRM | undefined = this.parser.json.extensions?.['VRMC_vrm-1.0'];
+    const extension: V1VRMSchema.VRM | undefined = this.parser.json.extensions?.['VRMC_vrm'];
     if (!extension) {
       return null;
     }
