@@ -1,14 +1,14 @@
-import * as V0VRM from '@pixiv/types-vrm-0.0';
-import * as V1SpringBoneSchema from '@pixiv/types-vrmc-springbone-1.0';
+import type * as V0VRM from '@pixiv/types-vrm-0.0';
+import type * as V1SpringBoneSchema from '@pixiv/types-vrmc-springbone-1.0';
 import * as THREE from 'three';
-import { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
+import type { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRMSpringBoneCollider } from './VRMSpringBoneCollider';
-import { VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';
+import type { VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';
 import { VRMSpringBoneColliderShapeCapsule } from './VRMSpringBoneColliderShapeCapsule';
 import { VRMSpringBoneColliderShapeSphere } from './VRMSpringBoneColliderShapeSphere';
 import { VRMSpringBoneJoint } from './VRMSpringBoneJoint';
 import { VRMSpringBoneManager } from './VRMSpringBoneManager';
-import { VRMSpringBoneSettings } from './VRMSpringBoneSettings';
+import type { VRMSpringBoneSettings } from './VRMSpringBoneSettings';
 
 export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
   public static readonly EXTENSION_NAME = 'VRMC_springBone';

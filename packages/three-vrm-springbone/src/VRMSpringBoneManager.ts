@@ -1,8 +1,8 @@
 import type * as THREE from 'three';
 import type { VRMSpringBoneJoint } from './VRMSpringBoneJoint';
 import { traverseAncestorsFromRoot } from './utils/traverseAncestorsFromRoot';
-import { VRMSpringBoneCollider } from './VRMSpringBoneCollider';
-import { VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';
+import type { VRMSpringBoneCollider } from './VRMSpringBoneCollider';
+import type { VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';
 
 export class VRMSpringBoneManager {
   private _springBones = new Set<VRMSpringBoneJoint>();
@@ -43,7 +43,7 @@ export class VRMSpringBoneManager {
     objectSet.add(springBone);
   }
 
-  public deleteConstraint(springBone: VRMSpringBoneJoint): void {
+  public deleteSpringBone(springBone: VRMSpringBoneJoint): void {
     this._springBones.delete(springBone);
 
     const objectSet = this._objectSpringBonesMap.get(springBone.bone)!;

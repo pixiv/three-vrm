@@ -81,7 +81,7 @@
 			springBoneManager.addSpringBone( springBone );
 
 			// helper
-			const springBoneHelper = new THREE.VRMSpringBoneHelper( springBone );
+			const springBoneHelper = new THREE.VRMSpringBoneJointHelper( springBone );
 			scene.add( springBoneHelper );
 
 			// init spring bones
@@ -108,8 +108,6 @@
 				}
 
 				springBoneManager.update( deltaTime );
-
-				springBoneHelper.update();
 
 				renderer.render( scene, camera );
 

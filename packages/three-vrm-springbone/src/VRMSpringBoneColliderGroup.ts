@@ -1,4 +1,4 @@
-import { VRMSpringBoneCollider } from './VRMSpringBoneCollider';
+import type { VRMSpringBoneCollider } from './VRMSpringBoneCollider';
 
 /**
  * Represents a collider group of a VRM.

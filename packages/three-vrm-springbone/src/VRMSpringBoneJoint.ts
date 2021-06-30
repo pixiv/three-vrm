@@ -2,8 +2,8 @@ import * as THREE from 'three';
 import { getWorldQuaternionLite } from './utils/getWorldQuaternionLite';
 import { mat4InvertCompat } from './utils/mat4InvertCompat';
 import { Matrix4InverseCache } from './utils/Matrix4InverseCache';
-import { VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';
-import { VRMSpringBoneSettings } from './VRMSpringBoneSettings';
+import type { VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';
+import type { VRMSpringBoneSettings } from './VRMSpringBoneSettings';
 
 // based on
 // http://rocketjump.skr.jp/unity3d/109/
