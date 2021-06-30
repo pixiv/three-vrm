@@ -8,8 +8,6 @@ import { MToonMaterialDebugMode } from './MToonMaterialDebugMode';
 import { MToonMaterialOutlineWidthMode } from './MToonMaterialOutlineWidthMode';
 import type { MToonMaterialParameters } from './MToonMaterialParameters';
 
-const TAU = 2.0 * Math.PI;
-
 /**
  * MToon is a material specification that has various features.
  * The spec and implementation are originally founded for Unity engine and this is a port of the material.
@@ -17,51 +15,295 @@ const TAU = 2.0 * Math.PI;
  * See: https://github.com/Santarh/MToon
  */
 export class MToonMaterial extends THREE.ShaderMaterial {
-  public color = new THREE.Color(1.0, 1.0, 1.0);
-  public map: THREE.Texture | null = null;
-  public normalMap: THREE.Texture | null = null;
-  public normalMapType = THREE.TangentSpaceNormalMap;
-  public normalScale = new THREE.Vector2(1.0, 1.0);
-  public emissive = new THREE.Color(0.0, 0.0, 0.0);
-  public emissiveMap: THREE.Texture | null = null;
-  public shadeColorFactor = new THREE.Color(0.97, 0.81, 0.86);
-  public shadeMultiplyTexture: THREE.Texture | null = null;
-  public shadingShiftFactor = 0.0;
-  public shadingShiftTexture: THREE.Texture | null = null;
-  public shadingShiftTextureScale = 1.0;
-  public shadingToonyFactor = 0.9;
-  public giIntensityFactor = 0.1;
-  public matcapTexture: THREE.Texture | null = null;
-  public parametricRimColorFactor = new THREE.Color(0.0, 0.0, 0.0);
-  public rimMultiplyTexture: THREE.Texture | null = null;
-  public rimLightingMixFactor = 0.0;
-  public parametricRimFresnelPowerFactor = 1.0;
-  public parametricRimLiftFactor = 0.0;
-  public outlineWidthFactor = 0.5;
-  public outlineWidthMultiplyTexture: THREE.Texture | null = null;
-  public outlineColorFactor = new THREE.Color(0.0, 0.0, 0.0);
-  public outlineLightingMixFactor = 1.0;
-  public uvAnimationMaskTexture: THREE.Texture | null = null;
+  public uniforms: {
+    litFactor: THREE.IUniform<THREE.Color>;
+    map: THREE.IUniform<THREE.Texture | null>;
+    normalMap: THREE.IUniform<THREE.Texture | null>;
+    normalScale: THREE.IUniform<THREE.Vector2>;
+    emissive: THREE.IUniform<THREE.Color>;
+    emissiveMap: THREE.IUniform<THREE.Texture | null>;
+    shadeColorFactor: THREE.IUniform<THREE.Color>;
+    shadeMultiplyTexture: THREE.IUniform<THREE.Texture | null>;
+    shadingShiftFactor: THREE.IUniform<number>;
+    shadingShiftTexture: THREE.IUniform<THREE.Texture | null>;
+    shadingShiftTextureScale: THREE.IUniform<number>;
+    shadingToonyFactor: THREE.IUniform<number>;
+    giIntensityFactor: THREE.IUniform<number>;
+    matcapTexture: THREE.IUniform<THREE.Texture | null>;
+    parametricRimColorFactor: THREE.IUniform<THREE.Color>;
+    rimMultiplyTexture: THREE.IUniform<THREE.Texture | null>;
+    rimLightingMixFactor: THREE.IUniform<number>;
+    parametricRimFresnelPowerFactor: THREE.IUniform<number>;
+    parametricRimLiftFactor: THREE.IUniform<number>;
+    outlineWidthMultiplyTexture: THREE.IUniform<THREE.Texture | null>;
+    outlineWidthFactor: THREE.IUniform<number>;
+    outlineColorFactor: THREE.IUniform<THREE.Color>;
+    outlineLightingMixFactor: THREE.IUniform<number>;
+    uvAnimationMaskTexture: THREE.IUniform<THREE.Texture | null>;
+    uvAnimationScrollXOffset: THREE.IUniform<number>;
+    uvAnimationScrollYOffset: THREE.IUniform<number>;
+    uvAnimationRotationPhase: THREE.IUniform<number>;
+  };
+
+  public get color(): THREE.Color {
+    return this.uniforms.litFactor.value;
+  }
+  public set color(value: THREE.Color) {
+    this.uniforms.litFactor.value = value;
+  }
+
+  public get map(): THREE.Texture | null {
+    return this.uniforms.map.value;
+  }
+  public set map(value: THREE.Texture | null) {
+    this.uniforms.map.value = value;
+  }
+
+  public get normalMap(): THREE.Texture | null {
+    return this.uniforms.normalMap.value;
+  }
+  public set normalMap(value: THREE.Texture | null) {
+    this.uniforms.normalMap.value = value;
+  }
+
+  public get normalScale(): THREE.Vector2 {
+    return this.uniforms.normalScale.value;
+  }
+  public set normalScale(value: THREE.Vector2) {
+    this.uniforms.normalScale.value = value;
+  }
+
+  public get emissive(): THREE.Color {
+    return this.uniforms.emissive.value;
+  }
+  public set emissive(value: THREE.Color) {
+    this.uniforms.emissive.value = value;
+  }
+
+  public get emissiveMap(): THREE.Texture | null {
+    return this.uniforms.emissiveMap.value;
+  }
+  public set emissiveMap(value: THREE.Texture | null) {
+    this.uniforms.emissiveMap.value = value;
+  }
+
+  public get shadeColorFactor(): THREE.Color {
+    return this.uniforms.shadeColorFactor.value;
+  }
+  public set shadeColorFactor(value: THREE.Color) {
+    this.uniforms.shadeColorFactor.value = value;
+  }
+
+  public get shadeMultiplyTexture(): THREE.Texture | null {
+    return this.uniforms.shadeMultiplyTexture.value;
+  }
+  public set shadeMultiplyTexture(value: THREE.Texture | null) {
+    this.uniforms.shadeMultiplyTexture.value = value;
+  }
+
+  public get shadingShiftFactor(): number {
+    return this.uniforms.shadingShiftFactor.value;
+  }
+  public set shadingShiftFactor(value: number) {
+    this.uniforms.shadingShiftFactor.value = value;
+  }
+
+  public get shadingShiftTexture(): THREE.Texture | null {
+    return this.uniforms.shadingShiftTexture.value;
+  }
+  public set shadingShiftTexture(value: THREE.Texture | null) {
+    this.uniforms.shadingShiftTexture.value = value;
+  }
+
+  public get shadingShiftTextureScale(): number {
+    return this.uniforms.shadingShiftTextureScale.value;
+  }
+  public set shadingShiftTextureScale(value: number) {
+    this.uniforms.shadingShiftTextureScale.value = value;
+  }
+
+  public get shadingToonyFactor(): number {
+    return this.uniforms.shadingToonyFactor.value;
+  }
+  public set shadingToonyFactor(value: number) {
+    this.uniforms.shadingToonyFactor.value = value;
+  }
+
+  public get giIntensityFactor(): number {
+    return this.uniforms.giIntensityFactor.value;
+  }
+  public set giIntensityFactor(value: number) {
+    this.uniforms.giIntensityFactor.value = value;
+  }
+
+  public get matcapTexture(): THREE.Texture | null {
+    return this.uniforms.matcapTexture.value;
+  }
+  public set matcapTexture(value: THREE.Texture | null) {
+    this.uniforms.matcapTexture.value = value;
+  }
+
+  public get parametricRimColorFactor(): THREE.Color {
+    return this.uniforms.parametricRimColorFactor.value;
+  }
+  public set parametricRimColorFactor(value: THREE.Color) {
+    this.uniforms.parametricRimColorFactor.value = value;
+  }
+
+  public get rimMultiplyTexture(): THREE.Texture | null {
+    return this.uniforms.rimMultiplyTexture.value;
+  }
+  public set rimMultiplyTexture(value: THREE.Texture | null) {
+    this.uniforms.rimMultiplyTexture.value = value;
+  }
+
+  public get rimLightingMixFactor(): number {
+    return this.uniforms.rimLightingMixFactor.value;
+  }
+  public set rimLightingMixFactor(value: number) {
+    this.uniforms.rimLightingMixFactor.value = value;
+  }
+
+  public get parametricRimFresnelPowerFactor(): number {
+    return this.uniforms.parametricRimFresnelPowerFactor.value;
+  }
+  public set parametricRimFresnelPowerFactor(value: number) {
+    this.uniforms.parametricRimFresnelPowerFactor.value = value;
+  }
+
+  public get parametricRimLiftFactor(): number {
+    return this.uniforms.parametricRimLiftFactor.value;
+  }
+  public set parametricRimLiftFactor(value: number) {
+    this.uniforms.parametricRimLiftFactor.value = value;
+  }
+
+  public get outlineWidthMultiplyTexture(): THREE.Texture | null {
+    return this.uniforms.outlineWidthMultiplyTexture.value;
+  }
+  public set outlineWidthMultiplyTexture(value: THREE.Texture | null) {
+    this.uniforms.outlineWidthMultiplyTexture.value = value;
+  }
+
+  public get outlineWidthFactor(): number {
+    return this.uniforms.outlineWidthFactor.value;
+  }
+  public set outlineWidthFactor(value: number) {
+    this.uniforms.outlineWidthFactor.value = value;
+  }
+
+  public get outlineColorFactor(): THREE.Color {
+    return this.uniforms.outlineColorFactor.value;
+  }
+  public set outlineColorFactor(value: THREE.Color) {
+    this.uniforms.outlineColorFactor.value = value;
+  }
+
+  public get outlineLightingMixFactor(): number {
+    return this.uniforms.outlineLightingMixFactor.value;
+  }
+  public set outlineLightingMixFactor(value: number) {
+    this.uniforms.outlineLightingMixFactor.value = value;
+  }
+
+  public get uvAnimationMaskTexture(): THREE.Texture | null {
+    return this.uniforms.uvAnimationMaskTexture.value;
+  }
+  public set uvAnimationMaskTexture(value: THREE.Texture | null) {
+    this.uniforms.uvAnimationMaskTexture.value = value;
+  }
+
+  public get uvAnimationScrollXOffset(): number {
+    return this.uniforms.uvAnimationScrollXOffset.value;
+  }
+  public set uvAnimationScrollXOffset(value: number) {
+    this.uniforms.uvAnimationScrollXOffset.value = value;
+  }
+
+  public get uvAnimationScrollYOffset(): number {
+    return this.uniforms.uvAnimationScrollYOffset.value;
+  }
+  public set uvAnimationScrollYOffset(value: number) {
+    this.uniforms.uvAnimationScrollYOffset.value = value;
+  }
+
+  public get uvAnimationRotationPhase(): number {
+    return this.uniforms.uvAnimationRotationPhase.value;
+  }
+  public set uvAnimationRotationPhase(value: number) {
+    this.uniforms.uvAnimationRotationPhase.value = value;
+  }
+
   public uvAnimationScrollXSpeedFactor = 0.0;
   public uvAnimationScrollYSpeedFactor = 0.0;
   public uvAnimationRotationSpeedFactor = 0.0;
 
-  public shouldApplyUniforms = true; // when this is true, applyUniforms effects
+  /**
+   * Will be read in WebGLPrograms
+   *
+   * See: https://github.com/mrdoob/three.js/blob/4f5236ac3d6f41d904aa58401b40554e8fbdcb15/src/renderers/webgl/WebGLPrograms.js#L190-L191
+   */
+  public normalMapType = THREE.TangentSpaceNormalMap;
 
   /**
-   * See: {@link MToonMaterialParameters.onLoadMaterial}.
+   * The material will call this in its constructor.
+   * See {@link VRMCMaterialsMToonExtensionPlugin.setMToonMaterial} for more details.
+   *
    * It will called also when it's copied.
    */
   public onLoadMaterial?: (material: MToonMaterial) => void;
 
+  /**
+   * When this is `true`, vertex colors will be ignored.
+   * `true` by default.
+   */
+  private _ignoreVertexColor = true;
+
+  /**
+   * When this is `true`, vertex colors will be ignored.
+   * `true` by default.
+   */
+  public get ignoreVertexColor(): boolean {
+    return this._ignoreVertexColor;
+  }
+  public set ignoreVertexColor(value: boolean) {
+    this._ignoreVertexColor = value;
+
+    this._updateShaderCode();
+  }
+
   private _debugMode: MToonMaterialDebugMode = MToonMaterialDebugMode.None;
+
+  get debugMode(): MToonMaterialDebugMode {
+    return this._debugMode;
+  }
+  set debugMode(m: MToonMaterialDebugMode) {
+    this._debugMode = m;
+
+    this._updateShaderCode();
+  }
+
   private _outlineWidthMode: MToonMaterialOutlineWidthMode = MToonMaterialOutlineWidthMode.None;
+
+  get outlineWidthMode(): MToonMaterialOutlineWidthMode {
+    return this._outlineWidthMode;
+  }
+  set outlineWidthMode(m: MToonMaterialOutlineWidthMode) {
+    this._outlineWidthMode = m;
+
+    this._updateShaderCode();
+  }
 
   private _isOutline = false;
 
-  private _uvAnimationScrollXOffset = 0.0;
-  private _uvAnimationScrollYOffset = 0.0;
-  private _uvAnimationRotationPhase = 0.0;
+  get isOutline(): boolean {
+    return this._isOutline;
+  }
+  set isOutline(b: boolean) {
+    this._isOutline = b;
+
+    this._updateShaderCode();
+  }
 
   /**
    * Readonly boolean that indicates this is a [[MToonMaterial]].
@@ -93,7 +335,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     parameters.morphNormals = parameters.morphNormals || false;
 
     // == uniforms =================================================================================
-    parameters.uniforms = THREE.UniformsUtils.merge([
+    this.uniforms = THREE.UniformsUtils.merge([
       THREE.UniformsLib.common, // map
       THREE.UniformsLib.normalmap, // normalMap
       THREE.UniformsLib.emissivemap, // emissiveMap
@@ -125,6 +367,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
         uvAnimationScrollYOffset: { value: 0.0 },
         uvAnimationRotationPhase: { value: 0.0 },
       },
+      parameters.uniforms,
     ]);
 
     // == finally compile the shader program =======================================================
@@ -132,48 +375,9 @@ export class MToonMaterial extends THREE.ShaderMaterial {
 
     // == update shader stuff ======================================================================
     this._updateShaderCode();
-    this._applyUniforms();
 
     // == call onLoadMaterial ======================================================================
     this.onLoadMaterial?.(this);
-  }
-
-  get debugMode(): MToonMaterialDebugMode {
-    return this._debugMode;
-  }
-
-  set debugMode(m: MToonMaterialDebugMode) {
-    this._debugMode = m;
-
-    this._updateShaderCode();
-  }
-
-  get outlineWidthMode(): MToonMaterialOutlineWidthMode {
-    return this._outlineWidthMode;
-  }
-
-  set outlineWidthMode(m: MToonMaterialOutlineWidthMode) {
-    this._outlineWidthMode = m;
-
-    this._updateShaderCode();
-  }
-
-  get zWrite(): number {
-    return this.depthWrite ? 1 : 0;
-  }
-
-  set zWrite(i: number) {
-    this.depthWrite = 0.5 <= i;
-  }
-
-  get isOutline(): boolean {
-    return this._isOutline;
-  }
-
-  set isOutline(b: boolean) {
-    this._isOutline = b;
-
-    this._updateShaderCode();
   }
 
   /**
@@ -182,110 +386,65 @@ export class MToonMaterial extends THREE.ShaderMaterial {
    * @param delta deltaTime since last update
    */
   public update(delta: number): void {
-    this._uvAnimationScrollXOffset = this._uvAnimationScrollXOffset + delta * this.uvAnimationScrollXSpeedFactor;
-    this._uvAnimationScrollYOffset = this._uvAnimationScrollYOffset - delta * this.uvAnimationScrollYSpeedFactor; // Negative since t axis of uvs are opposite from Unity's one
-    this._uvAnimationRotationPhase = this._uvAnimationRotationPhase + delta * this.uvAnimationRotationSpeedFactor;
+    this.uniforms.uvAnimationScrollXOffset.value += delta * this.uvAnimationScrollXSpeedFactor;
+    this.uniforms.uvAnimationScrollYOffset.value += delta * this.uvAnimationScrollYSpeedFactor;
+    this.uniforms.uvAnimationRotationPhase.value += delta * this.uvAnimationRotationSpeedFactor;
 
-    this._applyUniforms();
+    this.uniformsNeedUpdate = true;
   }
 
   public copy(source: this): this {
     super.copy(source);
+    // uniforms are already copied at this moment
 
     // == copy members =============================================================================
-    this.color.copy(source.color);
-    this.map = source.map;
-    this.normalMap = source.normalMap;
     this.normalMapType = source.normalMapType;
-    this.normalScale.copy(this.normalScale);
-    this.emissive.copy(source.emissive);
-    this.emissiveMap = source.emissiveMap;
-    this.shadeColorFactor.copy(source.shadeColorFactor);
-    this.shadeMultiplyTexture = source.shadeMultiplyTexture;
-    this.shadingShiftFactor = source.shadingShiftFactor;
-    this.shadingShiftTexture = source.shadingShiftTexture;
-    this.shadingShiftTextureScale = source.shadingShiftTextureScale;
-    this.shadingToonyFactor = source.shadingToonyFactor;
-    this.giIntensityFactor = source.giIntensityFactor;
-    this.matcapTexture = source.matcapTexture;
-    this.parametricRimColorFactor.copy(source.parametricRimColorFactor);
-    this.rimMultiplyTexture = source.rimMultiplyTexture;
-    this.rimLightingMixFactor = source.rimLightingMixFactor;
-    this.parametricRimFresnelPowerFactor = source.parametricRimFresnelPowerFactor;
-    this.parametricRimLiftFactor = source.parametricRimLiftFactor;
-    this.outlineWidthMultiplyTexture = source.outlineWidthMultiplyTexture;
-    this.outlineWidthFactor = source.outlineWidthFactor;
-    this.outlineColorFactor.copy(source.outlineColorFactor);
-    this.outlineLightingMixFactor = source.outlineLightingMixFactor;
-    this.uvAnimationMaskTexture = source.uvAnimationMaskTexture;
+
     this.uvAnimationScrollXSpeedFactor = source.uvAnimationScrollXSpeedFactor;
     this.uvAnimationScrollYSpeedFactor = source.uvAnimationScrollYSpeedFactor;
     this.uvAnimationRotationSpeedFactor = source.uvAnimationRotationSpeedFactor;
+
+    this.ignoreVertexColor = source.ignoreVertexColor;
 
     this.debugMode = source.debugMode;
     this.outlineWidthMode = source.outlineWidthMode;
 
     this.isOutline = source.isOutline;
 
+    // == update shader stuff ======================================================================
+    this._updateShaderCode();
+
+    // == call onLoadMaterial ======================================================================
     this.onLoadMaterial = source.onLoadMaterial;
     this.onLoadMaterial?.(this);
 
     return this;
   }
 
-  /**
-   * Apply updated uniform variables.
-   */
-  private _applyUniforms(): void {
-    this.uniforms.uvAnimationScrollXOffset.value = this._uvAnimationScrollXOffset;
-    this.uniforms.uvAnimationScrollYOffset.value = this._uvAnimationScrollYOffset;
-    this.uniforms.uvAnimationRotationPhase.value = TAU * this._uvAnimationRotationPhase;
-
-    if (!this.shouldApplyUniforms) {
-      return;
-    }
-    this.shouldApplyUniforms = false;
-
-    this.uniforms.litFactor.value.copy(this.color);
-    this.uniforms.opacity.value = this.opacity;
-    this.uniforms.map.value = this.map;
-    this.uniforms.normalMap.value = this.normalMap;
-    this.uniforms.normalScale.value.copy(this.normalScale);
-    this.uniforms.emissive.value.copy(this.emissive);
-    this.uniforms.emissiveMap.value = this.emissiveMap;
-    this.uniforms.shadeColorFactor.value.copy(this.shadeColorFactor);
-    this.uniforms.shadeMultiplyTexture.value = this.shadeMultiplyTexture;
-    this.uniforms.shadingShiftFactor.value = this.shadingShiftFactor;
-    this.uniforms.shadingShiftTexture.value = this.shadingShiftTexture;
-    this.uniforms.shadingShiftTextureScale.value = this.shadingShiftTextureScale;
-    this.uniforms.shadingToonyFactor.value = this.shadingToonyFactor;
-    this.uniforms.giIntensityFactor.value = this.giIntensityFactor;
-    this.uniforms.matcapTexture.value = this.matcapTexture;
-    this.uniforms.parametricRimColorFactor.value.copy(this.parametricRimColorFactor);
-    this.uniforms.rimMultiplyTexture.value = this.rimMultiplyTexture;
-    this.uniforms.rimLightingMixFactor.value = this.rimLightingMixFactor;
-    this.uniforms.parametricRimFresnelPowerFactor.value = this.parametricRimFresnelPowerFactor;
-    this.uniforms.parametricRimLiftFactor.value = this.parametricRimLiftFactor;
-    this.uniforms.outlineWidthMultiplyTexture.value = this.outlineWidthMultiplyTexture;
-    this.uniforms.outlineWidthFactor.value = this.outlineWidthFactor;
-    this.uniforms.outlineColorFactor.value.copy(this.outlineColorFactor);
-    this.uniforms.outlineLightingMixFactor.value = this.outlineLightingMixFactor;
-    this.uniforms.uvAnimationMaskTexture.value = this.uvAnimationMaskTexture;
-  }
-
   private _updateShaderCode(): void {
+    const useUvInVert = this.outlineWidthMultiplyTexture !== null;
+    const useUvInFrag =
+      this.map !== null ||
+      this.shadeMultiplyTexture !== null ||
+      this.shadingShiftTexture !== null ||
+      this.rimMultiplyTexture !== null ||
+      this.uvAnimationMaskTexture !== null;
+
     this.defines = {
       // Temporary compat against shader change @ Three.js r126
       // See: #21205, #21307, #21299
       THREE_VRM_THREE_REVISION_126: parseInt(THREE.REVISION) >= 126,
 
       OUTLINE: this._isOutline,
+      MTOON_USE_UV: useUvInVert || useUvInFrag, // we can't use `USE_UV` , it will be redefined in WebGLProgram.js
+      MTOON_UVS_VERTEX_ONLY: useUvInVert && !useUvInFrag,
       USE_SHADEMULTIPLYTEXTURE: this.shadeMultiplyTexture !== null,
       USE_SHADINGSHIFTTEXTURE: this.shadingShiftTexture !== null,
-      USE_ADDITIVETEXTURE: this.matcapTexture !== null,
+      USE_MATCAPTEXTURE: this.matcapTexture !== null,
       USE_RIMMULTIPLYTEXTURE: this.rimMultiplyTexture !== null,
       USE_OUTLINEWIDTHMULTIPLYTEXTURE: this.outlineWidthMultiplyTexture !== null,
       USE_UVANIMATIONMASKTEXTURE: this.uvAnimationMaskTexture !== null,
+      IGNORE_VERTEX_COLOR: this._ignoreVertexColor === true,
       DEBUG_NORMAL: this._debugMode === 'normal',
       DEBUG_LITSHADERATE: this._debugMode === 'litShadeRate',
       DEBUG_UV: this._debugMode === 'uv',
