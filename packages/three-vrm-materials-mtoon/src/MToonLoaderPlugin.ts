@@ -24,7 +24,7 @@ export class MToonLoaderPlugin implements GLTFLoaderPlugin {
    */
   public onLoadMaterial?: (material: MToonMaterial) => void;
 
-  protected _parser: GLTFParser;
+  public readonly parser: GLTFParser;
 
   public get name(): string {
     return MToonLoaderPlugin.EXTENSION_NAME;
@@ -48,7 +48,7 @@ export class MToonLoaderPlugin implements GLTFLoaderPlugin {
       onLoadMaterial?: (material: MToonMaterial) => void;
     } = {},
   ) {
-    this._parser = parser;
+    this.parser = parser;
 
     this.renderOrderOffset = options.renderOrderOffset ?? 0;
     this.onLoadMaterial = options.onLoadMaterial;
@@ -88,7 +88,7 @@ export class MToonLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   public async loadMesh(meshIndex: number): Promise<THREE.Group | THREE.Mesh | THREE.SkinnedMesh> {
-    const parser = this._parser;
+    const parser = this.parser;
     const json = parser.json;
 
     const meshDef = json.meshes[meshIndex];
@@ -121,7 +121,7 @@ export class MToonLoaderPlugin implements GLTFLoaderPlugin {
    * we have to delete the extension before we start to parse the glTF.
    */
   protected _v1RemoveUnlitExtension(): void {
-    const parser = this._parser;
+    const parser = this.parser;
     const json = parser.json;
 
     const materialDefs: any[] = json.materials;
@@ -141,7 +141,7 @@ export class MToonLoaderPlugin implements GLTFLoaderPlugin {
    * we have to delete the extension before we start to parse the glTF.
    */
   protected _v0RemoveUnlitExtension(): void {
-    const parser = this._parser;
+    const parser = this.parser;
     const json = parser.json;
 
     const materialDefs: any[] = json.materials;
@@ -155,7 +155,7 @@ export class MToonLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   protected _v1GetMToonExtension(materialIndex: number): V1MToonSchema.MaterialsMToon | undefined {
-    const parser = this._parser;
+    const parser = this.parser;
     const json = parser.json;
 
     const materialDef = json.materials[materialIndex];
@@ -170,7 +170,7 @@ export class MToonLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   protected _v0GetMToonProperties(materialIndex: number): V0Material | undefined {
-    const parser = this._parser;
+    const parser = this.parser;
     const json = parser.json;
 
     const v0VRMExtension: V0VRM | undefined = json.extensions?.['VRM'];
@@ -191,7 +191,7 @@ export class MToonLoaderPlugin implements GLTFLoaderPlugin {
     delete (materialParams as THREE.MeshStandardMaterialParameters).metalness;
     delete (materialParams as THREE.MeshStandardMaterialParameters).roughness;
 
-    const assignHelper = new GLTFMToonMaterialParamsAssignHelper(this._parser, materialParams);
+    const assignHelper = new GLTFMToonMaterialParamsAssignHelper(this.parser, materialParams);
 
     assignHelper.assignPrimitive('transparentWithZWrite', extension.transparentWithZWrite);
     assignHelper.assignColor('shadeColorFactor', extension.shadeColorFactor);
@@ -234,7 +234,7 @@ export class MToonLoaderPlugin implements GLTFLoaderPlugin {
     const enabledZWrite = properties.floatProperties?.['_ZWrite'] === 1;
     const transparentWithZWrite = enabledZWrite && isTransparent;
 
-    const assignHelper = new GLTFMToonMaterialParamsAssignHelper(this._parser, materialParams);
+    const assignHelper = new GLTFMToonMaterialParamsAssignHelper(this.parser, materialParams);
 
     assignHelper.assignColor('color', properties.vectorProperties?.['_Color'], true);
     assignHelper.assignTextureByIndex('map', properties.textureProperties?.['_MainTex'], true);
