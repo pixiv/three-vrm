@@ -89,12 +89,10 @@
 			constraintManager.addConstraint(constraint);
 
 			// constraint helpers
-			const helpers = Array.from( constraintManager.constraints ).map( ( constraint ) => {
+			Array.from( constraintManager.constraints ).forEach( ( constraint ) => {
 
 				const helper = new THREE.VRMConstraintHelper( constraint );
-				helper.renderOrder = 10000;
 				scene.add( helper );
-				return helper;
 
 			} );
 
@@ -114,7 +112,6 @@
 				cube.position.x = 2.0 * Math.sin( clock.elapsedTime );
 
 				constraintManager.update();
-				helpers.forEach( ( helper ) => helper.update() );
 
 				renderer.render( scene, camera );
 

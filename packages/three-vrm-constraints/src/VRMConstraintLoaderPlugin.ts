@@ -1,17 +1,47 @@
-import * as ConstraintSchema from '@pixiv/types-vrmc-constraints-1.0';
-import * as THREE from 'three';
-import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+import type * as ConstraintSchema from '@pixiv/types-vrmc-constraints-1.0';
+import type * as THREE from 'three';
+import type { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
+import { VRMConstraintHelper } from './helpers';
 import { VRMAimConstraint } from './VRMAimConstraint';
+import type { VRMConstraintLoaderPluginOptions } from './VRMConstraintLoaderPluginOptions';
 import { VRMConstraintManager } from './VRMConstraintManager';
 import { VRMPositionConstraint } from './VRMPositionConstraint';
 import { VRMRotationConstraint } from './VRMRotationConstraint';
 
-export class VRMConstraintImporter {
+export class VRMConstraintLoaderPlugin implements GLTFLoaderPlugin {
+  public static readonly EXTENSION_NAME = 'VRMC_constraints';
+
   /**
-   * Create a new VRMConstraintImporter.
+   * Specify an Object3D to add {@link VRMConstraintHelper} s.
+   * If not specified, helper will not be created.
    */
-  constructor() {
-    // do nothing
+  public helperRoot?: THREE.Object3D;
+
+  public readonly parser: GLTFParser;
+
+  public get name(): string {
+    return VRMConstraintLoaderPlugin.EXTENSION_NAME;
+  }
+
+  public constructor(parser: GLTFParser, options?: VRMConstraintLoaderPluginOptions) {
+    this.parser = parser;
+
+    this.helperRoot = options?.helperRoot;
+  }
+
+  public async afterRoot(gltf: GLTF): Promise<void> {
+    // this might be called twice or more by its dependants!
+
+    if (gltf.userData.promiseVrmConstraintManager == null) {
+      gltf.userData.promiseVrmConstraintManager = (async () => {
+        // load the constraints
+        return await this._import(gltf);
+      })();
+
+      gltf.userData.vrmConstraintManager = await gltf.userData.promiseVrmConstraintManager;
+    }
+
+    await gltf.userData.promiseVrmConstraintManager;
   }
 
   /**
@@ -20,7 +50,7 @@ export class VRMConstraintImporter {
    *
    * @param gltf A parsed result of GLTF taken from GLTFLoader
    */
-  public async import(gltf: GLTF): Promise<VRMConstraintManager | null> {
+  protected async _import(gltf: GLTF): Promise<VRMConstraintManager | null> {
     // early abort if it doesn't use constraints
     const isConstraintsUsed = gltf.parser.json.extensionsUsed.indexOf('VRMC_constraints-1.0') !== -1;
     if (!isConstraintsUsed) {
@@ -58,7 +88,7 @@ export class VRMConstraintImporter {
     return manager;
   }
 
-  private _importPositionConstraint(
+  protected _importPositionConstraint(
     destination: THREE.Object3D,
     nodes: THREE.Object3D[],
     modelRoot: THREE.Object3D,
@@ -82,10 +112,15 @@ export class VRMConstraintImporter {
       constraint.freezeAxes = freezeAxes;
     }
 
+    if (this.helperRoot) {
+      const helper = new VRMConstraintHelper(constraint);
+      this.helperRoot.add(helper);
+    }
+
     return constraint;
   }
 
-  private _importRotationConstraint(
+  protected _importRotationConstraint(
     destination: THREE.Object3D,
     nodes: THREE.Object3D[],
     modelRoot: THREE.Object3D,
@@ -109,10 +144,15 @@ export class VRMConstraintImporter {
       constraint.freezeAxes = freezeAxes;
     }
 
+    if (this.helperRoot) {
+      const helper = new VRMConstraintHelper(constraint);
+      this.helperRoot.add(helper);
+    }
+
     return constraint;
   }
 
-  private _importAimConstraint(
+  protected _importAimConstraint(
     destination: THREE.Object3D,
     nodes: THREE.Object3D[],
     modelRoot: THREE.Object3D,
@@ -140,6 +180,11 @@ export class VRMConstraintImporter {
     }
     if (freezeAxes) {
       constraint.freezeAxes = freezeAxes;
+    }
+
+    if (this.helperRoot) {
+      const helper = new VRMConstraintHelper(constraint);
+      this.helperRoot.add(helper);
     }
 
     return constraint;

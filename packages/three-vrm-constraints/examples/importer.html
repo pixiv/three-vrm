@@ -50,12 +50,20 @@
 
 			// gltf and vrm
 			let currentGltf = null;
-			let currentManager = null;
-			let currentHelpers = null;
-
-			const importer = new THREE.VRMConstraintImporter();
 
 			const loader = new THREE.GLTFLoader();
+
+			const pluginOptions = {
+
+				helperRoot: scene,
+
+			};
+
+			loader.register( ( parser ) => {
+
+				return new THREE_VRM_CONSTRAINTS.VRMConstraintLoaderPlugin( parser, pluginOptions );
+
+			} );
 
 			function load( url ) {
 
@@ -72,25 +80,6 @@
 						console.log( gltf );
 
 						currentGltf = gltf;
-
-						const promiseManager = importer.import( gltf );
-
-						promiseManager.then( ( manager ) => {
-
-							console.log( manager );
-
-							currentManager = manager;
-
-							currentHelpers = Array.from( manager.constraints ).map( ( constraint ) => {
-
-								const helper = new THREE.VRMConstraintHelper( constraint );
-								helper.renderOrder = 10000;
-								scene.add( helper );
-								return helper;
-
-							} );
-
-						} );
 
 					},
 
@@ -128,17 +117,8 @@
 					cubeA.position.y = Math.sin( clock.elapsedTime );
 					cubeA.rotation.x = Math.cos( clock.elapsedTime );
 
-				}
-
-				if ( currentManager ) {
-
-					currentManager.update();
-
-				}
-
-				if ( currentHelpers ) {
-
-					currentHelpers.forEach( ( helper ) => helper.update() );
+					const constraintManager = currentGltf.userData.vrmConstraintManager;
+					constraintManager.update();
 
 				}
 
