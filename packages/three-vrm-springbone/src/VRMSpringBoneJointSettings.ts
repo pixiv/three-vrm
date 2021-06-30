@@ -1,4 +1,4 @@
-export interface VRMSpringBoneSettings {
+export interface VRMSpringBoneJointSettings {
   /**
    * Radius of the bone, will be used for collision.
    */

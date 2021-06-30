@@ -10,7 +10,7 @@ import { VRMSpringBoneColliderShapeSphere } from './VRMSpringBoneColliderShapeSp
 import { VRMSpringBoneJoint } from './VRMSpringBoneJoint';
 import type { VRMSpringBoneLoaderPluginOptions } from './VRMSpringBoneLoaderPluginOptions';
 import { VRMSpringBoneManager } from './VRMSpringBoneManager';
-import type { VRMSpringBoneSettings } from './VRMSpringBoneSettings';
+import type { VRMSpringBoneJointSettings } from './VRMSpringBoneJointSettings';
 
 export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
   public static readonly EXTENSION_NAME = 'VRMC_springBone';
@@ -158,7 +158,7 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
           const child = threeNodes[childIndex];
 
           // prepare setting
-          const setting: Partial<VRMSpringBoneSettings> = {
+          const setting: Partial<VRMSpringBoneJointSettings> = {
             hitRadius: prevJoint.hitRadius,
             dragForce: prevJoint.dragForce,
             gravityPower: prevJoint.gravityPower,
@@ -245,7 +245,7 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
         } else {
           gravityDir.set(0.0, -1.0, 0.0);
         }
-        const setting: Partial<VRMSpringBoneSettings> = {
+        const setting: Partial<VRMSpringBoneJointSettings> = {
           hitRadius: schemaBoneGroup.hitRadius,
           dragForce: schemaBoneGroup.dragForce,
           gravityPower: schemaBoneGroup.gravityPower,
@@ -285,7 +285,7 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
   protected _importJoint(
     node: THREE.Object3D,
     child: THREE.Object3D,
-    setting?: Partial<VRMSpringBoneSettings>,
+    setting?: Partial<VRMSpringBoneJointSettings>,
     colliderGroupsForSpring?: VRMSpringBoneColliderGroup[],
   ): VRMSpringBoneJoint {
     const springBone = new VRMSpringBoneJoint(node, child, setting, colliderGroupsForSpring);
