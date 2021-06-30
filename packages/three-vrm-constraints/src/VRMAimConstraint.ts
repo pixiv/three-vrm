@@ -33,7 +33,8 @@ export class VRMAimConstraint extends VRMConstraint {
   private readonly _quatInitDst = new THREE.Quaternion();
 
   public setInitState(): void {
-    this._quatInitDst.copy(this.object.quaternion);
+    this._getDestinationMatrix(_matA);
+    decomposeRotation(_matA, this._quatInitDst);
 
     this._getAimQuat(this._quatInitAim);
     quatInvertCompat(this._quatInvInitAim.copy(this._quatInitAim));
@@ -41,22 +42,23 @@ export class VRMAimConstraint extends VRMConstraint {
 
   public update(): void {
     if (this.destinationSpace === 'local') {
+      // reset rotation
       this.object.quaternion.copy(QUAT_IDENTITY);
     } else {
+      // back to the initial rotation in world space
       this._getParentMatrixInModelSpace(_matA);
       decomposeRotation(_matA, _quatA);
       quatInvertCompat(this.object.quaternion.copy(_quatA));
     }
 
+    // aim toward the target
     this._getAimDiffQuat(_quatB);
     this.object.quaternion.multiply(_quatB);
 
-    if (this.destinationSpace === 'model') {
-      this.object.quaternion.multiply(_quatA);
-    }
-
+    // apply the initial rotation
     this.object.quaternion.multiply(this._quatInitDst);
 
+    // done
     this.object.updateMatrix();
   }
 
