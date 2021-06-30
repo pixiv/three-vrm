@@ -1,7 +1,7 @@
 import * as THREE from 'three';
+import { VRMConstraintManager } from '@pixiv/three-vrm-constraints';
 import { VRMExpressionManager, VRMFirstPerson, VRMHumanoid, VRMLookAt, VRMMeta } from '@pixiv/three-vrm-core';
 import { VRMSpringBoneManager } from '@pixiv/three-vrm-springbone';
-import { VRMConstraintManager } from 'packages/three-vrm-constraints/types';
 
 /**
  * Parameters for a [[VRM]] class.
