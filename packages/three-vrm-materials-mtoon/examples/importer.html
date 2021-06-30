@@ -56,7 +56,7 @@
 
 			loader.register( ( parser ) => {
 
-				const plugin = new THREE_VRM_MATERIALS_MTOON.VRMCMaterialsMToonExtensionPlugin( parser );
+				const plugin = new THREE_VRM_MATERIALS_MTOON.MToonLoaderPlugin( parser );
 				plugin.onLoadMaterial = ( material ) => mtoonSet.add( material );
 				return plugin;
 
