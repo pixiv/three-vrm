@@ -8,10 +8,10 @@ import {
   VRMMetaPlugin,
 } from '@pixiv/three-vrm-core';
 import { VRMCMaterialsMToonExtensionPlugin } from '@pixiv/three-vrm-materials-mtoon';
-import { VRMPluginOptions } from './VRMPluginOptions';
+import { VRMLoaderPluginOptions } from './VRMLoaderPluginOptions';
 import { VRM } from './VRM';
 
-export class VRMPlugin implements GLTFLoaderPlugin {
+export class VRMLoaderPlugin implements GLTFLoaderPlugin {
   public readonly parser: GLTFParser;
 
   public readonly expressionPlugin: VRMExpressionPlugin;
@@ -21,7 +21,7 @@ export class VRMPlugin implements GLTFLoaderPlugin {
   public readonly metaPlugin: VRMMetaPlugin;
   public readonly mtoonPlugin: VRMCMaterialsMToonExtensionPlugin;
 
-  public constructor(parser: GLTFParser, options?: VRMPluginOptions) {
+  public constructor(parser: GLTFParser, options?: VRMLoaderPluginOptions) {
     this.parser = parser;
     this.expressionPlugin = options?.expressionPlugin ?? new VRMExpressionPlugin(parser);
     this.firstPersonPlugin = options?.firstPersonPlugin ?? new VRMFirstPersonPlugin(parser);

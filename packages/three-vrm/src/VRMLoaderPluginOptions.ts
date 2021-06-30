@@ -7,7 +7,7 @@ import {
 } from 'packages/three-vrm-core/types';
 import { VRMCMaterialsMToonExtensionPlugin } from '@pixiv/three-vrm-materials-mtoon';
 
-export interface VRMPluginOptions {
+export interface VRMLoaderPluginOptions {
   expressionPlugin?: VRMExpressionPlugin;
   firstPersonPlugin?: VRMFirstPersonPlugin;
   humanoidPlugin?: VRMHumanoidPlugin;
