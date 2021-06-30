@@ -1,5 +1,4 @@
 export { VRMExpression } from './VRMExpression';
-export { VRMExpressionImporter } from './VRMExpressionImporter';
 export { VRMExpressionLoaderPlugin } from './VRMExpressionLoaderPlugin';
 export { VRMExpressionManager } from './VRMExpressionManager';
 export type { VRMExpressionMaterialColorBind } from './VRMExpressionMaterialColorBind';

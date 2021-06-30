@@ -59,10 +59,29 @@
 			camera.add( lookAtTarget );
 
 			// gltf and vrm
-			let currentExpressionManager = undefined;
-			let currentLookAt = undefined;
+			let currentGltf = undefined;
+
 			const loader = new THREE.GLTFLoader();
 			loader.crossOrigin = 'anonymous';
+
+			loader.register( ( parser ) => {
+
+				return new THREE_VRM_CORE.VRMHumanoidLoaderPlugin( parser );
+
+			} );
+
+			loader.register( ( parser ) => {
+
+				return new THREE_VRM_CORE.VRMExpressionLoaderPlugin( parser );
+
+			} );
+
+			loader.register( ( parser ) => {
+
+				return new THREE_VRM_CORE.VRMLookAtLoaderPlugin( parser );
+
+			} );
+
 			loader.load(
 
 				// URL of the VRM you want to load
@@ -73,29 +92,14 @@
 
 					// put the model to the scene
 					scene.add( gltf.scene );
+					console.log( gltf );
 
-					// import a VRM look at information from gltf
-					const humanoidImporter = new THREE_VRM_CORE.VRMHumanoidImporter();
-					const expressionImporter = new THREE_VRM_CORE.VRMExpressionImporter();
-					const lookAtImporter = new THREE_VRM_CORE.VRMLookAtImporter();
+					currentGltf = gltf;
 
-					humanoidImporter.import( gltf ).then( ( humanoid ) => {
+					// set the target of lookAt
+					const lookAt = gltf.userData.vrmLookAt;
 
-						expressionImporter.import( gltf ).then( ( expressions ) => {
-
-							currentExpressionManager = expressions;
-
-							lookAtImporter.import( gltf, humanoid, expressions ).then( ( lookAt ) => {
-
-								currentLookAt = lookAt;
-
-								currentLookAt.target = lookAtTarget;
-
-							} );
-
-						} );
-
-					} );
+					lookAt.target = lookAtTarget;
 
 				},
 
@@ -123,10 +127,13 @@
 
 				const deltaTime = clock.getDelta();
 
-				if ( currentLookAt ) {
+				if ( currentGltf ) {
 
-					currentLookAt.update( deltaTime );
-					currentExpressionManager.update( deltaTime );
+					const lookAt = currentGltf.userData.vrmLookAt;
+					const expressionManager = currentGltf.userData.vrmExpressionManager;
+
+					lookAt.update( deltaTime );
+					expressionManager?.update( deltaTime );
 
 				}
 

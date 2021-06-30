@@ -1,4 +1,3 @@
 export type { VRMMeta } from './VRMMeta';
-export { VRMMetaImporter } from './VRMMetaImporter';
-export type { VRMMetaImporterOptions } from './VRMMetaImporterOptions';
+export type { VRMMetaLoaderPluginOptions as VRMMetaImporterOptions } from './VRMMetaLoaderPluginOptions';
 export { VRMMetaLoaderPlugin } from './VRMMetaLoaderPlugin';

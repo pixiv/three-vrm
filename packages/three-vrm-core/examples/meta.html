@@ -64,6 +64,13 @@
 			// gltf and vrm
 			const loader = new THREE.GLTFLoader();
 			loader.crossOrigin = 'anonymous';
+
+			loader.register( ( parser ) => {
+
+				return new THREE_VRM_CORE.VRMMetaLoaderPlugin( parser );
+
+			} );
+
 			loader.load(
 
 				// URL of the VRM you want to load
@@ -74,23 +81,20 @@
 
 					// put the model to the scene
 					scene.add( gltf.scene );
+					console.log( gltf );
 
-					// import a VRM meta information from gltf
-					const importer = new THREE_VRM_CORE.VRMMetaImporter();
+					currentGltf = gltf;
 
-					importer.import( gltf ).then( ( meta ) => {
+					// print meta fields
+					const meta = gltf.userData.vrmMeta;
+					Object.keys( meta ).forEach( ( key ) => {
 
-						// print meta fields
-						Object.keys( meta ).forEach( ( key ) => {
-
-							document.getElementById( 'meta' ).innerText += key + ' : ' + meta[ key ] + '\n';
-
-						} );
-
-						// show thumbnail
-						document.getElementById( 'thumbnail' ).src = meta.thumbnailImage.src;
+						document.getElementById( 'meta' ).innerText += key + ' : ' + meta[ key ] + '\n';
 
 					} );
+
+					// show thumbnail
+					document.getElementById( 'thumbnail' ).src = meta.thumbnailImage.src;
 
 				},
 
