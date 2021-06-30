@@ -20,7 +20,12 @@ function dispose(object3D: THREE.Object3D): void {
     geometry.dispose();
   }
 
-  const material: THREE.Material | THREE.Material[] = (object3D as any).material;
+  const skeleton: THREE.Skeleton | undefined = (object3D as any).material;
+  if (skeleton) {
+    skeleton.dispose();
+  }
+
+  const material: THREE.Material | THREE.Material[] | undefined = (object3D as any).material;
   if (material) {
     if (Array.isArray(material)) {
       material.forEach((material: THREE.Material) => disposeMaterial(material));
