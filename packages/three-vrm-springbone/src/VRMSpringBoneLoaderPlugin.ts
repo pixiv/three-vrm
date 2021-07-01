@@ -211,7 +211,11 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
         const colliders = (schemaColliderGroup.colliders ?? []).map((schemaCollider, iCollider) => {
           const offset = new THREE.Vector3(0.0, 0.0, 0.0);
           if (schemaCollider.offset) {
-            offset.set(schemaCollider.offset.x ?? 0.0, schemaCollider.offset.y ?? 0.0, schemaCollider.offset.z ?? 0.0);
+            offset.set(
+              schemaCollider.offset.x ?? 0.0,
+              schemaCollider.offset.y ?? 0.0,
+              schemaCollider.offset.z ? -schemaCollider.offset.z : 0.0, // z is opposite in VRM0.0
+            );
           }
 
           return this._importSphereCollider(node, {
@@ -269,7 +273,7 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
         // create spring bones
         root.traverse((node) => {
           const child: THREE.Object3D | null = node.children[0] ?? null;
-          const spring = new VRMSpringBoneJoint(node, child, setting, colliderGroupsForSpring);
+          const spring = this._importJoint(node, child, setting, colliderGroupsForSpring);
           manager.addSpringBone(spring);
         });
       });
