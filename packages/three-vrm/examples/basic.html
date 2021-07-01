@@ -50,6 +50,7 @@
 			scene.add( light );
 
 			// gltf and vrm
+			let currentVrm = undefined;
 			const loader = new THREE.GLTFLoader();
 			loader.crossOrigin = 'anonymous';
 
@@ -72,6 +73,7 @@
 					// calling this function greatly improves the performance
 					THREE_VRM.VRMUtils.removeUnnecessaryJoints( gltf.scene );
 
+					currentVrm = vrm;
 					console.log( vrm );
 					scene.add( vrm.scene );
 
@@ -94,10 +96,22 @@
 			const axesHelper = new THREE.AxesHelper( 5 );
 			scene.add( axesHelper );
 
+			// animate
+			const clock = new THREE.Clock();
+			clock.start();
+
 			function animate() {
 
 				requestAnimationFrame( animate );
 
+				// update vrm components
+				if ( currentVrm ) {
+
+					currentVrm.update( clock.getDelta() );
+
+				}
+
+				// render
 				renderer.render( scene, camera );
 
 			}

@@ -50,14 +50,14 @@
 			scene.add( light );
 
 			// gltf and vrm
-			let currentVrm;
-
+			let currentVrm = undefined;
 			const loader = new THREE.GLTFLoader();
 			loader.crossOrigin = 'anonymous';
 
 			loader.register( ( parser ) => {
 
-				return new THREE_VRM.VRMLoaderPlugin( parser );
+				// assigning `helperRoot` to options will make helpers appear
+				return new THREE_VRM.VRMLoaderPlugin( parser, { helperRoot: scene } );
 
 			} );
 
@@ -71,9 +71,11 @@
 
 					const vrm = gltf.userData.vrm;
 
-					console.log( vrm );
-					currentVrm = vrm;
+					// calling this function greatly improves the performance
+					THREE_VRM.VRMUtils.removeUnnecessaryJoints( gltf.scene );
 
+					currentVrm = vrm;
+					console.log( vrm );
 					scene.add( vrm.scene );
 
 					vrm.humanoid.getBoneNode( THREE_VRM.VRMHumanBoneName.Hips ).rotation.y = Math.PI;
@@ -95,7 +97,7 @@
 			const axesHelper = new THREE.AxesHelper( 5 );
 			scene.add( axesHelper );
 
-			// update
+			// animate
 			const clock = new THREE.Clock();
 			clock.start();
 
@@ -103,7 +105,14 @@
 
 				requestAnimationFrame( animate );
 
-				if ( currentVrm ) { currentVrm.update( clock.getDelta() ); }
+				// update vrm components
+				if ( currentVrm ) {
+
+					currentVrm.update( clock.getDelta() );
+
+				}
+
+				// render
 				renderer.render( scene, camera );
 
 			}

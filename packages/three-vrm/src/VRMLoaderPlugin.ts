@@ -27,14 +27,24 @@ export class VRMLoaderPlugin implements GLTFLoaderPlugin {
 
   public constructor(parser: GLTFParser, options?: VRMLoaderPluginOptions) {
     this.parser = parser;
+
+    const helperRoot = options?.helperRoot;
+
     this.expressionPlugin = options?.expressionPlugin ?? new VRMExpressionLoaderPlugin(parser);
     this.firstPersonPlugin = options?.firstPersonPlugin ?? new VRMFirstPersonLoaderPlugin(parser);
     this.humanoidPlugin = options?.humanoidPlugin ?? new VRMHumanoidLoaderPlugin(parser);
     this.lookAtPlugin = options?.lookAtPlugin ?? new VRMLookAtLoaderPlugin(parser);
     this.metaPlugin = options?.metaPlugin ?? new VRMMetaLoaderPlugin(parser);
     this.mtoonPlugin = options?.mtoonPlugin ?? new MToonLoaderPlugin(parser);
-    this.springBonePlugin = options?.springBonePlugin ?? new VRMSpringBoneLoaderPlugin(parser);
-    this.constraintPlugin = options?.constraintPlugin ?? new VRMConstraintLoaderPlugin(parser);
+
+    this.springBonePlugin =
+      options?.springBonePlugin ??
+      new VRMSpringBoneLoaderPlugin(parser, {
+        colliderHelperRoot: helperRoot,
+        jointHelperRoot: helperRoot,
+      });
+
+    this.constraintPlugin = options?.constraintPlugin ?? new VRMConstraintLoaderPlugin(parser, { helperRoot });
   }
 
   public async beforeRoot(): Promise<void> {

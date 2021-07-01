@@ -1,3 +1,4 @@
+import type * as THREE from 'three';
 import type {
   VRMExpressionLoaderPlugin,
   VRMFirstPersonLoaderPlugin,
@@ -18,4 +19,11 @@ export interface VRMLoaderPluginOptions {
   mtoonPlugin?: MToonLoaderPlugin;
   springBonePlugin?: VRMSpringBoneLoaderPlugin;
   constraintPlugin?: VRMConstraintLoaderPlugin;
+
+  /**
+   * If assigned, the object will be used as a helper root of every component.
+   * Useful for debug.
+   * Will be overwritten if you use custom loader plugins for each components.
+   */
+  helperRoot?: THREE.Object3D;
 }
