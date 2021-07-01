@@ -48,7 +48,7 @@ export interface MToonMaterialParameters extends THREE.ShaderMaterialParameters 
 
   /**
    * The material will call this in its constructor.
-   * See {@link MToonLoaderPlugin.setMToonMaterial} for more details.
+   * See {@link MToonMaterialLoaderPlugin.setMToonMaterial} for more details.
    */
   onLoadMaterial?: (material: MToonMaterial) => void;
 
