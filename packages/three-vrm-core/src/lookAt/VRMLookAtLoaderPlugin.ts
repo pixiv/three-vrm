@@ -51,13 +51,14 @@ export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
    * @param gltf The input GLTF
    */
   private async _dependOnHumanoid(gltf: GLTF): Promise<VRMHumanoid | null> {
-    const humanoidPlugin = (this.parser as any).plugins['VRMHumanoidLoaderPlugin']; // TODO: remove any
+    if (gltf.userData.promiseVrmHumanoid == null) {
+      const humanoidPlugin = (this.parser as any).plugins['VRMHumanoidLoaderPlugin']; // TODO: remove any
+      if (!humanoidPlugin) {
+        throw new Error('VRMLookAtLoaderPlugin: It must be used along with VRMHumanoidLoaderPlugin');
+      }
 
-    if (!humanoidPlugin) {
-      throw new Error('VRMLookAtLoaderPlugin: It must be used along with VRMHumanoidLoaderPlugin');
+      humanoidPlugin.afterRoot(gltf); // this will make sure `gltf.userData.promiseVrmHumanoid` exists
     }
-
-    humanoidPlugin.afterRoot(gltf); // this will make sure `gltf.userData.promiseVrmHumanoid` exists
 
     return await gltf.userData.promiseVrmHumanoid;
   }
@@ -71,13 +72,14 @@ export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
    * @param gltf The input GLTF
    */
   private async _dependOnExpressionManager(gltf: GLTF): Promise<VRMExpressionManager | null> {
-    const expressionPlugin = (this.parser as any).plugins['VRMExpressionLoaderPlugin']; // TODO: remove any
+    if (gltf.userData.promiseVrmExpressionManager == null) {
+      const expressionPlugin = (this.parser as any).plugins['VRMExpressionLoaderPlugin']; // TODO: remove any
+      if (!expressionPlugin) {
+        throw new Error('VRMLookAtLoaderPlugin: It must be used along with VRMExpressionLoaderPlugin');
+      }
 
-    if (!expressionPlugin) {
-      throw new Error('VRMLookAtLoaderPlugin: It must be used along with VRMExpressionLoaderPlugin');
+      expressionPlugin.afterRoot(gltf); // this will make sure `gltf.userData.promiseVrmExpressionManager` exists
     }
-
-    expressionPlugin.afterRoot(gltf); // this will make sure `gltf.userData.promiseVrmExpressionManager` exists
 
     return await gltf.userData.promiseVrmExpressionManager;
   }
