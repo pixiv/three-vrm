@@ -49,13 +49,14 @@ export class VRMFirstPersonLoaderPlugin implements GLTFLoaderPlugin {
    * @param gltf The input GLTF
    */
   private async _dependOnHumanoid(gltf: GLTF): Promise<VRMHumanoid | null> {
-    const humanoidPlugin = (this.parser as any).plugins['VRMHumanoidLoaderPlugin']; // TODO: remove any
+    if (gltf.userData.promiseVrmHumanoid == null) {
+      const humanoidPlugin = (this.parser as any).plugins['VRMHumanoidLoaderPlugin']; // TODO: remove any
+      if (!humanoidPlugin) {
+        throw new Error('VRMFirstPersonLoaderPlugin: It must be used along with VRMHumanoidLoaderPlugin');
+      }
 
-    if (!humanoidPlugin) {
-      throw new Error('VRMFirstPersonLoaderPlugin: It must be used along with VRMHumanoidLoaderPlugin');
+      humanoidPlugin.afterRoot(gltf); // this will make sure `gltf.userData.promiseVrmHumanoid` exists
     }
-
-    humanoidPlugin.afterRoot(gltf); // this will make sure `gltf.userData.promiseVrmHumanoid` exists
 
     return await gltf.userData.promiseVrmHumanoid;
   }
