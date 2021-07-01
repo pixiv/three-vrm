@@ -247,7 +247,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
 
   /**
    * The material will call this in its constructor.
-   * See {@link MToonLoaderPlugin.setMToonMaterial} for more details.
+   * See {@link MToonMaterialLoaderPlugin.setMToonMaterial} for more details.
    *
    * It will called also when it's copied.
    */

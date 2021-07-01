@@ -7,7 +7,7 @@ import type { MToonMaterialParameters } from './MToonMaterialParameters';
 import { MToonMaterialOutlineWidthMode } from './MToonMaterialOutlineWidthMode';
 import { GLTFMToonMaterialParamsAssignHelper } from './GLTFMToonMaterialParamsAssignHelper';
 
-export class MToonLoaderPlugin implements GLTFLoaderPlugin {
+export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
   public static EXTENSION_NAME = 'VRMC_materials_mtoon';
 
   /**
@@ -27,7 +27,7 @@ export class MToonLoaderPlugin implements GLTFLoaderPlugin {
   public readonly parser: GLTFParser;
 
   public get name(): string {
-    return MToonLoaderPlugin.EXTENSION_NAME;
+    return MToonMaterialLoaderPlugin.EXTENSION_NAME;
   }
 
   public constructor(
@@ -161,7 +161,7 @@ export class MToonLoaderPlugin implements GLTFLoaderPlugin {
     const materialDef = json.materials[materialIndex];
 
     const extension: V1MToonSchema.MaterialsMToon | undefined =
-      materialDef.extensions?.[MToonLoaderPlugin.EXTENSION_NAME];
+      materialDef.extensions?.[MToonMaterialLoaderPlugin.EXTENSION_NAME];
     if (extension != null) {
       return extension;
     }
