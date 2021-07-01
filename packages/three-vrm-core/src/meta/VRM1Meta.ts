@@ -1,7 +1,12 @@
 /**
- * Interface represents a set of metadata of a VRM.
+ * Interface represents metadata of a VRM 1.0 model.
  */
-export interface VRMMeta {
+export interface VRM1Meta {
+  /**
+   * The version of meta.
+   */
+  metaVersion: '1';
+
   /**
    * The name of the model.
    */

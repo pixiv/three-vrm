@@ -1,18 +1,21 @@
 import type { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
+import type { VRM0Meta } from './VRM0Meta';
+import type { VRM1Meta } from './VRM1Meta';
 import type { VRMMeta } from './VRMMeta';
 import type { VRMMetaLoaderPluginOptions } from './VRMMetaLoaderPluginOptions';
+import type * as V0VRM from '@pixiv/types-vrm-0.0';
 import type * as V1VRMSchema from '@pixiv/types-vrmc-vrm-1.0';
 import * as THREE from 'three';
 import { resolveURL } from '../utils/resolveURL';
 
 /**
- * A plugin of GLTFLoader that imports a {@link VRMMeta} from a VRM extension of a GLTF.
+ * A plugin of GLTFLoader that imports a {@link VRM1Meta} from a VRM extension of a GLTF.
  */
 export class VRMMetaLoaderPlugin implements GLTFLoaderPlugin {
   public readonly parser: GLTFParser;
 
   /**
-   * If `false`, it won't load its thumbnail image ({@link VRMMeta.thumbnailImage}). `true` by default.
+   * If `false`, it won't load its thumbnail image ({@link VRM1Meta.thumbnailImage}). `true` by default.
    */
   public needThumbnailImage: boolean;
 
@@ -55,7 +58,7 @@ export class VRMMetaLoaderPlugin implements GLTFLoaderPlugin {
     return null;
   }
 
-  protected async _v1Import(gltf: GLTF): Promise<VRMMeta | null> {
+  protected async _v1Import(gltf: GLTF): Promise<VRM1Meta | null> {
     // early abort if it doesn't use vrm
     const isVRMUsed = this.parser.json.extensionsUsed.indexOf('VRMC_vrm') !== -1;
     if (!isVRMUsed) {
@@ -73,11 +76,12 @@ export class VRMMetaLoaderPlugin implements GLTFLoaderPlugin {
     }
 
     let thumbnailImage: HTMLImageElement | undefined = undefined;
-    if (this.needThumbnailImage && schemaMeta.thumbnailImage != null && schemaMeta.thumbnailImage !== -1) {
-      thumbnailImage = (await this._extractGLTFImage(gltf, schemaMeta.thumbnailImage)) ?? undefined;
+    if (this.needThumbnailImage && schemaMeta.thumbnailImage != null) {
+      thumbnailImage = (await this._extractGLTFImage(schemaMeta.thumbnailImage)) ?? undefined;
     }
 
     return {
+      metaVersion: '1',
       name: schemaMeta.name,
       version: schemaMeta.version,
       authors: schemaMeta.authors,
@@ -99,19 +103,43 @@ export class VRMMetaLoaderPlugin implements GLTFLoaderPlugin {
     };
   }
 
-  protected async _v0Import(gltf: GLTF): Promise<VRMMeta | null> {
+  protected async _v0Import(gltf: GLTF): Promise<VRM0Meta | null> {
     // early abort if it doesn't use vrm
-    const isVRMUsed = this.parser.json.extensionsUsed.indexOf('VRM') !== -1;
-    if (!isVRMUsed) {
+    const vrmExt: V0VRM.VRM | undefined = this.parser.json.extensions?.VRM;
+    if (!vrmExt) {
       return null;
     }
 
-    // we don't support v0 meta atm
-    console.warn("We don't support v0 meta at the moment");
-    return null;
+    const schemaMeta = vrmExt.meta;
+    if (!schemaMeta) {
+      return null;
+    }
+
+    // load thumbnail texture
+    let texture: THREE.Texture | null | undefined;
+    if (this.needThumbnailImage && schemaMeta.texture != null && schemaMeta.texture !== -1) {
+      texture = await this.parser.getDependency('texture', schemaMeta.texture);
+    }
+
+    return {
+      metaVersion: '0',
+      allowedUserName: schemaMeta.allowedUserName,
+      author: schemaMeta.author,
+      commercialUssageName: schemaMeta.commercialUssageName,
+      contactInformation: schemaMeta.contactInformation,
+      licenseName: schemaMeta.licenseName,
+      otherLicenseUrl: schemaMeta.otherLicenseUrl,
+      otherPermissionUrl: schemaMeta.otherPermissionUrl,
+      reference: schemaMeta.reference,
+      sexualUssageName: schemaMeta.sexualUssageName,
+      texture: texture ?? undefined,
+      title: schemaMeta.title,
+      version: schemaMeta.version,
+      violentUssageName: schemaMeta.violentUssageName,
+    };
   }
 
-  protected async _extractGLTFImage(gltf: GLTF, index: number): Promise<HTMLImageElement | null> {
+  protected async _extractGLTFImage(index: number): Promise<HTMLImageElement | null> {
     const source = this.parser.json.images?.[index];
     if (source == null) {
       console.warn(`Attempt to use images[${index}] of glTF as a thumbnail but the image doesn't exist`);
