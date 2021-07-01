@@ -20,7 +20,7 @@ function dispose(object3D: THREE.Object3D): void {
     geometry.dispose();
   }
 
-  const skeleton: THREE.Skeleton | undefined = (object3D as any).material;
+  const skeleton: THREE.Skeleton | undefined = (object3D as any).skeleton;
   if (skeleton) {
     skeleton.dispose();
   }
