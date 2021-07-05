@@ -8,7 +8,7 @@ export interface LookAtRangeMap {
   inputMaxValue?: number;
 
   /**
-   * Degree for LookAtType.bone ,  Weight for LookAtType.blendShape
+   * Degree for type.bone, Weight for type.expressions
    */
   outputScale?: number;
 
