@@ -50,14 +50,14 @@
     ]
   },
   "devDependencies": {
-    "@types/three": "^0.126.0",
+    "@types/three": "^0.129.2",
     "gh-pages": "^3.1.0",
     "lint-staged": "10.5.4",
     "quicktype": "^15.0.258",
     "three": "^0.126.1"
   },
   "peerDependencies": {
-    "@types/three": "^0.126.0",
+    "@types/three": "^0.129.2",
     "three": "^0.126.1"
   }
 }
