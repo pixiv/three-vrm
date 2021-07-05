@@ -1,4 +1,4 @@
-import type { Expression } from './Expression';
+import type { Expressions } from './Expressions';
 import type { FirstPerson } from './FirstPerson';
 import type { Humanoid } from './Humanoid';
 import type { LookAt } from './LookAt';
@@ -27,7 +27,7 @@ export interface VRM {
    */
   lookAt?: LookAt;
 
-  expressions?: Expression[];
+  expressions?: Expressions;
 
   extensions?: { [key: string]: { [key: string]: any } };
   extras?: any;

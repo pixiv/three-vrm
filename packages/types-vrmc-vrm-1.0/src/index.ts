@@ -4,6 +4,7 @@ export * from './ExpressionMaterialColorType';
 export * from './ExpressionMorphTargetBind';
 export * from './ExpressionOverrideType';
 export * from './ExpressionPreset';
+export * from './Expressions';
 export * from './ExpressionTextureTransformBind';
 export * from './FirstPerson';
 export * from './FirstPersonMeshAnnotation';
