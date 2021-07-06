@@ -91,6 +91,11 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
       return null;
     }
 
+    const specVersion = extension.specVersion;
+    if (specVersion !== '1.0-draft') {
+      return null;
+    }
+
     const colliders = extension.colliders?.map((schemaCollider, iCollider) => {
       const node = threeNodes[schemaCollider.node!];
       const schemaShape = schemaCollider.shape!;
