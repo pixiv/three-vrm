@@ -162,11 +162,16 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
 
     const extension: V1MToonSchema.MaterialsMToon | undefined =
       materialDef.extensions?.[MToonMaterialLoaderPlugin.EXTENSION_NAME];
-    if (extension != null) {
-      return extension;
+    if (extension == null) {
+      return undefined;
     }
 
-    return undefined;
+    const specVersion = extension.specVersion;
+    if (specVersion !== '1.0-draft') {
+      return undefined;
+    }
+
+    return extension;
   }
 
   protected _v0GetMToonProperties(materialIndex: number): V0Material | undefined {
