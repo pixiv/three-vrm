@@ -15,9 +15,24 @@ export class VRMMetaLoaderPlugin implements GLTFLoaderPlugin {
   public readonly parser: GLTFParser;
 
   /**
-   * If `false`, it won't load its thumbnail image ({@link VRM1Meta.thumbnailImage}). `true` by default.
+   * If `false`, it won't load its thumbnail image ({@link VRM1Meta.thumbnailImage}).
+   * `true` by default.
    */
   public needThumbnailImage: boolean;
+
+  /**
+   * A list of license urls.
+   * This meta loader will accept these `licenseUrl`s.
+   * Otherwise it won't be loaded.
+   */
+  public acceptLicenseUrls: string[];
+
+  /**
+   * Whether it should accept VRM0.X meta or not.
+   * Note that it might load {@link VRM0Meta} instead of {@link VRM1Meta} when this is `true`.
+   * `true` by default.
+   */
+  public acceptV0Meta: boolean;
 
   public get name(): string {
     // We should use the extension name instead but we have multiple plugins for an extension...
@@ -28,6 +43,8 @@ export class VRMMetaLoaderPlugin implements GLTFLoaderPlugin {
     this.parser = parser;
 
     this.needThumbnailImage = options?.needThumbnailImage ?? true;
+    this.acceptLicenseUrls = options?.acceptLicenseUrls ?? ['https://vrm.dev/licenses/1.0/'];
+    this.acceptV0Meta = options?.acceptV0Meta ?? true;
   }
 
   public async afterRoot(gltf: GLTF): Promise<void> {
@@ -75,6 +92,13 @@ export class VRMMetaLoaderPlugin implements GLTFLoaderPlugin {
       return null;
     }
 
+    // throw an error if acceptV0Meta is false
+    const licenseUrl = schemaMeta.licenseUrl;
+    const acceptLicenseUrlsSet = new Set(this.acceptLicenseUrls);
+    if (!acceptLicenseUrlsSet.has(licenseUrl)) {
+      throw new Error(`VRMMetaLoaderPlugin: The license url "${licenseUrl}" is not accepted`);
+    }
+
     let thumbnailImage: HTMLImageElement | undefined = undefined;
     if (this.needThumbnailImage && schemaMeta.thumbnailImage != null) {
       thumbnailImage = (await this._extractGLTFImage(schemaMeta.thumbnailImage)) ?? undefined;
@@ -90,6 +114,7 @@ export class VRMMetaLoaderPlugin implements GLTFLoaderPlugin {
       references: schemaMeta.references,
       thirdPartyLicenses: schemaMeta.thirdPartyLicenses,
       thumbnailImage,
+      licenseUrl: schemaMeta.licenseUrl,
       avatarPermission: schemaMeta.avatarPermission,
       allowExcessivelyViolentUsage: schemaMeta.allowExcessivelyViolentUsage,
       allowExcessivelySexualUsage: schemaMeta.allowExcessivelySexualUsage,
@@ -113,6 +138,11 @@ export class VRMMetaLoaderPlugin implements GLTFLoaderPlugin {
     const schemaMeta = vrmExt.meta;
     if (!schemaMeta) {
       return null;
+    }
+
+    // throw an error if acceptV0Meta is false
+    if (!this.acceptV0Meta) {
+      throw new Error('VRMMetaLoaderPlugin: Attempted to load VRM0.X meta but acceptV0Meta is false');
     }
 
     // load thumbnail texture

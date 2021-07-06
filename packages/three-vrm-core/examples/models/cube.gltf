@@ -436,6 +436,7 @@
         "copyrightInformation": "pixiv Inc.",
         "contactInformation": "https://github.com/pixiv/three-vrm",
         "thumbnailImage": 0,
+        "licenseUrl": "https://vrm.dev/licenses/1.0/",
         "avatarPermission": "everyone",
         "allowExcessivelyViolentUsage": true,
         "allowExcessivelySexualUsage": true,
