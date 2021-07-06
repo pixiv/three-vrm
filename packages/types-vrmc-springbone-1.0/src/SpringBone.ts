@@ -7,6 +7,11 @@ import type { SpringBoneSpring } from './SpringBoneSpring';
  */
 export interface SpringBone {
   /**
+   * Specification version of VRMC_springBone
+   */
+  specVersion: '1.0-draft';
+
+  /**
    * An array of colliders.
    */
   colliders?: SpringBoneCollider[];
