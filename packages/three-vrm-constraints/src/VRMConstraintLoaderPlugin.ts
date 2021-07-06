@@ -9,7 +9,7 @@ import { VRMPositionConstraint } from './VRMPositionConstraint';
 import { VRMRotationConstraint } from './VRMRotationConstraint';
 
 export class VRMConstraintLoaderPlugin implements GLTFLoaderPlugin {
-  public static readonly EXTENSION_NAME = 'VRMC_constraints';
+  public static readonly EXTENSION_NAME = 'VRMC_node_constraint';
 
   /**
    * Specify an Object3D to add {@link VRMConstraintHelper} s.
@@ -52,7 +52,7 @@ export class VRMConstraintLoaderPlugin implements GLTFLoaderPlugin {
    */
   protected async _import(gltf: GLTF): Promise<VRMConstraintManager | null> {
     // early abort if it doesn't use constraints
-    const isConstraintsUsed = gltf.parser.json.extensionsUsed.indexOf('VRMC_constraints-1.0') !== -1;
+    const isConstraintsUsed = gltf.parser.json.extensionsUsed.indexOf(VRMConstraintLoaderPlugin.EXTENSION_NAME) !== -1;
     if (!isConstraintsUsed) {
       return null;
     }
@@ -62,9 +62,20 @@ export class VRMConstraintLoaderPlugin implements GLTFLoaderPlugin {
 
     // import constraints for each nodes
     threeNodes.forEach((node) => {
+      // check if the extension uses the extension
       const extension: ConstraintSchema.Constraints | undefined =
-        node.userData?.gltfExtensions?.['VRMC_constraints-1.0'];
+        node.userData?.gltfExtensions?.[VRMConstraintLoaderPlugin.EXTENSION_NAME];
 
+      if (extension == null) {
+        return;
+      }
+
+      const specVersion = extension.specVersion;
+      if (specVersion !== '1.0-draft') {
+        return;
+      }
+
+      // import constraints
       if (extension?.position) {
         const constraint = this._importPositionConstraint(node, threeNodes, gltf.scene, extension.position);
         manager.addConstraint(constraint);

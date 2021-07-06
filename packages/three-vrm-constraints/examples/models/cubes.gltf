@@ -318,7 +318,8 @@
       ],
       "mesh": 1,
       "extensions": {
-        "VRMC_constraints-1.0": {
+        "VRMC_node_constraint": {
+          "specVersion": "1.0-draft",
           "position": {
             "source": 0,
             "sourceSpace": "model",
@@ -350,7 +351,8 @@
       ],
       "mesh": 2,
       "extensions": {
-        "VRMC_constraints-1.0": {
+        "VRMC_node_constraint": {
+          "specVersion": "1.0-draft",
           "rotation": {
             "source": 0,
             "sourceSpace": "model",
@@ -375,7 +377,7 @@
   ],
   "extensionsUsed": [
     "KHR_materials_unlit",
-    "VRMC_constraints-1.0"
+    "VRMC_node_constraint"
   ],
   "extensions": {},
   "extras": {}
