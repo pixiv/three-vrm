@@ -89,6 +89,11 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
       return null;
     }
 
+    const specVersion = extension.specVersion;
+    if (specVersion !== '1.0-draft') {
+      return null;
+    }
+
     const schemaExpressions = extension.expressions;
     if (!schemaExpressions) {
       return null;

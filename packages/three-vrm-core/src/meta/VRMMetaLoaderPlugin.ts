@@ -83,7 +83,12 @@ export class VRMMetaLoaderPlugin implements GLTFLoaderPlugin {
     }
 
     const extension: V1VRMSchema.VRM | undefined = this.parser.json.extensions?.['VRMC_vrm'];
-    if (!extension) {
+    if (extension == null) {
+      return null;
+    }
+
+    const specVersion = extension.specVersion;
+    if (specVersion !== '1.0-draft') {
       return null;
     }
 

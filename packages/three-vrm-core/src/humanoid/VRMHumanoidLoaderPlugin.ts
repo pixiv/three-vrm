@@ -64,6 +64,11 @@ export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
       return null;
     }
 
+    const specVersion = extension.specVersion;
+    if (specVersion !== '1.0-draft') {
+      return null;
+    }
+
     const schemaHumanoid = extension.humanoid;
     if (!schemaHumanoid) {
       return null;
