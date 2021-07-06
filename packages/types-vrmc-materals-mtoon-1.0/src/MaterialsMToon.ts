@@ -4,9 +4,9 @@ import type { MaterialsMToonTextureInfo } from './MaterialsMToonTextureInfo';
 
 export interface MaterialsMToon {
   /**
-   * Meta
+   * Specification version of VRMC_materials_mtoon
    */
-  version?: string;
+  specVersion: '1.0-draft';
 
   /**
    * enable depth buffer when renderMode is transparent
