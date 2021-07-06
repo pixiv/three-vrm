@@ -6,7 +6,7 @@ import type {
   VRMLookAtLoaderPlugin,
   VRMMetaLoaderPlugin,
 } from '@pixiv/three-vrm-core';
-import type { MToonLoaderPlugin } from '@pixiv/three-vrm-materials-mtoon';
+import type { MToonMaterialLoaderPlugin } from '@pixiv/three-vrm-materials-mtoon';
 import type { VRMSpringBoneLoaderPlugin } from '@pixiv/three-vrm-springbone';
 import type { VRMConstraintLoaderPlugin } from '@pixiv/three-vrm-constraints';
 
@@ -16,7 +16,7 @@ export interface VRMLoaderPluginOptions {
   humanoidPlugin?: VRMHumanoidLoaderPlugin;
   lookAtPlugin?: VRMLookAtLoaderPlugin;
   metaPlugin?: VRMMetaLoaderPlugin;
-  mtoonPlugin?: MToonLoaderPlugin;
+  mtoonMaterialPlugin?: MToonMaterialLoaderPlugin;
   springBonePlugin?: VRMSpringBoneLoaderPlugin;
   constraintPlugin?: VRMConstraintLoaderPlugin;
 

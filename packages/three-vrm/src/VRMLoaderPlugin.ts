@@ -9,7 +9,7 @@ import {
   VRMMetaLoaderPlugin,
 } from '@pixiv/three-vrm-core';
 import { VRMSpringBoneLoaderPlugin } from '@pixiv/three-vrm-springbone';
-import { MToonLoaderPlugin } from '@pixiv/three-vrm-materials-mtoon';
+import { MToonMaterialLoaderPlugin } from '@pixiv/three-vrm-materials-mtoon';
 import { VRMLoaderPluginOptions } from './VRMLoaderPluginOptions';
 import { VRM } from './VRM';
 
@@ -21,7 +21,7 @@ export class VRMLoaderPlugin implements GLTFLoaderPlugin {
   public readonly humanoidPlugin: VRMHumanoidLoaderPlugin;
   public readonly lookAtPlugin: VRMLookAtLoaderPlugin;
   public readonly metaPlugin: VRMMetaLoaderPlugin;
-  public readonly mtoonPlugin: MToonLoaderPlugin;
+  public readonly mtoonMaterialPlugin: MToonMaterialLoaderPlugin;
   public readonly springBonePlugin: VRMSpringBoneLoaderPlugin;
   public readonly constraintPlugin: VRMConstraintLoaderPlugin;
 
@@ -35,7 +35,7 @@ export class VRMLoaderPlugin implements GLTFLoaderPlugin {
     this.humanoidPlugin = options?.humanoidPlugin ?? new VRMHumanoidLoaderPlugin(parser);
     this.lookAtPlugin = options?.lookAtPlugin ?? new VRMLookAtLoaderPlugin(parser);
     this.metaPlugin = options?.metaPlugin ?? new VRMMetaLoaderPlugin(parser);
-    this.mtoonPlugin = options?.mtoonPlugin ?? new MToonLoaderPlugin(parser);
+    this.mtoonMaterialPlugin = options?.mtoonMaterialPlugin ?? new MToonMaterialLoaderPlugin(parser);
 
     this.springBonePlugin =
       options?.springBonePlugin ??
@@ -48,15 +48,15 @@ export class VRMLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   public async beforeRoot(): Promise<void> {
-    await this.mtoonPlugin.beforeRoot();
+    await this.mtoonMaterialPlugin.beforeRoot();
   }
 
   public async loadMesh(meshIndex: number): Promise<THREE.Group | THREE.Mesh | THREE.SkinnedMesh> {
-    return await this.mtoonPlugin.loadMesh(meshIndex);
+    return await this.mtoonMaterialPlugin.loadMesh(meshIndex);
   }
 
   public getMaterialType(materialIndex: number): typeof THREE.Material | null {
-    const mtoonType = this.mtoonPlugin.getMaterialType(materialIndex);
+    const mtoonType = this.mtoonMaterialPlugin.getMaterialType(materialIndex);
     if (mtoonType != null) {
       return mtoonType;
     }
@@ -65,7 +65,7 @@ export class VRMLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   public async extendMaterialParams(materialIndex: number, materialParams: { [key: string]: any }): Promise<any> {
-    await this.mtoonPlugin.extendMaterialParams(materialIndex, materialParams);
+    await this.mtoonMaterialPlugin.extendMaterialParams(materialIndex, materialParams);
   }
 
   public async afterRoot(gltf: GLTF): Promise<void> {
