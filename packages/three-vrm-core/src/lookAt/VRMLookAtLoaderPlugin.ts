@@ -129,6 +129,11 @@ export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
       return null;
     }
 
+    const specVersion = extension.specVersion;
+    if (specVersion !== '1.0-draft') {
+      return null;
+    }
+
     const schemaLookAt = extension.lookAt;
     if (!schemaLookAt) {
       return null;

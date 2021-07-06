@@ -49,6 +49,11 @@ export interface VRM1Meta {
   thumbnailImage?: HTMLImageElement;
 
   /**
+   * A URL towards the license document this model refers to
+   */
+  licenseUrl: string;
+
+  /**
    * A person who can perform as an avatar with this model.
    */
   avatarPermission?: 'onlyAuthor' | 'onlySeparatelyLicensedPerson' | 'everyone';

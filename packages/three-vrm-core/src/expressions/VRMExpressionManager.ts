@@ -36,46 +36,6 @@ export class VRMExpressionManager {
   }
 
   /**
-   * A map from preset name to expression.
-   */
-  private _presetExpressionMap: { [presetName in VRMExpressionPreset]?: VRMExpression } = {};
-  public get presetExpressionMap(): { [presetName in VRMExpressionPreset]?: VRMExpression } {
-    return Object.assign({}, this._presetExpressionMap);
-  }
-
-  /**
-   * A map from preset name to name.
-   */
-  private _presetNameToNameMap: { [presetName in VRMExpressionPreset]?: string } = {};
-  public get presetNameToNameMap(): { [presetName in VRMExpressionPreset]?: string } {
-    return Object.assign({}, this._presetNameToNameMap);
-  }
-
-  /**
-   * A map from name to preset name.
-   */
-  private _nameToPresetNameMap: { [name: string]: VRMExpressionPreset } = {};
-  public get nameToPresetNameMap(): { [name: string]: VRMExpressionPreset } {
-    return Object.assign({}, this._nameToPresetNameMap);
-  }
-
-  /**
-   * A set of custom expressions.
-   */
-  private _customExpressions: VRMExpression[] = [];
-  public get customExpressions(): VRMExpression[] {
-    return this._customExpressions.concat();
-  }
-
-  /**
-   * A set of custom expression names.
-   */
-  private _customExpressionNames: string[] = [];
-  public get customExpressionNames(): string[] {
-    return this._customExpressionNames.concat();
-  }
-
-  /**
    * Create a new {@link VRMExpressionManager}.
    */
   public constructor() {
@@ -122,17 +82,7 @@ export class VRMExpressionManager {
    * @param name Name or preset name of the expression
    */
   public getExpression(name: VRMExpressionPreset | string): VRMExpression | null {
-    const expressionByPresetName = this._presetExpressionMap[name as VRMExpressionPreset];
-    if (expressionByPresetName != null) {
-      return expressionByPresetName;
-    }
-
-    const expressionByName = this._expressionMap[name];
-    if (expressionByName != null) {
-      return expressionByName;
-    }
-
-    return null;
+    return this._expressionMap[name] ?? null;
   }
 
   /**
@@ -142,17 +92,7 @@ export class VRMExpressionManager {
    */
   public registerExpression(expression: VRMExpression): void {
     this._expressions.push(expression);
-
     this._expressionMap[expression.expressionName] = expression;
-    this._nameToPresetNameMap[expression.expressionName] = expression.presetName;
-
-    if (expression.presetName === 'custom') {
-      this._customExpressions.push(expression);
-      this._customExpressionNames.push(expression.presetName);
-    } else {
-      this._presetExpressionMap[expression.presetName] = expression;
-      this._presetNameToNameMap[expression.presetName] = expression.expressionName;
-    }
   }
 
   /**
@@ -167,24 +107,7 @@ export class VRMExpressionManager {
     }
 
     this._expressions.splice(index, 1);
-
     delete this._expressionMap[expression.expressionName];
-    delete this._nameToPresetNameMap[expression.expressionName];
-
-    if (expression.presetName === 'custom') {
-      {
-        const index = this._customExpressions.indexOf(expression);
-        this._customExpressions.splice(index, 1);
-      }
-
-      {
-        const index = this._customExpressionNames.indexOf(expression.presetName);
-        this._customExpressionNames.splice(index, 1);
-      }
-    } else {
-      delete this._presetExpressionMap[expression.presetName];
-      delete this._presetNameToNameMap[expression.presetName];
-    }
   }
 
   /**
@@ -258,17 +181,16 @@ export class VRMExpressionManager {
     this._expressions.forEach((expression) => {
       let multiplier = 1.0;
       const name = expression.expressionName;
-      const presetName = expression.presetName;
 
-      if (this.blinkExpressionNames.indexOf(presetName) !== -1 || this.blinkExpressionNames.indexOf(name) !== -1) {
+      if (this.blinkExpressionNames.indexOf(name) !== -1) {
         multiplier *= weightMultipliers.blink;
       }
 
-      if (this.lookAtExpressionNames.indexOf(presetName) !== -1 || this.lookAtExpressionNames.indexOf(name) !== -1) {
+      if (this.lookAtExpressionNames.indexOf(name) !== -1) {
         multiplier *= weightMultipliers.lookAt;
       }
 
-      if (this.mouthExpressionNames.indexOf(presetName) !== -1 || this.mouthExpressionNames.indexOf(name) !== -1) {
+      if (this.mouthExpressionNames.indexOf(name) !== -1) {
         multiplier *= weightMultipliers.mouth;
       }
 

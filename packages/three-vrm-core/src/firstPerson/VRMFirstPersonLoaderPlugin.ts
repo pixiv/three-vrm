@@ -98,6 +98,11 @@ export class VRMFirstPersonLoaderPlugin implements GLTFLoaderPlugin {
       return null;
     }
 
+    const specVersion = extension.specVersion;
+    if (specVersion !== '1.0-draft') {
+      return null;
+    }
+
     const schemaFirstPerson = extension.firstPerson;
     if (!schemaFirstPerson) {
       return null;
