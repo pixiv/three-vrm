@@ -166,7 +166,7 @@
       },
       "doubleSided": false,
       "extensions": {
-        "VRMC_materials_mtoon-1.0": {
+        "VRMC_materials_mtoon": {
           "version": "1.0",
           "transparentWithZWrite": false,
           "renderQueueOffsetNumber": 0,
@@ -258,7 +258,7 @@
   ],
   "extensionsUsed": [
     "KHR_materials_unlit",
-    "VRMC_materials_mtoon-1.0"
+    "VRMC_materials_mtoon"
   ],
   "extensions": {},
   "extras": {}
