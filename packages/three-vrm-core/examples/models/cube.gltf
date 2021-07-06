@@ -502,57 +502,51 @@
           }
         }
       },
-      "expressions": [
-        {
-          "name": "Aa",
-          "preset": "aa",
-          "morphTargetBinds": [
-            {
-              "node": 21,
-              "index": 1,
-              "weight": 3
-            }
-          ]
-        },
-        {
-          "name": "Blink",
-          "preset": "blink",
-          "morphTargetBinds": [
-            {
-              "node": 18,
-              "index": 1,
-              "weight": -0.75
-            },
-            {
-              "node": 20,
-              "index": 1,
-              "weight": -0.75
-            }
-          ]
-        },
-        {
-          "name": "BlinkLeft",
-          "preset": "blinkLeft",
-          "morphTargetBinds": [
-            {
-              "node": 18,
-              "index": 1,
-              "weight": -0.75
-            }
-          ]
-        },
-        {
-          "name": "BlinkRight",
-          "preset": "blinkRight",
-          "morphTargetBinds": [
-            {
-              "node": 20,
-              "index": 1,
-              "weight": -0.75
-            }
-          ]
+      "expressions": {
+        "preset": {
+          "aa": {
+            "morphTargetBinds": [
+              {
+                "node": 21,
+                "index": 1,
+                "weight": 3
+              }
+            ]
+          },
+          "blink": {
+            "morphTargetBinds": [
+              {
+                "node": 18,
+                "index": 1,
+                "weight": -0.75
+              },
+              {
+                "node": 20,
+                "index": 1,
+                "weight": -0.75
+              }
+            ]
+          },
+          "blinkLeft": {
+            "morphTargetBinds": [
+              {
+                "node": 18,
+                "index": 1,
+                "weight": -0.75
+              }
+            ]
+          },
+          "blinkRight": {
+            "morphTargetBinds": [
+              {
+                "node": 20,
+                "index": 1,
+                "weight": -0.75
+              }
+            ]
+          }
         }
-      ],
+      },
       "firstPerson": {
         "meshAnnotations": [
           {

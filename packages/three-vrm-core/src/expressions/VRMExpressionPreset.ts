@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
 export const VRMExpressionPreset = {
-  Custom: 'custom',
   Aa: 'aa',
   Ih: 'ih',
   Ou: 'ou',

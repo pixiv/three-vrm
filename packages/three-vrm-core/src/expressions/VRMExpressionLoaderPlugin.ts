@@ -5,14 +5,13 @@ import { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/G
 import { gltfExtractPrimitivesFromNode } from '../utils/gltfExtractPrimitivesFromNode';
 import { VRMExpression } from './VRMExpression';
 import { VRMExpressionManager } from './VRMExpressionManager';
-import type { VRMExpressionPreset } from './VRMExpressionPreset';
+import { VRMExpressionPreset } from './VRMExpressionPreset';
 
 /**
  * A plugin of GLTFLoader that imports a {@link VRMExpressionManager} from a VRM extension of a GLTF.
  */
 export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
-  public static readonly v0v1PresetNameMap: { [v0Name in V0VRM.BlendShapePresetName]: VRMExpressionPreset } = {
-    unknown: 'custom',
+  public static readonly v0v1PresetNameMap: { [v0Name in V0VRM.BlendShapePresetName]?: VRMExpressionPreset } = {
     a: 'aa',
     e: 'ee',
     i: 'ih',
@@ -95,32 +94,45 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
       return null;
     }
 
-    const manager = new VRMExpressionManager();
+    // list expressions
+    const presetNameSet = new Set<string>(Object.values(VRMExpressionPreset));
+    const nameSchemaExpressionMap = new Map<string, V1VRMSchema.Expression>();
 
-    const blendShapePresetMap: { [presetName in VRMExpressionPreset]?: string } = {};
+    if (schemaExpressions.preset != null) {
+      Object.entries(schemaExpressions.preset).forEach(([name, schemaExpression]) => {
+        if (schemaExpression == null) {
+          return;
+        } // typescript
 
-    await Promise.all(
-      schemaExpressions.map(async (schemaExpression) => {
-        const presetName = schemaExpression.preset;
-        const name = schemaExpression.name;
-
-        if (name === undefined && presetName === 'custom') {
-          console.warn('One of custom expressions has no name');
+        if (!presetNameSet.has(name)) {
+          console.warn(`VRMExpressionLoaderPlugin: Unknown preset name "${name}" detected. Ignoring the expression`);
           return;
         }
 
-        const nameOrPresetName = name ?? presetName;
+        nameSchemaExpressionMap.set(name, schemaExpression);
+      });
+    }
 
-        if (presetName != null && presetName !== 'custom') {
-          // duplication check
-          if (blendShapePresetMap[presetName]) {
-            console.warn(`An expression preset ${presetName} has duplicated entries`);
-          } else {
-            blendShapePresetMap[presetName] = nameOrPresetName;
-          }
+    if (schemaExpressions.custom != null) {
+      Object.entries(schemaExpressions.custom).forEach(([name, schemaExpression]) => {
+        if (!presetNameSet.has(name)) {
+          console.warn(
+            `VRMExpressionLoaderPlugin: Custom expression cannot have preset name "${name}". Ignoring the expression`,
+          );
+          return;
         }
 
-        const expression = new VRMExpression(nameOrPresetName, presetName);
+        nameSchemaExpressionMap.set(name, schemaExpression);
+      });
+    }
+
+    // prepare manager
+    const manager = new VRMExpressionManager();
+
+    // load expressions
+    await Promise.all(
+      Array.from(nameSchemaExpressionMap.entries()).map(async ([name, schemaExpression]) => {
+        const expression = new VRMExpression(name);
         gltf.scene.add(expression);
 
         expression.isBinary = schemaExpression.isBinary ?? false;
@@ -145,7 +157,7 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
             )
           ) {
             console.warn(
-              `VRMBlendShapeImporter: ${schemaExpression.name} attempts to index ${morphTargetIndex}th morph but not found.`,
+              `VRMExpressionLoaderPlugin: ${schemaExpression.name} attempts to index morph #${morphTargetIndex} but not found.`,
             );
             return;
           }
@@ -222,31 +234,31 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
       return manager;
     }
 
-    const blendShapePresetMap: { [presetName in VRMExpressionPreset]?: string } = {};
+    const blendShapeNameSet = new Set<string>();
 
     await Promise.all(
       schemaBlendShapeGroups.map(async (schemaGroup) => {
         const v0PresetName = schemaGroup.presetName;
-        const v1PresetName = VRMExpressionLoaderPlugin.v0v1PresetNameMap[v0PresetName ?? 'unknown'];
-        const name = schemaGroup.name;
+        const v1PresetName =
+          (v0PresetName != null && VRMExpressionLoaderPlugin.v0v1PresetNameMap[v0PresetName]) || null;
+        const name = v1PresetName ?? schemaGroup.name;
 
-        if (name === undefined && v1PresetName === 'custom') {
-          console.warn('One of custom expressions has no name');
+        if (name == null) {
+          console.warn('VRMExpressionLoaderPlugin: One of custom expressions has no name. Ignoring the expression');
           return;
         }
 
-        const nameOrPresetName = name ?? v1PresetName;
-
-        if (v1PresetName != null && v1PresetName !== 'custom') {
-          // duplication check
-          if (blendShapePresetMap[v1PresetName]) {
-            console.warn(`An expression preset ${v0PresetName} has duplicated entries`);
-          } else {
-            blendShapePresetMap[v1PresetName] = nameOrPresetName;
-          }
+        // duplication check
+        if (blendShapeNameSet.has(name)) {
+          console.warn(
+            `VRMExpressionLoaderPlugin: An expression preset ${v0PresetName} has duplicated entries. Ignoring the expression`,
+          );
+          return;
         }
 
-        const expression = new VRMExpression(nameOrPresetName, v1PresetName);
+        blendShapeNameSet.add(name);
+
+        const expression = new VRMExpression(name);
         gltf.scene.add(expression);
 
         expression.isBinary = schemaGroup.isBinary ?? false;
@@ -280,7 +292,7 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
                   )
                 ) {
                   console.warn(
-                    `VRMBlendShapeImporter: ${schemaGroup.name} attempts to index ${morphTargetIndex}th morph but not found.`,
+                    `VRMExpressionLoaderPlugin: ${schemaGroup.name} attempts to index ${morphTargetIndex}th morph but not found.`,
                   );
                   return;
                 }
