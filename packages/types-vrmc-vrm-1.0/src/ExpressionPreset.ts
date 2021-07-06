@@ -1,5 +1,4 @@
 export type ExpressionPreset =
-  | 'custom'
   | 'happy'
   | 'angry'
   | 'sad'

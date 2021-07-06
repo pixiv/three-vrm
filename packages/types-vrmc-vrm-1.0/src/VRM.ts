@@ -8,14 +8,14 @@ export interface VRM {
   /**
    * Specification version of VRMC_vrm
    */
-  specVersion?: '1.0';
+  specVersion: '1.0-draft';
 
   /**
    * Meta informations of the VRM model
    */
-  meta?: Meta;
+  meta: Meta;
 
-  humanoid?: Humanoid;
+  humanoid: Humanoid;
 
   /**
    * First-person perspective settings
