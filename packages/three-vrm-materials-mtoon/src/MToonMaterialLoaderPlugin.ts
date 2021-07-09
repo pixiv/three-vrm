@@ -117,7 +117,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
    * Since GLTFLoader have so many hardcoded procedure related to `KHR_materials_unlit`
    * we have to delete the extension before we start to parse the glTF.
    */
-  protected _v1RemoveUnlitExtension(): void {
+  private _v1RemoveUnlitExtension(): void {
     const parser = this.parser;
     const json = parser.json;
 
@@ -137,7 +137,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
    * Since GLTFLoader have so many hardcoded procedure related to `KHR_materials_unlit`
    * we have to delete the extension before we start to parse the glTF.
    */
-  protected _v0RemoveUnlitExtension(): void {
+  private _v0RemoveUnlitExtension(): void {
     const parser = this.parser;
     const json = parser.json;
 
@@ -151,7 +151,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     });
   }
 
-  protected _v1GetMToonExtension(materialIndex: number): V1MToonSchema.VRMCMaterialsMToon | undefined {
+  private _v1GetMToonExtension(materialIndex: number): V1MToonSchema.VRMCMaterialsMToon | undefined {
     const parser = this.parser;
     const json = parser.json;
 
@@ -171,7 +171,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     return extension;
   }
 
-  protected _v0GetMToonProperties(materialIndex: number): V0Material | undefined {
+  private _v0GetMToonProperties(materialIndex: number): V0Material | undefined {
     const parser = this.parser;
     const json = parser.json;
 
@@ -183,7 +183,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     }
   }
 
-  protected async _v1ExtendMaterialParams(
+  private async _v1ExtendMaterialParams(
     extension: V1MToonSchema.VRMCMaterialsMToon,
     materialParams: MToonMaterialParameters,
   ): Promise<void> {
@@ -220,7 +220,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     await assignHelper.pending;
   }
 
-  protected async _v0ExtendMaterialParams(
+  private async _v0ExtendMaterialParams(
     properties: V0Material,
     materialParams: MToonMaterialParameters,
   ): Promise<void> {
@@ -315,7 +315,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
    * @param mesh A target GLTF primitive
    * @param materialIndex The material index of the primitive
    */
-  protected _setupPrimitive(mesh: THREE.Mesh, materialIndex: number): void {
+  private _setupPrimitive(mesh: THREE.Mesh, materialIndex: number): void {
     const v1Extension = this._v1GetMToonExtension(materialIndex);
     if (v1Extension) {
       const renderOrder = this._v1ParseRenderOrder(v1Extension);
@@ -346,7 +346,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
    *
    * @param mesh The target mesh
    */
-  protected _generateOutline(mesh: THREE.Mesh): void {
+  private _generateOutline(mesh: THREE.Mesh): void {
     // OK, it's the hacky part.
     // We are going to duplicate the MToonMaterial for outline use.
     // Then we are going to create two geometry groups and refer same buffer but different material.
@@ -380,7 +380,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     geometry.addGroup(0, primitiveVertices, 1);
   }
 
-  protected _addToMaterialSet(mesh: THREE.Mesh): void {
+  private _addToMaterialSet(mesh: THREE.Mesh): void {
     const materialOrMaterials = mesh.material;
     const materialSet = new Set<THREE.Material>();
 
@@ -397,14 +397,14 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     }
   }
 
-  protected _v1ParseRenderOrder(extension: V1MToonSchema.VRMCMaterialsMToon): number {
+  private _v1ParseRenderOrder(extension: V1MToonSchema.VRMCMaterialsMToon): number {
     // transparentWithZWrite ranges from 0 to +9
     // mere transparent ranges from -9 to 0
     const enabledZWrite = extension.transparentWithZWrite;
     return (enabledZWrite ? 0 : 19) + (extension.renderQueueOffsetNumber ?? 0);
   }
 
-  protected _v0ParseRenderOrder(properties: V0Material): number {
+  private _v0ParseRenderOrder(properties: V0Material): number {
     const isTransparent = properties.keywordMap?.['_ALPHABLEND_ON'] ?? false;
     const enabledZWrite = properties.floatProperties?.['_ZWrite'] === 1;
 
