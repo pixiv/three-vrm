@@ -61,7 +61,7 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
    *
    * @param gltf A parsed result of GLTF taken from GLTFLoader
    */
-  protected async _import(gltf: GLTF): Promise<VRMSpringBoneManager | null> {
+  private async _import(gltf: GLTF): Promise<VRMSpringBoneManager | null> {
     const v1Result = await this._v1Import(gltf);
     if (v1Result != null) {
       return v1Result;
@@ -75,7 +75,7 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
     return null;
   }
 
-  protected async _v1Import(gltf: GLTF): Promise<VRMSpringBoneManager | null> {
+  private async _v1Import(gltf: GLTF): Promise<VRMSpringBoneManager | null> {
     // early abort if it doesn't use spring bones
     const isSpringBoneUsed = gltf.parser.json.extensionsUsed.indexOf('VRMC_springBone-1.0') !== -1;
     if (!isSpringBoneUsed) {
@@ -187,7 +187,7 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
     return manager;
   }
 
-  protected async _v0Import(gltf: GLTF): Promise<VRMSpringBoneManager | null> {
+  private async _v0Import(gltf: GLTF): Promise<VRMSpringBoneManager | null> {
     // early abort if it doesn't use vrm
     const isVRMUsed = gltf.parser.json.extensionsUsed.indexOf('VRM') !== -1;
     if (!isVRMUsed) {
@@ -291,7 +291,7 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
     return manager;
   }
 
-  protected _importJoint(
+  private _importJoint(
     node: THREE.Object3D,
     child: THREE.Object3D,
     setting?: Partial<VRMSpringBoneJointSettings>,
@@ -307,7 +307,7 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
     return springBone;
   }
 
-  protected _importSphereCollider(
+  private _importSphereCollider(
     destination: THREE.Object3D,
     params: {
       offset: THREE.Vector3;
@@ -330,7 +330,7 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
     return collider;
   }
 
-  protected _importCapsuleCollider(
+  private _importCapsuleCollider(
     destination: THREE.Object3D,
     params: {
       offset: THREE.Vector3;

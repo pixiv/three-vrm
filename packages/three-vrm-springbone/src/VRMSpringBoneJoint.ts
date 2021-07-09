@@ -49,40 +49,40 @@ export class VRMSpringBoneJoint {
   /**
    * Current position of child tail, in world unit. Will be used for verlet integration.
    */
-  protected _currentTail = new THREE.Vector3();
+  private _currentTail = new THREE.Vector3();
 
   /**
    * Previous position of child tail, in world unit. Will be used for verlet integration.
    */
-  protected _prevTail = new THREE.Vector3();
+  private _prevTail = new THREE.Vector3();
 
   /**
    * Next position of child tail, in world unit. Will be used for verlet integration.
    * Actually used only in [[update]] and it's kind of temporary variable.
    */
-  protected _nextTail = new THREE.Vector3();
+  private _nextTail = new THREE.Vector3();
 
   /**
    * Initial axis of the bone, in local unit.
    */
-  protected _boneAxis = new THREE.Vector3();
+  private _boneAxis = new THREE.Vector3();
 
   /**
    * Length of the bone in relative space unit. Will be used for normalization in update loop.
    * It's same as local unit length unless there are scale transformation in world matrix.
    */
-  protected _centerSpaceBoneLength = 0.0;
+  private _centerSpaceBoneLength = 0.0;
 
   /**
    * Position of this bone in relative space, kind of a temporary variable.
    */
-  protected _centerSpacePosition = new THREE.Vector3();
+  private _centerSpacePosition = new THREE.Vector3();
 
   /**
    * This springbone will be calculated based on the space relative from this object.
    * If this is `null`, springbone will be calculated in world space.
    */
-  protected _center: THREE.Object3D | null = null;
+  private _center: THREE.Object3D | null = null;
   public get center(): THREE.Object3D | null {
     return this._center;
   }
