@@ -1,5 +1,5 @@
-export * from './AimConstraint';
-export * from './ConstraintsObjectSpace';
-export * from './Constraints';
-export * from './PositionConstraint';
-export * from './RotationConstraint';
+export type { AimConstraint } from './AimConstraint';
+export type { ConstraintsObjectSpace } from './ConstraintsObjectSpace';
+export type { Constraints } from './Constraints';
+export type { PositionConstraint } from './PositionConstraint';
+export type { RotationConstraint } from './RotationConstraint';

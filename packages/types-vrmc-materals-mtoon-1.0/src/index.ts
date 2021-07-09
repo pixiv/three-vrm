@@ -1,4 +1,4 @@
-export * from './MaterialsMToon';
-export * from './MaterialsMToonOutlineWidthMode';
-export * from './MaterialsMToonShadingShiftTextureInfo';
-export * from './MaterialsMToonTextureInfo';
+export type { MaterialsMToon } from './MaterialsMToon';
+export type { MaterialsMToonOutlineWidthMode } from './MaterialsMToonOutlineWidthMode';
+export type { MaterialsMToonShadingShiftTextureInfo } from './MaterialsMToonShadingShiftTextureInfo';
+export type { MaterialsMToonTextureInfo } from './MaterialsMToonTextureInfo';
