@@ -1,4 +1,4 @@
-import type { ConstraintsObjectSpace } from './ConstraintsObjectSpace';
+import type { ConstraintObjectSpace } from './ConstraintObjectSpace';
 
 /**
  * A constraint that rotates the node to face sources.
@@ -12,12 +12,12 @@ export interface AimConstraint {
   /**
    * The source node will be evaluated in this space.
    */
-  sourceSpace?: ConstraintsObjectSpace;
+  sourceSpace?: ConstraintObjectSpace;
 
   /**
    * The destination node will be evaluated in this space.
    */
-  destinationSpace?: ConstraintsObjectSpace;
+  destinationSpace?: ConstraintObjectSpace;
 
   /**
    * An axis which faces the direction of its sources.
