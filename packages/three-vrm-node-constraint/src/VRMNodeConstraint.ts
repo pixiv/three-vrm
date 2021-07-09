@@ -3,7 +3,7 @@ import { Matrix4InverseCache } from './utils/Matrix4InverseCache';
 
 const _matWorldToModel = new THREE.Matrix4();
 
-export abstract class VRMConstraint {
+export abstract class VRMNodeConstraint {
   public weight = 1.0;
 
   public readonly object: THREE.Object3D;
@@ -78,7 +78,7 @@ export abstract class VRMConstraint {
       this._getMatrixWorldToModel(_matWorldToModel);
       target.premultiply(_matWorldToModel);
     } else {
-      throw new Error(`VRMConstraint: Unknown destinationSpace ${this.destinationSpace} detected`);
+      throw new Error(`VRMNodeConstraint: Unknown destinationSpace ${this.destinationSpace} detected`);
     }
 
     return target;
@@ -104,7 +104,7 @@ export abstract class VRMConstraint {
       this._getMatrixWorldToModel(_matWorldToModel);
       target.premultiply(_matWorldToModel);
     } else {
-      throw new Error(`VRMConstraint: Unknown sourceSpace ${this.sourceSpace} detected`);
+      throw new Error(`VRMNodeConstraint: Unknown sourceSpace ${this.sourceSpace} detected`);
     }
 
     return target;

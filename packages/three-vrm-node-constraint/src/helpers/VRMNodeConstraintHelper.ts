@@ -1,14 +1,14 @@
 import * as THREE from 'three';
-import { VRMConstraint } from '../VRMConstraint';
+import { VRMNodeConstraint } from '../VRMNodeConstraint';
 
 const _v3A = new THREE.Vector3();
 
-export class VRMConstraintHelper extends THREE.Group {
-  public readonly constraint: VRMConstraint;
+export class VRMNodeConstraintHelper extends THREE.Group {
+  public readonly constraint: VRMNodeConstraint;
   private _line: THREE.Line;
   private _attrPosition: THREE.BufferAttribute;
 
-  public constructor(constraint: VRMConstraint) {
+  public constructor(constraint: VRMNodeConstraint) {
     super();
 
     this._attrPosition = new THREE.BufferAttribute(new Float32Array([0, 0, 0, 0, 0, 0]), 3);

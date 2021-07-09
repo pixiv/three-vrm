@@ -1,27 +1,27 @@
 import type * as THREE from 'three';
-import type { VRMConstraint } from './VRMConstraint';
+import type { VRMNodeConstraint } from './VRMNodeConstraint';
 import { traverseAncestorsFromRoot } from './utils/traverseAncestorsFromRoot';
 
-export class VRMConstraintManager {
-  private _constraints = new Set<VRMConstraint>();
-  public get constraints(): Set<VRMConstraint> {
+export class VRMNodeConstraintManager {
+  private _constraints = new Set<VRMNodeConstraint>();
+  public get constraints(): Set<VRMNodeConstraint> {
     return this._constraints;
   }
 
-  private _objectConstraintsMap = new Map<THREE.Object3D, Set<VRMConstraint>>();
+  private _objectConstraintsMap = new Map<THREE.Object3D, Set<VRMNodeConstraint>>();
 
-  public addConstraint(constraint: VRMConstraint): void {
+  public addConstraint(constraint: VRMNodeConstraint): void {
     this._constraints.add(constraint);
 
     let objectSet = this._objectConstraintsMap.get(constraint.object);
     if (objectSet == null) {
-      objectSet = new Set<VRMConstraint>();
+      objectSet = new Set<VRMNodeConstraint>();
       this._objectConstraintsMap.set(constraint.object, objectSet);
     }
     objectSet.add(constraint);
   }
 
-  public deleteConstraint(constraint: VRMConstraint): void {
+  public deleteConstraint(constraint: VRMNodeConstraint): void {
     this._constraints.delete(constraint);
 
     const objectSet = this._objectConstraintsMap.get(constraint.object)!;
@@ -29,8 +29,8 @@ export class VRMConstraintManager {
   }
 
   public setInitState(): void {
-    const constraintsTried = new Set<VRMConstraint>();
-    const constraintsDone = new Set<VRMConstraint>();
+    const constraintsTried = new Set<VRMNodeConstraint>();
+    const constraintsDone = new Set<VRMNodeConstraint>();
 
     for (const constraint of this._constraints) {
       this._processConstraint(constraint, constraintsTried, constraintsDone, (constraint) => constraint.setInitState());
@@ -38,8 +38,8 @@ export class VRMConstraintManager {
   }
 
   public update(): void {
-    const constraintsTried = new Set<VRMConstraint>();
-    const constraintsDone = new Set<VRMConstraint>();
+    const constraintsTried = new Set<VRMNodeConstraint>();
+    const constraintsDone = new Set<VRMNodeConstraint>();
 
     for (const constraint of this._constraints) {
       this._processConstraint(constraint, constraintsTried, constraintsDone, (constraint) => constraint.update());
@@ -58,10 +58,10 @@ export class VRMConstraintManager {
    * @param constraintsDone Set of constraints that are already up to date
    */
   private _processConstraint(
-    constraint: VRMConstraint,
-    constraintsTried: Set<VRMConstraint>,
-    constraintsDone: Set<VRMConstraint>,
-    callback: (constraint: VRMConstraint) => void,
+    constraint: VRMNodeConstraint,
+    constraintsTried: Set<VRMNodeConstraint>,
+    constraintsDone: Set<VRMNodeConstraint>,
+    callback: (constraint: VRMNodeConstraint) => void,
   ): void {
     if (constraintsDone.has(constraint)) {
       return;
