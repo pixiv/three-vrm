@@ -94,7 +94,7 @@ describe('VRMAimConstraint', () => {
           quatInvLookAtBefore.setFromRotationMatrix(new THREE.Matrix4().lookAt(sourcePos, destinationPos, VEC3_UP));
           quatInvertCompat(quatInvLookAtBefore);
 
-            quatLookAtDelta.setFromRotationMatrix(new THREE.Matrix4().lookAt(sourcePosAfter, destinationPos, VEC3_UP));
+          quatLookAtDelta.setFromRotationMatrix(new THREE.Matrix4().lookAt(sourcePosAfter, destinationPos, VEC3_UP));
           quatLookAtDelta.multiply(quatInvLookAtBefore);
 
           constraint.setInitState();
