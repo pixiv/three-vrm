@@ -1,7 +1,7 @@
 import type { ExpressionMaterialColorBind } from './ExpressionMaterialColorBind';
 import type { ExpressionMorphTargetBind } from './ExpressionMorphTargetBind';
 import type { ExpressionOverrideType } from './ExpressionOverrideType';
-import type { ExpressionPreset } from './ExpressionPreset';
+import type { ExpressionPresetName } from './ExpressionPresetName';
 import type { ExpressionTextureTransformBind } from './ExpressionTextureTransformBind';
 
 /**
@@ -16,7 +16,7 @@ export interface Expression {
   /**
    * Functions of Expression
    */
-  preset: ExpressionPreset;
+  preset: ExpressionPresetName;
 
   /**
    * Specify a morph target
