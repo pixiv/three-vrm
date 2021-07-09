@@ -2,7 +2,7 @@ import type { MaterialsMToonOutlineWidthMode } from './MaterialsMToonOutlineWidt
 import type { MaterialsMToonShadingShiftTextureInfo } from './MaterialsMToonShadingShiftTextureInfo';
 import type { MaterialsMToonTextureInfo } from './MaterialsMToonTextureInfo';
 
-export interface MaterialsMToon {
+export interface VRMCMaterialsMToon {
   /**
    * Specification version of VRMC_materials_mtoon
    */

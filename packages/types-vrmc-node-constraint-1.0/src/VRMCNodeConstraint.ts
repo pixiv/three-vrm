@@ -3,9 +3,9 @@ import type { PositionConstraint } from './PositionConstraint';
 import type { RotationConstraint } from './RotationConstraint';
 
 /**
- * glTF extension that defines constraints.
+ * glTF extension that defines a node constraint.
  */
-export interface Constraints {
+export interface VRMCNodeConstraint {
   /**
    * Specification version of VRMC_node_constraint
    */
