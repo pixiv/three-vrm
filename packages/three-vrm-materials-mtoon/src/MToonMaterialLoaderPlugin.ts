@@ -154,13 +154,13 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     });
   }
 
-  protected _v1GetMToonExtension(materialIndex: number): V1MToonSchema.MaterialsMToon | undefined {
+  protected _v1GetMToonExtension(materialIndex: number): V1MToonSchema.VRMCMaterialsMToon | undefined {
     const parser = this.parser;
     const json = parser.json;
 
     const materialDef = json.materials[materialIndex];
 
-    const extension: V1MToonSchema.MaterialsMToon | undefined =
+    const extension: V1MToonSchema.VRMCMaterialsMToon | undefined =
       materialDef.extensions?.[MToonMaterialLoaderPlugin.EXTENSION_NAME];
     if (extension == null) {
       return undefined;
@@ -187,7 +187,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   protected async _v1ExtendMaterialParams(
-    extension: V1MToonSchema.MaterialsMToon,
+    extension: V1MToonSchema.VRMCMaterialsMToon,
     materialParams: MToonMaterialParameters,
   ): Promise<void> {
     materialParams.onLoadMaterial = this.onLoadMaterial;
@@ -340,14 +340,14 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     }
   }
 
-  protected _v1SetRenderOrder(mesh: THREE.Mesh, extension: V1MToonSchema.MaterialsMToon): void {
+  protected _v1SetRenderOrder(mesh: THREE.Mesh, extension: V1MToonSchema.VRMCMaterialsMToon): void {
     // transparentWithZWrite ranges from 0 to +9
     // mere transparent ranges from -9 to 0
     const enabledZWrite = extension.transparentWithZWrite;
     mesh.renderOrder = (enabledZWrite ? 0 : 19) + this.renderOrderOffset + (extension.renderQueueOffsetNumber ?? 0);
   }
 
-  protected _v1GenerateOutline(mesh: THREE.Mesh, extension: V1MToonSchema.MaterialsMToon): void {
+  protected _v1GenerateOutline(mesh: THREE.Mesh, extension: V1MToonSchema.VRMCMaterialsMToon): void {
     // Check whether we really have to prepare outline or not
     if ((extension.outlineWidthMode ?? 'none') === 'none' || (extension.outlineWidthFactor ?? 0.0) === 0.0) {
       return;
