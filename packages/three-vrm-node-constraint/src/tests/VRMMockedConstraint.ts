@@ -1,4 +1,4 @@
-import { VRMNodeConstraint } from '../VRMConstraint';
+import { VRMNodeConstraint } from '../VRMNodeConstraint';
 
 export class VRMMockedConstraint extends VRMNodeConstraint {
   public setInitState(): void {

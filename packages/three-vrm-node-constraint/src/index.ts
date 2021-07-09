@@ -1,9 +1,9 @@
 export * from './helpers';
 
 export { VRMAimConstraint } from './VRMAimConstraint';
-export { VRMNodeConstraint } from './VRMConstraint';
-export { VRMNodeConstraintLoaderPlugin } from './VRMConstraintLoaderPlugin';
-export { VRMNodeConstraintManager } from './VRMConstraintManager';
-export { VRMNodeConstraintObjectSpace } from './VRMConstraintSpace';
+export { VRMNodeConstraint } from './VRMNodeConstraint';
+export { VRMNodeConstraintLoaderPlugin } from './VRMNodeConstraintLoaderPlugin';
+export { VRMNodeConstraintManager } from './VRMNodeConstraintManager';
+export { VRMNodeConstraintObjectSpace } from './VRMNodeConstraintObjectSpace';
 export { VRMPositionConstraint } from './VRMPositionConstraint';
 export { VRMRotationConstraint } from './VRMRotationConstraint';

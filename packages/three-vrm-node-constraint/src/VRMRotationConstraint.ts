@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { decomposeRotation } from './utils/decomposeRotation';
 import { quaternionFreezeAxes } from './utils/quaternionFreezeAxes';
 import { quatInvertCompat } from './utils/quatInvertCompat';
-import { VRMNodeConstraint } from './VRMConstraint';
+import { VRMNodeConstraint } from './VRMNodeConstraint';
 
 const QUAT_IDENTITY = new THREE.Quaternion(0, 0, 0, 1);
 

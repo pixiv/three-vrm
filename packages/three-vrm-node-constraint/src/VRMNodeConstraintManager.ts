@@ -1,5 +1,5 @@
 import type * as THREE from 'three';
-import type { VRMNodeConstraint } from './VRMConstraint';
+import type { VRMNodeConstraint } from './VRMNodeConstraint';
 import { traverseAncestorsFromRoot } from './utils/traverseAncestorsFromRoot';
 
 export class VRMNodeConstraintManager {

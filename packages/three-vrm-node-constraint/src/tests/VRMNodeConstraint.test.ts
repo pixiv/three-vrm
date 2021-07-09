@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 import * as THREE from 'three';
-import { VRMNodeConstraint } from '../VRMConstraint';
+import { VRMNodeConstraint } from '../VRMNodeConstraint';
 import { VRMMockedConstraint } from './VRMMockedConstraint';
 
 describe('VRMNodeConstraint', () => {

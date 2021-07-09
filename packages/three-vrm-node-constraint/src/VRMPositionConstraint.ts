@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { decomposePosition } from './utils/decomposePosition';
 import { mat4InvertCompat } from './utils/mat4InvertCompat';
 import { vector3FreezeAxes } from './utils/vector3FreezeAxes';
-import { VRMNodeConstraint } from './VRMConstraint';
+import { VRMNodeConstraint } from './VRMNodeConstraint';
 
 const _matA = new THREE.Matrix4();
 

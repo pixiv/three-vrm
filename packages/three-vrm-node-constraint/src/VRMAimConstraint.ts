@@ -3,7 +3,7 @@ import { decomposePosition } from './utils/decomposePosition';
 import { decomposeRotation } from './utils/decomposeRotation';
 import { quatInvertCompat } from './utils/quatInvertCompat';
 import { setAimQuaternion } from './utils/setAimQuaternion';
-import { VRMNodeConstraint } from './VRMConstraint';
+import { VRMNodeConstraint } from './VRMNodeConstraint';
 
 const QUAT_IDENTITY = new THREE.Quaternion(0, 0, 0, 1);
 

@@ -3,8 +3,8 @@ import type * as THREE from 'three';
 import type { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRMNodeConstraintHelper } from './helpers';
 import { VRMAimConstraint } from './VRMAimConstraint';
-import type { VRMNodeConstraintLoaderPluginOptions } from './VRMConstraintLoaderPluginOptions';
-import { VRMNodeConstraintManager } from './VRMConstraintManager';
+import type { VRMNodeConstraintLoaderPluginOptions } from './VRMNodeConstraintLoaderPluginOptions';
+import { VRMNodeConstraintManager } from './VRMNodeConstraintManager';
 import { VRMPositionConstraint } from './VRMPositionConstraint';
 import { VRMRotationConstraint } from './VRMRotationConstraint';
 
