@@ -17,7 +17,7 @@ const licenseName = 'MIT License';
 const licenseUri = 'https://github.com/pixiv/three-vrm/blob/release/LICENSE';
 
 /** output name of the module */
-const name = 'THREE_VRM_CONSTRAINTS';
+const name = 'THREE_VRM_NODE_CONSTRAINT';
 
 // == envs =========================================================================================
 const NODE_ENV = process.env.NODE_ENV;

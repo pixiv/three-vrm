@@ -1,10 +1,10 @@
 /* eslint-env jest */
 
 import * as THREE from 'three';
-import { VRMConstraint } from '../VRMConstraint';
+import { VRMNodeConstraint } from '../VRMConstraint';
 import { VRMMockedConstraint } from './VRMMockedConstraint';
 
-describe('VRMConstraint', () => {
+describe('VRMNodeConstraint', () => {
   let scene = new THREE.Scene();
   let modelRoot = new THREE.Object3D();
   let object = new THREE.Object3D();
@@ -21,7 +21,7 @@ describe('VRMConstraint', () => {
 
   it('must be instantiated properly', () => {
     const constraint = new VRMMockedConstraint(object, modelRoot);
-    expect(constraint).toBeInstanceOf(VRMConstraint);
+    expect(constraint).toBeInstanceOf(VRMNodeConstraint);
   });
 
   let constraint = new VRMMockedConstraint(object, modelRoot);

@@ -1,5 +1,5 @@
-# @pixiv/three-vrm-constraints
+# @pixiv/three-vrm-node-constraint
 
-Constraints module for @pixiv/three-vrm
+Node constraint module for @pixiv/three-vrm
 
 You cannot use this yet! It's a candidate implementation for VRM 1.0

@@ -3,7 +3,7 @@ import { decomposePosition } from './utils/decomposePosition';
 import { decomposeRotation } from './utils/decomposeRotation';
 import { quatInvertCompat } from './utils/quatInvertCompat';
 import { setAimQuaternion } from './utils/setAimQuaternion';
-import { VRMConstraint } from './VRMConstraint';
+import { VRMNodeConstraint } from './VRMConstraint';
 
 const QUAT_IDENTITY = new THREE.Quaternion(0, 0, 0, 1);
 
@@ -13,7 +13,7 @@ const _matA = new THREE.Matrix4();
 const _v3GetRotationPos = new THREE.Vector3();
 const _v3GetRotationDir = new THREE.Vector3();
 
-export class VRMAimConstraint extends VRMConstraint {
+export class VRMAimConstraint extends VRMNodeConstraint {
   /**
    * Represents the aim vector used for reference of aim rotation.
    * It must be normalized.

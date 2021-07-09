@@ -1,18 +1,18 @@
 import type * as ConstraintSchema from '@pixiv/types-vrmc-constraints-1.0';
 import type * as THREE from 'three';
 import type { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
-import { VRMConstraintHelper } from './helpers';
+import { VRMNodeConstraintHelper } from './helpers';
 import { VRMAimConstraint } from './VRMAimConstraint';
-import type { VRMConstraintLoaderPluginOptions } from './VRMConstraintLoaderPluginOptions';
-import { VRMConstraintManager } from './VRMConstraintManager';
+import type { VRMNodeConstraintLoaderPluginOptions } from './VRMConstraintLoaderPluginOptions';
+import { VRMNodeConstraintManager } from './VRMConstraintManager';
 import { VRMPositionConstraint } from './VRMPositionConstraint';
 import { VRMRotationConstraint } from './VRMRotationConstraint';
 
-export class VRMConstraintLoaderPlugin implements GLTFLoaderPlugin {
+export class VRMNodeConstraintLoaderPlugin implements GLTFLoaderPlugin {
   public static readonly EXTENSION_NAME = 'VRMC_node_constraint';
 
   /**
-   * Specify an Object3D to add {@link VRMConstraintHelper} s.
+   * Specify an Object3D to add {@link VRMNodeConstraintHelper} s.
    * If not specified, helper will not be created.
    */
   public helperRoot?: THREE.Object3D;
@@ -20,10 +20,10 @@ export class VRMConstraintLoaderPlugin implements GLTFLoaderPlugin {
   public readonly parser: GLTFParser;
 
   public get name(): string {
-    return VRMConstraintLoaderPlugin.EXTENSION_NAME;
+    return VRMNodeConstraintLoaderPlugin.EXTENSION_NAME;
   }
 
-  public constructor(parser: GLTFParser, options?: VRMConstraintLoaderPluginOptions) {
+  public constructor(parser: GLTFParser, options?: VRMNodeConstraintLoaderPluginOptions) {
     this.parser = parser;
 
     this.helperRoot = options?.helperRoot;
@@ -32,39 +32,40 @@ export class VRMConstraintLoaderPlugin implements GLTFLoaderPlugin {
   public async afterRoot(gltf: GLTF): Promise<void> {
     // this might be called twice or more by its dependants!
 
-    if (gltf.userData.promiseVrmConstraintManager == null) {
-      gltf.userData.promiseVrmConstraintManager = (async () => {
+    if (gltf.userData.promiseVrmNodeConstraintManager == null) {
+      gltf.userData.promiseVrmNodeConstraintManager = (async () => {
         // load the constraints
         return await this._import(gltf);
       })();
 
-      gltf.userData.vrmConstraintManager = await gltf.userData.promiseVrmConstraintManager;
+      gltf.userData.vrmNodeConstraintManager = await gltf.userData.promiseVrmNodeConstraintManager;
     }
 
-    await gltf.userData.promiseVrmConstraintManager;
+    await gltf.userData.promiseVrmNodeConstraintManager;
   }
 
   /**
-   * Import constraints from a GLTF and returns a {@link VRMConstraintManager}.
+   * Import constraints from a GLTF and returns a {@link VRMNodeConstraintManager}.
    * It might return `null` instead when it does not need to be created or something go wrong.
    *
    * @param gltf A parsed result of GLTF taken from GLTFLoader
    */
-  protected async _import(gltf: GLTF): Promise<VRMConstraintManager | null> {
+  protected async _import(gltf: GLTF): Promise<VRMNodeConstraintManager | null> {
     // early abort if it doesn't use constraints
-    const isConstraintsUsed = gltf.parser.json.extensionsUsed.indexOf(VRMConstraintLoaderPlugin.EXTENSION_NAME) !== -1;
+    const isConstraintsUsed =
+      gltf.parser.json.extensionsUsed.indexOf(VRMNodeConstraintLoaderPlugin.EXTENSION_NAME) !== -1;
     if (!isConstraintsUsed) {
       return null;
     }
 
-    const manager = new VRMConstraintManager();
+    const manager = new VRMNodeConstraintManager();
     const threeNodes: THREE.Object3D[] = await gltf.parser.getDependencies('node');
 
     // import constraints for each nodes
     threeNodes.forEach((node) => {
       // check if the extension uses the extension
       const extension: ConstraintSchema.Constraints | undefined =
-        node.userData?.gltfExtensions?.[VRMConstraintLoaderPlugin.EXTENSION_NAME];
+        node.userData?.gltfExtensions?.[VRMNodeConstraintLoaderPlugin.EXTENSION_NAME];
 
       if (extension == null) {
         return;
@@ -124,7 +125,7 @@ export class VRMConstraintLoaderPlugin implements GLTFLoaderPlugin {
     }
 
     if (this.helperRoot) {
-      const helper = new VRMConstraintHelper(constraint);
+      const helper = new VRMNodeConstraintHelper(constraint);
       this.helperRoot.add(helper);
     }
 
@@ -156,7 +157,7 @@ export class VRMConstraintLoaderPlugin implements GLTFLoaderPlugin {
     }
 
     if (this.helperRoot) {
-      const helper = new VRMConstraintHelper(constraint);
+      const helper = new VRMNodeConstraintHelper(constraint);
       this.helperRoot.add(helper);
     }
 
@@ -194,7 +195,7 @@ export class VRMConstraintLoaderPlugin implements GLTFLoaderPlugin {
     }
 
     if (this.helperRoot) {
-      const helper = new VRMConstraintHelper(constraint);
+      const helper = new VRMNodeConstraintHelper(constraint);
       this.helperRoot.add(helper);
     }
 

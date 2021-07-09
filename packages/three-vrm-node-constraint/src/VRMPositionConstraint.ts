@@ -2,11 +2,11 @@ import * as THREE from 'three';
 import { decomposePosition } from './utils/decomposePosition';
 import { mat4InvertCompat } from './utils/mat4InvertCompat';
 import { vector3FreezeAxes } from './utils/vector3FreezeAxes';
-import { VRMConstraint } from './VRMConstraint';
+import { VRMNodeConstraint } from './VRMConstraint';
 
 const _matA = new THREE.Matrix4();
 
-export class VRMPositionConstraint extends VRMConstraint {
+export class VRMPositionConstraint extends VRMNodeConstraint {
   public freezeAxes: [boolean, boolean, boolean] = [true, true, true];
 
   private _v3InitDst = new THREE.Vector3();

@@ -1,1 +1,1 @@
-export { VRMConstraintHelper } from './VRMConstraintHelper';
+export { VRMNodeConstraintHelper } from './VRMConstraintHelper';

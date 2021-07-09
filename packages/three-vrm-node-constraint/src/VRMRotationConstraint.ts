@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { decomposeRotation } from './utils/decomposeRotation';
 import { quaternionFreezeAxes } from './utils/quaternionFreezeAxes';
 import { quatInvertCompat } from './utils/quatInvertCompat';
-import { VRMConstraint } from './VRMConstraint';
+import { VRMNodeConstraint } from './VRMConstraint';
 
 const QUAT_IDENTITY = new THREE.Quaternion(0, 0, 0, 1);
 
@@ -10,7 +10,7 @@ const _matA = new THREE.Matrix4();
 const _quatA = new THREE.Quaternion();
 const _quatB = new THREE.Quaternion();
 
-export class VRMRotationConstraint extends VRMConstraint {
+export class VRMRotationConstraint extends VRMNodeConstraint {
   public freezeAxes: [boolean, boolean, boolean] = [true, true, true];
 
   private _quatInitSrc = new THREE.Quaternion();

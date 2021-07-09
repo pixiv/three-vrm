@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
-export const VRMConstraintSpace = {
+export const VRMNodeConstraintObjectSpace = {
   Local: 'local',
   Model: 'model',
 } as const;
 
-export type VRMConstraintSpace = typeof VRMConstraintSpace[keyof typeof VRMConstraintSpace];
+export type VRMNodeConstraintObjectSpace = typeof VRMNodeConstraintObjectSpace[keyof typeof VRMNodeConstraintObjectSpace];

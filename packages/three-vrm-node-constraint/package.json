@@ -1,7 +1,7 @@
 {
-  "name": "@pixiv/three-vrm-constraints",
+  "name": "@pixiv/three-vrm-node-constraint",
   "version": "0.0.1",
-  "description": "Constraints module for @pixiv/three-vrm",
+  "description": "Node constraint module for @pixiv/three-vrm",
   "license": "MIT",
   "author": "pixiv",
   "files": [
@@ -10,8 +10,8 @@
     "/types/",
     "LICENSE"
   ],
-  "main": "lib/three-vrm-constraints.js",
-  "module": "lib/three-vrm-constraints.module.js",
+  "main": "lib/three-vrm-node-constraint.js",
+  "module": "lib/three-vrm-node-constraint.module.js",
   "types": "types/index.d.ts",
   "typesVersions": {
     "<3.9": {
@@ -23,13 +23,13 @@
   "scripts": {
     "version": "yarn all",
     "all": "yarn && yarn test && yarn lint && yarn clean && yarn build && yarn docs",
-    "dev": "cross-env NODE_ENV=development SERVE=1 rollup -w -c -o lib/three-vrm-constraints.js",
+    "dev": "cross-env NODE_ENV=development SERVE=1 rollup -w -c -o lib/three-vrm-node-constraint.js",
     "clean": "rimraf docs/ lib/ ts*/ types/",
     "build": "yarn build-dev && yarn build-prod && yarn build-moduledev && yarn build-moduleprod && yarn build-types",
-    "build-dev": "cross-env NODE_ENV=development rollup -c -o lib/three-vrm-constraints.js",
-    "build-prod": "cross-env NODE_ENV=production rollup -c -o lib/three-vrm-constraints.min.js",
-    "build-moduledev": "cross-env NODE_ENV=development ESM=1 rollup -c -o lib/three-vrm-constraints.module.js",
-    "build-moduleprod": "cross-env NODE_ENV=production ESM=1 rollup -c -o lib/three-vrm-constraints.module.min.js",
+    "build-dev": "cross-env NODE_ENV=development rollup -c -o lib/three-vrm-node-constraint.js",
+    "build-prod": "cross-env NODE_ENV=production rollup -c -o lib/three-vrm-node-constraint.min.js",
+    "build-moduledev": "cross-env NODE_ENV=development ESM=1 rollup -c -o lib/three-vrm-node-constraint.module.js",
+    "build-moduleprod": "cross-env NODE_ENV=production ESM=1 rollup -c -o lib/three-vrm-node-constraint.module.min.js",
     "build-types": "tsc --project ./tsconfig.build-types.json && downlevel-dts types ts3.4/types",
     "docs": "typedoc --entryPoints ./src/index.ts --out docs",
     "test": "jest",
