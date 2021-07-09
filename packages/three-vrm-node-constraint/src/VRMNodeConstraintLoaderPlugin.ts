@@ -1,4 +1,4 @@
-import type * as ConstraintSchema from '@pixiv/types-vrmc-constraints-1.0';
+import type * as ConstraintSchema from '@pixiv/types-vrmc-node-constraint-1.0';
 import type * as THREE from 'three';
 import type { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRMNodeConstraintHelper } from './helpers';
@@ -53,19 +53,21 @@ export class VRMNodeConstraintLoaderPlugin implements GLTFLoaderPlugin {
   protected async _import(gltf: GLTF): Promise<VRMNodeConstraintManager | null> {
     // early abort if it doesn't use constraints
     const isConstraintsUsed =
-      gltf.parser.json.extensionsUsed.indexOf(VRMNodeConstraintLoaderPlugin.EXTENSION_NAME) !== -1;
+      this.parser.json.extensionsUsed.indexOf(VRMNodeConstraintLoaderPlugin.EXTENSION_NAME) !== -1;
     if (!isConstraintsUsed) {
       return null;
     }
 
     const manager = new VRMNodeConstraintManager();
-    const threeNodes: THREE.Object3D[] = await gltf.parser.getDependencies('node');
+    const threeNodes: THREE.Object3D[] = await this.parser.getDependencies('node');
 
     // import constraints for each nodes
-    threeNodes.forEach((node) => {
+    threeNodes.forEach((node, nodeIndex) => {
+      const schemaNode = this.parser.json.nodes[nodeIndex];
+
       // check if the extension uses the extension
-      const extension: ConstraintSchema.Constraints | undefined =
-        node.userData?.gltfExtensions?.[VRMNodeConstraintLoaderPlugin.EXTENSION_NAME];
+      const extension: ConstraintSchema.VRMCNodeConstraint | undefined =
+        schemaNode?.extensions?.[VRMNodeConstraintLoaderPlugin.EXTENSION_NAME];
 
       if (extension == null) {
         return;

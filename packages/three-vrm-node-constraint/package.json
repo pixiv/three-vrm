@@ -43,7 +43,7 @@
     ]
   },
   "dependencies": {
-    "@pixiv/types-vrmc-constraints-1.0": "0.0.1"
+    "@pixiv/types-vrmc-node-constraint-1.0": "0.0.1"
   },
   "devDependencies": {
     "@types/three": "^0.126.0",
