@@ -91,7 +91,7 @@ export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
    * @param humanoid A {@link VRMHumanoid} instance that represents the VRM
    * @param expressions A {@link VRMExpressionManager} instance that represents the VRM
    */
-  protected async _import(
+  private async _import(
     gltf: GLTF,
     humanoid: VRMHumanoid | null,
     expressions: VRMExpressionManager | null,
@@ -113,7 +113,7 @@ export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
     return null;
   }
 
-  protected async _v1Import(
+  private async _v1Import(
     gltf: GLTF,
     humanoid: VRMHumanoid,
     expressions: VRMExpressionManager,
@@ -161,7 +161,7 @@ export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
     return lookAt;
   }
 
-  protected _v1ImportRangeMap(
+  private _v1ImportRangeMap(
     schemaRangeMap: V1VRMSchema.LookAtRangeMap | undefined,
     defaultOutputScale: number,
   ): VRMLookAtRangeMap {
@@ -171,7 +171,7 @@ export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
     );
   }
 
-  protected async _v0Import(
+  private async _v0Import(
     gltf: GLTF,
     humanoid: VRMHumanoid,
     expressions: VRMExpressionManager,
@@ -220,7 +220,7 @@ export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
     return lookAt;
   }
 
-  protected _v0ImportDegreeMap(
+  private _v0ImportDegreeMap(
     schemaDegreeMap: V0VRM.FirstPersonDegreeMap | undefined,
     defaultOutputScale: number,
   ): VRMLookAtRangeMap {

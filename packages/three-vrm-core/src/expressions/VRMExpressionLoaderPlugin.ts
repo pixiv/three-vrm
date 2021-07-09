@@ -63,7 +63,7 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
    *
    * @param gltf A parsed result of GLTF taken from GLTFLoader
    */
-  protected async _import(gltf: GLTF): Promise<VRMExpressionManager | null> {
+  private async _import(gltf: GLTF): Promise<VRMExpressionManager | null> {
     const v1Result = await this._v1Import(gltf);
     if (v1Result) {
       return v1Result;
@@ -77,7 +77,7 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
     return null;
   }
 
-  protected async _v1Import(gltf: GLTF): Promise<VRMExpressionManager | null> {
+  private async _v1Import(gltf: GLTF): Promise<VRMExpressionManager | null> {
     // early abort if it doesn't use vrm
     const isVRMUsed = this.parser.json.extensionsUsed.indexOf('VRMC_vrm') !== -1;
     if (!isVRMUsed) {
@@ -220,7 +220,7 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
     return manager;
   }
 
-  protected async _v0Import(gltf: GLTF): Promise<VRMExpressionManager | null> {
+  private async _v0Import(gltf: GLTF): Promise<VRMExpressionManager | null> {
     // early abort if it doesn't use vrm
     const vrmExt: V0VRM.VRM | undefined = this.parser.json.extensions?.VRM;
     if (!vrmExt) {

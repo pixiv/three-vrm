@@ -68,7 +68,7 @@ export class VRMFirstPersonLoaderPlugin implements GLTFLoaderPlugin {
    * @param humanoid A {@link VRMHumanoid} instance that represents the VRM
    */
 
-  protected async _import(gltf: GLTF, humanoid: VRMHumanoid | null): Promise<VRMFirstPerson | null> {
+  private async _import(gltf: GLTF, humanoid: VRMHumanoid | null): Promise<VRMFirstPerson | null> {
     if (humanoid == null) {
       return null;
     }
@@ -86,7 +86,7 @@ export class VRMFirstPersonLoaderPlugin implements GLTFLoaderPlugin {
     return null;
   }
 
-  protected async _v1Import(gltf: GLTF, humanoid: VRMHumanoid): Promise<VRMFirstPerson | null> {
+  private async _v1Import(gltf: GLTF, humanoid: VRMHumanoid): Promise<VRMFirstPerson | null> {
     // early abort if it doesn't use vrm
     const isVRMUsed = this.parser.json.extensionsUsed.indexOf('VRMC_vrm') !== -1;
     if (!isVRMUsed) {
@@ -124,7 +124,7 @@ export class VRMFirstPersonLoaderPlugin implements GLTFLoaderPlugin {
     return new VRMFirstPerson(humanoid, meshAnnotations);
   }
 
-  protected async _v0Import(gltf: GLTF, humanoid: VRMHumanoid): Promise<VRMFirstPerson | null> {
+  private async _v0Import(gltf: GLTF, humanoid: VRMHumanoid): Promise<VRMFirstPerson | null> {
     const vrmExt: V0VRM.VRM | undefined = this.parser.json.extensions?.VRM;
     if (!vrmExt) {
       return null;
@@ -154,7 +154,7 @@ export class VRMFirstPersonLoaderPlugin implements GLTFLoaderPlugin {
     return new VRMFirstPerson(humanoid, meshAnnotations);
   }
 
-  protected _convertV0FlagToV1Type(flag: string | undefined): VRMFirstPersonMeshAnnotationType {
+  private _convertV0FlagToV1Type(flag: string | undefined): VRMFirstPersonMeshAnnotationType {
     if (flag === 'FirstPersonOnly') {
       return 'firstPersonOnly';
     } else if (flag === 'ThirdPersonOnly') {
