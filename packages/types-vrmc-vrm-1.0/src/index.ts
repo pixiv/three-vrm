@@ -15,4 +15,4 @@ export type { HumanoidHumanBones } from './HumanoidHumanBones';
 export type { LookAt } from './LookAt';
 export type { LookAtRangeMap } from './LookAtRangeMap';
 export type { Meta } from './Meta';
-export type { VRM } from './VRM';
+export type { VRMCVRM } from './VRMCVRM';
