@@ -1,4 +1,4 @@
-export type ExpressionPreset =
+export type ExpressionPresetName =
   | 'happy'
   | 'angry'
   | 'sad'

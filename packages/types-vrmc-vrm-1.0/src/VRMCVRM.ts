@@ -4,7 +4,7 @@ import type { Humanoid } from './Humanoid';
 import type { LookAt } from './LookAt';
 import type { Meta } from './Meta';
 
-export interface VRM {
+export interface VRMCVRM {
   /**
    * Specification version of VRMC_vrm
    */
