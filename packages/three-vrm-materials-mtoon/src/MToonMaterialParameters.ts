@@ -47,12 +47,6 @@ export interface MToonMaterialParameters extends THREE.ShaderMaterialParameters 
   debugMode?: MToonMaterialDebugMode | number;
 
   /**
-   * The material will call this in its constructor.
-   * See {@link MToonMaterialLoaderPlugin.setMToonMaterial} for more details.
-   */
-  onLoadMaterial?: (material: MToonMaterial) => void;
-
-  /**
    * It will draw its outline instead when it's `true`.
    */
   isOutline?: boolean;

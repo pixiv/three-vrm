@@ -52,19 +52,15 @@
 			let currentGltf = null;
 
 			const loader = new THREE.GLTFLoader();
-			const mtoonSet = new Set();
 
 			loader.register( ( parser ) => {
 
 				const plugin = new THREE_VRM_MATERIALS_MTOON.MToonMaterialLoaderPlugin( parser );
-				plugin.onLoadMaterial = ( material ) => mtoonSet.add( material );
 				return plugin;
 
 			} );
 
 			function load( url ) {
-
-				mtoonSet.clear();
 
 				loader.crossOrigin = 'anonymous';
 				loader.load(
@@ -202,9 +198,15 @@
 				const sinTheta = Math.sin( theta );
 				light.position.set( cosTheta, 2.0, sinTheta ).normalize();
 
-				for ( const material of mtoonSet ) {
+				if ( currentGltf != null ) {
 
-					material.update( delta );
+					const mtoonMaterials = currentGltf.userData.vrmMToonMaterials;
+
+					for ( const material of mtoonMaterials ) {
+
+						material.update( delta );
+
+					}
 
 				}
 
