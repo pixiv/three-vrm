@@ -22,7 +22,7 @@
 		<script src="https://unpkg.com/three@0.126.1/build/three.js"></script>
 		<script src="https://unpkg.com/three@0.126.1/examples/js/loaders/GLTFLoader.js"></script>
 		<script src="https://unpkg.com/three@0.126.1/examples/js/controls/OrbitControls.js"></script>
-		<script src="../lib/three-vrm-constraints.js"></script>
+		<script src="../lib/three-vrm-node-constraint.js"></script>
 		<script>
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
@@ -61,7 +61,7 @@
 
 			loader.register( ( parser ) => {
 
-				return new THREE_VRM_CONSTRAINTS.VRMConstraintLoaderPlugin( parser, pluginOptions );
+				return new THREE_VRM_NODE_CONSTRAINT.VRMNodeConstraintLoaderPlugin( parser, pluginOptions );
 
 			} );
 
@@ -117,7 +117,7 @@
 					cubeA.position.y = Math.sin( clock.elapsedTime );
 					cubeA.rotation.x = Math.cos( clock.elapsedTime );
 
-					const constraintManager = currentGltf.userData.vrmConstraintManager;
+					const constraintManager = currentGltf.userData.vrmNodeConstraintManager;
 					constraintManager.update();
 
 				}

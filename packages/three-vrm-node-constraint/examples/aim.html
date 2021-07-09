@@ -21,7 +21,7 @@
 	<body>
 		<script src="https://unpkg.com/three@0.126.1/build/three.js"></script>
 		<script src="https://unpkg.com/three@0.126.1/examples/js/controls/OrbitControls.js"></script>
-		<script src="../lib/three-vrm-constraints.js"></script>
+		<script src="../lib/three-vrm-node-constraint.js"></script>
 		<script>
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
@@ -79,11 +79,11 @@
 			scene.add( axesHelper );
 
 			// constraints
-			const constraintManager = new THREE_VRM_CONSTRAINTS.VRMConstraintManager({
+			const constraintManager = new THREE_VRM_NODE_CONSTRAINT.VRMNodeConstraintManager({
 				autoRemoveCircularDependency: true
 			});
 
-			const constraint = new THREE_VRM_CONSTRAINTS.VRMAimConstraint(cone, modelRoot);
+			const constraint = new THREE_VRM_NODE_CONSTRAINT.VRMAimConstraint(cone, modelRoot);
 			constraint.aimVector.set( 0.0, 0.0, 1.0 ).normalize();
 			constraint.setSource(cube);
 			constraintManager.addConstraint(constraint);
@@ -91,7 +91,7 @@
 			// constraint helpers
 			Array.from( constraintManager.constraints ).forEach( ( constraint ) => {
 
-				const helper = new THREE_VRM_CONSTRAINTS.VRMConstraintHelper( constraint );
+				const helper = new THREE_VRM_NODE_CONSTRAINT.VRMNodeConstraintHelper( constraint );
 				scene.add( helper );
 
 			} );
