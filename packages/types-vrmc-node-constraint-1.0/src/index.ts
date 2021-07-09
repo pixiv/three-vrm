@@ -1,5 +1,5 @@
 export type { AimConstraint } from './AimConstraint';
-export type { ConstraintsObjectSpace } from './ConstraintsObjectSpace';
-export type { Constraints } from './Constraints';
+export type { ConstraintObjectSpace } from './ConstraintObjectSpace';
 export type { PositionConstraint } from './PositionConstraint';
 export type { RotationConstraint } from './RotationConstraint';
+export type { VRMCNodeConstraint } from './VRMCNodeConstraint';
