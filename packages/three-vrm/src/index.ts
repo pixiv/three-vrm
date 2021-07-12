@@ -4,7 +4,7 @@ export { VRMLoaderPluginOptions } from './VRMLoaderPluginOptions';
 
 export * from './VRMUtils';
 
-export * from '@pixiv/three-vrm-constraints';
 export * from '@pixiv/three-vrm-core';
 export * from '@pixiv/three-vrm-materials-mtoon';
+export * from '@pixiv/three-vrm-node-constraint';
 export * from '@pixiv/three-vrm-springbone';

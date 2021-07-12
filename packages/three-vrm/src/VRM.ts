@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import { VRMConstraintManager } from '@pixiv/three-vrm-constraints';
 import { VRMExpressionManager, VRMFirstPerson, VRMHumanoid, VRMLookAt, VRMMeta } from '@pixiv/three-vrm-core';
+import { VRMNodeConstraintManager } from '@pixiv/three-vrm-node-constraint';
 import { VRMSpringBoneManager } from '@pixiv/three-vrm-springbone';
 
 /**
@@ -14,7 +14,7 @@ export interface VRMParameters {
   lookAt?: VRMLookAt;
   materials?: THREE.Material[];
   springBoneManager?: VRMSpringBoneManager;
-  constraintManager?: VRMConstraintManager;
+  constraintManager?: VRMNodeConstraintManager;
   meta?: VRMMeta;
 }
 
@@ -73,10 +73,10 @@ export class VRM {
   public readonly springBoneManager?: VRMSpringBoneManager;
 
   /**
-   * A [[VRMConstraintManager]] manipulates all constraints attached on the VRM.
+   * A [[VRMNodeConstraintManager]] manipulates all constraints attached on the VRM.
    * Usually you don't have to care about this property.
    */
-  public readonly constraintManager?: VRMConstraintManager;
+  public readonly constraintManager?: VRMNodeConstraintManager;
 
   /**
    * Create a new VRM instance.

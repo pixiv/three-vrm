@@ -7,8 +7,8 @@ import type {
   VRMMetaLoaderPlugin,
 } from '@pixiv/three-vrm-core';
 import type { MToonMaterialLoaderPlugin } from '@pixiv/three-vrm-materials-mtoon';
+import type { VRMNodeConstraintLoaderPlugin } from '@pixiv/three-vrm-node-constraint';
 import type { VRMSpringBoneLoaderPlugin } from '@pixiv/three-vrm-springbone';
-import type { VRMConstraintLoaderPlugin } from '@pixiv/three-vrm-constraints';
 
 export interface VRMLoaderPluginOptions {
   expressionPlugin?: VRMExpressionLoaderPlugin;
@@ -18,7 +18,7 @@ export interface VRMLoaderPluginOptions {
   metaPlugin?: VRMMetaLoaderPlugin;
   mtoonMaterialPlugin?: MToonMaterialLoaderPlugin;
   springBonePlugin?: VRMSpringBoneLoaderPlugin;
-  constraintPlugin?: VRMConstraintLoaderPlugin;
+  constraintPlugin?: VRMNodeConstraintLoaderPlugin;
 
   /**
    * If assigned, the object will be used as a helper root of every component.

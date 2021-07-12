@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
-import { VRMConstraintLoaderPlugin } from '@pixiv/three-vrm-constraints';
 import {
   VRMExpressionLoaderPlugin,
   VRMFirstPersonLoaderPlugin,
@@ -8,8 +7,9 @@ import {
   VRMLookAtLoaderPlugin,
   VRMMetaLoaderPlugin,
 } from '@pixiv/three-vrm-core';
-import { VRMSpringBoneLoaderPlugin } from '@pixiv/three-vrm-springbone';
 import { MToonMaterialLoaderPlugin } from '@pixiv/three-vrm-materials-mtoon';
+import { VRMNodeConstraintLoaderPlugin } from '@pixiv/three-vrm-node-constraint';
+import { VRMSpringBoneLoaderPlugin } from '@pixiv/three-vrm-springbone';
 import { VRMLoaderPluginOptions } from './VRMLoaderPluginOptions';
 import { VRM } from './VRM';
 
@@ -23,7 +23,7 @@ export class VRMLoaderPlugin implements GLTFLoaderPlugin {
   public readonly metaPlugin: VRMMetaLoaderPlugin;
   public readonly mtoonMaterialPlugin: MToonMaterialLoaderPlugin;
   public readonly springBonePlugin: VRMSpringBoneLoaderPlugin;
-  public readonly constraintPlugin: VRMConstraintLoaderPlugin;
+  public readonly constraintPlugin: VRMNodeConstraintLoaderPlugin;
 
   public constructor(parser: GLTFParser, options?: VRMLoaderPluginOptions) {
     this.parser = parser;
@@ -44,7 +44,7 @@ export class VRMLoaderPlugin implements GLTFLoaderPlugin {
         jointHelperRoot: helperRoot,
       });
 
-    this.constraintPlugin = options?.constraintPlugin ?? new VRMConstraintLoaderPlugin(parser, { helperRoot });
+    this.constraintPlugin = options?.constraintPlugin ?? new VRMNodeConstraintLoaderPlugin(parser, { helperRoot });
   }
 
   public async beforeRoot(): Promise<void> {

@@ -53,7 +53,7 @@
     "@pixiv/types-vrm-0.0": "^0.0.1"
   },
   "devDependencies": {
-    "@pixiv/three-vrm-constraints": "0.0.1",
+    "@pixiv/three-vrm-node-constraint": "0.0.1",
     "@pixiv/three-vrm-core": "0.0.1",
     "@pixiv/three-vrm-materials-mtoon": "0.0.1",
     "@pixiv/three-vrm-springbone": "0.0.1",
