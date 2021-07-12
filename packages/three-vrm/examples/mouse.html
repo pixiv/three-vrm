@@ -70,8 +70,6 @@
 					currentVrm = vrm;
 					console.log( vrm );
 
-					vrm.humanoid.getBoneNode( THREE_VRM.VRMHumanBoneName.Hips ).rotation.y = Math.PI;
-
 				},
 
 				( progress ) => console.log( 'Loading model...', 100.0 * ( progress.loaded / progress.total ), '%' ),

@@ -82,7 +82,8 @@
 						currentVrm = vrm;
 						scene.add( vrm.scene );
 
-						vrm.humanoid.getBoneNode( THREE_VRM.VRMHumanBoneName.Hips ).rotation.y = Math.PI;
+						// rotate if the VRM is VRM0.0
+						THREE_VRM.VRMUtils.rotateVRM0( vrm );
 
 						console.log( vrm );
 

@@ -89,8 +89,6 @@
 					console.log( vrm );
 					scene.add( vrm.scene );
 
-						vrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.Hips ).rotation.y = Math.PI;
-
 					// print meta fields
 					const meta = gltf.userData.vrmMeta;
 					Object.keys( meta ).forEach( ( key ) => {
