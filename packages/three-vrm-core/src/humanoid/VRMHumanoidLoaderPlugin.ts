@@ -38,7 +38,7 @@ export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
    *
    * @param gltf A parsed result of GLTF taken from GLTFLoader
    */
-  protected async _import(gltf: GLTF): Promise<VRMHumanoid | null> {
+  private async _import(gltf: GLTF): Promise<VRMHumanoid | null> {
     const v1Result = await this._v1Import(gltf);
     if (v1Result) {
       return v1Result;
@@ -52,14 +52,14 @@ export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
     return null;
   }
 
-  protected async _v1Import(gltf: GLTF): Promise<VRMHumanoid | null> {
+  private async _v1Import(gltf: GLTF): Promise<VRMHumanoid | null> {
     // early abort if it doesn't use vrm
     const isVRMUsed = this.parser.json.extensionsUsed.indexOf('VRMC_vrm') !== -1;
     if (!isVRMUsed) {
       return null;
     }
 
-    const extension: V1VRMSchema.VRM | undefined = this.parser.json.extensions?.['VRMC_vrm'];
+    const extension: V1VRMSchema.VRMCVRM | undefined = this.parser.json.extensions?.['VRMC_vrm'];
     if (!extension) {
       return null;
     }
@@ -98,7 +98,7 @@ export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
     return new VRMHumanoid(humanBones);
   }
 
-  protected async _v0Import(gltf: GLTF): Promise<VRMHumanoid | null> {
+  private async _v0Import(gltf: GLTF): Promise<VRMHumanoid | null> {
     const vrmExt: V0VRM.VRM | undefined = this.parser.json.extensions?.VRM;
     if (!vrmExt) {
       return null;

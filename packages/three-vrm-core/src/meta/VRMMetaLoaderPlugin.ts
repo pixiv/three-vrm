@@ -61,7 +61,7 @@ export class VRMMetaLoaderPlugin implements GLTFLoaderPlugin {
     await gltf.userData.promiseVrmMeta;
   }
 
-  protected async _import(gltf: GLTF): Promise<VRMMeta | null> {
+  private async _import(gltf: GLTF): Promise<VRMMeta | null> {
     const v1Result = await this._v1Import(gltf);
     if (v1Result != null) {
       return v1Result;
@@ -75,14 +75,14 @@ export class VRMMetaLoaderPlugin implements GLTFLoaderPlugin {
     return null;
   }
 
-  protected async _v1Import(gltf: GLTF): Promise<VRM1Meta | null> {
+  private async _v1Import(gltf: GLTF): Promise<VRM1Meta | null> {
     // early abort if it doesn't use vrm
     const isVRMUsed = this.parser.json.extensionsUsed.indexOf('VRMC_vrm') !== -1;
     if (!isVRMUsed) {
       return null;
     }
 
-    const extension: V1VRMSchema.VRM | undefined = this.parser.json.extensions?.['VRMC_vrm'];
+    const extension: V1VRMSchema.VRMCVRM | undefined = this.parser.json.extensions?.['VRMC_vrm'];
     if (extension == null) {
       return null;
     }
@@ -133,7 +133,7 @@ export class VRMMetaLoaderPlugin implements GLTFLoaderPlugin {
     };
   }
 
-  protected async _v0Import(gltf: GLTF): Promise<VRM0Meta | null> {
+  private async _v0Import(gltf: GLTF): Promise<VRM0Meta | null> {
     // early abort if it doesn't use vrm
     const vrmExt: V0VRM.VRM | undefined = this.parser.json.extensions?.VRM;
     if (!vrmExt) {
@@ -174,7 +174,7 @@ export class VRMMetaLoaderPlugin implements GLTFLoaderPlugin {
     };
   }
 
-  protected async _extractGLTFImage(index: number): Promise<HTMLImageElement | null> {
+  private async _extractGLTFImage(index: number): Promise<HTMLImageElement | null> {
     const source = this.parser.json.images?.[index];
     if (source == null) {
       console.warn(`Attempt to use images[${index}] of glTF as a thumbnail but the image doesn't exist`);
