@@ -246,14 +246,6 @@ export class MToonMaterial extends THREE.ShaderMaterial {
   public normalMapType = THREE.TangentSpaceNormalMap;
 
   /**
-   * The material will call this in its constructor.
-   * See {@link MToonMaterialLoaderPlugin.setMToonMaterial} for more details.
-   *
-   * It will called also when it's copied.
-   */
-  public onLoadMaterial?: (material: MToonMaterial) => void;
-
-  /**
    * When this is `true`, vertex colors will be ignored.
    * `true` by default.
    */
@@ -315,10 +307,6 @@ export class MToonMaterial extends THREE.ShaderMaterial {
   constructor(parameters: MToonMaterialParameters = {}) {
     super();
 
-    // have onLoadMaterial as a variable before it attempts to import this as a member
-    this.onLoadMaterial = parameters.onLoadMaterial;
-    delete parameters.onLoadMaterial;
-
     // override depthWrite with transparentWithZWrite
     if (parameters.transparentWithZWrite) {
       parameters.depthWrite = true;
@@ -375,9 +363,6 @@ export class MToonMaterial extends THREE.ShaderMaterial {
 
     // == update shader stuff ======================================================================
     this._updateShaderCode();
-
-    // == call onLoadMaterial ======================================================================
-    this.onLoadMaterial?.(this);
   }
 
   /**
@@ -413,10 +398,6 @@ export class MToonMaterial extends THREE.ShaderMaterial {
 
     // == update shader stuff ======================================================================
     this._updateShaderCode();
-
-    // == call onLoadMaterial ======================================================================
-    this.onLoadMaterial = source.onLoadMaterial;
-    this.onLoadMaterial?.(this);
 
     return this;
   }

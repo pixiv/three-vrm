@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { VRM as V0VRM, Material as V0Material } from '@pixiv/types-vrm-0.0';
 import * as V1MToonSchema from '@pixiv/types-vrmc-materials-mtoon-1.0';
-import type { GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
+import type { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
 import { MToonMaterial } from './MToonMaterial';
 import type { MToonMaterialParameters } from './MToonMaterialParameters';
 import { MToonMaterialOutlineWidthMode } from './MToonMaterialOutlineWidthMode';
@@ -17,14 +17,13 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
    */
   public renderOrderOffset: number;
 
-  /**
-   * All imported materials will call this in their constructor.
-   * You will need to use this in order to call update for each materials.
-   * Update call is required to do uv animations.
-   */
-  public onLoadMaterial?: (material: MToonMaterial) => void;
-
   public readonly parser: GLTFParser;
+
+  /**
+   * Loaded materials will be stored in this set.
+   * Will be transferred into `gltf.userData.vrmMToonMaterials` in {@link afterRoot}.
+   */
+  private readonly _mToonMaterialSet: Set<MToonMaterial>;
 
   public get name(): string {
     return MToonMaterialLoaderPlugin.EXTENSION_NAME;
@@ -39,24 +38,22 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
        * `0` by default.
        */
       renderOrderOffset?: number;
-
-      /**
-       * All imported materials will call this their constructor.
-       * You will need to use this in order to call update for each materials.
-       * Update call is required to do uv animations.
-       */
-      onLoadMaterial?: (material: MToonMaterial) => void;
     } = {},
   ) {
     this.parser = parser;
 
     this.renderOrderOffset = options.renderOrderOffset ?? 0;
-    this.onLoadMaterial = options.onLoadMaterial;
+
+    this._mToonMaterialSet = new Set();
   }
 
   public async beforeRoot(): Promise<void> {
     this._v1RemoveUnlitExtension();
     this._v0RemoveUnlitExtension();
+  }
+
+  public async afterRoot(gltf: GLTF): Promise<void> {
+    gltf.userData.vrmMToonMaterials = Array.from(this._mToonMaterialSet);
   }
 
   public getMaterialType(materialIndex: number): typeof THREE.Material | null {
@@ -120,7 +117,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
    * Since GLTFLoader have so many hardcoded procedure related to `KHR_materials_unlit`
    * we have to delete the extension before we start to parse the glTF.
    */
-  protected _v1RemoveUnlitExtension(): void {
+  private _v1RemoveUnlitExtension(): void {
     const parser = this.parser;
     const json = parser.json;
 
@@ -140,7 +137,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
    * Since GLTFLoader have so many hardcoded procedure related to `KHR_materials_unlit`
    * we have to delete the extension before we start to parse the glTF.
    */
-  protected _v0RemoveUnlitExtension(): void {
+  private _v0RemoveUnlitExtension(): void {
     const parser = this.parser;
     const json = parser.json;
 
@@ -154,13 +151,13 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     });
   }
 
-  protected _v1GetMToonExtension(materialIndex: number): V1MToonSchema.MaterialsMToon | undefined {
+  private _v1GetMToonExtension(materialIndex: number): V1MToonSchema.VRMCMaterialsMToon | undefined {
     const parser = this.parser;
     const json = parser.json;
 
     const materialDef = json.materials[materialIndex];
 
-    const extension: V1MToonSchema.MaterialsMToon | undefined =
+    const extension: V1MToonSchema.VRMCMaterialsMToon | undefined =
       materialDef.extensions?.[MToonMaterialLoaderPlugin.EXTENSION_NAME];
     if (extension == null) {
       return undefined;
@@ -174,7 +171,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     return extension;
   }
 
-  protected _v0GetMToonProperties(materialIndex: number): V0Material | undefined {
+  private _v0GetMToonProperties(materialIndex: number): V0Material | undefined {
     const parser = this.parser;
     const json = parser.json;
 
@@ -186,12 +183,10 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     }
   }
 
-  protected async _v1ExtendMaterialParams(
-    extension: V1MToonSchema.MaterialsMToon,
+  private async _v1ExtendMaterialParams(
+    extension: V1MToonSchema.VRMCMaterialsMToon,
     materialParams: MToonMaterialParameters,
   ): Promise<void> {
-    materialParams.onLoadMaterial = this.onLoadMaterial;
-
     // Removing material params that is not required to supress warnings.
     delete (materialParams as THREE.MeshStandardMaterialParameters).metalness;
     delete (materialParams as THREE.MeshStandardMaterialParameters).roughness;
@@ -225,12 +220,10 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     await assignHelper.pending;
   }
 
-  protected async _v0ExtendMaterialParams(
+  private async _v0ExtendMaterialParams(
     properties: V0Material,
     materialParams: MToonMaterialParameters,
   ): Promise<void> {
-    materialParams.onLoadMaterial = this.onLoadMaterial;
-
     // Removing material params that is not required to supress warnings.
     delete (materialParams as THREE.MeshStandardMaterialParameters).metalness;
     delete (materialParams as THREE.MeshStandardMaterialParameters).roughness;
@@ -322,44 +315,55 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
    * @param mesh A target GLTF primitive
    * @param materialIndex The material index of the primitive
    */
-  protected _setupPrimitive(mesh: THREE.Mesh, materialIndex: number): void {
+  private _setupPrimitive(mesh: THREE.Mesh, materialIndex: number): void {
     const v1Extension = this._v1GetMToonExtension(materialIndex);
     if (v1Extension) {
-      this._v1SetRenderOrder(mesh, v1Extension);
-      this._v1GenerateOutline(mesh, v1Extension);
+      const renderOrder = this._v1ParseRenderOrder(v1Extension);
+      mesh.renderOrder = renderOrder + this.renderOrderOffset;
+
+      this._generateOutline(mesh);
+
+      this._addToMaterialSet(mesh);
 
       return;
     }
 
     const v0Properties = this._v0GetMToonProperties(materialIndex);
     if (v0Properties) {
-      this._v0SetRenderOrder(mesh, v0Properties);
-      this._v0GenerateOutline(mesh, v0Properties);
+      const renderOrder = this._v0ParseRenderOrder(v0Properties);
+      mesh.renderOrder = renderOrder + this.renderOrderOffset;
+
+      this._generateOutline(mesh);
+
+      this._addToMaterialSet(mesh);
 
       return;
     }
   }
 
-  protected _v1SetRenderOrder(mesh: THREE.Mesh, extension: V1MToonSchema.MaterialsMToon): void {
-    // transparentWithZWrite ranges from 0 to +9
-    // mere transparent ranges from -9 to 0
-    const enabledZWrite = extension.transparentWithZWrite;
-    mesh.renderOrder = (enabledZWrite ? 0 : 19) + this.renderOrderOffset + (extension.renderQueueOffsetNumber ?? 0);
-  }
-
-  protected _v1GenerateOutline(mesh: THREE.Mesh, extension: V1MToonSchema.MaterialsMToon): void {
-    // Check whether we really have to prepare outline or not
-    if ((extension.outlineWidthMode ?? 'none') === 'none' || (extension.outlineWidthFactor ?? 0.0) === 0.0) {
-      return;
-    }
-
+  /**
+   * Generate outline for the given mesh, if it needs.
+   *
+   * @param mesh The target mesh
+   */
+  private _generateOutline(mesh: THREE.Mesh): void {
     // OK, it's the hacky part.
     // We are going to duplicate the MToonMaterial for outline use.
     // Then we are going to create two geometry groups and refer same buffer but different material.
     // It's how we draw two materials at once using a single mesh.
 
+    // make sure the material is mtoon
+    const surfaceMaterial = mesh.material;
+    if (!(surfaceMaterial instanceof MToonMaterial)) {
+      return;
+    }
+
+    // check whether we really have to prepare outline or not
+    if (surfaceMaterial.outlineWidthMode === 'none' && surfaceMaterial.outlineWidthFactor <= 0.0) {
+      return;
+    }
+
     // make its material an array
-    const surfaceMaterial = mesh.material as MToonMaterial;
     mesh.material = [surfaceMaterial]; // mesh.material is guaranteed to be a Material in GLTFLoader
 
     // duplicate the material for outline use
@@ -376,7 +380,31 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     geometry.addGroup(0, primitiveVertices, 1);
   }
 
-  protected _v0SetRenderOrder(mesh: THREE.Mesh, properties: V0Material): void {
+  private _addToMaterialSet(mesh: THREE.Mesh): void {
+    const materialOrMaterials = mesh.material;
+    const materialSet = new Set<THREE.Material>();
+
+    if (Array.isArray(materialOrMaterials)) {
+      materialOrMaterials.forEach((material) => materialSet.add(material));
+    } else {
+      materialSet.add(materialOrMaterials);
+    }
+
+    for (const material of materialSet) {
+      if (material instanceof MToonMaterial) {
+        this._mToonMaterialSet.add(material);
+      }
+    }
+  }
+
+  private _v1ParseRenderOrder(extension: V1MToonSchema.VRMCMaterialsMToon): number {
+    // transparentWithZWrite ranges from 0 to +9
+    // mere transparent ranges from -9 to 0
+    const enabledZWrite = extension.transparentWithZWrite;
+    return (enabledZWrite ? 0 : 19) + (extension.renderQueueOffsetNumber ?? 0);
+  }
+
+  private _v0ParseRenderOrder(properties: V0Material): number {
     const isTransparent = properties.keywordMap?.['_ALPHABLEND_ON'] ?? false;
     const enabledZWrite = properties.floatProperties?.['_ZWrite'] === 1;
 
@@ -392,38 +420,6 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
 
     // transparentWithZWrite ranges from 0 to +9
     // mere transparent ranges from -9 to 0
-    mesh.renderOrder = (enabledZWrite ? 0 : 19) + this.renderOrderOffset + offset;
-  }
-
-  protected _v0GenerateOutline(mesh: THREE.Mesh, properties: V0Material): void {
-    // Check whether we really have to prepare outline or not
-    if (
-      (properties.floatProperties?.['_OutlineWidthMode'] ?? 0) === 0 ||
-      (properties.floatProperties?.['_OutlineWidth'] ?? 0.0) === 0.0
-    ) {
-      return;
-    }
-
-    // OK, it's the hacky part.
-    // We are going to duplicate the MToonMaterial for outline use.
-    // Then we are going to create two geometry groups and refer same buffer but different material.
-    // It's how we draw two materials at once using a single mesh.
-
-    // make its material an array
-    const surfaceMaterial = mesh.material as MToonMaterial;
-    mesh.material = [surfaceMaterial]; // mesh.material is guaranteed to be a Material in GLTFLoader
-
-    // duplicate the material for outline use
-    const outlineMaterial = surfaceMaterial.clone() as MToonMaterial;
-    outlineMaterial.name += ' (Outline)';
-    outlineMaterial.isOutline = true;
-    outlineMaterial.side = THREE.BackSide;
-    mesh.material.push(outlineMaterial);
-
-    // make two geometry groups out of a same buffer
-    const geometry = mesh.geometry; // mesh.geometry is guaranteed to be a BufferGeometry in GLTFLoader
-    const primitiveVertices = geometry.index ? geometry.index.count : geometry.attributes.position.count / 3;
-    geometry.addGroup(0, primitiveVertices, 0);
-    geometry.addGroup(0, primitiveVertices, 1);
+    return (enabledZWrite ? 0 : 19) + offset;
   }
 }
