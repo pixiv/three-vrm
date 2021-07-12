@@ -265,10 +265,10 @@
     }
   ],
   "extensionsUsed": [
-    "VRMC_springBone-1.0"
+    "VRMC_springBone"
   ],
   "extensions": {
-    "VRMC_springBone-1.0": {
+    "VRMC_springBone": {
       "specVersion": "1.0-draft",
       "colliders": [
         {
