@@ -1,4 +1,4 @@
-import * as VRMSchema from '@pixiv/types-vrm-0.0';
+import { VRMSchema } from '../types';
 import { saturate } from '../utils/math';
 import { VRMBlendShapeGroup } from './VRMBlendShapeGroup';
 
