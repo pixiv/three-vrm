@@ -1,11 +1,9 @@
 import * as THREE from 'three';
-import { VRMHumanoid } from '../humanoid/VRMHumanoid';
-import { VRMHumanoidBoneName } from '../humanoid/VRMHumanoidBoneName';
-import { GLTFNode } from '../types';
+import { VRMHumanoid } from '../humanoid';
+import { GLTFNode, VRMSchema } from '../types';
 import { VRMCurveMapper } from './VRMCurveMapper';
 import { VRMLookAtApplyer } from './VRMLookAtApplyer';
 import { VRMLookAtHead } from './VRMLookAtHead';
-import { VRMLookAtTypeName } from './VRMLookAtTypeName';
 
 const _euler = new THREE.Euler(0.0, 0.0, 0.0, VRMLookAtHead.EULER_ORDER);
 
@@ -13,7 +11,7 @@ const _euler = new THREE.Euler(0.0, 0.0, 0.0, VRMLookAtHead.EULER_ORDER);
  * This class is used by [[VRMLookAtHead]], applies look at direction to eye bones of a VRM.
  */
 export class VRMLookAtBoneApplyer extends VRMLookAtApplyer {
-  public readonly type = VRMLookAtTypeName.Bone;
+  public readonly type = VRMSchema.FirstPersonLookAtTypeName.Bone;
 
   private readonly _curveHorizontalInner: VRMCurveMapper;
   private readonly _curveHorizontalOuter: VRMCurveMapper;
@@ -46,8 +44,8 @@ export class VRMLookAtBoneApplyer extends VRMLookAtApplyer {
     this._curveVerticalDown = curveVerticalDown;
     this._curveVerticalUp = curveVerticalUp;
 
-    this._leftEye = humanoid.getBoneNode(VRMHumanoidBoneName.LeftEye);
-    this._rightEye = humanoid.getBoneNode(VRMHumanoidBoneName.RightEye);
+    this._leftEye = humanoid.getBoneNode(VRMSchema.HumanoidBoneName.LeftEye);
+    this._rightEye = humanoid.getBoneNode(VRMSchema.HumanoidBoneName.RightEye);
   }
 
   public lookAt(euler: THREE.Euler): void {

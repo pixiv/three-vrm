@@ -1,11 +1,10 @@
 import * as THREE from 'three';
-import { GLTFNode, RawVector3, RawVector4, VRMPose } from '../types';
+import { GLTFNode, RawVector3, RawVector4, VRMPose, VRMSchema } from '../types';
 import { quatInvertCompat } from '../utils/quatInvertCompat';
 import { VRMHumanBone } from './VRMHumanBone';
 import { VRMHumanBoneArray } from './VRMHumanBoneArray';
 import { VRMHumanBones } from './VRMHumanBones';
 import { VRMHumanDescription } from './VRMHumanDescription';
-import { VRMHumanoidBoneName } from './VRMHumanoidBoneName';
 
 const _v3A = new THREE.Vector3();
 const _quatA = new THREE.Quaternion();
@@ -51,7 +50,7 @@ export class VRMHumanoid {
   public getPose(): VRMPose {
     const pose: VRMPose = {};
     Object.keys(this.humanBones).forEach((vrmBoneName) => {
-      const node = this.getBoneNode(vrmBoneName as VRMHumanoidBoneName)!;
+      const node = this.getBoneNode(vrmBoneName as VRMSchema.HumanoidBoneName)!;
 
       // Ignore when there are no bone on the VRMHumanoid
       if (!node) {
@@ -99,7 +98,7 @@ export class VRMHumanoid {
   public setPose(poseObject: VRMPose): void {
     Object.keys(poseObject).forEach((boneName) => {
       const state = poseObject[boneName]!;
-      const node = this.getBoneNode(boneName as VRMHumanoidBoneName);
+      const node = this.getBoneNode(boneName as VRMSchema.HumanoidBoneName);
 
       // Ignore when there are no bone that is defined in the pose on the VRMHumanoid
       if (!node) {
@@ -134,7 +133,7 @@ export class VRMHumanoid {
    */
   public resetPose(): void {
     Object.entries(this.restPose).forEach(([boneName, rest]) => {
-      const node = this.getBoneNode(boneName as VRMHumanoidBoneName);
+      const node = this.getBoneNode(boneName as VRMSchema.HumanoidBoneName);
 
       if (!node) {
         return;
@@ -157,7 +156,7 @@ export class VRMHumanoid {
    *
    * @param name Name of the bone you want
    */
-  public getBone(name: VRMHumanoidBoneName): VRMHumanBone | undefined {
+  public getBone(name: VRMSchema.HumanoidBoneName): VRMHumanBone | undefined {
     return this.humanBones[name][0] ?? undefined;
   }
 
@@ -169,7 +168,7 @@ export class VRMHumanoid {
    *
    * @param name Name of the bone you want
    */
-  public getBones(name: VRMHumanoidBoneName): VRMHumanBone[] {
+  public getBones(name: VRMSchema.HumanoidBoneName): VRMHumanBone[] {
     return this.humanBones[name] ?? [];
   }
 
@@ -180,7 +179,7 @@ export class VRMHumanoid {
    *
    * @param name Name of the bone you want
    */
-  public getBoneNode(name: VRMHumanoidBoneName): GLTFNode | null {
+  public getBoneNode(name: VRMSchema.HumanoidBoneName): GLTFNode | null {
     return this.humanBones[name][0]?.node ?? null;
   }
 
@@ -192,7 +191,7 @@ export class VRMHumanoid {
    *
    * @param name Name of the bone you want
    */
-  public getBoneNodes(name: VRMHumanoidBoneName): GLTFNode[] {
+  public getBoneNodes(name: VRMSchema.HumanoidBoneName): GLTFNode[] {
     return this.humanBones[name]?.map((bone) => bone.node) ?? [];
   }
 
@@ -200,7 +199,7 @@ export class VRMHumanoid {
    * Prepare a [[VRMHumanBones]] from a [[VRMHumanBoneArray]].
    */
   private _createHumanBones(boneArray: VRMHumanBoneArray): VRMHumanBones {
-    const bones: VRMHumanBones = Object.values(VRMHumanoidBoneName).reduce((accum, name) => {
+    const bones: VRMHumanBones = Object.values(VRMSchema.HumanoidBoneName).reduce((accum, name) => {
       accum[name] = [];
       return accum;
     }, {} as Partial<VRMHumanBones>) as VRMHumanBones;

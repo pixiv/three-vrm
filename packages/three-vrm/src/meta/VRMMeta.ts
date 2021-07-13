@@ -1,7 +1,5 @@
 import * as THREE from 'three';
-import { VRMMetaAllowedUserName } from './VRMMetaAllowedUserName';
-import { VRMMetaUssageName } from './VRMMetaUssageName';
-import { VRMMetaLicenseName } from './VRMMetaLicenseName';
+import { VRMSchema } from '../types';
 
 /**
  * Interface represents metadata of a VRM.
@@ -10,7 +8,7 @@ export interface VRMMeta {
   /**
    * Enum indicates a condition who can perform with this avatar.
    */
-  allowedUserName?: VRMMetaAllowedUserName;
+  allowedUserName?: VRMSchema.MetaAllowedUserName;
 
   /**
    * Author of the model.
@@ -20,7 +18,7 @@ export interface VRMMeta {
   /**
    * Enum indicates allow or disallow commercial use.
    */
-  commercialUssageName?: VRMMetaUssageName;
+  commercialUssageName?: VRMSchema.MetaUssageName;
 
   /**
    * Contact Information of its author.
@@ -30,7 +28,7 @@ export interface VRMMeta {
   /**
    * Enum indicates a license type.
    */
-  licenseName?: VRMMetaLicenseName;
+  licenseName?: VRMSchema.MetaLicenseName;
 
   /**
    * If `Other` is selected for {@link licenseName}, put the URL link of the license document here.
@@ -50,7 +48,7 @@ export interface VRMMeta {
   /**
    * Enum indicates allow or disallow sexual expressions.
    */
-  sexualUssageName?: VRMMetaUssageName;
+  sexualUssageName?: VRMSchema.MetaUssageName;
 
   /**
    * Thumbnail of the model.
@@ -70,5 +68,5 @@ export interface VRMMeta {
   /**
    * Enum indicates allow or disallow violent expressions.
    */
-  violentUssageName?: VRMMetaUssageName;
+  violentUssageName?: VRMSchema.MetaUssageName;
 }
