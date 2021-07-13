@@ -14,6 +14,7 @@ export class VRMNodeConstraintLoaderPlugin implements GLTFLoaderPlugin {
   /**
    * Specify an Object3D to add {@link VRMNodeConstraintHelper} s.
    * If not specified, helper will not be created.
+   * If `renderOrder` is set to the root, helpers will copy the same `renderOrder` .
    */
   public helperRoot?: THREE.Object3D;
 
@@ -129,6 +130,7 @@ export class VRMNodeConstraintLoaderPlugin implements GLTFLoaderPlugin {
     if (this.helperRoot) {
       const helper = new VRMNodeConstraintHelper(constraint);
       this.helperRoot.add(helper);
+      helper.renderOrder = this.helperRoot.renderOrder;
     }
 
     return constraint;
