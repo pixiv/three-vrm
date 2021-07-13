@@ -15,12 +15,18 @@ jobs:
           command: node -v
       - run:
           name: Fetch deps
-          command: yarn
+          command: yarn --frozen-lockfile
       - save_cache:
           key: deps-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
             - packages/three-vrm/node_modules
+            - packages/types-vrm-0.0/node_modules
+            - packages/types-vrmc-constraints/node_modules
+            - packages/types-vrmc-materals-mtoon-1.0/node_modules
+            - packages/types-vrmc-node-collider-1.0/node_modules
+            - packages/types-vrmc-springbone-1.0/node_modules
+            - packages/types-vrmc-vrm-1.0/node_modules
 
   build:
     docker: *docker
@@ -30,6 +36,9 @@ jobs:
           keys:
             - deps-{{ checksum "yarn.lock" }}
             - deps-
+      - run:
+          name: Fetch deps
+          command: yarn --frozen-lockfile
       - run:
           name: Build
           command: yarn build
@@ -43,6 +52,9 @@ jobs:
             - deps-{{ checksum "yarn.lock" }}
             - deps-
       - run:
+          name: Fetch deps
+          command: yarn --frozen-lockfile
+      - run:
           name: Test
           command: yarn test
 
@@ -55,6 +67,9 @@ jobs:
             - deps-{{ checksum "yarn.lock" }}
             - deps-
       - run:
+          name: Fetch deps
+          command: yarn --frozen-lockfile
+      - run:
           name: Lint
           command: yarn lint
 
@@ -66,6 +81,9 @@ jobs:
           keys:
             - deps-{{ checksum "yarn.lock" }}
             - deps-
+      - run:
+          name: Fetch deps
+          command: yarn --frozen-lockfile
       - run:
           name: Docs
           command: yarn docs
