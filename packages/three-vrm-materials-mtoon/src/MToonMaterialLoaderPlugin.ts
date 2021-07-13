@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { VRM as V0VRM, Material as V0Material } from '@pixiv/types-vrm-0.0';
 import * as V1MToonSchema from '@pixiv/types-vrmc-materials-mtoon-1.0';
 import type { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
 import { MToonMaterial } from './MToonMaterial';
@@ -48,8 +47,13 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   public async beforeRoot(): Promise<void> {
-    this._v1RemoveUnlitExtension();
-    this._v0RemoveUnlitExtension();
+    // want to do v0compat first if exist
+    const v0compatPlugin = (this.parser as any).plugins?.['VRMMaterialsV0CompatPlugin'];
+    if (v0compatPlugin != null) {
+      await v0compatPlugin.beforeRoot();
+    }
+
+    this._removeUnlitExtensionIfMToonExists();
   }
 
   public async afterRoot(gltf: GLTF): Promise<void> {
@@ -57,13 +61,8 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   public getMaterialType(materialIndex: number): typeof THREE.Material | null {
-    const v1Extension = this._v1GetMToonExtension(materialIndex);
+    const v1Extension = this._getMToonExtension(materialIndex);
     if (v1Extension) {
-      return MToonMaterial;
-    }
-
-    const v0Properties = this._v0GetMToonProperties(materialIndex);
-    if (v0Properties) {
       return MToonMaterial;
     }
 
@@ -71,14 +70,9 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   public extendMaterialParams(materialIndex: number, materialParams: MToonMaterialParameters): Promise<any> | null {
-    const extension = this._v1GetMToonExtension(materialIndex);
+    const extension = this._getMToonExtension(materialIndex);
     if (extension) {
-      return this._v1ExtendMaterialParams(extension, materialParams);
-    }
-
-    const v0Properties = this._v0GetMToonProperties(materialIndex);
-    if (v0Properties) {
-      return this._v0ExtendMaterialParams(v0Properties, materialParams);
+      return this._extendMaterialParams(extension, materialParams);
     }
 
     return null;
@@ -117,13 +111,13 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
    * Since GLTFLoader have so many hardcoded procedure related to `KHR_materials_unlit`
    * we have to delete the extension before we start to parse the glTF.
    */
-  private _v1RemoveUnlitExtension(): void {
+  private _removeUnlitExtensionIfMToonExists(): void {
     const parser = this.parser;
     const json = parser.json;
 
     const materialDefs: any[] = json.materials;
     materialDefs.map((materialDef, iMaterial) => {
-      const extension = this._v1GetMToonExtension(iMaterial);
+      const extension = this._getMToonExtension(iMaterial);
 
       if (extension && materialDef.extensions?.['KHR_materials_unlit']) {
         delete materialDef.extensions['KHR_materials_unlit'];
@@ -131,27 +125,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     });
   }
 
-  /**
-   * Delete use of `KHR_materials_unlit` from its `materials` if the material is using MToon.
-   *
-   * Since GLTFLoader have so many hardcoded procedure related to `KHR_materials_unlit`
-   * we have to delete the extension before we start to parse the glTF.
-   */
-  private _v0RemoveUnlitExtension(): void {
-    const parser = this.parser;
-    const json = parser.json;
-
-    const materialDefs: any[] = json.materials;
-    materialDefs.map((materialDef, iMaterial) => {
-      const properties = this._v0GetMToonProperties(iMaterial);
-
-      if (properties && materialDef.extensions?.['KHR_materials_unlit']) {
-        delete materialDef.extensions['KHR_materials_unlit'];
-      }
-    });
-  }
-
-  private _v1GetMToonExtension(materialIndex: number): V1MToonSchema.VRMCMaterialsMToon | undefined {
+  private _getMToonExtension(materialIndex: number): V1MToonSchema.VRMCMaterialsMToon | undefined {
     const parser = this.parser;
     const json = parser.json;
 
@@ -171,19 +145,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     return extension;
   }
 
-  private _v0GetMToonProperties(materialIndex: number): V0Material | undefined {
-    const parser = this.parser;
-    const json = parser.json;
-
-    const v0VRMExtension: V0VRM | undefined = json.extensions?.['VRM'];
-    const v0MaterialProperties: V0Material | undefined = v0VRMExtension?.materialProperties?.[materialIndex];
-
-    if (v0MaterialProperties?.shader === 'VRM/MToon') {
-      return v0MaterialProperties;
-    }
-  }
-
-  private async _v1ExtendMaterialParams(
+  private async _extendMaterialParams(
     extension: V1MToonSchema.VRMCMaterialsMToon,
     materialParams: MToonMaterialParameters,
   ): Promise<void> {
@@ -220,92 +182,6 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     await assignHelper.pending;
   }
 
-  private async _v0ExtendMaterialParams(
-    properties: V0Material,
-    materialParams: MToonMaterialParameters,
-  ): Promise<void> {
-    // Removing material params that is not required to supress warnings.
-    delete (materialParams as THREE.MeshStandardMaterialParameters).metalness;
-    delete (materialParams as THREE.MeshStandardMaterialParameters).roughness;
-
-    const isTransparent = properties.keywordMap?.['_ALPHABLEND_ON'] ?? false;
-    const enabledZWrite = properties.floatProperties?.['_ZWrite'] === 1;
-    const transparentWithZWrite = enabledZWrite && isTransparent;
-
-    const assignHelper = new GLTFMToonMaterialParamsAssignHelper(this.parser, materialParams);
-
-    assignHelper.assignColor('color', properties.vectorProperties?.['_Color'], true);
-    assignHelper.assignTextureByIndex('map', properties.textureProperties?.['_MainTex'], true);
-    assignHelper.assignTextureByIndex('normalMap', properties.textureProperties?.['_BumpMap'], false);
-
-    const normalScale = properties.floatProperties?.['_BumpScale']
-      ? new THREE.Vector2(properties.floatProperties?.['_BumpScale'], -properties.floatProperties?.['_BumpScale'])
-      : undefined;
-    assignHelper.assignPrimitive('normalScale', normalScale);
-
-    assignHelper.assignColor('emissive', properties.vectorProperties?.['_EmissionColor'], true);
-    assignHelper.assignTextureByIndex('emissiveMap', properties.textureProperties?.['_EmissionMap'], true);
-    assignHelper.assignPrimitive('transparentWithZWrite', transparentWithZWrite);
-    assignHelper.assignColor('shadeColorFactor', properties.vectorProperties?.['_ShadeColor'], true);
-    assignHelper.assignTextureByIndex('shadeMultiplyTexture', properties.textureProperties?.['_ShadeTexture'], true);
-
-    // convert v0 shade shift / shade toony
-    let shadingShift = properties.floatProperties?.['_ShadeShift'] ?? 0.0;
-    let shadingToony = properties.floatProperties?.['_ShadeToony'] ?? 0.9;
-    shadingToony = THREE.MathUtils.lerp(shadingToony, 1.0, 0.5 + 0.5 * shadingShift);
-    shadingShift = -shadingShift - (1.0 - shadingToony);
-    assignHelper.assignPrimitive('shadingShiftFactor', shadingShift);
-    assignHelper.assignPrimitive('shadingToonyFactor', shadingToony);
-
-    assignHelper.assignPrimitive('giIntensityFactor', properties.floatProperties?.['_IndirectLightIntensity']);
-    assignHelper.assignTextureByIndex('matcapTexture', properties.textureProperties?.['_SphereAdd'], true);
-    assignHelper.assignColor('parametricRimColorFactor', properties.vectorProperties?.['_RimColor'], true);
-    assignHelper.assignTextureByIndex('rimMultiplyTexture', properties.textureProperties?.['_RimTexture'], true);
-    assignHelper.assignPrimitive('rimLightingMixFactor', properties.floatProperties?.['_RimLightingMix']);
-    assignHelper.assignPrimitive('parametricRimFresnelPowerFactor', properties.floatProperties?.['_RimFresnelPower']);
-    assignHelper.assignPrimitive('parametricRimLiftFactor', properties.floatProperties?.['_RimLift']);
-
-    const outlineWidthMode = [
-      MToonMaterialOutlineWidthMode.None,
-      MToonMaterialOutlineWidthMode.WorldCoordinates,
-      MToonMaterialOutlineWidthMode.ScreenCoordinates,
-    ][properties.floatProperties?.['_OutlineWidthMode'] ?? 0];
-    assignHelper.assignPrimitive('outlineWidthMode', outlineWidthMode);
-
-    // v0 outlineWidthFactor is in centimeter
-    let outlineWidthFactor = properties.floatProperties?.['_OutlineWidth'] ?? 0.0;
-    outlineWidthFactor = 0.01 * outlineWidthFactor;
-    assignHelper.assignPrimitive('outlineWidthFactor', outlineWidthFactor);
-    assignHelper.assignTextureByIndex(
-      'outlineWidthMultiplyTexture',
-      properties.textureProperties?.['_OutlineWidthTexture'],
-      false,
-    );
-    assignHelper.assignColor('outlineColorFactor', properties.vectorProperties?.['_OutlineColor'], true);
-    assignHelper.assignPrimitive(
-      'outlineLightingMixFactor',
-      properties.floatProperties?.['_OutlineColorMode'] === 0
-        ? 0.0
-        : properties.floatProperties?.['_OutlineLightingMix'],
-    );
-    assignHelper.assignTextureByIndex(
-      'uvAnimationMaskTexture',
-      properties.textureProperties?.['_UvAnimMaskTexture'],
-      false,
-    );
-    assignHelper.assignPrimitive('uvAnimationScrollXSpeedFactor', properties.floatProperties?.['_UvAnimScrollX']);
-
-    const uvAnimationScrollYSpeedFactor =
-      properties.floatProperties?.['_UvAnimScrollY'] != null
-        ? -properties.floatProperties?.['_UvAnimScrollY']
-        : undefined;
-    assignHelper.assignPrimitive('uvAnimationScrollYSpeedFactor', uvAnimationScrollYSpeedFactor);
-
-    assignHelper.assignPrimitive('uvAnimationRotationSpeedFactor', properties.floatProperties?.['_UvAnimRotation']);
-
-    await assignHelper.pending;
-  }
-
   /**
    * This will do two processes that is required to render MToon properly.
    *
@@ -316,21 +192,9 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
    * @param materialIndex The material index of the primitive
    */
   private _setupPrimitive(mesh: THREE.Mesh, materialIndex: number): void {
-    const v1Extension = this._v1GetMToonExtension(materialIndex);
-    if (v1Extension) {
-      const renderOrder = this._v1ParseRenderOrder(v1Extension);
-      mesh.renderOrder = renderOrder + this.renderOrderOffset;
-
-      this._generateOutline(mesh);
-
-      this._addToMaterialSet(mesh);
-
-      return;
-    }
-
-    const v0Properties = this._v0GetMToonProperties(materialIndex);
-    if (v0Properties) {
-      const renderOrder = this._v0ParseRenderOrder(v0Properties);
+    const extension = this._getMToonExtension(materialIndex);
+    if (extension) {
+      const renderOrder = this._parseRenderOrder(extension);
       mesh.renderOrder = renderOrder + this.renderOrderOffset;
 
       this._generateOutline(mesh);
@@ -359,7 +223,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     }
 
     // check whether we really have to prepare outline or not
-    if (surfaceMaterial.outlineWidthMode === 'none' && surfaceMaterial.outlineWidthFactor <= 0.0) {
+    if (surfaceMaterial.outlineWidthMode === 'none' || surfaceMaterial.outlineWidthFactor <= 0.0) {
       return;
     }
 
@@ -397,29 +261,10 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     }
   }
 
-  private _v1ParseRenderOrder(extension: V1MToonSchema.VRMCMaterialsMToon): number {
+  private _parseRenderOrder(extension: V1MToonSchema.VRMCMaterialsMToon): number {
     // transparentWithZWrite ranges from 0 to +9
     // mere transparent ranges from -9 to 0
     const enabledZWrite = extension.transparentWithZWrite;
     return (enabledZWrite ? 0 : 19) + (extension.renderQueueOffsetNumber ?? 0);
-  }
-
-  private _v0ParseRenderOrder(properties: V0Material): number {
-    const isTransparent = properties.keywordMap?.['_ALPHABLEND_ON'] ?? false;
-    const enabledZWrite = properties.floatProperties?.['_ZWrite'] === 1;
-
-    let offset = 0;
-
-    if (isTransparent && properties.renderQueue) {
-      if (enabledZWrite) {
-        offset = Math.min(Math.max(properties.renderQueue - 2501, 0), 9);
-      } else {
-        offset = Math.min(Math.max(properties.renderQueue - 3000, -9), 0);
-      }
-    }
-
-    // transparentWithZWrite ranges from 0 to +9
-    // mere transparent ranges from -9 to 0
-    return (enabledZWrite ? 0 : 19) + offset;
   }
 }

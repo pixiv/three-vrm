@@ -53,6 +53,7 @@
     "@pixiv/three-vrm-node-constraint": "0.0.1",
     "@pixiv/three-vrm-core": "0.0.1",
     "@pixiv/three-vrm-materials-mtoon": "0.0.1",
+    "@pixiv/three-vrm-materials-v0compat": "0.0.1",
     "@pixiv/three-vrm-springbone": "0.0.1",
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@types/three": "^0.126.0",
