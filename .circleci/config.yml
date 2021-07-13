@@ -49,6 +49,8 @@ jobs:
             - node_modules
             - packages/three-vrm/lib
             - packages/three-vrm/types
+            - packages/three-vrm-core/lib
+            - packages/three-vrm-core/types
             - packages/types-vrm-0.0/types
             - packages/types-vrmc-materials-mtoon-1.0/types
             - packages/types-vrmc-materials-hdr-emissive-multiplier-1.0/types
