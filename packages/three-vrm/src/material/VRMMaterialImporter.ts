@@ -1,6 +1,6 @@
-import * as VRMSchema from '@pixiv/types-vrm-0.0';
 import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTFSchema, VRMSchema } from '../types';
 import { gltfExtractPrimitivesFromNodes } from '../utils/gltfExtractPrimitivesFromNode';
 import { MToonMaterial, MToonMaterialOutlineWidthMode } from './MToonMaterial';
 import { VRMUnlitMaterial, VRMUnlitMaterialRenderType } from './VRMUnlitMaterial';
@@ -73,8 +73,8 @@ export class VRMMaterialImporter {
 
     await Promise.all(
       Array.from(nodePrimitivesMap.entries()).map(async ([nodeIndex, primitives]) => {
-        const schemaNode: any = gltf.parser.json.nodes[nodeIndex];
-        const schemaMesh: any = gltf.parser.json.meshes[schemaNode.mesh!];
+        const schemaNode: GLTFSchema.Node = gltf.parser.json.nodes[nodeIndex];
+        const schemaMesh: GLTFSchema.Mesh = gltf.parser.json.meshes[schemaNode.mesh!];
 
         await Promise.all(
           primitives.map(async (primitive, primitiveIndex) => {

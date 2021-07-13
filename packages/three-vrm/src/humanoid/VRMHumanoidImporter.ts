@@ -1,11 +1,10 @@
 import * as THREE from 'three';
-import * as VRMSchema from '@pixiv/types-vrm-0.0';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+import { VRMSchema } from '../types';
 import { VRMHumanBone } from './VRMHumanBone';
 import { VRMHumanBoneArray } from './VRMHumanBoneArray';
 import { VRMHumanDescription } from './VRMHumanDescription';
 import { VRMHumanoid } from './VRMHumanoid';
-import { VRMHumanoidBoneName } from './VRMHumanoidBoneName';
 
 /**
  * An importer that imports a [[VRMHumanoid]] from a VRM extension of a GLTF.
@@ -37,7 +36,7 @@ export class VRMHumanoidImporter {
 
           const node = await gltf.parser.getDependency('node', bone.node);
           humanBoneArray.push({
-            name: bone.bone as VRMHumanoidBoneName,
+            name: bone.bone,
             bone: new VRMHumanBone(node, {
               axisLength: bone.axisLength,
               center: bone.center && new THREE.Vector3(bone.center.x, bone.center.y, bone.center.z),
