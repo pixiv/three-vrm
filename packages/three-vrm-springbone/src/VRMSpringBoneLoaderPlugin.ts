@@ -18,12 +18,14 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
   /**
    * Specify an Object3D to add {@link VRMSpringBoneJointHelper} s.
    * If not specified, helper will not be created.
+   * If `renderOrder` is set to the root, helpers will copy the same `renderOrder` .
    */
   public jointHelperRoot?: THREE.Object3D;
 
   /**
    * Specify an Object3D to add {@link VRMSpringBoneJointHelper} s.
    * If not specified, helper will not be created.
+   * If `renderOrder` is set to the root, helpers will copy the same `renderOrder` .
    */
   public colliderHelperRoot?: THREE.Object3D;
 
@@ -303,6 +305,7 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
     if (this.jointHelperRoot) {
       const helper = new VRMSpringBoneJointHelper(springBone);
       this.jointHelperRoot.add(helper);
+      helper.renderOrder = this.jointHelperRoot.renderOrder;
     }
 
     return springBone;
@@ -326,6 +329,7 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
     if (this.colliderHelperRoot) {
       const helper = new VRMSpringBoneColliderHelper(collider);
       this.colliderHelperRoot.add(helper);
+      helper.renderOrder = this.colliderHelperRoot.renderOrder;
     }
 
     return collider;
@@ -350,6 +354,7 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
     if (this.colliderHelperRoot) {
       const helper = new VRMSpringBoneColliderHelper(collider);
       this.colliderHelperRoot.add(helper);
+      helper.renderOrder = this.colliderHelperRoot.renderOrder;
     }
 
     return collider;
