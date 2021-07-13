@@ -1,11 +1,8 @@
-import * as VRMSchema from '@pixiv/types-vrm-0.0';
 import * as THREE from 'three';
+import { VRMSchema } from '../types';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRMMeta } from './VRMMeta';
-import { VRMMetaAllowedUserName } from './VRMMetaAllowedUserName';
 import { VRMMetaImporterOptions } from './VRMMetaImporterOptions';
-import { VRMMetaLicenseName } from './VRMMetaLicenseName';
-import { VRMMetaUssageName } from './VRMMetaUssageName';
 
 /**
  * An importer that imports a {@link VRMMeta} from a VRM extension of a GLTF.
@@ -37,19 +34,19 @@ export class VRMMetaImporter {
     }
 
     return {
-      allowedUserName: schemaMeta.allowedUserName as VRMMetaAllowedUserName,
+      allowedUserName: schemaMeta.allowedUserName,
       author: schemaMeta.author,
-      commercialUssageName: schemaMeta.commercialUssageName as VRMMetaUssageName,
+      commercialUssageName: schemaMeta.commercialUssageName,
       contactInformation: schemaMeta.contactInformation,
-      licenseName: schemaMeta.licenseName as VRMMetaLicenseName,
+      licenseName: schemaMeta.licenseName,
       otherLicenseUrl: schemaMeta.otherLicenseUrl,
       otherPermissionUrl: schemaMeta.otherPermissionUrl,
       reference: schemaMeta.reference,
-      sexualUssageName: schemaMeta.sexualUssageName as VRMMetaUssageName,
+      sexualUssageName: schemaMeta.sexualUssageName,
       texture: texture ?? undefined,
       title: schemaMeta.title,
       version: schemaMeta.version,
-      violentUssageName: schemaMeta.violentUssageName as VRMMetaUssageName,
+      violentUssageName: schemaMeta.violentUssageName,
     };
   }
 }

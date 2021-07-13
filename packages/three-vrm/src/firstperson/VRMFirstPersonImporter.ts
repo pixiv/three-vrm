@@ -1,9 +1,7 @@
-import * as VRMSchema from '@pixiv/types-vrm-0.0';
 import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
-import { VRMHumanoid } from '../humanoid/VRMHumanoid';
-import { VRMHumanoidBoneName } from '../humanoid/VRMHumanoidBoneName';
-import { GLTFNode } from '../types';
+import { VRMHumanoid } from '../humanoid';
+import { GLTFNode, GLTFSchema, VRMSchema } from '../types';
 import { gltfExtractPrimitivesFromNodes } from '../utils/gltfExtractPrimitivesFromNode';
 import { VRMFirstPerson, VRMRendererFirstPersonFlags } from './VRMFirstPerson';
 
@@ -32,7 +30,7 @@ export class VRMFirstPersonImporter {
 
     let firstPersonBone: GLTFNode | null;
     if (firstPersonBoneIndex === undefined || firstPersonBoneIndex === -1) {
-      firstPersonBone = humanoid.getBoneNode(VRMHumanoidBoneName.Head);
+      firstPersonBone = humanoid.getBoneNode(VRMSchema.HumanoidBoneName.Head);
     } else {
       firstPersonBone = await gltf.parser.getDependency('node', firstPersonBoneIndex);
     }
@@ -54,7 +52,7 @@ export class VRMFirstPersonImporter {
     const nodePrimitivesMap = await gltfExtractPrimitivesFromNodes(gltf);
 
     Array.from(nodePrimitivesMap.entries()).forEach(([nodeIndex, primitives]) => {
-      const schemaNode: any = gltf.parser.json.nodes[nodeIndex];
+      const schemaNode: GLTFSchema.Node = gltf.parser.json.nodes[nodeIndex];
 
       const flag = schemaFirstPerson.meshAnnotations
         ? schemaFirstPerson.meshAnnotations.find((a) => a.mesh === schemaNode.mesh)

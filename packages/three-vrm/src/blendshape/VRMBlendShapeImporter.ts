@@ -1,10 +1,9 @@
-import * as VRMSchema from '@pixiv/types-vrm-0.0';
 import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTFSchema, VRMSchema } from '../types';
 import { gltfExtractPrimitivesFromNode } from '../utils/gltfExtractPrimitivesFromNode';
 import { renameMaterialProperty } from '../utils/renameMaterialProperty';
 import { VRMBlendShapeGroup } from './VRMBlendShapeGroup';
-import { VRMBlendShapePresetName } from './VRMBlendShapePresetName';
 import { VRMBlendShapeProxy } from './VRMBlendShapeProxy';
 
 /**
@@ -47,7 +46,7 @@ export class VRMBlendShapeImporter {
         let presetName: VRMSchema.BlendShapePresetName | undefined;
         if (
           schemaGroup.presetName &&
-          schemaGroup.presetName !== VRMBlendShapePresetName.Unknown &&
+          schemaGroup.presetName !== VRMSchema.BlendShapePresetName.Unknown &&
           !blendShapePresetMap[schemaGroup.presetName]
         ) {
           presetName = schemaGroup.presetName;
@@ -66,8 +65,7 @@ export class VRMBlendShapeImporter {
             }
 
             const nodesUsingMesh: number[] = [];
-            const nodes: any[] = gltf.parser.json.nodes;
-            nodes.forEach((node, i) => {
+            (gltf.parser.json.nodes as GLTFSchema.Node[]).forEach((node, i) => {
               if (node.mesh === bind.mesh) {
                 nodesUsingMesh.push(i);
               }
