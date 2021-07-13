@@ -1,8 +1,8 @@
-import * as VRMSchema from '@pixiv/types-vrm-0.0';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRMBlendShapeProxy } from '../blendshape';
 import { VRMFirstPerson } from '../firstperson';
 import { VRMHumanoid } from '../humanoid';
+import { VRMSchema } from '../types';
 import { VRMCurveMapper } from './VRMCurveMapper';
 import { VRMLookAtApplyer } from './VRMLookAtApplyer';
 import { VRMLookAtBlendShapeApplyer } from './VRMLookAtBlendShapeApplyer';
@@ -56,7 +56,7 @@ export class VRMLookAtImporter {
     const lookAtVerticalUp = schemaFirstPerson.lookAtVerticalUp;
 
     switch (schemaFirstPerson.lookAtTypeName) {
-      case 'Bone': {
+      case VRMSchema.FirstPersonLookAtTypeName.Bone: {
         if (
           lookAtHorizontalInner === undefined ||
           lookAtHorizontalOuter === undefined ||
@@ -74,7 +74,7 @@ export class VRMLookAtImporter {
           );
         }
       }
-      case 'BlendShape': {
+      case VRMSchema.FirstPersonLookAtTypeName.BlendShape: {
         if (lookAtHorizontalOuter === undefined || lookAtVerticalDown === undefined || lookAtVerticalUp === undefined) {
           return null;
         } else {
