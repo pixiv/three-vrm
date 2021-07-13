@@ -26,6 +26,7 @@
 		<script>
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
+			renderer.outputEncoding = THREE.sRGBEncoding;
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			renderer.setPixelRatio( window.devicePixelRatio );
 			document.body.appendChild( renderer.domElement );
@@ -52,24 +53,27 @@
 			let currentVrm = undefined;
 			const loader = new THREE.GLTFLoader();
 			loader.crossOrigin = 'anonymous';
+
+			loader.register( ( parser ) => {
+
+				return new THREE_VRM.VRMLoaderPlugin( parser );
+
+			} );
+
 			loader.load(
 
 				'./models/three-vrm-girl.vrm',
 
 				( gltf ) => {
 
-					THREE.VRMUtils.removeUnnecessaryJoints( gltf.scene );
+					const vrm = gltf.userData.vrm;
 
-					THREE.VRM.from( gltf ).then( ( vrm ) => {
+					THREE_VRM.VRMUtils.removeUnnecessaryJoints( gltf.scene );
 
-						scene.add( vrm.scene );
-						currentVrm = vrm;
+					scene.add( vrm.scene );
+					currentVrm = vrm;
 
-						vrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.Hips ).rotation.y = Math.PI;
-
-						console.log( vrm );
-
-					} );
+					console.log( vrm );
 
 				},
 
@@ -99,8 +103,8 @@
 
 					// tweak blendshape
 					const s = Math.sin( Math.PI * clock.elapsedTime );
-					currentVrm.blendShapeProxy.setValue( THREE.VRMSchema.BlendShapePresetName.A, 0.5 + 0.5 * s );
-					currentVrm.blendShapeProxy.setValue( THREE.VRMSchema.BlendShapePresetName.BlinkL, 0.5 - 0.5 * s );
+					currentVrm.expressionManager.setValue( THREE_VRM.VRMExpressionPreset.Aa, 0.5 + 0.5 * s );
+					currentVrm.expressionManager.setValue( THREE_VRM.VRMExpressionPreset.BlinkLeft, 0.5 - 0.5 * s );
 
 					// update vrm
 					currentVrm.update( deltaTime );

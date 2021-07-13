@@ -4,6 +4,7 @@ import packageJson from './package.json';
 import serve from 'rollup-plugin-serve';
 import { string } from 'rollup-plugin-string';
 import { terser } from 'rollup-plugin-terser';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 
 // == constants ====================================================================================
@@ -63,6 +64,7 @@ export default {
       include: ['**/*.frag', '**/*.vert'],
     }),
     typescript(),
+    nodeResolve(),
     ...(DEV ? [] : [terser()]),
     ...(SERVE ? [serve(serveOptions)] : []),
   ],

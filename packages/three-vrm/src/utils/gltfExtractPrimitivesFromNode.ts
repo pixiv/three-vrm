@@ -1,7 +1,6 @@
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
-import type { GLTFPrimitive, GLTFSchema } from '../types';
 
-function extractPrimitivesInternal(gltf: GLTF, nodeIndex: number, node: THREE.Object3D): GLTFPrimitive[] | null {
+function extractPrimitivesInternal(gltf: GLTF, nodeIndex: number, node: THREE.Object3D): THREE.Mesh[] | null {
   /**
    * Let's list up every possible patterns that parsed gltf nodes with a mesh can have,,,
    *
@@ -54,22 +53,22 @@ function extractPrimitivesInternal(gltf: GLTF, nodeIndex: number, node: THREE.Ob
    */
 
   // Make sure that the node has a mesh
-  const schemaNode: GLTFSchema.Node = gltf.parser.json.nodes[nodeIndex];
+  const schemaNode: any = gltf.parser.json.nodes[nodeIndex];
   const meshIndex = schemaNode.mesh;
   if (meshIndex == null) {
     return null;
   }
 
   // How many primitives the mesh has?
-  const schemaMesh: GLTFSchema.Mesh = gltf.parser.json.meshes[meshIndex];
+  const schemaMesh: any = gltf.parser.json.meshes[meshIndex];
   const primitiveCount = schemaMesh.primitives.length;
 
   // Traverse the node and take first (primitiveCount) meshes
-  const primitives: GLTFPrimitive[] = [];
+  const primitives: THREE.Mesh[] = [];
   node.traverse((object) => {
     if (primitives.length < primitiveCount) {
       if ((object as any).isMesh) {
-        primitives.push(object as GLTFPrimitive);
+        primitives.push(object as THREE.Mesh);
       }
     }
   });
@@ -86,7 +85,7 @@ function extractPrimitivesInternal(gltf: GLTF, nodeIndex: number, node: THREE.Ob
  * @param gltf A GLTF object taken from GLTFLoader
  * @param nodeIndex The index of the node
  */
-export async function gltfExtractPrimitivesFromNode(gltf: GLTF, nodeIndex: number): Promise<GLTFPrimitive[] | null> {
+export async function gltfExtractPrimitivesFromNode(gltf: GLTF, nodeIndex: number): Promise<THREE.Mesh[] | null> {
   const node: THREE.Object3D = await gltf.parser.getDependency('node', nodeIndex);
   return extractPrimitivesInternal(gltf, nodeIndex, node);
 }
@@ -100,9 +99,9 @@ export async function gltfExtractPrimitivesFromNode(gltf: GLTF, nodeIndex: numbe
  *
  * @param gltf A GLTF object taken from GLTFLoader
  */
-export async function gltfExtractPrimitivesFromNodes(gltf: GLTF): Promise<Map<number, GLTFPrimitive[]>> {
+export async function gltfExtractPrimitivesFromNodes(gltf: GLTF): Promise<Map<number, THREE.Mesh[]>> {
   const nodes: THREE.Object3D[] = await gltf.parser.getDependencies('node');
-  const map = new Map<number, GLTFPrimitive[]>();
+  const map = new Map<number, THREE.Mesh[]>();
 
   nodes.forEach((node, index) => {
     const result = extractPrimitivesInternal(gltf, index, node);

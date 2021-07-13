@@ -26,6 +26,7 @@
 		<script>
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
+			renderer.outputEncoding = THREE.sRGBEncoding;
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			renderer.setPixelRatio( window.devicePixelRatio );
 			document.body.appendChild( renderer.domElement );
@@ -48,23 +49,26 @@
 			let currentVrm = undefined;
 			const loader = new THREE.GLTFLoader();
 			loader.crossOrigin = 'anonymous';
+
+			loader.register( ( parser ) => {
+
+				return new THREE_VRM.VRMLoaderPlugin( parser );
+
+			} );
+
 			loader.load(
 
 				'./models/three-vrm-girl.vrm',
 
 				( gltf ) => {
 
-					THREE.VRMUtils.removeUnnecessaryJoints( gltf.scene );
+					const vrm = gltf.userData.vrm;
 
-					THREE.VRM.from( gltf ).then( ( vrm ) => {
+					THREE_VRM.VRMUtils.removeUnnecessaryJoints( gltf.scene );
 
-						scene.add( vrm.scene );
-						currentVrm = vrm;
-						console.log( vrm );
-
-						vrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.Hips ).rotation.y = Math.PI;
-
-					} );
+					scene.add( vrm.scene );
+					currentVrm = vrm;
+					console.log( vrm );
 
 				},
 
@@ -108,7 +112,7 @@
 					const px = ( 2.0 * event.clientX - window.innerWidth ) / window.innerHeight * range;
 					const py = -( 2.0 * event.clientY - window.innerHeight ) / window.innerHeight * range;
 
-					currentVrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.Hips ).position.set( px, py, 0.0 );
+					currentVrm.humanoid.getBoneNode( THREE_VRM.VRMHumanBoneName.Hips ).position.set( px, py, 0.0 );
 
 				}
 
