@@ -22,6 +22,7 @@ jobs:
             - node_modules
             - packages/three-vrm/node_modules
             - packages/three-vrm-core/node_modules
+            - packages/three-vrm-materials-mtoon/node_modules
             - packages/three-vrm-springbone/node_modules
             - packages/types-vrm-0.0/node_modules
             - packages/types-vrmc-materials-mtoon-1.0/node_modules
@@ -52,6 +53,8 @@ jobs:
             - packages/three-vrm/types
             - packages/three-vrm-core/lib
             - packages/three-vrm-core/types
+            - packages/three-vrm-materials-mtoon/lib
+            - packages/three-vrm-materials-mtoon/types
             - packages/three-vrm-springbone/lib
             - packages/three-vrm-springbone/types
             - packages/types-vrm-0.0/types
