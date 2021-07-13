@@ -36,7 +36,7 @@ export interface VRMCMaterialsMToon {
   /**
    *
    */
-  shadingShiftTexture: MaterialsMToonShadingShiftTextureInfo;
+  shadingShiftTexture?: MaterialsMToonShadingShiftTextureInfo;
 
   /**
    *
