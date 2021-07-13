@@ -44,6 +44,11 @@
 			// scene
 			const scene = new THREE.Scene();
 
+			// helperRoot
+			const helperRoot = new THREE.Group();
+			helperRoot.renderOrder = 10000;
+			scene.add( helperRoot );
+
 			// light
 			const light = new THREE.DirectionalLight( 0xffffff );
 			light.position.set( 1.0, 1.0, 1.0 ).normalize();
@@ -57,7 +62,7 @@
 			loader.register( ( parser ) => {
 
 				// assigning `helperRoot` to options will make helpers appear
-				return new THREE_VRM.VRMLoaderPlugin( parser, { helperRoot: scene } );
+				return new THREE_VRM.VRMLoaderPlugin( parser, { helperRoot } );
 
 			} );
 
