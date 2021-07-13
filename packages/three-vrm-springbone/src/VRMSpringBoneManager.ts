@@ -3,6 +3,7 @@ import type { VRMSpringBoneJoint } from './VRMSpringBoneJoint';
 import { traverseAncestorsFromRoot } from './utils/traverseAncestorsFromRoot';
 import type { VRMSpringBoneCollider } from './VRMSpringBoneCollider';
 import type { VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';
+import { traverseChildrenUntilConditionMet } from './utils/traverseChildrenUntilConditionMet';
 
 export class VRMSpringBoneManager {
   private _springBones = new Set<VRMSpringBoneJoint>();
@@ -73,7 +74,21 @@ export class VRMSpringBoneManager {
     const constraintsDone = new Set<VRMSpringBoneJoint>();
 
     for (const springBone of this._springBones) {
+      // update the springbone
       this._processSpringBone(springBone, constraintsTried, constraintsDone, (springBone) => springBone.update(delta));
+
+      // update children world matrices
+      // it is required when the spring bone chain is sparse
+      traverseChildrenUntilConditionMet(springBone.bone, (object) => {
+        // if the object has attached springbone, halt the traversal
+        if ((this._objectSpringBonesMap.get(object)?.size ?? 0) > 0) {
+          return true;
+        }
+
+        // otherwise update its world matrix
+        object.updateWorldMatrix(false, false);
+        return false;
+      });
     }
   }
 
