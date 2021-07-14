@@ -32,7 +32,6 @@
     "build-moduleprod": "cross-env NODE_ENV=production ESM=1 rollup -c -o lib/three-vrm-materials-v0compat.module.min.js",
     "build-types": "tsc --project ./tsconfig.build-types.json && downlevel-dts types ts3.4/types",
     "docs": "typedoc --entryPoints ./src/index.ts --out docs",
-    "test": "jest",
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier \"src/**/*.{ts,tsx}\" --check",
     "lint-fix": "eslint \"src/**/*.{ts,tsx}\" --fix && prettier \"src/**/*.{ts,tsx}\" --write"
   },
