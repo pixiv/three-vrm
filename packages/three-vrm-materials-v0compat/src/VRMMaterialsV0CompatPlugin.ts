@@ -63,7 +63,9 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
     const cullMode = materialProperties.floatProperties?.['_CullMode'] ?? 2; // enum, { Off, Front, Back }
     const doubleSided = cullMode === 0;
 
-    const baseColorFactor = materialProperties.vectorProperties?.['_Color']?.map(gammaEOTF);
+    const baseColorFactor = materialProperties.vectorProperties?.['_Color']?.map(
+      (v: number, i: number) => (i === 3 ? v : gammaEOTF(v)), // alpha channel is stored in linear
+    );
     const baseColorTextureIndex = materialProperties.textureProperties?.['_MainTex'];
     const baseColorTexture =
       baseColorTextureIndex != null
