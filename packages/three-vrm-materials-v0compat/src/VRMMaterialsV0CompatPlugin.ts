@@ -7,7 +7,7 @@ import { gammaEOTF } from './utils/gammaEOTF';
 export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
   public readonly parser: GLTFParser;
 
-  private _haveExecutedBeforeRoot: boolean;
+  private _beforeRootCache?: Promise<void>;
 
   public get name(): string {
     return 'VRMMaterialsV0CompatPlugin';
@@ -15,38 +15,41 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
 
   public constructor(parser: GLTFParser) {
     this.parser = parser;
-
-    this._haveExecutedBeforeRoot = false;
   }
 
   public async beforeRoot(): Promise<void> {
-    if (this._haveExecutedBeforeRoot) {
+    if (this._beforeRootCache) {
       // someone else have already executed beforeRoot
-      return;
+      // It's probably MToonMaterialLoaderPlugin
+      return this._beforeRootCache;
     }
 
-    // early abort if it doesn't use V0VRM
-    const json = this.parser.json;
-    const v0VRMExtension: V0VRM | undefined = json.extensions?.['VRM'];
-    const v0MaterialProperties = v0VRMExtension?.materialProperties;
-    if (!v0MaterialProperties) {
-      return;
-    }
-
-    // convert V0 material properties into V1 compatible format
-    v0MaterialProperties.forEach((materialProperties, materialIndex) => {
-      if (materialProperties.shader === 'VRM/MToon') {
-        const material = this._parseV0MToonProperties(materialProperties, json.materials[materialIndex]);
-        json.materials[materialIndex] = material;
-      } else if (materialProperties.shader?.startsWith('VRM/Unlit')) {
-        const material = this._parseV0UnlitProperties(materialProperties, json.materials[materialIndex]);
-        json.materials[materialIndex] = material;
-      } else if (materialProperties.shader === 'VRM_USE_GLTFSHADER') {
-        // `json.materials[materialIndex]` should be already valid
-      } else {
-        console.warn(`VRMMaterialsV0CompatPlugin: Unknown shader: ${materialProperties.shader}`);
+    this._beforeRootCache = (async () => {
+      // early abort if it doesn't use V0VRM
+      const json = this.parser.json;
+      const v0VRMExtension: V0VRM | undefined = json.extensions?.['VRM'];
+      const v0MaterialProperties = v0VRMExtension?.materialProperties;
+      if (!v0MaterialProperties) {
+        return;
       }
-    });
+
+      // convert V0 material properties into V1 compatible format
+      v0MaterialProperties.forEach((materialProperties, materialIndex) => {
+        if (materialProperties.shader === 'VRM/MToon') {
+          const material = this._parseV0MToonProperties(materialProperties, json.materials[materialIndex]);
+          json.materials[materialIndex] = material;
+        } else if (materialProperties.shader?.startsWith('VRM/Unlit')) {
+          const material = this._parseV0UnlitProperties(materialProperties, json.materials[materialIndex]);
+          json.materials[materialIndex] = material;
+        } else if (materialProperties.shader === 'VRM_USE_GLTFSHADER') {
+          // `json.materials[materialIndex]` should be already valid
+        } else {
+          console.warn(`VRMMaterialsV0CompatPlugin: Unknown shader: ${materialProperties.shader}`);
+        }
+      });
+    })();
+
+    await this._beforeRootCache;
   }
 
   private _parseV0MToonProperties(materialProperties: V0Material, schemaMaterial: any): any {
