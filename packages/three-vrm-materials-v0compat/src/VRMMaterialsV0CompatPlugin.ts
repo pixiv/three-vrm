@@ -222,7 +222,7 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
 
     const isCutoff = materialProperties.shader === 'VRM/UnlitCutout';
     const alphaMode = isTransparent ? 'BLEND' : isCutoff ? 'MASK' : 'OPAQUE';
-    const alphaCutoff = isCutoff ? materialProperties.vectorProperties?.['_Cutoff'] : undefined;
+    const alphaCutoff = isCutoff ? materialProperties.floatProperties?.['_Cutoff'] : undefined;
 
     const baseColorFactor = materialProperties.vectorProperties?.['_Color']?.map(gammaEOTF);
     const baseColorTextureIndex = materialProperties.textureProperties?.['_MainTex'];
