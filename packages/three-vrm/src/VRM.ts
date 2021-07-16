@@ -56,7 +56,7 @@ export class VRM {
 
   /**
    * Contains materials of the VRM.
-   * `updateVRMMaterials` method of these materials will be called via its [[VRM.update]] method.
+   * `update` method of these materials will be called via its [[VRM.update]] method.
    */
   public readonly materials?: THREE.Material[];
 
@@ -121,8 +121,8 @@ export class VRM {
 
     if (this.materials) {
       this.materials.forEach((material: any) => {
-        if (material.updateVRMMaterials) {
-          material.updateVRMMaterials(delta);
+        if (material.update) {
+          material.update(delta);
         }
       });
     }
