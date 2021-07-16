@@ -17,6 +17,7 @@ import type { MToonMaterialParameters } from './MToonMaterialParameters';
 export class MToonMaterial extends THREE.ShaderMaterial {
   public uniforms: {
     litFactor: THREE.IUniform<THREE.Color>;
+    opacity: THREE.IUniform<number>;
     map: THREE.IUniform<THREE.Texture | null>;
     normalMap: THREE.IUniform<THREE.Texture | null>;
     normalScale: THREE.IUniform<THREE.Vector2>;
@@ -374,6 +375,11 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.uniforms.uvAnimationScrollXOffset.value += delta * this.uvAnimationScrollXSpeedFactor;
     this.uniforms.uvAnimationScrollYOffset.value += delta * this.uvAnimationScrollYSpeedFactor;
     this.uniforms.uvAnimationRotationPhase.value += delta * this.uvAnimationRotationSpeedFactor;
+
+    // workaround: since opacity is defined as a property in THREE.Material
+    // and cannot be overridden as an accessor,
+    // We are going to update opacity here
+    this.uniforms.opacity.value = this.opacity;
 
     this.uniformsNeedUpdate = true;
   }
