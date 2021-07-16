@@ -76,6 +76,7 @@ export class VRMLoaderPlugin implements GLTFLoaderPlugin {
     await this.firstPersonPlugin.afterRoot(gltf);
     await this.springBonePlugin.afterRoot(gltf);
     await this.constraintPlugin.afterRoot(gltf);
+    await this.mtoonMaterialPlugin.afterRoot(gltf);
 
     const vrm = new VRM({
       scene: gltf.scene,
@@ -84,6 +85,7 @@ export class VRMLoaderPlugin implements GLTFLoaderPlugin {
       humanoid: gltf.userData.vrmHumanoid,
       lookAt: gltf.userData.vrmLookAt,
       meta: gltf.userData.vrmMeta,
+      materials: gltf.userData.vrmMToonMaterials,
       springBoneManager: gltf.userData.vrmSpringBoneManager,
       constraintManager: gltf.userData.vrmConstraintManager,
     });
