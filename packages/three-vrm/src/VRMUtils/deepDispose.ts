@@ -3,13 +3,25 @@
 import * as THREE from 'three';
 
 function disposeMaterial(material: THREE.Material): void {
-  Object.keys(material).forEach((propertyName) => {
-    const value = (material as any)[propertyName];
+  Object.values(material).forEach((value) => {
     if (value?.isTexture) {
       const texture = value as THREE.Texture;
       texture.dispose();
     }
   });
+
+  if ((material as any).isShaderMaterial) {
+    const uniforms: { [uniform: string]: THREE.IUniform<any> } = (material as any).uniforms;
+    if (uniforms) {
+      Object.values(uniforms).forEach((uniform) => {
+        const value = uniform.value;
+        if (value?.isTexture) {
+          const texture = value as THREE.Texture;
+          texture.dispose();
+        }
+      });
+    }
+  }
 
   material.dispose();
 }
