@@ -3,6 +3,7 @@ import type * as V1VRMSchema from '@pixiv/types-vrmc-vrm-1.0';
 import type { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRMHumanoid } from './VRMHumanoid';
 import type { VRMHumanBones } from './VRMHumanBones';
+import { VRMRequiredHumanBoneName } from './VRMRequiredHumanBoneName';
 
 /**
  * A plugin of GLTFLoader that imports a {@link VRMHumanoid} from a VRM extension of a GLTF.
@@ -74,7 +75,7 @@ export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
       return null;
     }
 
-    const humanBones: VRMHumanBones = {};
+    const humanBones: Partial<VRMHumanBones> = {};
     if (schemaHumanoid.humanBones != null) {
       await Promise.all(
         Object.entries(schemaHumanoid.humanBones).map(async ([boneNameString, schemaHumanBone]) => {
@@ -95,7 +96,7 @@ export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
       );
     }
 
-    return new VRMHumanoid(humanBones);
+    return new VRMHumanoid(this._ensureRequiredBonesExist(humanBones));
   }
 
   private async _v0Import(gltf: GLTF): Promise<VRMHumanoid | null> {
@@ -109,7 +110,7 @@ export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
       return null;
     }
 
-    const humanBones: VRMHumanBones = {};
+    const humanBones: Partial<VRMHumanBones> = {};
     if (schemaHumanoid.humanBones != null) {
       await Promise.all(
         schemaHumanoid.humanBones.map(async (bone) => {
@@ -143,6 +144,27 @@ export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
       );
     }
 
-    return new VRMHumanoid(humanBones);
+    return new VRMHumanoid(this._ensureRequiredBonesExist(humanBones));
+  }
+
+  /**
+   * Ensure required bones exist in given human bones.
+   * @param humanBones Human bones
+   * @returns Human bones, no longer partial!
+   */
+  private _ensureRequiredBonesExist(humanBones: Partial<VRMHumanBones>): VRMHumanBones {
+    // ensure required bones exist
+    const missingRequiredBones = Object.values(VRMRequiredHumanBoneName).filter(
+      (requiredBoneName) => humanBones[requiredBoneName] == null,
+    );
+
+    // throw an error if there are missing bones
+    if (missingRequiredBones.length > 0) {
+      throw new Error(
+        `VRMHumanoidLoaderPlugin: These humanoid bones are required but not exist: ${missingRequiredBones.join(', ')}`,
+      );
+    }
+
+    return humanBones as VRMHumanBones;
   }
 }
