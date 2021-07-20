@@ -5,3 +5,4 @@ export { VRMHumanoid } from './VRMHumanoid';
 export { VRMHumanoidLoaderPlugin } from './VRMHumanoidLoaderPlugin';
 export type { VRMPose } from './VRMPose';
 export type { VRMPoseTransform } from './VRMPoseTransform';
+export { VRMRequiredHumanBoneName } from './VRMRequiredHumanBoneName';

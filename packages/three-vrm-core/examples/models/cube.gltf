@@ -429,6 +429,7 @@
   ],
   "extensions": {
     "VRMC_vrm": {
+      "specVersion": "1.0-draft",
       "meta": {
         "name": "Cube",
         "version": "1.0.0",
