@@ -1,0 +1,7 @@
+/packages/*/docs/
+/packages/*/lib/
+/packages/*/node_modules/
+/packages/*/ts*/
+/packages/*/types/
+
+jest.config.js

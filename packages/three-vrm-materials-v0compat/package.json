@@ -1,0 +1,56 @@
+{
+  "name": "@pixiv/three-vrm-materials-v0compat",
+  "version": "0.0.1",
+  "description": "VRM0.0 materials compatibility layer plugin for @pixiv/three-vrm",
+  "license": "MIT",
+  "author": "pixiv",
+  "files": [
+    "/lib/",
+    "/ts*/",
+    "/types/",
+    "LICENSE"
+  ],
+  "main": "lib/three-vrm-materials-v0compat.js",
+  "module": "lib/three-vrm-materials-v0compat.module.js",
+  "types": "types/index.d.ts",
+  "typesVersions": {
+    "<3.9": {
+      "*": [
+        "ts3.4/*"
+      ]
+    }
+  },
+  "scripts": {
+    "version": "yarn all",
+    "all": "yarn && yarn test && yarn lint && yarn clean && yarn build && yarn docs",
+    "dev": "cross-env NODE_ENV=development SERVE=1 rollup -w -c -o lib/three-vrm-materials-v0compat.js",
+    "clean": "rimraf docs/ lib/ ts*/ types/",
+    "build": "yarn build-dev && yarn build-prod && yarn build-moduledev && yarn build-moduleprod && yarn build-types",
+    "build-dev": "cross-env NODE_ENV=development rollup -c -o lib/three-vrm-materials-v0compat.js",
+    "build-prod": "cross-env NODE_ENV=production rollup -c -o lib/three-vrm-materials-v0compat.min.js",
+    "build-moduledev": "cross-env NODE_ENV=development ESM=1 rollup -c -o lib/three-vrm-materials-v0compat.module.js",
+    "build-moduleprod": "cross-env NODE_ENV=production ESM=1 rollup -c -o lib/three-vrm-materials-v0compat.module.min.js",
+    "build-types": "tsc --project ./tsconfig.build-types.json && downlevel-dts types ts3.4/types",
+    "docs": "typedoc --entryPoints ./src/index.ts --out docs",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier \"src/**/*.{ts,tsx}\" --check",
+    "lint-fix": "eslint \"src/**/*.{ts,tsx}\" --fix && prettier \"src/**/*.{ts,tsx}\" --write"
+  },
+  "lint-staged": {
+    "./src/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "dependencies": {
+    "@pixiv/types-vrm-0.0": "0.0.1",
+    "@pixiv/types-vrmc-materials-mtoon-1.0": "0.0.1"
+  },
+  "devDependencies": {
+    "@types/three": "^0.126.0",
+    "lint-staged": "10.5.4",
+    "three": "^0.126.1"
+  },
+  "peerDependencies": {
+    "three": "^0.126.1"
+  }
+}

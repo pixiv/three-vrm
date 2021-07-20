@@ -26,6 +26,7 @@
 		<script>
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
+			renderer.outputEncoding = THREE.sRGBEncoding;
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			renderer.setPixelRatio( window.devicePixelRatio );
 			document.body.appendChild( renderer.domElement );
@@ -53,26 +54,29 @@
 			let currentMixer = undefined;
 			const loader = new THREE.GLTFLoader();
 			loader.crossOrigin = 'anonymous';
+
+			loader.register( ( parser ) => {
+
+				return new THREE_VRM.VRMLoaderPlugin( parser );
+
+			} );
+
 			loader.load(
 
 				'./models/three-vrm-girl.vrm',
 
 				( gltf ) => {
 
-					THREE.VRMUtils.removeUnnecessaryJoints( gltf.scene );
+					const vrm = gltf.userData.vrm;
 
-					THREE.VRM.from( gltf ).then( ( vrm ) => {
+					THREE_VRM.VRMUtils.removeUnnecessaryJoints( gltf.scene );
 
-						scene.add( vrm.scene );
-						currentVrm = vrm;
+					scene.add( vrm.scene );
+					currentVrm = vrm;
 
-						vrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.Hips ).rotation.y = Math.PI;
+					prepareAnimation( vrm );
 
-						prepareAnimation( vrm );
-
-						console.log( vrm );
-
-					} );
+					console.log( vrm );
 
 				},
 
@@ -92,13 +96,13 @@
 				quatB.setFromEuler( new THREE.Euler( 0.0, 0.0, 0.25 * Math.PI ) );
 
 				const armTrack = new THREE.QuaternionKeyframeTrack(
-					vrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.LeftUpperArm ).name + '.quaternion', // name
+					vrm.humanoid.getBoneNode( THREE_VRM.VRMHumanBoneName.LeftUpperArm ).name + '.quaternion', // name
 					[ 0.0, 0.5, 1.0 ], // times
 					[ ...quatA.toArray(), ...quatB.toArray(), ...quatA.toArray() ] // values
 				);
 
 				const blinkTrack = new THREE.NumberKeyframeTrack(
-					vrm.blendShapeProxy.getBlendShapeTrackName( THREE.VRMSchema.BlendShapePresetName.Blink ), // name
+					vrm.expressionManager.getExpressionTrackName( THREE_VRM.VRMExpressionPreset.Blink ), // name
 					[ 0.0, 0.5, 1.0 ], // times
 					[ 0.0, 1.0, 0.0 ] // values
 				);

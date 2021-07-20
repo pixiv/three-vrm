@@ -1,12 +1,10 @@
-export * from './VRM';
-export * from './VRMImporter';
+export { VRM, VRMParameters } from './VRM';
+export { VRMLoaderPlugin } from './VRMLoaderPlugin';
+export { VRMLoaderPluginOptions } from './VRMLoaderPluginOptions';
+
 export * from './VRMUtils';
-export * from './blendshape';
-export * from './debug';
-export * from './firstperson';
-export * from './humanoid';
-export * from './lookat';
-export * from './springbone';
-export * from './types';
-export * from './material';
-export * from './meta';
+
+export * from '@pixiv/three-vrm-core';
+export * from '@pixiv/three-vrm-materials-mtoon';
+export * from '@pixiv/three-vrm-node-constraint';
+export * from '@pixiv/three-vrm-springbone';
