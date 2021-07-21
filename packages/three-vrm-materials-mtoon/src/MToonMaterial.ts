@@ -19,28 +19,37 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     litFactor: THREE.IUniform<THREE.Color>;
     opacity: THREE.IUniform<number>;
     map: THREE.IUniform<THREE.Texture | null>;
+    mapUvTransform: THREE.IUniform<THREE.Matrix3>;
     normalMap: THREE.IUniform<THREE.Texture | null>;
+    normalMapUvTransform: THREE.IUniform<THREE.Matrix3>;
     normalScale: THREE.IUniform<THREE.Vector2>;
     emissive: THREE.IUniform<THREE.Color>;
     emissiveMap: THREE.IUniform<THREE.Texture | null>;
+    emissiveMapUvTransform: THREE.IUniform<THREE.Matrix3>;
     shadeColorFactor: THREE.IUniform<THREE.Color>;
     shadeMultiplyTexture: THREE.IUniform<THREE.Texture | null>;
+    shadeMultiplyTextureUvTransform: THREE.IUniform<THREE.Matrix3>;
     shadingShiftFactor: THREE.IUniform<number>;
     shadingShiftTexture: THREE.IUniform<THREE.Texture | null>;
+    shadingShiftTextureUvTransform: THREE.IUniform<THREE.Matrix3>;
     shadingShiftTextureScale: THREE.IUniform<number>;
     shadingToonyFactor: THREE.IUniform<number>;
     giIntensityFactor: THREE.IUniform<number>;
     matcapTexture: THREE.IUniform<THREE.Texture | null>;
+    matcapTextureUvTransform: THREE.IUniform<THREE.Matrix3>;
     parametricRimColorFactor: THREE.IUniform<THREE.Color>;
     rimMultiplyTexture: THREE.IUniform<THREE.Texture | null>;
+    rimMultiplyTextureUvTransform: THREE.IUniform<THREE.Matrix3>;
     rimLightingMixFactor: THREE.IUniform<number>;
     parametricRimFresnelPowerFactor: THREE.IUniform<number>;
     parametricRimLiftFactor: THREE.IUniform<number>;
     outlineWidthMultiplyTexture: THREE.IUniform<THREE.Texture | null>;
+    outlineWidthMultiplyTextureUvTransform: THREE.IUniform<THREE.Matrix3>;
     outlineWidthFactor: THREE.IUniform<number>;
     outlineColorFactor: THREE.IUniform<THREE.Color>;
     outlineLightingMixFactor: THREE.IUniform<number>;
     uvAnimationMaskTexture: THREE.IUniform<THREE.Texture | null>;
+    uvAnimationMaskTextureUvTransform: THREE.IUniform<THREE.Matrix3>;
     uvAnimationScrollXOffset: THREE.IUniform<number>;
     uvAnimationScrollYOffset: THREE.IUniform<number>;
     uvAnimationRotationPhase: THREE.IUniform<number>;
@@ -332,26 +341,35 @@ export class MToonMaterial extends THREE.ShaderMaterial {
       THREE.UniformsLib.lights,
       {
         litFactor: { value: new THREE.Color(1.0, 1.0, 1.0) },
+        mapUvTransform: { value: new THREE.Matrix3() },
         colorAlpha: { value: 1.0 },
+        normalMapUvTransform: { value: new THREE.Matrix3() },
         shadeColorFactor: { value: new THREE.Color(0.97, 0.81, 0.86) },
         shadeMultiplyTexture: { value: null },
+        shadeMultiplyTextureUvTransform: { value: new THREE.Matrix3() },
         shadingShiftFactor: { value: 0.0 },
         shadingShiftTexture: { value: null },
+        shadingShiftTextureUvTransform: { value: new THREE.Matrix3() },
         shadingShiftTextureScale: { value: null },
         shadingToonyFactor: { value: 0.9 },
         giIntensityFactor: { value: 0.1 },
         matcapTexture: { value: null },
+        matcapTextureUvTransform: { value: new THREE.Matrix3() },
         parametricRimColorFactor: { value: new THREE.Color(0.0, 0.0, 0.0) },
         rimMultiplyTexture: { value: null },
+        rimMultiplyTextureUvTransform: { value: new THREE.Matrix3() },
         rimLightingMixFactor: { value: 0.0 },
         parametricRimFresnelPowerFactor: { value: 1.0 },
         parametricRimLiftFactor: { value: 0.0 },
         emissive: { value: new THREE.Color(0.0, 0.0, 0.0) },
+        emissiveMapUvTransform: { value: new THREE.Matrix3() },
         outlineWidthMultiplyTexture: { value: null },
+        outlineWidthMultiplyTextureUvTransform: { value: new THREE.Matrix3() },
         outlineWidthFactor: { value: 0.5 },
         outlineColorFactor: { value: new THREE.Color(0.0, 0.0, 0.0) },
         outlineLightingMixFactor: { value: 1.0 },
         uvAnimationMaskTexture: { value: null },
+        uvAnimationMaskTextureUvTransform: { value: new THREE.Matrix3() },
         uvAnimationScrollXOffset: { value: 0.0 },
         uvAnimationScrollYOffset: { value: 0.0 },
         uvAnimationRotationPhase: { value: 0.0 },
@@ -381,6 +399,20 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     // We are going to update opacity here
     this.uniforms.opacity.value = this.opacity;
 
+    // workaround: textures are not updated automatically
+    this._updateTextureMatrix(this.uniforms.map, this.uniforms.mapUvTransform);
+    this._updateTextureMatrix(this.uniforms.normalMap, this.uniforms.normalMapUvTransform);
+    this._updateTextureMatrix(this.uniforms.emissiveMap, this.uniforms.emissiveMapUvTransform);
+    this._updateTextureMatrix(this.uniforms.shadeMultiplyTexture, this.uniforms.shadeMultiplyTextureUvTransform);
+    this._updateTextureMatrix(this.uniforms.shadingShiftTexture, this.uniforms.shadingShiftTextureUvTransform);
+    this._updateTextureMatrix(this.uniforms.matcapTexture, this.uniforms.matcapTextureUvTransform);
+    this._updateTextureMatrix(this.uniforms.rimMultiplyTexture, this.uniforms.rimMultiplyTextureUvTransform);
+    this._updateTextureMatrix(
+      this.uniforms.outlineWidthMultiplyTexture,
+      this.uniforms.outlineWidthMultiplyTextureUvTransform,
+    );
+    this._updateTextureMatrix(this.uniforms.uvAnimationMaskTexture, this.uniforms.uvAnimationMaskTextureUvTransform);
+
     this.uniformsNeedUpdate = true;
   }
 
@@ -406,6 +438,16 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this._updateShaderCode();
 
     return this;
+  }
+
+  private _updateTextureMatrix(src: THREE.IUniform<THREE.Texture | null>, dst: THREE.IUniform<THREE.Matrix3>): void {
+    if (src.value) {
+      if (src.value.matrixAutoUpdate) {
+        src.value.updateMatrix();
+      }
+
+      dst.value.copy(src.value.matrix);
+    }
   }
 
   private _updateShaderCode(): void {

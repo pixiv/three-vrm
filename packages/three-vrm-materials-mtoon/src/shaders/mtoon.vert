@@ -27,6 +27,7 @@ varying vec3 vViewPosition;
 
 #ifdef USE_OUTLINEWIDTHMULTIPLYTEXTURE
   uniform sampler2D outlineWidthMultiplyTexture;
+  uniform mat3 outlineWidthMultiplyTextureUvTransform;
 #endif
 
 uniform float outlineWidthFactor;
@@ -70,7 +71,8 @@ void main() {
 
   #ifdef OUTLINE
     #ifdef USE_OUTLINEWIDTHMULTIPLYTEXTURE
-      outlineTex = texture2D( outlineWidthMultiplyTexture, vUv ).g;
+      vec2 outlineWidthMultiplyTextureUv = ( outlineWidthMultiplyTextureUvTransform * vec3( vUv, 1 ) ).xy;
+      outlineTex = texture2D( outlineWidthMultiplyTexture, outlineWidthMultiplyTextureUv ).g;
     #endif
 
     #ifdef OUTLINE_WIDTH_WORLD
