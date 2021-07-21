@@ -10,9 +10,9 @@ export interface VRMExpressionTextureTransformBind {
   material: THREE.Material;
 
   /**
-   * The uv scaling of the texture.
+   * The uv scale of the texture.
    */
-  scaling: THREE.Vector2;
+  scale: THREE.Vector2;
 
   /**
    * The uv offset of the texture.

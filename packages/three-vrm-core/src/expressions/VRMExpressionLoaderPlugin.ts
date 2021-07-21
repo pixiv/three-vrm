@@ -207,7 +207,7 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
               expression.addTextureTransformBind({
                 material,
                 offset: new THREE.Vector2().fromArray(bind.offset ?? [0.0, 0.0]),
-                scaling: new THREE.Vector2().fromArray(bind.scaling ?? [1.0, 1.0]),
+                scale: new THREE.Vector2().fromArray(bind.scale ?? [1.0, 1.0]),
               });
             });
           });
