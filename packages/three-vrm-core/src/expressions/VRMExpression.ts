@@ -202,9 +202,9 @@ export class VRMExpression extends THREE.Object3D {
         (material as any)[propertyName] = texture; // because the texture is cloned
 
         const initialOffset = texture.offset.clone();
-        const deltaOffset = bind.offset.clone().sub(initialOffset);
         const initialScale = texture.repeat.clone();
-        const deltaScale = bind.scale.clone().multiply(initialScale);
+        const deltaOffset = bind.offset.clone().multiply(initialScale);
+        const deltaScale = bind.scale.clone().addScalar(-1).multiply(initialScale);
 
         properties.push({
           name: propertyName,
