@@ -5,9 +5,9 @@ export interface ExpressionTextureTransformBind {
   material: number;
 
   /**
-   * uv scaling for TEXCOORD_0
+   * uv scale for TEXCOORD_0
    */
-  scaling?: [number, number];
+  scale?: [number, number];
 
   /**
    * uv offset for TEXCOORD_0
