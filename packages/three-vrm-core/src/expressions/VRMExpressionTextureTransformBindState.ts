@@ -10,8 +10,8 @@ export interface VRMExpressionTextureTransformBindState {
   properties: {
     name: string;
     initialOffset: THREE.Vector2;
-    initialScaling: THREE.Vector2;
+    initialScale: THREE.Vector2;
     deltaOffset: THREE.Vector2;
-    deltaScaling: THREE.Vector2;
+    deltaScale: THREE.Vector2;
   }[];
 }

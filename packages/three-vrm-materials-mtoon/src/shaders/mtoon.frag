@@ -13,7 +13,9 @@ uniform float shadingShiftFactor;
 uniform float shadingToonyFactor;
 
 #ifdef USE_SHADINGSHIFTTEXTURE
+  vec2 shadingShiftTextureUv = ( shadingShiftTextureUvTransform * vec3( uv, 1 ) ).xy;
   uniform sampler2D shadingShiftTexture;
+  uniform mat3 shadingShiftTextureUvTransform;
   uniform float shadingShiftTextureScale;
 #endif
 
@@ -22,6 +24,7 @@ uniform float giIntensityFactor;
 uniform vec3 parametricRimColorFactor;
 #ifdef USE_RIMMULTIPLYTEXTURE
   uniform sampler2D rimMultiplyTexture;
+  uniform mat3 rimMultiplyTextureUvTransform;
 #endif
 uniform float rimLightingMixFactor;
 uniform float parametricRimFresnelPowerFactor;
@@ -29,6 +32,7 @@ uniform float parametricRimLiftFactor;
 
 #ifdef USE_MATCAPTEXTURE
   uniform sampler2D matcapTexture;
+  uniform mat3 matcapTextureUvTransform;
 #endif
 
 uniform vec3 emissive;
@@ -38,6 +42,7 @@ uniform float outlineLightingMixFactor;
 
 #ifdef USE_UVANIMATIONMASKTEXTURE
   uniform sampler2D uvAnimationMaskTexture;
+  uniform mat3 uvAnimationMaskTextureUvTransform;
 #endif
 
 uniform float uvAnimationScrollXOffset;
@@ -56,10 +61,20 @@ uniform float uvAnimationRotationPhase;
 
 #include <uv2_pars_fragment>
 #include <map_pars_fragment>
+
+#ifdef USE_MAP
+  uniform mat3 mapUvTransform;
+#endif
+
 // #include <alphamap_pars_fragment>
 #include <aomap_pars_fragment>
 // #include <lightmap_pars_fragment>
 #include <emissivemap_pars_fragment>
+
+#ifdef USE_EMISSIVEMAP
+  uniform mat3 emissiveMapUvTransform;
+#endif
+
 // #include <envmap_common_pars_fragment>
 // #include <envmap_pars_fragment>
 // #include <cube_uv_reflection_fragment>
@@ -154,6 +169,7 @@ void RE_IndirectDiffuse_MToon( const in vec3 irradiance, const in GeometricConte
 #ifdef USE_NORMALMAP
 
   uniform sampler2D normalMap;
+  uniform vec3 normalMapUvTransform;
   uniform vec2 normalScale;
 
 #endif
@@ -277,7 +293,8 @@ void main() {
 
     float uvAnimMask = 1.0;
     #ifdef USE_UVANIMATIONMASKTEXTURE
-      uvAnimMask = texture2D( uvAnimationMaskTexture, uv ).b;
+      vec2 uvAnimationMaskTextureUv = ( uvAnimationMaskTextureUvTransform * vec3( uv, 1 ) ).xy;
+      uvAnimMask = texture2D( uvAnimationMaskTexture, uvAnimationMaskTextureUv ).b;
     #endif
 
     uv = uv + vec2( uvAnimationScrollXOffset, uvAnimationScrollYOffset ) * uvAnimMask;
@@ -302,7 +319,8 @@ void main() {
 
   // #include <map_fragment>
   #ifdef USE_MAP
-    vec4 texelColor = texture2D( map, uv );
+    vec2 mapUv = ( mapUvTransform * vec3( uv, 1 ) ).xy;
+    vec4 texelColor = texture2D( map, mapUv );
     texelColor = mapTexelToLinear( texelColor );
     diffuseColor *= texelColor;
   #endif
@@ -327,7 +345,8 @@ void main() {
 
   #ifdef OBJECTSPACE_NORMALMAP
 
-    normal = texture2D( normalMap, uv ).xyz * 2.0 - 1.0; // overrides both flatShading and attribute normals
+    vec2 normalMapUv = ( normalMapUvTransform * vec3( uv, 1 ) ).xy;
+    normal = texture2D( normalMap, normalMapUv ).xyz * 2.0 - 1.0; // overrides both flatShading and attribute normals
 
     #ifdef FLIP_SIDED
 
@@ -355,7 +374,8 @@ void main() {
 
   #elif defined( TANGENTSPACE_NORMALMAP )
 
-    vec3 mapN = texture2D( normalMap, uv ).xyz * 2.0 - 1.0;
+    vec2 normalMapUv = ( normalMapUvTransform * vec3( uv, 1 ) ).xy;
+    vec3 mapN = texture2D( normalMap, normalMapUv ).xyz * 2.0 - 1.0;
     mapN.xy *= normalScale;
 
     #ifdef USE_TANGENT
@@ -382,7 +402,8 @@ void main() {
 
   // #include <emissivemap_fragment>
   #ifdef USE_EMISSIVEMAP
-    totalEmissiveRadiance *= emissiveMapTexelToLinear( texture2D( emissiveMap, uv ) ).rgb;
+    vec2 emissiveMapUv = ( emissiveMapUvTransform * vec3( uv, 1 ) ).xy;
+    totalEmissiveRadiance *= emissiveMapTexelToLinear( texture2D( emissiveMap, emissiveMapUv ) ).rgb;
   #endif
 
   #ifdef DEBUG_NORMAL
@@ -408,7 +429,8 @@ void main() {
 
   material.shadingShift = shadingShiftFactor;
   #ifdef USE_SHADINGSHIFTTEXTURE
-    material.shadingShift += texture2D( shadingShiftTexture, uv ).r * shadingShiftTextureScale;
+    vec2 shadingShiftTextureUv = ( shadingShiftTextureUvTransform * vec3( uv, 1 ) ).xy;
+    material.shadingShift += texture2D( shadingShiftTexture, shadingShiftTextureUv ).r * shadingShiftTextureScale;
   #endif
 
   // #include <lights_fragment_begin>
@@ -590,13 +612,15 @@ void main() {
       vec3 x = normalize( vec3( viewDir.z, 0.0, -viewDir.x ) );
       vec3 y = cross( viewDir, x ); // guaranteed to be normalized
       vec2 sphereUv = 0.5 + 0.5 * vec2( dot( x, normal ), -dot( y, normal ) );
+      sphereUv = ( matcapTextureUvTransform * vec3( sphereUv, 1 ) ).xy;
       vec3 matcap = matcapTextureTexelToLinear( texture2D( matcapTexture, sphereUv ) ).xyz;
       rim += matcap;
     }
   #endif
 
   #ifdef USE_RIMMULTIPLYTEXTURE
-    rim *= rimMultiplyTextureTexelToLinear( texture2D( rimMultiplyTexture, uv ) ).rgb;
+    vec2 rimMultiplyTextureUv = ( rimMultiplyTextureUvTransform * vec3( uv, 1 ) ).xy;
+    rim *= rimMultiplyTextureTexelToLinear( texture2D( rimMultiplyTexture, rimMultiplyTextureUv ) ).rgb;
   #endif
 
   col += rimMix * rim;

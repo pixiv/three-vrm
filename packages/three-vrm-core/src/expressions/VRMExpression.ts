@@ -202,16 +202,16 @@ export class VRMExpression extends THREE.Object3D {
         (material as any)[propertyName] = texture; // because the texture is cloned
 
         const initialOffset = texture.offset.clone();
-        const deltaOffset = bind.offset.clone().sub(initialOffset);
-        const initialScaling = texture.repeat.clone();
-        const deltaScaling = bind.scaling.clone().multiply(initialScaling);
+        const initialScale = texture.repeat.clone();
+        const deltaOffset = bind.offset.clone().multiply(initialScale);
+        const deltaScale = bind.scale.clone().addScalar(-1).multiply(initialScale);
 
         properties.push({
           name: propertyName,
           initialOffset,
           deltaOffset,
-          initialScaling,
-          deltaScaling,
+          initialScale,
+          deltaScale,
         });
       }
     });
@@ -268,7 +268,7 @@ export class VRMExpression extends THREE.Object3D {
         } // TODO: we should kick this at `addMaterialValue`
 
         target.offset.add(_v2.copy(property.deltaOffset).multiplyScalar(actualWeight));
-        target.repeat.add(_v2.copy(property.deltaScaling).multiplyScalar(actualWeight));
+        target.repeat.add(_v2.copy(property.deltaScale).multiplyScalar(actualWeight));
 
         target.needsUpdate = true;
       });
@@ -311,7 +311,7 @@ export class VRMExpression extends THREE.Object3D {
         } // TODO: we should kick this at `addMaterialValue`
 
         target.offset.copy(property.initialOffset);
-        target.repeat.copy(property.initialScaling);
+        target.repeat.copy(property.initialScale);
 
         target.needsUpdate = true;
       });
