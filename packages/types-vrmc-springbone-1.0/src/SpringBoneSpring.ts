@@ -19,11 +19,6 @@ export interface SpringBoneSpring {
    */
   colliderGroups?: number[];
 
-  /**
-   * Colliders that detect collision with this spring.
-   */
-  colliders?: number[];
-
   extensions?: { [name: string]: any };
   extras?: any;
 }
