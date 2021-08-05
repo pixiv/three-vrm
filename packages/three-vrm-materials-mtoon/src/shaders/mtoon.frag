@@ -169,7 +169,7 @@ void RE_IndirectDiffuse_MToon( const in vec3 irradiance, const in GeometricConte
 #ifdef USE_NORMALMAP
 
   uniform sampler2D normalMap;
-  uniform vec3 normalMapUvTransform;
+  uniform mat3 normalMapUvTransform;
   uniform vec2 normalScale;
 
 #endif
