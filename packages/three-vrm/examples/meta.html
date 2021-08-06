@@ -94,6 +94,7 @@
 					Object.keys( meta ).forEach( ( key ) => {
 
 						document.getElementById( 'meta' ).innerText += key + ' : ' + meta[ key ] + '\n';
+						document.getElementById( 'thumbnail' ).src = meta.thumbnailImage.src;
 
 					} );
 
