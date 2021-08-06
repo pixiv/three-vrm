@@ -19,7 +19,7 @@ uniform float shadingToonyFactor;
   uniform float shadingShiftTextureScale;
 #endif
 
-uniform float giIntensityFactor;
+uniform float giEqualizationFactor;
 
 uniform vec3 parametricRimColorFactor;
 #ifdef USE_RIMMULTIPLYTEXTURE
@@ -31,6 +31,7 @@ uniform float parametricRimFresnelPowerFactor;
 uniform float parametricRimLiftFactor;
 
 #ifdef USE_MATCAPTEXTURE
+  uniform vec3 matcapFactor;
   uniform sampler2D matcapTexture;
   uniform mat3 matcapTextureUvTransform;
 #endif
@@ -613,8 +614,8 @@ void main() {
       vec3 y = cross( viewDir, x ); // guaranteed to be normalized
       vec2 sphereUv = 0.5 + 0.5 * vec2( dot( x, normal ), -dot( y, normal ) );
       sphereUv = ( matcapTextureUvTransform * vec3( sphereUv, 1 ) ).xy;
-      vec3 matcap = matcapTextureTexelToLinear( texture2D( matcapTexture, sphereUv ) ).xyz;
-      rim += matcap;
+      vec3 matcap = matcapTextureTexelToLinear( texture2D( matcapTexture, sphereUv ) ).rgb;
+      rim += matcapFactor * matcap;
     }
   #endif
 

@@ -34,7 +34,8 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     shadingShiftTextureUvTransform: THREE.IUniform<THREE.Matrix3>;
     shadingShiftTextureScale: THREE.IUniform<number>;
     shadingToonyFactor: THREE.IUniform<number>;
-    giIntensityFactor: THREE.IUniform<number>;
+    giEqualizationFactor: THREE.IUniform<number>;
+    matcapFactor: THREE.IUniform<THREE.Color>;
     matcapTexture: THREE.IUniform<THREE.Texture | null>;
     matcapTextureUvTransform: THREE.IUniform<THREE.Matrix3>;
     parametricRimColorFactor: THREE.IUniform<THREE.Color>;
@@ -139,11 +140,18 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.uniforms.shadingToonyFactor.value = value;
   }
 
-  public get giIntensityFactor(): number {
-    return this.uniforms.giIntensityFactor.value;
+  public get giEqualizationFactor(): number {
+    return this.uniforms.giEqualizationFactor.value;
   }
-  public set giIntensityFactor(value: number) {
-    this.uniforms.giIntensityFactor.value = value;
+  public set giEqualizationFactor(value: number) {
+    this.uniforms.giEqualizationFactor.value = value;
+  }
+
+  public get matcapFactor(): THREE.Color {
+    return this.uniforms.matcapFactor.value;
+  }
+  public set matcapFactor(value: THREE.Color) {
+    this.uniforms.matcapFactor.value = value;
   }
 
   public get matcapTexture(): THREE.Texture | null {
@@ -352,7 +360,8 @@ export class MToonMaterial extends THREE.ShaderMaterial {
         shadingShiftTextureUvTransform: { value: new THREE.Matrix3() },
         shadingShiftTextureScale: { value: null },
         shadingToonyFactor: { value: 0.9 },
-        giIntensityFactor: { value: 0.1 },
+        giEqualizationFactor: { value: 0.9 },
+        matcapFactor: { value: new THREE.Color(1.0, 1.0, 1.0) },
         matcapTexture: { value: null },
         matcapTextureUvTransform: { value: new THREE.Matrix3() },
         parametricRimColorFactor: { value: new THREE.Color(0.0, 0.0, 0.0) },

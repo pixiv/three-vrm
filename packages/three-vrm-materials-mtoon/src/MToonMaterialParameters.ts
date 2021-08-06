@@ -1,4 +1,3 @@
-import type { MToonMaterial } from './MToonMaterial';
 import type { MToonMaterialDebugMode } from './MToonMaterialDebugMode';
 import type { MToonMaterialOutlineWidthMode } from './MToonMaterialOutlineWidthMode';
 
@@ -21,7 +20,8 @@ export interface MToonMaterialParameters extends THREE.ShaderMaterialParameters 
   shadingShiftTexture?: THREE.Texture;
   shadingShiftTextureScale?: number;
   shadingToonyFactor?: number;
-  giIntensityFactor?: number;
+  giEqualizationFactor?: number;
+  matcapFactor?: THREE.Color;
   matcapTexture?: THREE.Texture;
   parametricRimColorFactor?: THREE.Color;
   rimMultiplyTexture?: THREE.Texture;

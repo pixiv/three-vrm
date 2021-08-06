@@ -46,7 +46,12 @@ export interface VRMCMaterialsMToon {
   /**
    *
    */
-  giIntensityFactor?: number;
+  giEqualizationFactor?: number;
+
+  /**
+   *
+   */
+  matcapFactor?: number[];
 
   /**
    * MatCap
