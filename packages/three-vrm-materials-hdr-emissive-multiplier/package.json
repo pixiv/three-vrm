@@ -22,7 +22,7 @@
   },
   "scripts": {
     "version": "yarn all",
-    "all": "yarn && yarn lint && yarn clean && yarn build && yarn docs",
+    "all": "yarn lint && yarn clean && yarn build && yarn docs",
     "dev": "cross-env NODE_ENV=development SERVE=1 rollup -w -c -o lib/three-vrm-materials-hdr-emissive-multiplier.js",
     "clean": "rimraf docs/ lib/ ts*/ types/",
     "build": "yarn build-dev && yarn build-prod && yarn build-moduledev && yarn build-moduleprod && yarn build-types",

@@ -20,7 +20,7 @@
   },
   "scripts": {
     "version": "yarn all",
-    "all": "yarn && yarn lint && yarn clean && yarn build && yarn docs",
+    "all": "yarn lint && yarn clean && yarn build && yarn docs",
     "clean": "rimraf docs/ ts*/ types/",
     "build": "tsc --declaration --declarationDir ./types --emitDeclarationOnly && downlevel-dts types ts3.4/types",
     "docs": "typedoc --entryPoints ./src/index.ts --out docs",
