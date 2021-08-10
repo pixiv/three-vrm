@@ -112,6 +112,7 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
     shadingShiftFactor = -shadingShiftFactor - (1.0 - shadingToonyFactor);
 
     const giIntensityFactor = materialProperties.floatProperties?.['_IndirectLightIntensity'];
+    const giEqualizationFactor = giIntensityFactor ? 1.0 - giIntensityFactor : undefined;
 
     const matcapTextureIndex = materialProperties.textureProperties?.['_SphereAdd'];
     const matcapTexture =
@@ -181,7 +182,7 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
       shadeMultiplyTexture,
       shadingShiftFactor,
       shadingToonyFactor,
-      giIntensityFactor,
+      giEqualizationFactor,
       matcapTexture,
       rimLightingMixFactor,
       rimMultiplyTexture,

@@ -162,7 +162,8 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     assignHelper.assignTexture('shadingShiftTexture', extension.shadingShiftTexture, true);
     assignHelper.assignPrimitive('shadingShiftTextureScale', extension.shadingShiftTexture?.scale);
     assignHelper.assignPrimitive('shadingToonyFactor', extension.shadingToonyFactor);
-    assignHelper.assignPrimitive('giIntensityFactor', extension.giIntensityFactor);
+    assignHelper.assignPrimitive('giEqualizationFactor', extension.giEqualizationFactor);
+    assignHelper.assignColor('matcapFactor', extension.matcapFactor);
     assignHelper.assignTexture('matcapTexture', extension.matcapTexture, true);
     assignHelper.assignColor('parametricRimColorFactor', extension.parametricRimColorFactor);
     assignHelper.assignTexture('rimMultiplyTexture', extension.rimMultiplyTexture, true);
