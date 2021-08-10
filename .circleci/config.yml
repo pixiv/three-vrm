@@ -23,6 +23,7 @@ jobs:
             - packages/three-vrm/node_modules
             - packages/three-vrm-core/node_modules
             - packages/three-vrm-materials-mtoon/node_modules
+            - packages/three-vrm-materials-hdr-emissive-multiplier/node_modules
             - packages/three-vrm-materials-v0compat/node_modules
             - packages/three-vrm-node-constraint/node_modules
             - packages/three-vrm-springbone/node_modules
@@ -57,6 +58,8 @@ jobs:
             - packages/three-vrm-core/types
             - packages/three-vrm-materials-mtoon/lib
             - packages/three-vrm-materials-mtoon/types
+            - packages/three-vrm-materials-hdr-emissive-multiplier/lib
+            - packages/three-vrm-materials-hdr-emissive-multiplier/types
             - packages/three-vrm-materials-v0compat/lib
             - packages/three-vrm-materials-v0compat/types
             - packages/three-vrm-node-constraint/lib
