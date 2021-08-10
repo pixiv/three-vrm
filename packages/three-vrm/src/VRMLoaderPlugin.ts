@@ -8,6 +8,7 @@ import {
   VRMMetaLoaderPlugin,
 } from '@pixiv/three-vrm-core';
 import { MToonMaterialLoaderPlugin } from '@pixiv/three-vrm-materials-mtoon';
+import { VRMMaterialsHDREmissiveMultiplierLoaderPlugin } from '@pixiv/three-vrm-materials-hdr-emissive-multiplier';
 import { VRMMaterialsV0CompatPlugin } from '@pixiv/three-vrm-materials-v0compat';
 import { VRMNodeConstraintLoaderPlugin } from '@pixiv/three-vrm-node-constraint';
 import { VRMSpringBoneLoaderPlugin } from '@pixiv/three-vrm-springbone';
@@ -23,6 +24,7 @@ export class VRMLoaderPlugin implements GLTFLoaderPlugin {
   public readonly lookAtPlugin: VRMLookAtLoaderPlugin;
   public readonly metaPlugin: VRMMetaLoaderPlugin;
   public readonly mtoonMaterialPlugin: MToonMaterialLoaderPlugin;
+  public readonly materialsHDREmissiveMultiplierPlugin: VRMMaterialsHDREmissiveMultiplierLoaderPlugin;
   public readonly materialsV0CompatPlugin: VRMMaterialsV0CompatPlugin;
   public readonly springBonePlugin: VRMSpringBoneLoaderPlugin;
   public readonly constraintPlugin: VRMNodeConstraintLoaderPlugin;
@@ -38,6 +40,8 @@ export class VRMLoaderPlugin implements GLTFLoaderPlugin {
     this.lookAtPlugin = options?.lookAtPlugin ?? new VRMLookAtLoaderPlugin(parser);
     this.metaPlugin = options?.metaPlugin ?? new VRMMetaLoaderPlugin(parser);
     this.mtoonMaterialPlugin = options?.mtoonMaterialPlugin ?? new MToonMaterialLoaderPlugin(parser);
+    this.materialsHDREmissiveMultiplierPlugin =
+      options?.materialsHDREmissiveMultiplierPlugin ?? new VRMMaterialsHDREmissiveMultiplierLoaderPlugin(parser);
     this.materialsV0CompatPlugin = options?.materialsV0CompatPlugin ?? new VRMMaterialsV0CompatPlugin(parser);
 
     this.springBonePlugin =
@@ -81,6 +85,7 @@ export class VRMLoaderPlugin implements GLTFLoaderPlugin {
     await this.springBonePlugin.afterRoot(gltf);
     await this.constraintPlugin.afterRoot(gltf);
     await this.mtoonMaterialPlugin.afterRoot(gltf);
+    await this.materialsHDREmissiveMultiplierPlugin.afterRoot(gltf);
 
     const vrm = new VRM({
       scene: gltf.scene,
