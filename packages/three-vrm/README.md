@@ -33,6 +33,14 @@ Code like this:
 const scene = new THREE.Scene();
 
 const loader = new THREE.GLTFLoader();
+
+// Install GLTFLoader plugin
+loader.register( ( parser ) => {
+
+	return new THREE_VRM.VRMLoaderPlugin( parser );
+
+} );
+
 loader.load(
 
 	// URL of the VRM you want to load
@@ -41,16 +49,14 @@ loader.load(
 	// called when the resource is loaded
 	( gltf ) => {
 
-		// generate a VRM instance from gltf
-		THREE.VRM.from( gltf ).then( ( vrm ) => {
+		// retrieve a VRM instance from gltf
+		const vrm = gltf.userData.vrm;
 
-			// add the loaded vrm to the scene
-			scene.add( vrm.scene );
+		// add the loaded vrm to the scene
+		scene.add( vrm.scene );
 
-			// deal with vrm features
-			console.log( vrm );
-
-		} );
+		// deal with vrm features
+		console.log( vrm );
 
 	},
 
@@ -77,11 +83,19 @@ Code like this:
 ```javascript
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { VRM } from '@pixiv/three-vrm';
+import { VRMLoaderPlugin } from '@pixiv/three-vrm';
 
 const scene = new THREE.Scene();
 
 const loader = new GLTFLoader();
+
+// Install GLTFLoader plugin
+loader.register( ( parser ) => {
+
+	return new VRMLoaderPlugin( parser );
+
+} );
+
 loader.load(
 
 	// URL of the VRM you want to load
@@ -90,16 +104,14 @@ loader.load(
 	// called when the resource is loaded
 	( gltf ) => {
 
-		// generate a VRM instance from gltf
-		VRM.from( gltf ).then( ( vrm ) => {
+		// retrieve a VRM instance from gltf
+		const vrm = gltf.userData.vrm;
 
-			// add the loaded vrm to the scene
-			scene.add( vrm.scene );
+		// add the loaded vrm to the scene
+		scene.add( vrm.scene );
 
-			// deal with vrm features
-			console.log( vrm );
-
-		} );
+		// deal with vrm features
+		console.log( vrm );
 
 	},
 
