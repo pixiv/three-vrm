@@ -130,7 +130,7 @@ export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
     }
 
     const specVersion = extension.specVersion;
-    if (specVersion !== '1.0-draft') {
+    if (specVersion !== '1.0-beta') {
       return null;
     }
 

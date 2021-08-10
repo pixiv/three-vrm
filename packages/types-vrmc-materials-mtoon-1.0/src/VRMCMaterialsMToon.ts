@@ -6,7 +6,7 @@ export interface VRMCMaterialsMToon {
   /**
    * Specification version of VRMC_materials_mtoon
    */
-  specVersion: '1.0-draft';
+  specVersion: '1.0-beta';
 
   /**
    * enable depth buffer when renderMode is transparent

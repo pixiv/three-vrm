@@ -9,7 +9,7 @@ export interface VRMCSpringBone {
   /**
    * Specification version of VRMC_springBone
    */
-  specVersion: '1.0-draft';
+  specVersion: '1.0-beta';
 
   /**
    * An array of colliders.
