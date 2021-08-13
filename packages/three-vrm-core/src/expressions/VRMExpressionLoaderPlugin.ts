@@ -120,7 +120,7 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
 
     if (schemaExpressions.custom != null) {
       Object.entries(schemaExpressions.custom).forEach(([name, schemaExpression]) => {
-        if (!presetNameSet.has(name)) {
+        if (presetNameSet.has(name)) {
           console.warn(
             `VRMExpressionLoaderPlugin: Custom expression cannot have preset name "${name}". Ignoring the expression`,
           );
