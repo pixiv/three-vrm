@@ -1,4 +1,4 @@
-import type { VRMExpressionPreset } from './VRMExpressionPreset';
+import { VRMExpressionPreset } from './VRMExpressionPreset';
 import { saturate } from '../utils/saturate';
 import type { VRMExpression } from './VRMExpression';
 
@@ -33,6 +33,40 @@ export class VRMExpressionManager {
   private _expressionMap: { [name: string]: VRMExpression } = {};
   public get expressionMap(): { [name: string]: VRMExpression } {
     return Object.assign({}, this._expressionMap);
+  }
+
+  /**
+   * A map from name to expression, but excluding custom expressions.
+   */
+  public get presetExpressionMap(): { [name in VRMExpressionPreset]?: VRMExpression } {
+    const result: { [name in VRMExpressionPreset]?: VRMExpression } = {};
+
+    const presetNameSet = new Set<string>(Object.values(VRMExpressionPreset));
+
+    Object.entries(this._expressionMap).forEach(([name, expression]) => {
+      if (presetNameSet.has(name)) {
+        result[name as VRMExpressionPreset] = expression;
+      }
+    });
+
+    return result;
+  }
+
+  /**
+   * A map from name to expression, but excluding preset expressions.
+   */
+  public get customExpressionMap(): { [name: string]: VRMExpression } {
+    const result: { [name: string]: VRMExpression } = {};
+
+    const presetNameSet = new Set<string>(Object.values(VRMExpressionPreset));
+
+    Object.entries(this._expressionMap).forEach(([name, expression]) => {
+      if (!presetNameSet.has(name)) {
+        result[name] = expression;
+      }
+    });
+
+    return result;
   }
 
   /**
