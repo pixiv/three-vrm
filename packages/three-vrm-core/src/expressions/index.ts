@@ -6,6 +6,6 @@ export type { VRMExpressionMaterialColorBindState } from './VRMExpressionMateria
 export { VRMExpressionMaterialColorType } from './VRMExpressionMaterialColorType';
 export type { VRMExpressionMorphTargetBind } from './VRMExpressionMorphTargetBind';
 export { VRMExpressionOverrideType } from './VRMExpressionOverrideType';
-export { VRMExpressionPresetName as VRMExpressionPreset } from './VRMExpressionPresetName';
+export { VRMExpressionPresetName } from './VRMExpressionPresetName';
 export type { VRMExpressionTextureTransformBind } from './VRMExpressionTextureTransformBind';
 export type { VRMExpressionTextureTransformBindState } from './VRMExpressionTextureTransformBindState';
