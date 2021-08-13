@@ -5,13 +5,13 @@ import { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/G
 import { gltfExtractPrimitivesFromNode } from '../utils/gltfExtractPrimitivesFromNode';
 import { VRMExpression } from './VRMExpression';
 import { VRMExpressionManager } from './VRMExpressionManager';
-import { VRMExpressionPreset } from './VRMExpressionPreset';
+import { VRMExpressionPresetName } from './VRMExpressionPresetName';
 
 /**
  * A plugin of GLTFLoader that imports a {@link VRMExpressionManager} from a VRM extension of a GLTF.
  */
 export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
-  public static readonly v0v1PresetNameMap: { [v0Name in V0VRM.BlendShapePresetName]?: VRMExpressionPreset } = {
+  public static readonly v0v1PresetNameMap: { [v0Name in V0VRM.BlendShapePresetName]?: VRMExpressionPresetName } = {
     a: 'aa',
     e: 'ee',
     i: 'ih',
@@ -100,7 +100,7 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
     }
 
     // list expressions
-    const presetNameSet = new Set<string>(Object.values(VRMExpressionPreset));
+    const presetNameSet = new Set<string>(Object.values(VRMExpressionPresetName));
     const nameSchemaExpressionMap = new Map<string, V1VRMSchema.Expression>();
 
     if (schemaExpressions.preset != null) {

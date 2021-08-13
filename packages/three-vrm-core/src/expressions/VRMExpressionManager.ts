@@ -1,4 +1,4 @@
-import { VRMExpressionPreset } from './VRMExpressionPreset';
+import { VRMExpressionPresetName } from './VRMExpressionPresetName';
 import { saturate } from '../utils/saturate';
 import type { VRMExpression } from './VRMExpression';
 
@@ -38,14 +38,14 @@ export class VRMExpressionManager {
   /**
    * A map from name to expression, but excluding custom expressions.
    */
-  public get presetExpressionMap(): { [name in VRMExpressionPreset]?: VRMExpression } {
-    const result: { [name in VRMExpressionPreset]?: VRMExpression } = {};
+  public get presetExpressionMap(): { [name in VRMExpressionPresetName]?: VRMExpression } {
+    const result: { [name in VRMExpressionPresetName]?: VRMExpression } = {};
 
-    const presetNameSet = new Set<string>(Object.values(VRMExpressionPreset));
+    const presetNameSet = new Set<string>(Object.values(VRMExpressionPresetName));
 
     Object.entries(this._expressionMap).forEach(([name, expression]) => {
       if (presetNameSet.has(name)) {
-        result[name as VRMExpressionPreset] = expression;
+        result[name as VRMExpressionPresetName] = expression;
       }
     });
 
@@ -58,7 +58,7 @@ export class VRMExpressionManager {
   public get customExpressionMap(): { [name: string]: VRMExpression } {
     const result: { [name: string]: VRMExpression } = {};
 
-    const presetNameSet = new Set<string>(Object.values(VRMExpressionPreset));
+    const presetNameSet = new Set<string>(Object.values(VRMExpressionPresetName));
 
     Object.entries(this._expressionMap).forEach(([name, expression]) => {
       if (!presetNameSet.has(name)) {
@@ -115,7 +115,7 @@ export class VRMExpressionManager {
    *
    * @param name Name or preset name of the expression
    */
-  public getExpression(name: VRMExpressionPreset | string): VRMExpression | null {
+  public getExpression(name: VRMExpressionPresetName | string): VRMExpression | null {
     return this._expressionMap[name] ?? null;
   }
 
@@ -150,7 +150,7 @@ export class VRMExpressionManager {
    *
    * @param name Name of the expression
    */
-  public getValue(name: VRMExpressionPreset | string): number | null {
+  public getValue(name: VRMExpressionPresetName | string): number | null {
     const expression = this.getExpression(name);
     return expression?.weight ?? null;
   }
@@ -161,7 +161,7 @@ export class VRMExpressionManager {
    * @param name Name of the expression
    * @param weight Weight
    */
-  public setValue(name: VRMExpressionPreset | string, weight: number): void {
+  public setValue(name: VRMExpressionPresetName | string, weight: number): void {
     const expression = this.getExpression(name);
     if (expression) {
       expression.weight = saturate(weight);
@@ -194,7 +194,7 @@ export class VRMExpressionManager {
    *
    * @param name Name of the expression
    */
-  public getExpressionTrackName(name: VRMExpressionPreset | string): string | null {
+  public getExpressionTrackName(name: VRMExpressionPresetName | string): string | null {
     const expression = this.getExpression(name);
     return expression ? `${expression.name}.weight` : null;
   }

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
-export const VRMExpressionPreset = {
+export const VRMExpressionPresetName = {
   Aa: 'aa',
   Ih: 'ih',
   Ou: 'ou',
@@ -21,4 +21,4 @@ export const VRMExpressionPreset = {
   Neutral: 'neutral',
 } as const;
 
-export type VRMExpressionPreset = typeof VRMExpressionPreset[keyof typeof VRMExpressionPreset];
+export type VRMExpressionPresetName = typeof VRMExpressionPresetName[keyof typeof VRMExpressionPresetName];
