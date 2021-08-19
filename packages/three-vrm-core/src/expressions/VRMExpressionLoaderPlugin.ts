@@ -5,7 +5,10 @@ import { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/G
 import { gltfExtractPrimitivesFromNode } from '../utils/gltfExtractPrimitivesFromNode';
 import { VRMExpression } from './VRMExpression';
 import { VRMExpressionManager } from './VRMExpressionManager';
+import { VRMExpressionMaterialColorBind } from './VRMExpressionMaterialColorBind';
+import { VRMExpressionMorphTargetBind } from './VRMExpressionMorphTargetBind';
 import { VRMExpressionPresetName } from './VRMExpressionPresetName';
+import { VRMExpressionTextureTransformBind } from './VRMExpressionTextureTransformBind';
 
 /**
  * A plugin of GLTFLoader that imports a {@link VRMExpressionManager} from a VRM extension of a GLTF.
@@ -167,11 +170,13 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
             return;
           }
 
-          expression.addMorphTargetBind({
-            primitives,
-            index: morphTargetIndex,
-            weight: bind.weight ?? 1.0,
-          });
+          expression.addBind(
+            new VRMExpressionMorphTargetBind({
+              primitives,
+              index: morphTargetIndex,
+              weight: bind.weight ?? 1.0,
+            }),
+          );
         });
 
         if (schemaExpression.materialColorBinds || schemaExpression.textureTransformBinds) {
@@ -190,11 +195,13 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
             });
 
             materials.forEach((material) => {
-              expression.addMaterialColorBind({
-                material,
-                type: bind.type,
-                targetValue: new THREE.Color().fromArray(bind.targetValue),
-              });
+              expression.addBind(
+                new VRMExpressionMaterialColorBind({
+                  material,
+                  type: bind.type,
+                  targetValue: new THREE.Color().fromArray(bind.targetValue),
+                }),
+              );
             });
           });
 
@@ -204,11 +211,13 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
             });
 
             materials.forEach((material) => {
-              expression.addTextureTransformBind({
-                material,
-                offset: new THREE.Vector2().fromArray(bind.offset ?? [0.0, 0.0]),
-                scale: new THREE.Vector2().fromArray(bind.scale ?? [1.0, 1.0]),
-              });
+              expression.addBind(
+                new VRMExpressionTextureTransformBind({
+                  material,
+                  offset: new THREE.Vector2().fromArray(bind.offset ?? [0.0, 0.0]),
+                  scale: new THREE.Vector2().fromArray(bind.scale ?? [1.0, 1.0]),
+                }),
+              );
             });
           });
         }
@@ -302,11 +311,13 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
                   return;
                 }
 
-                expression.addMorphTargetBind({
-                  primitives,
-                  index: morphTargetIndex,
-                  weight: 0.01 * (bind.weight ?? 100), // narrowing the range from [ 0.0 - 100.0 ] to [ 0.0 - 1.0 ]
-                });
+                expression.addBind(
+                  new VRMExpressionMorphTargetBind({
+                    primitives,
+                    index: morphTargetIndex,
+                    weight: 0.01 * (bind.weight ?? 100), // narrowing the range from [ 0.0 - 100.0 ] to [ 0.0 - 1.0 ]
+                  }),
+                );
               }),
             );
           });
