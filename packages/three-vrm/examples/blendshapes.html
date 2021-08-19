@@ -103,8 +103,8 @@
 
 					// tweak blendshape
 					const s = Math.sin( Math.PI * clock.elapsedTime );
-					currentVrm.expressionManager.setValue( THREE_VRM.VRMExpressionPreset.Aa, 0.5 + 0.5 * s );
-					currentVrm.expressionManager.setValue( THREE_VRM.VRMExpressionPreset.BlinkLeft, 0.5 - 0.5 * s );
+					currentVrm.expressionManager.setValue( THREE_VRM.VRMExpressionPresetName.Aa, 0.5 + 0.5 * s );
+					currentVrm.expressionManager.setValue( THREE_VRM.VRMExpressionPresetName.BlinkLeft, 0.5 - 0.5 * s );
 
 					// update vrm
 					currentVrm.update( deltaTime );
