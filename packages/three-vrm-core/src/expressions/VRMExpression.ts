@@ -5,29 +5,6 @@ import type { VRMExpressionOverrideType } from './VRMExpressionOverrideType';
 // animationMixer の監視対象は、Scene の中に入っている必要がある。
 // そのため、表示オブジェクトではないけれど、Object3D を継承して Scene に投入できるようにする。
 export class VRMExpression extends THREE.Object3D {
-  public textureTransformPropertyNamesMap: { [distinguisher: string]: string[] } = {
-    isMeshStandardMaterial: [
-      'map',
-      'emissiveMap',
-      'bumpMap',
-      'normalMap',
-      'displacementMap',
-      'roughnessMap',
-      'metalnessMap',
-      'alphaMap',
-    ],
-    isMeshBasicMaterial: ['map', 'specularMap', 'alphaMap'],
-    isMToonMaterial: [
-      'map',
-      'normalMap',
-      'emissiveMap',
-      'shadeMultiplyTexture',
-      'rimMultiplyTexture',
-      'outlineWidthMultiplyTexture',
-      'uvAnimationMaskTexture',
-    ],
-  };
-
   /**
    * Name of this expression.
    * Distinguished with `name` since `name` will be conflicted with Object3D.
