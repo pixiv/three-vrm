@@ -1,60 +1,10 @@
 import * as THREE from 'three';
-import type { VRMExpressionMaterialColorBind } from './VRMExpressionMaterialColorBind';
-import type { VRMExpressionMaterialColorBindState } from './VRMExpressionMaterialColorBindState';
-import type { VRMExpressionMaterialColorType } from './VRMExpressionMaterialColorType';
-import type { VRMExpressionMorphTargetBind } from './VRMExpressionMorphTargetBind';
+import { VRMExpressionBind } from './VRMExpressionBind';
 import type { VRMExpressionOverrideType } from './VRMExpressionOverrideType';
-import type { VRMExpressionTextureTransformBind } from './VRMExpressionTextureTransformBind';
-import type { VRMExpressionTextureTransformBindState } from './VRMExpressionTextureTransformBindState';
-
-const _v2 = new THREE.Vector2();
-const _color = new THREE.Color();
 
 // animationMixer の監視対象は、Scene の中に入っている必要がある。
 // そのため、表示オブジェクトではないけれど、Object3D を継承して Scene に投入できるようにする。
 export class VRMExpression extends THREE.Object3D {
-  public materialColorTypePropertyNameMap: {
-    [distinguisher: string]: { [type in VRMExpressionMaterialColorType]?: string };
-  } = {
-    isMeshStandardMaterial: {
-      color: 'color',
-      emissionColor: 'emissive',
-    },
-    isMeshBasicMaterial: {
-      color: 'color',
-    },
-    isMToonMaterial: {
-      color: 'color',
-      emissionColor: 'emissive',
-      outlineColor: 'outlineFactor',
-      rimColor: 'rimFactor',
-      shadeColor: 'shadeFactor',
-    },
-  };
-
-  public textureTransformPropertyNamesMap: { [distinguisher: string]: string[] } = {
-    isMeshStandardMaterial: [
-      'map',
-      'emissiveMap',
-      'bumpMap',
-      'normalMap',
-      'displacementMap',
-      'roughnessMap',
-      'metalnessMap',
-      'alphaMap',
-    ],
-    isMeshBasicMaterial: ['map', 'specularMap', 'alphaMap'],
-    isMToonMaterial: [
-      'map',
-      'normalMap',
-      'emissiveMap',
-      'shadeMultiplyTexture',
-      'rimMultiplyTexture',
-      'outlineWidthMultiplyTexture',
-      'uvAnimationMaskTexture',
-    ],
-  };
-
   /**
    * Name of this expression.
    * Distinguished with `name` since `name` will be conflicted with Object3D.
@@ -86,9 +36,7 @@ export class VRMExpression extends THREE.Object3D {
    */
   public overrideMouth: VRMExpressionOverrideType = 'none';
 
-  private _materialColorBinds: (VRMExpressionMaterialColorBind & VRMExpressionMaterialColorBindState)[] = [];
-  private _morphTargetBinds: VRMExpressionMorphTargetBind[] = [];
-  private _textureTransformBinds: (VRMExpressionTextureTransformBind & VRMExpressionTextureTransformBindState)[] = [];
+  private _binds: VRMExpressionBind[] = [];
 
   /**
    * A value represents how much it should override blink expressions.
@@ -145,81 +93,8 @@ export class VRMExpression extends THREE.Object3D {
     this.visible = false;
   }
 
-  public addMorphTargetBind(bind: VRMExpressionMorphTargetBind): void {
-    this._morphTargetBinds.push(bind);
-  }
-
-  public addMaterialColorBind(bind: VRMExpressionMaterialColorBind): void {
-    const { material, type } = bind;
-
-    const propertyNameMap = Object.entries(this.materialColorTypePropertyNameMap).find(([distinguisher]) => {
-      return (material as any)[distinguisher] === true;
-    })?.[1];
-    const propertyName = propertyNameMap?.[type];
-
-    if (!propertyName) {
-      console.warn(
-        `Tried to add a material color bind to the material ${
-          material.name ?? '(no name)'
-        }, the type ${type} but the material or the type is not supported.`,
-      );
-      return;
-    }
-
-    const target = (material as any)[propertyName] as THREE.Color;
-
-    const initialColor = target.clone();
-    const deltaColor = bind.targetValue.clone().sub(initialColor);
-
-    this._materialColorBinds.push({
-      ...bind,
-      propertyName,
-      initialValue: initialColor,
-      deltaValue: deltaColor,
-    });
-  }
-
-  public addTextureTransformBind(bind: VRMExpressionTextureTransformBind): void {
-    const { material } = bind;
-
-    const propertyNames = Object.entries(this.textureTransformPropertyNamesMap).find(([distinguisher]) => {
-      return (material as any)[distinguisher] === true;
-    })?.[1];
-
-    if (!propertyNames) {
-      console.warn(
-        `Tried to add a texture transform bind to the material ${
-          material.name ?? '(no name)'
-        } but the material is not supported.`,
-      );
-      return;
-    }
-
-    const properties: VRMExpressionTextureTransformBindState['properties'] = [];
-    propertyNames.forEach((propertyName) => {
-      const texture = ((material as any)[propertyName] as THREE.Texture | undefined)?.clone();
-      if (texture) {
-        (material as any)[propertyName] = texture; // because the texture is cloned
-
-        const initialOffset = texture.offset.clone();
-        const initialScale = texture.repeat.clone();
-        const deltaOffset = bind.offset.clone().multiply(initialScale);
-        const deltaScale = bind.scale.clone().addScalar(-1).multiply(initialScale);
-
-        properties.push({
-          name: propertyName,
-          initialOffset,
-          deltaOffset,
-          initialScale,
-          deltaScale,
-        });
-      }
-    });
-
-    this._textureTransformBinds.push({
-      ...bind,
-      properties,
-    });
+  public addBind(bind: VRMExpressionBind): void {
+    this._binds.push(bind);
   }
 
   /**
@@ -237,84 +112,13 @@ export class VRMExpression extends THREE.Object3D {
     let actualWeight = this.isBinary ? (this.weight === 0.0 ? 0.0 : 1.0) : this.weight;
     actualWeight *= options?.multiplier ?? 1.0;
 
-    this._morphTargetBinds.forEach((bind) => {
-      bind.primitives.forEach((mesh) => {
-        if (!mesh.morphTargetInfluences) {
-          return;
-        } // TODO: we should kick this at `addBind`
-
-        mesh.morphTargetInfluences[bind.index] += actualWeight * bind.weight;
-      });
-    });
-
-    this._materialColorBinds.forEach((bind) => {
-      const target = (bind.material as any)[bind.propertyName] as THREE.Color;
-      if (target === undefined) {
-        return;
-      } // TODO: we should kick this at `addMaterialValue`
-
-      target.add(_color.copy(bind.deltaValue).multiplyScalar(actualWeight));
-
-      if (typeof (bind.material as any).shouldApplyUniforms === 'boolean') {
-        (bind.material as any).shouldApplyUniforms = true;
-      }
-    });
-
-    this._textureTransformBinds.forEach((bind) => {
-      bind.properties.forEach((property) => {
-        const target = (bind.material as any)[property.name] as THREE.Texture;
-        if (target === undefined) {
-          return;
-        } // TODO: we should kick this at `addMaterialValue`
-
-        target.offset.add(_v2.copy(property.deltaOffset).multiplyScalar(actualWeight));
-        target.repeat.add(_v2.copy(property.deltaScale).multiplyScalar(actualWeight));
-
-        target.needsUpdate = true;
-      });
-    });
+    this._binds.forEach((bind) => bind.applyWeight(actualWeight));
   }
 
   /**
    * Clear previously assigned blend shapes.
    */
   public clearAppliedWeight(): void {
-    this._morphTargetBinds.forEach((bind) => {
-      bind.primitives.forEach((mesh) => {
-        if (!mesh.morphTargetInfluences) {
-          return;
-        } // TODO: we should kick this at `addBind`
-
-        mesh.morphTargetInfluences[bind.index] = 0.0;
-      });
-    });
-
-    this._materialColorBinds.forEach((bind) => {
-      const target = (bind.material as any)[bind.propertyName] as THREE.Color;
-      if (target === undefined) {
-        return;
-      } // TODO: we should kick this at `addMaterialValue`
-
-      const initialValue = bind.initialValue;
-      target.copy(initialValue);
-
-      if (typeof (bind.material as any).shouldApplyUniforms === 'boolean') {
-        (bind.material as any).shouldApplyUniforms = true;
-      }
-    });
-
-    this._textureTransformBinds.forEach((bind) => {
-      bind.properties.forEach((property) => {
-        const target = (bind.material as any)[property.name] as THREE.Texture;
-        if (target === undefined) {
-          return;
-        } // TODO: we should kick this at `addMaterialValue`
-
-        target.offset.copy(property.initialOffset);
-        target.repeat.copy(property.initialScale);
-
-        target.needsUpdate = true;
-      });
-    });
+    this._binds.forEach((bind) => bind.clearAppliedWeight());
   }
 }
