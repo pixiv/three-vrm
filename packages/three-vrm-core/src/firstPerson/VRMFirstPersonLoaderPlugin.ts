@@ -23,42 +23,15 @@ export class VRMFirstPersonLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   public async afterRoot(gltf: GLTF): Promise<void> {
-    // this might be called twice or more by its dependants!
+    const vrmHumanoid = gltf.userData.vrmHumanoid as VRMHumanoid | undefined;
 
-    if (gltf.userData.promiseVrmFirstPerson == null) {
-      gltf.userData.promiseVrmFirstPerson = (async () => {
-        // it depends on humanoid, load humanoid first
-        const promiseHumanoid = this._dependOnHumanoid(gltf);
-
-        // load the firstPerson
-        return await this._import(gltf, await promiseHumanoid);
-      })();
-
-      gltf.userData.vrmFirstPerson = await gltf.userData.promiseVrmFirstPerson;
+    if (vrmHumanoid == null) {
+      throw new Error(
+        'VRMFirstPersonLoaderPlugin: vrmHumanoid is undefined. VRMHumanoidLoaderPlugin have to be used first',
+      );
     }
 
-    await gltf.userData.promiseVrmFirstPerson;
-  }
-
-  /**
-   * Since FirstPerson depends on Humanoid, Humanoid must be loaded first.
-   * Sadly, there is no system that do dependency resolution on GLTFLoader Plugin system.
-   * This will execute the `afterRoot` of {@link VRMHumanoidLoaderPlugin} instead
-   * while making sure the `afterRoot` will be called only once by making `gltf.userData.promiseVrmHumanoid` as a cache.
-   * This function also returns the `gltf.userData.promiseVrmHumanoid`.
-   * @param gltf The input GLTF
-   */
-  private async _dependOnHumanoid(gltf: GLTF): Promise<VRMHumanoid | null> {
-    if (gltf.userData.promiseVrmHumanoid == null) {
-      const humanoidPlugin = (this.parser as any).plugins['VRMHumanoidLoaderPlugin']; // TODO: remove any
-      if (!humanoidPlugin) {
-        throw new Error('VRMFirstPersonLoaderPlugin: It must be used along with VRMHumanoidLoaderPlugin');
-      }
-
-      humanoidPlugin.afterRoot(gltf); // this will make sure `gltf.userData.promiseVrmHumanoid` exists
-    }
-
-    return await gltf.userData.promiseVrmHumanoid;
+    gltf.userData.vrmFirstPerson = await this._import(gltf, vrmHumanoid);
   }
 
   /**

@@ -67,7 +67,7 @@
 
 			loader.register( ( parser ) => {
 
-				return new THREE_VRM_CORE.VRMMetaLoaderPlugin( parser );
+				return new THREE_VRM_CORE.VRMCoreLoaderPlugin( parser );
 
 			} );
 
@@ -86,7 +86,7 @@
 					currentGltf = gltf;
 
 					// print meta fields
-					const meta = gltf.userData.vrmMeta;
+					const meta = gltf.userData.vrmCore.meta;
 					Object.keys( meta ).forEach( ( key ) => {
 
 						document.getElementById( 'meta' ).innerText += key + ' : ' + meta[ key ] + '\n';
