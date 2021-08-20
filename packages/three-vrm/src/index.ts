@@ -1,6 +1,7 @@
-export { VRM, VRMParameters } from './VRM';
+export { VRM } from './VRM';
 export { VRMLoaderPlugin } from './VRMLoaderPlugin';
-export { VRMLoaderPluginOptions } from './VRMLoaderPluginOptions';
+export type { VRMLoaderPluginOptions } from './VRMLoaderPluginOptions';
+export type { VRMParameters } from './VRMParameters';
 
 export * from './VRMUtils';
 
