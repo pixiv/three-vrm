@@ -107,6 +107,12 @@ function processSomeVector(v: THREE.Vector3): number {
 }
 ```
 
+## Typedef packages
+
+We also provide type definition packages (e.g. `@pixiv/types-vrmc-vrm-1.0` , `@pixiv/types-vrm-0.0` , ...)
+These branches should not include any implementations.
+These type definitions are authored manually by referencing the [vrm spec schema](https://github.com/vrm-c/vrm-specification).
+
 ## How to release
 
 - 1, Make sure you're on `dev` branch
