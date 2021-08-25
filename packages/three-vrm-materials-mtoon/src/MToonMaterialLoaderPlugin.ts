@@ -47,12 +47,6 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   public async beforeRoot(): Promise<void> {
-    // want to do v0compat first if exist
-    const v0compatPlugin = (this.parser as any).plugins?.['VRMMaterialsV0CompatPlugin'];
-    if (v0compatPlugin != null) {
-      await v0compatPlugin.beforeRoot();
-    }
-
     this._removeUnlitExtensionIfMToonExists();
   }
 

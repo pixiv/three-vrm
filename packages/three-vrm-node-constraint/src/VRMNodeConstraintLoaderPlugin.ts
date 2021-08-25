@@ -31,18 +31,7 @@ export class VRMNodeConstraintLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   public async afterRoot(gltf: GLTF): Promise<void> {
-    // this might be called twice or more by its dependants!
-
-    if (gltf.userData.promiseVrmNodeConstraintManager == null) {
-      gltf.userData.promiseVrmNodeConstraintManager = (async () => {
-        // load the constraints
-        return await this._import(gltf);
-      })();
-
-      gltf.userData.vrmNodeConstraintManager = await gltf.userData.promiseVrmNodeConstraintManager;
-    }
-
-    await gltf.userData.promiseVrmNodeConstraintManager;
+    gltf.userData.vrmNodeConstraintManager = await this._import(gltf);
   }
 
   /**
