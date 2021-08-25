@@ -40,8 +40,7 @@
     "gh-pages": "node ./bin/gh-pages.js",
     "test": "echo There is no test for three-vrm",
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier \"src/**/*.{ts,tsx}\" --check",
-    "lint-fix": "eslint \"src/**/*.{ts,tsx}\" --fix && prettier \"src/**/*.{ts,tsx}\" --write",
-    "typedefgen": "node ./bin/typedefgen.js"
+    "lint-fix": "eslint \"src/**/*.{ts,tsx}\" --fix && prettier \"src/**/*.{ts,tsx}\" --write"
   },
   "lint-staged": {
     "./src/**/*.{ts,tsx}": [

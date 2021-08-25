@@ -128,9 +128,3 @@ function processSomeVector(v: THREE.Vector3): number {
 ## When you add a new package to the repository
 
 - Do not forget to add a cache path for the new package!
-
-## `typedefgen.js`
-
-`typedefgen.js` ( can be run via `yarn typedefgen` of `packages/three-vrm` ) is a script that generates type definitions of GLTF and VRM schema automatically using [quicktype](https://quicktype.io/).
-However, names of each interfaces/enums are not good so you have to rename these names by your own hand.
-We usually don't have to generate these frequently.
