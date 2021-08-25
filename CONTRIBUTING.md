@@ -114,8 +114,8 @@ function processSomeVector(v: THREE.Vector3): number {
 - 2, Run the following:
 
   ```sh
-  yarn lerna version <newversion> # will also automatically runs build scripts
-  yarn lerna publish from-git # will also automatically pushes some files into `gh-pages` branch
+  yarn lerna version <newversion> --exact --no-push # will also automatically runs build scripts
+  yarn lerna publish from-git --dist-tag latest # will also automatically pushes some files into `gh-pages` branch
 
   git switch release
   git merge dev
