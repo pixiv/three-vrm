@@ -107,6 +107,12 @@ function processSomeVector(v: THREE.Vector3): number {
 }
 ```
 
+## Typedef packages
+
+We also provide type definition packages (e.g. `@pixiv/types-vrmc-vrm-1.0` , `@pixiv/types-vrm-0.0` , ...)
+These branches should not include any implementations.
+These type definitions are authored manually by referencing the [vrm spec schema](https://github.com/vrm-c/vrm-specification).
+
 ## How to release
 
 - 1, Make sure you're on `dev` branch
@@ -114,8 +120,8 @@ function processSomeVector(v: THREE.Vector3): number {
 - 2, Run the following:
 
   ```sh
-  yarn lerna version <newversion> # will also automatically runs build scripts
-  yarn lerna publish from-git # will also automatically pushes some files into `gh-pages` branch
+  yarn lerna version <newversion> --exact --no-push # will also automatically runs build scripts
+  yarn lerna publish from-git --dist-tag latest # will also automatically pushes some files into `gh-pages` branch
 
   git switch release
   git merge dev
@@ -128,9 +134,3 @@ function processSomeVector(v: THREE.Vector3): number {
 ## When you add a new package to the repository
 
 - Do not forget to add a cache path for the new package!
-
-## `typedefgen.js`
-
-`typedefgen.js` ( can be run via `yarn typedefgen` of `packages/three-vrm` ) is a script that generates type definitions of GLTF and VRM schema automatically using [quicktype](https://quicktype.io/).
-However, names of each interfaces/enums are not good so you have to rename these names by your own hand.
-We usually don't have to generate these frequently.
