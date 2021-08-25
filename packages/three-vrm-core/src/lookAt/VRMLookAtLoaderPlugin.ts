@@ -24,22 +24,23 @@ export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   public async afterRoot(gltf: GLTF): Promise<void> {
-    // this might be called twice or more by its dependants!
+    const vrmHumanoid = gltf.userData.vrmHumanoid as VRMHumanoid | undefined;
 
-    if (gltf.userData.promiseVrmLookAt == null) {
-      gltf.userData.promiseVrmLookAt = (async () => {
-        // load dependencies
-        const promiseHumanoid = this._dependOnHumanoid(gltf);
-        const promiseExpressionManager = this._dependOnExpressionManager(gltf);
-
-        // load the lookAt
-        return await this._import(gltf, await promiseHumanoid, await promiseExpressionManager);
-      })();
-
-      gltf.userData.vrmLookAt = await gltf.userData.promiseVrmLookAt;
+    if (vrmHumanoid == null) {
+      throw new Error(
+        'VRMFirstPersonLoaderPlugin: vrmHumanoid is undefined. VRMHumanoidLoaderPlugin have to be used first',
+      );
     }
 
-    await gltf.userData.promiseVrmLookAt;
+    const vrmExpressionManager = gltf.userData.vrmExpressionManager as VRMExpressionManager | undefined;
+
+    if (vrmExpressionManager == null) {
+      throw new Error(
+        'VRMFirstPersonLoaderPlugin: vrmExpressionManager is undefined. VRMExpressionLoaderPlugin have to be used first',
+      );
+    }
+
+    gltf.userData.vrmLookAt = await this._import(gltf, vrmHumanoid, vrmExpressionManager);
   }
 
   /**

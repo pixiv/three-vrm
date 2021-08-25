@@ -48,17 +48,7 @@ export class VRMMetaLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   public async afterRoot(gltf: GLTF): Promise<void> {
-    // this might be called twice or more by its dependants!
-
-    if (gltf.userData.promiseVrmMeta == null) {
-      gltf.userData.promiseVrmMeta = (async () => {
-        return await this._import(gltf);
-      })();
-
-      gltf.userData.vrmMeta = await gltf.userData.promiseVrmMeta;
-    }
-
-    await gltf.userData.promiseVrmMeta;
+    gltf.userData.vrmMeta = await this._import(gltf);
   }
 
   private async _import(gltf: GLTF): Promise<VRMMeta | null> {

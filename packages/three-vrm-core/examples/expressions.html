@@ -57,7 +57,7 @@
 
 			loader.register( ( parser ) => {
 
-				return new THREE_VRM_CORE.VRMExpressionLoaderPlugin( parser );
+				return new THREE_VRM_CORE.VRMCoreLoaderPlugin( parser );
 
 			} );
 
@@ -103,7 +103,7 @@
 
 				if ( currentGltf ) {
 
-					const expressionManager = currentGltf.userData.vrmExpressionManager;
+					const expressionManager = currentGltf.userData.vrmCore.expressionManager;
 
 					// tweak expressions
 					const s = Math.sin( Math.PI * clock.elapsedTime );

@@ -66,19 +66,7 @@
 
 			loader.register( ( parser ) => {
 
-				return new THREE_VRM_CORE.VRMHumanoidLoaderPlugin( parser );
-
-			} );
-
-			loader.register( ( parser ) => {
-
-				return new THREE_VRM_CORE.VRMExpressionLoaderPlugin( parser );
-
-			} );
-
-			loader.register( ( parser ) => {
-
-				return new THREE_VRM_CORE.VRMLookAtLoaderPlugin( parser );
+				return new THREE_VRM_CORE.VRMCoreLoaderPlugin( parser );
 
 			} );
 
@@ -97,7 +85,7 @@
 					currentGltf = gltf;
 
 					// set the target of lookAt
-					const lookAt = gltf.userData.vrmLookAt;
+					const lookAt = gltf.userData.vrmCore.lookAt;
 
 					lookAt.target = lookAtTarget;
 
@@ -129,7 +117,7 @@
 
 				if ( currentGltf ) {
 
-					const lookAt = currentGltf.userData.vrmLookAt;
+					const lookAt = currentGltf.userData.vrmCore.lookAt;
 					const expressionManager = currentGltf.userData.vrmExpressionManager;
 
 					lookAt.update( deltaTime );

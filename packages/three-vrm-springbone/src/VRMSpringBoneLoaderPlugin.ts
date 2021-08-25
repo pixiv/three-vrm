@@ -43,18 +43,7 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   public async afterRoot(gltf: GLTF): Promise<void> {
-    // this might be called twice or more by its dependants!
-
-    if (gltf.userData.promiseVrmSpringBoneManager == null) {
-      gltf.userData.promiseVrmSpringBoneManager = (async () => {
-        // load the spring bones
-        return await this._import(gltf);
-      })();
-
-      gltf.userData.vrmSpringBoneManager = await gltf.userData.promiseVrmSpringBoneManager;
-    }
-
-    await gltf.userData.promiseVrmSpringBoneManager;
+    gltf.userData.vrmSpringBoneManager = await this._import(gltf);
   }
 
   /**

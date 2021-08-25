@@ -21,17 +21,7 @@ export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   public async afterRoot(gltf: GLTF): Promise<void> {
-    // this might be called twice or more by its dependants!
-
-    if (gltf.userData.promiseVrmHumanoid == null) {
-      gltf.userData.promiseVrmHumanoid = (async () => {
-        return await this._import(gltf);
-      })();
-
-      gltf.userData.vrmHumanoid = await gltf.userData.promiseVrmHumanoid;
-    }
-
-    await gltf.userData.promiseVrmHumanoid;
+    gltf.userData.vrmHumanoid = await this._import(gltf);
   }
 
   /**
