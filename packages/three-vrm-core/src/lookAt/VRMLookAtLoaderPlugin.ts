@@ -3,15 +3,25 @@ import type * as V1VRMSchema from '@pixiv/types-vrmc-vrm-1.0';
 import type { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
 import type { VRMExpressionManager } from '../expressions/VRMExpressionManager';
 import type { VRMHumanoid } from '../humanoid/VRMHumanoid';
+import { VRMLookAtHelper } from './helpers/VRMLookAtHelper';
 import { VRMLookAt } from './VRMLookAt';
+import type { VRMLookAtApplier } from './VRMLookAtApplier';
 import { VRMLookAtBoneApplier } from './VRMLookAtBoneApplier';
 import { VRMLookAtExpressionApplier } from './VRMLookAtExpressionApplier';
+import type { VRMLookAtLoaderPluginOptions } from './VRMLookAtLoaderPluginOptions';
 import { VRMLookAtRangeMap } from './VRMLookAtRangeMap';
 
 /**
  * A plugin of GLTFLoader that imports a {@link VRMLookAt} from a VRM extension of a GLTF.
  */
 export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
+  /**
+   * Specify an Object3D to add {@link VRMLookAtHelper} s.
+   * If not specified, helper will not be created.
+   * If `renderOrder` is set to the root, helpers will copy the same `renderOrder` .
+   */
+  public helperRoot?: THREE.Object3D;
+
   public readonly parser: GLTFParser;
 
   public get name(): string {
@@ -19,8 +29,10 @@ export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
     return 'VRMLookAtLoaderPlugin';
   }
 
-  public constructor(parser: GLTFParser) {
+  public constructor(parser: GLTFParser, options?: VRMLookAtLoaderPluginOptions) {
     this.parser = parser;
+
+    this.helperRoot = options?.helperRoot;
   }
 
   public async afterRoot(gltf: GLTF): Promise<void> {
@@ -41,48 +53,6 @@ export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
     }
 
     gltf.userData.vrmLookAt = await this._import(gltf, vrmHumanoid, vrmExpressionManager);
-  }
-
-  /**
-   * Since LookAt depends on Humanoid, Humanoid must be loaded first.
-   * Sadly, there is no system that do dependency resolution on GLTFLoader Plugin system.
-   * This will execute the `afterRoot` of {@link VRMHumanoidLoaderPlugin} instead
-   * while making sure the `afterRoot` will be called only once by making `gltf.userData.promiseVrmHumanoid` as a cache.
-   * This function also returns the `gltf.userData.promiseVrmHumanoid`.
-   * @param gltf The input GLTF
-   */
-  private async _dependOnHumanoid(gltf: GLTF): Promise<VRMHumanoid | null> {
-    if (gltf.userData.promiseVrmHumanoid == null) {
-      const humanoidPlugin = (this.parser as any).plugins['VRMHumanoidLoaderPlugin']; // TODO: remove any
-      if (!humanoidPlugin) {
-        throw new Error('VRMLookAtLoaderPlugin: It must be used along with VRMHumanoidLoaderPlugin');
-      }
-
-      humanoidPlugin.afterRoot(gltf); // this will make sure `gltf.userData.promiseVrmHumanoid` exists
-    }
-
-    return await gltf.userData.promiseVrmHumanoid;
-  }
-
-  /**
-   * Since LookAt depends on Expressions, ExpressionManager must be loaded first.
-   * Sadly, there is no system that do dependency resolution on GLTFLoader Plugin system.
-   * This will execute the `afterRoot` of {@link VRMExpressionLoaderPlugin} instead
-   * while making sure the `afterRoot` will be called only once by making `gltf.userData.promiseVrmExpressionManager` as a cache.
-   * This function also returns the `gltf.userData.promiseVrmExpressionManager`.
-   * @param gltf The input GLTF
-   */
-  private async _dependOnExpressionManager(gltf: GLTF): Promise<VRMExpressionManager | null> {
-    if (gltf.userData.promiseVrmExpressionManager == null) {
-      const expressionPlugin = (this.parser as any).plugins['VRMExpressionLoaderPlugin']; // TODO: remove any
-      if (!expressionPlugin) {
-        throw new Error('VRMLookAtLoaderPlugin: It must be used along with VRMExpressionLoaderPlugin');
-      }
-
-      expressionPlugin.afterRoot(gltf); // this will make sure `gltf.userData.promiseVrmExpressionManager` exists
-    }
-
-    return await gltf.userData.promiseVrmExpressionManager;
   }
 
   /**
@@ -155,7 +125,7 @@ export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
       applier = new VRMLookAtBoneApplier(humanoid, mapHI, mapHO, mapVD, mapVU);
     }
 
-    const lookAt = new VRMLookAt(humanoid, applier);
+    const lookAt = this._importLookAt(humanoid, applier);
 
     lookAt.offsetFromHeadBone.fromArray(schemaLookAt.offsetFromHeadBone ?? [0.0, 0.06, 0.0]);
 
@@ -203,7 +173,7 @@ export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
       applier = new VRMLookAtBoneApplier(humanoid, mapHI, mapHO, mapVD, mapVU);
     }
 
-    const lookAt = new VRMLookAt(humanoid, applier);
+    const lookAt = this._importLookAt(humanoid, applier);
 
     if (schemaFirstPerson.firstPersonBoneOffset) {
       lookAt.offsetFromHeadBone.set(
@@ -230,5 +200,17 @@ export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
     }
 
     return new VRMLookAtRangeMap(schemaDegreeMap?.xRange ?? 90.0, schemaDegreeMap?.yRange ?? defaultOutputScale);
+  }
+
+  private _importLookAt(humanoid: VRMHumanoid, applier: VRMLookAtApplier): VRMLookAt {
+    const lookAt = new VRMLookAt(humanoid, applier);
+
+    if (this.helperRoot) {
+      const helper = new VRMLookAtHelper(lookAt);
+      this.helperRoot.add(helper);
+      helper.renderOrder = this.helperRoot.renderOrder;
+    }
+
+    return lookAt;
   }
 }
