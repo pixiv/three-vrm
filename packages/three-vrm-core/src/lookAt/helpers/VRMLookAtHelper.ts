@@ -60,7 +60,7 @@ export class VRMLookAtHelper extends THREE.Group {
 
     {
       const geometry = new LineAndSphereBufferGeometry();
-      geometry.radius = 0.5;
+      geometry.radius = 0.1;
 
       const material = new THREE.LineBasicMaterial({
         color: 0xffffff,
