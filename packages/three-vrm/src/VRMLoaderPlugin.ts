@@ -37,7 +37,7 @@ export class VRMLoaderPlugin implements GLTFLoaderPlugin {
     this.expressionPlugin = options?.expressionPlugin ?? new VRMExpressionLoaderPlugin(parser);
     this.firstPersonPlugin = options?.firstPersonPlugin ?? new VRMFirstPersonLoaderPlugin(parser);
     this.humanoidPlugin = options?.humanoidPlugin ?? new VRMHumanoidLoaderPlugin(parser);
-    this.lookAtPlugin = options?.lookAtPlugin ?? new VRMLookAtLoaderPlugin(parser);
+    this.lookAtPlugin = options?.lookAtPlugin ?? new VRMLookAtLoaderPlugin(parser, { helperRoot });
     this.metaPlugin = options?.metaPlugin ?? new VRMMetaLoaderPlugin(parser);
     this.mtoonMaterialPlugin = options?.mtoonMaterialPlugin ?? new MToonMaterialLoaderPlugin(parser);
     this.materialsHDREmissiveMultiplierPlugin =
