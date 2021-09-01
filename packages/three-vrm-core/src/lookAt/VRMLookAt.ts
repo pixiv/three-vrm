@@ -56,6 +56,13 @@ export class VRMLookAt {
   protected _euler: THREE.Euler = new THREE.Euler(0.0, 0.0, 0.0, VRMLookAt.EULER_ORDER);
 
   /**
+   * Its current euler direction.
+   */
+  public get euler(): THREE.Euler {
+    return this._euler.clone();
+  }
+
+  /**
    * Create a new {@link VRMLookAt}.
    *
    * @param humanoid A {@link VRMHumanoid}
@@ -117,16 +124,25 @@ export class VRMLookAt {
   }
 
   /**
+   * Get its LookAt orientation in world coordinate.
+   *
+   * @param target A target `THREE.Vector3`
+   */
+  public getLookAtWorldQuaternion(target: THREE.Quaternion): THREE.Quaternion {
+    const head = this.humanoid.getBoneNode('head')!;
+
+    return getWorldQuaternionLite(head, target);
+  }
+
+  /**
    * Get its LookAt direction in world coordinate.
    *
    * @param target A target `THREE.Vector3`
    */
   public getLookAtWorldDirection(target: THREE.Vector3): THREE.Vector3 {
-    const head = this.humanoid.getBoneNode('head')!;
+    this.getLookAtWorldQuaternion(_quatA);
 
-    const rot = getWorldQuaternionLite(head, _quatA);
-
-    return target.copy(this.faceFront).applyEuler(this._euler).applyQuaternion(rot);
+    return target.copy(this.faceFront).applyEuler(this._euler).applyQuaternion(_quatA);
   }
 
   /**
@@ -156,10 +172,8 @@ export class VRMLookAt {
   }
 
   protected _calcEuler(target: THREE.Euler, position: THREE.Vector3): THREE.Euler {
-    const head = this.humanoid.getBoneNode('head')!;
-
     // Look at direction in local coordinate
-    const headRotInv = quatInvertCompat(getWorldQuaternionLite(head, _quatA));
+    const headRotInv = quatInvertCompat(this.getLookAtWorldQuaternion(_quatA));
     const headPos = this.getLookAtWorldPosition(_v3B);
     const lookAtDir = _v3C.copy(position).sub(headPos).applyQuaternion(headRotInv).normalize();
 

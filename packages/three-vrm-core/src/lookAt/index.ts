@@ -1,3 +1,5 @@
+export * from './helpers';
+
 export { VRMLookAt } from './VRMLookAt';
 export type { VRMLookAtApplier } from './VRMLookAtApplier';
 export { VRMLookAtBoneApplier } from './VRMLookAtBoneApplier';
