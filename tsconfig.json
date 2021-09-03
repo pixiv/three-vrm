@@ -7,6 +7,7 @@
     "resolveJsonModule": true,
     "strict": true,
     "baseUrl": ".",
+    "forceConsistentCasingInFileNames": true,
     "paths": {
       "@pixiv/three-vrm": ["packages/three-vrm"],
       "@pixiv/three-vrm-constraints": ["packages/three-vrm-constraints"],
