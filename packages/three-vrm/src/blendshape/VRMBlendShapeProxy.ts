@@ -53,8 +53,10 @@ export class VRMBlendShapeProxy {
    */
   public getBlendShapeGroup(name: string | VRMSchema.BlendShapePresetName): VRMBlendShapeGroup | undefined {
     const presetName = this._blendShapePresetMap[name as VRMSchema.BlendShapePresetName];
-    const controller = presetName ? this._blendShapeGroups[presetName] : this._blendShapeGroups[name];
-    if (!controller) {
+    const controller = (presetName != null ? this._blendShapeGroups[presetName] : this._blendShapeGroups[name]) as
+      | VRMBlendShapeGroup
+      | undefined;
+    if (controller == null) {
       console.warn(`no blend shape found by ${name}`);
       return undefined;
     }
@@ -73,7 +75,7 @@ export class VRMBlendShapeProxy {
     controller: VRMBlendShapeGroup,
   ): void {
     this._blendShapeGroups[name] = controller;
-    if (presetName) {
+    if (presetName != null) {
       this._blendShapePresetMap[presetName] = name;
     } else {
       this._unknownGroupNames.push(name);

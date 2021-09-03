@@ -198,7 +198,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
   constructor(parameters: MToonParameters = {}) {
     super();
 
-    this.encoding = parameters.encoding || THREE.LinearEncoding;
+    this.encoding = parameters.encoding ?? THREE.LinearEncoding;
     if (this.encoding !== THREE.LinearEncoding && this.encoding !== THREE.sRGBEncoding) {
       console.warn(
         'The specified color encoding does not work properly with MToonMaterial. You might want to use THREE.sRGBEncoding instead.',
@@ -231,9 +231,9 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     parameters.lights = true;
     parameters.clipping = true;
 
-    parameters.skinning = parameters.skinning || false;
-    parameters.morphTargets = parameters.morphTargets || false;
-    parameters.morphNormals = parameters.morphNormals || false;
+    parameters.skinning = parameters.skinning ?? false;
+    parameters.morphTargets = parameters.morphTargets ?? false;
+    parameters.morphNormals = parameters.morphNormals ?? false;
 
     // == uniforms =============================================================
     parameters.uniforms = THREE.UniformsUtils.merge([
