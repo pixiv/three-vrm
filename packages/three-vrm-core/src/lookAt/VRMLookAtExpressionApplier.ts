@@ -73,11 +73,11 @@ export class VRMLookAtExpressionApplier implements VRMLookAtApplier {
     const srcY = (angle.y * 180.0) / Math.PI;
 
     if (srcX < 0.0) {
-      this.expressions.setValue('lookUp', 0.0);
-      this.expressions.setValue('lookDown', this.rangeMapVerticalDown.map(-srcX));
-    } else {
       this.expressions.setValue('lookDown', 0.0);
-      this.expressions.setValue('lookUp', this.rangeMapVerticalUp.map(srcX));
+      this.expressions.setValue('lookUp', this.rangeMapVerticalUp.map(-srcX));
+    } else {
+      this.expressions.setValue('lookUp', 0.0);
+      this.expressions.setValue('lookDown', this.rangeMapVerticalDown.map(srcX));
     }
 
     if (srcY < 0.0) {
