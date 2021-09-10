@@ -337,10 +337,18 @@ export class VRMMaterialImporter {
       }
     }
 
-    // set whether it needs skinning and morphing or not
-    params.skinning = (originalMaterial as any).skinning || false;
-    params.morphTargets = (originalMaterial as any).morphTargets || false;
-    params.morphNormals = (originalMaterial as any).morphNormals || false;
+    // COMPAT
+    // See: https://github.com/mrdoob/three.js/pull/21788
+    if (parseInt(THREE.REVISION, 10) < 129) {
+      params.skinning = (originalMaterial as any).skinning || false;
+    }
+
+    // COMPAT
+    // See: https://github.com/mrdoob/three.js/pull/22169
+    if (parseInt(THREE.REVISION, 10) < 131) {
+      params.morphTargets = (originalMaterial as any).morphTargets || false;
+      params.morphNormals = (originalMaterial as any).morphNormals || false;
+    }
 
     return Promise.all(taskList).then(() => params);
   }
