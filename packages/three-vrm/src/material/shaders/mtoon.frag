@@ -71,7 +71,12 @@ uniform float uvAnimTheta;
 // #include <envmap_pars_fragment>
 // #include <cube_uv_reflection_fragment>
 #include <fog_pars_fragment>
-#include <bsdfs>
+
+// #include <bsdfs>
+vec3 BRDF_Lambert( const in vec3 diffuseColor ) {
+    return RECIPROCAL_PI * diffuseColor;
+}
+
 #include <lights_pars_begin>
 
 // #include <lights_phong_pars_fragment>
@@ -116,7 +121,7 @@ struct MToonMaterial {
 
   // Temporary compat against shader change @ Three.js r126
   // See: #21205, #21307, #21299
-  #ifdef THREE_VRM_THREE_REVISION_126
+  #if THREE_VRM_THREE_REVISION >= 126
 
     vec3 perturbNormal2Arb( vec2 uv, vec3 eye_pos, vec3 surf_norm, vec3 mapN, float faceDirection ) {
 
@@ -238,10 +243,10 @@ vec3 getDiffuse(
   const in vec3 lighting
 ) {
   #ifdef DEBUG_LITSHADERATE
-    return vec3( BRDF_Diffuse_Lambert( lightIntensity * lighting ) );
+    return vec3( BRDF_Lambert( lightIntensity * lighting ) );
   #endif
 
-  return lighting * BRDF_Diffuse_Lambert( mix( material.shadeColor, material.diffuseColor, lightIntensity ) );
+  return lighting * BRDF_Lambert( mix( material.shadeColor, material.diffuseColor, lightIntensity ) );
 }
 
 // == post correction ==========================================================
@@ -335,7 +340,7 @@ void main() {
 
       // Temporary compat against shader change @ Three.js r126
       // See: #21205, #21307, #21299
-      #ifdef THREE_VRM_THREE_REVISION_126
+      #if THREE_VRM_THREE_REVISION >= 126
 
         normal = normal * faceDirection;
 
@@ -362,7 +367,7 @@ void main() {
 
       // Temporary compat against shader change @ Three.js r126
       // See: #21205, #21307, #21299
-      #ifdef THREE_VRM_THREE_REVISION_126
+      #if THREE_VRM_THREE_REVISION >= 126
 
         normal = perturbNormal2Arb( uv, -vViewPosition, normal, mapN, faceDirection );
 
@@ -432,7 +437,12 @@ void main() {
     #pragma unroll_loop_start
     for ( int i = 0; i < NUM_POINT_LIGHTS; i ++ ) {
       pointLight = pointLights[ i ];
-      getPointDirectLightIrradiance( pointLight, geometry, directLight );
+
+      #if THREE_VRM_THREE_REVISION >= 132
+        getPointLightInfo( pointLight, geometry, directLight );
+      #else
+        getPointDirectLightIrradiance( pointLight, geometry, directLight );
+      #endif
 
       atten = 1.0;
       #if defined( USE_SHADOWMAP ) && ( UNROLLED_LOOP_INDEX < NUM_POINT_LIGHT_SHADOWS )
@@ -459,7 +469,12 @@ void main() {
     #pragma unroll_loop_start
     for ( int i = 0; i < NUM_SPOT_LIGHTS; i ++ ) {
       spotLight = spotLights[ i ];
-      getSpotDirectLightIrradiance( spotLight, geometry, directLight );
+
+      #if THREE_VRM_THREE_REVISION >= 132
+        getSpotLightInfo( spotLight, geometry, directLight );
+      #else
+        getSpotDirectLightIrradiance( spotLight, geometry, directLight );
+      #endif
 
       atten = 1.0;
       #if defined( USE_SHADOWMAP ) && ( UNROLLED_LOOP_INDEX < NUM_SPOT_LIGHT_SHADOWS )
@@ -486,7 +501,12 @@ void main() {
     #pragma unroll_loop_start
     for ( int i = 0; i < NUM_DIR_LIGHTS; i ++ ) {
       directionalLight = directionalLights[ i ];
-      getDirectionalDirectLightIrradiance( directionalLight, geometry, directLight );
+
+      #if THREE_VRM_THREE_REVISION >= 132
+        getDirectionalLightInfo( directionalLight, geometry, directLight );
+      #else
+        getDirectionalDirectLightIrradiance( directionalLight, geometry, directLight );
+      #endif
 
       atten = 1.0;
       #if defined( USE_SHADOWMAP ) && ( UNROLLED_LOOP_INDEX < NUM_DIR_LIGHT_SHADOWS )
@@ -527,7 +547,7 @@ void main() {
 
   // #include <lights_fragment_end>
   // RE_IndirectDiffuse here
-  reflectedLight.indirectDiffuse += indirectLightIntensity * irradiance * BRDF_Diffuse_Lambert( material.diffuseColor );
+  reflectedLight.indirectDiffuse += indirectLightIntensity * irradiance * BRDF_Lambert( material.diffuseColor );
 
   // modulation
   #include <aomap_fragment>

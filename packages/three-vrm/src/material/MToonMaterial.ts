@@ -231,9 +231,18 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     parameters.lights = true;
     parameters.clipping = true;
 
-    parameters.skinning = parameters.skinning || false;
-    parameters.morphTargets = parameters.morphTargets || false;
-    parameters.morphNormals = parameters.morphNormals || false;
+    // COMPAT
+    // See: https://github.com/mrdoob/three.js/pull/21788
+    if (parseInt(THREE.REVISION, 10) < 129) {
+      (parameters as any).skinning = (parameters as any).skinning || false;
+    }
+
+    // COMPAT
+    // See: https://github.com/mrdoob/three.js/pull/22169
+    if (parseInt(THREE.REVISION, 10) < 131) {
+      (parameters as any).morphTargets = (parameters as any).morphTargets || false;
+      (parameters as any).morphNormals = (parameters as any).morphNormals || false;
+    }
 
     // == uniforms =============================================================
     parameters.uniforms = THREE.UniformsUtils.merge([
@@ -539,9 +548,8 @@ export class MToonMaterial extends THREE.ShaderMaterial {
       this.uvAnimMaskTexture !== null;
 
     this.defines = {
-      // Temporary compat against shader change @ Three.js r126
-      // See: #21205, #21307, #21299
-      THREE_VRM_THREE_REVISION_126: parseInt(THREE.REVISION) >= 126,
+      // Used for compats
+      THREE_VRM_THREE_REVISION: parseInt(THREE.REVISION, 10),
 
       OUTLINE: this._isOutline,
       BLENDMODE_OPAQUE: this._blendMode === MToonMaterialRenderMode.Opaque,
