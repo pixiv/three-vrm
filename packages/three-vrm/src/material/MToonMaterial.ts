@@ -539,9 +539,8 @@ export class MToonMaterial extends THREE.ShaderMaterial {
       this.uvAnimMaskTexture !== null;
 
     this.defines = {
-      // Temporary compat against shader change @ Three.js r126
-      // See: #21205, #21307, #21299
-      THREE_VRM_THREE_REVISION_126: parseInt(THREE.REVISION) >= 126,
+      // Used for compats
+      THREE_VRM_THREE_REVISION: parseInt(THREE.REVISION, 10),
 
       OUTLINE: this._isOutline,
       BLENDMODE_OPAQUE: this._blendMode === MToonMaterialRenderMode.Opaque,
