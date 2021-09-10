@@ -10,4 +10,11 @@ export interface VRMCoreLoaderPluginOptions {
   humanoidPlugin?: VRMHumanoidLoaderPlugin;
   lookAtPlugin?: VRMLookAtLoaderPlugin;
   metaPlugin?: VRMMetaLoaderPlugin;
+
+  /**
+   * If assigned, the object will be used as a helper root of every component.
+   * Useful for debug.
+   * Will be overwritten if you use custom loader plugins for each components.
+   */
+  helperRoot?: THREE.Object3D;
 }

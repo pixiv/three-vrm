@@ -56,6 +56,7 @@
 
 			// lookat target
 			const lookAtTarget = new THREE.Object3D();
+			lookAtTarget.position.z = -1.0;
 			camera.add( lookAtTarget );
 
 			// gltf and vrm
@@ -66,7 +67,7 @@
 
 			loader.register( ( parser ) => {
 
-				return new THREE_VRM_CORE.VRMCoreLoaderPlugin( parser );
+				return new THREE_VRM_CORE.VRMCoreLoaderPlugin( parser, { helperRoot: scene } );
 
 			} );
 
@@ -117,11 +118,9 @@
 
 				if ( currentGltf ) {
 
-					const lookAt = currentGltf.userData.vrmCore.lookAt;
-					const expressionManager = currentGltf.userData.vrmExpressionManager;
+					const vrmCore = currentGltf.userData.vrmCore;
 
-					lookAt.update( deltaTime );
-					expressionManager?.update( deltaTime );
+					vrmCore.update( deltaTime );
 
 				}
 
