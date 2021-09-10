@@ -437,7 +437,12 @@ void main() {
     #pragma unroll_loop_start
     for ( int i = 0; i < NUM_POINT_LIGHTS; i ++ ) {
       pointLight = pointLights[ i ];
-      getPointDirectLightIrradiance( pointLight, geometry, directLight );
+
+      #if THREE_VRM_THREE_REVISION >= 132
+        getPointLightInfo( pointLight, geometry, directLight );
+      #else
+        getPointDirectLightIrradiance( pointLight, geometry, directLight );
+      #endif
 
       atten = 1.0;
       #if defined( USE_SHADOWMAP ) && ( UNROLLED_LOOP_INDEX < NUM_POINT_LIGHT_SHADOWS )
@@ -464,7 +469,12 @@ void main() {
     #pragma unroll_loop_start
     for ( int i = 0; i < NUM_SPOT_LIGHTS; i ++ ) {
       spotLight = spotLights[ i ];
-      getSpotDirectLightIrradiance( spotLight, geometry, directLight );
+
+      #if THREE_VRM_THREE_REVISION >= 132
+        getSpotLightInfo( spotLight, geometry, directLight );
+      #else
+        getSpotDirectLightIrradiance( spotLight, geometry, directLight );
+      #endif
 
       atten = 1.0;
       #if defined( USE_SHADOWMAP ) && ( UNROLLED_LOOP_INDEX < NUM_SPOT_LIGHT_SHADOWS )
@@ -491,7 +501,12 @@ void main() {
     #pragma unroll_loop_start
     for ( int i = 0; i < NUM_DIR_LIGHTS; i ++ ) {
       directionalLight = directionalLights[ i ];
-      getDirectionalDirectLightIrradiance( directionalLight, geometry, directLight );
+
+      #if THREE_VRM_THREE_REVISION >= 132
+        getDirectionalLightInfo( directionalLight, geometry, directLight );
+      #else
+        getDirectionalDirectLightIrradiance( directionalLight, geometry, directLight );
+      #endif
 
       atten = 1.0;
       #if defined( USE_SHADOWMAP ) && ( UNROLLED_LOOP_INDEX < NUM_DIR_LIGHT_SHADOWS )
