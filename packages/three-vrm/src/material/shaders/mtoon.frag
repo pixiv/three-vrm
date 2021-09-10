@@ -71,7 +71,12 @@ uniform float uvAnimTheta;
 // #include <envmap_pars_fragment>
 // #include <cube_uv_reflection_fragment>
 #include <fog_pars_fragment>
-#include <bsdfs>
+
+// #include <bsdfs>
+vec3 BRDF_Lambert( const in vec3 diffuseColor ) {
+    return RECIPROCAL_PI * diffuseColor;
+}
+
 #include <lights_pars_begin>
 
 // #include <lights_phong_pars_fragment>
@@ -238,10 +243,10 @@ vec3 getDiffuse(
   const in vec3 lighting
 ) {
   #ifdef DEBUG_LITSHADERATE
-    return vec3( BRDF_Diffuse_Lambert( lightIntensity * lighting ) );
+    return vec3( BRDF_Lambert( lightIntensity * lighting ) );
   #endif
 
-  return lighting * BRDF_Diffuse_Lambert( mix( material.shadeColor, material.diffuseColor, lightIntensity ) );
+  return lighting * BRDF_Lambert( mix( material.shadeColor, material.diffuseColor, lightIntensity ) );
 }
 
 // == post correction ==========================================================
@@ -527,7 +532,7 @@ void main() {
 
   // #include <lights_fragment_end>
   // RE_IndirectDiffuse here
-  reflectedLight.indirectDiffuse += indirectLightIntensity * irradiance * BRDF_Diffuse_Lambert( material.diffuseColor );
+  reflectedLight.indirectDiffuse += indirectLightIntensity * irradiance * BRDF_Lambert( material.diffuseColor );
 
   // modulation
   #include <aomap_fragment>
