@@ -107,8 +107,8 @@ export class VRMExpressionTextureTransformBind implements VRMExpressionBind {
 
         const initialOffset = texture.offset.clone();
         const initialScale = texture.repeat.clone();
-        const deltaOffset = offset.clone().multiply(initialScale);
-        const deltaScale = scale.clone().addScalar(-1).multiply(initialScale);
+        const deltaOffset = offset.clone().sub(initialOffset);
+        const deltaScale = scale.clone().sub(initialScale);
 
         this._properties.push({
           name: propertyName,
