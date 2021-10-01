@@ -525,7 +525,7 @@ void main() {
 
   // #if defined( RE_IndirectDiffuse )
   vec3 irradiance = getAmbientLightIrradiance( ambientLightColor );
-  irradiance += getLightProbeIrradiance( lightProbe, geometry );
+  irradiance += getLightProbeIrradiance( lightProbe, geometry.normal );
   #if ( NUM_HEMI_LIGHTS > 0 )
     #pragma unroll_loop_start
     for ( int i = 0; i < NUM_HEMI_LIGHTS; i ++ ) {
