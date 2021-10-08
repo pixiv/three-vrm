@@ -38,7 +38,11 @@ export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
   public async afterRoot(gltf: GLTF): Promise<void> {
     const vrmHumanoid = gltf.userData.vrmHumanoid as VRMHumanoid | undefined;
 
-    if (vrmHumanoid == null) {
+    // explicitly distinguish null and undefined
+    // since vrmHumanoid might be null as a result
+    if (vrmHumanoid === null) {
+      return;
+    } else if (vrmHumanoid === undefined) {
       throw new Error(
         'VRMFirstPersonLoaderPlugin: vrmHumanoid is undefined. VRMHumanoidLoaderPlugin have to be used first',
       );
@@ -46,7 +50,9 @@ export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
 
     const vrmExpressionManager = gltf.userData.vrmExpressionManager as VRMExpressionManager | undefined;
 
-    if (vrmExpressionManager == null) {
+    if (vrmExpressionManager === null) {
+      return;
+    } else if (vrmExpressionManager === undefined) {
       throw new Error(
         'VRMFirstPersonLoaderPlugin: vrmExpressionManager is undefined. VRMExpressionLoaderPlugin have to be used first',
       );

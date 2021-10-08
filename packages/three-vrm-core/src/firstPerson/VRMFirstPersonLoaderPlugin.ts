@@ -25,7 +25,11 @@ export class VRMFirstPersonLoaderPlugin implements GLTFLoaderPlugin {
   public async afterRoot(gltf: GLTF): Promise<void> {
     const vrmHumanoid = gltf.userData.vrmHumanoid as VRMHumanoid | undefined;
 
-    if (vrmHumanoid == null) {
+    // explicitly distinguish null and undefined
+    // since vrmHumanoid might be null as a result
+    if (vrmHumanoid === null) {
+      return;
+    } else if (vrmHumanoid === undefined) {
       throw new Error(
         'VRMFirstPersonLoaderPlugin: vrmHumanoid is undefined. VRMHumanoidLoaderPlugin have to be used first',
       );
