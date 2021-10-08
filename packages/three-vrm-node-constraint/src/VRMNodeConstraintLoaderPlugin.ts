@@ -43,7 +43,7 @@ export class VRMNodeConstraintLoaderPlugin implements GLTFLoaderPlugin {
   protected async _import(gltf: GLTF): Promise<VRMNodeConstraintManager | null> {
     // early abort if it doesn't use constraints
     const isConstraintsUsed =
-      this.parser.json.extensionsUsed.indexOf(VRMNodeConstraintLoaderPlugin.EXTENSION_NAME) !== -1;
+      this.parser.json.extensionsUsed?.indexOf(VRMNodeConstraintLoaderPlugin.EXTENSION_NAME) !== -1;
     if (!isConstraintsUsed) {
       return null;
     }

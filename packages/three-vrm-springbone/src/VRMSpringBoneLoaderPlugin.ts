@@ -68,7 +68,7 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
 
   private async _v1Import(gltf: GLTF): Promise<VRMSpringBoneManager | null> {
     // early abort if it doesn't use spring bones
-    const isSpringBoneUsed = gltf.parser.json.extensionsUsed.indexOf(VRMSpringBoneLoaderPlugin.EXTENSION_NAME) !== -1;
+    const isSpringBoneUsed = gltf.parser.json.extensionsUsed?.indexOf(VRMSpringBoneLoaderPlugin.EXTENSION_NAME) !== -1;
     if (!isSpringBoneUsed) {
       return null;
     }
@@ -181,7 +181,7 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
 
   private async _v0Import(gltf: GLTF): Promise<VRMSpringBoneManager | null> {
     // early abort if it doesn't use vrm
-    const isVRMUsed = gltf.parser.json.extensionsUsed.indexOf('VRM') !== -1;
+    const isVRMUsed = gltf.parser.json.extensionsUsed?.indexOf('VRM') !== -1;
     if (!isVRMUsed) {
       return null;
     }
