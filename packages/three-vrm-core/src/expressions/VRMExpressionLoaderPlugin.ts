@@ -72,7 +72,7 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
 
   private async _v1Import(gltf: GLTF): Promise<VRMExpressionManager | null> {
     // early abort if it doesn't use vrm
-    const isVRMUsed = this.parser.json.extensionsUsed.indexOf('VRMC_vrm') !== -1;
+    const isVRMUsed = this.parser.json.extensionsUsed?.indexOf('VRMC_vrm') !== -1;
     if (!isVRMUsed) {
       return null;
     }
