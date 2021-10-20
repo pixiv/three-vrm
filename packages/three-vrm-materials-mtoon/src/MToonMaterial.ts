@@ -477,10 +477,12 @@ export class MToonMaterial extends THREE.ShaderMaterial {
       this.rimMultiplyTexture !== null ||
       this.uvAnimationMaskTexture !== null;
 
+    const threeRevision = parseInt(THREE.REVISION, 10);
+
     this.defines = {
       // Temporary compat against shader change @ Three.js r126
       // See: #21205, #21307, #21299
-      THREE_VRM_THREE_REVISION: parseInt(THREE.REVISION, 10),
+      THREE_VRM_THREE_REVISION: threeRevision,
 
       OUTLINE: this._isOutline,
       MTOON_USE_UV: useUvInVert || useUvInFrag, // we can't use `USE_UV` , it will be redefined in WebGLProgram.js
@@ -514,6 +516,14 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     // == generate shader code =====================================================================
     this.vertexShader = vertexShader;
     this.fragmentShader = encodings + fragmentShader;
+
+    // == compat ===================================================================================
+
+    // COMPAT
+    // Three.js r132 introduces a new shader chunk <alphatest_pars_fragment>
+    if (threeRevision < 132) {
+      this.fragmentShader = this.fragmentShader.replace('#include <alphatest_pars_fragment>', '');
+    }
 
     // == set needsUpdate flag =====================================================================
     this.needsUpdate = true;

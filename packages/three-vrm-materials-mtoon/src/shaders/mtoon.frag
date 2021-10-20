@@ -68,6 +68,11 @@ uniform float uvAnimationRotationPhase;
 #endif
 
 // #include <alphamap_pars_fragment>
+
+#if THREE_VRM_THREE_REVISION >= 132
+  #include <alphatest_pars_fragment>
+#endif
+
 #include <aomap_pars_fragment>
 // #include <lightmap_pars_fragment>
 #include <emissivemap_pars_fragment>
