@@ -454,6 +454,9 @@ void main() {
 
   IncidentLight directLight;
 
+  // since these variables will be used in unrolled loop, we have to define in prior
+  float shadow;
+
   #if ( NUM_POINT_LIGHTS > 0 ) && defined( RE_Direct )
 
     PointLight pointLight;
@@ -468,7 +471,7 @@ void main() {
 
       getPointDirectLightIrradiance( pointLight, geometry, directLight );
 
-      float shadow = 1.0;
+      shadow = 1.0;
       #if defined( USE_SHADOWMAP ) && ( UNROLLED_LOOP_INDEX < NUM_POINT_LIGHT_SHADOWS )
       pointLightShadow = pointLightShadows[ i ];
       shadow = all( bvec2( directLight.visible, receiveShadow ) ) ? getPointShadow( pointShadowMap[ i ], pointLightShadow.shadowMapSize, pointLightShadow.shadowBias, pointLightShadow.shadowRadius, vPointShadowCoord[ i ], pointLightShadow.shadowCameraNear, pointLightShadow.shadowCameraFar ) : 1.0;
@@ -495,7 +498,7 @@ void main() {
 
       getSpotDirectLightIrradiance( spotLight, geometry, directLight );
 
-      float shadow = 1.0;
+      shadow = 1.0;
       #if defined( USE_SHADOWMAP ) && ( UNROLLED_LOOP_INDEX < NUM_SPOT_LIGHT_SHADOWS )
       spotLightShadow = spotLightShadows[ i ];
       shadow = all( bvec2( directLight.visible, receiveShadow ) ) ? getShadow( spotShadowMap[ i ], spotLightShadow.shadowMapSize, spotLightShadow.shadowBias, spotLightShadow.shadowRadius, vSpotShadowCoord[ i ] ) : 1.0;
@@ -522,7 +525,7 @@ void main() {
 
       getDirectionalDirectLightIrradiance( directionalLight, geometry, directLight );
 
-      float shadow = 1.0;
+      shadow = 1.0;
       #if defined( USE_SHADOWMAP ) && ( UNROLLED_LOOP_INDEX < NUM_DIR_LIGHT_SHADOWS )
       directionalLightShadow = directionalLightShadows[ i ];
       shadow = all( bvec2( directLight.visible, receiveShadow ) ) ? getShadow( directionalShadowMap[ i ], directionalLightShadow.shadowMapSize, directionalLightShadow.shadowBias, directionalLightShadow.shadowRadius, vDirectionalShadowCoord[ i ] ) : 1.0;
