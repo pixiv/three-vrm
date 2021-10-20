@@ -83,16 +83,20 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
 
     if (primitivesDef.length === 1) {
       const mesh = meshOrGroup as THREE.Mesh;
-      const materialIndex = primitivesDef[0].material;
+      const materialIndex = primitivesDef[0].material as number | undefined;
 
-      this._setupPrimitive(mesh, materialIndex);
+      if (materialIndex != null) {
+        this._setupPrimitive(mesh, materialIndex);
+      }
     } else {
       const group = meshOrGroup as THREE.Group;
       for (let i = 0; i < primitivesDef.length; i++) {
         const mesh = group.children[i] as THREE.Mesh;
-        const materialIndex = primitivesDef[i].material;
+        const materialIndex = primitivesDef[i].material as number | undefined;
 
-        this._setupPrimitive(mesh, materialIndex);
+        if (materialIndex != null) {
+          this._setupPrimitive(mesh, materialIndex);
+        }
       }
     }
 
