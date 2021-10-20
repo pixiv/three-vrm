@@ -8,7 +8,7 @@ import type {
 } from '@pixiv/three-vrm-core';
 import type { MToonMaterialLoaderPlugin } from '@pixiv/three-vrm-materials-mtoon';
 import type { VRMMaterialsHDREmissiveMultiplierLoaderPlugin } from '@pixiv/three-vrm-materials-hdr-emissive-multiplier';
-import type { VRMMaterialsV0CompatPlugin } from 'packages/three-vrm-materials-v0compat/types';
+import type { VRMMaterialsV0CompatPlugin } from '@pixiv/three-vrm-materials-v0compat';
 import type { VRMNodeConstraintLoaderPlugin } from '@pixiv/three-vrm-node-constraint';
 import type { VRMSpringBoneLoaderPlugin } from '@pixiv/three-vrm-springbone';
 
