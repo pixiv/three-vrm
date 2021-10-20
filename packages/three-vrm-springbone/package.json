@@ -48,9 +48,9 @@
   },
   "devDependencies": {
     "lint-staged": "10.4.2",
-    "three": "^0.126.1"
+    "three": "^0.133.1"
   },
   "peerDependencies": {
-    "three": "^0.126.1"
+    "three": "^0.133.1"
   }
 }
