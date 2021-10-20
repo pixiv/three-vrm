@@ -17,6 +17,7 @@ import type { MToonMaterialParameters } from './MToonMaterialParameters';
 export class MToonMaterial extends THREE.ShaderMaterial {
   public uniforms: {
     litFactor: THREE.IUniform<THREE.Color>;
+    alphaTest: THREE.IUniform<number>;
     opacity: THREE.IUniform<number>;
     map: THREE.IUniform<THREE.Texture | null>;
     mapUvTransform: THREE.IUniform<THREE.Matrix3>;
@@ -430,6 +431,13 @@ export class MToonMaterial extends THREE.ShaderMaterial {
       this.uniforms.outlineWidthMultiplyTextureUvTransform,
     );
     this._updateTextureMatrix(this.uniforms.uvAnimationMaskTexture, this.uniforms.uvAnimationMaskTextureUvTransform);
+
+    // COMPAT workaround: starting from r132, alphaTest becomes a uniform instead of preprocessor value
+    const threeRevision = parseInt(THREE.REVISION, 10);
+
+    if (threeRevision >= 132) {
+      this.uniforms.alphaTest.value = this.alphaTest;
+    }
 
     this.uniformsNeedUpdate = true;
   }
