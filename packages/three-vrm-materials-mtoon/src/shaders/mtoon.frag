@@ -88,16 +88,22 @@ uniform float uvAnimationRotationPhase;
 
 // #include <bsdfs>
 vec3 BRDF_Lambert( const in vec3 diffuseColor ) {
-    return RECIPROCAL_PI * diffuseColor;
+  return RECIPROCAL_PI * diffuseColor;
 }
 
 #include <lights_pars_begin>
 
+#if THREE_VRM_THREE_REVISION >= 132
+  #include <normal_pars_fragment>
+#endif
+
 // #include <lights_phong_pars_fragment>
 varying vec3 vViewPosition;
 
-#ifndef FLAT_SHADED
-  varying vec3 vNormal;
+#if THREE_VRM_THREE_REVISION < 132
+  #ifndef FLAT_SHADED
+    varying vec3 vNormal;
+  #endif
 #endif
 
 struct MToonMaterial {

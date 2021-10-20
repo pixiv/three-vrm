@@ -520,8 +520,9 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     // == compat ===================================================================================
 
     // COMPAT
-    // Three.js r132 introduces a new shader chunk <alphatest_pars_fragment>
+    // Three.js r132 introduces new shader chunks <normal_pars_fragment> and <alphatest_pars_fragment>
     if (threeRevision < 132) {
+      this.fragmentShader = this.fragmentShader.replace('#include <normal_pars_fragment>', '');
       this.fragmentShader = this.fragmentShader.replace('#include <alphatest_pars_fragment>', '');
     }
 
