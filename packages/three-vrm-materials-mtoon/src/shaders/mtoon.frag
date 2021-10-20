@@ -143,8 +143,10 @@ vec3 getDiffuse(
     return vec3( BRDF_Lambert( shading * lightColor ) );
   #endif
 
-  #ifndef PHYSICALLY_CORRECT_LIGHTS
-    lightColor *= PI;
+  #if THREE_VRM_THREE_REVISION < 132
+    #ifndef PHYSICALLY_CORRECT_LIGHTS
+      lightColor *= PI;
+    #endif
   #endif
 
   return lightColor * BRDF_Lambert( mix( material.shadeColor, material.diffuseColor, shading ) );
@@ -154,8 +156,10 @@ void RE_Direct_MToon( const in IncidentLight directLight, const in GeometricCont
   float dotNL = saturate( dot( geometry.normal, directLight.direction ) );
   vec3 irradiance = dotNL * directLight.color;
 
-  #ifndef PHYSICALLY_CORRECT_LIGHTS
-    irradiance *= PI;
+  #if THREE_VRM_THREE_REVISION < 132
+    #ifndef PHYSICALLY_CORRECT_LIGHTS
+      irradiance *= PI;
+    #endif
   #endif
 
   float shading = getShading( dotNL, shadow, material.shadingShift );
