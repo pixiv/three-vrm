@@ -80,7 +80,12 @@ uniform float uvAnimationRotationPhase;
 // #include <envmap_pars_fragment>
 // #include <cube_uv_reflection_fragment>
 #include <fog_pars_fragment>
-#include <bsdfs>
+
+// #include <bsdfs>
+vec3 BRDF_Lambert( const in vec3 diffuseColor ) {
+    return RECIPROCAL_PI * diffuseColor;
+}
+
 #include <lights_pars_begin>
 
 // #include <lights_phong_pars_fragment>
@@ -124,14 +129,14 @@ vec3 getDiffuse(
   in vec3 lightColor
 ) {
   #ifdef DEBUG_LITSHADERATE
-    return vec3( BRDF_Diffuse_Lambert( shading * lightColor ) );
+    return vec3( BRDF_Lambert( shading * lightColor ) );
   #endif
 
   #ifndef PHYSICALLY_CORRECT_LIGHTS
     lightColor *= PI;
   #endif
 
-  return lightColor * BRDF_Diffuse_Lambert( mix( material.shadeColor, material.diffuseColor, shading ) );
+  return lightColor * BRDF_Lambert( mix( material.shadeColor, material.diffuseColor, shading ) );
 }
 
 void RE_Direct_MToon( const in IncidentLight directLight, const in GeometricContext geometry, const in MToonMaterial material, const in float shadow, inout ReflectedLight reflectedLight ) {
@@ -153,7 +158,7 @@ void RE_Direct_MToon( const in IncidentLight directLight, const in GeometricCont
 
 void RE_IndirectDiffuse_MToon( const in vec3 irradiance, const in GeometricContext geometry, const in MToonMaterial material, inout ReflectedLight reflectedLight ) {
   // indirect diffuse will be use diffuseColor, no shadeColor involved
-  reflectedLight.indirectDiffuse += irradiance * BRDF_Diffuse_Lambert( material.diffuseColor );
+  reflectedLight.indirectDiffuse += irradiance * BRDF_Lambert( material.diffuseColor );
 
   // directSpecular will be used for rim lighting, not an actual specular
   reflectedLight.directSpecular += irradiance;
