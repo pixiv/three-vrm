@@ -190,7 +190,7 @@ void RE_IndirectDiffuse_MToon( const in vec3 irradiance, const in GeometricConte
 
   // Temporary compat against shader change @ Three.js r126
   // See: #21205, #21307, #21299
-  #ifdef THREE_VRM_THREE_REVISION_126
+  #if THREE_VRM_THREE_REVISION >= 126
 
     vec3 perturbNormal2Arb( vec2 uv, vec3 eye_pos, vec3 surf_norm, vec3 mapN, float faceDirection ) {
 
@@ -359,7 +359,7 @@ void main() {
 
       // Temporary compat against shader change @ Three.js r126
       // See: #21205, #21307, #21299
-      #ifdef THREE_VRM_THREE_REVISION_126
+      #if THREE_VRM_THREE_REVISION >= 126
 
         normal = normal * faceDirection;
 
@@ -387,7 +387,7 @@ void main() {
 
       // Temporary compat against shader change @ Three.js r126
       // See: #21205, #21307, #21299
-      #ifdef THREE_VRM_THREE_REVISION_126
+      #if THREE_VRM_THREE_REVISION >= 126
 
         normal = perturbNormal2Arb( uv, -vViewPosition, normal, mapN, faceDirection );
 

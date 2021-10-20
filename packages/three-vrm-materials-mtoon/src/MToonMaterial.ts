@@ -471,7 +471,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.defines = {
       // Temporary compat against shader change @ Three.js r126
       // See: #21205, #21307, #21299
-      THREE_VRM_THREE_REVISION_126: parseInt(THREE.REVISION) >= 126,
+      THREE_VRM_THREE_REVISION: parseInt(THREE.REVISION, 10),
 
       OUTLINE: this._isOutline,
       MTOON_USE_UV: useUvInVert || useUvInFrag, // we can't use `USE_UV` , it will be redefined in WebGLProgram.js
