@@ -3,6 +3,7 @@ import type * as V1VRMSchema from '@pixiv/types-vrmc-vrm-1.0';
 import * as THREE from 'three';
 import { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
 import { gltfExtractPrimitivesFromNode } from '../utils/gltfExtractPrimitivesFromNode';
+import { gltfGetAssociatedMaterialIndex } from '../utils/gltfGetAssociatedMaterialIndex';
 import { VRMExpression } from './VRMExpression';
 import { VRMExpressionManager } from './VRMExpressionManager';
 import { VRMExpressionMaterialColorBind } from './VRMExpressionMaterialColorBind';
@@ -181,7 +182,8 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
 
           schemaExpression.materialColorBinds?.forEach(async (bind) => {
             const materials = gltfMaterials.filter((material) => {
-              return this.parser.associations.get(material)?.index === bind.material;
+              const materialIndex = gltfGetAssociatedMaterialIndex(this.parser, material);
+              return bind.material === materialIndex;
             });
 
             materials.forEach((material) => {
@@ -197,7 +199,8 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
 
           schemaExpression.textureTransformBinds?.forEach(async (bind) => {
             const materials = gltfMaterials.filter((material) => {
-              return this.parser.associations.get(material)?.index === bind.material;
+              const materialIndex = gltfGetAssociatedMaterialIndex(this.parser, material);
+              return bind.material === materialIndex;
             });
 
             materials.forEach((material) => {
