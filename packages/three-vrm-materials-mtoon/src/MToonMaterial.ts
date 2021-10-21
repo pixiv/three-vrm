@@ -446,6 +446,23 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     super.copy(source);
     // uniforms are already copied at this moment
 
+    // Beginning from r133, uniform textures will be cloned instead of reference
+    // See: https://github.com/mrdoob/three.js/blob/a8813be04a849bd155f7cf6f1b23d8ee2e0fb48b/examples/jsm/loaders/GLTFLoader.js#L3047
+    // See: https://github.com/mrdoob/three.js/blob/a8813be04a849bd155f7cf6f1b23d8ee2e0fb48b/src/renderers/shaders/UniformsUtils.js#L22
+    // This will leave their `.version` to be `0`
+    // and these textures won't be uploaded to GPU
+    // We are going to workaround this in here
+    // I've opened an issue for this: https://github.com/mrdoob/three.js/issues/22718
+    this.map = source.map;
+    this.normalMap = source.normalMap;
+    this.emissiveMap = source.emissiveMap;
+    this.shadeMultiplyTexture = source.shadeMultiplyTexture;
+    this.shadingShiftTexture = source.shadingShiftTexture;
+    this.matcapTexture = source.matcapTexture;
+    this.rimMultiplyTexture = source.rimMultiplyTexture;
+    this.outlineWidthMultiplyTexture = source.outlineWidthMultiplyTexture;
+    this.uvAnimationMaskTexture = source.uvAnimationMaskTexture;
+
     // == copy members =============================================================================
     this.normalMapType = source.normalMapType;
 
