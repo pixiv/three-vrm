@@ -7,32 +7,34 @@ import typescript from '@rollup/plugin-typescript';
 
 // == constants ====================================================================================
 /** copyright text */
-const copyright = '(c) 2020 pixiv Inc.';
+const copyright = '(c) 2020-2021 pixiv Inc.';
 
 /** name of the license */
 const licenseName = 'MIT License';
 
 /** url of the license */
-const licenseUri = 'https://github.com/pixiv/three-vrm/blob/master/LICENSE';
+const licenseUri = 'https://github.com/pixiv/three-vrm/blob/release/LICENSE';
 
 /** output name of the module */
-const name = 'THREE_VRM_MATERIALS_V0COMPAT';
+const globalName = 'THREE_VRM_MATERIALS_V0COMPAT';
+
+/** filename of output */
+const filename = 'lib/three-vrm-materials-v0compat';
 
 // == envs =========================================================================================
 const NODE_ENV = process.env.NODE_ENV;
 const DEV = NODE_ENV === 'development';
-const ESM = process.env.ESM === '1';
-const SERVE = process.env.SERVE === '1';
+const WATCH = process.env.ROLLUP_WATCH === 'true';
 
 // == banner =======================================================================================
 const bannerTextDev = `/*!
-* ${packageJson.name} v${packageJson.version}
-* ${packageJson.description}
-*
-* Copyright ${copyright}
-* ${packageJson.name} is distributed under ${licenseName}
-* ${licenseUri}
-*/`;
+ * ${packageJson.name} v${packageJson.version}
+ * ${packageJson.description}
+ *
+ * Copyright ${copyright}
+ * ${packageJson.name} is distributed under ${licenseName}
+ * ${licenseUri}
+ */`;
 
 const bannerTextProd = `/*! ${copyright} - ${licenseUri} */`;
 
@@ -45,21 +47,47 @@ const serveOptions = {
   contentBase: '.',
 };
 
-// == output =======================================================================================
-export default {
-  input: 'src/index.ts',
-  output: {
-    format: ESM ? 'esm' : 'umd',
+// == config =======================================================================================
+function createOutputOptions( { esm } ) {
+  let file = filename;
+  file += esm ? '.module' : '';
+  file += DEV ? '' : '.min';
+  file += '.js';
+
+  return {
+    file,
+    format: esm ? 'esm' : 'umd',
+    name: esm ? undefined : globalName,
     banner: DEV ? bannerTextDev : bannerTextProd,
+    globals: esm ? undefined : { three: 'THREE' },
     sourcemap: DEV ? 'inline' : false,
-    globals: ESM ? undefined : { three: 'THREE' },
-    name: ESM ? undefined : name,
-    outro: ESM ? undefined : outro,
-  },
-  external: [ 'three' ],
-  plugins: [
-    typescript(),
-    ...(DEV ? [] : [terser()]),
-    ...(SERVE ? [serve(serveOptions)] : []),
-  ],
+    plugins: [
+      ...( DEV ? [] : [
+        terser(),
+      ] ),
+      ...( WATCH ? [
+        serve( serveOptions )
+      ] : [] ),
+    ],
+    outro: esm ? undefined : outro,
+  };
+}
+
+function createConfig( output ) {
+  return {
+    input: 'src/index.ts',
+    output,
+    external: [ 'three' ],
+    plugins: [
+      typescript(),
+    ],
+  };
 };
+
+// == output =======================================================================================
+export default [
+  createConfig( [
+    createOutputOptions( {} ),
+    createOutputOptions( { esm: true } ),
+  ] ),
+];
