@@ -17,6 +17,7 @@ import type { MToonMaterialParameters } from './MToonMaterialParameters';
 export class MToonMaterial extends THREE.ShaderMaterial {
   public uniforms: {
     litFactor: THREE.IUniform<THREE.Color>;
+    alphaTest: THREE.IUniform<number>;
     opacity: THREE.IUniform<number>;
     map: THREE.IUniform<THREE.Texture | null>;
     mapUvTransform: THREE.IUniform<THREE.Matrix3>;
@@ -336,9 +337,18 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     parameters.lights = true;
     parameters.clipping = true;
 
-    parameters.skinning = parameters.skinning || false;
-    parameters.morphTargets = parameters.morphTargets || false;
-    parameters.morphNormals = parameters.morphNormals || false;
+    // COMPAT
+    // See: https://github.com/mrdoob/three.js/pull/21788
+    if (parseInt(THREE.REVISION, 10) < 129) {
+      (parameters as any).skinning = (parameters as any).skinning || false;
+    }
+
+    // COMPAT
+    // See: https://github.com/mrdoob/three.js/pull/22169
+    if (parseInt(THREE.REVISION, 10) < 131) {
+      (parameters as any).morphTargets = (parameters as any).morphTargets || false;
+      (parameters as any).morphNormals = (parameters as any).morphNormals || false;
+    }
 
     // == uniforms =================================================================================
     this.uniforms = THREE.UniformsUtils.merge([
@@ -422,12 +432,36 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     );
     this._updateTextureMatrix(this.uniforms.uvAnimationMaskTexture, this.uniforms.uvAnimationMaskTextureUvTransform);
 
+    // COMPAT workaround: starting from r132, alphaTest becomes a uniform instead of preprocessor value
+    const threeRevision = parseInt(THREE.REVISION, 10);
+
+    if (threeRevision >= 132) {
+      this.uniforms.alphaTest.value = this.alphaTest;
+    }
+
     this.uniformsNeedUpdate = true;
   }
 
   public copy(source: this): this {
     super.copy(source);
     // uniforms are already copied at this moment
+
+    // Beginning from r133, uniform textures will be cloned instead of reference
+    // See: https://github.com/mrdoob/three.js/blob/a8813be04a849bd155f7cf6f1b23d8ee2e0fb48b/examples/jsm/loaders/GLTFLoader.js#L3047
+    // See: https://github.com/mrdoob/three.js/blob/a8813be04a849bd155f7cf6f1b23d8ee2e0fb48b/src/renderers/shaders/UniformsUtils.js#L22
+    // This will leave their `.version` to be `0`
+    // and these textures won't be uploaded to GPU
+    // We are going to workaround this in here
+    // I've opened an issue for this: https://github.com/mrdoob/three.js/issues/22718
+    this.map = source.map;
+    this.normalMap = source.normalMap;
+    this.emissiveMap = source.emissiveMap;
+    this.shadeMultiplyTexture = source.shadeMultiplyTexture;
+    this.shadingShiftTexture = source.shadingShiftTexture;
+    this.matcapTexture = source.matcapTexture;
+    this.rimMultiplyTexture = source.rimMultiplyTexture;
+    this.outlineWidthMultiplyTexture = source.outlineWidthMultiplyTexture;
+    this.uvAnimationMaskTexture = source.uvAnimationMaskTexture;
 
     // == copy members =============================================================================
     this.normalMapType = source.normalMapType;
@@ -468,10 +502,12 @@ export class MToonMaterial extends THREE.ShaderMaterial {
       this.rimMultiplyTexture !== null ||
       this.uvAnimationMaskTexture !== null;
 
+    const threeRevision = parseInt(THREE.REVISION, 10);
+
     this.defines = {
       // Temporary compat against shader change @ Three.js r126
       // See: #21205, #21307, #21299
-      THREE_VRM_THREE_REVISION_126: parseInt(THREE.REVISION) >= 126,
+      THREE_VRM_THREE_REVISION: threeRevision,
 
       OUTLINE: this._isOutline,
       MTOON_USE_UV: useUvInVert || useUvInFrag, // we can't use `USE_UV` , it will be redefined in WebGLProgram.js
@@ -505,6 +541,15 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     // == generate shader code =====================================================================
     this.vertexShader = vertexShader;
     this.fragmentShader = encodings + fragmentShader;
+
+    // == compat ===================================================================================
+
+    // COMPAT
+    // Three.js r132 introduces new shader chunks <normal_pars_fragment> and <alphatest_pars_fragment>
+    if (threeRevision < 132) {
+      this.fragmentShader = this.fragmentShader.replace('#include <normal_pars_fragment>', '');
+      this.fragmentShader = this.fragmentShader.replace('#include <alphatest_pars_fragment>', '');
+    }
 
     // == set needsUpdate flag =====================================================================
     this.needsUpdate = true;

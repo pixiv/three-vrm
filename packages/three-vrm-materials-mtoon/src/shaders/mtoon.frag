@@ -68,6 +68,11 @@ uniform float uvAnimationRotationPhase;
 #endif
 
 // #include <alphamap_pars_fragment>
+
+#if THREE_VRM_THREE_REVISION >= 132
+  #include <alphatest_pars_fragment>
+#endif
+
 #include <aomap_pars_fragment>
 // #include <lightmap_pars_fragment>
 #include <emissivemap_pars_fragment>
@@ -80,14 +85,25 @@ uniform float uvAnimationRotationPhase;
 // #include <envmap_pars_fragment>
 // #include <cube_uv_reflection_fragment>
 #include <fog_pars_fragment>
-#include <bsdfs>
+
+// #include <bsdfs>
+vec3 BRDF_Lambert( const in vec3 diffuseColor ) {
+  return RECIPROCAL_PI * diffuseColor;
+}
+
 #include <lights_pars_begin>
+
+#if THREE_VRM_THREE_REVISION >= 132
+  #include <normal_pars_fragment>
+#endif
 
 // #include <lights_phong_pars_fragment>
 varying vec3 vViewPosition;
 
-#ifndef FLAT_SHADED
-  varying vec3 vNormal;
+#if THREE_VRM_THREE_REVISION < 132
+  #ifndef FLAT_SHADED
+    varying vec3 vNormal;
+  #endif
 #endif
 
 struct MToonMaterial {
@@ -124,22 +140,26 @@ vec3 getDiffuse(
   in vec3 lightColor
 ) {
   #ifdef DEBUG_LITSHADERATE
-    return vec3( BRDF_Diffuse_Lambert( shading * lightColor ) );
+    return vec3( BRDF_Lambert( shading * lightColor ) );
   #endif
 
-  #ifndef PHYSICALLY_CORRECT_LIGHTS
-    lightColor *= PI;
+  #if THREE_VRM_THREE_REVISION < 132
+    #ifndef PHYSICALLY_CORRECT_LIGHTS
+      lightColor *= PI;
+    #endif
   #endif
 
-  return lightColor * BRDF_Diffuse_Lambert( mix( material.shadeColor, material.diffuseColor, shading ) );
+  return lightColor * BRDF_Lambert( mix( material.shadeColor, material.diffuseColor, shading ) );
 }
 
 void RE_Direct_MToon( const in IncidentLight directLight, const in GeometricContext geometry, const in MToonMaterial material, const in float shadow, inout ReflectedLight reflectedLight ) {
   float dotNL = saturate( dot( geometry.normal, directLight.direction ) );
   vec3 irradiance = dotNL * directLight.color;
 
-  #ifndef PHYSICALLY_CORRECT_LIGHTS
-    irradiance *= PI;
+  #if THREE_VRM_THREE_REVISION < 132
+    #ifndef PHYSICALLY_CORRECT_LIGHTS
+      irradiance *= PI;
+    #endif
   #endif
 
   float shading = getShading( dotNL, shadow, material.shadingShift );
@@ -153,7 +173,7 @@ void RE_Direct_MToon( const in IncidentLight directLight, const in GeometricCont
 
 void RE_IndirectDiffuse_MToon( const in vec3 irradiance, const in GeometricContext geometry, const in MToonMaterial material, inout ReflectedLight reflectedLight ) {
   // indirect diffuse will be use diffuseColor, no shadeColor involved
-  reflectedLight.indirectDiffuse += irradiance * BRDF_Diffuse_Lambert( material.diffuseColor );
+  reflectedLight.indirectDiffuse += irradiance * BRDF_Lambert( material.diffuseColor );
 
   // directSpecular will be used for rim lighting, not an actual specular
   reflectedLight.directSpecular += irradiance;
@@ -190,7 +210,7 @@ void RE_IndirectDiffuse_MToon( const in vec3 irradiance, const in GeometricConte
 
   // Temporary compat against shader change @ Three.js r126
   // See: #21205, #21307, #21299
-  #ifdef THREE_VRM_THREE_REVISION_126
+  #if THREE_VRM_THREE_REVISION >= 126
 
     vec3 perturbNormal2Arb( vec2 uv, vec3 eye_pos, vec3 surf_norm, vec3 mapN, float faceDirection ) {
 
@@ -359,7 +379,7 @@ void main() {
 
       // Temporary compat against shader change @ Three.js r126
       // See: #21205, #21307, #21299
-      #ifdef THREE_VRM_THREE_REVISION_126
+      #if THREE_VRM_THREE_REVISION >= 126
 
         normal = normal * faceDirection;
 
@@ -387,7 +407,7 @@ void main() {
 
       // Temporary compat against shader change @ Three.js r126
       // See: #21205, #21307, #21299
-      #ifdef THREE_VRM_THREE_REVISION_126
+      #if THREE_VRM_THREE_REVISION >= 126
 
         normal = perturbNormal2Arb( uv, -vViewPosition, normal, mapN, faceDirection );
 
@@ -466,7 +486,11 @@ void main() {
 
       pointLight = pointLights[ i ];
 
-      getPointDirectLightIrradiance( pointLight, geometry, directLight );
+      #if THREE_VRM_THREE_REVISION >= 132
+        getPointLightInfo( pointLight, geometry, directLight );
+      #else
+        getPointDirectLightIrradiance( pointLight, geometry, directLight );
+      #endif
 
       float shadow = 1.0;
       #if defined( USE_SHADOWMAP ) && ( UNROLLED_LOOP_INDEX < NUM_POINT_LIGHT_SHADOWS )
@@ -493,7 +517,11 @@ void main() {
 
       spotLight = spotLights[ i ];
 
-      getSpotDirectLightIrradiance( spotLight, geometry, directLight );
+      #if THREE_VRM_THREE_REVISION >= 132
+        getSpotLightInfo( spotLight, geometry, directLight );
+      #else
+        getSpotDirectLightIrradiance( spotLight, geometry, directLight );
+      #endif
 
       float shadow = 1.0;
       #if defined( USE_SHADOWMAP ) && ( UNROLLED_LOOP_INDEX < NUM_SPOT_LIGHT_SHADOWS )
@@ -520,7 +548,11 @@ void main() {
 
       directionalLight = directionalLights[ i ];
 
-      getDirectionalDirectLightIrradiance( directionalLight, geometry, directLight );
+      #if THREE_VRM_THREE_REVISION >= 132
+        getDirectionalLightInfo( directionalLight, geometry, directLight );
+      #else
+        getDirectionalDirectLightIrradiance( directionalLight, geometry, directLight );
+      #endif
 
       float shadow = 1.0;
       #if defined( USE_SHADOWMAP ) && ( UNROLLED_LOOP_INDEX < NUM_DIR_LIGHT_SHADOWS )
@@ -556,7 +588,11 @@ void main() {
 
     vec3 irradiance = getAmbientLightIrradiance( ambientLightColor );
 
-    irradiance += getLightProbeIrradiance( lightProbe, geometry );
+    #if THREE_VRM_THREE_REVISION >= 133
+      irradiance += getLightProbeIrradiance( lightProbe, geometry.normal );
+    #else
+      irradiance += getLightProbeIrradiance( lightProbe, geometry );
+    #endif
 
     #if ( NUM_HEMI_LIGHTS > 0 )
 

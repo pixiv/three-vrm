@@ -1,5 +1,7 @@
+import * as THREE from 'three';
 import { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as HDREmissiveMultiplierSchema from '@pixiv/types-vrmc-materials-hdr-emissive-multiplier-1.0';
+import { gltfGetAssociatedMaterialIndex } from './utils/gltfGetAssociatedMaterialIndex';
 
 export class VRMMaterialsHDREmissiveMultiplierLoaderPlugin implements GLTFLoaderPlugin {
   public static EXTENSION_NAME = 'VRMC_materials_hdr_emissiveMultiplier' as const;
@@ -17,19 +19,25 @@ export class VRMMaterialsHDREmissiveMultiplierLoaderPlugin implements GLTFLoader
   public async afterRoot(gltf: GLTF): Promise<void> {
     const parser = this.parser;
 
-    // list all materials in the gltf
-    const materialsIndexInstancePairs: Array<[number, THREE.Material]> = [];
-    Array.from(parser.associations.entries()).forEach(([value, { type, index }]) => {
-      if (type === 'materials') {
-        materialsIndexInstancePairs.push([index, value as THREE.Material]);
+    // list up every material in `gltf.scene`
+    const gltfMaterials: THREE.Material[] = [];
+    gltf.scene.traverse((object) => {
+      const material = (object as any).material as THREE.Material | undefined;
+      if (material) {
+        gltfMaterials.push(material);
       }
     });
 
     // multiply emissive value using the extension
-    materialsIndexInstancePairs.forEach(([index, material]) => {
-      const extension = this._getHDREmissiveMultiplierExtension(index);
-      if (extension) {
-        (material as any).emissive?.multiplyScalar(extension.emissiveMultiplier);
+    gltfMaterials.forEach((material) => {
+      const materialIndex = gltfGetAssociatedMaterialIndex(parser, material);
+
+      if (materialIndex != null) {
+        const extension = this._getHDREmissiveMultiplierExtension(materialIndex);
+
+        if (extension) {
+          (material as any).emissive?.multiplyScalar(extension.emissiveMultiplier);
+        }
       }
     });
   }
