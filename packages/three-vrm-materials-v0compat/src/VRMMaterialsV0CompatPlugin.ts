@@ -13,6 +13,15 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
 
   public constructor(parser: GLTFParser) {
     this.parser = parser;
+
+    // WORKAROUND: Add KHR_texture_transform to extensionsUsed
+    // It is too late to add this in beforeRoot
+    const json = this.parser.json;
+
+    json.extensionsUsed = json.extensionsUsed ?? [];
+    if (json.extensionsUsed.indexOf('KHR_texture_transform') === -1) {
+      json.extensionsUsed.push('KHR_texture_transform');
+    }
   }
 
   public async beforeRoot(): Promise<void> {
@@ -54,6 +63,8 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
     const cullMode = materialProperties.floatProperties?.['_CullMode'] ?? 2; // enum, { Off, Front, Back }
     const doubleSided = cullMode === 0;
 
+    const textureTransformExt = this._portTextureTransform(materialProperties);
+
     const baseColorFactor = materialProperties.vectorProperties?.['_Color']?.map(
       (v: number, i: number) => (i === 3 ? v : gammaEOTF(v)), // alpha channel is stored in linear
     );
@@ -62,6 +73,9 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
       baseColorTextureIndex != null
         ? {
             index: baseColorTextureIndex,
+            extensions: {
+              ...textureTransformExt,
+            },
           }
         : undefined;
 
@@ -72,6 +86,9 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
         ? {
             index: normalTextureIndex,
             scale: normalTextureScale,
+            extensions: {
+              ...textureTransformExt,
+            },
           }
         : undefined;
 
@@ -81,6 +98,9 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
       emissiveTextureIndex != null
         ? {
             index: emissiveTextureIndex,
+            extensions: {
+              ...textureTransformExt,
+            },
           }
         : undefined;
 
@@ -90,6 +110,9 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
       shadeMultiplyTextureIndex != null
         ? {
             index: shadeMultiplyTextureIndex,
+            extensions: {
+              ...textureTransformExt,
+            },
           }
         : undefined;
 
@@ -116,6 +139,9 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
       rimMultiplyTextureIndex != null
         ? {
             index: rimMultiplyTextureIndex,
+            extensions: {
+              ...textureTransformExt,
+            },
           }
         : undefined;
 
@@ -136,6 +162,9 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
       outlineWidthMultiplyTextureIndex != null
         ? {
             index: outlineWidthMultiplyTextureIndex,
+            extensions: {
+              ...textureTransformExt,
+            },
           }
         : undefined;
 
@@ -149,6 +178,9 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
       uvAnimationMaskTextureIndex != null
         ? {
             index: uvAnimationMaskTextureIndex,
+            extensions: {
+              ...textureTransformExt,
+            },
           }
         : undefined;
 
@@ -218,12 +250,17 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
     const alphaMode = isTransparent ? 'BLEND' : isCutoff ? 'MASK' : 'OPAQUE';
     const alphaCutoff = isCutoff ? materialProperties.floatProperties?.['_Cutoff'] : undefined;
 
+    const textureTransformExt = this._portTextureTransform(materialProperties);
+
     const baseColorFactor = materialProperties.vectorProperties?.['_Color']?.map(gammaEOTF);
     const baseColorTextureIndex = materialProperties.textureProperties?.['_MainTex'];
     const baseColorTexture =
       baseColorTextureIndex != null
         ? {
             index: baseColorTextureIndex,
+            extensions: {
+              ...textureTransformExt,
+            },
           }
         : undefined;
 
@@ -248,6 +285,24 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
       extensions: {
         // eslint-disable-next-line @typescript-eslint/naming-convention
         VRMC_materials_mtoon: mtoonExtension,
+      },
+    };
+  }
+
+  /**
+   * Create a glTF `KHR_texture_transform` extension from v0 texture transform info.
+   */
+  private _portTextureTransform(materialProperties: V0Material): { [name: string]: any } {
+    const textureTransform = materialProperties.vectorProperties?.['_MainTex'];
+    if (textureTransform == null) {
+      return {};
+    }
+
+    return {
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      KHR_texture_transform: {
+        offset: [textureTransform?.[0] ?? 0.0, textureTransform?.[1] ?? 0.0],
+        scale: [textureTransform?.[2] ?? 0.0, textureTransform?.[3] ?? 1.0],
       },
     };
   }
