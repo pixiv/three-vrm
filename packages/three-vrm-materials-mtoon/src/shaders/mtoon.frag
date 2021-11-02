@@ -13,7 +13,6 @@ uniform float shadingShiftFactor;
 uniform float shadingToonyFactor;
 
 #ifdef USE_SHADINGSHIFTTEXTURE
-  vec2 shadingShiftTextureUv = ( shadingShiftTextureUvTransform * vec3( uv, 1 ) ).xy;
   uniform sampler2D shadingShiftTexture;
   uniform mat3 shadingShiftTextureUvTransform;
   uniform float shadingShiftTextureScale;
@@ -154,7 +153,7 @@ vec3 getDiffuse(
 
 void RE_Direct_MToon( const in IncidentLight directLight, const in GeometricContext geometry, const in MToonMaterial material, const in float shadow, inout ReflectedLight reflectedLight ) {
   float dotNL = saturate( dot( geometry.normal, directLight.direction ) );
-  vec3 irradiance = dotNL * directLight.color;
+  vec3 irradiance = directLight.color;
 
   #if THREE_VRM_THREE_REVISION < 132
     #ifndef PHYSICALLY_CORRECT_LIGHTS
@@ -162,17 +161,19 @@ void RE_Direct_MToon( const in IncidentLight directLight, const in GeometricCont
     #endif
   #endif
 
+  // directSpecular will be used for rim lighting, not an actual specular
+  reflectedLight.directSpecular += irradiance;
+
+  irradiance *= dotNL;
+
   float shading = getShading( dotNL, shadow, material.shadingShift );
 
   // toon shaded diffuse
   reflectedLight.directDiffuse += getDiffuse( material, shading, directLight.color );
-
-  // directSpecular will be used for rim lighting, not an actual specular
-  reflectedLight.directSpecular += irradiance;
 }
 
 void RE_IndirectDiffuse_MToon( const in vec3 irradiance, const in GeometricContext geometry, const in MToonMaterial material, inout ReflectedLight reflectedLight ) {
-  // indirect diffuse will be use diffuseColor, no shadeColor involved
+  // indirect diffuse will use diffuseColor, no shadeColor involved
   reflectedLight.indirectDiffuse += irradiance * BRDF_Lambert( material.diffuseColor );
 
   // directSpecular will be used for rim lighting, not an actual specular
@@ -643,6 +644,10 @@ void main() {
 
   // -- MToon: rim lighting -----------------------------------------
   vec3 viewDir = normalize( vViewPosition );
+
+  #ifndef PHYSICALLY_CORRECT_LIGHTS
+    reflectedLight.directSpecular /= PI;
+  #endif
   vec3 rimMix = mix( vec3( 1.0 ), reflectedLight.directSpecular, 1.0 );
 
   vec3 rim = parametricRimColorFactor * pow( saturate( 1.0 - dot( viewDir, normal ) + parametricRimLiftFactor ), parametricRimFresnelPowerFactor );
