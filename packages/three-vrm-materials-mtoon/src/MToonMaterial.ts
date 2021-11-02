@@ -7,6 +7,7 @@ import fragmentShader from './shaders/mtoon.frag';
 import { MToonMaterialDebugMode } from './MToonMaterialDebugMode';
 import { MToonMaterialOutlineWidthMode } from './MToonMaterialOutlineWidthMode';
 import type { MToonMaterialParameters } from './MToonMaterialParameters';
+import { getTextureEncodingFromMap } from './utils/getTextureEncodingFromMap';
 
 /**
  * MToon is a material specification that has various features.
@@ -283,6 +284,25 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this._updateShaderCode();
   }
 
+  /**
+   * Give the `renderer.capabilities.isWebGL2` here.
+   * Needed from Three.js r133.
+   */
+  private _isWebGL2 = false;
+
+  /**
+   * Give the `renderer.capabilities.isWebGL2` here.
+   * Needed from Three.js r133.
+   */
+  public get isWebGL2(): boolean {
+    return this._isWebGL2;
+  }
+  public set isWebGL2(value: boolean) {
+    this._isWebGL2 = value;
+
+    this._updateShaderCode();
+  }
+
   private _debugMode: MToonMaterialDebugMode = MToonMaterialDebugMode.None;
 
   get debugMode(): MToonMaterialDebugMode {
@@ -529,13 +549,22 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     // == texture encodings ========================================================================
     const encodings =
       (this.matcapTexture !== null
-        ? getTexelDecodingFunction('matcapTextureTexelToLinear', this.matcapTexture.encoding) + '\n'
+        ? getTexelDecodingFunction(
+            'matcapTextureTexelToLinear',
+            getTextureEncodingFromMap(this.matcapTexture, this.isWebGL2),
+          ) + '\n'
         : '') +
       (this.shadeMultiplyTexture !== null
-        ? getTexelDecodingFunction('shadeMultiplyTextureTexelToLinear', this.shadeMultiplyTexture.encoding) + '\n'
+        ? getTexelDecodingFunction(
+            'shadeMultiplyTextureTexelToLinear',
+            getTextureEncodingFromMap(this.shadeMultiplyTexture, this.isWebGL2),
+          ) + '\n'
         : '') +
       (this.rimMultiplyTexture !== null
-        ? getTexelDecodingFunction('rimMultiplyTextureTexelToLinear', this.rimMultiplyTexture.encoding) + '\n'
+        ? getTexelDecodingFunction(
+            'rimMultiplyTextureTexelToLinear',
+            getTextureEncodingFromMap(this.rimMultiplyTexture, this.isWebGL2),
+          ) + '\n'
         : '');
 
     // == generate shader code =====================================================================
