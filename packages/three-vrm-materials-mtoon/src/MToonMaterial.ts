@@ -401,6 +401,18 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.setValues(parameters);
 
     // == update shader stuff ======================================================================
+    this.customProgramCacheKey = () =>
+      [
+        this._ignoreVertexColor ? 'ignoreVertexColor' : '',
+        this._debugMode !== 'none' ? `debugMode:${this._debugMode}` : '',
+        this._outlineWidthMode !== 'none' ? `outlineWidthMode:${this._outlineWidthMode}` : '',
+        this._isOutline ? 'isOutline' : '',
+        ...Object.entries(this._generateDefines()).map(([token, macro]) => `${token}:${macro}`),
+        this.matcapTexture ? `matcapTextureEncoding:${this.matcapTexture.encoding}` : '',
+        this.shadeMultiplyTexture ? `shadeMultiplyTextureEncoding:${this.shadeMultiplyTexture.encoding}` : '',
+        this.rimMultiplyTexture ? `rimMultiplyTextureEncoding:${this.rimMultiplyTexture.encoding}` : '',
+      ].join(',');
+
     this.onBeforeCompile = (shader, renderer) => {
       /**
        * Will be needed to determine whether we should inline convert sRGB textures or not.
@@ -408,38 +420,10 @@ export class MToonMaterial extends THREE.ShaderMaterial {
        */
       const isWebGL2 = renderer.capabilities.isWebGL2;
 
-      const useUvInVert = this.outlineWidthMultiplyTexture !== null;
-      const useUvInFrag =
-        this.map !== null ||
-        this.shadeMultiplyTexture !== null ||
-        this.shadingShiftTexture !== null ||
-        this.rimMultiplyTexture !== null ||
-        this.uvAnimationMaskTexture !== null;
-
       const threeRevision = parseInt(THREE.REVISION, 10);
 
       const defines =
-        Object.entries({
-          // Temporary compat against shader change @ Three.js r126
-          // See: #21205, #21307, #21299
-          THREE_VRM_THREE_REVISION: threeRevision,
-
-          OUTLINE: this._isOutline,
-          MTOON_USE_UV: useUvInVert || useUvInFrag, // we can't use `USE_UV` , it will be redefined in WebGLProgram.js
-          MTOON_UVS_VERTEX_ONLY: useUvInVert && !useUvInFrag,
-          USE_SHADEMULTIPLYTEXTURE: this.shadeMultiplyTexture !== null,
-          USE_SHADINGSHIFTTEXTURE: this.shadingShiftTexture !== null,
-          USE_MATCAPTEXTURE: this.matcapTexture !== null,
-          USE_RIMMULTIPLYTEXTURE: this.rimMultiplyTexture !== null,
-          USE_OUTLINEWIDTHMULTIPLYTEXTURE: this.outlineWidthMultiplyTexture !== null,
-          USE_UVANIMATIONMASKTEXTURE: this.uvAnimationMaskTexture !== null,
-          IGNORE_VERTEX_COLOR: this._ignoreVertexColor === true,
-          DEBUG_NORMAL: this._debugMode === 'normal',
-          DEBUG_LITSHADERATE: this._debugMode === 'litShadeRate',
-          DEBUG_UV: this._debugMode === 'uv',
-          OUTLINE_WIDTH_WORLD: this._outlineWidthMode === MToonMaterialOutlineWidthMode.WorldCoordinates,
-          OUTLINE_WIDTH_SCREEN: this._outlineWidthMode === MToonMaterialOutlineWidthMode.ScreenCoordinates,
-        })
+        Object.entries({ ...this._generateDefines(), ...this.defines })
           .filter(([token, macro]) => !!macro)
           .map(([token, macro]) => `#define ${token} ${macro}`)
           .join('\n') + '\n';
@@ -558,6 +542,43 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.needsUpdate = true;
 
     return this;
+  }
+
+  /**
+   * Returns a map object of preprocessor token and macro of the shader program.
+   */
+  private _generateDefines(): { [token: string]: boolean | number | string } {
+    const threeRevision = parseInt(THREE.REVISION, 10);
+
+    const useUvInVert = this.outlineWidthMultiplyTexture !== null;
+    const useUvInFrag =
+      this.map !== null ||
+      this.shadeMultiplyTexture !== null ||
+      this.shadingShiftTexture !== null ||
+      this.rimMultiplyTexture !== null ||
+      this.uvAnimationMaskTexture !== null;
+
+    return {
+      // Temporary compat against shader change @ Three.js r126
+      // See: #21205, #21307, #21299
+      THREE_VRM_THREE_REVISION: threeRevision,
+
+      OUTLINE: this._isOutline,
+      MTOON_USE_UV: useUvInVert || useUvInFrag, // we can't use `USE_UV` , it will be redefined in WebGLProgram.js
+      MTOON_UVS_VERTEX_ONLY: useUvInVert && !useUvInFrag,
+      USE_SHADEMULTIPLYTEXTURE: this.shadeMultiplyTexture !== null,
+      USE_SHADINGSHIFTTEXTURE: this.shadingShiftTexture !== null,
+      USE_MATCAPTEXTURE: this.matcapTexture !== null,
+      USE_RIMMULTIPLYTEXTURE: this.rimMultiplyTexture !== null,
+      USE_OUTLINEWIDTHMULTIPLYTEXTURE: this.outlineWidthMultiplyTexture !== null,
+      USE_UVANIMATIONMASKTEXTURE: this.uvAnimationMaskTexture !== null,
+      IGNORE_VERTEX_COLOR: this._ignoreVertexColor === true,
+      DEBUG_NORMAL: this._debugMode === 'normal',
+      DEBUG_LITSHADERATE: this._debugMode === 'litShadeRate',
+      DEBUG_UV: this._debugMode === 'uv',
+      OUTLINE_WIDTH_WORLD: this._outlineWidthMode === MToonMaterialOutlineWidthMode.WorldCoordinates,
+      OUTLINE_WIDTH_SCREEN: this._outlineWidthMode === MToonMaterialOutlineWidthMode.ScreenCoordinates,
+    };
   }
 
   private _updateTextureMatrix(src: THREE.IUniform<THREE.Texture | null>, dst: THREE.IUniform<THREE.Matrix3>): void {
