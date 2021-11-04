@@ -7,6 +7,7 @@ import fragmentShader from './shaders/mtoon.frag';
 import { MToonMaterialDebugMode } from './MToonMaterialDebugMode';
 import { MToonMaterialOutlineWidthMode } from './MToonMaterialOutlineWidthMode';
 import type { MToonMaterialParameters } from './MToonMaterialParameters';
+import { getTextureEncodingFromMap } from './utils/getTextureEncodingFromMap';
 
 /**
  * MToon is a material specification that has various features.
@@ -280,7 +281,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
   public set ignoreVertexColor(value: boolean) {
     this._ignoreVertexColor = value;
 
-    this._updateShaderCode();
+    this.needsUpdate = true;
   }
 
   private _debugMode: MToonMaterialDebugMode = MToonMaterialDebugMode.None;
@@ -291,7 +292,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
   set debugMode(m: MToonMaterialDebugMode) {
     this._debugMode = m;
 
-    this._updateShaderCode();
+    this.needsUpdate = true;
   }
 
   private _outlineWidthMode: MToonMaterialOutlineWidthMode = MToonMaterialOutlineWidthMode.None;
@@ -302,7 +303,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
   set outlineWidthMode(m: MToonMaterialOutlineWidthMode) {
     this._outlineWidthMode = m;
 
-    this._updateShaderCode();
+    this.needsUpdate = true;
   }
 
   private _isOutline = false;
@@ -313,7 +314,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
   set isOutline(b: boolean) {
     this._isOutline = b;
 
-    this._updateShaderCode();
+    this.needsUpdate = true;
   }
 
   /**
@@ -324,7 +325,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
   }
 
   constructor(parameters: MToonMaterialParameters = {}) {
-    super();
+    super({ vertexShader, fragmentShader });
 
     // override depthWrite with transparentWithZWrite
     if (parameters.transparentWithZWrite) {
@@ -400,7 +401,83 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.setValues(parameters);
 
     // == update shader stuff ======================================================================
-    this._updateShaderCode();
+    this.onBeforeCompile = (shader, renderer) => {
+      /**
+       * Will be needed to determine whether we should inline convert sRGB textures or not.
+       * See: https://github.com/mrdoob/three.js/pull/22551
+       */
+      const isWebGL2 = renderer.capabilities.isWebGL2;
+
+      const useUvInVert = this.outlineWidthMultiplyTexture !== null;
+      const useUvInFrag =
+        this.map !== null ||
+        this.shadeMultiplyTexture !== null ||
+        this.shadingShiftTexture !== null ||
+        this.rimMultiplyTexture !== null ||
+        this.uvAnimationMaskTexture !== null;
+
+      const threeRevision = parseInt(THREE.REVISION, 10);
+
+      const defines =
+        Object.entries({
+          // Temporary compat against shader change @ Three.js r126
+          // See: #21205, #21307, #21299
+          THREE_VRM_THREE_REVISION: threeRevision,
+
+          OUTLINE: this._isOutline,
+          MTOON_USE_UV: useUvInVert || useUvInFrag, // we can't use `USE_UV` , it will be redefined in WebGLProgram.js
+          MTOON_UVS_VERTEX_ONLY: useUvInVert && !useUvInFrag,
+          USE_SHADEMULTIPLYTEXTURE: this.shadeMultiplyTexture !== null,
+          USE_SHADINGSHIFTTEXTURE: this.shadingShiftTexture !== null,
+          USE_MATCAPTEXTURE: this.matcapTexture !== null,
+          USE_RIMMULTIPLYTEXTURE: this.rimMultiplyTexture !== null,
+          USE_OUTLINEWIDTHMULTIPLYTEXTURE: this.outlineWidthMultiplyTexture !== null,
+          USE_UVANIMATIONMASKTEXTURE: this.uvAnimationMaskTexture !== null,
+          IGNORE_VERTEX_COLOR: this._ignoreVertexColor === true,
+          DEBUG_NORMAL: this._debugMode === 'normal',
+          DEBUG_LITSHADERATE: this._debugMode === 'litShadeRate',
+          DEBUG_UV: this._debugMode === 'uv',
+          OUTLINE_WIDTH_WORLD: this._outlineWidthMode === MToonMaterialOutlineWidthMode.WorldCoordinates,
+          OUTLINE_WIDTH_SCREEN: this._outlineWidthMode === MToonMaterialOutlineWidthMode.ScreenCoordinates,
+        })
+          .filter(([token, macro]) => !!macro)
+          .map(([token, macro]) => `#define ${token} ${macro}`)
+          .join('\n') + '\n';
+
+      // -- texture encodings ----------------------------------------------------------------------
+      const encodings =
+        (this.matcapTexture !== null
+          ? getTexelDecodingFunction(
+              'matcapTextureTexelToLinear',
+              getTextureEncodingFromMap(this.matcapTexture, isWebGL2),
+            ) + '\n'
+          : '') +
+        (this.shadeMultiplyTexture !== null
+          ? getTexelDecodingFunction(
+              'shadeMultiplyTextureTexelToLinear',
+              getTextureEncodingFromMap(this.shadeMultiplyTexture, isWebGL2),
+            ) + '\n'
+          : '') +
+        (this.rimMultiplyTexture !== null
+          ? getTexelDecodingFunction(
+              'rimMultiplyTextureTexelToLinear',
+              getTextureEncodingFromMap(this.rimMultiplyTexture, isWebGL2),
+            ) + '\n'
+          : '');
+
+      // -- generate shader code -------------------------------------------------------------------
+      shader.vertexShader = defines + shader.vertexShader;
+      shader.fragmentShader = defines + encodings + shader.fragmentShader;
+
+      // -- compat ---------------------------------------------------------------------------------
+
+      // COMPAT
+      // Three.js r132 introduces new shader chunks <normal_pars_fragment> and <alphatest_pars_fragment>
+      if (threeRevision < 132) {
+        shader.fragmentShader = shader.fragmentShader.replace('#include <normal_pars_fragment>', '');
+        shader.fragmentShader = shader.fragmentShader.replace('#include <alphatest_pars_fragment>', '');
+      }
+    };
   }
 
   /**
@@ -478,7 +555,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.isOutline = source.isOutline;
 
     // == update shader stuff ======================================================================
-    this._updateShaderCode();
+    this.needsUpdate = true;
 
     return this;
   }
@@ -491,67 +568,5 @@ export class MToonMaterial extends THREE.ShaderMaterial {
 
       dst.value.copy(src.value.matrix);
     }
-  }
-
-  private _updateShaderCode(): void {
-    const useUvInVert = this.outlineWidthMultiplyTexture !== null;
-    const useUvInFrag =
-      this.map !== null ||
-      this.shadeMultiplyTexture !== null ||
-      this.shadingShiftTexture !== null ||
-      this.rimMultiplyTexture !== null ||
-      this.uvAnimationMaskTexture !== null;
-
-    const threeRevision = parseInt(THREE.REVISION, 10);
-
-    this.defines = {
-      // Temporary compat against shader change @ Three.js r126
-      // See: #21205, #21307, #21299
-      THREE_VRM_THREE_REVISION: threeRevision,
-
-      OUTLINE: this._isOutline,
-      MTOON_USE_UV: useUvInVert || useUvInFrag, // we can't use `USE_UV` , it will be redefined in WebGLProgram.js
-      MTOON_UVS_VERTEX_ONLY: useUvInVert && !useUvInFrag,
-      USE_SHADEMULTIPLYTEXTURE: this.shadeMultiplyTexture !== null,
-      USE_SHADINGSHIFTTEXTURE: this.shadingShiftTexture !== null,
-      USE_MATCAPTEXTURE: this.matcapTexture !== null,
-      USE_RIMMULTIPLYTEXTURE: this.rimMultiplyTexture !== null,
-      USE_OUTLINEWIDTHMULTIPLYTEXTURE: this.outlineWidthMultiplyTexture !== null,
-      USE_UVANIMATIONMASKTEXTURE: this.uvAnimationMaskTexture !== null,
-      IGNORE_VERTEX_COLOR: this._ignoreVertexColor === true,
-      DEBUG_NORMAL: this._debugMode === 'normal',
-      DEBUG_LITSHADERATE: this._debugMode === 'litShadeRate',
-      DEBUG_UV: this._debugMode === 'uv',
-      OUTLINE_WIDTH_WORLD: this._outlineWidthMode === MToonMaterialOutlineWidthMode.WorldCoordinates,
-      OUTLINE_WIDTH_SCREEN: this._outlineWidthMode === MToonMaterialOutlineWidthMode.ScreenCoordinates,
-    };
-
-    // == texture encodings ========================================================================
-    const encodings =
-      (this.matcapTexture !== null
-        ? getTexelDecodingFunction('matcapTextureTexelToLinear', this.matcapTexture.encoding) + '\n'
-        : '') +
-      (this.shadeMultiplyTexture !== null
-        ? getTexelDecodingFunction('shadeMultiplyTextureTexelToLinear', this.shadeMultiplyTexture.encoding) + '\n'
-        : '') +
-      (this.rimMultiplyTexture !== null
-        ? getTexelDecodingFunction('rimMultiplyTextureTexelToLinear', this.rimMultiplyTexture.encoding) + '\n'
-        : '');
-
-    // == generate shader code =====================================================================
-    this.vertexShader = vertexShader;
-    this.fragmentShader = encodings + fragmentShader;
-
-    // == compat ===================================================================================
-
-    // COMPAT
-    // Three.js r132 introduces new shader chunks <normal_pars_fragment> and <alphatest_pars_fragment>
-    if (threeRevision < 132) {
-      this.fragmentShader = this.fragmentShader.replace('#include <normal_pars_fragment>', '');
-      this.fragmentShader = this.fragmentShader.replace('#include <alphatest_pars_fragment>', '');
-    }
-
-    // == set needsUpdate flag =====================================================================
-    this.needsUpdate = true;
   }
 }
