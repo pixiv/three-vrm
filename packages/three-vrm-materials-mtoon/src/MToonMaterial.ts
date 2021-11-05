@@ -553,6 +553,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     const useUvInVert = this.outlineWidthMultiplyTexture !== null;
     const useUvInFrag =
       this.map !== null ||
+      this.emissiveMap !== null ||
       this.shadeMultiplyTexture !== null ||
       this.shadingShiftTexture !== null ||
       this.rimMultiplyTexture !== null ||
