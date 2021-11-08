@@ -29,6 +29,10 @@ export class VRMLoaderPlugin implements GLTFLoaderPlugin {
   public readonly springBonePlugin: VRMSpringBoneLoaderPlugin;
   public readonly constraintPlugin: VRMNodeConstraintLoaderPlugin;
 
+  public get name(): string {
+    return 'VRMLoaderPlugin';
+  }
+
   public constructor(parser: GLTFParser, options?: VRMLoaderPluginOptions) {
     this.parser = parser;
 
