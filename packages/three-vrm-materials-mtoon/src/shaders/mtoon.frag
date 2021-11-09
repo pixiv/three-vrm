@@ -148,7 +148,14 @@ vec3 getDiffuse(
     #endif
   #endif
 
-  return lightColor * BRDF_Lambert( mix( material.shadeColor, material.diffuseColor, shading ) );
+  vec3 col = lightColor * BRDF_Lambert( mix( material.shadeColor, material.diffuseColor, shading ) );
+
+  // The "comment out if you want to PBR absolutely" line
+  #ifdef V0_COMPAT_SHADE
+    col = min( col, material.diffuseColor );
+  #endif
+
+  return col;
 }
 
 void RE_Direct_MToon( const in IncidentLight directLight, const in GeometricContext geometry, const in MToonMaterial material, const in float shadow, inout ReflectedLight reflectedLight ) {
