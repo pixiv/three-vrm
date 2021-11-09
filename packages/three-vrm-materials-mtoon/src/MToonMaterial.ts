@@ -284,11 +284,48 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.needsUpdate = true;
   }
 
+  private _v0CompatShade = false;
+
+  /**
+   * There is a line of the shader called "comment out if you want to PBR absolutely" in VRM0.0 MToon.
+   * When this is true, the material enables the line to make it compatible with the legacy rendering of VRM.
+   * Usually not recommended to turn this on.
+   * `false` by default.
+   */
+  get v0CompatShade(): boolean {
+    return this._v0CompatShade;
+  }
+
+  /**
+   * There is a line of the shader called "comment out if you want to PBR absolutely" in VRM0.0 MToon.
+   * When this is true, the material enables the line to make it compatible with the legacy rendering of VRM.
+   * Usually not recommended to turn this on.
+   * `false` by default.
+   */
+  set v0CompatShade(v: boolean) {
+    this._v0CompatShade = v;
+
+    this.needsUpdate = true;
+  }
+
   private _debugMode: MToonMaterialDebugMode = MToonMaterialDebugMode.None;
 
+  /**
+   * Debug mode for the material.
+   * You can visualize several components for diagnosis using debug mode.
+   *
+   * See: {@link MToonMaterialDebugMode}
+   */
   get debugMode(): MToonMaterialDebugMode {
     return this._debugMode;
   }
+
+  /**
+   * Debug mode for the material.
+   * You can visualize several components for diagnosis using debug mode.
+   *
+   * See: {@link MToonMaterialDebugMode}
+   */
   set debugMode(m: MToonMaterialDebugMode) {
     this._debugMode = m;
 
@@ -404,6 +441,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.customProgramCacheKey = () =>
       [
         this._ignoreVertexColor ? 'ignoreVertexColor' : '',
+        this._v0CompatShade ? 'v0CompatShade' : '',
         this._debugMode !== 'none' ? `debugMode:${this._debugMode}` : '',
         this._outlineWidthMode !== 'none' ? `outlineWidthMode:${this._outlineWidthMode}` : '',
         this._isOutline ? 'isOutline' : '',
@@ -533,6 +571,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
 
     this.ignoreVertexColor = source.ignoreVertexColor;
 
+    this.v0CompatShade = source.v0CompatShade;
     this.debugMode = source.debugMode;
     this.outlineWidthMode = source.outlineWidthMode;
 
@@ -567,6 +606,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
       OUTLINE: this._isOutline,
       MTOON_USE_UV: useUvInVert || useUvInFrag, // we can't use `USE_UV` , it will be redefined in WebGLProgram.js
       MTOON_UVS_VERTEX_ONLY: useUvInVert && !useUvInFrag,
+      V0_COMPAT_SHADE: this._v0CompatShade,
       USE_SHADEMULTIPLYTEXTURE: this.shadeMultiplyTexture !== null,
       USE_SHADINGSHIFTTEXTURE: this.shadingShiftTexture !== null,
       USE_MATCAPTEXTURE: this.matcapTexture !== null,
