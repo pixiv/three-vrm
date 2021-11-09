@@ -558,6 +558,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
 
     this.ignoreVertexColor = source.ignoreVertexColor;
 
+    this.v0CompatShade = source.v0CompatShade;
     this.debugMode = source.debugMode;
     this.outlineWidthMode = source.outlineWidthMode;
 
