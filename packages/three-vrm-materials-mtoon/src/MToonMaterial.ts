@@ -290,6 +290,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
    * There is a line of the shader called "comment out if you want to PBR absolutely" in VRM0.0 MToon.
    * When this is true, the material enables the line to make it compatible with the legacy rendering of VRM.
    * Usually not recommended to turn this on.
+   * `false` by default.
    */
   get v0CompatShade(): boolean {
     return this._v0CompatShade;
@@ -299,6 +300,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
    * There is a line of the shader called "comment out if you want to PBR absolutely" in VRM0.0 MToon.
    * When this is true, the material enables the line to make it compatible with the legacy rendering of VRM.
    * Usually not recommended to turn this on.
+   * `false` by default.
    */
   set v0CompatShade(v: boolean) {
     this._v0CompatShade = v;

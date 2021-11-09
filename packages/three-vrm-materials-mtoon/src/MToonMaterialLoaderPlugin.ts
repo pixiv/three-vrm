@@ -5,6 +5,7 @@ import { MToonMaterial } from './MToonMaterial';
 import type { MToonMaterialParameters } from './MToonMaterialParameters';
 import { MToonMaterialOutlineWidthMode } from './MToonMaterialOutlineWidthMode';
 import { GLTFMToonMaterialParamsAssignHelper } from './GLTFMToonMaterialParamsAssignHelper';
+import { MToonMaterialLoaderPluginOptions } from './MToonMaterialLoaderPluginOptions';
 
 export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
   public static EXTENSION_NAME = 'VRMC_materials_mtoon';
@@ -15,6 +16,14 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
    * `0` by default.
    */
   public renderOrderOffset: number;
+
+  /**
+   * There is a line of the shader called "comment out if you want to PBR absolutely" in VRM0.0 MToon.
+   * When this is true, the material enables the line to make it compatible with the legacy rendering of VRM.
+   * Usually not recommended to turn this on.
+   * `false` by default.
+   */
+  public v0CompatShade: boolean;
 
   public readonly parser: GLTFParser;
 
@@ -28,20 +37,11 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     return MToonMaterialLoaderPlugin.EXTENSION_NAME;
   }
 
-  public constructor(
-    parser: GLTFParser,
-    options: {
-      /**
-       * This value will be added to every meshes who have MaterialsMToon.
-       * The final renderOrder will be sum of this `renderOrderOffset` and `renderQueueOffsetNumber` for each materials.
-       * `0` by default.
-       */
-      renderOrderOffset?: number;
-    } = {},
-  ) {
+  public constructor(parser: GLTFParser, options: MToonMaterialLoaderPluginOptions = {}) {
     this.parser = parser;
 
     this.renderOrderOffset = options.renderOrderOffset ?? 0;
+    this.v0CompatShade = options.v0CompatShade ?? false;
 
     this._mToonMaterialSet = new Set();
   }
@@ -177,6 +177,8 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     assignHelper.assignPrimitive('uvAnimationScrollXSpeedFactor', extension.uvAnimationScrollXSpeedFactor);
     assignHelper.assignPrimitive('uvAnimationScrollYSpeedFactor', extension.uvAnimationScrollYSpeedFactor);
     assignHelper.assignPrimitive('uvAnimationRotationSpeedFactor', extension.uvAnimationRotationSpeedFactor);
+
+    assignHelper.assignPrimitive('v0CompatShade', this.v0CompatShade);
 
     await assignHelper.pending;
   }
