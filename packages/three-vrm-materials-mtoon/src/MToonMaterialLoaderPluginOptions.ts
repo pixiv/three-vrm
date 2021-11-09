@@ -1,3 +1,5 @@
+import type { MToonMaterialDebugMode } from './MToonMaterialDebugMode';
+
 export interface MToonMaterialLoaderPluginOptions {
   /**
    * This value will be added to every meshes who have MaterialsMToon.
@@ -13,4 +15,12 @@ export interface MToonMaterialLoaderPluginOptions {
    * `false` by default.
    */
   v0CompatShade?: boolean;
+
+  /**
+   * Debug mode for the material.
+   * You can visualize several components for diagnosis using debug mode.
+   *
+   * See: {@link MToonMaterialDebugMode}
+   */
+  debugMode?: MToonMaterialDebugMode;
 }

@@ -6,6 +6,7 @@ import type { MToonMaterialParameters } from './MToonMaterialParameters';
 import { MToonMaterialOutlineWidthMode } from './MToonMaterialOutlineWidthMode';
 import { GLTFMToonMaterialParamsAssignHelper } from './GLTFMToonMaterialParamsAssignHelper';
 import { MToonMaterialLoaderPluginOptions } from './MToonMaterialLoaderPluginOptions';
+import type { MToonMaterialDebugMode } from './MToonMaterialDebugMode';
 
 export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
   public static EXTENSION_NAME = 'VRMC_materials_mtoon';
@@ -25,6 +26,14 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
    */
   public v0CompatShade: boolean;
 
+  /**
+   * Debug mode for the material.
+   * You can visualize several components for diagnosis using debug mode.
+   *
+   * See: {@link MToonMaterialDebugMode}
+   */
+  public debugMode: MToonMaterialDebugMode;
+
   public readonly parser: GLTFParser;
 
   /**
@@ -42,6 +51,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
 
     this.renderOrderOffset = options.renderOrderOffset ?? 0;
     this.v0CompatShade = options.v0CompatShade ?? false;
+    this.debugMode = options.debugMode ?? 'none';
 
     this._mToonMaterialSet = new Set();
   }
@@ -179,6 +189,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     assignHelper.assignPrimitive('uvAnimationRotationSpeedFactor', extension.uvAnimationRotationSpeedFactor);
 
     assignHelper.assignPrimitive('v0CompatShade', this.v0CompatShade);
+    assignHelper.assignPrimitive('debugMode', this.debugMode);
 
     await assignHelper.pending;
   }

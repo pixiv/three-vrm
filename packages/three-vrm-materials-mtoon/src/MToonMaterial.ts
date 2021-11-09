@@ -310,9 +310,22 @@ export class MToonMaterial extends THREE.ShaderMaterial {
 
   private _debugMode: MToonMaterialDebugMode = MToonMaterialDebugMode.None;
 
+  /**
+   * Debug mode for the material.
+   * You can visualize several components for diagnosis using debug mode.
+   *
+   * See: {@link MToonMaterialDebugMode}
+   */
   get debugMode(): MToonMaterialDebugMode {
     return this._debugMode;
   }
+
+  /**
+   * Debug mode for the material.
+   * You can visualize several components for diagnosis using debug mode.
+   *
+   * See: {@link MToonMaterialDebugMode}
+   */
   set debugMode(m: MToonMaterialDebugMode) {
     this._debugMode = m;
 

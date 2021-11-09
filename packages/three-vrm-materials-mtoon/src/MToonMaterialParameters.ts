@@ -44,7 +44,13 @@ export interface MToonMaterialParameters extends THREE.ShaderMaterialParameters 
    */
   ignoreVertexColor?: boolean;
 
-  debugMode?: MToonMaterialDebugMode | number;
+  /**
+   * Debug mode for the material.
+   * You can visualize several components for diagnosis using debug mode.
+   *
+   * See: {@link MToonMaterialDebugMode}
+   */
+  debugMode?: MToonMaterialDebugMode;
 
   /**
    * There is a line of the shader called "comment out if you want to PBR absolutely" in VRM0.0 MToon.
