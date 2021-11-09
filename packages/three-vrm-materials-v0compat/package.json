@@ -1,6 +1,6 @@
 {
   "name": "@pixiv/three-vrm-materials-v0compat",
-  "version": "1.0.0-beta.5",
+  "version": "1.0.0-beta.6",
   "description": "VRM0.0 materials compatibility layer plugin for @pixiv/three-vrm",
   "license": "MIT",
   "author": "pixiv",
@@ -40,8 +40,8 @@
     ]
   },
   "dependencies": {
-    "@pixiv/types-vrm-0.0": "1.0.0-beta.5",
-    "@pixiv/types-vrmc-materials-mtoon-1.0": "1.0.0-beta.5"
+    "@pixiv/types-vrm-0.0": "1.0.0-beta.6",
+    "@pixiv/types-vrmc-materials-mtoon-1.0": "1.0.0-beta.6"
   },
   "devDependencies": {
     "@types/three": "^0.133.1",
