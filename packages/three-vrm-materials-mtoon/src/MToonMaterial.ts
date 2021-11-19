@@ -437,6 +437,9 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     // == finally compile the shader program =======================================================
     this.setValues(parameters);
 
+    // == upload uniforms that need to upload ======================================================
+    this._uploadUniformsWorkaround();
+
     // == update shader stuff ======================================================================
     this.customProgramCacheKey = () =>
       [
@@ -508,37 +511,8 @@ export class MToonMaterial extends THREE.ShaderMaterial {
    * @param delta deltaTime since last update
    */
   public update(delta: number): void {
-    this.uniforms.uvAnimationScrollXOffset.value += delta * this.uvAnimationScrollXSpeedFactor;
-    this.uniforms.uvAnimationScrollYOffset.value += delta * this.uvAnimationScrollYSpeedFactor;
-    this.uniforms.uvAnimationRotationPhase.value += delta * this.uvAnimationRotationSpeedFactor;
-
-    // workaround: since opacity is defined as a property in THREE.Material
-    // and cannot be overridden as an accessor,
-    // We are going to update opacity here
-    this.uniforms.opacity.value = this.opacity;
-
-    // workaround: textures are not updated automatically
-    this._updateTextureMatrix(this.uniforms.map, this.uniforms.mapUvTransform);
-    this._updateTextureMatrix(this.uniforms.normalMap, this.uniforms.normalMapUvTransform);
-    this._updateTextureMatrix(this.uniforms.emissiveMap, this.uniforms.emissiveMapUvTransform);
-    this._updateTextureMatrix(this.uniforms.shadeMultiplyTexture, this.uniforms.shadeMultiplyTextureUvTransform);
-    this._updateTextureMatrix(this.uniforms.shadingShiftTexture, this.uniforms.shadingShiftTextureUvTransform);
-    this._updateTextureMatrix(this.uniforms.matcapTexture, this.uniforms.matcapTextureUvTransform);
-    this._updateTextureMatrix(this.uniforms.rimMultiplyTexture, this.uniforms.rimMultiplyTextureUvTransform);
-    this._updateTextureMatrix(
-      this.uniforms.outlineWidthMultiplyTexture,
-      this.uniforms.outlineWidthMultiplyTextureUvTransform,
-    );
-    this._updateTextureMatrix(this.uniforms.uvAnimationMaskTexture, this.uniforms.uvAnimationMaskTextureUvTransform);
-
-    // COMPAT workaround: starting from r132, alphaTest becomes a uniform instead of preprocessor value
-    const threeRevision = parseInt(THREE.REVISION, 10);
-
-    if (threeRevision >= 132) {
-      this.uniforms.alphaTest.value = this.alphaTest;
-    }
-
-    this.uniformsNeedUpdate = true;
+    this._uploadUniformsWorkaround();
+    this._updateUVAnimation(delta);
   }
 
   public copy(source: this): this {
@@ -581,6 +555,53 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.needsUpdate = true;
 
     return this;
+  }
+
+  /**
+   * Update UV animation state.
+   * Intended to be called via {@link update}.
+   * @param delta deltaTime
+   */
+  private _updateUVAnimation(delta: number): void {
+    this.uniforms.uvAnimationScrollXOffset.value += delta * this.uvAnimationScrollXSpeedFactor;
+    this.uniforms.uvAnimationScrollYOffset.value += delta * this.uvAnimationScrollYSpeedFactor;
+    this.uniforms.uvAnimationRotationPhase.value += delta * this.uvAnimationRotationSpeedFactor;
+
+    this.uniformsNeedUpdate = true;
+  }
+
+  /**
+   * Upload uniforms that need to upload but doesn't automatically because of reasons.
+   * Intended to be called via {@link constructor} and {@link update}.
+   */
+  private _uploadUniformsWorkaround(): void {
+    // workaround: since opacity is defined as a property in THREE.Material
+    // and cannot be overridden as an accessor,
+    // We are going to update opacity here
+    this.uniforms.opacity.value = this.opacity;
+
+    // workaround: texture transforms are not updated automatically
+    this._updateTextureMatrix(this.uniforms.map, this.uniforms.mapUvTransform);
+    this._updateTextureMatrix(this.uniforms.normalMap, this.uniforms.normalMapUvTransform);
+    this._updateTextureMatrix(this.uniforms.emissiveMap, this.uniforms.emissiveMapUvTransform);
+    this._updateTextureMatrix(this.uniforms.shadeMultiplyTexture, this.uniforms.shadeMultiplyTextureUvTransform);
+    this._updateTextureMatrix(this.uniforms.shadingShiftTexture, this.uniforms.shadingShiftTextureUvTransform);
+    this._updateTextureMatrix(this.uniforms.matcapTexture, this.uniforms.matcapTextureUvTransform);
+    this._updateTextureMatrix(this.uniforms.rimMultiplyTexture, this.uniforms.rimMultiplyTextureUvTransform);
+    this._updateTextureMatrix(
+      this.uniforms.outlineWidthMultiplyTexture,
+      this.uniforms.outlineWidthMultiplyTextureUvTransform,
+    );
+    this._updateTextureMatrix(this.uniforms.uvAnimationMaskTexture, this.uniforms.uvAnimationMaskTextureUvTransform);
+
+    // COMPAT workaround: starting from r132, alphaTest becomes a uniform instead of preprocessor value
+    const threeRevision = parseInt(THREE.REVISION, 10);
+
+    if (threeRevision >= 132) {
+      this.uniforms.alphaTest.value = this.alphaTest;
+    }
+
+    this.uniformsNeedUpdate = true;
   }
 
   /**
