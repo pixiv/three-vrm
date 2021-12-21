@@ -201,7 +201,8 @@ export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
     schemaDegreeMap: V0VRM.FirstPersonDegreeMap | undefined,
     defaultOutputScale: number,
   ): VRMLookAtRangeMap {
-    if (schemaDegreeMap?.curve) {
+    const curve = schemaDegreeMap?.curve;
+    if (JSON.stringify(curve) !== '[0,0,0,1,1,1,1,0]') {
       console.warn('Curves of LookAtDegreeMap defined in VRM 0.0 are not supported');
     }
 
