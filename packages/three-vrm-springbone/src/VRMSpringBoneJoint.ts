@@ -201,9 +201,9 @@ export class VRMSpringBoneJoint {
     if (this.child) {
       this._initialLocalChildPosition.copy(this.child.position);
     } else {
-      // 末端のボーン。子ボーンがいないため「自分の少し先」が子ボーンということにする
-      // https://github.com/dwango/UniVRM/blob/master/Assets/VRM/UniVRM/Scripts/SpringBone/VRMSpringBone.cs#L246
-      this._initialLocalChildPosition.copy(this.bone.position).normalize().multiplyScalar(0.07); // magic number! derives from original UniVRM source
+      // vrm0 requires a 7cm fixed bone length for the final node in a chain
+      // See: https://github.com/vrm-c/vrm-specification/tree/master/specification/VRMC_springBone-1.0-beta#about-spring-configuration
+      this._initialLocalChildPosition.copy(this.bone.position).normalize().multiplyScalar(0.07);
     }
 
     // copy the child position to tails
