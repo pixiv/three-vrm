@@ -7,6 +7,8 @@ import type { VRMPose } from './VRMPose';
 
 const _v3A = new THREE.Vector3();
 const _quatA = new THREE.Quaternion();
+const _mat4A = new THREE.Matrix4();
+const _mat4B = new THREE.Matrix4();
 
 /**
  * A class represents a humanoid of a VRM.
@@ -208,5 +210,137 @@ export class VRMHumanoid {
    */
   public getBoneNode(name: VRMHumanBoneName): THREE.Object3D | null {
     return this.humanBones[name]?.node ?? null;
+  }
+
+  /**
+   * Normalize bone orientations.
+   * It also converts skeletons inside given scene.
+   *
+   * @param root Root object that will be traversed for skeletons
+   */
+  public normalizeBoneOrientations(root?: THREE.Object3D): void {
+    this.transferBoneOrientations({}, root);
+  }
+
+  /**
+   * Transfer a bone orientation structure to this model from another model.
+   * You can use {@link restPose} retrieved from other models.
+   * It also converts skeletons inside given scene.
+   *
+   * @param pose The reference rest pose retrieved from other models
+   * @param root Root object that will be traversed for skeletons
+   */
+  public transferBoneOrientations(pose: VRMPose, root?: THREE.Object3D): void {
+    const worldMatrixMap = new Map<THREE.Object3D, THREE.Matrix4>();
+    const newWorldMatrixMap = new Map<THREE.Object3D, THREE.Matrix4>();
+
+    // store the current world matrix of human bones
+    Object.values(this.humanBones).forEach((bone) => {
+      if (bone == null) {
+        return;
+      }
+
+      const boneNode = bone.node;
+
+      boneNode.updateWorldMatrix(true, false);
+      worldMatrixMap.set(boneNode, boneNode.matrixWorld.clone());
+    });
+
+    // store current world matrices of all root objects
+    // skinned mesh might depend on non humanoid bones!
+    root?.updateWorldMatrix(true, true);
+    root?.traverse((obj) => {
+      worldMatrixMap.set(obj, obj.matrixWorld.clone());
+    });
+
+    // copy reference orientation
+    Object.entries(this.humanBones).forEach(([key, bone]) => {
+      if (bone == null) {
+        return;
+      }
+
+      const boneName = key as VRMHumanBoneName;
+      const boneNode = bone.node;
+
+      const referenceQuat = pose[boneName]?.rotation;
+      if (referenceQuat != null) {
+        // copy reference orientation
+        boneNode.quaternion.fromArray(referenceQuat);
+      } else {
+        boneNode.quaternion.identity();
+      }
+    });
+
+    // translate bones
+    Object.values(this.humanBones).forEach((bone) => {
+      if (bone == null) {
+        return;
+      }
+
+      const boneNode = bone.node;
+
+      const originalWorldMatrix = worldMatrixMap.get(boneNode);
+
+      if (originalWorldMatrix != null) {
+        const position = _v3A.set(
+          originalWorldMatrix.elements[12],
+          originalWorldMatrix.elements[13],
+          originalWorldMatrix.elements[14],
+        );
+
+        const parent = boneNode.parent;
+        if (parent) {
+          parent.worldToLocal(position);
+        }
+
+        boneNode.position.copy(position);
+      }
+
+      // set the new world matrix
+      boneNode.updateWorldMatrix(true, false);
+      newWorldMatrixMap.set(boneNode, boneNode.matrixWorld.clone());
+    });
+
+    // store new world matrices of all root objects
+    // skinned mesh might depend on non humanoid bones!
+    root?.updateWorldMatrix(true, true);
+    root?.traverse((obj) => {
+      newWorldMatrixMap.set(obj, obj.matrixWorld.clone());
+    });
+
+    // list all skeletons in the root
+    const skeletons: THREE.Skeleton[] = [];
+    root?.traverse((obj) => {
+      if (obj.type !== 'SkinnedMesh') {
+        return;
+      }
+
+      const mesh = obj as THREE.SkinnedMesh;
+      const skeleton = mesh.skeleton;
+      skeletons.push(skeleton);
+    });
+
+    // apply diff of world transform to skeletons
+    skeletons.forEach((skeleton) => {
+      skeleton.bones.forEach((bone, boneIndex) => {
+        const worldMatrix = worldMatrixMap.get(bone);
+        const newWorldMatrix = newWorldMatrixMap.get(bone);
+
+        if (worldMatrix != null && newWorldMatrix != null) {
+          const boneInverse = skeleton.boneInverses[boneIndex];
+
+          // current: worldMatrix * boneInverse = dest
+          // need: newWorldMatrix * newBoneInverse = dest
+          // do: invNewWorldMatrix * newWorldMatrix * newBoneInverse = invNewWorldMatrix * dest
+
+          const dest = _mat4A.multiplyMatrices(worldMatrix, boneInverse);
+          const invNewWorldMatrix = _mat4B.copy(newWorldMatrix).invert();
+          boneInverse.multiplyMatrices(invNewWorldMatrix, dest);
+        }
+      });
+    });
+
+    // update rest pose
+    this.restPose = this.getAbsolutePose();
   }
 }
