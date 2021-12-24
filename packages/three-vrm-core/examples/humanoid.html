@@ -57,7 +57,7 @@
 
 			loader.register( ( parser ) => {
 
-				return new THREE_VRM_CORE.VRMCoreLoaderPlugin( parser );
+				return new THREE_VRM_CORE.VRMCoreLoaderPlugin( parser, { helperRoot: scene } );
 
 			} );
 

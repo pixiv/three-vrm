@@ -4,11 +4,20 @@ import type { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/load
 import { VRMHumanoid } from './VRMHumanoid';
 import type { VRMHumanBones } from './VRMHumanBones';
 import { VRMRequiredHumanBoneName } from './VRMRequiredHumanBoneName';
+import { VRMHumanoidHelper } from './helpers/VRMHumanoidHelper';
+import { VRMHumanoidLoaderPluginOptions } from './VRMHumanoidLoaderPluginOptions';
 
 /**
  * A plugin of GLTFLoader that imports a {@link VRMHumanoid} from a VRM extension of a GLTF.
  */
 export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
+  /**
+   * Specify an Object3D to add {@link VRMHumanoidHelper}.
+   * If not specified, helper will not be created.
+   * If `renderOrder` is set to the root, the helper will copy the same `renderOrder` .
+   */
+  public helperRoot?: THREE.Object3D;
+
   public readonly parser: GLTFParser;
 
   public get name(): string {
@@ -16,8 +25,10 @@ export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
     return 'VRMHumanoidLoaderPlugin';
   }
 
-  public constructor(parser: GLTFParser) {
+  public constructor(parser: GLTFParser, options?: VRMHumanoidLoaderPluginOptions) {
     this.parser = parser;
+
+    this.helperRoot = options?.helperRoot;
   }
 
   public async afterRoot(gltf: GLTF): Promise<void> {
@@ -86,7 +97,15 @@ export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
       );
     }
 
-    return new VRMHumanoid(this._ensureRequiredBonesExist(humanBones));
+    const humanoid = new VRMHumanoid(this._ensureRequiredBonesExist(humanBones));
+
+    if (this.helperRoot) {
+      const helper = new VRMHumanoidHelper(humanoid);
+      this.helperRoot.add(helper);
+      helper.renderOrder = this.helperRoot.renderOrder;
+    }
+
+    return humanoid;
   }
 
   private async _v0Import(gltf: GLTF): Promise<VRMHumanoid | null> {
@@ -134,7 +153,15 @@ export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
       );
     }
 
-    return new VRMHumanoid(this._ensureRequiredBonesExist(humanBones));
+    const humanoid = new VRMHumanoid(this._ensureRequiredBonesExist(humanBones));
+
+    if (this.helperRoot) {
+      const helper = new VRMHumanoidHelper(humanoid);
+      this.helperRoot.add(helper);
+      helper.renderOrder = this.helperRoot.renderOrder;
+    }
+
+    return humanoid;
   }
 
   /**

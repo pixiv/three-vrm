@@ -1,3 +1,5 @@
+export * from './helpers';
+
 export { VRMHumanBone } from './VRMHumanBone';
 export { VRMHumanBoneName } from './VRMHumanBoneName';
 export type { VRMHumanBones } from './VRMHumanBones';
