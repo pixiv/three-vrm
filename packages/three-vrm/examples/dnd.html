@@ -70,6 +70,8 @@
 
 						const vrm = gltf.userData.vrm;
 
+						// calling these functions greatly improves the performance
+						THREE_VRM.VRMUtils.removeUnnecessaryVertices( gltf.scene );
 						THREE_VRM.VRMUtils.removeUnnecessaryJoints( gltf.scene );
 
 						if ( currentVrm ) {

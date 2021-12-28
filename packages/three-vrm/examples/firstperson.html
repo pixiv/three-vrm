@@ -68,6 +68,7 @@
 
 					const vrm = gltf.userData.vrm;
 
+					THREE_VRM.VRMUtils.removeUnnecessaryVertices( gltf.scene );
 					THREE_VRM.VRMUtils.removeUnnecessaryJoints( gltf.scene );
 
 					scene.add( vrm.scene );
