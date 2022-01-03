@@ -1019,10 +1019,10 @@
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
   integrity sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
 
-"@types/three@^0.132.1":
-  version "0.132.1"
-  resolved "https://registry.yarnpkg.com/@types/three/-/three-0.132.1.tgz#16e0889fdbd41259c2fdf18ff2444baa0afc8e57"
-  integrity sha512-d+eB9/zaK7Bo690EmWCrMwutNWiMYGnW+G5cRO4jvRHvKhI/fe2B2d6xHf1MW0yl+nQ0ij+ctezYGePWtVhAAA==
+"@types/three@^0.135.0":
+  version "0.135.0"
+  resolved "https://registry.yarnpkg.com/@types/three/-/three-0.135.0.tgz#db7f9d9699b60aba844fc5b2893adf6dd6811665"
+  integrity sha512-l7WLhIHjhHMtlpyTSltPPAKLpiMwgMD1hXHj59AVUpYRoZP7Fd9NNOSRSvZBCPLpTHPYojgQvSJCoza9zoL7bg==
 
 "@typescript-eslint/eslint-plugin@^4.6.1":
   version "4.14.2"
