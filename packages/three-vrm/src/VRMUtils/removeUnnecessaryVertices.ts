@@ -80,7 +80,7 @@ export function removeUnnecessaryVertices(root: THREE.Object3D): void {
       const originalAttribute = geometry.attributes[attributeName] as THREE.BufferAttribute;
 
       if ((originalAttribute as any).isInterleavedBufferAttribute) {
-        throw new Error('removeUnnecessaryVertices: InterlavedBufferAttribute is not supported');
+        throw new Error('removeUnnecessaryVertices: InterleavedBufferAttribute is not supported');
       }
 
       const originalAttributeArray = originalAttribute.array;
@@ -111,7 +111,7 @@ export function removeUnnecessaryVertices(root: THREE.Object3D): void {
         const originalAttribute = morphs[iMorph] as THREE.BufferAttribute;
 
         if ((originalAttribute as any).isInterleavedBufferAttribute) {
-          throw new Error('removeUnnecessaryVertices: InterlavedBufferAttribute is not supported');
+          throw new Error('removeUnnecessaryVertices: InterleavedBufferAttribute is not supported');
         }
 
         const originalAttributeArray = originalAttribute.array;
