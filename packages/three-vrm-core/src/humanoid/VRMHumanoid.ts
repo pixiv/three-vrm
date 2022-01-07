@@ -233,7 +233,7 @@ export class VRMHumanoid {
    */
   public transferBoneOrientations(pose: VRMPose, root?: THREE.Object3D): void {
     /** A map from bone object to original world matrix */
-    const worldMatrixMap = new Map<THREE.Object3D, THREE.Matrix4>();
+    const originalWorldMatrixMap = new Map<THREE.Object3D, THREE.Matrix4>();
 
     /** A map from bone object to new world matrix */
     const newWorldMatrixMap = new Map<THREE.Object3D, THREE.Matrix4>();
@@ -246,14 +246,14 @@ export class VRMHumanoid {
       }
 
       boneNode.updateWorldMatrix(true, false);
-      worldMatrixMap.set(boneNode, boneNode.matrixWorld.clone());
+      originalWorldMatrixMap.set(boneNode, boneNode.matrixWorld.clone());
     });
 
     // store current world matrices of all root objects
     // skinned mesh might depend on non humanoid bones!
     root?.updateWorldMatrix(true, true);
     root?.traverse((obj) => {
-      worldMatrixMap.set(obj, obj.matrixWorld.clone());
+      originalWorldMatrixMap.set(obj, obj.matrixWorld.clone());
     });
 
     // copy reference orientation
@@ -279,7 +279,7 @@ export class VRMHumanoid {
         return;
       }
 
-      const originalWorldMatrix = worldMatrixMap.get(boneNode);
+      const originalWorldMatrix = originalWorldMatrixMap.get(boneNode);
 
       if (originalWorldMatrix != null) {
         /** The vector is going to be a new local position of boneNode */
@@ -324,17 +324,17 @@ export class VRMHumanoid {
     // apply diff of world transform to skeletons
     skeletons.forEach((skeleton) => {
       skeleton.bones.forEach((bone, boneIndex) => {
-        const worldMatrix = worldMatrixMap.get(bone);
+        const originalWorldMatrix = originalWorldMatrixMap.get(bone);
         const newWorldMatrix = newWorldMatrixMap.get(bone);
 
-        if (worldMatrix != null && newWorldMatrix != null) {
+        if (originalWorldMatrix != null && newWorldMatrix != null) {
           const boneInverse = skeleton.boneInverses[boneIndex];
 
           // current: worldMatrix * boneInverse = dest
           // need: newWorldMatrix * newBoneInverse = dest
           // do: invNewWorldMatrix * newWorldMatrix * newBoneInverse = invNewWorldMatrix * dest
 
-          const dest = _mat4A.multiplyMatrices(worldMatrix, boneInverse);
+          const dest = _mat4A.multiplyMatrices(originalWorldMatrix, boneInverse);
           const invNewWorldMatrix = _mat4B.copy(newWorldMatrix).invert();
           boneInverse.multiplyMatrices(invNewWorldMatrix, dest);
         }
