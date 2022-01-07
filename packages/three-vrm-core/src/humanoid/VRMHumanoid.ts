@@ -285,6 +285,7 @@ export class VRMHumanoid {
       const originalWorldMatrix = worldMatrixMap.get(boneNode);
 
       if (originalWorldMatrix != null) {
+        /** The vector is going to be a new local position of boneNode */
         const position = _v3A.set(
           originalWorldMatrix.elements[12],
           originalWorldMatrix.elements[13],
