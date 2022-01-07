@@ -231,7 +231,10 @@ export class VRMHumanoid {
    * @param root Root object that will be traversed for skeletons
    */
   public transferBoneOrientations(pose: VRMPose, root?: THREE.Object3D): void {
+    /** A map from bone object to original world matrix */
     const worldMatrixMap = new Map<THREE.Object3D, THREE.Matrix4>();
+
+    /** A map from bone object to new world matrix */
     const newWorldMatrixMap = new Map<THREE.Object3D, THREE.Matrix4>();
 
     // store the current world matrix of human bones
