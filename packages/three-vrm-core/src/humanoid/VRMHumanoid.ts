@@ -4,6 +4,7 @@ import type { VRMHumanBone } from './VRMHumanBone';
 import type { VRMHumanBones } from './VRMHumanBones';
 import type { VRMHumanBoneName } from './VRMHumanBoneName';
 import type { VRMPose } from './VRMPose';
+import { VRMHumanBoneList } from './VRMHumanBoneList';
 
 const _v3A = new THREE.Vector3();
 const _quatA = new THREE.Quaternion();
@@ -238,12 +239,11 @@ export class VRMHumanoid {
     const newWorldMatrixMap = new Map<THREE.Object3D, THREE.Matrix4>();
 
     // store the current world matrix of human bones
-    Object.values(this.humanBones).forEach((bone) => {
-      if (bone == null) {
+    VRMHumanBoneList.forEach((boneName) => {
+      const boneNode = this.getBoneNode(boneName);
+      if (boneNode == null) {
         return;
       }
-
-      const boneNode = bone.node;
 
       boneNode.updateWorldMatrix(true, false);
       worldMatrixMap.set(boneNode, boneNode.matrixWorld.clone());
@@ -257,13 +257,11 @@ export class VRMHumanoid {
     });
 
     // copy reference orientation
-    Object.entries(this.humanBones).forEach(([key, bone]) => {
-      if (bone == null) {
+    VRMHumanBoneList.forEach((boneName) => {
+      const boneNode = this.getBoneNode(boneName);
+      if (boneNode == null) {
         return;
       }
-
-      const boneName = key as VRMHumanBoneName;
-      const boneNode = bone.node;
 
       const referenceQuat = pose[boneName]?.rotation;
       if (referenceQuat != null) {
@@ -275,12 +273,11 @@ export class VRMHumanoid {
     });
 
     // translate bones
-    Object.values(this.humanBones).forEach((bone) => {
-      if (bone == null) {
+    VRMHumanBoneList.forEach((boneName) => {
+      const boneNode = this.getBoneNode(boneName);
+      if (boneNode == null) {
         return;
       }
-
-      const boneNode = bone.node;
 
       const originalWorldMatrix = worldMatrixMap.get(boneNode);
 
