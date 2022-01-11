@@ -220,7 +220,7 @@ export class VRMHumanoid {
    * @param root Root object that will be traversed for skeletons
    */
   public normalizeBoneOrientations(root?: THREE.Object3D): void {
-    this.transferBoneOrientations({}, root);
+    this.transferBoneOrientations({}, new THREE.Quaternion(), root);
   }
 
   /**
@@ -229,9 +229,10 @@ export class VRMHumanoid {
    * It also converts skeletons inside given scene.
    *
    * @param pose The reference rest pose retrieved from other models
+   * @param hipsWorldQuat The world space rotation of hips
    * @param root Root object that will be traversed for skeletons
    */
-  public transferBoneOrientations(pose: VRMPose, root?: THREE.Object3D): void {
+  public transferBoneOrientations(pose: VRMPose, hipsWorldQuat?: THREE.Quaternion, root?: THREE.Object3D): void {
     /** A map from bone object to original world matrix */
     const originalWorldMatrixMap = new Map<THREE.Object3D, THREE.Matrix4>();
 
@@ -245,7 +246,6 @@ export class VRMHumanoid {
         return;
       }
 
-      boneNode.updateWorldMatrix(true, false);
       originalWorldMatrixMap.set(boneNode, boneNode.matrixWorld.clone());
     });
 
@@ -260,6 +260,15 @@ export class VRMHumanoid {
     VRMHumanBoneList.forEach((boneName) => {
       const boneNode = this.getBoneNode(boneName);
       if (boneNode == null) {
+        return;
+      }
+
+      if (hipsWorldQuat != null && boneName === 'hips') {
+        boneNode.updateWorldMatrix(false, false);
+        const invBoneWorldQuat = boneNode.getWorldQuaternion(_quatA).invert();
+        boneNode.quaternion.multiply(invBoneWorldQuat);
+        boneNode.updateWorldMatrix(false, false);
+        boneNode.applyQuaternion(hipsWorldQuat);
         return;
       }
 
