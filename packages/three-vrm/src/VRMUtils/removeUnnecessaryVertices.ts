@@ -38,12 +38,20 @@ export function removeUnnecessaryVertices(root: THREE.Object3D): void {
 
     const newGeometry = new THREE.BufferGeometry();
 
+    // copy morphTargetsRelative
     newGeometry.morphTargetsRelative = geometry.morphTargetsRelative;
+
+    // copy draw range and group
     newGeometry.setDrawRange(geometry.drawRange.start, geometry.drawRange.count);
     geometry.groups.forEach((group) => {
       newGeometry.addGroup(group.start, group.count, group.materialIndex);
     });
 
+    // copy boundingBox and boundingSphere
+    newGeometry.boundingBox = geometry.boundingBox?.clone() ?? null;
+    newGeometry.boundingSphere = geometry.boundingSphere?.clone() ?? null;
+
+    // set to geometryMap
     geometryMap.set(geometry, newGeometry);
 
     /** from original index to new index */
