@@ -4,13 +4,10 @@ import type { VRMHumanBone } from './VRMHumanBone';
 import type { VRMHumanBones } from './VRMHumanBones';
 import type { VRMHumanBoneName } from './VRMHumanBoneName';
 import type { VRMPose } from './VRMPose';
-import { VRMHumanBoneList } from './VRMHumanBoneList';
 import { VRMHumanoidRig } from './VRMHumanoidRig';
 
 const _v3A = new THREE.Vector3();
 const _quatA = new THREE.Quaternion();
-const _mat4A = new THREE.Matrix4();
-const _mat4B = new THREE.Matrix4();
 
 /**
  * A class represents a humanoid of a VRM.
@@ -239,146 +236,5 @@ export class VRMHumanoid {
     this._rig = rig;
 
     return rig;
-  }
-
-  /**
-   * Normalize bone orientations.
-   * It also converts skeletons inside given scene.
-   *
-   * @param root Root object that will be traversed for skeletons
-   */
-  public normalizeBoneOrientations(root?: THREE.Object3D): void {
-    this.transferBoneOrientations({}, new THREE.Quaternion(), root);
-  }
-
-  /**
-   * Transfer a bone orientation structure to this model from another model.
-   * You can use {@link restPose} retrieved from other models.
-   * It also converts skeletons inside given scene.
-   *
-   * @param pose The reference rest pose retrieved from other models
-   * @param hipsWorldQuat The world space rotation of hips
-   * @param root Root object that will be traversed for skeletons
-   */
-  public transferBoneOrientations(pose: VRMPose, hipsWorldQuat?: THREE.Quaternion, root?: THREE.Object3D): void {
-    /** A map from bone object to original world matrix */
-    const originalWorldMatrixMap = new Map<THREE.Object3D, THREE.Matrix4>();
-
-    /** A map from bone object to new world matrix */
-    const newWorldMatrixMap = new Map<THREE.Object3D, THREE.Matrix4>();
-
-    // store the current world matrix of human bones
-    VRMHumanBoneList.forEach((boneName) => {
-      const boneNode = this.getBoneNode(boneName);
-      if (boneNode == null) {
-        return;
-      }
-
-      originalWorldMatrixMap.set(boneNode, boneNode.matrixWorld.clone());
-    });
-
-    // store current world matrices of all root objects
-    // skinned mesh might depend on non humanoid bones!
-    root?.updateWorldMatrix(true, true);
-    root?.traverse((obj) => {
-      originalWorldMatrixMap.set(obj, obj.matrixWorld.clone());
-    });
-
-    // copy reference orientation
-    VRMHumanBoneList.forEach((boneName) => {
-      const boneNode = this.getBoneNode(boneName);
-      if (boneNode == null) {
-        return;
-      }
-
-      if (hipsWorldQuat != null && boneName === 'hips') {
-        boneNode.updateWorldMatrix(false, false);
-        const invBoneWorldQuat = boneNode.getWorldQuaternion(_quatA).invert();
-        boneNode.quaternion.multiply(invBoneWorldQuat);
-        boneNode.updateWorldMatrix(false, false);
-        boneNode.applyQuaternion(hipsWorldQuat);
-        return;
-      }
-
-      const referenceQuat = pose[boneName]?.rotation;
-      if (referenceQuat != null) {
-        // copy reference orientation
-        boneNode.quaternion.fromArray(referenceQuat);
-      } else {
-        boneNode.quaternion.identity();
-      }
-    });
-
-    // translate bones
-    VRMHumanBoneList.forEach((boneName) => {
-      const boneNode = this.getBoneNode(boneName);
-      if (boneNode == null) {
-        return;
-      }
-
-      const originalWorldMatrix = originalWorldMatrixMap.get(boneNode);
-
-      if (originalWorldMatrix != null) {
-        /** The vector is going to be a new local position of boneNode */
-        const position = _v3A.set(
-          originalWorldMatrix.elements[12],
-          originalWorldMatrix.elements[13],
-          originalWorldMatrix.elements[14],
-        );
-
-        const parent = boneNode.parent;
-        if (parent) {
-          parent.worldToLocal(position);
-        }
-
-        boneNode.position.copy(position);
-      }
-
-      // set the new world matrix
-      boneNode.updateWorldMatrix(true, false);
-      newWorldMatrixMap.set(boneNode, boneNode.matrixWorld.clone());
-    });
-
-    // store new world matrices of all root objects
-    // skinned mesh might depend on non humanoid bones!
-    root?.updateWorldMatrix(true, true);
-    root?.traverse((obj) => {
-      newWorldMatrixMap.set(obj, obj.matrixWorld.clone());
-    });
-
-    // list all skeletons in the root
-    const skeletons: THREE.Skeleton[] = [];
-    root?.traverse((obj) => {
-      if (obj.type !== 'SkinnedMesh') {
-        return;
-      }
-
-      const mesh = obj as THREE.SkinnedMesh;
-      const skeleton = mesh.skeleton;
-      skeletons.push(skeleton);
-    });
-
-    // apply diff of world transform to skeletons
-    skeletons.forEach((skeleton) => {
-      skeleton.bones.forEach((bone, boneIndex) => {
-        const originalWorldMatrix = originalWorldMatrixMap.get(bone);
-        const newWorldMatrix = newWorldMatrixMap.get(bone);
-
-        if (originalWorldMatrix != null && newWorldMatrix != null) {
-          const boneInverse = skeleton.boneInverses[boneIndex];
-
-          // current: worldMatrix * boneInverse = dest
-          // need: newWorldMatrix * newBoneInverse = dest
-          // do: invNewWorldMatrix * newWorldMatrix * newBoneInverse = invNewWorldMatrix * dest
-
-          const dest = _mat4A.multiplyMatrices(originalWorldMatrix, boneInverse);
-          const invNewWorldMatrix = _mat4B.copy(newWorldMatrix).invert();
-          boneInverse.multiplyMatrices(invNewWorldMatrix, dest);
-        }
-      });
-    });
-
-    // update rest pose
-    this.restPose = this.getAbsolutePose();
   }
 }
