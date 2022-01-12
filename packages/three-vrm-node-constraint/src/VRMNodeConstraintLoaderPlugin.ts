@@ -45,8 +45,7 @@ export class VRMNodeConstraintLoaderPlugin implements GLTFLoaderPlugin {
     const json = this.parser.json as GLTFSchema.IGLTF;
 
     // early abort if it doesn't use constraints
-    const isConstraintsUsed =
-      json.extensionsUsed?.indexOf(VRMNodeConstraintLoaderPlugin.EXTENSION_NAME) !== -1;
+    const isConstraintsUsed = json.extensionsUsed?.indexOf(VRMNodeConstraintLoaderPlugin.EXTENSION_NAME) !== -1;
     if (!isConstraintsUsed) {
       return null;
     }
@@ -56,11 +55,12 @@ export class VRMNodeConstraintLoaderPlugin implements GLTFLoaderPlugin {
 
     // import constraints for each nodes
     threeNodes.forEach((node, nodeIndex) => {
-      const schemaNode = (json.nodes!)[nodeIndex];
+      const schemaNode = json.nodes![nodeIndex];
 
       // check if the extension uses the extension
-      const extension =
-        schemaNode?.extensions?.[VRMNodeConstraintLoaderPlugin.EXTENSION_NAME] as ConstraintSchema.VRMCNodeConstraint | undefined;
+      const extension = schemaNode?.extensions?.[VRMNodeConstraintLoaderPlugin.EXTENSION_NAME] as
+        | ConstraintSchema.VRMCNodeConstraint
+        | undefined;
 
       if (extension == null) {
         return;

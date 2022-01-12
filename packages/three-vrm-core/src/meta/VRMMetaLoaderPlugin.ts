@@ -175,7 +175,9 @@ export class VRMMetaLoaderPlugin implements GLTFLoaderPlugin {
     const source = json.images?.[index];
 
     if (source == null) {
-      console.warn(`VRMMetaLoaderPlugin: Attempt to use images[${index}] of glTF as a thumbnail but the image doesn't exist`);
+      console.warn(
+        `VRMMetaLoaderPlugin: Attempt to use images[${index}] of glTF as a thumbnail but the image doesn't exist`,
+      );
       return null;
     }
 
@@ -192,7 +194,9 @@ export class VRMMetaLoaderPlugin implements GLTFLoaderPlugin {
     }
 
     if (sourceURI == null) {
-      console.warn(`VRMMetaLoaderPlugin: Attempt to use images[${index}] of glTF as a thumbnail but the image couldn't load properly`);
+      console.warn(
+        `VRMMetaLoaderPlugin: Attempt to use images[${index}] of glTF as a thumbnail but the image couldn't load properly`,
+      );
       return null;
     }
 

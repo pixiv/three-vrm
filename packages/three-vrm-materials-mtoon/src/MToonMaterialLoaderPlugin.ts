@@ -90,7 +90,9 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     const meshDef = json.meshes?.[meshIndex];
 
     if (meshDef == null) {
-      throw new Error(`MToonMaterialLoaderPlugin: Attempt to use meshes[${meshIndex}] of glTF but the mesh doesn't exist`);
+      throw new Error(
+        `MToonMaterialLoaderPlugin: Attempt to use meshes[${meshIndex}] of glTF but the mesh doesn't exist`,
+      );
     }
 
     const primitivesDef = meshDef.primitives;
@@ -146,12 +148,15 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     const materialDef = json.materials?.[materialIndex];
 
     if (materialDef == null) {
-      console.warn(`MToonMaterialLoaderPlugin: Attempt to use materials[${materialIndex}] of glTF but the material doesn't exist`);
+      console.warn(
+        `MToonMaterialLoaderPlugin: Attempt to use materials[${materialIndex}] of glTF but the material doesn't exist`,
+      );
       return undefined;
     }
 
-    const extension =
-      materialDef.extensions?.[MToonMaterialLoaderPlugin.EXTENSION_NAME] as V1MToonSchema.VRMCMaterialsMToon | undefined;
+    const extension = materialDef.extensions?.[MToonMaterialLoaderPlugin.EXTENSION_NAME] as
+      | V1MToonSchema.VRMCMaterialsMToon
+      | undefined;
     if (extension == null) {
       return undefined;
     }

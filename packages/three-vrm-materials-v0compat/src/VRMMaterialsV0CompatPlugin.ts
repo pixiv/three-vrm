@@ -40,29 +40,30 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
       const materialDef = json.materials?.[materialIndex];
 
       if (materialDef == null) {
-        console.warn(`VRMMaterialsV0CompatPlugin: Attempt to use materials[${materialIndex}] of glTF but the material doesn't exist`);
+        console.warn(
+          `VRMMaterialsV0CompatPlugin: Attempt to use materials[${materialIndex}] of glTF but the material doesn't exist`,
+        );
         return;
       }
 
       if (materialProperties.shader === 'VRM/MToon') {
         const material = this._parseV0MToonProperties(materialProperties, materialDef);
-        (json.materials!)[materialIndex] = material;
-
+        json.materials![materialIndex] = material;
       } else if (materialProperties.shader?.startsWith('VRM/Unlit')) {
         const material = this._parseV0UnlitProperties(materialProperties, materialDef);
-        (json.materials!)[materialIndex] = material;
-
+        json.materials![materialIndex] = material;
       } else if (materialProperties.shader === 'VRM_USE_GLTFSHADER') {
         // `json.materials[materialIndex]` should be already valid
-
       } else {
         console.warn(`VRMMaterialsV0CompatPlugin: Unknown shader: ${materialProperties.shader}`);
-
       }
     });
   }
 
-  private _parseV0MToonProperties(materialProperties: V0Material, schemaMaterial: GLTFSchema.IMaterial): GLTFSchema.IMaterial {
+  private _parseV0MToonProperties(
+    materialProperties: V0Material,
+    schemaMaterial: GLTFSchema.IMaterial,
+  ): GLTFSchema.IMaterial {
     const isTransparent = materialProperties.keywordMap?.['_ALPHABLEND_ON'] ?? false;
     const enabledZWrite = materialProperties.floatProperties?.['_ZWrite'] === 1;
     const transparentWithZWrite = enabledZWrite && isTransparent;
@@ -253,7 +254,10 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
     };
   }
 
-  private _parseV0UnlitProperties(materialProperties: V0Material, schemaMaterial: GLTFSchema.IMaterial): GLTFSchema.IMaterial {
+  private _parseV0UnlitProperties(
+    materialProperties: V0Material,
+    schemaMaterial: GLTFSchema.IMaterial,
+  ): GLTFSchema.IMaterial {
     const isTransparentZWrite = materialProperties.shader === 'VRM/UnlitTransparentZWrite';
     const isTransparent = materialProperties.shader === 'VRM/UnlitTransparent' || isTransparentZWrite;
 

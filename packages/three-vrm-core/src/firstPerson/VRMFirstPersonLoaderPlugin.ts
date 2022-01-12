@@ -121,7 +121,7 @@ export class VRMFirstPersonLoaderPlugin implements GLTFLoaderPlugin {
     const nodePrimitivesMap = await gltfExtractPrimitivesFromNodes(gltf);
 
     Array.from(nodePrimitivesMap.entries()).forEach(([nodeIndex, primitives]) => {
-      const schemaNode = (json.nodes!)[nodeIndex];
+      const schemaNode = json.nodes![nodeIndex];
 
       const flag = schemaFirstPerson.meshAnnotations
         ? schemaFirstPerson.meshAnnotations.find((a) => a.mesh === schemaNode.mesh)

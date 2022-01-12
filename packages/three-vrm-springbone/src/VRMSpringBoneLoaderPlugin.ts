@@ -80,8 +80,9 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
 
     const threeNodes: THREE.Object3D[] = await gltf.parser.getDependencies('node');
 
-    const extension =
-      json.extensions?.[VRMSpringBoneLoaderPlugin.EXTENSION_NAME] as V1SpringBoneSchema.VRMCSpringBone | undefined;
+    const extension = json.extensions?.[VRMSpringBoneLoaderPlugin.EXTENSION_NAME] as
+      | V1SpringBoneSchema.VRMCSpringBone
+      | undefined;
     if (!extension) {
       return null;
     }

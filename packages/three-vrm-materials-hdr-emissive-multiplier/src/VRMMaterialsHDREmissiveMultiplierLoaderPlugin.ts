@@ -52,12 +52,15 @@ export class VRMMaterialsHDREmissiveMultiplierLoaderPlugin implements GLTFLoader
     const materialDef = json.materials?.[materialIndex];
 
     if (materialDef == null) {
-      console.warn(`VRMMaterialsHDREmissiveMultiplierLoaderPlugin: Attempt to use materials[${materialIndex}] of glTF but the material doesn't exist`);
+      console.warn(
+        `VRMMaterialsHDREmissiveMultiplierLoaderPlugin: Attempt to use materials[${materialIndex}] of glTF but the material doesn't exist`,
+      );
       return undefined;
     }
 
-    const extension =
-      materialDef.extensions?.[VRMMaterialsHDREmissiveMultiplierLoaderPlugin.EXTENSION_NAME] as HDREmissiveMultiplierSchema.VRMCMaterialsHDREmissiveMultiplier | undefined;
+    const extension = materialDef.extensions?.[VRMMaterialsHDREmissiveMultiplierLoaderPlugin.EXTENSION_NAME] as
+      | HDREmissiveMultiplierSchema.VRMCMaterialsHDREmissiveMultiplier
+      | undefined;
     if (extension == null) {
       return undefined;
     }
