@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as HDREmissiveMultiplierSchema from '@pixiv/types-vrmc-materials-hdr-emissive-multiplier-1.0';
 import { gltfGetAssociatedMaterialIndex } from './utils/gltfGetAssociatedMaterialIndex';
+import { GLTF as GLTFSchema } from '@gltf-transform/core';
 
 export class VRMMaterialsHDREmissiveMultiplierLoaderPlugin implements GLTFLoaderPlugin {
   public static EXTENSION_NAME = 'VRMC_materials_hdr_emissiveMultiplier' as const;
@@ -46,12 +47,17 @@ export class VRMMaterialsHDREmissiveMultiplierLoaderPlugin implements GLTFLoader
     materialIndex: number,
   ): HDREmissiveMultiplierSchema.VRMCMaterialsHDREmissiveMultiplier | undefined {
     const parser = this.parser;
-    const json = parser.json;
+    const json = parser.json as GLTFSchema.IGLTF;
 
-    const materialDef = json.materials[materialIndex];
+    const materialDef = json.materials?.[materialIndex];
 
-    const extension: HDREmissiveMultiplierSchema.VRMCMaterialsHDREmissiveMultiplier | undefined =
-      materialDef.extensions?.[VRMMaterialsHDREmissiveMultiplierLoaderPlugin.EXTENSION_NAME];
+    if (materialDef == null) {
+      console.warn(`VRMMaterialsHDREmissiveMultiplierLoaderPlugin: Attempt to use materials[${materialIndex}] of glTF but the material doesn't exist`);
+      return undefined;
+    }
+
+    const extension =
+      materialDef.extensions?.[VRMMaterialsHDREmissiveMultiplierLoaderPlugin.EXTENSION_NAME] as HDREmissiveMultiplierSchema.VRMCMaterialsHDREmissiveMultiplier | undefined;
     if (extension == null) {
       return undefined;
     }

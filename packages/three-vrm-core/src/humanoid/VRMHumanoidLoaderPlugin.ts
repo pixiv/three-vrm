@@ -4,6 +4,7 @@ import type { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/load
 import { VRMHumanoid } from './VRMHumanoid';
 import type { VRMHumanBones } from './VRMHumanBones';
 import { VRMRequiredHumanBoneName } from './VRMRequiredHumanBoneName';
+import { GLTF as GLTFSchema } from '@gltf-transform/core';
 
 /**
  * A plugin of GLTFLoader that imports a {@link VRMHumanoid} from a VRM extension of a GLTF.
@@ -44,13 +45,15 @@ export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   private async _v1Import(gltf: GLTF): Promise<VRMHumanoid | null> {
+    const json = this.parser.json as GLTFSchema.IGLTF;
+
     // early abort if it doesn't use vrm
-    const isVRMUsed = this.parser.json.extensionsUsed?.indexOf('VRMC_vrm') !== -1;
+    const isVRMUsed = json.extensionsUsed?.indexOf('VRMC_vrm') !== -1;
     if (!isVRMUsed) {
       return null;
     }
 
-    const extension: V1VRMSchema.VRMCVRM | undefined = this.parser.json.extensions?.['VRMC_vrm'];
+    const extension = json.extensions?.['VRMC_vrm'] as V1VRMSchema.VRMCVRM | undefined;
     if (!extension) {
       return null;
     }
@@ -90,7 +93,9 @@ export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   private async _v0Import(gltf: GLTF): Promise<VRMHumanoid | null> {
-    const vrmExt: V0VRM.VRM | undefined = this.parser.json.extensions?.VRM;
+    const json = this.parser.json as GLTFSchema.IGLTF;
+
+    const vrmExt = json.extensions?.VRM as V0VRM.VRM | undefined;
     if (!vrmExt) {
       return null;
     }

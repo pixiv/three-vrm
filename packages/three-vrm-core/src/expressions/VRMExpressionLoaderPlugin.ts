@@ -10,6 +10,7 @@ import { VRMExpressionMaterialColorBind } from './VRMExpressionMaterialColorBind
 import { VRMExpressionMorphTargetBind } from './VRMExpressionMorphTargetBind';
 import { VRMExpressionPresetName } from './VRMExpressionPresetName';
 import { VRMExpressionTextureTransformBind } from './VRMExpressionTextureTransformBind';
+import { GLTF as GLTFSchema } from '@gltf-transform/core';
 
 /**
  * A plugin of GLTFLoader that imports a {@link VRMExpressionManager} from a VRM extension of a GLTF.
@@ -72,13 +73,15 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   private async _v1Import(gltf: GLTF): Promise<VRMExpressionManager | null> {
+    const json = this.parser.json as GLTFSchema.IGLTF;
+
     // early abort if it doesn't use vrm
-    const isVRMUsed = this.parser.json.extensionsUsed?.indexOf('VRMC_vrm') !== -1;
+    const isVRMUsed = json.extensionsUsed?.indexOf('VRMC_vrm') !== -1;
     if (!isVRMUsed) {
       return null;
     }
 
-    const extension: V1VRMSchema.VRMCVRM | undefined = this.parser.json.extensions?.['VRMC_vrm'];
+    const extension = json.extensions?.['VRMC_vrm'] as V1VRMSchema.VRMCVRM | undefined;
     if (!extension) {
       return null;
     }
@@ -223,8 +226,10 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   private async _v0Import(gltf: GLTF): Promise<VRMExpressionManager | null> {
+    const json = this.parser.json as GLTFSchema.IGLTF;
+
     // early abort if it doesn't use vrm
-    const vrmExt: V0VRM.VRM | undefined = this.parser.json.extensions?.VRM;
+    const vrmExt = json.extensions?.VRM as V0VRM.VRM | undefined;
     if (!vrmExt) {
       return null;
     }
@@ -278,7 +283,7 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
             }
 
             const nodesUsingMesh: number[] = [];
-            (this.parser.json.nodes as any[]).forEach((node, i) => {
+            json.nodes?.forEach((node, i) => {
               if (node.mesh === bind.mesh) {
                 nodesUsingMesh.push(i);
               }

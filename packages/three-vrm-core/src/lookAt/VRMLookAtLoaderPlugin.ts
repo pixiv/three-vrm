@@ -10,6 +10,7 @@ import { VRMLookAtBoneApplier } from './VRMLookAtBoneApplier';
 import { VRMLookAtExpressionApplier } from './VRMLookAtExpressionApplier';
 import type { VRMLookAtLoaderPluginOptions } from './VRMLookAtLoaderPluginOptions';
 import { VRMLookAtRangeMap } from './VRMLookAtRangeMap';
+import { GLTF as GLTFSchema } from '@gltf-transform/core';
 
 /**
  * A plugin of GLTFLoader that imports a {@link VRMLookAt} from a VRM extension of a GLTF.
@@ -95,13 +96,15 @@ export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
     humanoid: VRMHumanoid,
     expressions: VRMExpressionManager,
   ): Promise<VRMLookAt | null> {
+    const json = this.parser.json as GLTFSchema.IGLTF;
+
     // early abort if it doesn't use vrm
-    const isVRMUsed = this.parser.json.extensionsUsed?.indexOf('VRMC_vrm') !== -1;
+    const isVRMUsed = json.extensionsUsed?.indexOf('VRMC_vrm') !== -1;
     if (!isVRMUsed) {
       return null;
     }
 
-    const extension: V1VRMSchema.VRMCVRM | undefined = this.parser.json.extensions?.['VRMC_vrm'];
+    const extension = json.extensions?.['VRMC_vrm'] as V1VRMSchema.VRMCVRM | undefined;
     if (!extension) {
       return null;
     }
@@ -153,8 +156,10 @@ export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
     humanoid: VRMHumanoid,
     expressions: VRMExpressionManager,
   ): Promise<VRMLookAt | null> {
+    const json = this.parser.json as GLTFSchema.IGLTF;
+
     // early abort if it doesn't use vrm
-    const vrmExt: V0VRM.VRM | undefined = this.parser.json.extensions?.VRM;
+    const vrmExt = json.extensions?.VRM as V0VRM.VRM | undefined;
     if (!vrmExt) {
       return null;
     }

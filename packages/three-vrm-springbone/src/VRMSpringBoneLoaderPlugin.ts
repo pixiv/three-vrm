@@ -11,6 +11,7 @@ import { VRMSpringBoneJoint } from './VRMSpringBoneJoint';
 import type { VRMSpringBoneLoaderPluginOptions } from './VRMSpringBoneLoaderPluginOptions';
 import { VRMSpringBoneManager } from './VRMSpringBoneManager';
 import type { VRMSpringBoneJointSettings } from './VRMSpringBoneJointSettings';
+import { GLTF as GLTFSchema } from '@gltf-transform/core';
 
 export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
   public static readonly EXTENSION_NAME = 'VRMC_springBone';
@@ -67,8 +68,10 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   private async _v1Import(gltf: GLTF): Promise<VRMSpringBoneManager | null> {
+    const json = gltf.parser.json as GLTFSchema.IGLTF;
+
     // early abort if it doesn't use spring bones
-    const isSpringBoneUsed = gltf.parser.json.extensionsUsed?.indexOf(VRMSpringBoneLoaderPlugin.EXTENSION_NAME) !== -1;
+    const isSpringBoneUsed = json.extensionsUsed?.indexOf(VRMSpringBoneLoaderPlugin.EXTENSION_NAME) !== -1;
     if (!isSpringBoneUsed) {
       return null;
     }
@@ -77,8 +80,8 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
 
     const threeNodes: THREE.Object3D[] = await gltf.parser.getDependencies('node');
 
-    const extension: V1SpringBoneSchema.VRMCSpringBone | undefined =
-      gltf.parser.json.extensions?.[VRMSpringBoneLoaderPlugin.EXTENSION_NAME];
+    const extension =
+      json.extensions?.[VRMSpringBoneLoaderPlugin.EXTENSION_NAME] as V1SpringBoneSchema.VRMCSpringBone | undefined;
     if (!extension) {
       return null;
     }
@@ -180,14 +183,16 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   private async _v0Import(gltf: GLTF): Promise<VRMSpringBoneManager | null> {
+    const json = gltf.parser.json as GLTFSchema.IGLTF;
+
     // early abort if it doesn't use vrm
-    const isVRMUsed = gltf.parser.json.extensionsUsed?.indexOf('VRM') !== -1;
+    const isVRMUsed = json.extensionsUsed?.indexOf('VRM') !== -1;
     if (!isVRMUsed) {
       return null;
     }
 
     // early abort if it doesn't have bone groups
-    const extension: V0VRM.VRM | undefined = gltf.parser.json.extensions?.['VRM'];
+    const extension = json.extensions?.['VRM'] as V0VRM.VRM | undefined;
     const schemaSecondaryAnimation = extension?.secondaryAnimation;
     if (!schemaSecondaryAnimation) {
       return null;
