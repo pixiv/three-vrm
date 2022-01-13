@@ -98,7 +98,6 @@ jobs:
       with:
         name: build
         path: |
-          packages/**/examples/
           packages/**/lib/
           packages/**/types/
           packages/**/ts*/
@@ -168,6 +167,14 @@ jobs:
       with:
         name: docs
         path: public/packages
+    - name: Copy Examples
+      run: |
+        for d in packages/**; do
+          if [[ -e "$d/examples" ]]; then
+            mkdir -p public/$d
+            cp -r $d/examples public/$d
+          fi
+        done
     - name: Deploy to gh-pages
       uses: peaceiris/actions-gh-pages@v3
       with:
