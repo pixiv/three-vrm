@@ -21,7 +21,7 @@ jobs:
       with:
         path: |
           node_modules
-          packages/**/node_modules
+          packages/*/node_modules
         key: ${{ runner.os }}-yarn-${{ hashFiles( 'yarn.lock' ) }}
         restore-keys: |
           ${{ runner.os }}-yarn-
@@ -43,7 +43,7 @@ jobs:
       with:
         path: |
           node_modules
-          packages/**/node_modules
+          packages/*/node_modules
         key: ${{ runner.os }}-yarn-${{ hashFiles( 'yarn.lock' ) }}
         restore-keys: |
           ${{ runner.os }}-yarn-
@@ -65,7 +65,7 @@ jobs:
       with:
         path: |
           node_modules
-          packages/**/node_modules
+          packages/*/node_modules
         key: ${{ runner.os }}-yarn-${{ hashFiles( 'yarn.lock' ) }}
         restore-keys: |
           ${{ runner.os }}-yarn-
@@ -87,7 +87,7 @@ jobs:
       with:
         path: |
           node_modules
-          packages/**/node_modules
+          packages/*/node_modules
         key: ${{ runner.os }}-yarn-${{ hashFiles( 'yarn.lock' ) }}
         restore-keys: |
           ${{ runner.os }}-yarn-
@@ -98,9 +98,9 @@ jobs:
       with:
         name: build
         path: |
-          packages/**/lib/
-          packages/**/types/
-          packages/**/ts*/
+          packages/*/lib/
+          packages/*/types/
+          packages/*/ts*/
 
   docs:
     runs-on: ubuntu-latest
@@ -117,7 +117,7 @@ jobs:
       with:
         path: |
           node_modules
-          packages/**/node_modules
+          packages/*/node_modules
         key: ${{ runner.os }}-yarn-${{ hashFiles( 'yarn.lock' ) }}
         restore-keys: |
           ${{ runner.os }}-yarn-
@@ -133,7 +133,7 @@ jobs:
       with:
         name: docs
         path: |
-          packages/**/docs/
+          packages/*/docs/
 
   gh-pages:
     runs-on: ubuntu-latest
@@ -153,7 +153,7 @@ jobs:
       with:
         path: |
           node_modules
-          packages/**/node_modules
+          packages/*/node_modules
         key: ${{ runner.os }}-yarn-${{ hashFiles( 'yarn.lock' ) }}
         restore-keys: |
           ${{ runner.os }}-yarn-
@@ -169,7 +169,7 @@ jobs:
         path: public/packages
     - name: Copy Examples
       run: |
-        for d in packages/**; do
+        for d in packages/*; do
           if [[ -e "$d/examples" ]]; then
             mkdir -p public/$d
             cp -r $d/examples public/$d
