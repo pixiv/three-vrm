@@ -1,0 +1,66 @@
+{
+  "name": "@pixiv/three-vrm",
+  "version": "1.0.0-beta.7",
+  "description": "VRM file loader for three.js.",
+  "license": "MIT",
+  "author": "pixiv",
+  "files": [
+    "/lib/",
+    "/ts*/",
+    "/types/",
+    "LICENSE"
+  ],
+  "main": "lib/three-vrm.min.js",
+  "module": "lib/three-vrm.module.min.js",
+  "types": "types/index.d.ts",
+  "typesVersions": {
+    "<3.9": {
+      "*": [
+        "ts3.4/*"
+      ]
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pixiv/three-vrm.git"
+  },
+  "scripts": {
+    "version": "yarn all",
+    "all": "yarn test && yarn lint && yarn clean && yarn build && yarn docs",
+    "dev": "cross-env NODE_ENV=development rollup -w -c",
+    "clean": "rimraf docs lib ts*/ types",
+    "build": "yarn build-dev && yarn build-prod && yarn build-types",
+    "build-dev": "cross-env NODE_ENV=development rollup -c",
+    "build-prod": "cross-env NODE_ENV=production rollup -c",
+    "build-types": "tsc --declaration --declarationDir ./types --emitDeclarationOnly && downlevel-dts types ts3.4/types",
+    "docs": "typedoc --entryPoints ./src/index.ts --out docs",
+    "test": "echo There is no test for three-vrm",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier \"src/**/*.{ts,tsx}\" --check",
+    "lint-fix": "eslint \"src/**/*.{ts,tsx}\" --fix && prettier \"src/**/*.{ts,tsx}\" --write"
+  },
+  "lint-staged": {
+    "./src/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "dependencies": {
+    "@pixiv/three-vrm-core": "1.0.0-beta.7",
+    "@pixiv/three-vrm-materials-hdr-emissive-multiplier": "1.0.0-beta.7",
+    "@pixiv/three-vrm-materials-mtoon": "1.0.0-beta.7",
+    "@pixiv/three-vrm-materials-v0compat": "1.0.0-beta.7",
+    "@pixiv/three-vrm-node-constraint": "1.0.0-beta.7",
+    "@pixiv/three-vrm-springbone": "1.0.0-beta.7"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^13.0.0",
+    "@types/three": "^0.133.1",
+    "lint-staged": "10.5.4",
+    "quicktype": "^15.0.258",
+    "three": "^0.133.1"
+  },
+  "peerDependencies": {
+    "@types/three": "^0.133.1",
+    "three": "^0.133.1"
+  }
+}

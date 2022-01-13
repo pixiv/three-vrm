@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>three-vrm example</title>
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+		/>
+		<style>
+			html,
+			body {
+				overflow: hidden;
+				width: 100vw;
+				height: 100vh;
+				margin: 0;
+				padding: 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<script src="https://unpkg.com/three@0.133.1/build/three.js"></script>
+		<script src="https://unpkg.com/three@0.133.1/examples/js/loaders/GLTFLoader.js"></script>
+		<script src="https://unpkg.com/three@0.133.1/examples/js/controls/OrbitControls.js"></script>
+		<script src="../lib/three-vrm.js"></script>
+		<script>
+			const _v3A = new THREE.Vector3();
+
+			// extended lookat
+			class VRMSmoothLookAt extends THREE_VRM.VRMLookAt {
+
+				constructor( humanoid, applier ) {
+
+					super( humanoid, applier );
+
+					this.smoothFactor = 10.0;
+
+					this.horizontalLimit = Math.PI / 4.0;
+					this.verticalLimit = Math.PI / 4.0;
+
+					this._eulerTo = new THREE.Euler( 0.0, 0.0, 0.0, THREE_VRM.VRMLookAt.EULER_ORDER );
+
+				}
+
+				update( delta ) {
+
+					if ( this.target && this.autoUpdate ) {
+
+						this._calcEuler( this._eulerTo, this.target.getWorldPosition( _v3A ) );
+
+						if (
+
+							this.horizontalLimit < Math.abs( this._eulerTo.y ) ||
+							this.verticalLimit < Math.abs( this._eulerTo.x )
+
+						) {
+
+							this._eulerTo.set( 0.0, 0.0, 0.0 );
+
+						}
+
+
+						const k = 1.0 - Math.exp( - this.smoothFactor * delta );
+
+						this._euler.x += ( this._eulerTo.x - this._euler.x ) * k;
+						this._euler.y += ( this._eulerTo.y - this._euler.y ) * k;
+
+						this.applier.lookAt( this._euler );
+
+					}
+
+				}
+
+			}
+
+			// renderer
+			const renderer = new THREE.WebGLRenderer();
+			renderer.outputEncoding = THREE.sRGBEncoding;
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			renderer.setPixelRatio( window.devicePixelRatio );
+			document.body.appendChild( renderer.domElement );
+
+			// camera
+			const camera = new THREE.PerspectiveCamera( 30.0, window.innerWidth / window.innerHeight, 0.1, 20.0 );
+			camera.position.set( 0.0, 1.0, 5.0 );
+
+			// camera controls
+			const controls = new THREE.OrbitControls( camera, renderer.domElement );
+			controls.screenSpacePanning = true;
+			controls.target.set( 0.0, 1.0, 0.0 );
+			controls.update();
+
+			// scene
+			const scene = new THREE.Scene();
+
+			// light
+			const light = new THREE.DirectionalLight( 0xffffff );
+			light.position.set( 1.0, 1.0, 1.0 ).normalize();
+			scene.add( light );
+
+			// gltf and vrm
+			let currentVrm = undefined;
+			const loader = new THREE.GLTFLoader();
+			loader.crossOrigin = 'anonymous';
+
+			loader.register( ( parser ) => {
+
+				return new THREE_VRM.VRMLoaderPlugin( parser );
+
+			} );
+
+			loader.load(
+
+				'./models/three-vrm-girl.vrm',
+
+				( gltf ) => {
+
+					const vrm = gltf.userData.vrm;
+
+					THREE_VRM.VRMUtils.removeUnnecessaryVertices( gltf.scene );
+					THREE_VRM.VRMUtils.removeUnnecessaryJoints( gltf.scene );
+
+					// replace the lookAt to our extended one
+					const smoothLookAt = new VRMSmoothLookAt( vrm.humanoid, vrm.lookAt.applier );
+					smoothLookAt.copy( vrm.lookAt );
+					vrm.lookAt = smoothLookAt;
+
+					scene.add( vrm.scene );
+					currentVrm = vrm;
+
+					vrm.lookAt.target = camera;
+
+					console.log( vrm );
+
+				},
+
+				( progress ) => console.log( 'Loading model...', 100.0 * ( progress.loaded / progress.total ), '%' ),
+
+				( error ) => console.error( error )
+
+			);
+
+			// helpers
+			const gridHelper = new THREE.GridHelper( 10, 10 );
+			scene.add( gridHelper );
+
+			const axesHelper = new THREE.AxesHelper( 5 );
+			scene.add( axesHelper );
+
+			// animate
+			const clock = new THREE.Clock();
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				const deltaTime = clock.getDelta();
+
+				if ( currentVrm ) {
+
+					// update vrm
+					currentVrm.update( deltaTime );
+
+				}
+
+				renderer.render( scene, camera );
+
+			}
+
+			animate();
+		</script>
+	</body>
+</html>

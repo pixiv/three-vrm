@@ -1,0 +1,265 @@
+{
+  "asset": {
+    "generator": "Handwritten",
+    "version": "2.0"
+  },
+  "buffers": [
+    {
+      "uri": "cube_mesh.bin",
+      "byteLength": 912
+    }
+  ],
+  "bufferViews": [
+    {
+      "name": "Cube Position",
+      "buffer": 0,
+      "byteOffset": 0,
+      "byteLength": 288,
+      "target": 34962
+    },
+    {
+      "name": "Cube Normal",
+      "buffer": 0,
+      "byteOffset": 288,
+      "byteLength": 288,
+      "target": 34962
+    },
+    {
+      "name": "Cube UV",
+      "buffer": 0,
+      "byteOffset": 576,
+      "byteLength": 192,
+      "target": 34962
+    },
+    {
+      "name": "Cube Indices",
+      "buffer": 0,
+      "byteOffset": 768,
+      "byteLength": 144,
+      "target": 34963
+    }
+  ],
+  "accessors": [
+    {
+      "name": "Cube Position",
+      "bufferView": 0,
+      "byteOffset": 0,
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 24,
+      "max": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "min": [
+        -0.5,
+        -0.5,
+        -0.5
+      ],
+      "normalized": false
+    },
+    {
+      "name": "Cube Normal",
+      "bufferView": 1,
+      "byteOffset": 0,
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 24,
+      "normalized": false
+    },
+    {
+      "name": "Cube UV",
+      "bufferView": 2,
+      "byteOffset": 0,
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 24,
+      "normalized": false
+    },
+    {
+      "name": "Cube Indices",
+      "bufferView": 3,
+      "byteOffset": 0,
+      "type": "SCALAR",
+      "componentType": 5125,
+      "count": 36,
+      "normalized": false
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "sampler": 1,
+      "source": 1
+    },
+    {
+      "sampler": 2,
+      "source": 2
+    },
+    {
+      "sampler": 3,
+      "source": 3
+    }
+  ],
+  "images": [
+    {
+      "uri": "black.png"
+    },
+    {
+      "uri": "white.png"
+    },
+    {
+      "uri": "uv-grid.png"
+    },
+    {
+      "uri": "normal-perlin.png"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9987,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9987,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9987,
+      "wrapS": 10497,
+      "wrapT": 10497
+    }
+  ],
+  "materials": [
+    {
+      "name": "Cube Material",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [ 1, 1, 1, 1 ],
+        "baseColorTexture": {
+          "index": 2,
+          "texCoord": 0
+        },
+        "metallicFactor": 0,
+        "roughnessFactor": 0.5
+      },
+      "alphaMode": "OPAQUE",
+      "alphaCutoff": 0.5,
+      "normalTexture": {
+        "scale": 0.1,
+        "index": 3,
+        "texCoord": 0
+      },
+      "doubleSided": false,
+      "extensions": {
+        "VRMC_materials_mtoon": {
+          "specVersion": "1.0-beta",
+          "transparentWithZWrite": false,
+          "renderQueueOffsetNumber": 0,
+          "shadeColorFactor": [ 0.9, 0.5, 0.4 ],
+          "shadeMultiplyTexture": {
+            "index": 2,
+            "texCoord": 0
+          },
+          "shadingShiftFactor": 0.0,
+          "shadingToonyFactor": 0.5,
+          "giIntensityFactor": 0.0,
+          "matcapTexture": {
+            "index": 0
+          },
+          "parametricRimColorFactor": [ 0.0, 0.0, 0.0 ],
+          "rimMultiplyTexture": {
+            "index": 1,
+            "texCoord": 0
+          },
+          "rimLightingMixFactor": 0.0,
+          "parametricRimFresnelPowerFactor": 5.0,
+          "parametricRimLiftFactor": 0.0,
+          "outlineWidthMode": "worldCoordinates",
+          "outlineWidthFactor": 0.02,
+          "outlineWidthMultiplyTexture": {
+            "index": 1,
+            "texCoord": 0
+          },
+          "outlineColorFactor": [ 1.0, 0.5, 0.0 ],
+          "outlineLightingMixFactor": 0.0,
+          "uvAnimationMaskTexture": {
+            "index": 1,
+            "texCoord": 0
+          },
+          "uvAnimationScrollXSpeedFactor": 0.0,
+          "uvAnimationScrollYSpeedFactor": 0.0,
+          "uvAnimationRotationSpeedFactor": 0.0
+        }
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Cube",
+      "primitives": [
+        {
+          "mode": 4,
+          "indices": 3,
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TEXCOORD_0": 2
+          },
+          "material": 0
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "name": "Cube",
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "mesh": 0,
+      "extras": {}
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "extensionsUsed": [
+    "KHR_materials_unlit",
+    "VRMC_materials_mtoon"
+  ],
+  "extensions": {},
+  "extras": {}
+}

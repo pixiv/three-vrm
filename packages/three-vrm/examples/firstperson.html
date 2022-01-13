@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>three-vrm example</title>
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+		/>
+		<style>
+			body {
+				margin: 0;
+			}
+			canvas {
+				display: block;
+			}
+		</style>
+	</head>
+
+	<body>
+		<script src="https://unpkg.com/three@0.133.1/build/three.js"></script>
+		<script src="https://unpkg.com/three@0.133.1/examples/js/loaders/GLTFLoader.js"></script>
+		<script src="https://unpkg.com/three@0.133.1/examples/js/controls/OrbitControls.js"></script>
+		<script src="../lib/three-vrm.js"></script>
+		<script>
+			// renderer
+			const renderer = new THREE.WebGLRenderer();
+			renderer.outputEncoding = THREE.sRGBEncoding;
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			renderer.setPixelRatio( window.devicePixelRatio );
+			document.body.appendChild( renderer.domElement );
+
+			// camera
+			const camera = new THREE.PerspectiveCamera( 30.0, window.innerWidth / window.innerHeight, 0.1, 20.0 );
+			camera.position.set( 0.0, 1.0, 5.0 );
+
+			// camera controls
+			const controls = new THREE.OrbitControls( camera, renderer.domElement );
+			controls.screenSpacePanning = true;
+			controls.target.set( 0.0, 1.0, 0.0 );
+			controls.update();
+
+			// scene
+			const scene = new THREE.Scene();
+
+			// light
+			const light = new THREE.DirectionalLight( 0xffffff );
+			light.position.set( 1.0, 1.0, 1.0 ).normalize();
+			scene.add( light );
+
+			// gltf and vrm
+			let currentVrm = undefined;
+			const loader = new THREE.GLTFLoader();
+			loader.crossOrigin = 'anonymous';
+
+			loader.register( ( parser ) => {
+
+				return new THREE.VRMLoaderPlugin( parser );
+
+			} );
+
+			loader.load(
+
+				'./models/three-vrm-girl.vrm',
+
+				( gltf ) => {
+
+					const vrm = gltf.userData.vrm;
+
+					THREE_VRM.VRMUtils.removeUnnecessaryVertices( gltf.scene );
+					THREE_VRM.VRMUtils.removeUnnecessaryJoints( gltf.scene );
+
+					scene.add( vrm.scene );
+					currentVrm = vrm;
+
+					// generate firstperson mesh
+					vrm.firstPerson.setup();
+
+					// set to first person layer mode
+					toggleLayer( true );
+
+					console.log( vrm );
+
+				},
+
+				( progress ) => console.log( 'Loading model...', 100.0 * ( progress.loaded / progress.total ), '%' ),
+
+				( error ) => console.error( error )
+
+			);
+
+			// helpers
+			const gridHelper = new THREE.GridHelper( 10, 10 );
+			scene.add( gridHelper );
+
+			const axesHelper = new THREE.AxesHelper( 5 );
+			scene.add( axesHelper );
+
+			// animate
+			const clock = new THREE.Clock();
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				renderer.render( scene, camera );
+
+			}
+
+      animate();
+
+      // toggle layer
+      let isFirstPerson = false;
+
+      function toggleLayer( set ) {
+
+        if ( typeof set === 'boolean' )  {
+
+          isFirstPerson = set;
+
+        } else {
+
+          isFirstPerson = !isFirstPerson;
+
+        }
+
+        if ( currentVrm ) {
+
+          if ( isFirstPerson ) {
+
+            camera.layers.enable(currentVrm.firstPerson.firstPersonOnlyLayer);
+            camera.layers.disable(currentVrm.firstPerson.thirdPersonOnlyLayer);
+
+          } else {
+
+            camera.layers.disable(currentVrm.firstPerson.firstPersonOnlyLayer);
+            camera.layers.enable(currentVrm.firstPerson.thirdPersonOnlyLayer);
+
+          }
+
+        }
+
+      }
+
+      // mouse listener
+
+      window.addEventListener( 'keydown', () => {
+
+        toggleLayer();
+
+      } );
+		</script>
+	</body>
+</html>

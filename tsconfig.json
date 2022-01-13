@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "es6",
+    "lib": ["es2018", "dom"],
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "strict": true,
+    "baseUrl": ".",
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@pixiv/three-vrm": ["packages/three-vrm"],
+      "@pixiv/three-vrm-constraints": ["packages/three-vrm-constraints"],
+      "@pixiv/types-vrm-constraints-1.0": ["packages/types-vrm-constraints-1.0"],
+    }
+  }
+}
