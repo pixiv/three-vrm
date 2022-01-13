@@ -98,6 +98,7 @@ jobs:
       with:
         name: build
         path: |
+          packages/**/examples/
           packages/**/lib/
           packages/**/types/
           packages/**/ts*/
@@ -134,3 +135,42 @@ jobs:
         name: docs
         path: |
           packages/**/docs/
+
+  gh-pages:
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/1.0-ci' }}
+    needs:
+    - build
+    - docs
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Setup Node
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+    - name: Cache Deps
+      uses: actions/cache@v2
+      with:
+        path: |
+          node_modules
+          packages/**/node_modules
+        key: ${{ runner.os }}-yarn-${{ hashFiles( 'yarn.lock' ) }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+    - name: Download Builds
+      uses: actions/download-artifact@v2
+      with:
+        name: build
+        path: public/packages
+    - name: Download Docs
+      uses: actions/download-artifact@v2
+      with:
+        name: docs
+        path: public/packages
+    - name: Deploy to gh-pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: public
+        publish_branch: not-gh-pages
