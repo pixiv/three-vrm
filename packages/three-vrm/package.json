@@ -26,7 +26,6 @@
   },
   "scripts": {
     "version": "yarn all",
-    "postpublish": "yarn gh-pages",
     "all": "yarn && yarn test && yarn lint && yarn clean && yarn build && yarn docs",
     "dev": "cross-env NODE_ENV=development SERVE=1 rollup -w -c -o lib/three-vrm.js",
     "clean": "rimraf docs lib ts*/ types",
@@ -37,7 +36,6 @@
     "build-moduleprod": "cross-env NODE_ENV=production ESM=1 rollup -c -o lib/three-vrm.module.min.js",
     "build-types": "tsc --declaration --declarationDir ./types --emitDeclarationOnly && downlevel-dts types ts3.4/types",
     "docs": "typedoc --entryPoints ./src/index.ts --out docs",
-    "gh-pages": "node ./bin/gh-pages.js",
     "test": "echo There is no test for three-vrm",
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier \"src/**/*.{ts,tsx}\" --check",
     "lint-fix": "eslint \"src/**/*.{ts,tsx}\" --fix && prettier \"src/**/*.{ts,tsx}\" --write",
@@ -51,7 +49,6 @@
   },
   "devDependencies": {
     "@types/three": "^0.132.1",
-    "gh-pages": "^3.1.0",
     "lint-staged": "10.5.4",
     "quicktype": "^15.0.258",
     "three": "^0.133.0"
