@@ -89,6 +89,7 @@
 				// called when the resource is loaded
 				( gltf ) => {
 
+					THREE.VRMUtils.removeUnnecessaryVertices( gltf.scene );
 					THREE.VRMUtils.removeUnnecessaryJoints( gltf.scene );
 
 					// generate VRM instance from gltf
