@@ -337,13 +337,13 @@ export class VRMMaterialImporter {
       }
     }
 
-    // COMPAT
+    // COMPAT: pre-r129
     // See: https://github.com/mrdoob/three.js/pull/21788
     if (parseInt(THREE.REVISION, 10) < 129) {
       params.skinning = (originalMaterial as any).skinning || false;
     }
 
-    // COMPAT
+    // COMPAT: pre-r131
     // See: https://github.com/mrdoob/three.js/pull/22169
     if (parseInt(THREE.REVISION, 10) < 131) {
       params.morphTargets = (originalMaterial as any).morphTargets || false;

@@ -1,5 +1,6 @@
 import { extractThumbnailBlob } from './extractThumbnailBlob';
 import { removeUnnecessaryJoints } from './removeUnnecessaryJoints';
+import { removeUnnecessaryVertices } from './removeUnnecessaryVertices';
 
 export class VRMUtils {
   private constructor() {
@@ -8,4 +9,5 @@ export class VRMUtils {
 
   public static extractThumbnailBlob = extractThumbnailBlob;
   public static removeUnnecessaryJoints = removeUnnecessaryJoints;
+  public static removeUnnecessaryVertices = removeUnnecessaryVertices;
 }
