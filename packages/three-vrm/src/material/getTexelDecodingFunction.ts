@@ -11,8 +11,8 @@ export const getEncodingComponents = (encoding: THREE.TextureEncoding): [string,
       case THREE.sRGBEncoding:
         return ['sRGB', '( value )'];
       default:
-        console.warn( 'THREE.WebGLProgram: Unsupported encoding:', encoding );
-        return [ 'Linear', '( value )' ];
+        console.warn('THREE.WebGLProgram: Unsupported encoding:', encoding);
+        return ['Linear', '( value )'];
     }
   } else {
     // COMPAT: pre-r136
