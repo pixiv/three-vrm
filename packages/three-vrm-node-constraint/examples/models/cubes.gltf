@@ -322,8 +322,6 @@
           "constraint": {
             "rotation": {
               "source": 0,
-              "sourceSpace": "local",
-              "destinationSpace": "local",
               "freezeAxes": [true, false, false],
               "weight": 1.0
             }
@@ -357,8 +355,6 @@
           "constraint": {
             "rotation": {
               "source": 0,
-              "sourceSpace": "local",
-              "destinationSpace": "local",
               "freezeAxes": [true, true, true],
               "weight": 0.5
             }
