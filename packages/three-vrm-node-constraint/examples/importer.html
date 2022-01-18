@@ -114,8 +114,8 @@
 
 					const cubeA = currentGltf.scene.children.find( ( node ) => node.name === 'CubeA' );
 
-					cubeA.position.y = Math.sin( clock.elapsedTime );
 					cubeA.rotation.x = Math.cos( clock.elapsedTime );
+					cubeA.rotation.y = Math.sin( clock.elapsedTime );
 
 					const constraintManager = currentGltf.userData.vrmNodeConstraintManager;
 					constraintManager.update();
