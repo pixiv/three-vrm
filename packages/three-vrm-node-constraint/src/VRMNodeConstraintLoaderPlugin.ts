@@ -2,10 +2,8 @@ import type * as ConstraintSchema from '@pixiv/types-vrmc-node-constraint-1.0';
 import type * as THREE from 'three';
 import type { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRMNodeConstraintHelper } from './helpers';
-import { VRMAimConstraint } from './VRMAimConstraint';
 import type { VRMNodeConstraintLoaderPluginOptions } from './VRMNodeConstraintLoaderPluginOptions';
 import { VRMNodeConstraintManager } from './VRMNodeConstraintManager';
-import { VRMPositionConstraint } from './VRMPositionConstraint';
 import { VRMRotationConstraint } from './VRMRotationConstraint';
 import { GLTF as GLTFSchema } from '@gltf-transform/core';
 
@@ -71,21 +69,11 @@ export class VRMNodeConstraintLoaderPlugin implements GLTFLoaderPlugin {
         return;
       }
 
+      const constraintDef = extension.constraint;
+
       // import constraints
-      if (extension?.position) {
-        const constraint = this._importPositionConstraint(node, threeNodes, gltf.scene, extension.position);
-        manager.addConstraint(constraint);
-      }
-
-      if (extension?.rotation) {
-        const constraint = this._importRotationConstraint(node, threeNodes, gltf.scene, extension.rotation);
-        manager.addConstraint(constraint);
-      }
-
-      if (extension?.aim) {
-        const constraint = this._importAimConstraint(node, threeNodes, gltf.scene, extension.aim);
-        manager.addConstraint(constraint);
-      }
+      const constraint = this._importRotationConstraint(node, threeNodes, gltf.scene, constraintDef.rotation);
+      manager.addConstraint(constraint);
     });
 
     // init constraints
@@ -95,94 +83,20 @@ export class VRMNodeConstraintLoaderPlugin implements GLTFLoaderPlugin {
     return manager;
   }
 
-  protected _importPositionConstraint(
-    destination: THREE.Object3D,
-    nodes: THREE.Object3D[],
-    modelRoot: THREE.Object3D,
-    position: ConstraintSchema.PositionConstraint,
-  ): VRMPositionConstraint {
-    const { source, sourceSpace, destinationSpace, weight, freezeAxes } = position;
-    const constraint = new VRMPositionConstraint(destination, modelRoot);
-
-    constraint.setSource(nodes[source]);
-
-    if (sourceSpace) {
-      constraint.sourceSpace = sourceSpace;
-    }
-    if (destinationSpace) {
-      constraint.destinationSpace = destinationSpace;
-    }
-    if (weight) {
-      constraint.weight = weight;
-    }
-    if (freezeAxes) {
-      constraint.freezeAxes = freezeAxes;
-    }
-
-    if (this.helperRoot) {
-      const helper = new VRMNodeConstraintHelper(constraint);
-      this.helperRoot.add(helper);
-      helper.renderOrder = this.helperRoot.renderOrder;
-    }
-
-    return constraint;
-  }
-
   protected _importRotationConstraint(
     destination: THREE.Object3D,
     nodes: THREE.Object3D[],
     modelRoot: THREE.Object3D,
     rotation: ConstraintSchema.RotationConstraint,
   ): VRMRotationConstraint {
-    const { source, sourceSpace, destinationSpace, weight, freezeAxes } = rotation;
+    const { source, weight, freezeAxes } = rotation;
     const constraint = new VRMRotationConstraint(destination, modelRoot);
 
     constraint.setSource(nodes[source]);
 
-    if (sourceSpace) {
-      constraint.sourceSpace = sourceSpace;
-    }
-    if (destinationSpace) {
-      constraint.destinationSpace = destinationSpace;
-    }
-    if (weight) {
-      constraint.weight = weight;
-    }
-    if (freezeAxes) {
-      constraint.freezeAxes = freezeAxes;
-    }
+    constraint.sourceSpace = 'local';
+    constraint.destinationSpace = 'local';
 
-    if (this.helperRoot) {
-      const helper = new VRMNodeConstraintHelper(constraint);
-      this.helperRoot.add(helper);
-    }
-
-    return constraint;
-  }
-
-  protected _importAimConstraint(
-    destination: THREE.Object3D,
-    nodes: THREE.Object3D[],
-    modelRoot: THREE.Object3D,
-    aim: ConstraintSchema.AimConstraint,
-  ): VRMAimConstraint {
-    const { source, aimVector, upVector, sourceSpace, destinationSpace, weight, freezeAxes } = aim;
-    const constraint = new VRMAimConstraint(destination, modelRoot);
-
-    constraint.setSource(nodes[source]);
-
-    if (aimVector) {
-      constraint.aimVector.fromArray(aimVector).normalize();
-    }
-    if (upVector) {
-      constraint.upVector.fromArray(upVector).normalize();
-    }
-    if (sourceSpace) {
-      constraint.sourceSpace = sourceSpace;
-    }
-    if (destinationSpace) {
-      constraint.destinationSpace = destinationSpace;
-    }
     if (weight) {
       constraint.weight = weight;
     }
