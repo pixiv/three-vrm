@@ -121,7 +121,7 @@ These type definitions are authored manually by referencing the [vrm spec schema
 
   ```sh
   yarn lerna version <newversion> --exact --no-push # will also automatically runs build scripts
-  yarn lerna publish from-git --dist-tag latest # will also automatically pushes some files into `gh-pages` branch
+  yarn lerna publish from-git --dist-tag latest
 
   git switch release
   git merge dev

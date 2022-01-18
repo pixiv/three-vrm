@@ -6,9 +6,9 @@ Use [VRM](https://vrm.dev/) on [three.js](https://threejs.org/)
 
 [GitHub Repository](https://github.com/pixiv/three-vrm/)
 
-[Examples](https://pixiv.github.io/three-vrm/examples)
+[Examples](https://pixiv.github.io/three-vrm/packages/three-vrm/examples)
 
-[Documentation](https://pixiv.github.io/three-vrm/docs)
+[Documentation](https://pixiv.github.io/three-vrm/packages/three-vrm/docs)
 
 ## Usage
 
