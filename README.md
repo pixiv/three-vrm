@@ -10,7 +10,7 @@ Use [VRM](https://vrm.dev/) on [three.js](https://threejs.org/)
 
 [Documentation](https://pixiv.github.io/three-vrm/packages/three-vrm/docs)
 
-## Usage
+## How to Use
 
 ### from HTML
 
