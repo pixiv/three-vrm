@@ -3,6 +3,7 @@ import { VRM as V0VRM, Material as V0Material } from '@pixiv/types-vrm-0.0';
 import * as V1MToonSchema from '@pixiv/types-vrmc-materials-mtoon-1.0';
 import type { GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
 import { gammaEOTF } from './utils/gammaEOTF';
+import { GLTF as GLTFSchema } from '@gltf-transform/core';
 
 export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
   public readonly parser: GLTFParser;
@@ -16,7 +17,7 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
 
     // WORKAROUND: Add KHR_texture_transform to extensionsUsed
     // It is too late to add this in beforeRoot
-    const json = this.parser.json;
+    const json = this.parser.json as GLTFSchema.IGLTF;
 
     json.extensionsUsed = json.extensionsUsed ?? [];
     if (json.extensionsUsed.indexOf('KHR_texture_transform') === -1) {
@@ -25,9 +26,10 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
   }
 
   public async beforeRoot(): Promise<void> {
+    const json = this.parser.json as GLTFSchema.IGLTF;
+
     // early abort if it doesn't use V0VRM
-    const json = this.parser.json;
-    const v0VRMExtension: V0VRM | undefined = json.extensions?.['VRM'];
+    const v0VRMExtension = json.extensions?.['VRM'] as V0VRM | undefined;
     const v0MaterialProperties = v0VRMExtension?.materialProperties;
     if (!v0MaterialProperties) {
       return;
@@ -35,12 +37,21 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
 
     // convert V0 material properties into V1 compatible format
     v0MaterialProperties.forEach((materialProperties, materialIndex) => {
+      const materialDef = json.materials?.[materialIndex];
+
+      if (materialDef == null) {
+        console.warn(
+          `VRMMaterialsV0CompatPlugin: Attempt to use materials[${materialIndex}] of glTF but the material doesn't exist`,
+        );
+        return;
+      }
+
       if (materialProperties.shader === 'VRM/MToon') {
-        const material = this._parseV0MToonProperties(materialProperties, json.materials[materialIndex]);
-        json.materials[materialIndex] = material;
+        const material = this._parseV0MToonProperties(materialProperties, materialDef);
+        json.materials![materialIndex] = material;
       } else if (materialProperties.shader?.startsWith('VRM/Unlit')) {
-        const material = this._parseV0UnlitProperties(materialProperties, json.materials[materialIndex]);
-        json.materials[materialIndex] = material;
+        const material = this._parseV0UnlitProperties(materialProperties, materialDef);
+        json.materials![materialIndex] = material;
       } else if (materialProperties.shader === 'VRM_USE_GLTFSHADER') {
         // `json.materials[materialIndex]` should be already valid
       } else {
@@ -49,7 +60,10 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
     });
   }
 
-  private _parseV0MToonProperties(materialProperties: V0Material, schemaMaterial: any): any {
+  private _parseV0MToonProperties(
+    materialProperties: V0Material,
+    schemaMaterial: GLTFSchema.IMaterial,
+  ): GLTFSchema.IMaterial {
     const isTransparent = materialProperties.keywordMap?.['_ALPHABLEND_ON'] ?? false;
     const enabledZWrite = materialProperties.floatProperties?.['_ZWrite'] === 1;
     const transparentWithZWrite = enabledZWrite && isTransparent;
@@ -240,7 +254,10 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
     };
   }
 
-  private _parseV0UnlitProperties(materialProperties: V0Material, schemaMaterial: any): any {
+  private _parseV0UnlitProperties(
+    materialProperties: V0Material,
+    schemaMaterial: GLTFSchema.IMaterial,
+  ): GLTFSchema.IMaterial {
     const isTransparentZWrite = materialProperties.shader === 'VRM/UnlitTransparentZWrite';
     const isTransparent = materialProperties.shader === 'VRM/UnlitTransparent' || isTransparentZWrite;
 

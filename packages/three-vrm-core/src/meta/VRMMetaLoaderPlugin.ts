@@ -7,6 +7,7 @@ import type * as V0VRM from '@pixiv/types-vrm-0.0';
 import type * as V1VRMSchema from '@pixiv/types-vrmc-vrm-1.0';
 import * as THREE from 'three';
 import { resolveURL } from '../utils/resolveURL';
+import { GLTF as GLTFSchema } from '@gltf-transform/core';
 
 /**
  * A plugin of GLTFLoader that imports a {@link VRM1Meta} from a VRM extension of a GLTF.
@@ -66,13 +67,15 @@ export class VRMMetaLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   private async _v1Import(gltf: GLTF): Promise<VRM1Meta | null> {
+    const json = this.parser.json as GLTFSchema.IGLTF;
+
     // early abort if it doesn't use vrm
-    const isVRMUsed = this.parser.json.extensionsUsed?.indexOf('VRMC_vrm') !== -1;
+    const isVRMUsed = json.extensionsUsed?.indexOf('VRMC_vrm') !== -1;
     if (!isVRMUsed) {
       return null;
     }
 
-    const extension: V1VRMSchema.VRMCVRM | undefined = this.parser.json.extensions?.['VRMC_vrm'];
+    const extension = json.extensions?.['VRMC_vrm'] as V1VRMSchema.VRMCVRM | undefined;
     if (extension == null) {
       return null;
     }
@@ -124,8 +127,10 @@ export class VRMMetaLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   private async _v0Import(gltf: GLTF): Promise<VRM0Meta | null> {
+    const json = this.parser.json as GLTFSchema.IGLTF;
+
     // early abort if it doesn't use vrm
-    const vrmExt: V0VRM.VRM | undefined = this.parser.json.extensions?.VRM;
+    const vrmExt = json.extensions?.VRM as V0VRM.VRM | undefined;
     if (!vrmExt) {
       return null;
     }
@@ -165,9 +170,14 @@ export class VRMMetaLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   private async _extractGLTFImage(index: number): Promise<HTMLImageElement | null> {
-    const source = this.parser.json.images?.[index];
+    const json = this.parser.json as GLTFSchema.IGLTF;
+
+    const source = json.images?.[index];
+
     if (source == null) {
-      console.warn(`Attempt to use images[${index}] of glTF as a thumbnail but the image doesn't exist`);
+      console.warn(
+        `VRMMetaLoaderPlugin: Attempt to use images[${index}] of glTF as a thumbnail but the image doesn't exist`,
+      );
       return null;
     }
 
@@ -184,14 +194,16 @@ export class VRMMetaLoaderPlugin implements GLTFLoaderPlugin {
     }
 
     if (sourceURI == null) {
-      console.warn(`Attempt to use images[${index}] of glTF as a thumbnail but the image couldn't load properly`);
+      console.warn(
+        `VRMMetaLoaderPlugin: Attempt to use images[${index}] of glTF as a thumbnail but the image couldn't load properly`,
+      );
       return null;
     }
 
     const loader = new THREE.ImageLoader();
     return await loader.loadAsync(resolveURL(sourceURI, (this.parser as any).options.path)).catch((error) => {
       console.error(error);
-      console.warn('Failed to load a thumbnail image');
+      console.warn('VRMMetaLoaderPlugin: Failed to load a thumbnail image');
       return null;
     });
   }

@@ -6,6 +6,7 @@ import { gltfExtractPrimitivesFromNodes } from '../utils/gltfExtractPrimitivesFr
 import { VRMFirstPerson } from './VRMFirstPerson';
 import type { VRMFirstPersonMeshAnnotation } from './VRMFirstPersonMeshAnnotation';
 import type { VRMFirstPersonMeshAnnotationType } from './VRMFirstPersonMeshAnnotationType';
+import { GLTF as GLTFSchema } from '@gltf-transform/core';
 
 /**
  * A plugin of GLTFLoader that imports a {@link VRMFirstPerson} from a VRM extension of a GLTF.
@@ -64,13 +65,15 @@ export class VRMFirstPersonLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   private async _v1Import(gltf: GLTF, humanoid: VRMHumanoid): Promise<VRMFirstPerson | null> {
+    const json = this.parser.json as GLTFSchema.IGLTF;
+
     // early abort if it doesn't use vrm
-    const isVRMUsed = this.parser.json.extensionsUsed?.indexOf('VRMC_vrm') !== -1;
+    const isVRMUsed = json.extensionsUsed?.indexOf('VRMC_vrm') !== -1;
     if (!isVRMUsed) {
       return null;
     }
 
-    const extension: V1VRMSchema.VRMCVRM | undefined = this.parser.json.extensions?.['VRMC_vrm'];
+    const extension = json.extensions?.['VRMC_vrm'] as V1VRMSchema.VRMCVRM | undefined;
     if (!extension) {
       return null;
     }
@@ -102,7 +105,9 @@ export class VRMFirstPersonLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   private async _v0Import(gltf: GLTF, humanoid: VRMHumanoid): Promise<VRMFirstPerson | null> {
-    const vrmExt: V0VRM.VRM | undefined = this.parser.json.extensions?.VRM;
+    const json = this.parser.json as GLTFSchema.IGLTF;
+
+    const vrmExt = json.extensions?.VRM as V0VRM.VRM | undefined;
     if (!vrmExt) {
       return null;
     }
@@ -116,7 +121,7 @@ export class VRMFirstPersonLoaderPlugin implements GLTFLoaderPlugin {
     const nodePrimitivesMap = await gltfExtractPrimitivesFromNodes(gltf);
 
     Array.from(nodePrimitivesMap.entries()).forEach(([nodeIndex, primitives]) => {
-      const schemaNode = this.parser.json.nodes[nodeIndex];
+      const schemaNode = json.nodes![nodeIndex];
 
       const flag = schemaFirstPerson.meshAnnotations
         ? schemaFirstPerson.meshAnnotations.find((a) => a.mesh === schemaNode.mesh)

@@ -7,6 +7,7 @@ import { MToonMaterialOutlineWidthMode } from './MToonMaterialOutlineWidthMode';
 import { GLTFMToonMaterialParamsAssignHelper } from './GLTFMToonMaterialParamsAssignHelper';
 import { MToonMaterialLoaderPluginOptions } from './MToonMaterialLoaderPluginOptions';
 import type { MToonMaterialDebugMode } from './MToonMaterialDebugMode';
+import { GLTF as GLTFSchema } from '@gltf-transform/core';
 
 export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
   public static EXTENSION_NAME = 'VRMC_materials_mtoon';
@@ -84,16 +85,23 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
 
   public async loadMesh(meshIndex: number): Promise<THREE.Group | THREE.Mesh | THREE.SkinnedMesh> {
     const parser = this.parser;
-    const json = parser.json;
+    const json = parser.json as GLTFSchema.IGLTF;
 
-    const meshDef = json.meshes[meshIndex];
+    const meshDef = json.meshes?.[meshIndex];
+
+    if (meshDef == null) {
+      throw new Error(
+        `MToonMaterialLoaderPlugin: Attempt to use meshes[${meshIndex}] of glTF but the mesh doesn't exist`,
+      );
+    }
+
     const primitivesDef = meshDef.primitives;
 
     const meshOrGroup = await parser.loadMesh(meshIndex);
 
     if (primitivesDef.length === 1) {
       const mesh = meshOrGroup as THREE.Mesh;
-      const materialIndex = primitivesDef[0].material as number | undefined;
+      const materialIndex = primitivesDef[0].material;
 
       if (materialIndex != null) {
         this._setupPrimitive(mesh, materialIndex);
@@ -102,7 +110,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
       const group = meshOrGroup as THREE.Group;
       for (let i = 0; i < primitivesDef.length; i++) {
         const mesh = group.children[i] as THREE.Mesh;
-        const materialIndex = primitivesDef[i].material as number | undefined;
+        const materialIndex = primitivesDef[i].material;
 
         if (materialIndex != null) {
           this._setupPrimitive(mesh, materialIndex);
@@ -121,10 +129,10 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
    */
   private _removeUnlitExtensionIfMToonExists(): void {
     const parser = this.parser;
-    const json = parser.json;
+    const json = parser.json as GLTFSchema.IGLTF;
 
-    const materialDefs: any[] = json.materials;
-    materialDefs.map((materialDef, iMaterial) => {
+    const materialDefs = json.materials;
+    materialDefs?.map((materialDef, iMaterial) => {
       const extension = this._getMToonExtension(iMaterial);
 
       if (extension && materialDef.extensions?.['KHR_materials_unlit']) {
@@ -135,12 +143,20 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
 
   private _getMToonExtension(materialIndex: number): V1MToonSchema.VRMCMaterialsMToon | undefined {
     const parser = this.parser;
-    const json = parser.json;
+    const json = parser.json as GLTFSchema.IGLTF;
 
-    const materialDef = json.materials[materialIndex];
+    const materialDef = json.materials?.[materialIndex];
 
-    const extension: V1MToonSchema.VRMCMaterialsMToon | undefined =
-      materialDef.extensions?.[MToonMaterialLoaderPlugin.EXTENSION_NAME];
+    if (materialDef == null) {
+      console.warn(
+        `MToonMaterialLoaderPlugin: Attempt to use materials[${materialIndex}] of glTF but the material doesn't exist`,
+      );
+      return undefined;
+    }
+
+    const extension = materialDef.extensions?.[MToonMaterialLoaderPlugin.EXTENSION_NAME] as
+      | V1MToonSchema.VRMCMaterialsMToon
+      | undefined;
     if (extension == null) {
       return undefined;
     }
