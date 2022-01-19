@@ -27,7 +27,7 @@ export class VRMLoaderPlugin implements GLTFLoaderPlugin {
   public readonly materialsHDREmissiveMultiplierPlugin: VRMMaterialsHDREmissiveMultiplierLoaderPlugin;
   public readonly materialsV0CompatPlugin: VRMMaterialsV0CompatPlugin;
   public readonly springBonePlugin: VRMSpringBoneLoaderPlugin;
-  public readonly constraintPlugin: VRMNodeConstraintLoaderPlugin;
+  public readonly nodeConstraintPlugin: VRMNodeConstraintLoaderPlugin;
 
   public get name(): string {
     return 'VRMLoaderPlugin';
@@ -55,7 +55,8 @@ export class VRMLoaderPlugin implements GLTFLoaderPlugin {
         jointHelperRoot: helperRoot,
       });
 
-    this.constraintPlugin = options?.constraintPlugin ?? new VRMNodeConstraintLoaderPlugin(parser, { helperRoot });
+    this.nodeConstraintPlugin =
+      options?.nodeConstraintPlugin ?? new VRMNodeConstraintLoaderPlugin(parser, { helperRoot });
   }
 
   public async beforeRoot(): Promise<void> {
@@ -87,7 +88,7 @@ export class VRMLoaderPlugin implements GLTFLoaderPlugin {
     await this.lookAtPlugin.afterRoot(gltf);
     await this.firstPersonPlugin.afterRoot(gltf);
     await this.springBonePlugin.afterRoot(gltf);
-    await this.constraintPlugin.afterRoot(gltf);
+    await this.nodeConstraintPlugin.afterRoot(gltf);
     await this.mtoonMaterialPlugin.afterRoot(gltf);
     await this.materialsHDREmissiveMultiplierPlugin.afterRoot(gltf);
 
@@ -100,7 +101,7 @@ export class VRMLoaderPlugin implements GLTFLoaderPlugin {
       meta: gltf.userData.vrmMeta,
       materials: gltf.userData.vrmMToonMaterials,
       springBoneManager: gltf.userData.vrmSpringBoneManager,
-      constraintManager: gltf.userData.vrmConstraintManager,
+      nodeConstraintManager: gltf.userData.vrmNodeConstraintManager,
     });
     gltf.userData.vrm = vrm;
   }
