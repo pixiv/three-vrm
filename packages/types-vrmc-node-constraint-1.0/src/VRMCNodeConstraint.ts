@@ -1,6 +1,4 @@
-import type { AimConstraint } from './AimConstraint';
-import type { PositionConstraint } from './PositionConstraint';
-import type { RotationConstraint } from './RotationConstraint';
+import type { Constraint } from './Constraint';
 
 /**
  * glTF extension that defines a node constraint.
@@ -11,9 +9,7 @@ export interface VRMCNodeConstraint {
    */
   specVersion: '1.0-draft';
 
-  position?: PositionConstraint;
-  rotation?: RotationConstraint;
-  aim?: AimConstraint;
+  constraint: Constraint;
 
   extensions?: { [name: string]: any };
   extras?: any;

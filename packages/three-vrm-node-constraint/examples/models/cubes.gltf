@@ -225,7 +225,6 @@
         "roughnessFactor": 0.5
       },
       "alphaMode": "OPAQUE",
-      "alphaCutoff": 0.5,
       "doubleSided": false
     }
   ],
@@ -320,12 +319,12 @@
       "extensions": {
         "VRMC_node_constraint": {
           "specVersion": "1.0-draft",
-          "position": {
-            "source": 0,
-            "sourceSpace": "model",
-            "destinationSpace": "model",
-            "freezeAxes": [true, true, true],
-            "weight": 1.0
+          "constraint": {
+            "rotation": {
+              "source": 0,
+              "freezeAxes": [true, false, false],
+              "weight": 1.0
+            }
           }
         }
       },
@@ -353,12 +352,12 @@
       "extensions": {
         "VRMC_node_constraint": {
           "specVersion": "1.0-draft",
-          "rotation": {
-            "source": 0,
-            "sourceSpace": "model",
-            "destinationSpace": "model",
-            "freezeAxes": [true, true, true],
-            "weight": 1.0
+          "constraint": {
+            "rotation": {
+              "source": 0,
+              "freezeAxes": [true, true, true],
+              "weight": 0.5
+            }
           }
         }
       },

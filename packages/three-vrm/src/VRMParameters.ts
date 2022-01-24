@@ -8,5 +8,5 @@ import { VRMNodeConstraintManager } from '@pixiv/three-vrm-node-constraint';
 export interface VRMParameters extends VRMCoreParameters {
   materials?: THREE.Material[];
   springBoneManager?: VRMSpringBoneManager;
-  constraintManager?: VRMNodeConstraintManager;
+  nodeConstraintManager?: VRMNodeConstraintManager;
 }

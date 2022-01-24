@@ -24,7 +24,7 @@ export class VRM extends VRMCore {
    * A {@link VRMNodeConstraintManager} manipulates all constraints attached on the VRM.
    * Usually you don't have to care about this property.
    */
-  public readonly constraintManager?: VRMNodeConstraintManager;
+  public readonly nodeConstraintManager?: VRMNodeConstraintManager;
 
   /**
    * Create a new VRM instance.
@@ -36,7 +36,7 @@ export class VRM extends VRMCore {
 
     this.materials = params.materials;
     this.springBoneManager = params.springBoneManager;
-    this.constraintManager = params.constraintManager;
+    this.nodeConstraintManager = params.nodeConstraintManager;
   }
 
   /**
@@ -49,8 +49,8 @@ export class VRM extends VRMCore {
   public update(delta: number): void {
     super.update(delta);
 
-    if (this.constraintManager) {
-      this.constraintManager.update();
+    if (this.nodeConstraintManager) {
+      this.nodeConstraintManager.update();
     }
 
     if (this.springBoneManager) {

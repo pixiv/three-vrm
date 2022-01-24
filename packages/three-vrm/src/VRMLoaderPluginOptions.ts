@@ -22,7 +22,7 @@ export interface VRMLoaderPluginOptions {
   materialsHDREmissiveMultiplierPlugin?: VRMMaterialsHDREmissiveMultiplierLoaderPlugin;
   materialsV0CompatPlugin?: VRMMaterialsV0CompatPlugin;
   springBonePlugin?: VRMSpringBoneLoaderPlugin;
-  constraintPlugin?: VRMNodeConstraintLoaderPlugin;
+  nodeConstraintPlugin?: VRMNodeConstraintLoaderPlugin;
 
   /**
    * If assigned, the object will be used as a helper root of every component.

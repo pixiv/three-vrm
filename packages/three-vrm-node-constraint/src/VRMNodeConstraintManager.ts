@@ -68,7 +68,7 @@ export class VRMNodeConstraintManager {
     }
 
     if (constraintsTried.has(constraint)) {
-      throw new Error('VRMConstraintManager: Circular dependency detected while updating constraints');
+      throw new Error('VRMNodeConstraintManager: Circular dependency detected while updating constraints');
     }
     constraintsTried.add(constraint);
 
