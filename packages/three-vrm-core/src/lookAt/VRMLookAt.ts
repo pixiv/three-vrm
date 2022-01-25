@@ -45,7 +45,7 @@ export class VRMLookAt {
    *
    * See also: {@link autoUpdate}
    */
-  public target?: THREE.Object3D;
+  public target?: THREE.Object3D | null;
 
   /**
    * The front direction of the face.
