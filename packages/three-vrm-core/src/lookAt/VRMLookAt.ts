@@ -33,6 +33,7 @@ export class VRMLookAt {
 
   /**
    * If this is true, the LookAt will be updated automatically by calling {@link update}, towarding the direction to the {@link target}.
+   * `true` by default.
    *
    * See also: {@link target}
    */
