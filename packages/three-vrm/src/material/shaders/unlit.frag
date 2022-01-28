@@ -24,11 +24,7 @@ void main() {
 
   #include <logdepthbuf_fragment>
 
-  // #include <map_fragment>
-  #ifdef USE_MAP
-    diffuseColor *= mapTexelToLinear( texture2D( map, vUv ) );
-  #endif
-
+  #include <map_fragment>
   #include <color_fragment>
   // #include <alphamap_fragment>
 

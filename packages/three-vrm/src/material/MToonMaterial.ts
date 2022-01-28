@@ -1,7 +1,6 @@
 /* tslint:disable:member-ordering */
 
 import * as THREE from 'three';
-import { getTexelDecodingFunction } from './getTexelDecodingFunction';
 import vertexShader from './shaders/mtoon.vert';
 import fragmentShader from './shaders/mtoon.frag';
 
@@ -575,21 +574,9 @@ export class MToonMaterial extends THREE.ShaderMaterial {
       OUTLINE_COLOR_MIXED: this._outlineColorMode === MToonMaterialOutlineColorMode.MixedLighting,
     };
 
-    // == texture encodings ====================================================
-    const encodings =
-      (this.shadeTexture !== null
-        ? getTexelDecodingFunction('shadeTextureTexelToLinear', this.shadeTexture.encoding) + '\n'
-        : '') +
-      (this.sphereAdd !== null
-        ? getTexelDecodingFunction('sphereAddTexelToLinear', this.sphereAdd.encoding) + '\n'
-        : '') +
-      (this.rimTexture !== null
-        ? getTexelDecodingFunction('rimTextureTexelToLinear', this.rimTexture.encoding) + '\n'
-        : '');
-
     // == generate shader code =================================================
     this.vertexShader = vertexShader;
-    this.fragmentShader = encodings + fragmentShader;
+    this.fragmentShader = fragmentShader;
 
     // == set needsUpdate flag =================================================
     this.needsUpdate = true;
