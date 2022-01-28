@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { GLTFSchema, VRMSchema } from '../types';
 import { gltfExtractPrimitivesFromNode } from '../utils/gltfExtractPrimitivesFromNode';
 import { renameMaterialProperty } from '../utils/renameMaterialProperty';

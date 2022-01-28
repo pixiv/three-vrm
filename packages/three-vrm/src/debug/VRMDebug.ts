@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { VRM, VRMParameters } from '../VRM';
 import { VRMImporterOptions } from '../VRMImporter';
 import { VRMDebugOptions } from './VRMDebugOptions';
