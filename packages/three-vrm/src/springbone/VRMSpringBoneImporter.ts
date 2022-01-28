@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { GLTFNode, VRMSchema } from '../types';
 import { VRMSpringBone } from './VRMSpringBone';
 import { VRMSpringBoneColliderGroup, VRMSpringBoneColliderMesh } from './VRMSpringBoneColliderGroup';
