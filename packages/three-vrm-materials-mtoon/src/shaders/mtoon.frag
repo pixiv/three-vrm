@@ -349,9 +349,11 @@ void main() {
   // #include <map_fragment>
   #ifdef USE_MAP
     vec2 mapUv = ( mapUvTransform * vec3( uv, 1 ) ).xy;
-    vec4 texelColor = texture2D( map, mapUv );
-    texelColor = mapTexelToLinear( texelColor );
-    diffuseColor *= texelColor;
+    vec4 sampledDiffuseColor = texture2D( map, mapUv );
+    #ifdef DECODE_VIDEO_TEXTURE
+      sampledDiffuseColor = vec4( mix( pow( sampledDiffuseColor.rgb * 0.9478672986 + vec3( 0.0521327014 ), vec3( 2.4 ) ), sampledDiffuseColor.rgb * 0.0773993808, vec3( lessThanEqual( sampledDiffuseColor.rgb, vec3( 0.04045 ) ) ) ), sampledDiffuseColor.w );
+    #endif
+    diffuseColor *= sampledDiffuseColor;
   #endif
 
   // #include <color_fragment>
@@ -432,7 +434,7 @@ void main() {
   // #include <emissivemap_fragment>
   #ifdef USE_EMISSIVEMAP
     vec2 emissiveMapUv = ( emissiveMapUvTransform * vec3( uv, 1 ) ).xy;
-    totalEmissiveRadiance *= emissiveMapTexelToLinear( texture2D( emissiveMap, emissiveMapUv ) ).rgb;
+    totalEmissiveRadiance *= texture2D( emissiveMap, emissiveMapUv ).rgb;
   #endif
 
   #ifdef DEBUG_NORMAL
@@ -449,7 +451,7 @@ void main() {
 
   material.shadeColor = shadeColorFactor;
   #ifdef USE_SHADEMULTIPLYTEXTURE
-    material.shadeColor *= shadeMultiplyTextureTexelToLinear( texture2D( shadeMultiplyTexture, uv ) ).rgb;
+    material.shadeColor *= texture2D( shadeMultiplyTexture, uv ).rgb;
   #endif
 
   #if ( defined( USE_COLOR ) && !defined( IGNORE_VERTEX_COLOR ) )
@@ -665,14 +667,14 @@ void main() {
       vec3 y = cross( viewDir, x ); // guaranteed to be normalized
       vec2 sphereUv = 0.5 + 0.5 * vec2( dot( x, normal ), -dot( y, normal ) );
       sphereUv = ( matcapTextureUvTransform * vec3( sphereUv, 1 ) ).xy;
-      vec3 matcap = matcapTextureTexelToLinear( texture2D( matcapTexture, sphereUv ) ).rgb;
+      vec3 matcap = texture2D( matcapTexture, sphereUv ).rgb;
       rim += matcapFactor * matcap;
     }
   #endif
 
   #ifdef USE_RIMMULTIPLYTEXTURE
     vec2 rimMultiplyTextureUv = ( rimMultiplyTextureUvTransform * vec3( uv, 1 ) ).xy;
-    rim *= rimMultiplyTextureTexelToLinear( texture2D( rimMultiplyTexture, rimMultiplyTextureUv ) ).rgb;
+    rim *= texture2D( rimMultiplyTexture, rimMultiplyTextureUv ).rgb;
   #endif
 
   col += rimMix * rim;
