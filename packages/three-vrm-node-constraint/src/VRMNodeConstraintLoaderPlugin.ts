@@ -1,6 +1,6 @@
 import type * as ConstraintSchema from '@pixiv/types-vrmc-node-constraint-1.0';
 import type * as THREE from 'three';
-import type { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
+import type { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { VRMNodeConstraintHelper } from './helpers';
 import type { VRMNodeConstraintLoaderPluginOptions } from './VRMNodeConstraintLoaderPluginOptions';
 import { VRMNodeConstraintManager } from './VRMNodeConstraintManager';

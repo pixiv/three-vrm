@@ -1,6 +1,6 @@
 import type * as V0VRM from '@pixiv/types-vrm-0.0';
 import type * as V1VRMSchema from '@pixiv/types-vrmc-vrm-1.0';
-import type { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
+import type { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { VRMHumanoid } from './VRMHumanoid';
 import type { VRMHumanBones } from './VRMHumanBones';
 import { VRMRequiredHumanBoneName } from './VRMRequiredHumanBoneName';

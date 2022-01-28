@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { VRM as V0VRM, Material as V0Material } from '@pixiv/types-vrm-0.0';
 import * as V1MToonSchema from '@pixiv/types-vrmc-materials-mtoon-1.0';
-import type { GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
+import type { GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { gammaEOTF } from './utils/gammaEOTF';
 import { GLTF as GLTFSchema } from '@gltf-transform/core';
 
