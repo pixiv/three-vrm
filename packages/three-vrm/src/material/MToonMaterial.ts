@@ -3,6 +3,7 @@
 import * as THREE from 'three';
 import vertexShader from './shaders/mtoon.vert';
 import fragmentShader from './shaders/mtoon.frag';
+import { getTexelDecodingFunction } from './getTexelDecodingFunction';
 
 const TAU = 2.0 * Math.PI;
 
@@ -577,6 +578,22 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     // == generate shader code =================================================
     this.vertexShader = vertexShader;
     this.fragmentShader = fragmentShader;
+
+    // == texture encodings ====================================================
+    // COMPAT: pre-r137
+    if (parseInt(THREE.REVISION, 10) < 137) {
+      const encodings =
+        (this.shadeTexture !== null
+          ? getTexelDecodingFunction('shadeTextureTexelToLinear', this.shadeTexture.encoding) + '\n'
+          : '') +
+        (this.sphereAdd !== null
+          ? getTexelDecodingFunction('sphereAddTexelToLinear', this.sphereAdd.encoding) + '\n'
+          : '') +
+        (this.rimTexture !== null
+          ? getTexelDecodingFunction('rimTextureTexelToLinear', this.rimTexture.encoding) + '\n'
+          : '');
+      this.fragmentShader = encodings + fragmentShader;
+    }
 
     // == set needsUpdate flag =================================================
     this.needsUpdate = true;

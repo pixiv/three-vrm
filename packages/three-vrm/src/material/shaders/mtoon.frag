@@ -294,11 +294,16 @@ void main() {
 
   // #include <map_fragment>
   #ifdef USE_MAP
-    vec4 sampledDiffuseColor = texture2D( map, uv );
-    #ifdef DECODE_VIDEO_TEXTURE
-      sampledDiffuseColor = vec4( mix( pow( sampledDiffuseColor.rgb * 0.9478672986 + vec3( 0.0521327014 ), vec3( 2.4 ) ), sampledDiffuseColor.rgb * 0.0773993808, vec3( lessThanEqual( sampledDiffuseColor.rgb, vec3( 0.04045 ) ) ) ), sampledDiffuseColor.w );
+    #if THREE_VRM_THREE_REVISION >= 137
+      vec4 sampledDiffuseColor = texture2D( map, uv );
+      #ifdef DECODE_VIDEO_TEXTURE
+        sampledDiffuseColor = vec4( mix( pow( sampledDiffuseColor.rgb * 0.9478672986 + vec3( 0.0521327014 ), vec3( 2.4 ) ), sampledDiffuseColor.rgb * 0.0773993808, vec3( lessThanEqual( sampledDiffuseColor.rgb, vec3( 0.04045 ) ) ) ), sampledDiffuseColor.w );
+      #endif
+      diffuseColor *= sampledDiffuseColor;
+    #else
+      // COMPAT: pre-r137
+      diffuseColor *= mapTexelToLinear( texture2D( map, uv ) );
     #endif
-    diffuseColor *= sampledDiffuseColor;
   #endif
 
   #include <color_fragment>
@@ -387,7 +392,12 @@ void main() {
 
   // #include <emissivemap_fragment>
   #ifdef USE_EMISSIVEMAP
-    totalEmissiveRadiance *= texture2D( emissiveMap, uv ).rgb;
+    #if THREE_VRM_THREE_REVISION >= 137
+      totalEmissiveRadiance *= texture2D( emissiveMap, uv ).rgb;
+    #else
+      // COMPAT: pre-r137
+      totalEmissiveRadiance *= emissiveMapTexelToLinear( texture2D( emissiveMap, uv ) ).rgb;
+    #endif
   #endif
 
   #ifdef DEBUG_NORMAL
@@ -404,7 +414,12 @@ void main() {
 
   material.shadeColor = shadeColor;
   #ifdef USE_SHADETEXTURE
-    material.shadeColor *= texture2D( shadeTexture, uv ).rgb;
+    #if THREE_VRM_THREE_REVISION >= 137
+      material.shadeColor *= texture2D( shadeTexture, uv ).rgb;
+    #else
+      // COMPAT: pre-r137
+      material.shadeColor *= shadeTextureTexelToLinear( texture2D( shadeTexture, uv ) ).rgb;
+    #endif
   #endif
 
   material.shadingGrade = 1.0;
@@ -546,7 +561,12 @@ void main() {
   // #include <lights_fragment_maps>
   #ifdef USE_LIGHTMAP
     vec4 lightMapTexel = texture2D( lightMap, vUv2 );
-    vec3 lightMapIrradiance = lightMapTexel.rgb * lightMapIntensity;
+    #if THREE_VRM_THREE_REVISION >= 137
+      vec3 lightMapIrradiance = lightMapTexel.rgb * lightMapIntensity;
+    #else
+      // COMPAT: pre-r137
+      vec3 lightMapIrradiance = lightMapTexelToLinear( lightMapTexel ).rgb * lightMapIntensity;
+    #endif
     #ifndef PHYSICALLY_CORRECT_LIGHTS
       lightMapIrradiance *= PI;
     #endif
@@ -587,7 +607,12 @@ void main() {
   vec3 rimMix = mix( vec3( 1.0 ), lightingSum + indirectLightIntensity * irradiance, rimLightingMix );
   vec3 rim = rimColor * pow( saturate( 1.0 - dot( viewDir, normal ) + rimLift ), rimFresnelPower );
   #ifdef USE_RIMTEXTURE
-    rim *= texture2D( rimTexture, uv ).rgb;
+    #if THREE_VRM_THREE_REVISION >= 137
+      rim *= texture2D( rimTexture, uv ).rgb;
+    #else
+      // COMPAT: pre-r137
+      rim *= rimTextureTexelToLinear( texture2D( rimTexture, uv ) ).rgb;
+    #endif
   #endif
   col += rim;
 
@@ -597,7 +622,12 @@ void main() {
       vec3 x = normalize( vec3( viewDir.z, 0.0, -viewDir.x ) );
       vec3 y = cross( viewDir, x ); // guaranteed to be normalized
       vec2 sphereUv = 0.5 + 0.5 * vec2( dot( x, normal ), -dot( y, normal ) );
-      vec3 matcap = texture2D( sphereAdd, sphereUv ).xyz;
+      #if THREE_VRM_THREE_REVISION >= 137
+        vec3 matcap = texture2D( sphereAdd, sphereUv ).xyz;
+      #else
+        // COMPAT: pre-r137
+        vec3 matcap = sphereAddTexelToLinear( texture2D( sphereAdd, sphereUv ) ).xyz;
+      #endif
       col += matcap;
     }
   #endif
