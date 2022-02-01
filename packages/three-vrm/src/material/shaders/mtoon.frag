@@ -230,8 +230,10 @@ vec3 getLighting( const in vec3 lightColor ) {
     lightColorAttenuation
   );
 
-  #ifndef PHYSICALLY_CORRECT_LIGHTS
-    lighting *= PI;
+  #if THREE_VRM_THREE_REVISION < 132
+    #ifndef PHYSICALLY_CORRECT_LIGHTS
+      lighting *= PI;
+    #endif
   #endif
 
   return lighting;
