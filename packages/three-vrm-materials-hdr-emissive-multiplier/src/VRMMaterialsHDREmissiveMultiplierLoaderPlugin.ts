@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import * as HDREmissiveMultiplierSchema from '@pixiv/types-vrmc-materials-hdr-emissive-multiplier-1.0';
 import { gltfGetAssociatedMaterialIndex } from './utils/gltfGetAssociatedMaterialIndex';
 import { GLTF as GLTFSchema } from '@gltf-transform/core';

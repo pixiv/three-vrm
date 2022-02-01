@@ -1,12 +1,12 @@
 /* tslint:disable:member-ordering */
 
 import * as THREE from 'three';
-import { getTexelDecodingFunction } from './utils/getTexelDecodingFunction';
 import vertexShader from './shaders/mtoon.vert';
 import fragmentShader from './shaders/mtoon.frag';
 import { MToonMaterialDebugMode } from './MToonMaterialDebugMode';
 import { MToonMaterialOutlineWidthMode } from './MToonMaterialOutlineWidthMode';
 import type { MToonMaterialParameters } from './MToonMaterialParameters';
+import { getTexelDecodingFunction } from './utils/getTexelDecodingFunction';
 import { getTextureEncodingFromMap } from './utils/getTextureEncodingFromMap';
 
 /**
@@ -470,25 +470,30 @@ export class MToonMaterial extends THREE.ShaderMaterial {
           .join('\n') + '\n';
 
       // -- texture encodings ----------------------------------------------------------------------
-      const encodings =
-        (this.matcapTexture !== null
-          ? getTexelDecodingFunction(
-              'matcapTextureTexelToLinear',
-              getTextureEncodingFromMap(this.matcapTexture, isWebGL2),
-            ) + '\n'
-          : '') +
-        (this.shadeMultiplyTexture !== null
-          ? getTexelDecodingFunction(
-              'shadeMultiplyTextureTexelToLinear',
-              getTextureEncodingFromMap(this.shadeMultiplyTexture, isWebGL2),
-            ) + '\n'
-          : '') +
-        (this.rimMultiplyTexture !== null
-          ? getTexelDecodingFunction(
-              'rimMultiplyTextureTexelToLinear',
-              getTextureEncodingFromMap(this.rimMultiplyTexture, isWebGL2),
-            ) + '\n'
-          : '');
+      // COMPAT: pre-r137
+      let encodings = '';
+
+      if (parseInt(THREE.REVISION, 10) < 137) {
+        encodings =
+          (this.matcapTexture !== null
+            ? getTexelDecodingFunction(
+                'matcapTextureTexelToLinear',
+                getTextureEncodingFromMap(this.matcapTexture, isWebGL2),
+              ) + '\n'
+            : '') +
+          (this.shadeMultiplyTexture !== null
+            ? getTexelDecodingFunction(
+                'shadeMultiplyTextureTexelToLinear',
+                getTextureEncodingFromMap(this.shadeMultiplyTexture, isWebGL2),
+              ) + '\n'
+            : '') +
+          (this.rimMultiplyTexture !== null
+            ? getTexelDecodingFunction(
+                'rimMultiplyTextureTexelToLinear',
+                getTextureEncodingFromMap(this.rimMultiplyTexture, isWebGL2),
+              ) + '\n'
+            : '');
+      }
 
       // -- generate shader code -------------------------------------------------------------------
       shader.vertexShader = defines + shader.vertexShader;

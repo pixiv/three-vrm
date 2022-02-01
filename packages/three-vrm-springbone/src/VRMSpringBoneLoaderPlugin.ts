@@ -1,7 +1,7 @@
 import type * as V0VRM from '@pixiv/types-vrm-0.0';
 import type * as V1SpringBoneSchema from '@pixiv/types-vrmc-springbone-1.0';
 import * as THREE from 'three';
-import type { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
+import type { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { VRMSpringBoneColliderHelper, VRMSpringBoneJointHelper } from './helpers';
 import { VRMSpringBoneCollider } from './VRMSpringBoneCollider';
 import type { VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';

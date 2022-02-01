@@ -1,4 +1,4 @@
-import { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { VRMCoreLoaderPluginOptions } from './VRMCoreLoaderPluginOptions';
 import { VRMCore } from './VRMCore';
 import { VRMExpressionLoaderPlugin } from './expressions/VRMExpressionLoaderPlugin';

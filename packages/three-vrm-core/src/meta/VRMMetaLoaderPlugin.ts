@@ -1,4 +1,4 @@
-import type { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
+import type { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import type { VRM0Meta } from './VRM0Meta';
 import type { VRM1Meta } from './VRM1Meta';
 import type { VRMMeta } from './VRMMeta';
