@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { VRMSchema } from '../types';
 /**
  * Options for a [[VRMMaterialImporter]] instance.

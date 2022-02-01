@@ -1,4 +1,4 @@
-import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { VRMBlendShapeProxy } from './VRMBlendShapeProxy';
 /**
  * An importer that imports a [[VRMBlendShape]] from a VRM extension of a GLTF.

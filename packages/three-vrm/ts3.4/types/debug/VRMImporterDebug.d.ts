@@ -1,4 +1,4 @@
-import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { VRMImporter, VRMImporterOptions } from '../VRMImporter';
 import { VRMDebug } from './VRMDebug';
 import { VRMDebugOptions } from './VRMDebugOptions';

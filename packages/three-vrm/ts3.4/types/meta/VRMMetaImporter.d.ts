@@ -1,4 +1,4 @@
-import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { VRMMeta } from './VRMMeta';
 import { VRMMetaImporterOptions } from './VRMMetaImporterOptions';
 /**

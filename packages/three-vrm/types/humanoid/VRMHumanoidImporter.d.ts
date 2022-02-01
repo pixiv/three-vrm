@@ -1,4 +1,4 @@
-import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { VRMHumanoid } from './VRMHumanoid';
 /**
  * An importer that imports a [[VRMHumanoid]] from a VRM extension of a GLTF.

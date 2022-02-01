@@ -1,4 +1,4 @@
-import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { VRMBlendShapeImporter } from './blendshape';
 import { VRMFirstPersonImporter } from './firstperson';
 import { VRMHumanoidImporter } from './humanoid/VRMHumanoidImporter';
