@@ -11,7 +11,7 @@ const _quatA = new THREE.Quaternion();
 const _quatB = new THREE.Quaternion();
 
 export class VRMRotationConstraint extends VRMNodeConstraint {
-  public freezeAxes: [boolean, boolean, boolean] = [true, true, true];
+  public axes: [boolean, boolean, boolean] = [true, true, true];
 
   private _quatInitSrc = new THREE.Quaternion();
   private _quatInvInitSrc = new THREE.Quaternion();
@@ -46,7 +46,7 @@ export class VRMRotationConstraint extends VRMNodeConstraint {
 
   /**
    * Return a quaternion that represents a diff from the initial -> current orientation of the source.
-   * It's aware of its {@link sourceSpace}, {@link freezeAxes}, and {@link weight}.
+   * It's aware of its {@link sourceSpace}, {@link axes}, and {@link weight}.
    * @param target Target quaternion
    */
   private _getSourceDiffQuat<T extends THREE.Quaternion>(target: T): T {
@@ -57,7 +57,7 @@ export class VRMRotationConstraint extends VRMNodeConstraint {
       target.multiply(this._quatInvInitSrc);
     }
 
-    quaternionFreezeAxes(target, this.freezeAxes);
+    quaternionFreezeAxes(target, this.axes);
 
     target.slerp(QUAT_IDENTITY, 1.0 - this.weight);
 

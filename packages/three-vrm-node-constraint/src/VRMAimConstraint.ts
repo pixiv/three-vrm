@@ -26,7 +26,7 @@ export class VRMAimConstraint extends VRMNodeConstraint {
    */
   public readonly upVector = new THREE.Vector3(0.0, 1.0, 0.0);
 
-  public freezeAxes: [boolean, boolean] = [true, true];
+  public axes: [boolean, boolean] = [true, true];
 
   private readonly _quatInitAim = new THREE.Quaternion();
   private readonly _quatInvInitAim = new THREE.Quaternion();
@@ -64,7 +64,7 @@ export class VRMAimConstraint extends VRMNodeConstraint {
 
   /**
    * Return a quaternion that represents a diff from the initial -> current orientation of the aim direction.
-   * It's aware of its {@link sourceSpace}, {@link freezeAxes}, and {@link weight}.
+   * It's aware of its {@link sourceSpace}, {@link axes}, and {@link weight}.
    * @param target Target quaternion
    */
   private _getAimDiffQuat<T extends THREE.Quaternion>(target: T): T {
@@ -78,7 +78,7 @@ export class VRMAimConstraint extends VRMNodeConstraint {
 
   /**
    * Return a current orientation of the aim direction.
-   * It's aware of its {@link sourceSpace} and {@link freezeAxes}.
+   * It's aware of its {@link sourceSpace} and {@link axes}.
    * @param target Target quaternion
    */
   private _getAimQuat<T extends THREE.Quaternion>(target: T): T {
@@ -88,7 +88,7 @@ export class VRMAimConstraint extends VRMNodeConstraint {
       this._getSourcePosition(_v3GetRotationDir),
       this.aimVector,
       this.upVector,
-      this.freezeAxes,
+      this.axes,
     );
   }
 
