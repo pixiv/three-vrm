@@ -7,7 +7,7 @@ import { VRMNodeConstraint } from './VRMNodeConstraint';
 const _matA = new THREE.Matrix4();
 
 export class VRMPositionConstraint extends VRMNodeConstraint {
-  public freezeAxes: [boolean, boolean, boolean] = [true, true, true];
+  public axes: [boolean, boolean, boolean] = [true, true, true];
 
   private _v3InitDst = new THREE.Vector3();
   private _v3InitSrc = new THREE.Vector3();
@@ -39,14 +39,14 @@ export class VRMPositionConstraint extends VRMNodeConstraint {
 
   /**
    * Return a vector that represents a diff from the initial -> current position of the source.
-   * It's aware of its {@link sourceSpace}, {@link freezeAxes}, and {@link weight}.
+   * It's aware of its {@link sourceSpace}, {@link axes}, and {@link weight}.
    * @param target Target quaternion
    */
   private _getSourceDiffPosition<T extends THREE.Vector3>(target: T): T {
     this._getSourcePosition(target);
     target.sub(this._v3InitSrc);
 
-    vector3FreezeAxes(target, this.freezeAxes);
+    vector3FreezeAxes(target, this.axes);
 
     target.multiplyScalar(this.weight);
 

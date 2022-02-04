@@ -10,7 +10,7 @@ export interface RotationConstraint {
   /**
    * Axes be constrained by this constraint, in X-Y-Z order.
    */
-  freezeAxes?: [boolean, boolean, boolean];
+  axes?: [boolean, boolean, boolean];
 
   /**
    * The weight of the constraint.

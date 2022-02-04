@@ -89,7 +89,7 @@ export class VRMNodeConstraintLoaderPlugin implements GLTFLoaderPlugin {
     modelRoot: THREE.Object3D,
     rotation: ConstraintSchema.RotationConstraint,
   ): VRMRotationConstraint {
-    const { source, weight, freezeAxes } = rotation;
+    const { source, weight, axes } = rotation;
     const constraint = new VRMRotationConstraint(destination, modelRoot);
 
     constraint.setSource(nodes[source]);
@@ -100,8 +100,8 @@ export class VRMNodeConstraintLoaderPlugin implements GLTFLoaderPlugin {
     if (weight) {
       constraint.weight = weight;
     }
-    if (freezeAxes) {
-      constraint.freezeAxes = freezeAxes;
+    if (axes) {
+      constraint.axes = axes;
     }
 
     if (this.helperRoot) {

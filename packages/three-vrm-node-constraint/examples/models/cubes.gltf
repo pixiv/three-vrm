@@ -322,7 +322,7 @@
           "constraint": {
             "rotation": {
               "source": 0,
-              "freezeAxes": [true, false, false],
+              "axes": [true, false, false],
               "weight": 1.0
             }
           }
@@ -355,7 +355,7 @@
           "constraint": {
             "rotation": {
               "source": 0,
-              "freezeAxes": [true, true, true],
+              "axes": [true, true, true],
               "weight": 0.5
             }
           }
