@@ -3,6 +3,8 @@ import * as THREE from 'three';
 // Since these constants are deleted in r136 we have to define by ourselves
 /* eslint-disable @typescript-eslint/naming-convention */
 const RGBEEncoding = 3002;
+const RGBM7Encoding = 3004;
+const RGBM16Encoding = 3005;
 const RGBDEncoding = 3006;
 const GammaEncoding = 3007;
 /* eslint-enable @typescript-eslint/naming-convention */
@@ -32,9 +34,9 @@ export const getEncodingComponents = (encoding: THREE.TextureEncoding): [string,
         return ['sRGB', '( value )'];
       case RGBEEncoding:
         return ['RGBE', '( value )'];
-      case THREE.RGBM7Encoding:
+      case RGBM7Encoding:
         return ['RGBM', '( value, 7.0 )'];
-      case THREE.RGBM16Encoding:
+      case RGBM16Encoding:
         return ['RGBM', '( value, 16.0 )'];
       case RGBDEncoding:
         return ['RGBD', '( value, 256.0 )'];
