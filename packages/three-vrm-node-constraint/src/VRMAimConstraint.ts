@@ -79,6 +79,7 @@ export class VRMAimConstraint extends VRMNodeConstraint {
     this.destination.updateWorldMatrix(true, false);
     this.source.updateWorldMatrix(true, false);
 
+    // get world quaternion of the parent of the destination
     const dstParentWorldQuat = _quatA.identity();
     const invDstParentWorldQuat = _quatB.identity();
     if (this.destination.parent) {
@@ -86,18 +87,20 @@ export class VRMAimConstraint extends VRMNodeConstraint {
       quatInvertCompat(invDstParentWorldQuat.copy(dstParentWorldQuat));
     }
 
+    // calculate from-to vectors in world coord
     const a0 = _v3A.copy(this._v3AimAxis).applyQuaternion(this._dstRestQuat).applyQuaternion(dstParentWorldQuat);
-
     const a1 = decomposePosition(this.source.matrixWorld, _v3B)
       .sub(decomposePosition(this.destination.matrixWorld, _v3C))
       .normalize();
 
+    // create a from-to quaternion, convert to destination local coord, then multiply rest quaternion
     const targetQuat = _quatC
       .setFromUnitVectors(a0, a1)
       .premultiply(invDstParentWorldQuat)
       .multiply(dstParentWorldQuat)
       .multiply(this._dstRestQuat);
 
+    // blend with the rest quaternion using weight
     this.destination.quaternion.copy(this._dstRestQuat).slerp(targetQuat, this.weight);
   }
 }

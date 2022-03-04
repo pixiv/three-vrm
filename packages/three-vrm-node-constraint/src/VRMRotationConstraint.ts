@@ -38,9 +38,13 @@ export class VRMRotationConstraint extends VRMNodeConstraint {
   }
 
   public update(): void {
+    // calculate the delta rotation from the rest about the source
     const srcDeltaQuat = _quatA.copy(this._invSrcRestQuat).multiply(this.source.quaternion);
+
+    // multiply the delta to the rest of the destination
     const targetQuat = _quatB.copy(this._dstRestQuat).multiply(srcDeltaQuat);
 
+    // blend with the rest quaternion using weight
     this.destination.quaternion.copy(this._dstRestQuat).slerp(targetQuat, this.weight);
   }
 }

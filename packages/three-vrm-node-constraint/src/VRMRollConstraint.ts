@@ -74,6 +74,7 @@ export class VRMRollConstraint extends VRMNodeConstraint {
   }
 
   public update(): void {
+    // calculate the delta rotation from the rest about the source, then convert to the destination local coord
     /**
      * What the quatDelta is intended to be:
      *
@@ -96,19 +97,22 @@ export class VRMRollConstraint extends VRMNodeConstraint {
       .multiply(this.source.quaternion)
       .multiply(this._invSrcRestQuatMulDstRestQuat);
 
+    // create a from-to quaternion
     const n1 = _v3A.copy(this._v3RollAxis).applyQuaternion(quatDelta);
 
     /**
      * What the quatFromTo is intended to be:
      *
      * ```ts
-     * const quatFromTo = _quatB.setFromUnitVectors( n0, n1 ).inverse();
+     * const quatFromTo = _quatB.setFromUnitVectors( this._v3RollAxis, n1 ).inverse();
      * ```
      */
     const quatFromTo = _quatB.setFromUnitVectors(n1, this._v3RollAxis);
 
+    // quatFromTo * quatDelta == roll extracted from quatDelta
     const targetQuat = quatFromTo.premultiply(this._dstRestQuat).multiply(quatDelta);
 
+    // blend with the rest quaternion using weight
     this.destination.quaternion.copy(this._dstRestQuat).slerp(targetQuat, this.weight);
   }
 }
