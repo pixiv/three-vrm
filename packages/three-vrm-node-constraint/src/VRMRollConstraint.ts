@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { quatInvertCompat } from './utils/quatInvertCompat';
 import { VRMNodeConstraint } from './VRMNodeConstraint';
 
 const _v3A = new THREE.Vector3();
@@ -68,8 +69,8 @@ export class VRMRollConstraint extends VRMNodeConstraint {
 
   public setInitState(): void {
     this._dstRestQuat.copy(this.destination.quaternion);
-    this._invDstRestQuat.copy(this._dstRestQuat).invert();
-    this._invSrcRestQuatMulDstRestQuat.copy(this.source.quaternion).invert().multiply(this._dstRestQuat);
+    quatInvertCompat(this._invDstRestQuat.copy(this._dstRestQuat));
+    quatInvertCompat(this._invSrcRestQuatMulDstRestQuat.copy(this.source.quaternion)).multiply(this._dstRestQuat);
   }
 
   public update(): void {

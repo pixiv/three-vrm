@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { quatInvertCompat } from './utils/quatInvertCompat';
 import { VRMNodeConstraint } from './VRMNodeConstraint';
 
 const _v3A = new THREE.Vector3();
@@ -74,7 +75,7 @@ export class VRMAimConstraint extends VRMNodeConstraint {
   public update(): void {
     const dstParentWorldQuat = _quatA.identity();
     this.destination.parent?.getWorldQuaternion(dstParentWorldQuat);
-    const invDstParentWorldQuat = _quatB.copy(dstParentWorldQuat).invert();
+    const invDstParentWorldQuat = quatInvertCompat(_quatB.copy(dstParentWorldQuat));
 
     const a0 = _v3A.copy(this._v3AimAxis).applyQuaternion(this._dstRestQuat).applyQuaternion(dstParentWorldQuat);
 
