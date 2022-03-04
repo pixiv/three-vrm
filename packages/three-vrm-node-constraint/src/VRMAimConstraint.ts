@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import { decomposePosition } from './utils/decomposePosition';
+import { decomposeRotation } from './utils/decomposeRotation';
 import { quatInvertCompat } from './utils/quatInvertCompat';
 import { VRMNodeConstraint } from './VRMNodeConstraint';
 
@@ -73,13 +75,22 @@ export class VRMAimConstraint extends VRMNodeConstraint {
   }
 
   public update(): void {
+    // update world matrix of destination and source manually
+    this.destination.updateWorldMatrix(true, false);
+    this.source.updateWorldMatrix(true, false);
+
     const dstParentWorldQuat = _quatA.identity();
-    this.destination.parent?.getWorldQuaternion(dstParentWorldQuat);
-    const invDstParentWorldQuat = quatInvertCompat(_quatB.copy(dstParentWorldQuat));
+    const invDstParentWorldQuat = _quatB.identity();
+    if (this.destination.parent) {
+      decomposeRotation(this.destination.parent.matrixWorld, dstParentWorldQuat);
+      quatInvertCompat(invDstParentWorldQuat.copy(dstParentWorldQuat));
+    }
 
     const a0 = _v3A.copy(this._v3AimAxis).applyQuaternion(this._dstRestQuat).applyQuaternion(dstParentWorldQuat);
 
-    const a1 = this.source.getWorldPosition(_v3B).sub(this.destination.getWorldPosition(_v3C)).normalize();
+    const a1 = decomposePosition(this.source.matrixWorld, _v3B)
+      .sub(decomposePosition(this.destination.matrixWorld, _v3C))
+      .normalize();
 
     const targetQuat = _quatC
       .setFromUnitVectors(a0, a1)
