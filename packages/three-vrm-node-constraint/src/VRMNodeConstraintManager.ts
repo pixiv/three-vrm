@@ -13,10 +13,10 @@ export class VRMNodeConstraintManager {
   public addConstraint(constraint: VRMNodeConstraint): void {
     this._constraints.add(constraint);
 
-    let objectSet = this._objectConstraintsMap.get(constraint.object);
+    let objectSet = this._objectConstraintsMap.get(constraint.destination);
     if (objectSet == null) {
       objectSet = new Set<VRMNodeConstraint>();
-      this._objectConstraintsMap.set(constraint.object, objectSet);
+      this._objectConstraintsMap.set(constraint.destination, objectSet);
     }
     objectSet.add(constraint);
   }
@@ -24,7 +24,7 @@ export class VRMNodeConstraintManager {
   public deleteConstraint(constraint: VRMNodeConstraint): void {
     this._constraints.delete(constraint);
 
-    const objectSet = this._objectConstraintsMap.get(constraint.object)!;
+    const objectSet = this._objectConstraintsMap.get(constraint.destination)!;
     objectSet.delete(constraint);
   }
 

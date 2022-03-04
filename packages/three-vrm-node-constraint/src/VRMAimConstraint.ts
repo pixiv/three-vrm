@@ -1,124 +1,91 @@
 import * as THREE from 'three';
-import { decomposePosition } from './utils/decomposePosition';
-import { decomposeRotation } from './utils/decomposeRotation';
-import { quatInvertCompat } from './utils/quatInvertCompat';
-import { setAimQuaternion } from './utils/setAimQuaternion';
 import { VRMNodeConstraint } from './VRMNodeConstraint';
 
-const QUAT_IDENTITY = new THREE.Quaternion(0, 0, 0, 1);
-
+const _v3A = new THREE.Vector3();
+const _v3B = new THREE.Vector3();
+const _v3C = new THREE.Vector3();
 const _quatA = new THREE.Quaternion();
 const _quatB = new THREE.Quaternion();
-const _matA = new THREE.Matrix4();
-const _v3GetRotationPos = new THREE.Vector3();
-const _v3GetRotationDir = new THREE.Vector3();
+const _quatC = new THREE.Quaternion();
 
+/**
+ * A constraint that makes it look at a source object.
+ *
+ * See: https://github.com/vrm-c/vrm-specification/tree/master/specification/VRMC_node_constraint-1.0_draft#roll-constraint
+ */
 export class VRMAimConstraint extends VRMNodeConstraint {
   /**
-   * Represents the aim vector used for reference of aim rotation.
-   * It must be normalized.
+   * The aim axis of the constraint.
    */
-  public readonly aimVector = new THREE.Vector3(0.0, 0.0, 1.0);
-
-  /**
-   * Represents the up vector used for calculation of aim rotation.
-   * It must be normalized.
-   */
-  public readonly upVector = new THREE.Vector3(0.0, 1.0, 0.0);
-
-  public axes: [boolean, boolean] = [true, true];
-
-  private readonly _quatInitAim = new THREE.Quaternion();
-  private readonly _quatInvInitAim = new THREE.Quaternion();
-  private readonly _quatInitDst = new THREE.Quaternion();
-
-  public setInitState(): void {
-    this._getDestinationMatrix(_matA);
-    decomposeRotation(_matA, this._quatInitDst);
-
-    this._getAimQuat(this._quatInitAim);
-    quatInvertCompat(this._quatInvInitAim.copy(this._quatInitAim));
-  }
-
-  public update(): void {
-    if (this.destinationSpace === 'local') {
-      // reset rotation
-      this.object.quaternion.copy(QUAT_IDENTITY);
-    } else {
-      // back to the initial rotation in world space
-      this._getParentMatrixInModelSpace(_matA);
-      decomposeRotation(_matA, _quatA);
-      quatInvertCompat(this.object.quaternion.copy(_quatA));
-    }
-
-    // aim toward the target
-    this._getAimDiffQuat(_quatB);
-    this.object.quaternion.multiply(_quatB);
-
-    // apply the initial rotation
-    this.object.quaternion.multiply(this._quatInitDst);
-
-    // done
-    this.object.updateMatrix();
+  public get aimAxis(): '+X' | '-X' | '+Y' | '-Y' | '+Z' | '-Z' {
+    return this._aimAxis;
   }
 
   /**
-   * Return a quaternion that represents a diff from the initial -> current orientation of the aim direction.
-   * It's aware of its {@link sourceSpace}, {@link axes}, and {@link weight}.
-   * @param target Target quaternion
+   * The aim axis of the constraint.
    */
-  private _getAimDiffQuat<T extends THREE.Quaternion>(target: T): T {
-    this._getAimQuat(target);
-    target.multiply(this._quatInvInitAim);
-
-    target.slerp(QUAT_IDENTITY, 1.0 - this.weight);
-
-    return target;
-  }
-
-  /**
-   * Return a current orientation of the aim direction.
-   * It's aware of its {@link sourceSpace} and {@link axes}.
-   * @param target Target quaternion
-   */
-  private _getAimQuat<T extends THREE.Quaternion>(target: T): T {
-    return setAimQuaternion(
-      target,
-      this._getDestinationPosition(_v3GetRotationPos),
-      this._getSourcePosition(_v3GetRotationDir),
-      this.aimVector,
-      this.upVector,
-      this.axes,
+  public set aimAxis(aimAxis: '+X' | '-X' | '+Y' | '-Y' | '+Z' | '-Z') {
+    this._aimAxis = aimAxis;
+    this._v3AimAxis.set(
+      aimAxis === '+X' ? 1.0 : aimAxis === '-X' ? -1.0 : 0.0,
+      aimAxis === '+Y' ? 1.0 : aimAxis === '-Y' ? -1.0 : 0.0,
+      aimAxis === '+Z' ? 1.0 : aimAxis === '-Z' ? -1.0 : 0.0,
     );
   }
 
   /**
-   * Return the current position of the object.
-   * It's aware of its {@link sourceSpace}.
-   * @param target Target quaternion
+   * The aim axis of the constraint.
    */
-  private _getDestinationPosition<T extends THREE.Vector3>(target: T): T {
-    target.set(0.0, 0.0, 0.0);
-
-    this._getDestinationMatrix(_matA);
-    decomposePosition(_matA, target);
-
-    return target;
-  }
+  private _aimAxis: '+X' | '-X' | '+Y' | '-Y' | '+Z' | '-Z';
 
   /**
-   * Return the current position of the source.
-   * It's aware of its {@link sourceSpace}.
-   * @param target Target quaternion
+   * The {@link _aimAxis} but in an actual Vector3 form.
    */
-  private _getSourcePosition<T extends THREE.Vector3>(target: T): T {
-    target.set(0.0, 0.0, 0.0);
+  private _v3AimAxis: THREE.Vector3;
 
-    if (this._source) {
-      this._getSourceMatrix(_matA);
-      decomposePosition(_matA, target);
+  /**
+   * The rest quaternion of the {@link destination}.
+   */
+  private _dstRestQuat: THREE.Quaternion;
+
+  public get dependencies(): Set<THREE.Object3D<THREE.Event>> {
+    const set = new Set<THREE.Object3D>([this.source]);
+
+    if (this.destination.parent) {
+      set.add(this.destination.parent);
     }
 
-    return target;
+    return set;
+  }
+
+  public constructor(destination: THREE.Object3D, source: THREE.Object3D) {
+    super(destination, source);
+
+    this._aimAxis = '+X';
+    this._v3AimAxis = new THREE.Vector3(1, 0, 0);
+
+    this._dstRestQuat = new THREE.Quaternion();
+  }
+
+  public setInitState(): void {
+    this._dstRestQuat.copy(this.destination.quaternion);
+  }
+
+  public update(): void {
+    const dstParentWorldQuat = _quatA.identity();
+    this.destination.parent?.getWorldQuaternion(dstParentWorldQuat);
+    const invDstParentWorldQuat = _quatB.copy(dstParentWorldQuat).invert();
+
+    const a0 = _v3A.copy(this._v3AimAxis).applyQuaternion(this._dstRestQuat).applyQuaternion(dstParentWorldQuat);
+
+    const a1 = this.source.getWorldPosition(_v3B).sub(this.destination.getWorldPosition(_v3C)).normalize();
+
+    const targetQuat = _quatC
+      .setFromUnitVectors(a0, a1)
+      .premultiply(invDstParentWorldQuat)
+      .multiply(dstParentWorldQuat)
+      .multiply(this._dstRestQuat);
+
+    this.destination.quaternion.copy(this._dstRestQuat).slerp(targetQuat, this.weight);
   }
 }

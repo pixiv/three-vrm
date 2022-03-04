@@ -22,8 +22,28 @@
 		<script src="https://unpkg.com/three@0.137.4/build/three.js"></script>
 		<script src="https://unpkg.com/three@0.137.4/examples/js/loaders/GLTFLoader.js"></script>
 		<script src="https://unpkg.com/three@0.137.4/examples/js/controls/OrbitControls.js"></script>
+		<script src="https://unpkg.com/tweakpane@3.0"></script>
+		<script src="https://unpkg.com/@0b5vr/tweakpane-plugin-rotation@0.1"></script>
 		<script src="../lib/three-vrm-node-constraint.js"></script>
 		<script>
+			// gui
+			const guiParams = {
+
+				source: { x: 0.0, y: 0.0, z: 0.0 },
+
+			};
+
+			const pane = new Tweakpane.Pane();
+			pane.registerPlugin( TweakpaneRotationInputPlugin );
+
+			pane.addInput( guiParams, 'source', {
+
+				view: 'rotation',
+				rotationMode: 'euler',
+				unit: 'deg',
+
+			} );
+
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
 			renderer.setSize( window.innerWidth, window.innerHeight );
@@ -112,10 +132,16 @@
 
 				if ( currentGltf ) {
 
-					const cubeA = currentGltf.scene.children.find( ( node ) => node.name === 'CubeA' );
+					const source = currentGltf.scene.children.find( ( node ) => node.name === 'CubeA' );
 
-					cubeA.rotation.x = Math.cos( clock.elapsedTime );
-					cubeA.rotation.y = Math.sin( clock.elapsedTime );
+					source.rotation.set(
+
+						THREE.MathUtils.DEG2RAD * guiParams.source.x,
+						THREE.MathUtils.DEG2RAD * guiParams.source.y,
+						THREE.MathUtils.DEG2RAD * guiParams.source.z,
+						'ZYX',
+
+					);
 
 					const constraintManager = currentGltf.userData.vrmNodeConstraintManager;
 					constraintManager.update();
