@@ -17,6 +17,6 @@ export interface ExpressionMorphTargetBind {
    */
   weight: number;
 
-  extensions?: { [key: string]: { [key: string]: any } };
+  extensions?: { [name: string]: any };
   extras?: any;
 }

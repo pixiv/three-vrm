@@ -29,6 +29,6 @@ export interface VRMCVRM {
 
   expressions?: Expressions;
 
-  extensions?: { [key: string]: { [key: string]: any } };
+  extensions?: { [name: string]: any };
   extras?: any;
 }

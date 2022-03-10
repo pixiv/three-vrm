@@ -53,6 +53,6 @@ export interface Expression {
    */
   overrideMouth?: ExpressionOverrideType;
 
-  extensions?: { [key: string]: { [key: string]: any } };
+  extensions?: { [name: string]: any };
   extras?: any;
 }

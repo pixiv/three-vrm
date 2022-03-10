@@ -9,6 +9,6 @@ export interface FirstPerson {
    */
   meshAnnotations?: FirstPersonMeshAnnotation[];
 
-  extensions?: { [key: string]: { [key: string]: any } };
+  extensions?: { [name: string]: any };
   extras?: any;
 }

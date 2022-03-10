@@ -31,6 +31,6 @@ export interface LookAt {
    */
   rangeMapVerticalUp?: LookAtRangeMap;
 
-  extensions?: { [key: string]: { [key: string]: any } };
+  extensions?: { [name: string]: any };
   extras?: any;
 }

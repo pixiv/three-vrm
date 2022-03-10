@@ -7,6 +7,6 @@ export interface HumanoidHumanBone {
    */
   node: number;
 
-  extensions?: { [key: string]: { [key: string]: any } };
+  extensions?: { [name: string]: any };
   extras?: any;
 }
