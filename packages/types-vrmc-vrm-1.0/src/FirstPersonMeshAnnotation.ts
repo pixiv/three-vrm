@@ -12,6 +12,6 @@ export interface FirstPersonMeshAnnotation {
    */
   type: 'auto' | 'both' | 'thirdPersonOnly' | 'firstPersonOnly';
 
-  extensions?: { [key: string]: { [key: string]: any } };
+  extensions?: { [name: string]: any };
   extras?: any;
 }

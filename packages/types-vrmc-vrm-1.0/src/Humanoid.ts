@@ -6,6 +6,6 @@ import type { HumanoidHumanBones } from './HumanoidHumanBones';
 export interface Humanoid {
   humanBones: HumanoidHumanBones;
 
-  extensions?: { [key: string]: { [key: string]: any } };
+  extensions?: { [name: string]: any };
   extras?: any;
 }

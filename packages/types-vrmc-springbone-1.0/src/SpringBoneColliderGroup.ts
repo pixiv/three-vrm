@@ -6,6 +6,6 @@ export interface SpringBoneColliderGroup {
 
   colliders?: number[];
 
-  extensions?: { [key: string]: { [key: string]: any } };
+  extensions?: { [name: string]: any };
   extras?: any;
 }
