@@ -118,7 +118,7 @@ export class VRMSpringBoneJoint {
     this._nextTail.applyMatrix4(_matA);
 
     // convert center space dependant state
-    _matA.multiply(this.bone.matrixWorld); // 🔥 ??
+    _matA.multiply(this.bone.matrixWorld);
 
     this._centerSpacePosition.setFromMatrixPosition(_matA);
 
@@ -255,7 +255,7 @@ export class VRMSpringBoneJoint {
 
     // Get bone position in center space
     this._getMatrixWorldToCenter(_matA);
-    _matA.multiply(this.bone.matrixWorld); // 🔥 ??
+    _matA.multiply(this.bone.matrixWorld);
     this._centerSpacePosition.setFromMatrixPosition(_matA);
 
     // Get parent position in center space
