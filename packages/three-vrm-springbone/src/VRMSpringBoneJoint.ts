@@ -304,6 +304,7 @@ export class VRMSpringBoneJoint {
     // Collisionで移動
     this._collision(this._nextTail);
 
+    // update prevTail and currentTail
     this._prevTail.copy(this._currentTail);
     this._currentTail.copy(this._nextTail);
 
