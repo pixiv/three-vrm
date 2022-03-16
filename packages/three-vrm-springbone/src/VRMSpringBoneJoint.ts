@@ -154,6 +154,14 @@ export class VRMSpringBoneJoint {
   }
 
   /**
+   * Returns the world matrix of its parent object.
+   * Note that it returns a reference to the matrix. Don't mutate this directly!
+   */
+  private get _parentMatrixWorld(): THREE.Matrix4 {
+    return this.bone.parent ? this.bone.parent.matrixWorld : IDENTITY_MATRIX4;
+  }
+
+  /**
    * Create a new VRMSpringBone.
    *
    * @param bone An Object3D that will be attached to this bone
@@ -226,7 +234,7 @@ export class VRMSpringBoneJoint {
 
     // We need to update its matrixWorld manually, since we tweaked the bone by our hand
     this.bone.updateMatrix();
-    this.bone.matrixWorld.multiplyMatrices(this._getParentMatrixWorld(), this.bone.matrix);
+    this.bone.matrixWorld.multiplyMatrices(this._parentMatrixWorld, this.bone.matrix);
     this._centerSpacePosition.setFromMatrixPosition(this.bone.matrixWorld);
 
     // Apply updated position to tail states
@@ -260,7 +268,7 @@ export class VRMSpringBoneJoint {
 
     // Get parent position in center space
     this._getMatrixWorldToCenter(_matB);
-    _matB.multiply(this._getParentMatrixWorld());
+    _matB.multiply(this._parentMatrixWorld);
 
     // several parameters
     const stiffness = this.settings.stiffness * delta;
@@ -312,7 +320,7 @@ export class VRMSpringBoneJoint {
 
     // We need to update its matrixWorld manually, since we tweaked the bone by our hand
     this.bone.updateMatrix();
-    this.bone.matrixWorld.multiplyMatrices(this._getParentMatrixWorld(), this.bone.matrix);
+    this.bone.matrixWorld.multiplyMatrices(this._parentMatrixWorld, this.bone.matrix);
   }
 
   /**
@@ -369,12 +377,5 @@ export class VRMSpringBoneJoint {
     }
 
     return target;
-  }
-
-  /**
-   * Returns the world matrix of its parent object.
-   */
-  private _getParentMatrixWorld(): THREE.Matrix4 {
-    return this.bone.parent ? this.bone.parent.matrixWorld : IDENTITY_MATRIX4;
   }
 }
