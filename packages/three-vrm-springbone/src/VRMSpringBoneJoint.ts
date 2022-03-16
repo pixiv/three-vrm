@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import { getWorldQuaternionLite } from './utils/getWorldQuaternionLite';
-import { mat4InvertCompat } from './utils/mat4InvertCompat';
 import { Matrix4InverseCache } from './utils/Matrix4InverseCache';
 import type { VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';
 import type { VRMSpringBoneJointSettings } from './VRMSpringBoneJointSettings';
@@ -267,8 +266,15 @@ export class VRMSpringBoneJoint {
     this._centerSpacePosition.setFromMatrixPosition(_matA);
 
     // Get parent position in center space
-    this._getMatrixWorldToCenter(_matB);
-    _matB.multiply(this._parentMatrixWorld);
+    const centerSpaceParentMatrix = this._getMatrixWorldToCenter(_matB).multiply(this._parentMatrixWorld);
+
+    // Get boneAxis in center space
+    const centerSpaceBoneAxis = _v3B
+      .copy(this._boneAxis)
+      .applyMatrix4(this._initialLocalMatrix)
+      .applyMatrix4(centerSpaceParentMatrix)
+      .sub(this._centerSpacePosition)
+      .normalize();
 
     // verlet積分で次の位置を計算
     this._nextTail
@@ -279,20 +285,8 @@ export class VRMSpringBoneJoint {
           .sub(this._prevTail)
           .multiplyScalar(1 - this.settings.dragForce),
       ) // 前フレームの移動を継続する(減衰もあるよ)
-      .add(
-        _v3A
-          .copy(this._boneAxis)
-          .applyMatrix4(this._initialLocalMatrix)
-          .applyMatrix4(_matB)
-          .sub(this._centerSpacePosition)
-          .normalize()
-          .multiplyScalar(this.settings.stiffness * delta),
-      ) // 親の回転による子ボーンの移動目標
-      .add(
-        _v3A
-          .copy(this.settings.gravityDir)
-          .multiplyScalar(this.settings.gravityPower * delta),
-      ); // 外力による移動量
+      .add(_v3A.copy(centerSpaceBoneAxis).multiplyScalar(this.settings.stiffness * delta)) // 親の回転による子ボーンの移動目標
+      .add(_v3A.copy(this.settings.gravityDir).multiplyScalar(this.settings.gravityPower * delta)); // 外力による移動量
 
     // normalize bone length
     this._nextTail
@@ -309,13 +303,8 @@ export class VRMSpringBoneJoint {
     this._currentTail.copy(this._nextTail);
 
     // Apply rotation, convert vector3 thing into actual quaternion
-    // Original UniVRM is doing world unit calculus at here but we're gonna do this on local unit
-    // since Three.js is not good at world coordination stuff
-    const initialCenterSpaceMatrixInv = mat4InvertCompat(_matA.copy(_matB.multiply(this._initialLocalMatrix)));
-    const applyRotation = _quatA.setFromUnitVectors(
-      this._boneAxis,
-      _v3A.copy(this._nextTail).applyMatrix4(initialCenterSpaceMatrixInv).normalize(),
-    );
+    const to = this._nextTail.sub(this._centerSpacePosition).normalize();
+    const applyRotation = _quatA.setFromUnitVectors(centerSpaceBoneAxis, to);
 
     this.bone.quaternion.copy(this._initialLocalRotation).multiply(applyRotation);
 
