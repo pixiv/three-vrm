@@ -270,10 +270,6 @@ export class VRMSpringBoneJoint {
     this._getMatrixWorldToCenter(_matB);
     _matB.multiply(this._parentMatrixWorld);
 
-    // several parameters
-    const stiffness = this.settings.stiffness * delta;
-    const external = _v3B.copy(this.settings.gravityDir).multiplyScalar(this.settings.gravityPower * delta);
-
     // verlet積分で次の位置を計算
     this._nextTail
       .copy(this._currentTail)
@@ -290,9 +286,13 @@ export class VRMSpringBoneJoint {
           .applyMatrix4(_matB)
           .sub(this._centerSpacePosition)
           .normalize()
-          .multiplyScalar(stiffness),
+          .multiplyScalar(this.settings.stiffness * delta),
       ) // 親の回転による子ボーンの移動目標
-      .add(external); // 外力による移動量
+      .add(
+        _v3A
+          .copy(this.settings.gravityDir)
+          .multiplyScalar(this.settings.gravityPower * delta),
+      ); // 外力による移動量
 
     // normalize bone length
     this._nextTail
