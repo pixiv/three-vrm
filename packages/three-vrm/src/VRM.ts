@@ -103,6 +103,8 @@ export class VRM {
    */
   public readonly springBoneManager?: VRMSpringBoneManager;
 
+  private _initializedFlag = false;
+
   /**
    * Create a new VRM instance.
    *
@@ -120,6 +122,19 @@ export class VRM {
   }
 
   /**
+   * Initialize spring bone.
+   *
+   * This function is called just before first update function.
+   *
+   * @param delta deltaTime
+   */
+  private _initialize() {
+    if (this.springBoneManager) {
+      this.springBoneManager.reset();
+    }
+  }
+
+  /**
    * **You need to call this on your update loop.**
    *
    * This function updates every VRM components.
@@ -127,6 +142,10 @@ export class VRM {
    * @param delta deltaTime
    */
   public update(delta: number): void {
+    if (!this._initializedFlag) {
+      this._initialize();
+      this._initializedFlag = true;
+    }
     if (this.lookAt) {
       this.lookAt.update(delta);
     }

@@ -200,10 +200,6 @@ export class VRMSpringBone {
       this._initialLocalChildPosition.copy(firstChild.position);
     }
 
-    this.bone.localToWorld(this._currentTail.copy(this._initialLocalChildPosition));
-    this._prevTail.copy(this._currentTail);
-    this._nextTail.copy(this._currentTail);
-
     this._boneAxis.copy(this._initialLocalChildPosition).normalize();
     this._centerSpaceBoneLength = _v3A
       .copy(this._initialLocalChildPosition)
@@ -222,8 +218,7 @@ export class VRMSpringBone {
     this.bone.quaternion.copy(this._initialLocalRotation);
 
     // We need to update its matrixWorld manually, since we tweaked the bone by our hand
-    this.bone.updateMatrix();
-    this.bone.matrixWorld.multiplyMatrices(this._getParentMatrixWorld(), this.bone.matrix);
+    this.bone.updateWorldMatrix(true, false);
     this._centerSpacePosition.setFromMatrixPosition(this.bone.matrixWorld);
 
     // Apply updated position to tail states
