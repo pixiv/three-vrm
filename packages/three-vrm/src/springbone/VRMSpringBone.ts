@@ -200,6 +200,11 @@ export class VRMSpringBone {
       this._initialLocalChildPosition.copy(firstChild.position);
     }
 
+    // Apply updated position to tail states
+    this.bone.localToWorld(this._currentTail.copy(this._initialLocalChildPosition));
+    this._prevTail.copy(this._currentTail);
+    this._nextTail.copy(this._currentTail);
+
     this._boneAxis.copy(this._initialLocalChildPosition).normalize();
     this._centerSpaceBoneLength = _v3A
       .copy(this._initialLocalChildPosition)
