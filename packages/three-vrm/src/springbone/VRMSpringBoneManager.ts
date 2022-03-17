@@ -37,15 +37,15 @@ export class VRMSpringBoneManager {
   }
 
   /**
-   * Update worldMatrix of springbone's ancestors
-   * called before update springbone
+   * Update worldMatrix of given object, respecting its ancestors.
+   * called before update springbone.
    * @param updatedObjectSet Set of node which worldMatrix is updated.
    * @param node target bone node.
    */
-  private _updateParentMatrix(updatedObjectSet: Set<THREE.Object3D>, node: THREE.Object3D): void {
+  private _updateWorldMatrix(updatedObjectSet: Set<THREE.Object3D>, node: THREE.Object3D): void {
     if (updatedObjectSet.has(node)) return;
 
-    if (node.parent) this._updateParentMatrix(updatedObjectSet, node.parent);
+    if (node.parent) this._updateWorldMatrix(updatedObjectSet, node.parent);
     node.updateWorldMatrix(false, false);
 
     updatedObjectSet.add(node);
@@ -61,7 +61,7 @@ export class VRMSpringBoneManager {
 
     this.springBoneGroupList.forEach((springBoneGroup) => {
       springBoneGroup.forEach((springBone) => {
-        this._updateParentMatrix(updatedObjectSet, springBone.bone);
+        this._updateWorldMatrix(updatedObjectSet, springBone.bone);
         springBone.update(delta);
       });
     });
@@ -75,7 +75,7 @@ export class VRMSpringBoneManager {
 
     this.springBoneGroupList.forEach((springBoneGroup) => {
       springBoneGroup.forEach((springBone) => {
-        this._updateParentMatrix(updatedObjectSet, springBone.bone);
+        this._updateWorldMatrix(updatedObjectSet, springBone.bone);
         springBone.reset();
       });
     });

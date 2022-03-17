@@ -242,10 +242,6 @@ export class VRMSpringBone {
   public update(delta: number): void {
     if (delta <= 0) return;
 
-    // 親スプリングボーンの姿勢は常に変化している。
-    // それに基づいて処理直前に自分のworldMatrixを更新しておく
-    this.bone.matrixWorld.multiplyMatrices(this._getParentMatrixWorld(), this.bone.matrix);
-
     if (this.bone.parent) {
       // SpringBoneは親から順に処理されていくため、
       // 親のmatrixWorldは最新状態の前提でworldMatrixからquaternionを取り出す。
