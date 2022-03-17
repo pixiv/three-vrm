@@ -37,21 +37,6 @@ export class VRMSpringBoneManager {
   }
 
   /**
-   * Update worldMatrix of given object, respecting its ancestors.
-   * called before update springbone.
-   * @param updatedObjectSet Set of node which worldMatrix is updated.
-   * @param node target bone node.
-   */
-  private _updateWorldMatrix(updatedObjectSet: Set<THREE.Object3D>, node: THREE.Object3D): void {
-    if (updatedObjectSet.has(node)) return;
-
-    if (node.parent) this._updateWorldMatrix(updatedObjectSet, node.parent);
-    node.updateWorldMatrix(false, false);
-
-    updatedObjectSet.add(node);
-  }
-
-  /**
    * Update every spring bone attached to this manager.
    *
    * @param delta deltaTime
@@ -79,5 +64,20 @@ export class VRMSpringBoneManager {
         springBone.reset();
       });
     });
+  }
+
+  /**
+   * Update worldMatrix of given object, respecting its ancestors.
+   * called before update springbone.
+   * @param updatedObjectSet Set of node which worldMatrix is updated.
+   * @param node target bone node.
+   */
+  private _updateWorldMatrix(updatedObjectSet: Set<THREE.Object3D>, node: THREE.Object3D): void {
+    if (updatedObjectSet.has(node)) return;
+
+    if (node.parent) this._updateWorldMatrix(updatedObjectSet, node.parent);
+    node.updateWorldMatrix(false, false);
+
+    updatedObjectSet.add(node);
   }
 }
