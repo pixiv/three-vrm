@@ -41,7 +41,7 @@ export class VRMSpringBoneManager {
    * Update worldMatrix of springbone's ancestors
    * called before update springbone
    * @param updatedObjectSet Set of node which worldMatrix is updated.
-   * @param node target born node.
+   * @param node target bone node.
    */
   private _updateParentMatrix(updatedObjectSet: Set<THREE.Object3D>, node: THREE.Object3D): void {
     if (updatedObjectSet.has(node)) return;
