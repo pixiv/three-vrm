@@ -12,7 +12,6 @@ export type VRMSpringBoneGroup = VRMSpringBone[];
 export class VRMSpringBoneManager {
   public readonly colliderGroups: VRMSpringBoneColliderGroup[] = [];
   public readonly springBoneGroupList: VRMSpringBoneGroup[] = [];
-  private _needInitialize = true;
 
   /**
    * Create a new [[VRMSpringBoneManager]]
@@ -53,6 +52,21 @@ export class VRMSpringBoneManager {
   }
 
   /**
+   * Initialize spring bone's position in world coordinate.
+   * called by user before first update
+   */
+  public initialize(): void {
+    const updatedObjectSet = new Set<THREE.Object3D>();
+
+    this.springBoneGroupList.forEach((springBoneGroup) => {
+      springBoneGroup.forEach((springBone) => {
+        this._updateParentMatrix(updatedObjectSet, springBone.bone);
+        springBone.reset();
+      });
+    });
+  }
+
+  /**
    * Update every spring bone attached to this manager.
    *
    * @param delta deltaTime
@@ -63,11 +77,9 @@ export class VRMSpringBoneManager {
     this.springBoneGroupList.forEach((springBoneGroup) => {
       springBoneGroup.forEach((springBone) => {
         this._updateParentMatrix(updatedObjectSet, springBone.bone);
-        if (this._needInitialize) springBone.reset();
         springBone.update(delta);
       });
     });
-    this._needInitialize = false;
   }
 
   /**
