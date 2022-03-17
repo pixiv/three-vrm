@@ -43,11 +43,11 @@ export class VRMSpringBoneManager {
    * @param updated Set of node which worldMatrix is updated.
    * @param node target born node.
    */
-  public updateParentMatrix(updated: Set<THREE.Object3D>, node: THREE.Object3D): void {
+  private _updateParentMatrix(updated: Set<THREE.Object3D>, node: THREE.Object3D): void {
     if (updated.has(node)) return;
     node.updateMatrix()
     if(node.parent) {
-      this.updateParentMatrix(updated, node.parent)
+      this._updateParentMatrix(updated, node.parent)
       node.matrixWorld.multiplyMatrices(node.parent.matrixWorld, node.matrix)
     } else {
       node.matrixWorld.copy(node.matrix)
@@ -61,11 +61,11 @@ export class VRMSpringBoneManager {
    * @param delta deltaTime
    */
   public lateUpdate(delta: number): void {
-    const matrixUpdated = new Set<THREE.Object3D>();
+    const updatedObjectSet = new Set<THREE.Object3D>();
 
     this.springBoneGroupList.forEach((springBoneGroup) => {
       springBoneGroup.forEach((springBone) => {
-        this.updateParentMatrix(matrixUpdated, springBone.bone)
+        this._updateParentMatrix(updatedObjectSet, springBone.bone)
         if (this._needInitialize) springBone.reset()
         springBone.update(delta);
       });
