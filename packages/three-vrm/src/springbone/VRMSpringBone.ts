@@ -218,7 +218,8 @@ export class VRMSpringBone {
     this.bone.quaternion.copy(this._initialLocalRotation);
 
     // We need to update its matrixWorld manually, since we tweaked the bone by our hand
-    this.bone.updateWorldMatrix(true, false);
+    this.bone.updateMatrix();
+    this.bone.matrixWorld.multiplyMatrices(this._getParentMatrixWorld(), this.bone.matrix);
     this._centerSpacePosition.setFromMatrixPosition(this.bone.matrixWorld);
 
     // Apply updated position to tail states
