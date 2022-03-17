@@ -12,7 +12,7 @@ export type VRMSpringBoneGroup = VRMSpringBone[];
 export class VRMSpringBoneManager {
   public readonly colliderGroups: VRMSpringBoneColliderGroup[] = [];
   public readonly springBoneGroupList: VRMSpringBoneGroup[] = [];
-  private _needInitialize = true
+  private _needInitialize = true;
 
   /**
    * Create a new [[VRMSpringBoneManager]]
@@ -45,12 +45,12 @@ export class VRMSpringBoneManager {
    */
   private _updateParentMatrix(updatedObjectSet: Set<THREE.Object3D>, node: THREE.Object3D): void {
     if (updatedObjectSet.has(node)) return;
-    
-    if (node.matrixAutoUpdate) node.updateMatrix()
-    if (node.parent) this._updateParentMatrix(updatedObjectSet, node.parent)
-    node.updateWorldMatrix(false, false)
-    
-    updatedObjectSet.add(node)
+
+    if (node.matrixAutoUpdate) node.updateMatrix();
+    if (node.parent) this._updateParentMatrix(updatedObjectSet, node.parent);
+    node.updateWorldMatrix(false, false);
+
+    updatedObjectSet.add(node);
   }
 
   /**
@@ -63,12 +63,12 @@ export class VRMSpringBoneManager {
 
     this.springBoneGroupList.forEach((springBoneGroup) => {
       springBoneGroup.forEach((springBone) => {
-        this._updateParentMatrix(updatedObjectSet, springBone.bone)
-        if (this._needInitialize) springBone.reset()
+        this._updateParentMatrix(updatedObjectSet, springBone.bone);
+        if (this._needInitialize) springBone.reset();
         springBone.update(delta);
       });
     });
-    this._needInitialize = false
+    this._needInitialize = false;
   }
 
   /**
