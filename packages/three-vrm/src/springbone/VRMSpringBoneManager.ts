@@ -12,6 +12,7 @@ export type VRMSpringBoneGroup = VRMSpringBone[];
 export class VRMSpringBoneManager {
   public readonly colliderGroups: VRMSpringBoneColliderGroup[] = [];
   public readonly springBoneGroupList: VRMSpringBoneGroup[] = [];
+  private _needInitialize = true
 
   /**
    * Create a new [[VRMSpringBoneManager]]
@@ -44,9 +45,11 @@ export class VRMSpringBoneManager {
   public lateUpdate(delta: number): void {
     this.springBoneGroupList.forEach((springBoneGroup) => {
       springBoneGroup.forEach((springBone) => {
+        if (this._needInitialize) springBone.reset()
         springBone.update(delta);
       });
     });
+    this._needInitialize = false
   }
 
   /**
