@@ -125,8 +125,6 @@ export class VRM {
    * Initialize spring bone.
    *
    * This function is called just before first update function.
-   *
-   * @param delta deltaTime
    */
   private _initialize() {
     if (this.springBoneManager) {
