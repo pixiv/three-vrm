@@ -46,7 +46,6 @@ export class VRMSpringBoneManager {
   private _updateParentMatrix(updatedObjectSet: Set<THREE.Object3D>, node: THREE.Object3D): void {
     if (updatedObjectSet.has(node)) return;
 
-    if (node.matrixAutoUpdate) node.updateMatrix();
     if (node.parent) this._updateParentMatrix(updatedObjectSet, node.parent);
     node.updateWorldMatrix(false, false);
 
