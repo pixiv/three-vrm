@@ -40,19 +40,17 @@ export class VRMSpringBoneManager {
   /**
    * Update worldMatrix of springbone's ancestors
    * called before update springbone
-   * @param updated Set of node which worldMatrix is updated.
+   * @param updatedObjectSet Set of node which worldMatrix is updated.
    * @param node target born node.
    */
-  private _updateParentMatrix(updated: Set<THREE.Object3D>, node: THREE.Object3D): void {
-    if (updated.has(node)) return;
-    node.updateMatrix()
-    if(node.parent) {
-      this._updateParentMatrix(updated, node.parent)
-      node.matrixWorld.multiplyMatrices(node.parent.matrixWorld, node.matrix)
-    } else {
-      node.matrixWorld.copy(node.matrix)
-    }
-    updated.add(node)
+  private _updateParentMatrix(updatedObjectSet: Set<THREE.Object3D>, node: THREE.Object3D): void {
+    if (updatedObjectSet.has(node)) return;
+    
+    if (node.matrixAutoUpdate) node.updateMatrix()
+    if (node.parent) this._updateParentMatrix(updatedObjectSet, node.parent)
+    node.updateWorldMatrix(false, false)
+    
+    updatedObjectSet.add(node)
   }
 
   /**
