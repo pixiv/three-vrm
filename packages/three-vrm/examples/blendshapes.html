@@ -67,6 +67,7 @@
 						currentVrm = vrm;
 
 						vrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.Hips ).rotation.y = Math.PI;
+						vrm.springBoneManager.reset();
 
 						console.log( vrm );
 

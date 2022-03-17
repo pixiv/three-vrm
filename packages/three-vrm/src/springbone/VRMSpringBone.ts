@@ -200,6 +200,7 @@ export class VRMSpringBone {
       this._initialLocalChildPosition.copy(firstChild.position);
     }
 
+    // Apply updated position to tail states
     this.bone.localToWorld(this._currentTail.copy(this._initialLocalChildPosition));
     this._prevTail.copy(this._currentTail);
     this._nextTail.copy(this._currentTail);
@@ -240,10 +241,6 @@ export class VRMSpringBone {
    */
   public update(delta: number): void {
     if (delta <= 0) return;
-
-    // 親スプリングボーンの姿勢は常に変化している。
-    // それに基づいて処理直前に自分のworldMatrixを更新しておく
-    this.bone.matrixWorld.multiplyMatrices(this._getParentMatrixWorld(), this.bone.matrix);
 
     if (this.bone.parent) {
       // SpringBoneは親から順に処理されていくため、
