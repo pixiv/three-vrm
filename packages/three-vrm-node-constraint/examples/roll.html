@@ -3,7 +3,7 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<title>three-vrm-constraints example - position.html</title>
+		<title>three-vrm-constraints example - roll.html</title>
 		<meta
 			name="viewport"
 			content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
@@ -21,8 +21,45 @@
 	<body>
 		<script src="https://unpkg.com/three@0.137.4/build/three.js"></script>
 		<script src="https://unpkg.com/three@0.137.4/examples/js/controls/OrbitControls.js"></script>
+		<script src="https://unpkg.com/tweakpane@3.0"></script>
+		<script src="https://unpkg.com/@0b5vr/tweakpane-plugin-rotation@0.1"></script>
 		<script src="../lib/three-vrm-node-constraint.js"></script>
 		<script>
+			// gui
+			const guiParams = {
+
+				lowerArm: { x: 0.0, y: 0.0, z: 0.0 },
+				hand: { x: 0.0, y: 0.0, z: 0.0 },
+				weight: 0.5,
+
+			};
+
+			const pane = new Tweakpane.Pane();
+			pane.registerPlugin( TweakpaneRotationInputPlugin );
+
+			pane.addInput( guiParams, 'lowerArm', {
+
+				view: 'rotation',
+				rotationMode: 'euler',
+				unit: 'deg',
+
+			} );
+
+			pane.addInput( guiParams, 'hand', {
+
+				view: 'rotation',
+				rotationMode: 'euler',
+				unit: 'deg',
+
+			} );
+
+			pane.addInput( guiParams, 'weight', {
+
+				min: 0.0,
+				max: 1.0,
+
+			} );
+
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
 			renderer.setSize( window.innerWidth, window.innerHeight );
@@ -31,12 +68,12 @@
 
 			// camera
 			const camera = new THREE.PerspectiveCamera( 30.0, window.innerWidth / window.innerHeight, 0.1, 20.0 );
-			camera.position.set( 0.0, 0.5, 5.0 );
+			camera.position.set( 0.0, 1.0, 10.0 );
 
 			// camera controls
 			const controls = new THREE.OrbitControls( camera, renderer.domElement );
 			controls.screenSpacePanning = true;
-			controls.target.set( 0.0, 0.5, 0.0 );
+			controls.target.set( 0.0, 1.0, 0.0 );
 			controls.update();
 
 			// scene
@@ -48,32 +85,22 @@
 			scene.add( light );
 
 			// objects
-			const modelRoot = new THREE.Object3D();
-			modelRoot.name = 'modelRoot';
-			scene.add( modelRoot );
-
-			const haha = new THREE.Object3D();
-			haha.name = 'haha';
-			haha.scale.set(0.5, 0.5, 0.5);
-			haha.rotation.y = 1.0; // haha
-			modelRoot.add( haha );
-
-			const geometry = new THREE.BoxGeometry( 0.25, 0.25, 0.25 );
+			const geometry = new THREE.ConeBufferGeometry( 0.25, 0.5, 5 );
 			const material = new THREE.MeshStandardMaterial( { color: 0xbbbbbb } );
 
-			const cubeA = new THREE.Mesh( geometry, material );
-			cubeA.name = 'cubeA';
-			modelRoot.add( cubeA );
+			const lowerArm = new THREE.Mesh( geometry, material );
+			lowerArm.name = 'lowerArm';
+			scene.add( lowerArm );
 
-			const cubeB = new THREE.Mesh( geometry, material );
-			cubeB.name = 'cubeB';
-			cubeB.position.set( 0.5, 0.5, 0.5 );
-			haha.add( cubeB );
+			const hand = new THREE.Mesh( geometry, material );
+			hand.position.y = 2.0;
+			hand.name = 'hand';
+			lowerArm.add( hand );
 
-			const cubeC = new THREE.Mesh( geometry, material );
-			cubeC.name = 'cubeC';
-			cubeC.position.set( 1.0, 1.0, 1.0 );
-			haha.add( cubeC );
+			const roll = new THREE.Mesh( geometry, material );
+			roll.position.y = 1.0;
+			roll.name = 'roll';
+			lowerArm.add( roll );
 
 			// helpers
 			const gridHelper = new THREE.GridHelper( 10, 10 );
@@ -83,20 +110,15 @@
 			scene.add( axesHelper );
 
 			// constraints
-			const constraintManager = new THREE_VRM_NODE_CONSTRAINT.VRMNodeConstraintManager({
+			const constraintManager = new THREE_VRM_NODE_CONSTRAINT.VRMNodeConstraintManager( {
+
 				autoRemoveCircularDependency: true
-			});
 
-			const constraintAB = new THREE_VRM_NODE_CONSTRAINT.VRMPositionConstraint( cubeB, modelRoot );
-			constraintAB.setSource( cubeA );
-			constraintAB.sourceSpace = 'local';
-			constraintAB.destinationSpace = 'local';
-			constraintAB.weight = 0.5;
-			constraintManager.addConstraint( constraintAB );
+			} );
 
-			const constraintBC = new THREE_VRM_NODE_CONSTRAINT.VRMPositionConstraint( cubeC, modelRoot );
-			constraintBC.setSource( cubeA );
-			constraintManager.addConstraint( constraintBC );
+			const constraint = new THREE_VRM_NODE_CONSTRAINT.VRMRollConstraint( roll, hand );
+			constraint.rollAxis = 'Y';
+			constraintManager.addConstraint( constraint );
 
 			// constraint helpers
 			Array.from( constraintManager.constraints ).forEach( ( constraint ) => {
@@ -117,11 +139,25 @@
 
 				requestAnimationFrame( animate );
 
-				const deltaTime = clock.getDelta();
+				lowerArm.rotation.set(
 
-				cubeA.position.x = Math.sin( Math.PI * clock.elapsedTime );
+					THREE.MathUtils.DEG2RAD * guiParams.lowerArm.x,
+					THREE.MathUtils.DEG2RAD * guiParams.lowerArm.y,
+					THREE.MathUtils.DEG2RAD * guiParams.lowerArm.z,
+					'ZYX',
 
-				modelRoot.position.z = Math.sin( clock.elapsedTime );
+				);
+
+				hand.rotation.set(
+
+					THREE.MathUtils.DEG2RAD * guiParams.hand.x,
+					THREE.MathUtils.DEG2RAD * guiParams.hand.y,
+					THREE.MathUtils.DEG2RAD * guiParams.hand.z,
+					'ZYX',
+
+				);
+
+				constraint.weight = guiParams.weight;
 
 				constraintManager.update();
 

@@ -320,9 +320,9 @@
         "VRMC_node_constraint": {
           "specVersion": "1.0-draft",
           "constraint": {
-            "rotation": {
+            "roll": {
               "source": 0,
-              "axes": [true, false, false],
+              "rollAxis": "Y",
               "weight": 1.0
             }
           }
@@ -355,7 +355,6 @@
           "constraint": {
             "rotation": {
               "source": 0,
-              "axes": [true, true, true],
               "weight": 0.5
             }
           }

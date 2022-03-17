@@ -1,82 +1,50 @@
 import * as THREE from 'three';
-import { decomposeRotation } from './utils/decomposeRotation';
-import { quaternionFreezeAxes } from './utils/quaternionFreezeAxes';
 import { quatInvertCompat } from './utils/quatInvertCompat';
 import { VRMNodeConstraint } from './VRMNodeConstraint';
 
-const QUAT_IDENTITY = new THREE.Quaternion(0, 0, 0, 1);
-
-const _matA = new THREE.Matrix4();
 const _quatA = new THREE.Quaternion();
 const _quatB = new THREE.Quaternion();
 
+/**
+ * A constraint that transfers a rotation around one axis of a source.
+ *
+ * See: https://github.com/vrm-c/vrm-specification/tree/master/specification/VRMC_node_constraint-1.0_draft#roll-constraint
+ */
 export class VRMRotationConstraint extends VRMNodeConstraint {
-  public axes: [boolean, boolean, boolean] = [true, true, true];
+  /**
+   * The rest quaternion of the {@link destination}.
+   */
+  private _dstRestQuat: THREE.Quaternion;
 
-  private _quatInitSrc = new THREE.Quaternion();
-  private _quatInvInitSrc = new THREE.Quaternion();
-  private _quatInitDst = new THREE.Quaternion();
+  /**
+   * The inverse of the rest quaternion of the {@link source}.
+   */
+  private _invSrcRestQuat: THREE.Quaternion;
+
+  public get dependencies(): Set<THREE.Object3D<THREE.Event>> {
+    return new Set([this.source]);
+  }
+
+  public constructor(destination: THREE.Object3D, source: THREE.Object3D) {
+    super(destination, source);
+
+    this._dstRestQuat = new THREE.Quaternion();
+    this._invSrcRestQuat = new THREE.Quaternion();
+  }
 
   public setInitState(): void {
-    this._quatInitDst.copy(this.object.quaternion);
-
-    this._getSourceQuat(this._quatInitSrc);
-    quatInvertCompat(this._quatInvInitSrc.copy(this._quatInitSrc));
+    this._dstRestQuat.copy(this.destination.quaternion);
+    quatInvertCompat(this._invSrcRestQuat.copy(this.source.quaternion));
   }
 
   public update(): void {
-    if (this.destinationSpace === 'local') {
-      this.object.quaternion.copy(this._quatInitDst);
-    } else {
-      this._getParentMatrixInModelSpace(_matA);
-      decomposeRotation(_matA, _quatA);
-      quatInvertCompat(this.object.quaternion.copy(_quatA));
-    }
+    // calculate the delta rotation from the rest about the source
+    const srcDeltaQuat = _quatA.copy(this._invSrcRestQuat).multiply(this.source.quaternion);
 
-    this._getSourceDiffQuat(_quatB);
-    this.object.quaternion.multiply(_quatB);
+    // multiply the delta to the rest of the destination
+    const targetQuat = _quatB.copy(this._dstRestQuat).multiply(srcDeltaQuat);
 
-    if (this.destinationSpace === 'model') {
-      this.object.quaternion.multiply(_quatA);
-      this.object.quaternion.multiply(this._quatInitDst);
-    }
-
-    this.object.updateMatrix();
-  }
-
-  /**
-   * Return a quaternion that represents a diff from the initial -> current orientation of the source.
-   * It's aware of its {@link sourceSpace}, {@link axes}, and {@link weight}.
-   * @param target Target quaternion
-   */
-  private _getSourceDiffQuat<T extends THREE.Quaternion>(target: T): T {
-    this._getSourceQuat(target);
-    if (this.sourceSpace === 'local') {
-      target.premultiply(this._quatInvInitSrc);
-    } else {
-      target.multiply(this._quatInvInitSrc);
-    }
-
-    quaternionFreezeAxes(target, this.axes);
-
-    target.slerp(QUAT_IDENTITY, 1.0 - this.weight);
-
-    return target;
-  }
-
-  /**
-   * Return the current orientation of the source.
-   * It's aware of its {@link sourceSpace}.
-   * @param target Target quaternion
-   */
-  private _getSourceQuat<T extends THREE.Quaternion>(target: T): T {
-    target.copy(QUAT_IDENTITY);
-
-    if (this._source) {
-      this._getSourceMatrix(_matA);
-      decomposeRotation(_matA, target);
-    }
-
-    return target;
+    // blend with the rest quaternion using weight
+    this.destination.quaternion.copy(this._dstRestQuat).slerp(targetQuat, this.weight);
   }
 }

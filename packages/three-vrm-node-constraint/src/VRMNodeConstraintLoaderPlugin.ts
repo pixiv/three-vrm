@@ -6,6 +6,8 @@ import type { VRMNodeConstraintLoaderPluginOptions } from './VRMNodeConstraintLo
 import { VRMNodeConstraintManager } from './VRMNodeConstraintManager';
 import { VRMRotationConstraint } from './VRMRotationConstraint';
 import { GLTF as GLTFSchema } from '@gltf-transform/core';
+import { VRMAimConstraint } from './VRMAimConstraint';
+import { VRMRollConstraint } from './VRMRollConstraint';
 
 export class VRMNodeConstraintLoaderPlugin implements GLTFLoaderPlugin {
   public static readonly EXTENSION_NAME = 'VRMC_node_constraint';
@@ -72,8 +74,16 @@ export class VRMNodeConstraintLoaderPlugin implements GLTFLoaderPlugin {
       const constraintDef = extension.constraint;
 
       // import constraints
-      const constraint = this._importRotationConstraint(node, threeNodes, gltf.scene, constraintDef.rotation);
-      manager.addConstraint(constraint);
+      if (constraintDef.roll != null) {
+        const constraint = this._importRollConstraint(node, threeNodes, constraintDef.roll);
+        manager.addConstraint(constraint);
+      } else if (constraintDef.aim != null) {
+        const constraint = this._importAimConstraint(node, threeNodes, constraintDef.aim);
+        manager.addConstraint(constraint);
+      } else if (constraintDef.rotation != null) {
+        const constraint = this._importRotationConstraint(node, threeNodes, constraintDef.rotation);
+        manager.addConstraint(constraint);
+      }
     });
 
     // init constraints
@@ -83,25 +93,65 @@ export class VRMNodeConstraintLoaderPlugin implements GLTFLoaderPlugin {
     return manager;
   }
 
+  protected _importRollConstraint(
+    destination: THREE.Object3D,
+    nodes: THREE.Object3D[],
+    rollConstraintDef: ConstraintSchema.RollConstraint,
+  ): VRMRollConstraint {
+    const { source: sourceIndex, rollAxis, weight } = rollConstraintDef;
+    const source = nodes[sourceIndex];
+    const constraint = new VRMRollConstraint(destination, source);
+
+    if (rollAxis != null) {
+      constraint.rollAxis = rollAxis;
+    }
+    if (weight != null) {
+      constraint.weight = weight;
+    }
+
+    if (this.helperRoot) {
+      const helper = new VRMNodeConstraintHelper(constraint);
+      this.helperRoot.add(helper);
+    }
+
+    return constraint;
+  }
+
+  protected _importAimConstraint(
+    destination: THREE.Object3D,
+    nodes: THREE.Object3D[],
+    aimConstraintDef: ConstraintSchema.AimConstraint,
+  ): VRMAimConstraint {
+    const { source: sourceIndex, aimAxis, weight } = aimConstraintDef;
+    const source = nodes[sourceIndex];
+    const constraint = new VRMAimConstraint(destination, source);
+
+    if (aimAxis != null) {
+      constraint.aimAxis = aimAxis;
+    }
+    if (weight != null) {
+      constraint.weight = weight;
+    }
+
+    if (this.helperRoot) {
+      const helper = new VRMNodeConstraintHelper(constraint);
+      this.helperRoot.add(helper);
+    }
+
+    return constraint;
+  }
+
   protected _importRotationConstraint(
     destination: THREE.Object3D,
     nodes: THREE.Object3D[],
-    modelRoot: THREE.Object3D,
-    rotation: ConstraintSchema.RotationConstraint,
+    rotationConstraintDef: ConstraintSchema.RotationConstraint,
   ): VRMRotationConstraint {
-    const { source, weight, axes } = rotation;
-    const constraint = new VRMRotationConstraint(destination, modelRoot);
+    const { source: sourceIndex, weight } = rotationConstraintDef;
+    const source = nodes[sourceIndex];
+    const constraint = new VRMRotationConstraint(destination, source);
 
-    constraint.setSource(nodes[source]);
-
-    constraint.sourceSpace = 'local';
-    constraint.destinationSpace = 'local';
-
-    if (weight) {
+    if (weight != null) {
       constraint.weight = weight;
-    }
-    if (axes) {
-      constraint.axes = axes;
     }
 
     if (this.helperRoot) {

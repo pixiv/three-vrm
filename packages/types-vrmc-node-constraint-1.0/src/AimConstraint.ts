@@ -1,11 +1,16 @@
 /**
- * A constraint that links the rotation with a source.
+ * A constraint that makes it look at a source object.
  */
-export interface RotationConstraint {
+export interface AimConstraint {
   /**
    * The index of the node constrains the node.
    */
   source: number;
+
+  /**
+   * The aim axis of the constraint.
+   */
+  aimAxis: '+X' | '-X' | '+Y' | '-Y' | '+Z' | '-Z';
 
   /**
    * The weight of the constraint.

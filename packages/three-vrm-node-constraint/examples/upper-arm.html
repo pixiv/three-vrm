@@ -3,7 +3,7 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<title>three-vrm-constraints example - rotation.html</title>
+		<title>three-vrm-constraints example - upper-arm.html</title>
 		<meta
 			name="viewport"
 			content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
@@ -28,15 +28,15 @@
 			// gui
 			const guiParams = {
 
-				source: { x: 0.0, y: 0.0, z: 0.0 },
-				weight: 0.5,
+				upperArm: { x: 0.0, y: 0.0, z: 0.0 },
+				lowerArm: { x: 0.0, y: 0.0, z: 0.0 },
 
 			};
 
 			const pane = new Tweakpane.Pane();
 			pane.registerPlugin( TweakpaneRotationInputPlugin );
 
-			pane.addInput( guiParams, 'source', {
+			pane.addInput( guiParams, 'upperArm', {
 
 				view: 'rotation',
 				rotationMode: 'euler',
@@ -44,10 +44,11 @@
 
 			} );
 
-			pane.addInput( guiParams, 'weight', {
+			pane.addInput( guiParams, 'lowerArm', {
 
-				min: 0.0,
-				max: 1.0,
+				view: 'rotation',
+				rotationMode: 'euler',
+				unit: 'deg',
 
 			} );
 
@@ -79,15 +80,27 @@
 			const geometry = new THREE.ConeBufferGeometry( 0.25, 0.5, 5 );
 			const material = new THREE.MeshStandardMaterial( { color: 0xbbbbbb } );
 
-			const source = new THREE.Mesh( geometry, material );
-			source.name = 'source';
-			source.quaternion.set(0.022, 0.440, 0.360, 0.822);
-			scene.add( source );
+			const upperArm = new THREE.Object3D();
+			upperArm.name = 'upperArm';
+			scene.add( upperArm );
 
-			const destination = new THREE.Mesh( geometry, material );
-			destination.position.y = 2.0;
-			destination.name = 'destination';
-			scene.add( destination );
+			const lowerArm = new THREE.Mesh( geometry, material );
+			lowerArm.position.y = 2.0;
+			lowerArm.name = 'lowerArm';
+			upperArm.add( lowerArm );
+
+			const twistParent = new THREE.Object3D();
+			twistParent.name = 'twistParent';
+			scene.add( twistParent );
+
+			const twist1 = new THREE.Mesh( geometry, material );
+			twist1.name = 'twist1';
+			twistParent.add( twist1 );
+
+			const twist2 = new THREE.Mesh( geometry, material );
+			twist2.position.y = 1.0;
+			twist2.name = 'twist2';
+			twistParent.add( twist2 );
 
 			// helpers
 			const gridHelper = new THREE.GridHelper( 10, 10 );
@@ -103,8 +116,14 @@
 
 			} );
 
-			const constraint = new THREE_VRM_NODE_CONSTRAINT.VRMRotationConstraint( destination, source );
-			constraintManager.addConstraint( constraint );
+			const aimConstraint = new THREE_VRM_NODE_CONSTRAINT.VRMAimConstraint( twistParent, lowerArm );
+			aimConstraint.aimAxis = '+Y';
+			constraintManager.addConstraint( aimConstraint );
+
+			const rollConstraint = new THREE_VRM_NODE_CONSTRAINT.VRMRollConstraint( twist2, upperArm );
+			rollConstraint.rollAxis = 'Y';
+			rollConstraint.weight = 0.5;
+			constraintManager.addConstraint( rollConstraint );
 
 			// constraint helpers
 			Array.from( constraintManager.constraints ).forEach( ( constraint ) => {
@@ -125,16 +144,23 @@
 
 				requestAnimationFrame( animate );
 
-				source.rotation.set(
+				upperArm.rotation.set(
 
-					THREE.MathUtils.DEG2RAD * guiParams.source.x,
-					THREE.MathUtils.DEG2RAD * guiParams.source.y,
-					THREE.MathUtils.DEG2RAD * guiParams.source.z,
+					THREE.MathUtils.DEG2RAD * guiParams.upperArm.x,
+					THREE.MathUtils.DEG2RAD * guiParams.upperArm.y,
+					THREE.MathUtils.DEG2RAD * guiParams.upperArm.z,
 					'ZYX',
 
 				);
 
-				constraint.weight = guiParams.weight;
+				lowerArm.rotation.set(
+
+					THREE.MathUtils.DEG2RAD * guiParams.lowerArm.x,
+					THREE.MathUtils.DEG2RAD * guiParams.lowerArm.y,
+					THREE.MathUtils.DEG2RAD * guiParams.lowerArm.z,
+					'ZYX',
+
+				);
 
 				constraintManager.update();
 
