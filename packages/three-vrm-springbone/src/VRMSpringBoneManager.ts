@@ -133,17 +133,15 @@ export class VRMSpringBoneManager {
     const depObjects = this._getDependencies(springBone);
     for (const depObject of depObjects) {
       traverseAncestorsFromRoot(depObject, (depObjectAncestor) => {
-        if (!objectUpdated.has(springBone.bone)) {
-          // update matrix of all nodes
-          springBone.bone.updateMatrix();
-          springBone.bone.updateWorldMatrix(false, false);
-          objectUpdated.add(springBone.bone);
-        }
         const objectSet = this._objectSpringBonesMap.get(depObjectAncestor);
         if (objectSet) {
           for (const depConstraint of objectSet) {
             this._processSpringBone(depConstraint, springBonesTried, springBonesDone, objectUpdated, callback);
           }
+        } else if (!objectUpdated.has(depObjectAncestor)) {
+          // update matrix of non-springbone
+          depObjectAncestor.updateWorldMatrix(false, false);
+          objectUpdated.add(depObjectAncestor);
         }
       });
     }
