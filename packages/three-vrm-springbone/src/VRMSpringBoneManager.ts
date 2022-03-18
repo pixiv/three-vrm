@@ -146,14 +146,13 @@ export class VRMSpringBoneManager {
       });
     }
 
-    if (!objectUpdated.has(springBone.bone)) {
-      // update my matrix
-      springBone.bone.updateMatrix();
-      springBone.bone.updateWorldMatrix(false, false);
-      objectUpdated.add(springBone.bone);
-    }
-
+    // update my matrix
+    springBone.bone.updateMatrix();
+    springBone.bone.updateWorldMatrix(false, false);
+    
     callback(springBone);
+
+    objectUpdated.add(springBone.bone);
 
     springBonesDone.add(springBone);
   }
