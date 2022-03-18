@@ -149,7 +149,7 @@ export class VRMSpringBoneManager {
     // update my matrix
     springBone.bone.updateMatrix();
     springBone.bone.updateWorldMatrix(false, false);
-    
+
     callback(springBone);
 
     objectUpdated.add(springBone.bone);
