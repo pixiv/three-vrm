@@ -130,6 +130,7 @@ export class VRMSpringBoneManager {
     springBonesTried.add(springBone);
 
     if (!objectUpdated.has(springBone.bone)) {
+      springBone.bone.updateMatrix()
       springBone.bone.updateWorldMatrix(false, false);
       objectUpdated.add(springBone.bone);
     }
@@ -138,6 +139,7 @@ export class VRMSpringBoneManager {
     for (const depObject of depObjects) {
       traverseAncestorsFromRoot(depObject, (depObjectAncestor) => {
         if (!objectUpdated.has(depObjectAncestor)) {
+          springBone.bone.updateMatrix()
           depObjectAncestor.updateWorldMatrix(false, false);
           objectUpdated.add(depObjectAncestor);
         }
