@@ -177,7 +177,6 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
     });
 
     // init spring bones
-    gltf.scene.updateMatrixWorld();
     manager.setInitState();
 
     return manager;
