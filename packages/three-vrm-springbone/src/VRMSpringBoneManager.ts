@@ -1,4 +1,4 @@
-import type * as THREE from 'three';
+import * as THREE from 'three';
 import type { VRMSpringBoneJoint } from './VRMSpringBoneJoint';
 import { traverseAncestorsFromRoot } from './utils/traverseAncestorsFromRoot';
 import type { VRMSpringBoneCollider } from './VRMSpringBoneCollider';
@@ -54,28 +54,31 @@ export class VRMSpringBoneManager {
   public setInitState(): void {
     const springBonesTried = new Set<VRMSpringBoneJoint>();
     const springBonesDone = new Set<VRMSpringBoneJoint>();
+    const objectUpdated = new Set<THREE.Object3D>();
 
     for (const springBone of this._springBones) {
-      this._processSpringBone(springBone, springBonesTried, springBonesDone, (springBone) => springBone.setInitState());
+      this._processSpringBone(springBone, springBonesTried, springBonesDone, objectUpdated, (springBone) => springBone.setInitState());
     }
   }
 
   public reset(): void {
     const springBonesTried = new Set<VRMSpringBoneJoint>();
     const springBonesDone = new Set<VRMSpringBoneJoint>();
+    const objectUpdated = new Set<THREE.Object3D>();
 
     for (const springBone of this._springBones) {
-      this._processSpringBone(springBone, springBonesTried, springBonesDone, (springBone) => springBone.reset());
+      this._processSpringBone(springBone, springBonesTried, springBonesDone, objectUpdated, (springBone) => springBone.reset());
     }
   }
 
   public update(delta: number): void {
     const constraintsTried = new Set<VRMSpringBoneJoint>();
     const constraintsDone = new Set<VRMSpringBoneJoint>();
+    const objectUpdated = new Set<THREE.Object3D>();
 
     for (const springBone of this._springBones) {
       // update the springbone
-      this._processSpringBone(springBone, constraintsTried, constraintsDone, (springBone) => springBone.update(delta));
+      this._processSpringBone(springBone, constraintsTried, constraintsDone, objectUpdated, (springBone) => springBone.update(delta));
 
       // update children world matrices
       // it is required when the spring bone chain is sparse
@@ -101,12 +104,14 @@ export class VRMSpringBoneManager {
    *
    * @param springBone A springBone you want to update
    * @param springBonesTried Set of springBones that are already tried to be updated
+   * @param objectUpdated Set of object3D whose matrixWorld is updated
    * @param springBonesDone Set of springBones that are already up to date
    */
   private _processSpringBone(
     springBone: VRMSpringBoneJoint,
     springBonesTried: Set<VRMSpringBoneJoint>,
     springBonesDone: Set<VRMSpringBoneJoint>,
+    objectUpdated: Set<THREE.Object3D>,
     callback: (springBone: VRMSpringBoneJoint) => void,
   ): void {
     if (springBonesDone.has(springBone)) {
@@ -118,13 +123,23 @@ export class VRMSpringBoneManager {
     }
     springBonesTried.add(springBone);
 
+    
+    if (!objectUpdated.has(springBone.bone)) {
+      springBone.bone.updateWorldMatrix(false, false);
+      objectUpdated.add(springBone.bone);
+    }
+
     const depObjects = this._getDependencies(springBone);
     for (const depObject of depObjects) {
       traverseAncestorsFromRoot(depObject, (depObjectAncestor) => {
+        if (!objectUpdated.has(depObjectAncestor)) {
+          depObjectAncestor.updateWorldMatrix(false, false);
+          objectUpdated.add(depObjectAncestor);
+        }
         const objectSet = this._objectSpringBonesMap.get(depObjectAncestor);
         if (objectSet) {
           for (const depConstraint of objectSet) {
-            this._processSpringBone(depConstraint, springBonesTried, springBonesDone, callback);
+            this._processSpringBone(depConstraint, springBonesTried, springBonesDone, objectUpdated, callback);
           }
         }
       });
