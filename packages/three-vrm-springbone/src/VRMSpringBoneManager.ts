@@ -129,13 +129,13 @@ export class VRMSpringBoneManager {
       throw new Error('VRMSpringBoneManager: Circular dependency detected while updating constraints');
     }
     springBonesTried.add(springBone);
-    
+
     const depObjects = this._getDependencies(springBone);
     for (const depObject of depObjects) {
       traverseAncestorsFromRoot(depObject, (depObjectAncestor) => {
         if (!objectUpdated.has(springBone.bone)) {
           // update matrix of all nodes
-          springBone.bone.updateMatrix()
+          springBone.bone.updateMatrix();
           springBone.bone.updateWorldMatrix(false, false);
           objectUpdated.add(springBone.bone);
         }
@@ -150,11 +150,11 @@ export class VRMSpringBoneManager {
 
     if (!objectUpdated.has(springBone.bone)) {
       // update my matrix
-      springBone.bone.updateMatrix()
+      springBone.bone.updateMatrix();
       springBone.bone.updateWorldMatrix(false, false);
       objectUpdated.add(springBone.bone);
     }
-    
+
     callback(springBone);
 
     springBonesDone.add(springBone);
