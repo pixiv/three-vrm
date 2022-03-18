@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import type * as THREE from 'three';
 import type { VRMSpringBoneJoint } from './VRMSpringBoneJoint';
 import { traverseAncestorsFromRoot } from './utils/traverseAncestorsFromRoot';
 import type { VRMSpringBoneCollider } from './VRMSpringBoneCollider';
@@ -104,14 +104,15 @@ export class VRMSpringBoneManager {
   /**
    * Update a spring bone.
    * If there are other spring bone that are dependant, it will try to update them recursively.
+   * It updates matrixWorld of all ancestors and myself.
    * It might throw an error if there are circular dependencies.
    *
    * Intended to be used in {@link update} and {@link _processSpringBone} itself recursively.
    *
    * @param springBone A springBone you want to update
    * @param springBonesTried Set of springBones that are already tried to be updated
-   * @param objectUpdated Set of object3D whose matrixWorld is updated
    * @param springBonesDone Set of springBones that are already up to date
+   * @param objectUpdated Set of object3D whose matrixWorld is updated
    */
   private _processSpringBone(
     springBone: VRMSpringBoneJoint,
@@ -130,18 +131,20 @@ export class VRMSpringBoneManager {
     springBonesTried.add(springBone);
 
     if (!objectUpdated.has(springBone.bone)) {
+      // update my matrix
       springBone.bone.updateMatrix()
       springBone.bone.updateWorldMatrix(false, false);
       objectUpdated.add(springBone.bone);
     }
-
+    
     const depObjects = this._getDependencies(springBone);
     for (const depObject of depObjects) {
       traverseAncestorsFromRoot(depObject, (depObjectAncestor) => {
-        if (!objectUpdated.has(depObjectAncestor)) {
+        if (!objectUpdated.has(springBone.bone)) {
+          // update matrix of all nodes
           springBone.bone.updateMatrix()
-          depObjectAncestor.updateWorldMatrix(false, false);
-          objectUpdated.add(depObjectAncestor);
+          springBone.bone.updateWorldMatrix(false, false);
+          objectUpdated.add(springBone.bone);
         }
         const objectSet = this._objectSpringBonesMap.get(depObjectAncestor);
         if (objectSet) {
@@ -151,7 +154,7 @@ export class VRMSpringBoneManager {
         }
       });
     }
-
+    
     callback(springBone);
 
     springBonesDone.add(springBone);
