@@ -188,9 +188,6 @@ export class VRMSpringBoneJoint {
    * You might want to call {@link VRMSpringBoneManager.setInitState} instead.
    */
   public setInitState(): void {
-    this.bone.updateMatrix();
-    this.bone.updateWorldMatrix(false, false);
-
     // remember initial position of itself
     this._centerSpacePosition.setFromMatrixPosition(this.bone.matrixWorld);
 
@@ -246,10 +243,6 @@ export class VRMSpringBoneJoint {
    */
   public update(delta: number): void {
     if (delta <= 0) return;
-
-    // 親スプリングボーンの姿勢は常に変化している。
-    // それに基づいて処理直前に自分のworldMatrixを更新しておく
-    this.bone.matrixWorld.multiplyMatrices(this._getParentMatrixWorld(), this.bone.matrix);
 
     if (this.bone.parent) {
       // SpringBoneは親から順に処理されていくため、
