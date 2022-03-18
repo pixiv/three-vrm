@@ -76,13 +76,13 @@ export class VRMSpringBoneManager {
   }
 
   public update(delta: number): void {
-    const constraintsTried = new Set<VRMSpringBoneJoint>();
-    const constraintsDone = new Set<VRMSpringBoneJoint>();
+    const springBonesTried = new Set<VRMSpringBoneJoint>();
+    const springBonesDone = new Set<VRMSpringBoneJoint>();
     const objectUpdated = new Set<THREE.Object3D>();
 
     for (const springBone of this._springBones) {
       // update the springbone
-      this._processSpringBone(springBone, constraintsTried, constraintsDone, objectUpdated, (springBone) =>
+      this._processSpringBone(springBone, springBonesTried, springBonesDone, objectUpdated, (springBone) =>
         springBone.update(delta),
       );
 
@@ -126,7 +126,7 @@ export class VRMSpringBoneManager {
     }
 
     if (springBonesTried.has(springBone)) {
-      throw new Error('VRMSpringBoneManager: Circular dependency detected while updating constraints');
+      throw new Error('VRMSpringBoneManager: Circular dependency detected while updating springbones');
     }
     springBonesTried.add(springBone);
 
@@ -135,8 +135,8 @@ export class VRMSpringBoneManager {
       traverseAncestorsFromRoot(depObject, (depObjectAncestor) => {
         const objectSet = this._objectSpringBonesMap.get(depObjectAncestor);
         if (objectSet) {
-          for (const depConstraint of objectSet) {
-            this._processSpringBone(depConstraint, springBonesTried, springBonesDone, objectUpdated, callback);
+          for (const depSpringBone of objectSet) {
+            this._processSpringBone(depSpringBone, springBonesTried, springBonesDone, objectUpdated, callback);
           }
         } else if (!objectUpdated.has(depObjectAncestor)) {
           // update matrix of non-springbone
