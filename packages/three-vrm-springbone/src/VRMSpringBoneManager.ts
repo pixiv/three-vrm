@@ -57,7 +57,9 @@ export class VRMSpringBoneManager {
     const objectUpdated = new Set<THREE.Object3D>();
 
     for (const springBone of this._springBones) {
-      this._processSpringBone(springBone, springBonesTried, springBonesDone, objectUpdated, (springBone) => springBone.setInitState());
+      this._processSpringBone(springBone, springBonesTried, springBonesDone, objectUpdated, (springBone) =>
+        springBone.setInitState(),
+      );
     }
   }
 
@@ -67,7 +69,9 @@ export class VRMSpringBoneManager {
     const objectUpdated = new Set<THREE.Object3D>();
 
     for (const springBone of this._springBones) {
-      this._processSpringBone(springBone, springBonesTried, springBonesDone, objectUpdated, (springBone) => springBone.reset());
+      this._processSpringBone(springBone, springBonesTried, springBonesDone, objectUpdated, (springBone) =>
+        springBone.reset(),
+      );
     }
   }
 
@@ -78,7 +82,9 @@ export class VRMSpringBoneManager {
 
     for (const springBone of this._springBones) {
       // update the springbone
-      this._processSpringBone(springBone, constraintsTried, constraintsDone, objectUpdated, (springBone) => springBone.update(delta));
+      this._processSpringBone(springBone, constraintsTried, constraintsDone, objectUpdated, (springBone) =>
+        springBone.update(delta),
+      );
 
       // update children world matrices
       // it is required when the spring bone chain is sparse
@@ -123,7 +129,6 @@ export class VRMSpringBoneManager {
     }
     springBonesTried.add(springBone);
 
-    
     if (!objectUpdated.has(springBone.bone)) {
       springBone.bone.updateWorldMatrix(false, false);
       objectUpdated.add(springBone.bone);
