@@ -20,7 +20,7 @@ export class VRMSpringBoneColliderShapeSphere extends VRMSpringBoneColliderShape
     super();
 
     this.offset = params?.offset ?? new THREE.Vector3(0.0, 0.0, 0.0);
-    this.radius = params?.radius ?? 1.0;
+    this.radius = params?.radius ?? 0.0;
   }
 
   public calculateCollision(
