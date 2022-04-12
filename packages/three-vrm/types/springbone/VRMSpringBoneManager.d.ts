@@ -32,4 +32,11 @@ export declare class VRMSpringBoneManager {
      * Reset every spring bone attached to this manager.
      */
     reset(): void;
+    /**
+     * Update worldMatrix of given object, respecting its ancestors.
+     * called before update springbone.
+     * @param updatedObjectSet Set of node which worldMatrix is updated.
+     * @param node target bone node.
+     */
+    private _updateWorldMatrix;
 }

@@ -104,6 +104,7 @@
 						scene.add( vrm.scene );
 
 						vrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.Hips ).rotation.y = Math.PI;
+						vrm.springBoneManager.reset();
 
 					} );
 
