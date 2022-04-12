@@ -29,7 +29,7 @@ export class VRMSpringBoneColliderShapeCapsule extends VRMSpringBoneColliderShap
 
     this.offset = params?.offset ?? new THREE.Vector3(0.0, 0.0, 0.0);
     this.tail = params?.tail ?? new THREE.Vector3(0.0, 0.0, 0.0);
-    this.radius = params?.radius ?? 1.0;
+    this.radius = params?.radius ?? 0.0;
   }
 
   public calculateCollision(
