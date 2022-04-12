@@ -629,7 +629,11 @@ void main() {
       #pragma unroll_loop_start
       for ( int i = 0; i < NUM_HEMI_LIGHTS; i ++ ) {
 
-        irradiance += getHemisphereLightIrradiance( hemisphereLights[ i ], geometry );
+        #if THREE_VRM_THREE_REVISION >= 133
+          irradiance += getHemisphereLightIrradiance( hemisphereLights[ i ], geometry.normal );
+        #else
+          irradiance += getHemisphereLightIrradiance( hemisphereLights[ i ], geometry );
+        #endif
 
       }
       #pragma unroll_loop_end
