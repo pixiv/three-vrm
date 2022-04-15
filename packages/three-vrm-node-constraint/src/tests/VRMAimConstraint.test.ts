@@ -91,7 +91,7 @@ describe('VRMAimConstraint', () => {
 
       describe('when the aim axis is +Y', () => {
         beforeEach(() => {
-          constraint.aimAxis = '+Y';
+          constraint.aimAxis = 'PositiveY';
         });
 
         it('makes the +Y of the destination look at +Y', () => {
@@ -135,7 +135,7 @@ describe('VRMAimConstraint', () => {
 
       describe('when the aim axis is -Z', () => {
         beforeEach(() => {
-          constraint.aimAxis = '-Z';
+          constraint.aimAxis = 'NegativeZ';
         });
 
         describe('when the source moves to the right of the destination', () => {
@@ -158,7 +158,7 @@ describe('VRMAimConstraint', () => {
 
         describe('when the aim axis is +Y', () => {
           beforeEach(() => {
-            constraint.aimAxis = '+Y';
+            constraint.aimAxis = 'PositiveY';
           });
 
           it('makes the +Y of the destination look at +X', () => {
@@ -176,7 +176,7 @@ describe('VRMAimConstraint', () => {
 
         describe('when the aim axis is +Y', () => {
           beforeEach(() => {
-            constraint.aimAxis = '+Y';
+            constraint.aimAxis = 'PositiveY';
           });
 
           describe('when the source moves to the right of the destination', () => {
@@ -211,7 +211,7 @@ describe('VRMAimConstraint', () => {
 
         describe('when the aim axis is +Y', () => {
           beforeEach(() => {
-            constraint.aimAxis = '+Y';
+            constraint.aimAxis = 'PositiveY';
           });
 
           describe('when the source moves to (1, 0, 0)', () => {
@@ -249,7 +249,7 @@ describe('VRMAimConstraint', () => {
 
       describe('when the aim axis is +Y', () => {
         beforeEach(() => {
-          constraint.aimAxis = '+Y';
+          constraint.aimAxis = 'PositiveY';
         });
 
         it('makes the +Y of the destination look at +Y', () => {
@@ -297,7 +297,7 @@ describe('VRMAimConstraint', () => {
 
       describe('when the aim axis is +Y', () => {
         beforeEach(() => {
-          constraint.aimAxis = '+Y';
+          constraint.aimAxis = 'PositiveY';
         });
 
         it('makes the +Y of the destination look at the source', () => {

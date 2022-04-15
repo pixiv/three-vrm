@@ -10,7 +10,7 @@ export interface AimConstraint {
   /**
    * The aim axis of the constraint.
    */
-  aimAxis: '+X' | '-X' | '+Y' | '-Y' | '+Z' | '-Z';
+  aimAxis: 'PositiveX' | 'NegativeX' | 'PositiveY' | 'NegativeY' | 'PositiveZ' | 'NegativeZ';
 
   /**
    * The weight of the constraint.

@@ -20,26 +20,26 @@ export class VRMAimConstraint extends VRMNodeConstraint {
   /**
    * The aim axis of the constraint.
    */
-  public get aimAxis(): '+X' | '-X' | '+Y' | '-Y' | '+Z' | '-Z' {
+  public get aimAxis(): 'PositiveX' | 'NegativeX' | 'PositiveY' | 'NegativeY' | 'PositiveZ' | 'NegativeZ' {
     return this._aimAxis;
   }
 
   /**
    * The aim axis of the constraint.
    */
-  public set aimAxis(aimAxis: '+X' | '-X' | '+Y' | '-Y' | '+Z' | '-Z') {
+  public set aimAxis(aimAxis: 'PositiveX' | 'NegativeX' | 'PositiveY' | 'NegativeY' | 'PositiveZ' | 'NegativeZ') {
     this._aimAxis = aimAxis;
     this._v3AimAxis.set(
-      aimAxis === '+X' ? 1.0 : aimAxis === '-X' ? -1.0 : 0.0,
-      aimAxis === '+Y' ? 1.0 : aimAxis === '-Y' ? -1.0 : 0.0,
-      aimAxis === '+Z' ? 1.0 : aimAxis === '-Z' ? -1.0 : 0.0,
+      aimAxis === 'PositiveX' ? 1.0 : aimAxis === 'NegativeX' ? -1.0 : 0.0,
+      aimAxis === 'PositiveY' ? 1.0 : aimAxis === 'NegativeY' ? -1.0 : 0.0,
+      aimAxis === 'PositiveZ' ? 1.0 : aimAxis === 'NegativeZ' ? -1.0 : 0.0,
     );
   }
 
   /**
    * The aim axis of the constraint.
    */
-  private _aimAxis: '+X' | '-X' | '+Y' | '-Y' | '+Z' | '-Z';
+  private _aimAxis: 'PositiveX' | 'NegativeX' | 'PositiveY' | 'NegativeY' | 'PositiveZ' | 'NegativeZ';
 
   /**
    * The {@link _aimAxis} but in an actual Vector3 form.
@@ -64,7 +64,7 @@ export class VRMAimConstraint extends VRMNodeConstraint {
   public constructor(destination: THREE.Object3D, source: THREE.Object3D) {
     super(destination, source);
 
-    this._aimAxis = '+X';
+    this._aimAxis = 'PositiveX';
     this._v3AimAxis = new THREE.Vector3(1, 0, 0);
 
     this._dstRestQuat = new THREE.Quaternion();
