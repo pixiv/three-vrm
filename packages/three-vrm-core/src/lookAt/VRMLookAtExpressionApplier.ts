@@ -91,6 +91,8 @@ export class VRMLookAtExpressionApplier implements VRMLookAtApplier {
    * @deprecated Use {@link apply} instead.
    */
   public lookAt(euler: THREE.Euler): void {
+    console.warn('VRMLookAtBoneApplier: lookAt() is deprecated. use apply() instead.');
+
     const yaw = THREE.MathUtils.RAD2DEG * euler.y;
     const pitch = THREE.MathUtils.RAD2DEG * euler.x;
 
