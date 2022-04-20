@@ -2,13 +2,19 @@ import * as THREE from 'three';
 import { VRMHumanoid } from '../humanoid';
 import { getWorldQuaternionLite } from '../utils/getWorldQuaternionLite';
 import { quatInvertCompat } from '../utils/quatInvertCompat';
+import { calcAzimuthAltitude } from './utils/calcAzimuthAltitude';
 import type { VRMLookAtApplier } from './VRMLookAtApplier';
+import { sanitizeAngle } from './utils/sanitizeAngle';
+
+const VEC3_POSITIVE_Z = new THREE.Vector3(0.0, 0.0, 1.0);
 
 const _v3A = new THREE.Vector3();
 const _v3B = new THREE.Vector3();
 const _v3C = new THREE.Vector3();
 const _quatA = new THREE.Quaternion();
 const _quatB = new THREE.Quaternion();
+const _quatC = new THREE.Quaternion();
+const _eulerA = new THREE.Euler();
 
 /**
  * A class controls eye gaze movements of a VRM.
@@ -189,14 +195,34 @@ export class VRMLookAt {
   }
 
   /**
+   * Get a quaternion that rotates the +Z unit vector of the humanoid Head to the {@link faceFront} direction.
+   *
+   * @param target A target `THREE.Vector3`
+   */
+  public getFaceFrontQuaternion(target: THREE.Quaternion): THREE.Quaternion {
+    if (this.faceFront.distanceToSquared(VEC3_POSITIVE_Z) < 0.01) {
+      return target.identity();
+    }
+
+    const [ faceFrontAzimuth, faceFrontAltitude ] = calcAzimuthAltitude(this.faceFront);
+    _eulerA.set(0.0, 0.5 * Math.PI + faceFrontAzimuth, faceFrontAltitude, 'YZX');
+    return target.setFromEuler(_eulerA);
+  }
+
+  /**
    * Get its LookAt direction in world coordinate.
    *
    * @param target A target `THREE.Vector3`
    */
   public getLookAtWorldDirection(target: THREE.Vector3): THREE.Vector3 {
-    this.getLookAtWorldQuaternion(_quatA);
+    this.getLookAtWorldQuaternion(_quatB);
+    this.getFaceFrontQuaternion(_quatC);
 
-    return target.copy(this.faceFront).applyEuler(this.euler).applyQuaternion(_quatA);
+    return target
+      .copy(VEC3_POSITIVE_Z)
+      .applyQuaternion(_quatB)
+      .applyQuaternion(_quatC)
+      .applyEuler(this.euler);
   }
 
   /**
@@ -211,15 +237,15 @@ export class VRMLookAt {
     const headPos = this.getLookAtWorldPosition(_v3B);
     const lookAtDir = _v3C.copy(position).sub(headPos).applyQuaternion(headRotInv).normalize();
 
-    // calculate the rotation
-    const rotLocal = _quatB.setFromUnitVectors(this.faceFront, lookAtDir);
+    // calculate angles
+    const [ azimuthFrom, altitudeFrom ] = calcAzimuthAltitude(this.faceFront);
+    const [ azimuthTo, altitudeTo ] = calcAzimuthAltitude(lookAtDir);
+    const yaw = sanitizeAngle(azimuthTo - azimuthFrom);
+    const pitch = sanitizeAngle(altitudeFrom - altitudeTo); // spinning (1, 0, 0) CCW around Z axis makes the vector look up, while spinning (0, 0, 1) CCW around X axis makes the vector look down
 
-    // Transform the direction into local coordinate from the first person bone
-    _v3C.set(0.0, 0.0, 1.0).applyQuaternion(rotLocal);
-
-    // convert the direction into yaw pitch
-    this._yaw = THREE.MathUtils.RAD2DEG * Math.atan2(_v3C.x, _v3C.z);
-    this._pitch = THREE.MathUtils.RAD2DEG * Math.atan2(-_v3C.y, Math.sqrt(_v3C.x * _v3C.x + _v3C.z * _v3C.z));
+    // apply angles
+    this._yaw = THREE.MathUtils.RAD2DEG * yaw;
+    this._pitch = THREE.MathUtils.RAD2DEG * pitch;
 
     this._needsUpdate = true;
   }

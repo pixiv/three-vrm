@@ -2,7 +2,12 @@ import { VRMHumanoid } from '../humanoid';
 import * as THREE from 'three';
 import type { VRMLookAtApplier } from './VRMLookAtApplier';
 import { VRMLookAtRangeMap } from './VRMLookAtRangeMap';
+import { calcAzimuthAltitude } from './utils/calcAzimuthAltitude';
 
+const VEC3_POSITIVE_Z = new THREE.Vector3(0.0, 0.0, 1.0);
+
+const _quatA = new THREE.Quaternion();
+const _quatB = new THREE.Quaternion();
 const _eulerA = new THREE.Euler(0.0, 0.0, 0.0, 'YXZ');
 
 /**
@@ -41,6 +46,23 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
   public rangeMapVerticalUp: VRMLookAtRangeMap;
 
   /**
+   * The front direction of the face.
+   * Intended to be used for VRM 0.0 compat (VRM 0.0 models are facing Z- instead of Z+).
+   * You usually don't want to touch this.
+   */
+  public faceFront: THREE.Vector3;
+
+  /**
+   * The rest quaternion of LeftEye bone.
+   */
+  private _restQuatLeftEye: THREE.Quaternion;
+
+  /**
+   * The rest quaternion of RightEye bone.
+   */
+  private _restQuatRightEye: THREE.Quaternion;
+
+  /**
    * Create a new {@link VRMLookAtBoneApplier}.
    *
    * @param humanoid A {@link VRMHumanoid}
@@ -62,6 +84,23 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
     this.rangeMapHorizontalOuter = rangeMapHorizontalOuter;
     this.rangeMapVerticalDown = rangeMapVerticalDown;
     this.rangeMapVerticalUp = rangeMapVerticalUp;
+
+    this.faceFront = new THREE.Vector3(0.0, 0.0, 1.0);
+
+    // set rest quaternions
+    this._restQuatLeftEye = new THREE.Quaternion();
+    this._restQuatRightEye = new THREE.Quaternion();
+
+    const leftEye = this.humanoid.getBoneNode('leftEye');
+    const rightEye = this.humanoid.getBoneNode('leftEye');
+
+    if (leftEye) {
+      this._restQuatLeftEye.copy(leftEye.quaternion);
+    }
+
+    if (rightEye) {
+      this._restQuatRightEye.copy(rightEye.quaternion);
+    }
   }
 
   /**
@@ -88,7 +127,14 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
         _eulerA.y = THREE.MathUtils.DEG2RAD * this.rangeMapHorizontalOuter.map(yaw);
       }
 
-      leftEye.quaternion.setFromEuler(_eulerA);
+      _quatA.setFromEuler(_eulerA);
+      this._getFaceFrontQuaternion(_quatB);
+
+      leftEye.quaternion
+        .copy(_quatB)
+        .premultiply(_quatA)
+        .premultiply(_quatB.invert())
+        .multiply(this._restQuatLeftEye);
     }
 
     // right
@@ -105,7 +151,14 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
         _eulerA.y = THREE.MathUtils.DEG2RAD * this.rangeMapHorizontalInner.map(yaw);
       }
 
-      rightEye.quaternion.setFromEuler(_eulerA);
+      _quatA.setFromEuler(_eulerA);
+      this._getFaceFrontQuaternion(_quatB);
+
+      rightEye.quaternion
+        .copy(_quatB)
+        .premultiply(_quatA)
+        .premultiply(_quatB.invert())
+        .multiply(this._restQuatRightEye);
     }
   }
 
@@ -117,5 +170,20 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
     const pitch = THREE.MathUtils.RAD2DEG * euler.x;
 
     this.apply(yaw, pitch);
+  }
+
+  /**
+   * Get a quaternion that rotates the +Z unit vector of the humanoid Head to the {@link faceFront} direction.
+   *
+   * @param target A target `THREE.Vector3`
+   */
+  private _getFaceFrontQuaternion(target: THREE.Quaternion): THREE.Quaternion {
+    if (this.faceFront.distanceToSquared(VEC3_POSITIVE_Z) < 0.01) {
+      return target.identity();
+    }
+
+    const [ faceFrontAzimuth, faceFrontAltitude ] = calcAzimuthAltitude(this.faceFront);
+    _eulerA.set(0.0, 0.5 * Math.PI + faceFrontAzimuth, faceFrontAltitude, 'YZX');
+    return target.setFromEuler(_eulerA);
   }
 }

@@ -199,6 +199,10 @@ export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
     // VRM 0.0 are facing Z- instead of Z+
     lookAt.faceFront.set(0.0, 0.0, -1.0);
 
+    if (applier instanceof VRMLookAtBoneApplier) {
+      applier.faceFront?.set(0.0, 0.0, -1.0);
+    }
+
     return lookAt;
   }
 
