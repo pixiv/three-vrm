@@ -89,8 +89,8 @@ export class VRMLookAtHelper extends THREE.Group {
     this.vrmLookAt.getLookAtWorldPosition(_v3A);
     this.vrmLookAt.getLookAtWorldQuaternion(_quatA);
 
-    const yaw = this.vrmLookAt.euler.y;
-    const pitch = this.vrmLookAt.euler.x;
+    const yaw = THREE.MathUtils.DEG2RAD * this.vrmLookAt.yaw;
+    const pitch = THREE.MathUtils.DEG2RAD * this.vrmLookAt.pitch;
 
     this._meshYaw.geometry.theta = yaw;
     this._meshYaw.geometry.update();

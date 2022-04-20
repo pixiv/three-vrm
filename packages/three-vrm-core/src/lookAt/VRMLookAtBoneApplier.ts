@@ -67,27 +67,25 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
   /**
    * Apply the input angle to its associated VRM model.
    *
-   * @param angle An input angle
+   * @param yaw Rotation around Y axis, in degree
+   * @param pitch Rotation around X axis, in degree
    */
-  public lookAt(angle: THREE.Euler): void {
-    const srcX = THREE.MathUtils.RAD2DEG * angle.x;
-    const srcY = THREE.MathUtils.RAD2DEG * angle.y;
-
+  public lookAt(yaw: number, pitch: number): void {
     const leftEye = this.humanoid.getBoneNode('leftEye');
     const rightEye = this.humanoid.getBoneNode('rightEye');
 
     // left
     if (leftEye) {
-      if (srcX < 0.0) {
-        _eulerA.x = -THREE.MathUtils.DEG2RAD * this.rangeMapVerticalDown.map(-srcX);
+      if (pitch < 0.0) {
+        _eulerA.x = -THREE.MathUtils.DEG2RAD * this.rangeMapVerticalDown.map(-pitch);
       } else {
-        _eulerA.x = THREE.MathUtils.DEG2RAD * this.rangeMapVerticalUp.map(srcX);
+        _eulerA.x = THREE.MathUtils.DEG2RAD * this.rangeMapVerticalUp.map(pitch);
       }
 
-      if (srcY < 0.0) {
-        _eulerA.y = -THREE.MathUtils.DEG2RAD * this.rangeMapHorizontalInner.map(-srcY);
+      if (yaw < 0.0) {
+        _eulerA.y = -THREE.MathUtils.DEG2RAD * this.rangeMapHorizontalInner.map(-yaw);
       } else {
-        _eulerA.y = THREE.MathUtils.DEG2RAD * this.rangeMapHorizontalOuter.map(srcY);
+        _eulerA.y = THREE.MathUtils.DEG2RAD * this.rangeMapHorizontalOuter.map(yaw);
       }
 
       leftEye.quaternion.setFromEuler(_eulerA);
@@ -95,16 +93,16 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
 
     // right
     if (rightEye) {
-      if (srcX < 0.0) {
-        _eulerA.x = -THREE.MathUtils.DEG2RAD * this.rangeMapVerticalDown.map(-srcX);
+      if (pitch < 0.0) {
+        _eulerA.x = -THREE.MathUtils.DEG2RAD * this.rangeMapVerticalDown.map(-pitch);
       } else {
-        _eulerA.x = THREE.MathUtils.DEG2RAD * this.rangeMapVerticalUp.map(srcX);
+        _eulerA.x = THREE.MathUtils.DEG2RAD * this.rangeMapVerticalUp.map(pitch);
       }
 
-      if (srcY < 0.0) {
-        _eulerA.y = -THREE.MathUtils.DEG2RAD * this.rangeMapHorizontalOuter.map(-srcY);
+      if (yaw < 0.0) {
+        _eulerA.y = -THREE.MathUtils.DEG2RAD * this.rangeMapHorizontalOuter.map(-yaw);
       } else {
-        _eulerA.y = THREE.MathUtils.DEG2RAD * this.rangeMapHorizontalInner.map(srcY);
+        _eulerA.y = THREE.MathUtils.DEG2RAD * this.rangeMapHorizontalInner.map(yaw);
       }
 
       rightEye.quaternion.setFromEuler(_eulerA);

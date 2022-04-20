@@ -54,13 +54,57 @@ export class VRMLookAt {
    */
   public faceFront = new THREE.Vector3(0.0, 0.0, 1.0);
 
-  protected _euler: THREE.Euler = new THREE.Euler(0.0, 0.0, 0.0, VRMLookAt.EULER_ORDER);
+  /**
+   * Its current angle around Y axis, in degree.
+   */
+  protected _yaw: number;
 
   /**
-   * Its current euler direction.
+   * Its current angle around Y axis, in degree.
+   */
+  public get yaw(): number {
+    return this._yaw;
+  }
+
+  /**
+   * Its current angle around Y axis, in degree.
+   */
+  public set yaw(value: number) {
+    this._yaw = value;
+    this._needsUpdate = true;
+  }
+
+  /**
+   * Its current angle around X axis, in degree.
+   */
+  protected _pitch: number;
+
+  /**
+   * Its current angle around X axis, in degree.
+   */
+  public get pitch(): number {
+    return this._pitch;
+  }
+
+  /**
+   * Its current angle around X axis, in degree.
+   */
+  public set pitch(value: number) {
+    this._pitch = value;
+    this._needsUpdate = true;
+  }
+
+  /**
+   * Specifies that angles need to be applied to its [@link applier].
+   */
+   protected _needsUpdate: boolean;
+
+  /**
+   * Its current yaw-pitch angle in euler.
+   * Does NOT consider {@link faceFront}.
    */
   public get euler(): THREE.Euler {
-    return this._euler.clone();
+    return new THREE.Euler(this._pitch, this._yaw, 0.0, 'YXZ');
   }
 
   /**
@@ -72,6 +116,10 @@ export class VRMLookAt {
   public constructor(humanoid: VRMHumanoid, applier: VRMLookAtApplier) {
     this.humanoid = humanoid;
     this.applier = applier;
+
+    this._yaw = 0.0;
+    this._pitch = 0.0;
+    this._needsUpdate = true;
   }
 
   /**
@@ -108,9 +156,9 @@ export class VRMLookAt {
    * Reset the lookAt direction to initial direction.
    */
   public reset(): void {
-    this._euler.set(0.0, 0.0, 0.0);
-
-    this.applier.lookAt(this._euler);
+    this._yaw = 0.0;
+    this._pitch = 0.0;
+    this._needsUpdate = true;
   }
 
   /**
@@ -143,7 +191,7 @@ export class VRMLookAt {
   public getLookAtWorldDirection(target: THREE.Vector3): THREE.Vector3 {
     this.getLookAtWorldQuaternion(_quatA);
 
-    return target.copy(this.faceFront).applyEuler(this._euler).applyQuaternion(_quatA);
+    return target.copy(this.faceFront).applyEuler(this.euler).applyQuaternion(_quatA);
   }
 
   /**
@@ -153,9 +201,8 @@ export class VRMLookAt {
    * @param position A target position
    */
   public lookAt(position: THREE.Vector3): void {
-    this._calcEuler(this._euler, position);
-
-    this.applier.lookAt(this._euler);
+    this._updateYawPitchByPosition(position);
+    this._needsUpdate = true;
   }
 
   /**
@@ -167,12 +214,16 @@ export class VRMLookAt {
   public update(delta: number): void {
     if (this.target && this.autoUpdate) {
       this.lookAt(this.target.getWorldPosition(_v3A));
+    }
 
-      this.applier.lookAt(this._euler);
+    if (this._needsUpdate) {
+      this._needsUpdate = false;
+
+      this.applier.lookAt(this._yaw, this._pitch);
     }
   }
 
-  protected _calcEuler(target: THREE.Euler, position: THREE.Vector3): THREE.Euler {
+  protected _updateYawPitchByPosition(position: THREE.Vector3): void {
     // Look at direction in local coordinate
     const headRotInv = quatInvertCompat(this.getLookAtWorldQuaternion(_quatA));
     const headPos = this.getLookAtWorldPosition(_v3B);
@@ -184,10 +235,8 @@ export class VRMLookAt {
     // Transform the direction into local coordinate from the first person bone
     _v3C.set(0.0, 0.0, 1.0).applyQuaternion(rotLocal);
 
-    // convert the direction into euler
-    target.x = Math.atan2(-_v3C.y, Math.sqrt(_v3C.x * _v3C.x + _v3C.z * _v3C.z));
-    target.y = Math.atan2(_v3C.x, _v3C.z);
-
-    return target;
+    // convert the direction into yaw pitch
+    this._yaw = THREE.MathUtils.RAD2DEG * Math.atan2(_v3C.x, _v3C.z);
+    this._pitch = THREE.MathUtils.RAD2DEG * Math.atan2(-_v3C.y, Math.sqrt(_v3C.x * _v3C.x + _v3C.z * _v3C.z));
   }
 }
