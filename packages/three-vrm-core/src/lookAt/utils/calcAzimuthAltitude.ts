@@ -11,9 +11,6 @@ import * as THREE from 'three';
  * @param vector The vector
  * @returns A tuple contains two angles, `[ azimuth, altitude ]`
  */
-export function calcAzimuthAltitude(vector: THREE.Vector3): [ azimuth: number, altitude: number ] {
-  return [
-    Math.atan2(-vector.z, vector.x),
-    Math.atan2(vector.y, Math.sqrt(vector.x * vector.x + vector.z * vector.z)),
-  ];
+export function calcAzimuthAltitude(vector: THREE.Vector3): [azimuth: number, altitude: number] {
+  return [Math.atan2(-vector.z, vector.x), Math.atan2(vector.y, Math.sqrt(vector.x * vector.x + vector.z * vector.z))];
 }

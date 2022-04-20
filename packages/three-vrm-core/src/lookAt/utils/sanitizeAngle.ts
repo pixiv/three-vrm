@@ -9,6 +9,6 @@
  * @param angle An input angle
  */
 export function sanitizeAngle(angle: number): number {
-  const roundTurn = Math.round( angle / 2.0 / Math.PI );
+  const roundTurn = Math.round(angle / 2.0 / Math.PI);
   return angle - 2.0 * Math.PI * roundTurn;
 }

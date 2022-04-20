@@ -21,7 +21,7 @@ describe('calcAzimuthAltitude', () => {
   });
 
   it('processes a vector means azimuth = PI / 3, altitude = PI / 3', () => {
-    const [azimuth, altitude] = calcAzimuthAltitude(new THREE.Vector3(0.250, 0.866, -0.433));
+    const [azimuth, altitude] = calcAzimuthAltitude(new THREE.Vector3(0.25, 0.866, -0.433));
     expect(azimuth).toBeCloseTo(Math.PI / 3.0);
     expect(altitude).toBeCloseTo(Math.PI / 3.0);
   });

@@ -130,11 +130,7 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
       _quatA.setFromEuler(_eulerA);
       this._getFaceFrontQuaternion(_quatB);
 
-      leftEye.quaternion
-        .copy(_quatB)
-        .premultiply(_quatA)
-        .premultiply(_quatB.invert())
-        .multiply(this._restQuatLeftEye);
+      leftEye.quaternion.copy(_quatB).premultiply(_quatA).premultiply(_quatB.invert()).multiply(this._restQuatLeftEye);
     }
 
     // right
@@ -184,7 +180,7 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
       return target.identity();
     }
 
-    const [ faceFrontAzimuth, faceFrontAltitude ] = calcAzimuthAltitude(this.faceFront);
+    const [faceFrontAzimuth, faceFrontAltitude] = calcAzimuthAltitude(this.faceFront);
     _eulerA.set(0.0, 0.5 * Math.PI + faceFrontAzimuth, faceFrontAltitude, 'YZX');
     return target.setFromEuler(_eulerA);
   }

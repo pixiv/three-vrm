@@ -103,7 +103,7 @@ export class VRMLookAt {
   /**
    * Specifies that angles need to be applied to its [@link applier].
    */
-   protected _needsUpdate: boolean;
+  protected _needsUpdate: boolean;
 
   /**
    * @deprecated Use {@link getEuler} instead.
@@ -136,12 +136,7 @@ export class VRMLookAt {
    * @param target The target euler
    */
   public getEuler(target: THREE.Euler): THREE.Euler {
-    return target.set(
-      THREE.MathUtils.DEG2RAD * this._pitch,
-      THREE.MathUtils.DEG2RAD * this._yaw,
-      0.0,
-      'YXZ',
-    );
+    return target.set(THREE.MathUtils.DEG2RAD * this._pitch, THREE.MathUtils.DEG2RAD * this._yaw, 0.0, 'YXZ');
   }
 
   /**
@@ -215,7 +210,7 @@ export class VRMLookAt {
       return target.identity();
     }
 
-    const [ faceFrontAzimuth, faceFrontAltitude ] = calcAzimuthAltitude(this.faceFront);
+    const [faceFrontAzimuth, faceFrontAltitude] = calcAzimuthAltitude(this.faceFront);
     _eulerA.set(0.0, 0.5 * Math.PI + faceFrontAzimuth, faceFrontAltitude, 'YZX');
     return target.setFromEuler(_eulerA);
   }
@@ -229,11 +224,7 @@ export class VRMLookAt {
     this.getLookAtWorldQuaternion(_quatB);
     this.getFaceFrontQuaternion(_quatC);
 
-    return target
-      .copy(VEC3_POSITIVE_Z)
-      .applyQuaternion(_quatB)
-      .applyQuaternion(_quatC)
-      .applyEuler(this.euler);
+    return target.copy(VEC3_POSITIVE_Z).applyQuaternion(_quatB).applyQuaternion(_quatC).applyEuler(this.euler);
   }
 
   /**
@@ -249,8 +240,8 @@ export class VRMLookAt {
     const lookAtDir = _v3C.copy(position).sub(headPos).applyQuaternion(headRotInv).normalize();
 
     // calculate angles
-    const [ azimuthFrom, altitudeFrom ] = calcAzimuthAltitude(this.faceFront);
-    const [ azimuthTo, altitudeTo ] = calcAzimuthAltitude(lookAtDir);
+    const [azimuthFrom, altitudeFrom] = calcAzimuthAltitude(this.faceFront);
+    const [azimuthTo, altitudeTo] = calcAzimuthAltitude(lookAtDir);
     const yaw = sanitizeAngle(azimuthTo - azimuthFrom);
     const pitch = sanitizeAngle(altitudeFrom - altitudeTo); // spinning (1, 0, 0) CCW around Z axis makes the vector look up, while spinning (0, 0, 1) CCW around X axis makes the vector look down
 
