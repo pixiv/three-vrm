@@ -104,7 +104,12 @@ export class VRMLookAt {
    * Does NOT consider {@link faceFront}.
    */
   public get euler(): THREE.Euler {
-    return new THREE.Euler(this._pitch, this._yaw, 0.0, 'YXZ');
+    return new THREE.Euler(
+      THREE.MathUtils.DEG2RAD * this._pitch,
+      THREE.MathUtils.DEG2RAD * this._yaw,
+      0.0,
+      'YXZ',
+    );
   }
 
   /**
