@@ -268,7 +268,7 @@ export class VRMLookAt {
    * @param delta deltaTime, it isn't used though. You can use the parameter if you want to use this in your own extended {@link VRMLookAt}.
    */
   public update(delta: number): void {
-    if (this.target && this.autoUpdate) {
+    if (this.target != null && this.autoUpdate) {
       this.lookAt(this.target.getWorldPosition(_v3A));
     }
 

@@ -112,8 +112,8 @@ export class VRMLookAtHelper extends THREE.Group {
     this._meshPitch.quaternion.multiply(QUAT_XY_CW90);
 
     // update target line and sphere
-    const target = this.vrmLookAt.target;
-    if (target != null) {
+    const { target, autoUpdate } = this.vrmLookAt;
+    if (target != null && autoUpdate) {
       target.getWorldPosition(_v3B).sub(_v3A);
       this._lineTarget.geometry.tail.copy(_v3B);
       this._lineTarget.geometry.update();
