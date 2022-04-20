@@ -106,16 +106,12 @@ export class VRMLookAt {
    protected _needsUpdate: boolean;
 
   /**
-   * Its current yaw-pitch angle in euler.
-   * Does NOT consider {@link faceFront}.
+   * @deprecated Use {@link getEuler} instead.
    */
   public get euler(): THREE.Euler {
-    return new THREE.Euler(
-      THREE.MathUtils.DEG2RAD * this._pitch,
-      THREE.MathUtils.DEG2RAD * this._yaw,
-      0.0,
-      'YXZ',
-    );
+    console.warn('VRMLookAt: euler is deprecated. use getEuler() instead.');
+
+    return this.getEuler(new THREE.Euler());
   }
 
   /**
@@ -131,6 +127,21 @@ export class VRMLookAt {
     this._yaw = 0.0;
     this._pitch = 0.0;
     this._needsUpdate = true;
+  }
+
+  /**
+   * Get its yaw-pitch angles as an `Euler`.
+   * Does NOT consider {@link faceFront}.
+   *
+   * @param target The target euler
+   */
+  public getEuler(target: THREE.Euler): THREE.Euler {
+    return target.set(
+      THREE.MathUtils.DEG2RAD * this._pitch,
+      THREE.MathUtils.DEG2RAD * this._yaw,
+      0.0,
+      'YXZ',
+    );
   }
 
   /**
