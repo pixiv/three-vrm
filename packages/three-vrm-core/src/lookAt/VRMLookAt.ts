@@ -198,10 +198,24 @@ export class VRMLookAt {
    * Set its LookAt position.
    * Note that its result will be instantly overwritten if {@link VRMLookAtHead.autoUpdate} is enabled.
    *
-   * @param position A target position
+   * @param position A target position, in world space
    */
   public lookAt(position: THREE.Vector3): void {
-    this._updateYawPitchByPosition(position);
+    // Look at direction in local coordinate
+    const headRotInv = quatInvertCompat(this.getLookAtWorldQuaternion(_quatA));
+    const headPos = this.getLookAtWorldPosition(_v3B);
+    const lookAtDir = _v3C.copy(position).sub(headPos).applyQuaternion(headRotInv).normalize();
+
+    // calculate the rotation
+    const rotLocal = _quatB.setFromUnitVectors(this.faceFront, lookAtDir);
+
+    // Transform the direction into local coordinate from the first person bone
+    _v3C.set(0.0, 0.0, 1.0).applyQuaternion(rotLocal);
+
+    // convert the direction into yaw pitch
+    this._yaw = THREE.MathUtils.RAD2DEG * Math.atan2(_v3C.x, _v3C.z);
+    this._pitch = THREE.MathUtils.RAD2DEG * Math.atan2(-_v3C.y, Math.sqrt(_v3C.x * _v3C.x + _v3C.z * _v3C.z));
+
     this._needsUpdate = true;
   }
 
@@ -221,22 +235,5 @@ export class VRMLookAt {
 
       this.applier.apply(this._yaw, this._pitch);
     }
-  }
-
-  protected _updateYawPitchByPosition(position: THREE.Vector3): void {
-    // Look at direction in local coordinate
-    const headRotInv = quatInvertCompat(this.getLookAtWorldQuaternion(_quatA));
-    const headPos = this.getLookAtWorldPosition(_v3B);
-    const lookAtDir = _v3C.copy(position).sub(headPos).applyQuaternion(headRotInv).normalize();
-
-    // calculate the rotation
-    const rotLocal = _quatB.setFromUnitVectors(this.faceFront, lookAtDir);
-
-    // Transform the direction into local coordinate from the first person bone
-    _v3C.set(0.0, 0.0, 1.0).applyQuaternion(rotLocal);
-
-    // convert the direction into yaw pitch
-    this._yaw = THREE.MathUtils.RAD2DEG * Math.atan2(_v3C.x, _v3C.z);
-    this._pitch = THREE.MathUtils.RAD2DEG * Math.atan2(-_v3C.y, Math.sqrt(_v3C.x * _v3C.x + _v3C.z * _v3C.z));
   }
 }
