@@ -70,8 +70,8 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
    * @param angle An input angle
    */
   public lookAt(angle: THREE.Euler): void {
-    const srcX = (angle.x * 180.0) / Math.PI;
-    const srcY = (angle.y * 180.0) / Math.PI;
+    const srcX = THREE.MathUtils.RAD2DEG * angle.x;
+    const srcY = THREE.MathUtils.RAD2DEG * angle.y;
 
     const leftEye = this.humanoid.getBoneNode('leftEye');
     const rightEye = this.humanoid.getBoneNode('rightEye');
@@ -79,15 +79,15 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
     // left
     if (leftEye) {
       if (srcX < 0.0) {
-        _eulerA.x = (-this.rangeMapVerticalDown.map(-srcX) / 180.0) * Math.PI;
+        _eulerA.x = -THREE.MathUtils.DEG2RAD * this.rangeMapVerticalDown.map(-srcX);
       } else {
-        _eulerA.x = (this.rangeMapVerticalUp.map(srcX) / 180.0) * Math.PI;
+        _eulerA.x = THREE.MathUtils.DEG2RAD * this.rangeMapVerticalUp.map(srcX);
       }
 
       if (srcY < 0.0) {
-        _eulerA.y = (-this.rangeMapHorizontalInner.map(-srcY) / 180.0) * Math.PI;
+        _eulerA.y = -THREE.MathUtils.DEG2RAD * this.rangeMapHorizontalInner.map(-srcY);
       } else {
-        _eulerA.y = (this.rangeMapHorizontalOuter.map(srcY) / 180.0) * Math.PI;
+        _eulerA.y = THREE.MathUtils.DEG2RAD * this.rangeMapHorizontalOuter.map(srcY);
       }
 
       leftEye.quaternion.setFromEuler(_eulerA);
@@ -96,15 +96,15 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
     // right
     if (rightEye) {
       if (srcX < 0.0) {
-        _eulerA.x = (-this.rangeMapVerticalDown.map(-srcX) / 180.0) * Math.PI;
+        _eulerA.x = -THREE.MathUtils.DEG2RAD * this.rangeMapVerticalDown.map(-srcX);
       } else {
-        _eulerA.x = (this.rangeMapVerticalUp.map(srcX) / 180.0) * Math.PI;
+        _eulerA.x = THREE.MathUtils.DEG2RAD * this.rangeMapVerticalUp.map(srcX);
       }
 
       if (srcY < 0.0) {
-        _eulerA.y = (-this.rangeMapHorizontalOuter.map(-srcY) / 180.0) * Math.PI;
+        _eulerA.y = -THREE.MathUtils.DEG2RAD * this.rangeMapHorizontalOuter.map(-srcY);
       } else {
-        _eulerA.y = (this.rangeMapHorizontalInner.map(srcY) / 180.0) * Math.PI;
+        _eulerA.y = THREE.MathUtils.DEG2RAD * this.rangeMapHorizontalInner.map(srcY);
       }
 
       rightEye.quaternion.setFromEuler(_eulerA);
