@@ -1,4 +1,5 @@
 import { VRMExpressionManager } from '../expressions';
+import * as THREE from 'three';
 import type { VRMLookAtApplier } from './VRMLookAtApplier';
 import { VRMLookAtRangeMap } from './VRMLookAtRangeMap';
 
@@ -68,7 +69,7 @@ export class VRMLookAtExpressionApplier implements VRMLookAtApplier {
    * @param yaw Rotation around Y axis, in degree
    * @param pitch Rotation around X axis, in degree
    */
-  public lookAt(yaw: number, pitch: number): void {
+  public apply(yaw: number, pitch: number): void {
     if (pitch < 0.0) {
       this.expressions.setValue('lookDown', 0.0);
       this.expressions.setValue('lookUp', this.rangeMapVerticalUp.map(-pitch));
@@ -84,5 +85,15 @@ export class VRMLookAtExpressionApplier implements VRMLookAtApplier {
       this.expressions.setValue('lookRight', 0.0);
       this.expressions.setValue('lookLeft', this.rangeMapHorizontalOuter.map(yaw));
     }
+  }
+
+  /**
+   * @deprecated Use {@link apply} instead.
+   */
+  public lookAt(euler: THREE.Euler): void {
+    const yaw = THREE.MathUtils.RAD2DEG * euler.y;
+    const pitch = THREE.MathUtils.RAD2DEG * euler.x;
+
+    this.apply(yaw, pitch);
   }
 }

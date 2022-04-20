@@ -70,7 +70,7 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
    * @param yaw Rotation around Y axis, in degree
    * @param pitch Rotation around X axis, in degree
    */
-  public lookAt(yaw: number, pitch: number): void {
+  public apply(yaw: number, pitch: number): void {
     const leftEye = this.humanoid.getBoneNode('leftEye');
     const rightEye = this.humanoid.getBoneNode('rightEye');
 
@@ -107,5 +107,15 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
 
       rightEye.quaternion.setFromEuler(_eulerA);
     }
+  }
+
+  /**
+   * @deprecated Use {@link apply} instead.
+   */
+  public lookAt(euler: THREE.Euler): void {
+    const yaw = THREE.MathUtils.RAD2DEG * euler.y;
+    const pitch = THREE.MathUtils.RAD2DEG * euler.x;
+
+    this.apply(yaw, pitch);
   }
 }
