@@ -200,7 +200,7 @@ export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
     lookAt.faceFront.set(0.0, 0.0, -1.0);
 
     if (applier instanceof VRMLookAtBoneApplier) {
-      applier.faceFront?.set(0.0, 0.0, -1.0);
+      applier.faceFront.set(0.0, 0.0, -1.0);
     }
 
     return lookAt;
