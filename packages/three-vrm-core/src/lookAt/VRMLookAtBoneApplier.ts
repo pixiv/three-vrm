@@ -130,6 +130,7 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
       _quatA.setFromEuler(_eulerA);
       this._getFaceFrontQuaternion(_quatB);
 
+      // quatB^-1 * quatA * quatB * restQuatLeftEye
       leftEye.quaternion.copy(_quatB).premultiply(_quatA).premultiply(_quatB.invert()).multiply(this._restQuatLeftEye);
     }
 
@@ -150,6 +151,7 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
       _quatA.setFromEuler(_eulerA);
       this._getFaceFrontQuaternion(_quatB);
 
+      // quatB^-1 * quatA * quatB * restQuatRightEye
       rightEye.quaternion
         .copy(_quatB)
         .premultiply(_quatA)
