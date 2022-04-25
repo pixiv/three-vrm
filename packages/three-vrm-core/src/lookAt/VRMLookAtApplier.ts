@@ -11,10 +11,10 @@ export interface VRMLookAtApplier {
    * @param yaw Rotation around Y axis, in degree
    * @param pitch Rotation around X axis, in degree
    */
-  apply: (yaw: number, pitch: number) => void;
+  applyYawPitch: (yaw: number, pitch: number) => void;
 
   /**
-   * @deprecated Use {@link apply} instead.
+   * @deprecated Use {@link applyYawPitch} instead.
    */
   lookAt: (euler: THREE.Euler) => void;
 }

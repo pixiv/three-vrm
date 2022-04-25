@@ -266,7 +266,7 @@ export class VRMLookAt {
     if (this._needsUpdate) {
       this._needsUpdate = false;
 
-      this.applier.apply(this._yaw, this._pitch);
+      this.applier.applyYawPitch(this._yaw, this._pitch);
     }
   }
 }

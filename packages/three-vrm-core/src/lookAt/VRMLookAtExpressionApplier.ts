@@ -69,7 +69,7 @@ export class VRMLookAtExpressionApplier implements VRMLookAtApplier {
    * @param yaw Rotation around Y axis, in degree
    * @param pitch Rotation around X axis, in degree
    */
-  public apply(yaw: number, pitch: number): void {
+  public applyYawPitch(yaw: number, pitch: number): void {
     if (pitch < 0.0) {
       this.expressions.setValue('lookDown', 0.0);
       this.expressions.setValue('lookUp', this.rangeMapVerticalUp.map(-pitch));
@@ -88,7 +88,7 @@ export class VRMLookAtExpressionApplier implements VRMLookAtApplier {
   }
 
   /**
-   * @deprecated Use {@link apply} instead.
+   * @deprecated Use {@link applyYawPitch} instead.
    */
   public lookAt(euler: THREE.Euler): void {
     console.warn('VRMLookAtBoneApplier: lookAt() is deprecated. use apply() instead.');
@@ -96,6 +96,6 @@ export class VRMLookAtExpressionApplier implements VRMLookAtApplier {
     const yaw = THREE.MathUtils.RAD2DEG * euler.y;
     const pitch = THREE.MathUtils.RAD2DEG * euler.x;
 
-    this.apply(yaw, pitch);
+    this.applyYawPitch(yaw, pitch);
   }
 }

@@ -75,7 +75,7 @@
 						this._pitchDamped += ( this._pitch - this._pitchDamped ) * k;
 
 						// apply the animated angles
-						this.applier.apply( this._yawDamped, this._pitchDamped );
+						this.applier.applyYawPitch( this._yawDamped, this._pitchDamped );
 
 						// there is no need to update twice
 						this._needsUpdate = false;
@@ -87,7 +87,7 @@
 
 						this._needsUpdate = false;
 
-						this.applier.apply( this._yaw, this._pitch );
+						this.applier.applyYawPitch( this._yaw, this._pitch );
 
 					}
 

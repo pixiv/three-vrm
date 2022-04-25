@@ -109,7 +109,7 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
    * @param yaw Rotation around Y axis, in degree
    * @param pitch Rotation around X axis, in degree
    */
-  public apply(yaw: number, pitch: number): void {
+  public applyYawPitch(yaw: number, pitch: number): void {
     const leftEye = this.humanoid.getBoneNode('leftEye');
     const rightEye = this.humanoid.getBoneNode('rightEye');
 
@@ -159,7 +159,7 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
   }
 
   /**
-   * @deprecated Use {@link apply} instead.
+   * @deprecated Use {@link applyYawPitch} instead.
    */
   public lookAt(euler: THREE.Euler): void {
     console.warn('VRMLookAtBoneApplier: lookAt() is deprecated. use apply() instead.');
@@ -167,7 +167,7 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
     const yaw = THREE.MathUtils.RAD2DEG * euler.y;
     const pitch = THREE.MathUtils.RAD2DEG * euler.x;
 
-    this.apply(yaw, pitch);
+    this.applyYawPitch(yaw, pitch);
   }
 
   /**
