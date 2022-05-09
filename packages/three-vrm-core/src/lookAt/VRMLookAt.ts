@@ -224,7 +224,11 @@ export class VRMLookAt {
     this.getLookAtWorldQuaternion(_quatB);
     this.getFaceFrontQuaternion(_quatC);
 
-    return target.copy(VEC3_POSITIVE_Z).applyQuaternion(_quatB).applyQuaternion(_quatC).applyEuler(this.getEuler(_eulerA));
+    return target
+      .copy(VEC3_POSITIVE_Z)
+      .applyQuaternion(_quatB)
+      .applyQuaternion(_quatC)
+      .applyEuler(this.getEuler(_eulerA));
   }
 
   /**
