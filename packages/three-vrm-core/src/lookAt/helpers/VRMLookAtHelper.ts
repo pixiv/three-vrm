@@ -86,32 +86,41 @@ export class VRMLookAtHelper extends THREE.Group {
   }
 
   public updateMatrixWorld(force: boolean): void {
+    // update geometries
+    const yaw = THREE.MathUtils.DEG2RAD * this.vrmLookAt.yaw;
+    this._meshYaw.geometry.theta = yaw;
+    this._meshYaw.geometry.update();
+
+    const pitch = THREE.MathUtils.DEG2RAD * this.vrmLookAt.pitch;
+    this._meshPitch.geometry.theta = pitch;
+    this._meshPitch.geometry.update();
+
+    // get world position and quaternion
     this.vrmLookAt.getLookAtWorldPosition(_v3A);
     this.vrmLookAt.getLookAtWorldQuaternion(_quatA);
 
-    const yaw = this.vrmLookAt.euler.y;
-    const pitch = this.vrmLookAt.euler.x;
+    // calculate rotation using faceFront
+    _quatA.multiply(this.vrmLookAt.getFaceFrontQuaternion(_quatB));
 
-    this._meshYaw.geometry.theta = yaw;
-    this._meshYaw.geometry.update();
+    // set transform to meshes
     this._meshYaw.position.copy(_v3A);
     this._meshYaw.quaternion.copy(_quatA);
 
-    this._meshPitch.geometry.theta = pitch;
-    this._meshPitch.geometry.update();
     this._meshPitch.position.copy(_v3A);
     this._meshPitch.quaternion.copy(_quatA);
     this._meshPitch.quaternion.multiply(_quatB.setFromAxisAngle(VEC3_POSITIVE_Y, yaw));
     this._meshPitch.quaternion.multiply(QUAT_XY_CW90);
 
-    const target = this.vrmLookAt.target;
-    if (target != null) {
+    // update target line and sphere
+    const { target, autoUpdate } = this.vrmLookAt;
+    if (target != null && autoUpdate) {
       target.getWorldPosition(_v3B).sub(_v3A);
       this._lineTarget.geometry.tail.copy(_v3B);
       this._lineTarget.geometry.update();
       this._lineTarget.position.copy(_v3A);
     }
 
+    // apply transform to meshes
     super.updateMatrixWorld(force);
   }
 }

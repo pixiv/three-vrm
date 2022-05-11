@@ -2,7 +2,12 @@ import { VRMHumanoid } from '../humanoid';
 import * as THREE from 'three';
 import type { VRMLookAtApplier } from './VRMLookAtApplier';
 import { VRMLookAtRangeMap } from './VRMLookAtRangeMap';
+import { calcAzimuthAltitude } from './utils/calcAzimuthAltitude';
 
+const VEC3_POSITIVE_Z = new THREE.Vector3(0.0, 0.0, 1.0);
+
+const _quatA = new THREE.Quaternion();
+const _quatB = new THREE.Quaternion();
 const _eulerA = new THREE.Euler(0.0, 0.0, 0.0, 'YXZ');
 
 /**
@@ -41,6 +46,23 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
   public rangeMapVerticalUp: VRMLookAtRangeMap;
 
   /**
+   * The front direction of the face.
+   * Intended to be used for VRM 0.0 compat (VRM 0.0 models are facing Z- instead of Z+).
+   * You usually don't want to touch this.
+   */
+  public faceFront: THREE.Vector3;
+
+  /**
+   * The rest quaternion of LeftEye bone.
+   */
+  private _restQuatLeftEye: THREE.Quaternion;
+
+  /**
+   * The rest quaternion of RightEye bone.
+   */
+  private _restQuatRightEye: THREE.Quaternion;
+
+  /**
    * Create a new {@link VRMLookAtBoneApplier}.
    *
    * @param humanoid A {@link VRMHumanoid}
@@ -62,52 +84,106 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
     this.rangeMapHorizontalOuter = rangeMapHorizontalOuter;
     this.rangeMapVerticalDown = rangeMapVerticalDown;
     this.rangeMapVerticalUp = rangeMapVerticalUp;
+
+    this.faceFront = new THREE.Vector3(0.0, 0.0, 1.0);
+
+    // set rest quaternions
+    this._restQuatLeftEye = new THREE.Quaternion();
+    this._restQuatRightEye = new THREE.Quaternion();
+
+    const leftEye = this.humanoid.getBoneNode('leftEye');
+    const rightEye = this.humanoid.getBoneNode('leftEye');
+
+    if (leftEye) {
+      this._restQuatLeftEye.copy(leftEye.quaternion);
+    }
+
+    if (rightEye) {
+      this._restQuatRightEye.copy(rightEye.quaternion);
+    }
   }
 
   /**
    * Apply the input angle to its associated VRM model.
    *
-   * @param angle An input angle
+   * @param yaw Rotation around Y axis, in degree
+   * @param pitch Rotation around X axis, in degree
    */
-  public lookAt(angle: THREE.Euler): void {
-    const srcX = (angle.x * 180.0) / Math.PI;
-    const srcY = (angle.y * 180.0) / Math.PI;
-
+  public applyYawPitch(yaw: number, pitch: number): void {
     const leftEye = this.humanoid.getBoneNode('leftEye');
     const rightEye = this.humanoid.getBoneNode('rightEye');
 
     // left
     if (leftEye) {
-      if (srcX < 0.0) {
-        _eulerA.x = (-this.rangeMapVerticalDown.map(-srcX) / 180.0) * Math.PI;
+      if (pitch < 0.0) {
+        _eulerA.x = -THREE.MathUtils.DEG2RAD * this.rangeMapVerticalDown.map(-pitch);
       } else {
-        _eulerA.x = (this.rangeMapVerticalUp.map(srcX) / 180.0) * Math.PI;
+        _eulerA.x = THREE.MathUtils.DEG2RAD * this.rangeMapVerticalUp.map(pitch);
       }
 
-      if (srcY < 0.0) {
-        _eulerA.y = (-this.rangeMapHorizontalInner.map(-srcY) / 180.0) * Math.PI;
+      if (yaw < 0.0) {
+        _eulerA.y = -THREE.MathUtils.DEG2RAD * this.rangeMapHorizontalInner.map(-yaw);
       } else {
-        _eulerA.y = (this.rangeMapHorizontalOuter.map(srcY) / 180.0) * Math.PI;
+        _eulerA.y = THREE.MathUtils.DEG2RAD * this.rangeMapHorizontalOuter.map(yaw);
       }
 
-      leftEye.quaternion.setFromEuler(_eulerA);
+      _quatA.setFromEuler(_eulerA);
+      this._getFaceFrontQuaternion(_quatB);
+
+      // quatB^-1 * quatA * quatB * restQuatLeftEye
+      leftEye.quaternion.copy(_quatB).premultiply(_quatA).premultiply(_quatB.invert()).multiply(this._restQuatLeftEye);
     }
 
     // right
     if (rightEye) {
-      if (srcX < 0.0) {
-        _eulerA.x = (-this.rangeMapVerticalDown.map(-srcX) / 180.0) * Math.PI;
+      if (pitch < 0.0) {
+        _eulerA.x = -THREE.MathUtils.DEG2RAD * this.rangeMapVerticalDown.map(-pitch);
       } else {
-        _eulerA.x = (this.rangeMapVerticalUp.map(srcX) / 180.0) * Math.PI;
+        _eulerA.x = THREE.MathUtils.DEG2RAD * this.rangeMapVerticalUp.map(pitch);
       }
 
-      if (srcY < 0.0) {
-        _eulerA.y = (-this.rangeMapHorizontalOuter.map(-srcY) / 180.0) * Math.PI;
+      if (yaw < 0.0) {
+        _eulerA.y = -THREE.MathUtils.DEG2RAD * this.rangeMapHorizontalOuter.map(-yaw);
       } else {
-        _eulerA.y = (this.rangeMapHorizontalInner.map(srcY) / 180.0) * Math.PI;
+        _eulerA.y = THREE.MathUtils.DEG2RAD * this.rangeMapHorizontalInner.map(yaw);
       }
 
-      rightEye.quaternion.setFromEuler(_eulerA);
+      _quatA.setFromEuler(_eulerA);
+      this._getFaceFrontQuaternion(_quatB);
+
+      // quatB^-1 * quatA * quatB * restQuatRightEye
+      rightEye.quaternion
+        .copy(_quatB)
+        .premultiply(_quatA)
+        .premultiply(_quatB.invert())
+        .multiply(this._restQuatRightEye);
     }
+  }
+
+  /**
+   * @deprecated Use {@link applyYawPitch} instead.
+   */
+  public lookAt(euler: THREE.Euler): void {
+    console.warn('VRMLookAtBoneApplier: lookAt() is deprecated. use apply() instead.');
+
+    const yaw = THREE.MathUtils.RAD2DEG * euler.y;
+    const pitch = THREE.MathUtils.RAD2DEG * euler.x;
+
+    this.applyYawPitch(yaw, pitch);
+  }
+
+  /**
+   * Get a quaternion that rotates the +Z unit vector of the humanoid Head to the {@link faceFront} direction.
+   *
+   * @param target A target `THREE.Vector3`
+   */
+  private _getFaceFrontQuaternion(target: THREE.Quaternion): THREE.Quaternion {
+    if (this.faceFront.distanceToSquared(VEC3_POSITIVE_Z) < 0.01) {
+      return target.identity();
+    }
+
+    const [faceFrontAzimuth, faceFrontAltitude] = calcAzimuthAltitude(this.faceFront);
+    _eulerA.set(0.0, 0.5 * Math.PI + faceFrontAzimuth, faceFrontAltitude, 'YZX');
+    return target.setFromEuler(_eulerA);
   }
 }

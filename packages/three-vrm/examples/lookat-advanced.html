@@ -35,12 +35,16 @@
 
 					super( humanoid, applier );
 
+					// a factor used for animation
 					this.smoothFactor = 10.0;
 
-					this.horizontalLimit = Math.PI / 4.0;
-					this.verticalLimit = Math.PI / 4.0;
+					// maximum angles the lookAt tracks
+					this.yawLimit = 45.0;
+					this.pitchLimit = 45.0;
 
-					this._eulerTo = new THREE.Euler( 0.0, 0.0, 0.0, THREE_VRM.VRMLookAt.EULER_ORDER );
+					// Actual angles applied, animated
+					this._yawDamped = 0.0;
+					this._pitchDamped = 0.0;
 
 				}
 
@@ -48,26 +52,42 @@
 
 					if ( this.target && this.autoUpdate ) {
 
-						this._calcEuler( this._eulerTo, this.target.getWorldPosition( _v3A ) );
+						// this updates `_yaw` and `_pitch`
+						this.lookAt( this.target.getWorldPosition( _v3A ) );
 
+						// limit angles
 						if (
 
-							this.horizontalLimit < Math.abs( this._eulerTo.y ) ||
-							this.verticalLimit < Math.abs( this._eulerTo.x )
+							this.yawLimit < Math.abs( this._yaw ) ||
+							this.pitchLimit < Math.abs( this._pitch )
 
 						) {
 
-							this._eulerTo.set( 0.0, 0.0, 0.0 );
+							this._yaw = 0.0;
+							this._pitch = 0.0;
 
 						}
 
-
+						// animate angles
 						const k = 1.0 - Math.exp( - this.smoothFactor * delta );
 
-						this._euler.x += ( this._eulerTo.x - this._euler.x ) * k;
-						this._euler.y += ( this._eulerTo.y - this._euler.y ) * k;
+						this._yawDamped += ( this._yaw - this._yawDamped ) * k;
+						this._pitchDamped += ( this._pitch - this._pitchDamped ) * k;
 
-						this.applier.lookAt( this._euler );
+						// apply the animated angles
+						this.applier.applyYawPitch( this._yawDamped, this._pitchDamped );
+
+						// there is no need to update twice
+						this._needsUpdate = false;
+
+					}
+
+					// usual update procedure
+					if ( this._needsUpdate ) {
+
+						this._needsUpdate = false;
+
+						this.applier.applyYawPitch( this._yaw, this._pitch );
 
 					}
 
