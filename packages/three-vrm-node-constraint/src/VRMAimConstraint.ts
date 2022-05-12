@@ -14,7 +14,7 @@ const _quatC = new THREE.Quaternion();
 /**
  * A constraint that makes it look at a source object.
  *
- * See: https://github.com/vrm-c/vrm-specification/tree/master/specification/VRMC_node_constraint-1.0_draft#roll-constraint
+ * See: https://github.com/vrm-c/vrm-specification/tree/master/specification/VRMC_node_constraint-1.0_beta#roll-constraint
  */
 export class VRMAimConstraint extends VRMNodeConstraint {
   /**
