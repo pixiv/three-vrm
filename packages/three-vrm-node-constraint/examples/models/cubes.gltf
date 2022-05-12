@@ -318,7 +318,7 @@
       "mesh": 1,
       "extensions": {
         "VRMC_node_constraint": {
-          "specVersion": "1.0-draft",
+          "specVersion": "1.0-beta",
           "constraint": {
             "roll": {
               "source": 0,
@@ -351,7 +351,7 @@
       "mesh": 2,
       "extensions": {
         "VRMC_node_constraint": {
-          "specVersion": "1.0-draft",
+          "specVersion": "1.0-beta",
           "constraint": {
             "rotation": {
               "source": 0,
