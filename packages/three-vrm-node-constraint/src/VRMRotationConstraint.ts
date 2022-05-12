@@ -8,7 +8,7 @@ const _quatB = new THREE.Quaternion();
 /**
  * A constraint that transfers a rotation around one axis of a source.
  *
- * See: https://github.com/vrm-c/vrm-specification/tree/master/specification/VRMC_node_constraint-1.0_draft#roll-constraint
+ * See: https://github.com/vrm-c/vrm-specification/tree/master/specification/VRMC_node_constraint-1.0_beta#roll-constraint
  */
 export class VRMRotationConstraint extends VRMNodeConstraint {
   /**
