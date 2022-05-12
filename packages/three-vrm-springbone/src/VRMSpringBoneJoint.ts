@@ -46,17 +46,17 @@ export class VRMSpringBoneJoint {
   public readonly child: THREE.Object3D | null;
 
   /**
-   * Current position of child tail, in world unit. Will be used for verlet integration.
+   * Current position of child tail, in center unit. Will be used for verlet integration.
    */
   private _currentTail = new THREE.Vector3();
 
   /**
-   * Previous position of child tail, in world unit. Will be used for verlet integration.
+   * Previous position of child tail, in center unit. Will be used for verlet integration.
    */
   private _prevTail = new THREE.Vector3();
 
   /**
-   * Next position of child tail, in world unit. Will be used for verlet integration.
+   * Next position of child tail, in center unit. Will be used for verlet integration.
    * Actually used only in [[update]] and it's kind of temporary variable.
    */
   private _nextTail = new THREE.Vector3();
@@ -68,7 +68,7 @@ export class VRMSpringBoneJoint {
 
   /**
    * Length of the bone in relative space unit. Will be used for normalization in update loop.
-   * It's same as local unit length unless there are scale transformation in world matrix.
+   * It's same as local unit length unless there are scale transformations in the center space.
    */
   private _centerSpaceBoneLength = 0.0;
 
