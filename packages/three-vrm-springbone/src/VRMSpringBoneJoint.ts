@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { getWorldQuaternionLite } from './utils/getWorldQuaternionLite';
+import { mat4InvertCompat } from './utils/mat4InvertCompat';
 import { Matrix4InverseCache } from './utils/Matrix4InverseCache';
 import type { VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';
 import type { VRMSpringBoneJointSettings } from './VRMSpringBoneJointSettings';
@@ -46,17 +47,17 @@ export class VRMSpringBoneJoint {
   public readonly child: THREE.Object3D | null;
 
   /**
-   * Current position of child tail, in world unit. Will be used for verlet integration.
+   * Current position of child tail, in center unit. Will be used for verlet integration.
    */
   private _currentTail = new THREE.Vector3();
 
   /**
-   * Previous position of child tail, in world unit. Will be used for verlet integration.
+   * Previous position of child tail, in center unit. Will be used for verlet integration.
    */
   private _prevTail = new THREE.Vector3();
 
   /**
-   * Next position of child tail, in world unit. Will be used for verlet integration.
+   * Next position of child tail, in center unit. Will be used for verlet integration.
    * Actually used only in [[update]] and it's kind of temporary variable.
    */
   private _nextTail = new THREE.Vector3();
@@ -68,7 +69,7 @@ export class VRMSpringBoneJoint {
 
   /**
    * Length of the bone in relative space unit. Will be used for normalization in update loop.
-   * It's same as local unit length unless there are scale transformation in world matrix.
+   * It's same as local unit length unless there are scale transformations in the center space.
    */
   private _centerSpaceBoneLength = 0.0;
 
@@ -303,8 +304,12 @@ export class VRMSpringBoneJoint {
     this._currentTail.copy(this._nextTail);
 
     // Apply rotation, convert vector3 thing into actual quaternion
-    const to = this._nextTail.sub(this._centerSpacePosition).normalize();
-    const applyRotation = _quatA.setFromUnitVectors(centerSpaceBoneAxis, to);
+    // Original UniVRM is doing center unit calculus at here but we're gonna do this on local unit
+    const initialCenterSpaceMatrixInv = mat4InvertCompat(_matA.copy(_matB.multiply(this._initialLocalMatrix)));
+    const applyRotation = _quatA.setFromUnitVectors(
+      this._boneAxis,
+      _v3A.copy(this._nextTail).applyMatrix4(initialCenterSpaceMatrixInv).normalize(),
+    );
 
     this.bone.quaternion.copy(this._initialLocalRotation).multiply(applyRotation);
 
