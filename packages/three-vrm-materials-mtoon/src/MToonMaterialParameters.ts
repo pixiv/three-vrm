@@ -39,6 +39,12 @@ export interface MToonMaterialParameters extends THREE.ShaderMaterialParameters 
   uvAnimationRotationSpeedFactor?: number;
 
   /**
+   * Whether the material is affected by fog.
+   * `true` by default.
+   */
+  fog?: boolean;
+
+  /**
    * When this is `true`, vertex colors will be ignored.
    * `true` by default.
    */
