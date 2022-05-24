@@ -259,6 +259,12 @@ export class MToonMaterial extends THREE.ShaderMaterial {
   public uvAnimationRotationSpeedFactor = 0.0;
 
   /**
+   * Whether the material is affected by fog.
+   * `true` by default.
+   */
+  public fog = true;
+
+  /**
    * Will be read in WebGLPrograms
    *
    * See: https://github.com/mrdoob/three.js/blob/4f5236ac3d6f41d904aa58401b40554e8fbdcb15/src/renderers/webgl/WebGLPrograms.js#L190-L191

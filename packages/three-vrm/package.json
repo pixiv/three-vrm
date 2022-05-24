@@ -54,13 +54,13 @@
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.0.0",
-    "@types/three": "^0.137.0",
+    "@types/three": "^0.140.0",
     "lint-staged": "10.5.4",
     "quicktype": "^15.0.258",
-    "three": "^0.137.4"
+    "three": "^0.140.2"
   },
   "peerDependencies": {
-    "@types/three": "^0.137.0",
-    "three": "^0.137.4"
+    "@types/three": "^0.140.0",
+    "three": "^0.140.2"
   }
 }
