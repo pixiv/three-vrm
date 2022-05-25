@@ -13,6 +13,7 @@ export interface MToonMaterialParameters extends THREE.ShaderMaterialParameters 
   normalMap?: THREE.Texture;
   normalScale?: THREE.Vector2;
   emissive?: THREE.Color;
+  emissiveIntensity?: number;
   emissiveMap?: THREE.Texture;
   shadeColorFactor?: THREE.Color;
   shadeMultiplyTexture?: THREE.Texture;

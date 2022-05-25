@@ -36,6 +36,7 @@ uniform float parametricRimLiftFactor;
 #endif
 
 uniform vec3 emissive;
+uniform float emissiveIntensity;
 
 uniform vec3 outlineColorFactor;
 uniform float outlineLightingMixFactor;
@@ -342,7 +343,7 @@ void main() {
 
   vec4 diffuseColor = vec4( litFactor, opacity );
   ReflectedLight reflectedLight = ReflectedLight( vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ) );
-  vec3 totalEmissiveRadiance = emissive;
+  vec3 totalEmissiveRadiance = emissive * emissiveIntensity;
 
   #include <logdepthbuf_fragment>
 
