@@ -21,6 +21,10 @@ export class VRMMaterialsHDREmissiveMultiplierLoaderPlugin implements GLTFLoader
       return;
     }
 
+    // This extension is archived. Emit warning
+    // See: https://github.com/vrm-c/vrm-specification/pull/375
+    console.warn('VRMMaterialsHDREmissiveMultiplierLoaderPlugin: `VRMC_materials_hdr_emissiveMultiplier` is archived. Use `KHR_materials_emissive_strength` instead.');
+
     const emissiveMultiplier = extension.emissiveMultiplier;
     materialParams.emissiveIntensity = emissiveMultiplier;
   }
