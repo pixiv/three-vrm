@@ -15,7 +15,7 @@ export class VRMMaterialsHDREmissiveMultiplierLoaderPlugin implements GLTFLoader
     this.parser = parser;
   }
 
-  public async extendMaterialParams(materialIndex: number, materialParams: { [key: string]: any; }): Promise<void> {
+  public async extendMaterialParams(materialIndex: number, materialParams: { [key: string]: any }): Promise<void> {
     const extension = this._getHDREmissiveMultiplierExtension(materialIndex);
     if (extension == null) {
       return;
@@ -23,7 +23,9 @@ export class VRMMaterialsHDREmissiveMultiplierLoaderPlugin implements GLTFLoader
 
     // This extension is archived. Emit warning
     // See: https://github.com/vrm-c/vrm-specification/pull/375
-    console.warn('VRMMaterialsHDREmissiveMultiplierLoaderPlugin: `VRMC_materials_hdr_emissiveMultiplier` is archived. Use `KHR_materials_emissive_strength` instead.');
+    console.warn(
+      'VRMMaterialsHDREmissiveMultiplierLoaderPlugin: `VRMC_materials_hdr_emissiveMultiplier` is archived. Use `KHR_materials_emissive_strength` instead.',
+    );
 
     const emissiveMultiplier = extension.emissiveMultiplier;
     materialParams.emissiveIntensity = emissiveMultiplier;
