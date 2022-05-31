@@ -78,6 +78,7 @@ export class VRMLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   public async extendMaterialParams(materialIndex: number, materialParams: { [key: string]: any }): Promise<any> {
+    await this.materialsHDREmissiveMultiplierPlugin.extendMaterialParams(materialIndex, materialParams);
     await this.mtoonMaterialPlugin.extendMaterialParams(materialIndex, materialParams);
   }
 
@@ -90,7 +91,6 @@ export class VRMLoaderPlugin implements GLTFLoaderPlugin {
     await this.springBonePlugin.afterRoot(gltf);
     await this.nodeConstraintPlugin.afterRoot(gltf);
     await this.mtoonMaterialPlugin.afterRoot(gltf);
-    await this.materialsHDREmissiveMultiplierPlugin.afterRoot(gltf);
 
     const vrm = new VRM({
       scene: gltf.scene,
