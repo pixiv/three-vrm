@@ -149,6 +149,8 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
         return group;
       });
 
+      const center = schemaSpring.center != null ? threeNodes[schemaSpring.center] : undefined;
+
       let prevJoint: V1SpringBoneSchema.SpringBoneJoint | undefined;
       schemaJoints.forEach((joint) => {
         if (prevJoint) {
@@ -169,6 +171,10 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
 
           // create spring bones
           const spring = this._importJoint(node, child, setting, colliderGroupsForSpring);
+          if (center) {
+            spring.center = center;
+          }
+
           manager.addSpringBone(spring);
         }
 
@@ -251,6 +257,9 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
         } else {
           gravityDir.set(0.0, -1.0, 0.0);
         }
+
+      const center = schemaBoneGroup.center != null ? threeNodes[schemaBoneGroup.center] : undefined;
+
         const setting: Partial<VRMSpringBoneJointSettings> = {
           hitRadius: schemaBoneGroup.hitRadius,
           dragForce: schemaBoneGroup.dragForce,
@@ -275,7 +284,12 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
         // create spring bones
         root.traverse((node) => {
           const child: THREE.Object3D | null = node.children[0] ?? null;
+
           const spring = this._importJoint(node, child, setting, colliderGroupsForSpring);
+          if (center) {
+            spring.center = center;
+          }
+
           manager.addSpringBone(spring);
         });
       });
