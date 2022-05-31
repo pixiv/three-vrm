@@ -19,6 +19,11 @@ export interface SpringBoneSpring {
    */
   colliderGroups?: number[];
 
+  /**
+   * An index of node which is used as a root of center space.
+   */
+  center?: number;
+
   extensions?: { [name: string]: any };
   extras?: any;
 }
