@@ -258,7 +258,7 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
           gravityDir.set(0.0, -1.0, 0.0);
         }
 
-      const center = schemaBoneGroup.center != null ? threeNodes[schemaBoneGroup.center] : undefined;
+        const center = schemaBoneGroup.center != null ? threeNodes[schemaBoneGroup.center] : undefined;
 
         const setting: Partial<VRMSpringBoneJointSettings> = {
           hitRadius: schemaBoneGroup.hitRadius,
