@@ -250,11 +250,7 @@ export class VRMSpringBoneJoint {
       .applyMatrix4(matrixCenterToWorld); // tailをworld spaceに戻す
 
     // normalize bone length
-    _nextTail
-      .sub(_worldSpacePosition)
-      .normalize()
-      .multiplyScalar(this._worldSpaceBoneLength)
-      .add(_worldSpacePosition);
+    _nextTail.sub(_worldSpacePosition).normalize().multiplyScalar(this._worldSpaceBoneLength).add(_worldSpacePosition);
 
     // Collisionで移動
     this._collision(_nextTail);
@@ -267,7 +263,9 @@ export class VRMSpringBoneJoint {
 
     // Apply rotation, convert vector3 thing into actual quaternion
     // Original UniVRM is doing center unit calculus at here but we're gonna do this on local unit
-    const worldSpaceInitialMatrixInv = mat4InvertCompat(_matA.copy(this._parentMatrixWorld).multiply(this._initialLocalMatrix));
+    const worldSpaceInitialMatrixInv = mat4InvertCompat(
+      _matA.copy(this._parentMatrixWorld).multiply(this._initialLocalMatrix),
+    );
     const applyRotation = _quatA.setFromUnitVectors(
       this._boneAxis,
       _v3A.copy(_nextTail).applyMatrix4(worldSpaceInitialMatrixInv).normalize(),
@@ -295,11 +293,7 @@ export class VRMSpringBoneJoint {
           tail.add(_v3A.multiplyScalar(-dist));
 
           // normalize bone length
-          tail
-            .sub(_worldSpacePosition)
-            .normalize()
-            .multiplyScalar(this._worldSpaceBoneLength)
-            .add(_worldSpacePosition);
+          tail.sub(_worldSpacePosition).normalize().multiplyScalar(this._worldSpaceBoneLength).add(_worldSpacePosition);
         }
       });
     });
