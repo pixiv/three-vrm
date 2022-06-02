@@ -170,6 +170,12 @@ export class VRMSpringBoneManager {
       set.add(parent);
     }
 
+    springBone.colliderGroups.forEach((colliderGroup) => {
+      colliderGroup.colliders.forEach((collider) => {
+        set.add(collider);
+      });
+    });
+
     return set;
   }
 }
