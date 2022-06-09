@@ -1,7 +1,5 @@
-import * as THREE from 'three';
-import { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import * as HDREmissiveMultiplierSchema from '@pixiv/types-vrmc-materials-hdr-emissive-multiplier-1.0';
-import { gltfGetAssociatedMaterialIndex } from './utils/gltfGetAssociatedMaterialIndex';
 import { GLTF as GLTFSchema } from '@gltf-transform/core';
 
 export class VRMMaterialsHDREmissiveMultiplierLoaderPlugin implements GLTFLoaderPlugin {
@@ -17,30 +15,20 @@ export class VRMMaterialsHDREmissiveMultiplierLoaderPlugin implements GLTFLoader
     this.parser = parser;
   }
 
-  public async afterRoot(gltf: GLTF): Promise<void> {
-    const parser = this.parser;
+  public async extendMaterialParams(materialIndex: number, materialParams: { [key: string]: any }): Promise<void> {
+    const extension = this._getHDREmissiveMultiplierExtension(materialIndex);
+    if (extension == null) {
+      return;
+    }
 
-    // list up every material in `gltf.scene`
-    const gltfMaterials: THREE.Material[] = [];
-    gltf.scene.traverse((object) => {
-      const material = (object as any).material as THREE.Material | undefined;
-      if (material) {
-        gltfMaterials.push(material);
-      }
-    });
+    // This extension is archived. Emit warning
+    // See: https://github.com/vrm-c/vrm-specification/pull/375
+    console.warn(
+      'VRMMaterialsHDREmissiveMultiplierLoaderPlugin: `VRMC_materials_hdr_emissiveMultiplier` is archived. Use `KHR_materials_emissive_strength` instead.',
+    );
 
-    // multiply emissive value using the extension
-    gltfMaterials.forEach((material) => {
-      const materialIndex = gltfGetAssociatedMaterialIndex(parser, material);
-
-      if (materialIndex != null) {
-        const extension = this._getHDREmissiveMultiplierExtension(materialIndex);
-
-        if (extension) {
-          (material as any).emissive?.multiplyScalar(extension.emissiveMultiplier);
-        }
-      }
-    });
+    const emissiveMultiplier = extension.emissiveMultiplier;
+    materialParams.emissiveIntensity = emissiveMultiplier;
   }
 
   private _getHDREmissiveMultiplierExtension(

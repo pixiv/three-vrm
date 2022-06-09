@@ -26,6 +26,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     normalMapUvTransform: THREE.IUniform<THREE.Matrix3>;
     normalScale: THREE.IUniform<THREE.Vector2>;
     emissive: THREE.IUniform<THREE.Color>;
+    emissiveIntensity: THREE.IUniform<number>;
     emissiveMap: THREE.IUniform<THREE.Texture | null>;
     emissiveMapUvTransform: THREE.IUniform<THREE.Matrix3>;
     shadeColorFactor: THREE.IUniform<THREE.Color>;
@@ -91,6 +92,13 @@ export class MToonMaterial extends THREE.ShaderMaterial {
   }
   public set emissive(value: THREE.Color) {
     this.uniforms.emissive.value = value;
+  }
+
+  public get emissiveIntensity(): number {
+    return this.uniforms.emissiveIntensity.value;
+  }
+  public set emissiveIntensity(value: number) {
+    this.uniforms.emissiveIntensity.value = value;
   }
 
   public get emissiveMap(): THREE.Texture | null {
@@ -425,6 +433,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
         parametricRimFresnelPowerFactor: { value: 1.0 },
         parametricRimLiftFactor: { value: 0.0 },
         emissive: { value: new THREE.Color(0.0, 0.0, 0.0) },
+        emissiveIntensity: { value: 1.0 },
         emissiveMapUvTransform: { value: new THREE.Matrix3() },
         outlineWidthMultiplyTexture: { value: null },
         outlineWidthMultiplyTextureUvTransform: { value: new THREE.Matrix3() },
