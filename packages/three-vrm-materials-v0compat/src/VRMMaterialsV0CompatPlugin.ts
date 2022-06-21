@@ -402,11 +402,15 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
 
     // show a warning if the model uses v1 incompatible number of render queues
     if (renderQueuesTransparent.size > 10) {
-      console.warn(`VRMMaterialsV0CompatPlugin: This VRM uses ${ renderQueuesTransparent.size } render queues for Transparent materials while VRM 1.0 only supports up to 10 render queues. The model might not be rendered correctly.`);
+      console.warn(
+        `VRMMaterialsV0CompatPlugin: This VRM uses ${renderQueuesTransparent.size} render queues for Transparent materials while VRM 1.0 only supports up to 10 render queues. The model might not be rendered correctly.`,
+      );
     }
 
     if (renderQueuesTransparentZWrite.size > 10) {
-      console.warn(`VRMMaterialsV0CompatPlugin: This VRM uses ${ renderQueuesTransparentZWrite.size } render queues for TransparentZWrite materials while VRM 1.0 only supports up to 10 render queues. The model might not be rendered correctly.`);
+      console.warn(
+        `VRMMaterialsV0CompatPlugin: This VRM uses ${renderQueuesTransparentZWrite.size} render queues for TransparentZWrite materials while VRM 1.0 only supports up to 10 render queues. The model might not be rendered correctly.`,
+      );
     }
 
     // create a map from v0 render queue to v1 render queue offset
