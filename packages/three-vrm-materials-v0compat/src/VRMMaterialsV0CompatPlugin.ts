@@ -8,12 +8,25 @@ import { GLTF as GLTFSchema } from '@gltf-transform/core';
 export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
   public readonly parser: GLTFParser;
 
+  /**
+   * A map from v0 render queue to v1 render queue offset, for Transparent materials.
+   */
+  private readonly _renderQueueMapTransparent: Map<number, number>;
+
+  /**
+   * A map from v0 render queue to v1 render queue offset, for TransparentZWrite materials.
+   */
+  private readonly _renderQueueMapTransparentZWrite: Map<number, number>;
+
   public get name(): string {
     return 'VRMMaterialsV0CompatPlugin';
   }
 
   public constructor(parser: GLTFParser) {
     this.parser = parser;
+
+    this._renderQueueMapTransparent = new Map();
+    this._renderQueueMapTransparentZWrite = new Map();
 
     // WORKAROUND: Add KHR_texture_transform to extensionsUsed
     // It is too late to add this in beforeRoot
@@ -34,6 +47,9 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
     if (!v0MaterialProperties) {
       return;
     }
+
+    // populate render queue map
+    this._populateRenderQueueMap(v0MaterialProperties);
 
     // convert V0 material properties into V1 compatible format
     v0MaterialProperties.forEach((materialProperties, materialIndex) => {
@@ -328,6 +344,7 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
 
   /**
    * Convert v0 render order into v1 render order.
+   * This uses a map from v0 render queue to v1 compliant render queue offset which is generated in {@link _populateRenderQueueMap}.
    */
   private _v0ParseRenderQueue(materialProperties: V0Material): number {
     const isTransparent = materialProperties.keywordMap?.['_ALPHABLEND_ON'] ?? false;
@@ -335,14 +352,76 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
 
     let offset = 0;
 
-    if (isTransparent && materialProperties.renderQueue) {
-      if (enabledZWrite) {
-        offset = Math.min(Math.max(materialProperties.renderQueue - 2501, 0), 9);
-      } else {
-        offset = Math.min(Math.max(materialProperties.renderQueue - 3000, -9), 0);
+    if (isTransparent) {
+      const v0Queue = materialProperties.renderQueue;
+
+      if (v0Queue != null) {
+        if (enabledZWrite) {
+          offset = this._renderQueueMapTransparentZWrite.get(v0Queue)!;
+        } else {
+          offset = this._renderQueueMapTransparent.get(v0Queue)!;
+        }
       }
     }
 
     return offset;
+  }
+
+  /**
+   * Create a map which maps v0 render queue to v1 compliant render queue offset.
+   * This lists up all render queues the model use and creates a map to new render queue offsets in the same order.
+   */
+  private _populateRenderQueueMap(materialPropertiesList: V0Material[]) {
+    /**
+     * A set of used render queues in Transparent materials.
+     */
+    const renderQueuesTransparent = new Set<number>();
+
+    /**
+     * A set of used render queues in TransparentZWrite materials.
+     */
+    const renderQueuesTransparentZWrite = new Set<number>();
+
+    // populate the render queue set
+    materialPropertiesList.forEach((materialProperties) => {
+      const isTransparent = materialProperties.keywordMap?.['_ALPHABLEND_ON'] ?? false;
+      const enabledZWrite = materialProperties.floatProperties?.['_ZWrite'] === 1;
+
+      if (isTransparent) {
+        const v0Queue = materialProperties.renderQueue;
+
+        if (v0Queue != null) {
+          if (enabledZWrite) {
+            renderQueuesTransparentZWrite.add(v0Queue);
+          } else {
+            renderQueuesTransparent.add(v0Queue);
+          }
+        }
+      }
+    });
+
+    // show a warning if the model uses v1 incompatible number of render queues
+    if (renderQueuesTransparent.size > 10) {
+      console.warn(`VRMMaterialsV0CompatPlugin: This VRM uses ${ renderQueuesTransparent.size } render queues for Transparent materials while VRM 1.0 only supports up to 10 render queues. The model might not be rendered correctly.`);
+    }
+
+    if (renderQueuesTransparentZWrite.size > 10) {
+      console.warn(`VRMMaterialsV0CompatPlugin: This VRM uses ${ renderQueuesTransparentZWrite.size } render queues for TransparentZWrite materials while VRM 1.0 only supports up to 10 render queues. The model might not be rendered correctly.`);
+    }
+
+    // create a map from v0 render queue to v1 render queue offset
+    Array.from(renderQueuesTransparent)
+      .sort()
+      .forEach((queue, i) => {
+        const newQueueOffset = Math.min(Math.max(i - renderQueuesTransparent.size + 1, -9), 0);
+        this._renderQueueMapTransparent.set(queue, newQueueOffset);
+      });
+
+    Array.from(renderQueuesTransparentZWrite)
+      .sort()
+      .forEach((queue, i) => {
+        const newQueueOffset = Math.min(Math.max(i, 0), 9);
+        this._renderQueueMapTransparentZWrite.set(queue, newQueueOffset);
+      });
   }
 }
