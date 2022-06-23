@@ -18,18 +18,17 @@ export class VRMHumanoidHelper extends THREE.Group {
     this._boneAxesMap = new Map();
 
     Object.values(humanoid.humanBones).forEach((bone) => {
-      if (bone) {
-        const helper = new THREE.AxesHelper(1.0);
+      const helper = new THREE.AxesHelper(1.0);
 
-        helper.matrixAutoUpdate = false;
+      helper.matrixAutoUpdate = false;
 
-        (helper.material as THREE.Material).depthTest = false;
-        (helper.material as THREE.Material).depthWrite = false;
+      (helper.material as THREE.Material).depthTest = false;
+      (helper.material as THREE.Material).depthWrite = false;
 
-        this.add(helper);
+      this.add(helper);
 
-        this._boneAxesMap.set(bone, helper);
-      }
+      // TODO: type assertion is not needed in later versions of TypeScript
+      this._boneAxesMap.set(bone!, helper);
     });
   }
 
