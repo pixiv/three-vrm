@@ -166,7 +166,10 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
             dragForce: prevSchemaJoint.dragForce,
             gravityPower: prevSchemaJoint.gravityPower,
             stiffness: prevSchemaJoint.stiffness,
-            gravityDir: new THREE.Vector3().fromArray(prevSchemaJoint.gravityDir ?? [0.0, 1.0, 0.0]),
+            gravityDir:
+              prevSchemaJoint.gravityDir != null
+                ? new THREE.Vector3().fromArray(prevSchemaJoint.gravityDir)
+                : undefined,
           };
 
           // create spring bones
