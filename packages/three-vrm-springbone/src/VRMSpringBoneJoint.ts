@@ -205,7 +205,8 @@ export class VRMSpringBoneJoint {
     this.bone.matrixWorld.multiplyMatrices(this._parentMatrixWorld, this.bone.matrix);
 
     // Apply updated position to tail states
-    this.bone.localToWorld(this._currentTail.copy(this._initialLocalChildPosition));
+    const matrixWorldToCenter = this._getMatrixWorldToCenter(_matA);
+    this.bone.localToWorld(this._currentTail.copy(this._initialLocalChildPosition)).applyMatrix4(matrixWorldToCenter);
     this._prevTail.copy(this._currentTail);
   }
 
