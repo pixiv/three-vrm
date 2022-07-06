@@ -178,7 +178,7 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
             joint.center = center;
           }
 
-          manager.addSpringBone(joint);
+          manager.addJoint(joint);
         }
 
         prevSchemaJoint = schemaJoint;
@@ -293,7 +293,7 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
             joint.center = center;
           }
 
-          manager.addSpringBone(joint);
+          manager.addJoint(joint);
         });
       });
     });

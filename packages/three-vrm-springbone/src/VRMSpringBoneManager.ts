@@ -6,14 +6,23 @@ import type { VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';
 import { traverseChildrenUntilConditionMet } from './utils/traverseChildrenUntilConditionMet';
 
 export class VRMSpringBoneManager {
-  private _springBones = new Set<VRMSpringBoneJoint>();
+  private _joints = new Set<VRMSpringBoneJoint>();
+  public get joints(): Set<VRMSpringBoneJoint> {
+    return this._joints;
+  }
+
+  /**
+   * @deprecated Use {@link joints} instead.
+   */
   public get springBones(): Set<VRMSpringBoneJoint> {
-    return this._springBones;
+    console.warn('VRMLookAt: springBones is deprecated. use joints instead.');
+
+    return this._joints;
   }
 
   public get colliderGroups(): VRMSpringBoneColliderGroup[] {
     const set = new Set<VRMSpringBoneColliderGroup>();
-    this._springBones.forEach((springBone) => {
+    this._joints.forEach((springBone) => {
       springBone.colliderGroups.forEach((colliderGroup) => {
         set.add(colliderGroup);
       });
@@ -33,22 +42,40 @@ export class VRMSpringBoneManager {
 
   private _objectSpringBonesMap = new Map<THREE.Object3D, Set<VRMSpringBoneJoint>>();
 
-  public addSpringBone(springBone: VRMSpringBoneJoint): void {
-    this._springBones.add(springBone);
+  public addJoint(joint: VRMSpringBoneJoint): void {
+    this._joints.add(joint);
 
-    let objectSet = this._objectSpringBonesMap.get(springBone.bone);
+    let objectSet = this._objectSpringBonesMap.get(joint.bone);
     if (objectSet == null) {
       objectSet = new Set<VRMSpringBoneJoint>();
-      this._objectSpringBonesMap.set(springBone.bone, objectSet);
+      this._objectSpringBonesMap.set(joint.bone, objectSet);
     }
-    objectSet.add(springBone);
+    objectSet.add(joint);
   }
 
-  public deleteSpringBone(springBone: VRMSpringBoneJoint): void {
-    this._springBones.delete(springBone);
+  /**
+   * @deprecated Use {@link addJoint} instead.
+   */
+  public addSpringBone(joint: VRMSpringBoneJoint): void {
+    console.warn('VRMLookAt: addSpringBone() is deprecated. use addJoint() instead.');
 
-    const objectSet = this._objectSpringBonesMap.get(springBone.bone)!;
-    objectSet.delete(springBone);
+    this.addJoint(joint);
+  }
+
+  public deleteJoint(joint: VRMSpringBoneJoint): void {
+    this._joints.delete(joint);
+
+    const objectSet = this._objectSpringBonesMap.get(joint.bone)!;
+    objectSet.delete(joint);
+  }
+
+  /**
+   * @deprecated Use {@link deleteJoint} instead.
+   */
+  public deleteSpringBone(joint: VRMSpringBoneJoint): void {
+    console.warn('VRMLookAt: deleteSpringBone() is deprecated. use deleteJoint() instead.');
+
+    this.deleteJoint(joint);
   }
 
   public setInitState(): void {
@@ -56,7 +83,7 @@ export class VRMSpringBoneManager {
     const springBonesDone = new Set<VRMSpringBoneJoint>();
     const objectUpdated = new Set<THREE.Object3D>();
 
-    for (const springBone of this._springBones) {
+    for (const springBone of this._joints) {
       this._processSpringBone(springBone, springBonesTried, springBonesDone, objectUpdated, (springBone) =>
         springBone.setInitState(),
       );
@@ -68,7 +95,7 @@ export class VRMSpringBoneManager {
     const springBonesDone = new Set<VRMSpringBoneJoint>();
     const objectUpdated = new Set<THREE.Object3D>();
 
-    for (const springBone of this._springBones) {
+    for (const springBone of this._joints) {
       this._processSpringBone(springBone, springBonesTried, springBonesDone, objectUpdated, (springBone) =>
         springBone.reset(),
       );
@@ -80,7 +107,7 @@ export class VRMSpringBoneManager {
     const springBonesDone = new Set<VRMSpringBoneJoint>();
     const objectUpdated = new Set<THREE.Object3D>();
 
-    for (const springBone of this._springBones) {
+    for (const springBone of this._joints) {
       // update the springbone
       this._processSpringBone(springBone, springBonesTried, springBonesDone, objectUpdated, (springBone) =>
         springBone.update(delta),
