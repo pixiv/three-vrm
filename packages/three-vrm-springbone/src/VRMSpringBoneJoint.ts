@@ -13,6 +13,7 @@ const IDENTITY_MATRIX4 = new THREE.Matrix4();
 // 計算中の一時保存用変数（一度インスタンスを作ったらあとは使い回す）
 const _v3A = new THREE.Vector3();
 const _v3B = new THREE.Vector3();
+const _v3C = new THREE.Vector3();
 
 /**
  * A temporary variable which is used in `update`
@@ -205,7 +206,8 @@ export class VRMSpringBoneJoint {
     this.bone.matrixWorld.multiplyMatrices(this._parentMatrixWorld, this.bone.matrix);
 
     // Apply updated position to tail states
-    this.bone.localToWorld(this._currentTail.copy(this._initialLocalChildPosition));
+    const matrixWorldToCenter = this._getMatrixWorldToCenter(_matA);
+    this.bone.localToWorld(this._currentTail.copy(this._initialLocalChildPosition)).applyMatrix4(matrixWorldToCenter);
     this._prevTail.copy(this._currentTail);
   }
 
@@ -222,6 +224,7 @@ export class VRMSpringBoneJoint {
     _worldSpacePosition.setFromMatrixPosition(this.bone.matrixWorld);
     let matrixWorldToCenter = this._getMatrixWorldToCenter(_matA);
     _centerSpacePosition.copy(_worldSpacePosition).applyMatrix4(matrixWorldToCenter);
+    const quatWorldToCenter = _quatA.setFromRotationMatrix(matrixWorldToCenter);
 
     // Get parent matrix in center space
     const centerSpaceParentMatrix = _matB.copy(matrixWorldToCenter).multiply(this._parentMatrixWorld);
@@ -233,6 +236,9 @@ export class VRMSpringBoneJoint {
       .applyMatrix4(centerSpaceParentMatrix)
       .sub(_centerSpacePosition)
       .normalize();
+
+    // gravity in center space
+    const centerSpaceGravity = _v3C.copy(this.settings.gravityDir).applyQuaternion(quatWorldToCenter).normalize();
 
     const matrixCenterToWorld = this._getMatrixCenterToWorld(_matA);
 
@@ -246,7 +252,7 @@ export class VRMSpringBoneJoint {
           .multiplyScalar(1 - this.settings.dragForce),
       ) // 前フレームの移動を継続する(減衰もあるよ)
       .add(_v3A.copy(centerSpaceBoneAxis).multiplyScalar(this.settings.stiffness * delta)) // 親の回転による子ボーンの移動目標
-      .add(_v3A.copy(this.settings.gravityDir).multiplyScalar(this.settings.gravityPower * delta)) // 外力による移動量
+      .add(_v3A.copy(centerSpaceGravity).multiplyScalar(this.settings.gravityPower * delta)) // 外力による移動量
       .applyMatrix4(matrixCenterToWorld); // tailをworld spaceに戻す
 
     // normalize bone length
