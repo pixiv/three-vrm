@@ -9,6 +9,16 @@ import { VRMHumanoidHelper } from './helpers/VRMHumanoidHelper';
 import { VRMHumanoidLoaderPluginOptions } from './VRMHumanoidLoaderPluginOptions';
 
 /**
+ * A map from old thumb bone names to new thumb bone names
+ */
+const thumbBoneNameMap: { [key: string]: V1VRMSchema.HumanoidHumanBoneName | undefined } = {
+  leftThumbProximal: 'leftThumbMetacarpal',
+  leftThumbIntermediate: 'leftThumbProximal',
+  rightThumbProximal: 'rightThumbMetacarpal',
+  rightThumbIntermediate: 'rightThumbProximal',
+};
+
+/**
  * A plugin of GLTFLoader that imports a {@link VRMHumanoid} from a VRM extension of a GLTF.
  */
 export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
@@ -79,12 +89,29 @@ export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
       return null;
     }
 
+    /**
+     * compat: 1.0-beta thumb bone names
+     *
+     * `true` if `leftThumbIntermediate` or `rightThumbIntermediate` exists
+     */
+    const existsPreviousThumbName =
+      (schemaHumanoid.humanBones as any).leftThumbIntermediate != null ||
+      (schemaHumanoid.humanBones as any).rightThumbIntermediate != null;
+
     const humanBones: Partial<VRMHumanBones> = {};
     if (schemaHumanoid.humanBones != null) {
       await Promise.all(
         Object.entries(schemaHumanoid.humanBones).map(async ([boneNameString, schemaHumanBone]) => {
-          const boneName = boneNameString as V1VRMSchema.HumanoidHumanBoneName;
+          let boneName = boneNameString as V1VRMSchema.HumanoidHumanBoneName;
           const index = schemaHumanBone.node;
+
+          // compat: 1.0-beta previous thumb bone names
+          if (existsPreviousThumbName) {
+            const thumbBoneName = thumbBoneNameMap[boneName];
+            if (thumbBoneName != null) {
+              boneName = thumbBoneName;
+            }
+          }
 
           const node = await this.parser.getDependency('node', index);
 
@@ -143,17 +170,21 @@ export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
             return;
           }
 
+          // map to new bone name
+          const thumbBoneName = thumbBoneNameMap[boneName];
+          const newBoneName = (thumbBoneName ?? boneName) as V1VRMSchema.HumanoidHumanBoneName;
+
           // v0 VRMs might have a multiple nodes attached to a single bone...
           // so if there already is an entry in the `humanBones`, show a warning and ignore it
-          if (humanBones[boneName] != null) {
+          if (humanBones[newBoneName] != null) {
             console.warn(
-              `Multiple bone entries for ${boneName} detected (index = ${index}), ignoring duplicated entries.`,
+              `Multiple bone entries for ${newBoneName} detected (index = ${index}), ignoring duplicated entries.`,
             );
             return;
           }
 
           // set to the `humanBones`
-          humanBones[boneName] = { node };
+          humanBones[newBoneName] = { node };
         }),
       );
     }
