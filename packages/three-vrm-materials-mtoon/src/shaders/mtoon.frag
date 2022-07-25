@@ -658,15 +658,6 @@ void main() {
 
   vec3 col = reflectedLight.directDiffuse + reflectedLight.indirectDiffuse;
 
-  #if defined( OUTLINE )
-    gl_FragColor = vec4(
-      outlineColorFactor.rgb * mix( vec3( 1.0 ), col, outlineLightingMixFactor ),
-      diffuseColor.a
-    );
-    postCorrection();
-    return;
-  #endif
-
   #ifdef DEBUG_LITSHADERATE
     gl_FragColor = vec4( col, diffuseColor.a );
     postCorrection();
@@ -717,6 +708,10 @@ void main() {
   // #include <envmap_fragment>
 
   // -- Almost done! -----------------------------------------------------------
+  #if defined( OUTLINE )
+    col = outlineColorFactor.rgb * mix( vec3( 1.0 ), col, outlineLightingMixFactor );
+  #endif
+
   gl_FragColor = vec4( col, diffuseColor.a );
   postCorrection();
 }
