@@ -1,5 +1,7 @@
 # `@pixiv/three-vrm`
 
+[![@pixiv/three-vrm on npm](https://img.shields.io/npm/v/@pixiv/three-vrm)](https://www.npmjs.com/package/@pixiv/three-vrm)
+
 Use [VRM](https://vrm.dev/) on [three.js](https://threejs.org/)
 
 ![three-vrm](https://github.com/pixiv/three-vrm/raw/dev/three-vrm.png)
@@ -9,6 +11,28 @@ Use [VRM](https://vrm.dev/) on [three.js](https://threejs.org/)
 [Examples](https://pixiv.github.io/three-vrm/packages/three-vrm/examples)
 
 [Documentation](https://pixiv.github.io/three-vrm/packages/three-vrm/docs)
+
+## ⏭️ v1.0.0-beta ⏭️
+
+We are developing three-vrm v1.0 which supports [VRM 1.0-beta specification](https://vrm.dev/en/vrm1/index).
+
+**The beta preview of three-vrm v1.0 is released on [npm](https://www.npmjs.com/package/@pixiv/three-vrm/v/next).**
+It's almost stable but interfaces are still subject to change.
+
+[![@pixiv/three-vrm@next on npm](https://img.shields.io/npm/v/@pixiv/three-vrm/next)](https://www.npmjs.com/package/@pixiv/three-vrm/v/next)
+
+```sh
+npm install three-vrm@next
+```
+
+Check [Releases](https://github.com/pixiv/three-vrm/releases) for the latest release of v1.0.0-beta.
+
+We are working on the branch [`1.0`](https://github.com/pixiv/three-vrm/tree/1.0).
+You should see the README.md on that branch before use.
+
+We are planning to prepare a migration guide from v0 to v1 but it's not done yet. Sorry!
+
+We appreciate your feedback!
 
 ## Usage
 
