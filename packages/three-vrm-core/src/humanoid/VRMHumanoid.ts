@@ -4,7 +4,6 @@ import type { VRMHumanBone } from './VRMHumanBone';
 import type { VRMHumanBones } from './VRMHumanBones';
 import type { VRMHumanBoneName } from './VRMHumanBoneName';
 import type { VRMPose } from './VRMPose';
-import { VRMHumanoidRig } from './VRMHumanoidRig';
 
 const _v3A = new THREE.Vector3();
 const _quatA = new THREE.Quaternion();
@@ -24,20 +23,6 @@ export class VRMHumanoid {
    * Note that it's not compatible with {@link setPose} and {@link getPose}, since it contains non-relative values of each local transforms.
    */
   public restPose: VRMPose;
-
-  /**
-   * Its humanoid rig.
-   * It won't be generated unless you create this by either using this accessor or calling {@link buildHumanoidRig} explicitly.
-   */
-  public get rig(): VRMHumanoidRig {
-    if (this._rig != null) {
-      return this._rig;
-    } else {
-      return this.buildHumanoidRig();
-    }
-  }
-
-  private _rig: VRMHumanoidRig | undefined;
 
   /**
    * Create a new {@link VRMHumanoid}.
@@ -223,21 +208,5 @@ export class VRMHumanoid {
    */
   public getBoneNode(name: VRMHumanBoneName): THREE.Object3D | null {
     return this.humanBones[name]?.node ?? null;
-  }
-
-  /**
-   * Build a humanoid rig.
-   *
-   * @returns humanoid rig
-   */
-  public buildHumanoidRig(): VRMHumanoidRig {
-    if (this._rig != null) {
-      console.warn('VRMHumanoid: Humanoid rig already exists. Overwriting the existing one');
-    }
-
-    const rig = new VRMHumanoidRig(this);
-    this._rig = rig;
-
-    return rig;
   }
 }
