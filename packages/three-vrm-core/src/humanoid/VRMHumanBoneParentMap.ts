@@ -71,4 +71,3 @@ export const VRMHumanBoneParentMap: { [bone in VRMHumanBoneName]: VRMHumanBoneNa
   rightLittleIntermediate: 'rightLittleProximal',
   rightLittleDistal: 'rightLittleIntermediate',
 };
-

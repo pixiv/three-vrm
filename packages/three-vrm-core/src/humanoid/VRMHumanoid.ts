@@ -30,8 +30,11 @@ export class VRMHumanoid {
    * It won't be generated unless you create this by either using this accessor or calling {@link buildHumanoidRig} explicitly.
    */
   public get rig(): VRMHumanoidRig {
-    if (this._rig != null) { return this._rig; }
-    else { return this.buildHumanoidRig(); }
+    if (this._rig != null) {
+      return this._rig;
+    } else {
+      return this.buildHumanoidRig();
+    }
   }
 
   private _rig: VRMHumanoidRig | undefined;

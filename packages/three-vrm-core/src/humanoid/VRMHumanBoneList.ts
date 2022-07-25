@@ -68,5 +68,4 @@ export const VRMHumanBoneList: VRMHumanBoneName[] = [
   'rightLittleProximal',
   'rightLittleIntermediate',
   'rightLittleDistal',
-
 ];

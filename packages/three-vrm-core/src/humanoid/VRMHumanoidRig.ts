@@ -8,19 +8,21 @@ const _v3A = new THREE.Vector3();
 const _quatA = new THREE.Quaternion();
 
 export class VRMHumanoidRig extends VRMHumanoid {
-  protected static _setupTransforms(humanoid: VRMHumanoid): {
-    rigBones: VRMHumanBones,
-    root: THREE.Object3D,
-    parentWorldRotations: {[boneName in VRMHumanBoneName]?: THREE.Quaternion},
-    boneRotations: {[boneName in VRMHumanBoneName]?: THREE.Quaternion},
+  protected static _setupTransforms(
+    humanoid: VRMHumanoid,
+  ): {
+    rigBones: VRMHumanBones;
+    root: THREE.Object3D;
+    parentWorldRotations: { [boneName in VRMHumanBoneName]?: THREE.Quaternion };
+    boneRotations: { [boneName in VRMHumanBoneName]?: THREE.Quaternion };
   } {
     const root = new THREE.Object3D();
     root.name = 'VRMHumanoidRig';
 
     // store boneWorldPositions and boneWorldRotations
-    const boneWorldPositions: {[boneName in VRMHumanBoneName]?: THREE.Vector3} = {};
-    const boneWorldRotations: {[boneName in VRMHumanBoneName]?: THREE.Quaternion} = {};
-    const boneRotations: {[boneName in VRMHumanBoneName]?: THREE.Quaternion} = {};
+    const boneWorldPositions: { [boneName in VRMHumanBoneName]?: THREE.Vector3 } = {};
+    const boneWorldRotations: { [boneName in VRMHumanBoneName]?: THREE.Quaternion } = {};
+    const boneRotations: { [boneName in VRMHumanBoneName]?: THREE.Quaternion } = {};
 
     VRMHumanBoneList.forEach((boneName) => {
       const boneNode = humanoid.getBoneNode(boneName);
@@ -39,7 +41,7 @@ export class VRMHumanoidRig extends VRMHumanoid {
     });
 
     // build rig hierarchy + store parentWorldRotations
-    const parentWorldRotations: {[boneName in VRMHumanBoneName]?: THREE.Quaternion} = {};
+    const parentWorldRotations: { [boneName in VRMHumanBoneName]?: THREE.Quaternion } = {};
 
     const rigBones: Partial<VRMHumanBones> = {};
     VRMHumanBoneList.forEach((boneName) => {
@@ -54,7 +56,9 @@ export class VRMHumanoidRig extends VRMHumanoid {
         let parentWorldRotation: THREE.Quaternion | undefined;
         while (parentWorldPosition == null) {
           currentBoneName = VRMHumanBoneParentMap[currentBoneName];
-          if (currentBoneName == null) { break; }
+          if (currentBoneName == null) {
+            break;
+          }
           parentWorldPosition = boneWorldPositions[currentBoneName];
           parentWorldRotation = boneWorldRotations[currentBoneName];
         }
@@ -67,7 +71,9 @@ export class VRMHumanoidRig extends VRMHumanoid {
 
         parentRigBoneNode.add(rigBoneNode);
         rigBoneNode.position.copy(boneWorldPosition);
-        if (parentWorldPosition) {rigBoneNode.position.sub(parentWorldPosition);}
+        if (parentWorldPosition) {
+          rigBoneNode.position.sub(parentWorldPosition);
+        }
 
         rigBones[boneName] = { node: rigBoneNode };
 
@@ -86,8 +92,8 @@ export class VRMHumanoidRig extends VRMHumanoid {
 
   public readonly original: VRMHumanoid;
   public readonly root: THREE.Object3D;
-  protected readonly _parentWorldRotations: {[boneName in VRMHumanBoneName]?: THREE.Quaternion};
-  protected readonly _boneRotations: {[boneName in VRMHumanBoneName]?: THREE.Quaternion};
+  protected readonly _parentWorldRotations: { [boneName in VRMHumanBoneName]?: THREE.Quaternion };
+  protected readonly _boneRotations: { [boneName in VRMHumanBoneName]?: THREE.Quaternion };
 
   public constructor(humanoid: VRMHumanoid) {
     const { rigBones, root, parentWorldRotations, boneRotations } = VRMHumanoidRig._setupTransforms(humanoid);
@@ -113,7 +119,11 @@ export class VRMHumanoidRig extends VRMHumanoid {
         const invParentWorldRotation = _quatA.copy(parentWorldRotation).invert();
         const boneRotation = this._boneRotations[boneName]!;
 
-        boneNode.quaternion.copy(rigBoneNode.quaternion).multiply(parentWorldRotation).premultiply(invParentWorldRotation).multiply(boneRotation);
+        boneNode.quaternion
+          .copy(rigBoneNode.quaternion)
+          .multiply(parentWorldRotation)
+          .premultiply(invParentWorldRotation)
+          .multiply(boneRotation);
       }
     });
   }
