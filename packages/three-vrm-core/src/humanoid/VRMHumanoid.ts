@@ -4,6 +4,7 @@ import type { VRMHumanBone } from './VRMHumanBone';
 import type { VRMHumanBones } from './VRMHumanBones';
 import type { VRMHumanBoneName } from './VRMHumanBoneName';
 import type { VRMPose } from './VRMPose';
+import { VRMHumanoidRig } from './VRMHumanoidRig';
 
 const _v3A = new THREE.Vector3();
 const _quatA = new THREE.Quaternion();
@@ -12,6 +13,9 @@ const _quatA = new THREE.Quaternion();
  * A class represents a humanoid of a VRM.
  */
 export class VRMHumanoid {
+  // TODO: 1.0の場合HumanoidLoaderで生成して、強引に渡している
+  public humanoidRig?: VRMHumanoidRig;
+
   /**
    * A {@link VRMHumanBones} that contains all the human bones of the VRM.
    * You might want to get these bones using {@link VRMHumanoid.getBone}.

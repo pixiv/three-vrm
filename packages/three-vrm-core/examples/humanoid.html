@@ -64,7 +64,7 @@
 			loader.load(
 
 				// URL of the VRM you want to load
-				'./models/cube.gltf',
+				'./models/1_0.vrm',
 
 				// called when the resource is loaded
 				( gltf ) => {
@@ -103,14 +103,17 @@
 
 				if ( currentGltf ) {
 
-					const humanoid = currentGltf.userData.vrmCore.humanoid;
+					const humanoidRig = currentGltf.userData.vrmCore.humanoid.humanoidRig;
 
 					// tweak bones
 					const s = 0.25 * Math.PI * Math.sin( Math.PI * clock.elapsedTime );
-					humanoid.getBoneNode( 'head' ).rotation.y = s;
-					humanoid.getBoneNode( 'leftUpperArm' ).rotation.z = s;
-					humanoid.getBoneNode( 'rightUpperArm' ).rotation.x = s;
+					humanoidRig.getBoneNode( 'head' ).rotation.y = s;
+          humanoidRig.getBoneNode('hips').rotation.z = s;
+					// humanoidRig.getBoneNode( 'spine' ).rotation.y = s;
+					// humanoidRig.getBoneNode( 'rightUpperArm' ).rotation.y = s;
 
+
+          currentGltf.userData.vrmCore.update(deltaTime);
 				}
 
 				renderer.render( scene, camera );

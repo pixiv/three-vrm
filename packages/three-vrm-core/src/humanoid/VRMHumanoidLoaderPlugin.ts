@@ -7,6 +7,7 @@ import { VRMRequiredHumanBoneName } from './VRMRequiredHumanBoneName';
 import { GLTF as GLTFSchema } from '@gltf-transform/core';
 import { VRMHumanoidHelper } from './helpers/VRMHumanoidHelper';
 import { VRMHumanoidLoaderPluginOptions } from './VRMHumanoidLoaderPluginOptions';
+import { VRMHumanoidRig } from './VRMHumanoidRig';
 
 /**
  * A map from old thumb bone names to new thumb bone names
@@ -44,6 +45,8 @@ export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
 
   public async afterRoot(gltf: GLTF): Promise<void> {
     gltf.userData.vrmHumanoid = await this._import(gltf);
+    // TODO: HumanoidRigの生成を切り分ける
+    gltf.userData.vrmHumanoid.humanoidRig = new VRMHumanoidRig(gltf.userData.vrmHumanoid);
   }
 
   /**

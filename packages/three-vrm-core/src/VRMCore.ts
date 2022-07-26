@@ -77,5 +77,9 @@ export class VRMCore {
     if (this.expressionManager) {
       this.expressionManager.update();
     }
+
+    if (this.humanoid?.humanoidRig) {
+      this.humanoid.humanoidRig.update();
+    }
   }
 }
