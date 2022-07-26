@@ -108,12 +108,10 @@
 					// tweak bones
 					const s = 0.25 * Math.PI * Math.sin( Math.PI * clock.elapsedTime );
 					humanoidRig.getBoneNode( 'head' ).rotation.y = s;
-          humanoidRig.getBoneNode('hips').rotation.z = s;
-					// humanoidRig.getBoneNode( 'spine' ).rotation.y = s;
-					// humanoidRig.getBoneNode( 'rightUpperArm' ).rotation.y = s;
+					humanoidRig.getBoneNode( 'leftUpperArm' ).rotation.z = s;
+					humanoidRig.getBoneNode( 'rightUpperArm' ).rotation.x = s;
 
-
-          currentGltf.userData.vrmCore.update(deltaTime);
+          			currentGltf.userData.vrmCore.update(deltaTime);
 				}
 
 				renderer.render( scene, camera );
