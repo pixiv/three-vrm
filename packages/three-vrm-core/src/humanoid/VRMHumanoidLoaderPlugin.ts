@@ -45,7 +45,7 @@ export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
 
   public async afterRoot(gltf: GLTF): Promise<void> {
     gltf.userData.vrmHumanoid = await this._import(gltf);
-    // TODO: HumanoidRigの生成を切り分ける
+    // HumanoidRigの生成
     gltf.userData.vrmHumanoid.humanoidRig = new VRMHumanoidRig(gltf.userData.vrmHumanoid);
   }
 

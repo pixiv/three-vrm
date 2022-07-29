@@ -13,7 +13,7 @@ const _quatA = new THREE.Quaternion();
  * A class represents a humanoid of a VRM.
  */
 export class VRMHumanoid {
-  // TODO: 1.0の場合HumanoidLoaderで生成して、強引に渡している
+  // HumanoidLoaderで生成して、強引に渡している
   public humanoidRig?: VRMHumanoidRig;
 
   /**
