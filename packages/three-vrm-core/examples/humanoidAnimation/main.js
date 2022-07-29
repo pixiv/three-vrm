@@ -59,7 +59,6 @@ function loadVRM(modelUrl) {
 
       const root = gltf.userData.vrmCore.humanoid.humanoidRig.root; // HumanoidRigのRootを渡す必要がある
       gltf.scene.add(root);
-      console.log(root);
 
       if (currentAnimationUrl) {
         currentMixer = new THREE.AnimationMixer(gltf.scene); // vrmのAnimationMixerを作る

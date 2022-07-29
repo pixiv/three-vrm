@@ -65,7 +65,7 @@ export class VRMHumanoidRig extends VRMHumanoid {
 
         // add to hierarchy
         const rigBoneNode = new THREE.Object3D();
-        rigBoneNode.name = 'humanoid' + boneNode.name;
+        rigBoneNode.name = 'humanoid_' + boneNode.name;
 
         const parentRigBoneNode = (currentBoneName ? rigBones[currentBoneName]?.node : root) as THREE.Object3D;
 
@@ -124,10 +124,6 @@ export class VRMHumanoidRig extends VRMHumanoid {
           .multiply(parentWorldRotation)
           .premultiply(invParentWorldRotation)
           .multiply(boneRotation);
-
-        if (boneName === 'hips') {
-          boneNode.position.copy(rigBoneNode.position);
-        }
       }
     });
   }

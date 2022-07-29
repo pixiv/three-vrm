@@ -19,9 +19,7 @@ function loadMixamoAnimation(url, vrm) {
       const mixamoRigName = trackSplitted[0];
       const vrmBoneName = mixamoVRMRigMap[mixamoRigName];
       const vrmNodeName = vrm.humanoid?.humanoidRig.getBoneNode(vrmBoneName)?.name;
-      if (!vrmNodeName) {
-        console.log(vrmBoneName);
-      }
+
       if (vrmNodeName != null) {
         const propertyName = trackSplitted[1];
 
@@ -34,17 +32,28 @@ function loadMixamoAnimation(url, vrm) {
             ),
           );
         } else if (track instanceof THREE.VectorKeyframeTrack) {
-          tracks.push(
-            new THREE.VectorKeyframeTrack(
-              `${vrmNodeName}.${propertyName}`,
-              track.times,
-              track.values.map((v, i) => (vrm.meta?.metaVersion === '0' && i % 3 !== 1 ? -v : v) * 0.01),
-            ),
-          );
+          let nodeName = vrmNodeName;
+          let value = track.values.map((v, i) => (vrm.meta?.metaVersion === '0' && i % 3 !== 1 ? -v : v) * 0.01);
+
+          // MixamoのRootモーション（hips）でVRMのルートを動かす
+          if (vrmBoneName === 'hips') {
+            const hips = vrm.humanoid.getBoneNode('hips');
+            const root = hips.parent;
+
+            const hipsPos = hips.getWorldPosition(new THREE.Vector3());
+            const rootPos = root.getWorldPosition(new THREE.Vector3());
+            nodeName = root.name;
+
+            const offset = hipsPos.sub(rootPos).toArray();
+
+            value = value.map((v, i) => {
+              return v - offset[i % 3];
+            });
+          }
+
+          tracks.push(new THREE.VectorKeyframeTrack(`${nodeName}.${propertyName}`, track.times, value));
         }
       }
-
-      console.log(track);
     });
 
     return new THREE.AnimationClip('vrmAnimation', clip.duration, tracks);
