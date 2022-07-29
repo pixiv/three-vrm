@@ -1,4 +1,4 @@
-/* global THREE, THREE_VRM,THREE_VRM_CORE, loadMixamoAnimation */
+/* global THREE, THREE_VRM, loadMixamoAnimation */
 
 // renderer
 const renderer = new THREE.WebGLRenderer();
@@ -25,11 +25,11 @@ const light = new THREE.DirectionalLight(0xffffff);
 light.position.set(1.0, 1.0, 1.0).normalize();
 scene.add(light);
 
-const defaultModelUrl = '../models/1_0.vrm'; // 削除する
+const defaultModelUrl = '../models/three-vrm-girl.vrm';
 
 // gltf and vrm
-let currentGltf = undefined;
-let currentAnimationUrl = '../models/anim.fbx'; // 削除する
+let currentVrm = undefined;
+let currentAnimationUrl = undefined;
 let currentMixer = undefined;
 
 function loadVRM(modelUrl) {
@@ -37,7 +37,7 @@ function loadVRM(modelUrl) {
   loader.crossOrigin = 'anonymous';
 
   loader.register((parser) => {
-    return new THREE_VRM_CORE.VRMCoreLoaderPlugin(parser, { helperRoot: scene });
+    return new THREE_VRM.VRMLoaderPlugin(parser);
   });
 
   loader.load(
@@ -46,27 +46,32 @@ function loadVRM(modelUrl) {
 
     // called when the resource is loaded
     (gltf) => {
-      if (currentGltf) {
-        scene.remove(currentGltf.scene);
-        // THREE_VRM.VRMUtils.deepDispose(currentGltf.scene);
+      const vrm = gltf.userData.vrm;
+      if (currentVrm) {
+        scene.remove(currentVrm.scene);
+        THREE_VRM.VRMUtils.deepDispose(currentVrm.scene);
       }
 
       // put the model to the scene
-      scene.add(gltf.scene);
-      console.log(gltf);
+      currentVrm = vrm;
+      scene.add(vrm.scene);
 
-      currentGltf = gltf;
-
-      const root = gltf.userData.vrmCore.humanoid.humanoidRig.root; // HumanoidRigのRootを渡す必要がある
-      gltf.scene.add(root);
+      // HumanoidRigのRootを追加する必要がある
+      const root = vrm.humanoid.humanoidRig.root;
+      vrm.scene.add(root);
 
       if (currentAnimationUrl) {
-        currentMixer = new THREE.AnimationMixer(gltf.scene); // vrmのAnimationMixerを作る
-        loadMixamoAnimation(currentAnimationUrl, gltf.userData.vrmCore).then((clip) => {
+        currentMixer = new THREE.AnimationMixer(vrm.scene); // vrmのAnimationMixerを作る
+        loadMixamoAnimation(currentAnimationUrl, vrm).then((clip) => {
           // アニメーションを読み込む
           currentMixer.clipAction(clip).play(); // アニメーションをMixerに適用してplay
         });
       }
+
+      // rotate if the VRM is VRM0.0
+      THREE_VRM.VRMUtils.rotateVRM0(vrm);
+
+      console.log(vrm);
     },
 
     // called while loading is progressing
@@ -98,8 +103,8 @@ function animate() {
     currentMixer.update(deltaTime); // アニメーションをアップデート
   }
 
-  if (currentGltf) {
-    currentGltf.userData.vrmCore.update(deltaTime);
+  if (currentVrm) {
+    currentVrm.update(deltaTime);
   }
 
   renderer.render(scene, camera);
@@ -134,8 +139,8 @@ window.addEventListener('drop', function (event) {
 
   if (fileType === 'fbx') {
     currentAnimationUrl = url;
-    currentMixer = new THREE.AnimationMixer(currentGltf.scene); // vrmのAnimationMixerを作る
-    loadMixamoAnimation(url, currentGltf.userData.vrmCore).then((clip) => {
+    currentMixer = new THREE.AnimationMixer(currentVrm.scene); // vrmのAnimationMixerを作る
+    loadMixamoAnimation(url, currentVrm).then((clip) => {
       // アニメーションを読み込む
       currentMixer.clipAction(clip).play(); // アニメーションをMixerに適用してplay
     });
