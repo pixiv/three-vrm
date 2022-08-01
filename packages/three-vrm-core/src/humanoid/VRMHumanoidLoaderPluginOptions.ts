@@ -5,4 +5,6 @@ export interface VRMHumanoidLoaderPluginOptions {
    * If `renderOrder` is set to the root, helpers will copy the same `renderOrder` .
    */
   helperRoot?: THREE.Object3D;
+
+  autoUpdate?: boolean;
 }

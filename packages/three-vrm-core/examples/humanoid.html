@@ -57,7 +57,7 @@
 
 			loader.register( ( parser ) => {
 
-				return new THREE_VRM_CORE.VRMCoreLoaderPlugin( parser, { helperRoot: scene } );
+				return new THREE_VRM_CORE.VRMCoreLoaderPlugin( parser, { helperRoot: scene ,autoUpdateHumanoid:true} );
 
 			} );
 
@@ -108,9 +108,11 @@
 					// tweak bones
 					const s = 0.25 * Math.PI * Math.sin( Math.PI * clock.elapsedTime );
 					humanoid.getBoneNode( 'head' ).rotation.y = s;
-					humanoid.getBoneNode( 'leftUpperArm' ).rotation.z = s;
-					humanoid.getBoneNode( 'rightUpperArm' ).rotation.x = s;
+					humanoid.humanoidRig.getBoneNode( 'leftUpperArm' ).rotation.z = s;
+					humanoid.humanoidRig.getBoneNode( 'rightUpperArm' ).rotation.x = s;
 
+
+					currentGltf.userData.vrmCore.update(deltaTime);
 				}
 
 				renderer.render( scene, camera );

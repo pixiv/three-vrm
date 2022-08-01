@@ -2,14 +2,14 @@ import * as THREE from 'three';
 import { VRMHumanBoneName, VRMHumanBones } from '.';
 import { VRMHumanBoneList } from './VRMHumanBoneList';
 import { VRMHumanBoneParentMap } from './VRMHumanBoneParentMap';
-import { VRMHumanoid } from './VRMHumanoid';
+import { VRMRig } from './VRMRig';
 
 const _v3A = new THREE.Vector3();
 const _quatA = new THREE.Quaternion();
 
-export class VRMHumanoidRig extends VRMHumanoid {
+export class VRMHumanoidRig extends VRMRig {
   protected static _setupTransforms(
-    humanoid: VRMHumanoid,
+    humanoid: VRMRig,
   ): {
     rigBones: VRMHumanBones;
     root: THREE.Object3D;
@@ -90,12 +90,12 @@ export class VRMHumanoidRig extends VRMHumanoid {
     };
   }
 
-  public readonly original: VRMHumanoid;
+  public readonly original: VRMRig;
   public readonly root: THREE.Object3D;
   protected readonly _parentWorldRotations: { [boneName in VRMHumanBoneName]?: THREE.Quaternion };
   protected readonly _boneRotations: { [boneName in VRMHumanBoneName]?: THREE.Quaternion };
 
-  public constructor(humanoid: VRMHumanoid) {
+  public constructor(humanoid: VRMRig) {
     const { rigBones, root, parentWorldRotations, boneRotations } = VRMHumanoidRig._setupTransforms(humanoid);
 
     super(rigBones);

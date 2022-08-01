@@ -4,8 +4,6 @@ import type { VRMHumanBone } from './VRMHumanBone';
 import type { VRMHumanBones } from './VRMHumanBones';
 import type { VRMHumanBoneName } from './VRMHumanBoneName';
 import type { VRMPose } from './VRMPose';
-import { VRMRig } from './VRMRig';
-import { VRMHumanoidRig } from './VRMHumanoidRig';
 
 const _v3A = new THREE.Vector3();
 const _quatA = new THREE.Quaternion();
@@ -13,7 +11,7 @@ const _quatA = new THREE.Quaternion();
 /**
  * A class represents a humanoid of a VRM.
  */
-export class VRMHumanoid {
+export class VRMRig {
   /**
    * A {@link VRMHumanBones} that contains all the human bones of the VRM.
    * You might want to get these bones using {@link VRMHumanoid.getBone}.
@@ -26,44 +24,14 @@ export class VRMHumanoid {
    */
   public restPose: VRMPose;
 
-  // TODO: DOC
-  public modelRig: VRMRig;
-
-  // TODO: DOC
-  public humanoidRig: VRMHumanoidRig;
-
-  private _autoUpdate: boolean;
-
   /**
    * Create a new {@link VRMHumanoid}.
    * @param boneArray A {@link VRMHumanBones} contains all the bones of the new humanoid
    */
-  public constructor(humanBones: VRMHumanBones, autoUpdate = true) {
-    this._autoUpdate = autoUpdate;
+  public constructor(humanBones: VRMHumanBones) {
     this.humanBones = humanBones;
-    this.modelRig = new VRMRig(humanBones);
-    this.humanoidRig = new VRMHumanoidRig(this.modelRig);
+
     this.restPose = this.getAbsolutePose();
-  }
-
-  /**
-   * Copy the given {@link VRMHumanoid} into this one.
-   * @param source The {@link VRMHumanoid} you want to copy
-   * @returns this
-   */
-  public copy(source: VRMHumanoid): this {
-    this.humanBones = source.humanBones;
-    this.restPose = source.restPose;
-
-    return this;
-  }
-
-  /**
-   * Returns a clone of this {@link VRMHumanoid}.
-   * @returns Copied {@link VRMHumanoid}
-   */
-  public clone(): VRMHumanoid {
-    return new VRMHumanoid(this.humanBones).copy(this);
   }
 
   /**
@@ -220,11 +188,5 @@ export class VRMHumanoid {
    */
   public getBoneNode(name: VRMHumanBoneName): THREE.Object3D | null {
     return this.humanBones[name]?.node ?? null;
-  }
-
-  public update(): void {
-    if (this._autoUpdate) {
-      this.humanoidRig.update();
-    }
   }
 }

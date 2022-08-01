@@ -17,4 +17,6 @@ export interface VRMCoreLoaderPluginOptions {
    * Will be overwritten if you use custom loader plugins for each components.
    */
   helperRoot?: THREE.Object3D;
+
+  autoUpdateHumanoid?: boolean;
 }
