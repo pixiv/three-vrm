@@ -128,12 +128,9 @@ export class VRMHumanoidRig extends VRMRig {
         // ルートアニメーション用
         if (boneName === 'hips') {
           const boneWorldPosition = rigBoneNode.getWorldPosition(new THREE.Vector3());
-          const parentWorldMatrix = boneNode.parent?.matrixWorld;
-
-          if (parentWorldMatrix) {
-            const localPosition = boneWorldPosition.applyMatrix4(parentWorldMatrix);
-            boneNode.position.copy(localPosition);
-          }
+          const parentWorldMatrix = boneNode.parent!.matrixWorld;
+          const localPosition = boneWorldPosition.applyMatrix4(parentWorldMatrix);
+          boneNode.position.copy(localPosition);
         }
       }
     });
