@@ -9,7 +9,7 @@ const _quatA = new THREE.Quaternion();
 
 export class VRMHumanoidRig extends VRMRig {
   protected static _setupTransforms(
-    humanoid: VRMRig,
+    modelRig: VRMRig,
   ): {
     rigBones: VRMHumanBones;
     root: THREE.Object3D;
@@ -25,7 +25,7 @@ export class VRMHumanoidRig extends VRMRig {
     const boneRotations: { [boneName in VRMHumanBoneName]?: THREE.Quaternion } = {};
 
     VRMHumanBoneList.forEach((boneName) => {
-      const boneNode = humanoid.getBoneNode(boneName);
+      const boneNode = modelRig.getBoneNode(boneName);
 
       if (boneNode) {
         const boneWorldPosition = new THREE.Vector3();
@@ -45,7 +45,7 @@ export class VRMHumanoidRig extends VRMRig {
 
     const rigBones: Partial<VRMHumanBones> = {};
     VRMHumanBoneList.forEach((boneName) => {
-      const boneNode = humanoid.getBoneNode(boneName);
+      const boneNode = modelRig.getBoneNode(boneName);
 
       if (boneNode) {
         const boneWorldPosition = boneWorldPositions[boneName] as THREE.Vector3;
@@ -65,7 +65,7 @@ export class VRMHumanoidRig extends VRMRig {
 
         // add to hierarchy
         const rigBoneNode = new THREE.Object3D();
-        rigBoneNode.name = boneNode.name;
+        rigBoneNode.name = 'Normalized_' + boneNode.name;
 
         const parentRigBoneNode = (currentBoneName ? rigBones[currentBoneName]?.node : root) as THREE.Object3D;
 
