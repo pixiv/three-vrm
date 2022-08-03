@@ -9,7 +9,7 @@ const _v3A = new THREE.Vector3();
 const _quatA = new THREE.Quaternion();
 
 /**
- * A class represents a humanoid of a VRM.
+ * A class represents the Rig of a VRM.
  */
 export class VRMRig {
   /**

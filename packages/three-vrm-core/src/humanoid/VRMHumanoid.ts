@@ -22,12 +22,19 @@ export class VRMHumanoid {
    */
   public restPose: VRMPose;
 
-  // TODO: DOC
+  /**
+   * A raw rig of the VRM.
+   */
   public modelRig: VRMRig;
 
-  // TODO: DOC
+  /**
+   * A normalized rig of the VRM.
+   */
   public humanoidRig: VRMHumanoidRig;
 
+  /**
+   * Copy pose from humanoidRig to modelRig on update().
+   */
   public autoUpdate: boolean;
 
   /**
