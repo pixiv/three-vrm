@@ -32,12 +32,17 @@ let currentVrm = undefined;
 let currentAnimationUrl = undefined;
 let currentMixer = undefined;
 
+const helperRoot = new THREE.Group();
+helperRoot.renderOrder = 10000; // Helperをモデルよりも手前に描画させる
+scene.add(helperRoot);
+
 function loadVRM(modelUrl) {
   const loader = new THREE.GLTFLoader();
   loader.crossOrigin = 'anonymous';
 
+  helperRoot.clear();
   loader.register((parser) => {
-    return new THREE_VRM_CORE.VRMCoreLoaderPlugin(parser, { helperRoot: scene, autoUpdateHumanoid: true });
+    return new THREE_VRM_CORE.VRMCoreLoaderPlugin(parser, { helperRoot: helperRoot, autoUpdateHumanoid: true });
   });
 
   loader.load(
@@ -49,7 +54,6 @@ function loadVRM(modelUrl) {
       const vrm = gltf.userData.vrmCore;
       if (currentVrm) {
         scene.remove(currentVrm.scene);
-        // THREE_VRM.VRMUtils.deepDispose(currentVrm.scene);
       }
 
       // put the model to the scene
@@ -67,9 +71,6 @@ function loadVRM(modelUrl) {
           currentMixer.clipAction(clip).play(); // アニメーションをMixerに適用してplay
         });
       }
-
-      // rotate if the VRM is VRM0.0
-      // THREE_VRM.VRMUtils.rotateVRM0(vrm);
 
       console.log(vrm);
     },

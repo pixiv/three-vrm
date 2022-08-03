@@ -31,13 +31,17 @@ const defaultModelUrl = '../models/three-vrm-girl.vrm';
 let currentVrm = undefined;
 let currentAnimationUrl = undefined;
 let currentMixer = undefined;
+const helperRoot = new THREE.Group();
+helperRoot.renderOrder = 10000; // Helperをモデルよりも手前に描画させる
+scene.add(helperRoot);
 
 function loadVRM(modelUrl) {
   const loader = new THREE.GLTFLoader();
   loader.crossOrigin = 'anonymous';
 
+  helperRoot.clear();
   loader.register((parser) => {
-    return new THREE_VRM.VRMLoaderPlugin(parser, { helperRoot: scene, autoUpdateHumanoid: true });
+    return new THREE_VRM.VRMLoaderPlugin(parser, { helperRoot: helperRoot, autoUpdateHumanoid: true });
   });
 
   loader.load(
