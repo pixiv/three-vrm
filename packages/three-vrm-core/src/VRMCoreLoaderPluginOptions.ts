@@ -18,5 +18,5 @@ export interface VRMCoreLoaderPluginOptions {
    */
   helperRoot?: THREE.Object3D;
 
-  autoUpdateHumanoid?: boolean;
+  autoUpdateHumanoidRig?: boolean;
 }

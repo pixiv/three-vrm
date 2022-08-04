@@ -41,7 +41,7 @@ function loadVRM(modelUrl) {
 
   helperRoot.clear();
   loader.register((parser) => {
-    return new THREE_VRM.VRMLoaderPlugin(parser, { helperRoot: helperRoot, autoUpdateHumanoid: true });
+    return new THREE_VRM.VRMLoaderPlugin(parser, { helperRoot: helperRoot, autoUpdateHumanoidRig: true });
   });
 
   loader.load(

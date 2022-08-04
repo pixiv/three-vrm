@@ -6,5 +6,5 @@ export interface VRMHumanoidLoaderPluginOptions {
    */
   helperRoot?: THREE.Object3D;
 
-  autoUpdate?: boolean;
+  autoUpdateHumanoidRig?: boolean;
 }

@@ -25,11 +25,12 @@ export class VRMCoreLoaderPlugin implements GLTFLoaderPlugin {
     this.parser = parser;
 
     const helperRoot = options?.helperRoot;
-    const autoUpdate = options?.autoUpdateHumanoid;
+    const autoUpdateHumanoidRig = options?.autoUpdateHumanoidRig;
 
     this.expressionPlugin = options?.expressionPlugin ?? new VRMExpressionLoaderPlugin(parser);
     this.firstPersonPlugin = options?.firstPersonPlugin ?? new VRMFirstPersonLoaderPlugin(parser);
-    this.humanoidPlugin = options?.humanoidPlugin ?? new VRMHumanoidLoaderPlugin(parser, { helperRoot, autoUpdate });
+    this.humanoidPlugin =
+      options?.humanoidPlugin ?? new VRMHumanoidLoaderPlugin(parser, { helperRoot, autoUpdateHumanoidRig });
     this.lookAtPlugin = options?.lookAtPlugin ?? new VRMLookAtLoaderPlugin(parser, { helperRoot });
     this.metaPlugin = options?.metaPlugin ?? new VRMMetaLoaderPlugin(parser);
   }

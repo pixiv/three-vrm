@@ -35,14 +35,14 @@ export class VRMHumanoid {
   /**
    * Copy pose from humanoidRig to modelRig on update().
    */
-  public autoUpdate: boolean;
+  public autoUpdateHumanoidRig: boolean;
 
   /**
    * Create a new {@link VRMHumanoid}.
    * @param boneArray A {@link VRMHumanBones} contains all the bones of the new humanoid
    */
-  public constructor(humanBones: VRMHumanBones, autoUpdate = true) {
-    this.autoUpdate = autoUpdate;
+  public constructor(humanBones: VRMHumanBones, autoUpdateHumanoidRig = true) {
+    this.autoUpdateHumanoidRig = autoUpdateHumanoidRig;
     this.humanBones = humanBones;
     this.modelRig = new VRMRig(humanBones);
     this.humanoidRig = new VRMHumanoidRig(this.modelRig);
@@ -125,7 +125,7 @@ export class VRMHumanoid {
   }
 
   public update(): void {
-    if (this.autoUpdate) {
+    if (this.autoUpdateHumanoidRig) {
       this.humanoidRig.update();
     }
   }

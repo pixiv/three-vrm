@@ -57,7 +57,7 @@
 
 			loader.register( ( parser ) => {
 
-				return new THREE_VRM_CORE.VRMCoreLoaderPlugin( parser, { helperRoot: scene, autoUpdateHumanoid: true } );
+				return new THREE_VRM_CORE.VRMCoreLoaderPlugin( parser, { helperRoot: scene, autoUpdateHumanoidRig: true } );
 
 			} );
 
@@ -103,7 +103,8 @@
 
 				if ( currentGltf ) {
 
-					const humanoid = currentGltf.userData.vrmCore.humanoid;
+					const vrmCore = currentGltf.userData.vrmCore;
+					const humanoid = vrmCore.humanoid;
 
 					// tweak bones
 					const s = 0.25 * Math.PI * Math.sin( Math.PI * clock.elapsedTime );
