@@ -255,7 +255,7 @@ export class VRMFirstPerson {
   }
 
   private _isEraseTarget(bone: THREE.Object3D): boolean {
-    if (bone === this.humanoid.getBoneNode('head')) {
+    if (bone === this.humanoid.getRawBoneNode('head')) {
       return true;
     } else if (!bone.parent) {
       return false;

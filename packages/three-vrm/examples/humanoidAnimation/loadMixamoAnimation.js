@@ -18,7 +18,7 @@ function loadMixamoAnimation(url, vrm) {
       const trackSplitted = track.name.split('.');
       const mixamoRigName = trackSplitted[0];
       const vrmBoneName = mixamoVRMRigMap[mixamoRigName];
-      const vrmNodeName = vrm.humanoid?.humanoidRig.getBoneNode(vrmBoneName)?.name;
+      const vrmNodeName = vrm.humanoid?.getNormalizedBoneNode(vrmBoneName)?.name;
 
       if (vrmNodeName != null) {
         const propertyName = trackSplitted[1];

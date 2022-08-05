@@ -35,8 +35,8 @@ export class VRMHumanoid {
    * Create a new {@link VRMHumanoid}.
    * @param boneArray A {@link VRMHumanBones} contains all the bones of the new humanoid
    */
-  public constructor(humanBones: VRMHumanBones, autoUpdateHumanoidRig = true) {
-    this.autoUpdateHumanBones = autoUpdateHumanoidRig;
+  public constructor(humanBones: VRMHumanBones, autoUpdateHumanBones = true) {
+    this.autoUpdateHumanBones = autoUpdateHumanBones;
     this._rawHumanBonesRig = new VRMRig(humanBones);
     this._normalizedHumanBonesRig = new VRMHumanoidRig(this._rawHumanBonesRig);
     this.restPose = this.getRawAbsolutePose();

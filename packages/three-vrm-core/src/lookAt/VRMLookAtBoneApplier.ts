@@ -91,8 +91,8 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
     this._restQuatLeftEye = new THREE.Quaternion();
     this._restQuatRightEye = new THREE.Quaternion();
 
-    const leftEye = this.humanoid.getBoneNode('leftEye');
-    const rightEye = this.humanoid.getBoneNode('leftEye');
+    const leftEye = this.humanoid.getNormalizedBoneNode('leftEye');
+    const rightEye = this.humanoid.getNormalizedBoneNode('leftEye');
 
     if (leftEye) {
       this._restQuatLeftEye.copy(leftEye.quaternion);
@@ -110,8 +110,8 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
    * @param pitch Rotation around X axis, in degree
    */
   public applyYawPitch(yaw: number, pitch: number): void {
-    const leftEye = this.humanoid.getBoneNode('leftEye');
-    const rightEye = this.humanoid.getBoneNode('rightEye');
+    const leftEye = this.humanoid.getNormalizedBoneNode('leftEye');
+    const rightEye = this.humanoid.getNormalizedBoneNode('rightEye');
 
     // left
     if (leftEye) {

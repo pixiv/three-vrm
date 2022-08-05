@@ -42,7 +42,7 @@ function loadVRM(modelUrl) {
 
   helperRoot.clear();
   loader.register((parser) => {
-    return new THREE_VRM_CORE.VRMCoreLoaderPlugin(parser, { helperRoot: helperRoot, autoUpdateHumanoidRig: true });
+    return new THREE_VRM_CORE.VRMCoreLoaderPlugin(parser, { helperRoot: helperRoot, autoUpdateHumanBones: true });
   });
 
   loader.load(
@@ -61,7 +61,7 @@ function loadVRM(modelUrl) {
       scene.add(vrm.scene);
 
       // HumanoidRigのRootを追加する必要がある
-      const root = vrm.humanoid.humanoidRig.root;
+      const root = vrm.humanoid.getNormalizedBoneNode('hips').parent;
       vrm.scene.add(root);
 
       if (currentAnimationUrl) {
@@ -71,6 +71,8 @@ function loadVRM(modelUrl) {
           currentMixer.clipAction(clip).play(); // アニメーションをMixerに適用してplay
         });
       }
+
+      currentVrm.scene.rotation.y = Math.PI / 4;
 
       console.log(vrm);
     },

@@ -41,7 +41,7 @@ function loadVRM(modelUrl) {
 
   helperRoot.clear();
   loader.register((parser) => {
-    return new THREE_VRM.VRMLoaderPlugin(parser, { helperRoot: helperRoot, autoUpdateHumanoidRig: true });
+    return new THREE_VRM.VRMLoaderPlugin(parser, { helperRoot: helperRoot, autoUpdateHumanBones: true });
   });
 
   loader.load(
@@ -61,7 +61,7 @@ function loadVRM(modelUrl) {
       scene.add(vrm.scene);
 
       // HumanoidRigのRootを追加する必要がある
-      const root = vrm.humanoid.humanoidRig.root;
+      const root = vrm.humanoid.getNormalizedBoneNode('hips').parent;
       vrm.scene.add(root);
 
       if (currentAnimationUrl) {
