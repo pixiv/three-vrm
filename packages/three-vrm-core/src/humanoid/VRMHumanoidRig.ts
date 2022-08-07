@@ -132,7 +132,7 @@ export class VRMHumanoidRig extends VRMRig {
         if (boneName === 'hips') {
           const boneWorldPosition = rigBoneNode.getWorldPosition(new THREE.Vector3());
           const parentWorldMatrix = boneNode.parent!.matrixWorld;
-          const localPosition = boneWorldPosition.applyMatrix4(parentWorldMatrix);
+          const localPosition = boneWorldPosition.applyMatrix4(parentWorldMatrix.invert());
           boneNode.position.copy(localPosition);
         }
       }
