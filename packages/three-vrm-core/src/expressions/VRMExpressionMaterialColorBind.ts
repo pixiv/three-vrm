@@ -96,7 +96,13 @@ export class VRMExpressionMaterialColorBind implements VRMExpressionBind {
       const target = (material as any)[propertyName] as THREE.Color;
 
       const initialValue = target.clone();
-      const deltaValue = this.targetValue.clone().sub(initialValue);
+
+      // 負の値を保持するためにColor.subを使わずに差分を計算する
+      const deltaValue = new THREE.Color(
+        targetValue.r - initialValue.r,
+        targetValue.g - initialValue.g,
+        targetValue.b - initialValue.b,
+      );
 
       this._state = {
         propertyName,

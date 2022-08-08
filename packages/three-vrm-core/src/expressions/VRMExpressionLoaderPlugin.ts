@@ -6,11 +6,13 @@ import { gltfExtractPrimitivesFromNode } from '../utils/gltfExtractPrimitivesFro
 import { gltfGetAssociatedMaterialIndex } from '../utils/gltfGetAssociatedMaterialIndex';
 import { VRMExpression } from './VRMExpression';
 import { VRMExpressionManager } from './VRMExpressionManager';
+import { VRMExpressionMaterialColorType } from './VRMExpressionMaterialColorType';
 import { VRMExpressionMaterialColorBind } from './VRMExpressionMaterialColorBind';
 import { VRMExpressionMorphTargetBind } from './VRMExpressionMorphTargetBind';
 import { VRMExpressionPresetName } from './VRMExpressionPresetName';
 import { VRMExpressionTextureTransformBind } from './VRMExpressionTextureTransformBind';
 import { GLTF as GLTFSchema } from '@gltf-transform/core';
+import { renameMaterialProperty } from '../utils/renameMaterialProperty';
 
 /**
  * A plugin of GLTFLoader that imports a {@link VRMExpressionManager} from a VRM extension of a GLTF.
@@ -323,7 +325,57 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
 
         const materialValues = schemaGroup.materialValues;
         if (materialValues && materialValues.length !== 0) {
-          console.warn('Material binds of VRM 0.0 are not supported. Setup the model in VRM 1.0 and try again');
+          materialValues.forEach((materialValue) => {
+            if (
+              materialValue.materialName === undefined ||
+              materialValue.propertyName === undefined ||
+              materialValue.targetValue === undefined
+            ) {
+              return;
+            }
+
+            const materials: THREE.Material[] = [];
+            gltf.scene.traverse((object) => {
+              if ((object as any).material) {
+                const material: THREE.Material[] | THREE.Material = (object as any).material;
+                if (Array.isArray(material)) {
+                  materials.push(
+                    ...material.filter(
+                      (mtl) => mtl.name === materialValue.materialName! && materials.indexOf(mtl) === -1,
+                    ),
+                  );
+                } else if (material.name === materialValue.materialName && materials.indexOf(material) === -1) {
+                  materials.push(material);
+                }
+              }
+            });
+
+            materials.forEach((material) => {
+              const expressionType = renameMaterialProperty(
+                materialValue.propertyName!,
+              ) as VRMExpressionMaterialColorType;
+
+              if (Object.values(VRMExpressionMaterialColorType).includes(expressionType)) {
+                expression.addBind(
+                  new VRMExpressionMaterialColorBind({
+                    material,
+                    type: expressionType,
+                    targetValue: new THREE.Color(...materialValue.targetValue!.slice(0, 3)),
+                  }),
+                );
+              } else {
+                const scale = new THREE.Vector2(materialValue.targetValue![0], materialValue.targetValue![1]);
+                const offset = new THREE.Vector2(materialValue.targetValue![2], materialValue.targetValue![3]);
+                expression.addBind(
+                  new VRMExpressionTextureTransformBind({
+                    material,
+                    scale,
+                    offset,
+                  }),
+                );
+              }
+            });
+          });
         }
 
         manager.registerExpression(expression);
