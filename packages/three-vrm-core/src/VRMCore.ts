@@ -70,16 +70,16 @@ export class VRMCore {
    * @param delta deltaTime
    */
   public update(delta: number): void {
+    if (this.humanoid) {
+      this.humanoid.update();
+    }
+
     if (this.lookAt) {
       this.lookAt.update(delta);
     }
 
     if (this.expressionManager) {
       this.expressionManager.update();
-    }
-
-    if (this.humanoid) {
-      this.humanoid.update();
     }
   }
 }
