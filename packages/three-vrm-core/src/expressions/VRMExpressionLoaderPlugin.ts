@@ -340,7 +340,10 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
                 if (Array.isArray(material)) {
                   materials.push(
                     ...material.filter(
-                      (mtl) => mtl.name === materialValue.materialName! && materials.indexOf(mtl) === -1,
+                      (mtl) =>
+                        (mtl.name === materialValue.materialName! ||
+                          mtl.name === materialValue.materialName! + ' (Outline)') &&
+                        materials.indexOf(mtl) === -1,
                     ),
                   );
                 } else if (material.name === materialValue.materialName && materials.indexOf(material) === -1) {

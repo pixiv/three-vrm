@@ -21,9 +21,9 @@ export class VRMExpressionMaterialColorBind implements VRMExpressionBind {
     isMToonMaterial: {
       color: 'color',
       emissionColor: 'emissive',
-      outlineColor: 'outlineFactor',
-      rimColor: 'rimFactor',
-      shadeColor: 'shadeFactor',
+      outlineColor: 'outlineColorFactor',
+      rimColor: 'parametricRimColorFactor',
+      shadeColor: 'shadeColorFactor',
     },
   };
 
