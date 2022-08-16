@@ -6,13 +6,12 @@ import { gltfExtractPrimitivesFromNode } from '../utils/gltfExtractPrimitivesFro
 import { gltfGetAssociatedMaterialIndex } from '../utils/gltfGetAssociatedMaterialIndex';
 import { VRMExpression } from './VRMExpression';
 import { VRMExpressionManager } from './VRMExpressionManager';
-import { VRMExpressionMaterialColorType } from './VRMExpressionMaterialColorType';
+import { v0ExpressionMaterialColorMap } from './VRMExpressionMaterialColorType';
 import { VRMExpressionMaterialColorBind } from './VRMExpressionMaterialColorBind';
 import { VRMExpressionMorphTargetBind } from './VRMExpressionMorphTargetBind';
 import { VRMExpressionPresetName } from './VRMExpressionPresetName';
 import { VRMExpressionTextureTransformBind } from './VRMExpressionTextureTransformBind';
 import { GLTF as GLTFSchema } from '@gltf-transform/core';
-import { renameMaterialProperty } from '../utils/renameMaterialProperty';
 
 /**
  * A plugin of GLTFLoader that imports a {@link VRMExpressionManager} from a VRM extension of a GLTF.
@@ -350,20 +349,10 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
               }
             });
 
+            const materialPropertyName = materialValue.propertyName;
             materials.forEach((material) => {
-              const expressionType = renameMaterialProperty(
-                materialValue.propertyName!,
-              ) as VRMExpressionMaterialColorType;
-
-              if (Object.values(VRMExpressionMaterialColorType).includes(expressionType)) {
-                expression.addBind(
-                  new VRMExpressionMaterialColorBind({
-                    material,
-                    type: expressionType,
-                    targetValue: new THREE.Color(...materialValue.targetValue!.slice(0, 3)),
-                  }),
-                );
-              } else {
+              // TextureTransformBind
+              if (materialPropertyName === '_MainTex_ST') {
                 const scale = new THREE.Vector2(materialValue.targetValue![0], materialValue.targetValue![1]);
                 const offset = new THREE.Vector2(materialValue.targetValue![2], materialValue.targetValue![3]);
                 expression.addBind(
@@ -373,7 +362,25 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
                     offset,
                   }),
                 );
+
+                return;
               }
+
+              // MaterialColorBind
+              const materialColorType = v0ExpressionMaterialColorMap[materialPropertyName];
+              if (materialColorType) {
+                expression.addBind(
+                  new VRMExpressionMaterialColorBind({
+                    material,
+                    type: materialColorType,
+                    targetValue: new THREE.Color(...materialValue.targetValue!.slice(0, 3)),
+                  }),
+                );
+
+                return;
+              }
+
+              console.warn(materialPropertyName + ' is not supported');
             });
           });
         }
