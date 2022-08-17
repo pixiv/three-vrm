@@ -8,6 +8,9 @@ const _color = new THREE.Color();
  * A bind of expression influences to a material color.
  */
 export class VRMExpressionMaterialColorBind implements VRMExpressionBind {
+  /**
+   * Mapping of property names from VRMC/materialColorBinds.type to three.js/Material.
+   */
   private static _propertyNameMapMap: {
     [distinguisher: string]: { [type in VRMExpressionMaterialColorType]?: string };
   } = {

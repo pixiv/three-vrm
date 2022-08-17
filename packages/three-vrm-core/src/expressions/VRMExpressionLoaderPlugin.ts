@@ -277,6 +277,7 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
         expression.isBinary = schemaGroup.isBinary ?? false;
         // v0 doesn't have ignore properties
 
+        // Bind morphTarget
         if (schemaGroup.binds) {
           schemaGroup.binds.forEach(async (bind) => {
             if (bind.mesh === undefined || bind.index === undefined) {
@@ -322,6 +323,7 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
           });
         }
 
+        // Bind MaterialColor and TextureTransform
         const materialValues = schemaGroup.materialValues;
         if (materialValues && materialValues.length !== 0) {
           materialValues.forEach((materialValue) => {
@@ -333,6 +335,13 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
               return;
             }
 
+            /**
+             * アバターのオブジェクトに設定されているマテリアルの内から
+             * materialValueで指定されているマテリアルを集める。
+             *
+             * 特定には名前を使用する。
+             * アウトライン描画用のマテリアルも同時に集める。
+             */
             const materials: THREE.Material[] = [];
             gltf.scene.traverse((object) => {
               if ((object as any).material) {
