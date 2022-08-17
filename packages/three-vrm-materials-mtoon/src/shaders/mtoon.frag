@@ -7,6 +7,7 @@ uniform float opacity;
 uniform vec3 shadeColorFactor;
 #ifdef USE_SHADEMULTIPLYTEXTURE
   uniform sampler2D shadeMultiplyTexture;
+  uniform mat3 shadeMultiplyTextureUvTransform;
 #endif
 
 uniform float shadingShiftFactor;
@@ -464,11 +465,12 @@ void main() {
 
   material.shadeColor = shadeColorFactor;
   #ifdef USE_SHADEMULTIPLYTEXTURE
+    vec2 shadeMultiplyTextureUv = ( shadeMultiplyTextureUvTransform * vec3( uv, 1 ) ).xy;
     #if THREE_VRM_THREE_REVISION >= 137
-      material.shadeColor *= texture2D( shadeMultiplyTexture, uv ).rgb;
+      material.shadeColor *= texture2D( shadeMultiplyTexture, shadeMultiplyTextureUv ).rgb;
     #else
       // COMPAT: pre-r137
-      material.shadeColor *= shadeMultiplyTextureTexelToLinear( texture2D( shadeMultiplyTexture, uv ) ).rgb;
+      material.shadeColor *= shadeMultiplyTextureTexelToLinear( texture2D( shadeMultiplyTexture, shadeMultiplyTextureUv) ).rgb;
     #endif
   #endif
 

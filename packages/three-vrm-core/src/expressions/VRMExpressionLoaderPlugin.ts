@@ -6,6 +6,7 @@ import { gltfExtractPrimitivesFromNode } from '../utils/gltfExtractPrimitivesFro
 import { gltfGetAssociatedMaterialIndex } from '../utils/gltfGetAssociatedMaterialIndex';
 import { VRMExpression } from './VRMExpression';
 import { VRMExpressionManager } from './VRMExpressionManager';
+import { v0ExpressionMaterialColorMap } from './VRMExpressionMaterialColorType';
 import { VRMExpressionMaterialColorBind } from './VRMExpressionMaterialColorBind';
 import { VRMExpressionMorphTargetBind } from './VRMExpressionMorphTargetBind';
 import { VRMExpressionPresetName } from './VRMExpressionPresetName';
@@ -276,6 +277,7 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
         expression.isBinary = schemaGroup.isBinary ?? false;
         // v0 doesn't have ignore properties
 
+        // Bind morphTarget
         if (schemaGroup.binds) {
           schemaGroup.binds.forEach(async (bind) => {
             if (bind.mesh === undefined || bind.index === undefined) {
@@ -321,9 +323,78 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
           });
         }
 
+        // Bind MaterialColor and TextureTransform
         const materialValues = schemaGroup.materialValues;
         if (materialValues && materialValues.length !== 0) {
-          console.warn('Material binds of VRM 0.0 are not supported. Setup the model in VRM 1.0 and try again');
+          materialValues.forEach((materialValue) => {
+            if (
+              materialValue.materialName === undefined ||
+              materialValue.propertyName === undefined ||
+              materialValue.targetValue === undefined
+            ) {
+              return;
+            }
+
+            /**
+             * アバターのオブジェクトに設定されているマテリアルの内から
+             * materialValueで指定されているマテリアルを集める。
+             *
+             * 特定には名前を使用する。
+             * アウトライン描画用のマテリアルも同時に集める。
+             */
+            const materials: THREE.Material[] = [];
+            gltf.scene.traverse((object) => {
+              if ((object as any).material) {
+                const material: THREE.Material[] | THREE.Material = (object as any).material;
+                if (Array.isArray(material)) {
+                  materials.push(
+                    ...material.filter(
+                      (mtl) =>
+                        (mtl.name === materialValue.materialName! ||
+                          mtl.name === materialValue.materialName! + ' (Outline)') &&
+                        materials.indexOf(mtl) === -1,
+                    ),
+                  );
+                } else if (material.name === materialValue.materialName && materials.indexOf(material) === -1) {
+                  materials.push(material);
+                }
+              }
+            });
+
+            const materialPropertyName = materialValue.propertyName;
+            materials.forEach((material) => {
+              // TextureTransformBind
+              if (materialPropertyName === '_MainTex_ST') {
+                const scale = new THREE.Vector2(materialValue.targetValue![0], materialValue.targetValue![1]);
+                const offset = new THREE.Vector2(materialValue.targetValue![2], materialValue.targetValue![3]);
+                expression.addBind(
+                  new VRMExpressionTextureTransformBind({
+                    material,
+                    scale,
+                    offset,
+                  }),
+                );
+
+                return;
+              }
+
+              // MaterialColorBind
+              const materialColorType = v0ExpressionMaterialColorMap[materialPropertyName];
+              if (materialColorType) {
+                expression.addBind(
+                  new VRMExpressionMaterialColorBind({
+                    material,
+                    type: materialColorType,
+                    targetValue: new THREE.Color(...materialValue.targetValue!.slice(0, 3)),
+                  }),
+                );
+
+                return;
+              }
+
+              console.warn(materialPropertyName + ' is not supported');
+            });
+          });
         }
 
         manager.registerExpression(expression);
