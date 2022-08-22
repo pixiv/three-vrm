@@ -32,6 +32,8 @@ export class VRMHumanoid {
    * @deprecated Deprecated. Use either {@link rawRestPose} or {@link normalizedRestPose} instead.
    */
   public get restPose(): VRMPose {
+    console.warn('VRMHumanoid: restPose is deprecated. Use either rawRestPose or normalizedRestPose instead.');
+
     return this.rawRestPose;
   }
 
@@ -106,6 +108,15 @@ export class VRMHumanoid {
   }
 
   /**
+   * @deprecated Deprecated. Use either {@link getRawAbsolutePose} or {@link getNormalizedAbsolutePose} instead.
+   */
+  public getAbsolutePose(): VRMPose {
+    console.warn('VRMHumanoid: getAbsolutePose() is deprecated. Use either getRawAbsolutePose() or getNormalizedAbsolutePose() instead.');
+
+    return this.getRawAbsolutePose();
+  }
+
+  /**
    * Return the current absolute pose of this raw human bones as a {@link VRMPose}.
    * Note that the output result will contain initial state of the VRM and not compatible between different models.
    * You might want to use {@link getRawPose} instead.
@@ -124,6 +135,15 @@ export class VRMHumanoid {
   }
 
   /**
+   * @deprecated Deprecated. Use either {@link getRawPose} or {@link getNormalizedPose} instead.
+   */
+  public getPose(): VRMPose {
+    console.warn('VRMHumanoid: getPose() is deprecated. Use either getRawPose() or getNormalizedPose() instead.');
+
+    return this.getRawPose();
+  }
+
+  /**
    * Return the current pose of raw human bones as a {@link VRMPose}.
    *
    * Each transform is a local transform relative from rest pose (T-pose).
@@ -139,6 +159,15 @@ export class VRMHumanoid {
    */
    public getNormalizedPose(): VRMPose {
     return this._normalizedHumanBones.getPose();
+  }
+
+  /**
+   * @deprecated Deprecated. Use either {@link setRawPose} or {@link setNormalizedPose} instead.
+   */
+  public setPose(poseObject: VRMPose): void {
+    console.warn('VRMHumanoid: setPose() is deprecated. Use either setRawPose() or setNormalizedPose() instead.');
+
+    return this.setRawPose(poseObject);
   }
 
   /**
@@ -168,6 +197,15 @@ export class VRMHumanoid {
   }
 
   /**
+   * @deprecated Deprecated. Use either {@link resetRawPose} or {@link resetNormalizedPose} instead.
+   */
+  public resetPose(): void {
+    console.warn('VRMHumanoid: resetPose() is deprecated. Use either resetRawPose() or resetNormalizedPose() instead.');
+
+    return this.resetRawPose();
+  }
+
+  /**
    * Reset the raw humanoid to its rest pose.
    *
    * If you are using {@link autoUpdateHumanBones}, you might want to use {@link resetNormalizedPose} instead.
@@ -181,6 +219,15 @@ export class VRMHumanoid {
    */
    public resetNormalizedPose(): void {
     return this._rawHumanBones.resetPose();
+  }
+
+  /**
+   * @deprecated Deprecated. Use either {@link getRawBone} or {@link getNormalizedBone} instead.
+   */
+  public getBone(name: VRMHumanBoneName): VRMHumanBone | undefined {
+    console.warn('VRMHumanoid: getBone() is deprecated. Use either getRawBone() or getNormalizedBone() instead.');
+
+    return this.getRawBone(name);
   }
 
   /**
@@ -199,6 +246,15 @@ export class VRMHumanoid {
    */
    public getNormalizedBone(name: VRMHumanBoneName): VRMHumanBone | undefined {
     return this._normalizedHumanBones.getBone(name);
+  }
+
+  /**
+   * @deprecated Deprecated. Use either {@link getRawBoneNode} or {@link getNormalizedBoneNode} instead.
+   */
+   public getBoneNode(name: VRMHumanBoneName): THREE.Object3D | null {
+    console.warn('VRMHumanoid: getBoneNode() is deprecated. Use either getRawBoneNode() or getNormalizedBoneNode() instead.');
+
+    return this.getRawBoneNode(name);
   }
 
   /**
