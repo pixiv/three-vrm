@@ -27,12 +27,12 @@ export class VRMHumanoid {
   /**
    * A raw rig of the VRM.
    */
-  private _rawHumanBonesRig: VRMRig; // TODO: Rename
+  private _rawHumanBones: VRMRig; // TODO: Rename
 
   /**
    * A normalized rig of the VRM.
    */
-  private _normalizedHumanBonesRig: VRMHumanoidRig; // TODO: Rename
+  private _normalizedHumanBones: VRMHumanoidRig; // TODO: Rename
 
   /**
    * Create a new {@link VRMHumanoid}.
@@ -41,8 +41,8 @@ export class VRMHumanoid {
    */
   public constructor(humanBones: VRMHumanBones, autoUpdateHumanBones = true) {
     this.autoUpdateHumanBones = autoUpdateHumanBones;
-    this._rawHumanBonesRig = new VRMRig(humanBones);
-    this._normalizedHumanBonesRig = new VRMHumanoidRig(this._rawHumanBonesRig);
+    this._rawHumanBones = new VRMRig(humanBones);
+    this._normalizedHumanBones = new VRMHumanoidRig(this._rawHumanBones);
     this.restPose = this.getRawAbsolutePose();
   }
 
@@ -52,8 +52,8 @@ export class VRMHumanoid {
    * @returns this
    */
   public copy(source: VRMHumanoid): this {
-    this._rawHumanBonesRig = new VRMRig(source.humanBones);
-    this._normalizedHumanBonesRig = new VRMHumanoidRig(this._rawHumanBonesRig);
+    this._rawHumanBones = new VRMRig(source.humanBones);
+    this._normalizedHumanBones = new VRMHumanoidRig(this._rawHumanBones);
 
     this.restPose = source.restPose;
 
@@ -74,11 +74,11 @@ export class VRMHumanoid {
    * You might want to use {@link getPose} instead.
    */
   public getRawAbsolutePose(): VRMPose {
-    return this._rawHumanBonesRig.getAbsolutePose();
+    return this._rawHumanBones.getAbsolutePose();
   }
 
   public getNormalizedAbsolutePose(): VRMPose {
-    return this._normalizedHumanBonesRig.getAbsolutePose();
+    return this._normalizedHumanBones.getAbsolutePose();
   }
 
   /**
@@ -87,11 +87,11 @@ export class VRMHumanoid {
    * Each transform is a local transform relative from rest pose (T-pose).
    */
   public getRawPose(): VRMPose {
-    return this._rawHumanBonesRig.getPose();
+    return this._rawHumanBones.getPose();
   }
 
   public getNormalizedPose(): VRMPose {
-    return this._normalizedHumanBonesRig.getPose();
+    return this._normalizedHumanBones.getPose();
   }
 
   /**
@@ -103,30 +103,30 @@ export class VRMHumanoid {
    * @param poseObject A [[VRMPose]] that represents a single pose
    */
   public setRawPose(poseObject: VRMPose): void {
-    return this._rawHumanBonesRig.setPose(poseObject);
+    return this._rawHumanBones.setPose(poseObject);
   }
 
   public setNormalizedPose(poseObject: VRMPose): void {
-    return this._normalizedHumanBonesRig.setPose(poseObject);
+    return this._normalizedHumanBones.setPose(poseObject);
   }
 
   /**
    * Reset the humanoid to its rest pose.
    */
   public resetRawPose(): void {
-    return this._rawHumanBonesRig.resetPose();
+    return this._rawHumanBones.resetPose();
   }
 
   public resetNormalizedPose(): void {
-    return this._rawHumanBonesRig.resetPose();
+    return this._rawHumanBones.resetPose();
   }
 
   public get humanBones(): VRMHumanBones {
-    return this._rawHumanBonesRig.humanBones;
+    return this._rawHumanBones.humanBones;
   }
 
   public get normalizedHumanBones(): VRMHumanBones {
-    return this._normalizedHumanBonesRig.humanBones;
+    return this._normalizedHumanBones.humanBones;
   }
 
   /**
@@ -135,11 +135,11 @@ export class VRMHumanoid {
    * @param name Name of the bone you want
    */
   public getRawBone(name: VRMHumanBoneName): VRMHumanBone | undefined {
-    return this._rawHumanBonesRig.getBone(name);
+    return this._rawHumanBones.getBone(name);
   }
 
   public getNormalizedBone(name: VRMHumanBoneName): VRMHumanBone | undefined {
-    return this._normalizedHumanBonesRig.getBone(name);
+    return this._normalizedHumanBones.getBone(name);
   }
 
   /**
@@ -148,16 +148,16 @@ export class VRMHumanoid {
    * @param name Name of the bone you want
    */
   public getRawBoneNode(name: VRMHumanBoneName): THREE.Object3D | null {
-    return this._rawHumanBonesRig.getBoneNode(name);
+    return this._rawHumanBones.getBoneNode(name);
   }
 
   public getNormalizedBoneNode(name: VRMHumanBoneName): THREE.Object3D | null {
-    return this._normalizedHumanBonesRig.getBoneNode(name);
+    return this._normalizedHumanBones.getBoneNode(name);
   }
 
   public update(): void {
     if (this.autoUpdateHumanBones) {
-      this._normalizedHumanBonesRig.update();
+      this._normalizedHumanBones.update();
     }
   }
 }
