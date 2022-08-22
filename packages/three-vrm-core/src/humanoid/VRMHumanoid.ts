@@ -52,6 +52,20 @@ export class VRMHumanoid {
   }
 
   /**
+   * A map from {@link VRMHumanBoneName} to raw {@link VRMHumanBone}s.
+   */
+  public get humanBones(): VRMHumanBones {
+    return this._rawHumanBones.humanBones;
+  }
+
+  /**
+   * A map from {@link VRMHumanBoneName} to normalized {@link VRMHumanBone}s.
+   */
+  public get normalizedHumanBones(): VRMHumanBones {
+    return this._normalizedHumanBones.humanBones;
+  }
+
+  /**
    * Create a new {@link VRMHumanoid}.
    * @param humanBones A {@link VRMHumanBones} contains all the bones of the new humanoid
    * @param autoUpdateHumanBones Whether it copies pose from normalizedHumanBones to rawHumanBones on {@link update}. `true` by default.
@@ -134,14 +148,6 @@ export class VRMHumanoid {
 
   public resetNormalizedPose(): void {
     return this._rawHumanBones.resetPose();
-  }
-
-  public get humanBones(): VRMHumanBones {
-    return this._rawHumanBones.humanBones;
-  }
-
-  public get normalizedHumanBones(): VRMHumanBones {
-    return this._normalizedHumanBones.humanBones;
   }
 
   /**
