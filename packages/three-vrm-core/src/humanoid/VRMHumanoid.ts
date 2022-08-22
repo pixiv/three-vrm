@@ -19,12 +19,6 @@ export class VRMHumanoid {
   public autoUpdateHumanBones: boolean;
 
   /**
-   * A {@link VRMPose} that is its default state.
-   * Note that it's not compatible with {@link setPose} and {@link getPose}, since it contains non-relative values of each local transforms.
-   */
-  public restPose: VRMPose;
-
-  /**
    * A raw rig of the VRM.
    */
   private _rawHumanBones: VRMRig; // TODO: Rename
@@ -35,6 +29,29 @@ export class VRMHumanoid {
   private _normalizedHumanBones: VRMHumanoidRig; // TODO: Rename
 
   /**
+   * @deprecated Deprecated. Use either {@link rawRestPose} or {@link normalizedRestPose} instead.
+   */
+  public get restPose(): VRMPose {
+    return this.rawRestPose;
+  }
+
+  /**
+   * A {@link VRMPose} of its raw human bones that is its default state.
+   * Note that it's not compatible with {@link setPose} and {@link getPose}, since it contains non-relative values of each local transforms.
+   */
+  public get rawRestPose(): VRMPose {
+    return this._rawHumanBones.restPose;
+  }
+
+  /**
+   * A {@link VRMPose} of its normalized human bones that is its default state.
+   * Note that it's not compatible with {@link setPose} and {@link getPose}, since it contains non-relative values of each local transforms.
+   */
+  public get normalizedRestPose(): VRMPose {
+    return this._normalizedHumanBones.restPose;
+  }
+
+  /**
    * Create a new {@link VRMHumanoid}.
    * @param humanBones A {@link VRMHumanBones} contains all the bones of the new humanoid
    * @param autoUpdateHumanBones Whether it copies pose from normalizedHumanBones to rawHumanBones on {@link update}. `true` by default.
@@ -43,7 +60,6 @@ export class VRMHumanoid {
     this.autoUpdateHumanBones = autoUpdateHumanBones;
     this._rawHumanBones = new VRMRig(humanBones);
     this._normalizedHumanBones = new VRMHumanoidRig(this._rawHumanBones);
-    this.restPose = this.getRawAbsolutePose();
   }
 
   /**
@@ -52,11 +68,9 @@ export class VRMHumanoid {
    * @returns this
    */
   public copy(source: VRMHumanoid): this {
+    this.autoUpdateHumanBones = source.autoUpdateHumanBones;
     this._rawHumanBones = new VRMRig(source.humanBones);
     this._normalizedHumanBones = new VRMHumanoidRig(this._rawHumanBones);
-
-    this.autoUpdateHumanBones = source.autoUpdateHumanBones;
-    this.restPose = source.restPose;
 
     return this;
   }
