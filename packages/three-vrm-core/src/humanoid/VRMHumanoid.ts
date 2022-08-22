@@ -56,7 +56,7 @@ export class VRMHumanoid {
   /**
    * A map from {@link VRMHumanBoneName} to raw {@link VRMHumanBone}s.
    */
-   public get humanBones(): VRMHumanBones {
+  public get humanBones(): VRMHumanBones {
     // an alias of `rawHumanBones`
     return this._rawHumanBones.humanBones;
   }
@@ -64,7 +64,7 @@ export class VRMHumanoid {
   /**
    * A map from {@link VRMHumanBoneName} to raw {@link VRMHumanBone}s.
    */
-   public get rawHumanBones(): VRMHumanBones {
+  public get rawHumanBones(): VRMHumanBones {
     return this._rawHumanBones.humanBones;
   }
 
@@ -111,7 +111,9 @@ export class VRMHumanoid {
    * @deprecated Deprecated. Use either {@link getRawAbsolutePose} or {@link getNormalizedAbsolutePose} instead.
    */
   public getAbsolutePose(): VRMPose {
-    console.warn('VRMHumanoid: getAbsolutePose() is deprecated. Use either getRawAbsolutePose() or getNormalizedAbsolutePose() instead.');
+    console.warn(
+      'VRMHumanoid: getAbsolutePose() is deprecated. Use either getRawAbsolutePose() or getNormalizedAbsolutePose() instead.',
+    );
 
     return this.getRawAbsolutePose();
   }
@@ -130,7 +132,7 @@ export class VRMHumanoid {
    * Note that the output result will contain initial state of the VRM and not compatible between different models.
    * You might want to use {@link getNormalizedPose} instead.
    */
-   public getNormalizedAbsolutePose(): VRMPose {
+  public getNormalizedAbsolutePose(): VRMPose {
     return this._normalizedHumanBones.getAbsolutePose();
   }
 
@@ -157,7 +159,7 @@ export class VRMHumanoid {
    *
    * Each transform is a local transform relative from rest pose (T-pose).
    */
-   public getNormalizedPose(): VRMPose {
+  public getNormalizedPose(): VRMPose {
     return this._normalizedHumanBones.getPose();
   }
 
@@ -192,7 +194,7 @@ export class VRMHumanoid {
    *
    * @param poseObject A {@link VRMPose} that represents a single pose
    */
-   public setNormalizedPose(poseObject: VRMPose): void {
+  public setNormalizedPose(poseObject: VRMPose): void {
     return this._normalizedHumanBones.setPose(poseObject);
   }
 
@@ -217,7 +219,7 @@ export class VRMHumanoid {
   /**
    * Reset the normalized humanoid to its rest pose.
    */
-   public resetNormalizedPose(): void {
+  public resetNormalizedPose(): void {
     return this._rawHumanBones.resetPose();
   }
 
@@ -244,15 +246,17 @@ export class VRMHumanoid {
    *
    * @param name Name of the bone you want
    */
-   public getNormalizedBone(name: VRMHumanBoneName): VRMHumanBone | undefined {
+  public getNormalizedBone(name: VRMHumanBoneName): VRMHumanBone | undefined {
     return this._normalizedHumanBones.getBone(name);
   }
 
   /**
    * @deprecated Deprecated. Use either {@link getRawBoneNode} or {@link getNormalizedBoneNode} instead.
    */
-   public getBoneNode(name: VRMHumanBoneName): THREE.Object3D | null {
-    console.warn('VRMHumanoid: getBoneNode() is deprecated. Use either getRawBoneNode() or getNormalizedBoneNode() instead.');
+  public getBoneNode(name: VRMHumanBoneName): THREE.Object3D | null {
+    console.warn(
+      'VRMHumanoid: getBoneNode() is deprecated. Use either getRawBoneNode() or getNormalizedBoneNode() instead.',
+    );
 
     return this.getRawBoneNode(name);
   }
@@ -271,7 +275,7 @@ export class VRMHumanoid {
    *
    * @param name Name of the bone you want
    */
-   public getNormalizedBoneNode(name: VRMHumanBoneName): THREE.Object3D | null {
+  public getNormalizedBoneNode(name: VRMHumanBoneName): THREE.Object3D | null {
     return this._normalizedHumanBones.getBoneNode(name);
   }
 
