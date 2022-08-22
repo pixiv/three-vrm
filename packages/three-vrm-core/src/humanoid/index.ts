@@ -7,6 +7,7 @@ export { VRMHumanBoneParentMap } from './VRMHumanBoneParentMap';
 export type { VRMHumanBones } from './VRMHumanBones';
 export { VRMHumanoid } from './VRMHumanoid';
 export { VRMHumanoidLoaderPlugin } from './VRMHumanoidLoaderPlugin';
+export { VRMHumanoidLoaderPluginOptions } from './VRMHumanoidLoaderPluginOptions';
 export type { VRMPose } from './VRMPose';
 export type { VRMPoseTransform } from './VRMPoseTransform';
 export { VRMRequiredHumanBoneName } from './VRMRequiredHumanBoneName';
