@@ -37,7 +37,7 @@ export class VRMHumanoid {
 
   /**
    * A {@link VRMPose} of its raw human bones that is its default state.
-   * Note that it's not compatible with {@link setPose} and {@link getPose}, since it contains non-relative values of each local transforms.
+   * Note that it's not compatible with {@link setRawPose} and {@link getRawPose}, since it contains non-relative values of each local transforms.
    */
   public get rawRestPose(): VRMPose {
     return this._rawHumanBones.restPose;
@@ -45,7 +45,7 @@ export class VRMHumanoid {
 
   /**
    * A {@link VRMPose} of its normalized human bones that is its default state.
-   * Note that it's not compatible with {@link setPose} and {@link getPose}, since it contains non-relative values of each local transforms.
+   * Note that it's not compatible with {@link setNormalizedPose} and {@link getNormalizedPose}, since it contains non-relative values of each local transforms.
    */
   public get normalizedRestPose(): VRMPose {
     return this._normalizedHumanBones.restPose;
@@ -98,20 +98,25 @@ export class VRMHumanoid {
   }
 
   /**
-   * Return the current absolute pose of this humanoid as a {@link VRMPose}.
+   * Return the current absolute pose of this raw human bones as a {@link VRMPose}.
    * Note that the output result will contain initial state of the VRM and not compatible between different models.
-   * You might want to use {@link getPose} instead.
+   * You might want to use {@link getRawPose} instead.
    */
   public getRawAbsolutePose(): VRMPose {
     return this._rawHumanBones.getAbsolutePose();
   }
 
-  public getNormalizedAbsolutePose(): VRMPose {
+  /**
+   * Return the current absolute pose of this normalized human bones as a {@link VRMPose}.
+   * Note that the output result will contain initial state of the VRM and not compatible between different models.
+   * You might want to use {@link getNormalizedPose} instead.
+   */
+   public getNormalizedAbsolutePose(): VRMPose {
     return this._normalizedHumanBones.getAbsolutePose();
   }
 
   /**
-   * Return the current pose of this humanoid as a {@link VRMPose}.
+   * Return the current pose of raw human bones as a {@link VRMPose}.
    *
    * Each transform is a local transform relative from rest pose (T-pose).
    */
@@ -119,39 +124,59 @@ export class VRMHumanoid {
     return this._rawHumanBones.getPose();
   }
 
-  public getNormalizedPose(): VRMPose {
+  /**
+   * Return the current pose of normalized human bones as a {@link VRMPose}.
+   *
+   * Each transform is a local transform relative from rest pose (T-pose).
+   */
+   public getNormalizedPose(): VRMPose {
     return this._normalizedHumanBones.getPose();
   }
 
   /**
-   * Let the humanoid do a specified pose.
+   * Let the raw human bones do a specified pose.
    *
    * Each transform have to be a local transform relative from rest pose (T-pose).
-   * You can pass what you got from {@link getPose}.
+   * You can pass what you got from {@link getRawPose}.
    *
-   * @param poseObject A [[VRMPose]] that represents a single pose
+   * If you are using {@link autoUpdateHumanBones}, you might want to use {@link setNormalizedPose} instead.
+   *
+   * @param poseObject A {@link VRMPose} that represents a single pose
    */
   public setRawPose(poseObject: VRMPose): void {
     return this._rawHumanBones.setPose(poseObject);
   }
 
-  public setNormalizedPose(poseObject: VRMPose): void {
+  /**
+   * Let the normalized human bones do a specified pose.
+   *
+   * Each transform have to be a local transform relative from rest pose (T-pose).
+   * You can pass what you got from {@link getNormalizedPose}.
+   *
+   * @param poseObject A {@link VRMPose} that represents a single pose
+   */
+   public setNormalizedPose(poseObject: VRMPose): void {
     return this._normalizedHumanBones.setPose(poseObject);
   }
 
   /**
-   * Reset the humanoid to its rest pose.
+   * Reset the raw humanoid to its rest pose.
+   *
+   * If you are using {@link autoUpdateHumanBones}, you might want to use {@link resetNormalizedPose} instead.
    */
   public resetRawPose(): void {
     return this._rawHumanBones.resetPose();
   }
 
-  public resetNormalizedPose(): void {
+  /**
+   * Reset the normalized humanoid to its rest pose.
+   */
+   public resetNormalizedPose(): void {
     return this._rawHumanBones.resetPose();
   }
 
   /**
-   * Return a bone bound to a specified {@link VRMHumanBoneName}, as a {@link VRMHumanBone}.
+   * Return a raw {@link VRMHumanBone} bound to a specified {@link VRMHumanBoneName}.
    *
    * @param name Name of the bone you want
    */
@@ -159,12 +184,17 @@ export class VRMHumanoid {
     return this._rawHumanBones.getBone(name);
   }
 
-  public getNormalizedBone(name: VRMHumanBoneName): VRMHumanBone | undefined {
+  /**
+   * Return a normalized {@link VRMHumanBone} bound to a specified {@link VRMHumanBoneName}.
+   *
+   * @param name Name of the bone you want
+   */
+   public getNormalizedBone(name: VRMHumanBoneName): VRMHumanBone | undefined {
     return this._normalizedHumanBones.getBone(name);
   }
 
   /**
-   * Return a bone bound to a specified {@link VRMHumanBoneName}, as a `THREE.Object3D`.
+   * Return a raw bone as a `THREE.Object3D` bound to a specified {@link VRMHumanBoneName}.
    *
    * @param name Name of the bone you want
    */
@@ -172,10 +202,20 @@ export class VRMHumanoid {
     return this._rawHumanBones.getBoneNode(name);
   }
 
-  public getNormalizedBoneNode(name: VRMHumanBoneName): THREE.Object3D | null {
+  /**
+   * Return a normalized bone as a `THREE.Object3D` bound to a specified {@link VRMHumanBoneName}.
+   *
+   * @param name Name of the bone you want
+   */
+   public getNormalizedBoneNode(name: VRMHumanBoneName): THREE.Object3D | null {
     return this._normalizedHumanBones.getBoneNode(name);
   }
 
+  /**
+   * Update the humanoid component.
+   *
+   * If {@link autoUpdateHumanBones} is `true`, it transfers the pose of normalized human bones to raw human bones.
+   */
   public update(): void {
     if (this.autoUpdateHumanBones) {
       this._normalizedHumanBones.update();
