@@ -54,7 +54,15 @@ export class VRMHumanoid {
   /**
    * A map from {@link VRMHumanBoneName} to raw {@link VRMHumanBone}s.
    */
-  public get humanBones(): VRMHumanBones {
+   public get humanBones(): VRMHumanBones {
+    // an alias of `rawHumanBones`
+    return this._rawHumanBones.humanBones;
+  }
+
+  /**
+   * A map from {@link VRMHumanBoneName} to raw {@link VRMHumanBone}s.
+   */
+   public get rawHumanBones(): VRMHumanBones {
     return this._rawHumanBones.humanBones;
   }
 
