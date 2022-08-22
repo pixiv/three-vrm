@@ -11,7 +11,10 @@ import { VRMHumanoidRig } from './VRMHumanoidRig';
  */
 export class VRMHumanoid {
   /**
-   * Copy pose from humanoidRig to modelRig on update().
+   * Whether it copies pose from normalizedHumanBones to rawHumanBones on {@link update}.
+   * `true` by default.
+   *
+   * @default true
    */
   public autoUpdateHumanBones: boolean;
 
@@ -33,7 +36,8 @@ export class VRMHumanoid {
 
   /**
    * Create a new {@link VRMHumanoid}.
-   * @param boneArray A {@link VRMHumanBones} contains all the bones of the new humanoid
+   * @param humanBones A {@link VRMHumanBones} contains all the bones of the new humanoid
+   * @param autoUpdateHumanBones Whether it copies pose from normalizedHumanBones to rawHumanBones on {@link update}. `true` by default.
    */
   public constructor(humanBones: VRMHumanBones, autoUpdateHumanBones = true) {
     this.autoUpdateHumanBones = autoUpdateHumanBones;

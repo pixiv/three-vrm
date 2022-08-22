@@ -26,7 +26,7 @@ export class VRMRig {
 
   /**
    * Create a new {@link VRMHumanoid}.
-   * @param boneArray A {@link VRMHumanBones} contains all the bones of the new humanoid
+   * @param humanBones A {@link VRMHumanBones} contains all the bones of the new humanoid
    */
   public constructor(humanBones: VRMHumanBones) {
     this.humanBones = humanBones;
