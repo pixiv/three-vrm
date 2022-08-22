@@ -55,6 +55,7 @@ export class VRMHumanoid {
     this._rawHumanBones = new VRMRig(source.humanBones);
     this._normalizedHumanBones = new VRMHumanoidRig(this._rawHumanBones);
 
+    this.autoUpdateHumanBones = source.autoUpdateHumanBones;
     this.restPose = source.restPose;
 
     return this;
