@@ -30,4 +30,12 @@ export interface VRMLoaderPluginOptions {
    * Will be overwritten if you use custom loader plugins for each components.
    */
   helperRoot?: THREE.Object3D;
+
+  /**
+   * Whether it copies pose from normalizedHumanBones to rawHumanBones on {@link update}.
+   * `true` by default.
+   *
+   * @default true
+   */
+  autoUpdateHumanBones?: boolean;
 }
