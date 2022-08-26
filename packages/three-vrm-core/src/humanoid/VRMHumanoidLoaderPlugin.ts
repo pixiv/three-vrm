@@ -29,6 +29,8 @@ export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
    */
   public helperRoot?: THREE.Object3D;
 
+  public autoUpdateHumanBones?: boolean;
+
   public readonly parser: GLTFParser;
 
   public get name(): string {
@@ -40,6 +42,7 @@ export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
     this.parser = parser;
 
     this.helperRoot = options?.helperRoot;
+    this.autoUpdateHumanBones = options?.autoUpdateHumanBones;
   }
 
   public async afterRoot(gltf: GLTF): Promise<void> {
@@ -127,7 +130,7 @@ export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
       );
     }
 
-    const humanoid = new VRMHumanoid(this._ensureRequiredBonesExist(humanBones));
+    const humanoid = new VRMHumanoid(this._ensureRequiredBonesExist(humanBones), this.autoUpdateHumanBones);
 
     if (this.helperRoot) {
       const helper = new VRMHumanoidHelper(humanoid);

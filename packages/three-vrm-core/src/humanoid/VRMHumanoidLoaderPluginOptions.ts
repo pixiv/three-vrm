@@ -5,4 +5,12 @@ export interface VRMHumanoidLoaderPluginOptions {
    * If `renderOrder` is set to the root, helpers will copy the same `renderOrder` .
    */
   helperRoot?: THREE.Object3D;
+
+  /**
+   * Whether it copies pose from normalizedHumanBones to rawHumanBones on {@link update}.
+   * `true` by default.
+   *
+   * @default true
+   */
+  autoUpdateHumanBones?: boolean;
 }
