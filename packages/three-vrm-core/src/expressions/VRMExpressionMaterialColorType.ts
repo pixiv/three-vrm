@@ -4,6 +4,7 @@ export const VRMExpressionMaterialColorType = {
   Color: 'color',
   EmissionColor: 'emissionColor',
   ShadeColor: 'shadeColor',
+  MatcapColor: 'matcapColor',
   RimColor: 'rimColor',
   OutlineColor: 'outlineColor',
 } as const;

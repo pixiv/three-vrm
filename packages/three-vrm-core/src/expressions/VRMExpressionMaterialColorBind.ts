@@ -25,6 +25,7 @@ export class VRMExpressionMaterialColorBind implements VRMExpressionBind {
       color: 'color',
       emissionColor: 'emissive',
       outlineColor: 'outlineColorFactor',
+      matcapColor: 'matcapFactor',
       rimColor: 'parametricRimColorFactor',
       shadeColor: 'shadeColorFactor',
     },
