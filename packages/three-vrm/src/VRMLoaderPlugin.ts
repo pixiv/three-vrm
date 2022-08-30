@@ -3,8 +3,10 @@ import { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/G
 import {
   VRMExpressionLoaderPlugin,
   VRMFirstPersonLoaderPlugin,
+  VRMHumanoid,
   VRMHumanoidLoaderPlugin,
   VRMLookAtLoaderPlugin,
+  VRMMeta,
   VRMMetaLoaderPlugin,
 } from '@pixiv/three-vrm-core';
 import { MToonMaterialLoaderPlugin } from '@pixiv/three-vrm-materials-mtoon';
@@ -98,17 +100,25 @@ export class VRMLoaderPlugin implements GLTFLoaderPlugin {
     await this.nodeConstraintPlugin.afterRoot(gltf);
     await this.mtoonMaterialPlugin.afterRoot(gltf);
 
-    const vrm = new VRM({
-      scene: gltf.scene,
-      expressionManager: gltf.userData.vrmExpressionManager,
-      firstPerson: gltf.userData.vrmFirstPerson,
-      humanoid: gltf.userData.vrmHumanoid,
-      lookAt: gltf.userData.vrmLookAt,
-      meta: gltf.userData.vrmMeta,
-      materials: gltf.userData.vrmMToonMaterials,
-      springBoneManager: gltf.userData.vrmSpringBoneManager,
-      nodeConstraintManager: gltf.userData.vrmNodeConstraintManager,
-    });
-    gltf.userData.vrm = vrm;
+    const meta = gltf.userData.vrmMeta as VRMMeta | null;
+    const humanoid = gltf.userData.vrmHumanoid as VRMHumanoid | null;
+
+    // meta and humanoid are required to be a VRM.
+    // Don't create VRM if they are null
+    if (meta && humanoid) {
+      const vrm = new VRM({
+        scene: gltf.scene,
+        expressionManager: gltf.userData.vrmExpressionManager,
+        firstPerson: gltf.userData.vrmFirstPerson,
+        humanoid,
+        lookAt: gltf.userData.vrmLookAt,
+        meta,
+        materials: gltf.userData.vrmMToonMaterials,
+        springBoneManager: gltf.userData.vrmSpringBoneManager,
+        nodeConstraintManager: gltf.userData.vrmNodeConstraintManager,
+      });
+
+      gltf.userData.vrm = vrm;
+    }
   }
 }
