@@ -131,6 +131,7 @@ export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
     }
 
     const humanoid = new VRMHumanoid(this._ensureRequiredBonesExist(humanBones), this.autoUpdateHumanBones);
+    gltf.scene.add(humanoid.normalizedHumanBonesRoot);
 
     if (this.helperRoot) {
       const helper = new VRMHumanoidHelper(humanoid);
@@ -193,6 +194,7 @@ export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
     }
 
     const humanoid = new VRMHumanoid(this._ensureRequiredBonesExist(humanBones));
+    gltf.scene.add(humanoid.normalizedHumanBonesRoot);
 
     if (this.helperRoot) {
       const helper = new VRMHumanoidHelper(humanoid);

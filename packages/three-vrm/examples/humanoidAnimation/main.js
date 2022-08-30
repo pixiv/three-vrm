@@ -71,10 +71,6 @@ function loadVRM( modelUrl ) {
 			currentVrm = vrm;
 			scene.add( vrm.scene );
 
-			// The root of normalized human bones needs to be in the scene
-			const root = vrm.humanoid.getNormalizedBoneNode( 'hips' ).parent;
-			vrm.scene.add( root );
-
 			if ( currentAnimationUrl ) {
 
 				loadFBX( currentAnimationUrl );

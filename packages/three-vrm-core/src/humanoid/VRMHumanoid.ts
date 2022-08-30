@@ -76,6 +76,13 @@ export class VRMHumanoid {
   }
 
   /**
+   * The root of normalized {@link VRMHumanBone}s.
+   */
+  public get normalizedHumanBonesRoot(): THREE.Object3D {
+    return this._normalizedHumanBones.root;
+  }
+
+  /**
    * Create a new {@link VRMHumanoid}.
    * @param humanBones A {@link VRMHumanBones} contains all the bones of the new humanoid
    * @param autoUpdateHumanBones Whether it copies pose from normalizedHumanBones to rawHumanBones on {@link update}. `true` by default.
