@@ -1,7 +1,7 @@
 import { VRM } from '../VRM';
 
 /**
- * If given VRM is VRM0.0, rotate the `vrm.scene` by 180 degree.
+ * If the given VRM is VRM0.0, rotate the `vrm.scene` by 180 degrees around the Y axis.
  *
  * @param vrm The target VRM
  */
