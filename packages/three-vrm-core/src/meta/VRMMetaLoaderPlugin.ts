@@ -29,7 +29,7 @@ export class VRMMetaLoaderPlugin implements GLTFLoaderPlugin {
   public acceptLicenseUrls: string[];
 
   /**
-   * Whether it should accept VRM0.X meta or not.
+   * Whether it should accept VRM0.0 meta or not.
    * Note that it might load {@link VRM0Meta} instead of {@link VRM1Meta} when this is `true`.
    * `true` by default.
    */
@@ -142,7 +142,7 @@ export class VRMMetaLoaderPlugin implements GLTFLoaderPlugin {
 
     // throw an error if acceptV0Meta is false
     if (!this.acceptV0Meta) {
-      throw new Error('VRMMetaLoaderPlugin: Attempted to load VRM0.X meta but acceptV0Meta is false');
+      throw new Error('VRMMetaLoaderPlugin: Attempted to load VRM0.0 meta but acceptV0Meta is false');
     }
 
     // load thumbnail texture

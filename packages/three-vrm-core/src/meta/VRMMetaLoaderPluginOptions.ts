@@ -16,7 +16,7 @@ export interface VRMMetaLoaderPluginOptions {
   acceptLicenseUrls?: string[];
 
   /**
-   * Whether it should accept VRM0.X meta or not.
+   * Whether it should accept VRM0.0 meta or not.
    * Note that it might load {@link VRM0Meta} instead of {@link VRM1Meta} when this is `true`.
    * `true` by default.
    */
