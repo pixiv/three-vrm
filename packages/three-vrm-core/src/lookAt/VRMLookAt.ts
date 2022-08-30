@@ -184,7 +184,7 @@ export class VRMLookAt {
    * @param target A target `THREE.Vector3`
    */
   public getLookAtWorldPosition(target: THREE.Vector3): THREE.Vector3 {
-    const head = this.humanoid.getBoneNode('head')!;
+    const head = this.humanoid.getRawBoneNode('head')!;
 
     return target.copy(this.offsetFromHeadBone).applyMatrix4(head.matrixWorld);
   }
@@ -195,7 +195,7 @@ export class VRMLookAt {
    * @param target A target `THREE.Vector3`
    */
   public getLookAtWorldQuaternion(target: THREE.Quaternion): THREE.Quaternion {
-    const head = this.humanoid.getBoneNode('head')!;
+    const head = this.humanoid.getRawBoneNode('head')!;
 
     return getWorldQuaternionLite(head, target);
   }
