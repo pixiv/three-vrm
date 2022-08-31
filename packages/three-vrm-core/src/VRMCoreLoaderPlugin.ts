@@ -6,6 +6,8 @@ import { VRMFirstPersonLoaderPlugin } from './firstPerson/VRMFirstPersonLoaderPl
 import { VRMHumanoidLoaderPlugin } from './humanoid/VRMHumanoidLoaderPlugin';
 import { VRMMetaLoaderPlugin } from './meta/VRMMetaLoaderPlugin';
 import { VRMLookAtLoaderPlugin } from './lookAt/VRMLookAtLoaderPlugin';
+import type { VRMHumanoid } from './humanoid';
+import type { VRMMeta } from './meta';
 
 export class VRMCoreLoaderPlugin implements GLTFLoaderPlugin {
   public get name(): string {
@@ -42,14 +44,22 @@ export class VRMCoreLoaderPlugin implements GLTFLoaderPlugin {
     await this.lookAtPlugin.afterRoot(gltf);
     await this.firstPersonPlugin.afterRoot(gltf);
 
-    const vrmCore = new VRMCore({
-      scene: gltf.scene,
-      expressionManager: gltf.userData.vrmExpressionManager,
-      firstPerson: gltf.userData.vrmFirstPerson,
-      humanoid: gltf.userData.vrmHumanoid,
-      lookAt: gltf.userData.vrmLookAt,
-      meta: gltf.userData.vrmMeta,
-    });
-    gltf.userData.vrmCore = vrmCore;
+    const meta = gltf.userData.vrmMeta as VRMMeta | null;
+    const humanoid = gltf.userData.vrmHumanoid as VRMHumanoid | null;
+
+    // meta and humanoid are required to be a VRM.
+    // Don't create VRM if they are null
+    if (meta && humanoid) {
+      const vrmCore = new VRMCore({
+        scene: gltf.scene,
+        expressionManager: gltf.userData.vrmExpressionManager,
+        firstPerson: gltf.userData.vrmFirstPerson,
+        humanoid,
+        lookAt: gltf.userData.vrmLookAt,
+        meta,
+      });
+
+      gltf.userData.vrmCore = vrmCore;
+    }
   }
 }

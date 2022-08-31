@@ -17,12 +17,18 @@ export class VRMCore {
   public readonly scene: THREE.Group;
 
   /**
+   * Contains meta fields of the VRM.
+   * You might want to refer these license fields before use your VRMs.
+   */
+  public readonly meta: VRMMeta;
+
+  /**
    * Contains {@link VRMHumanoid} of the VRM.
    * You can control each bones using {@link VRMHumanoid.getBoneNode}.
    *
    * @TODO Add a link to VRM spec
    */
-  public readonly humanoid?: VRMHumanoid;
+  public readonly humanoid: VRMHumanoid;
 
   /**
    * Contains {@link VRMExpressionManager} of the VRM.
@@ -43,23 +49,17 @@ export class VRMCore {
   public readonly lookAt?: VRMLookAt;
 
   /**
-   * Contains meta fields of the VRM.
-   * You might want to refer these license fields before use your VRMs.
-   */
-  public readonly meta?: VRMMeta;
-
-  /**
    * Create a new VRM instance.
    *
    * @param params [[VRMParameters]] that represents components of the VRM
    */
   public constructor(params: VRMCoreParameters) {
     this.scene = params.scene;
+    this.meta = params.meta;
     this.humanoid = params.humanoid;
     this.expressionManager = params.expressionManager;
     this.firstPerson = params.firstPerson;
     this.lookAt = params.lookAt;
-    this.meta = params.meta;
   }
 
   /**
@@ -70,9 +70,7 @@ export class VRMCore {
    * @param delta deltaTime
    */
   public update(delta: number): void {
-    if (this.humanoid) {
-      this.humanoid.update();
-    }
+    this.humanoid.update();
 
     if (this.lookAt) {
       this.lookAt.update(delta);

@@ -9,9 +9,9 @@ import type { VRMMeta } from './meta/VRMMeta';
  */
 export interface VRMCoreParameters {
   scene: THREE.Group;
-  humanoid?: VRMHumanoid;
+  meta: VRMMeta;
+  humanoid: VRMHumanoid;
   expressionManager?: VRMExpressionManager;
   firstPerson?: VRMFirstPerson;
   lookAt?: VRMLookAt;
-  meta?: VRMMeta;
 }
