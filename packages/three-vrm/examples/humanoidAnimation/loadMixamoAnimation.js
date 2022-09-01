@@ -16,6 +16,11 @@ function loadMixamoAnimation( url, vrm ) {
 
 		const tracks = []; // KeyframeTracks compatible with VRM will be added here
 
+		const restRotationInverse = new THREE.Quaternion();
+		const parentRestWorldRotation = new THREE.Quaternion();
+		const targetRotation = new THREE.Quaternion();
+		const retargetRotation = new THREE.Quaternion();
+
 		clip.tracks.forEach( ( track ) => {
 
 			// Convert each tracks for VRM use, and push to `tracks`
@@ -23,12 +28,35 @@ function loadMixamoAnimation( url, vrm ) {
 			const mixamoRigName = trackSplitted[ 0 ];
 			const vrmBoneName = mixamoVRMRigMap[ mixamoRigName ];
 			const vrmNodeName = vrm.humanoid?.getNormalizedBoneNode( vrmBoneName )?.name;
+			const mixamoRigNode = asset.getObjectByName( mixamoRigName );
 
 			if ( vrmNodeName != null ) {
 
 				const propertyName = trackSplitted[ 1 ];
 
+				// Store rotations of rest-pose.
+				mixamoRigNode.getWorldQuaternion( restRotationInverse ).invert();
+				mixamoRigNode.parent.getWorldQuaternion( parentRestWorldRotation );
+
 				if ( track instanceof THREE.QuaternionKeyframeTrack ) {
+
+					// Retarget rotation of mixamoRig to NormalizedBone.
+					for ( let i = 0; i < track.values.length; i += 4 ) {
+
+						const flatQuaternion = track.values.slice( i, i + 4 );
+
+						targetRotation
+							.fromArray( flatQuaternion )
+							.premultiply( parentRestWorldRotation );
+
+						retargetRotation
+							.copy( targetRotation )
+							.multiply( restRotationInverse )
+							.toArray( flatQuaternion );
+
+						flatQuaternion.map( ( v, index )=> track.values[ index + i ] = v );
+
+					}
 
 					tracks.push(
 						new THREE.QuaternionKeyframeTrack(
