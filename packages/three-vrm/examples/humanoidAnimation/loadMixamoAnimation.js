@@ -18,8 +18,7 @@ function loadMixamoAnimation( url, vrm ) {
 
 		const restRotationInverse = new THREE.Quaternion();
 		const parentRestWorldRotation = new THREE.Quaternion();
-		const targetRotation = new THREE.Quaternion();
-		const retargetRotation = new THREE.Quaternion();
+		const _quatA = new THREE.Quaternion();
 
 		clip.tracks.forEach( ( track ) => {
 
@@ -45,16 +44,20 @@ function loadMixamoAnimation( url, vrm ) {
 
 						const flatQuaternion = track.values.slice( i, i + 4 );
 
-						targetRotation
-							.fromArray( flatQuaternion )
-							.premultiply( parentRestWorldRotation );
+						_quatA.fromArray( flatQuaternion );
 
-						retargetRotation
-							.copy( targetRotation )
-							.multiply( restRotationInverse )
-							.toArray( flatQuaternion );
+						// 親のレスト時ワールド回転 * トラックの回転 * レスト時ワールド回転の逆
+						_quatA
+							.premultiply( parentRestWorldRotation )
+							.multiply( restRotationInverse );
 
-						flatQuaternion.map( ( v, index ) => track.values[ index + i ] = v );
+						_quatA.toArray( flatQuaternion );
+
+						flatQuaternion.forEach( ( v, index ) => {
+
+							track.values[ index + i ] = v;
+
+						} );
 
 					}
 
