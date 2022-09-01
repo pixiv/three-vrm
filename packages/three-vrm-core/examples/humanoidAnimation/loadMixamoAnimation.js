@@ -7,7 +7,7 @@
  * @param {VRM} vrm A target VRM
  * @returns {Promise<THREE.AnimationClip>} The converted AnimationClip
  */
- function loadMixamoAnimation( url, vrm ) {
+function loadMixamoAnimation( url, vrm ) {
 
 	const loader = new THREE.FBXLoader(); // A loader which loads FBX
 	return loader.loadAsync( url ).then( ( asset ) => {
