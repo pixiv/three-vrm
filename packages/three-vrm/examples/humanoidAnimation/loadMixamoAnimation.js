@@ -54,7 +54,7 @@ function loadMixamoAnimation( url, vrm ) {
 							.multiply( restRotationInverse )
 							.toArray( flatQuaternion );
 
-						flatQuaternion.map( ( v, index )=> track.values[ index + i ] = v );
+						flatQuaternion.map( ( v, index ) => track.values[ index + i ] = v );
 
 					}
 
