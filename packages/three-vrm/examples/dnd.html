@@ -118,9 +118,9 @@
 
 				if ( currentVrm ) {
 
-		currentVrm.update( clock.getDelta() );
+					currentVrm.update( clock.getDelta() );
 
-	}
+				}
 
 				renderer.render( scene, camera );
 
@@ -143,16 +143,16 @@
 				const files = event.dataTransfer.files;
 				if ( ! files ) {
 
-		return;
+					return;
 
-	}
+				}
 
 				const file = files[ 0 ];
 				if ( ! file ) {
 
-		return;
+					return;
 
-	}
+				}
 
 				const blob = new Blob( [ file ], { type: "application/octet-stream" } );
 				const url = URL.createObjectURL( blob );
