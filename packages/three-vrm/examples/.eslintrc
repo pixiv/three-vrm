@@ -3,6 +3,8 @@
 	"plugins": [
 		"html"
 	],
-	"extends": "mdcs"
-
+	"extends": "mdcs",
+	"rules": {
+		"padded-blocks":"off"
+	}
 }

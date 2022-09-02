@@ -1,4 +1,10 @@
 {
-  "extends": "mdcs",
-	"root": true
+	"root": true,
+	"plugins": [
+		"html"
+	],
+	"extends": "mdcs",
+	"rules": {
+		"padded-blocks":"off"
+	}
 }

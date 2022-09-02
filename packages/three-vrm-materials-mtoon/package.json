@@ -30,8 +30,8 @@
     "build-prod": "cross-env NODE_ENV=production rollup -c",
     "build-types": "tsc --declaration --declarationDir ./types --emitDeclarationOnly && downlevel-dts types ts3.4/types",
     "docs": "typedoc --entryPoints ./src/index.ts --out docs",
-    "lint": "eslint \"src/**/*.{ts,tsx}\" && eslint \"examples/**/*.{ts,tsx,js}\" &&  prettier \"src/**/*.{ts,tsx}\" --check",
-    "lint-fix": "eslint \"src/**/*.{ts,tsx}\" --fix && eslint \"examples/**/*.{ts,tsx,js}\" --fix &&  prettier \"src/**/*.{ts,tsx}\" --write"
+    "lint": "eslint \"src/**/*.{ts,tsx}\" && eslint \"examples/**/*.{ts,tsx,js,html}\" &&  prettier \"src/**/*.{ts,tsx}\" --check",
+    "lint-fix": "eslint \"src/**/*.{ts,tsx}\" --fix && eslint \"examples/**/*.{ts,tsx,js,html}\" --fix &&  prettier \"src/**/*.{ts,tsx}\" --write"
   },
   "lint-staged": {
     "./src/**/*.{ts,tsx}": [
