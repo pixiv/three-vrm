@@ -136,21 +136,23 @@
 			animate();
 
 			// dnd handler
-			window.addEventListener( 'dragover', function( event ) {
+			window.addEventListener( 'dragover', function ( event ) {
 
 				event.preventDefault();
 
 			} );
 
-			window.addEventListener( 'drop', function( event ) {
+			window.addEventListener( 'drop', function ( event ) {
 
 				event.preventDefault();
 
 				// read given file then convert it to blob url
 				const files = event.dataTransfer.files;
-				if ( !files ) { return; }
-				const file = files[0];
-				if ( !file ) { return; }
+				if ( ! files ) { return }
+
+				const file = files[ 0 ];
+				if ( ! file ) { return }
+
 				const blob = new Blob( [ file ], { type: "application/octet-stream" } );
 				const url = URL.createObjectURL( blob );
 				load( url );

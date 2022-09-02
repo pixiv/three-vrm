@@ -94,7 +94,8 @@
 
 				requestAnimationFrame( animate );
 
-				if ( currentVrm ) { currentVrm.update( clock.getDelta() ); }
+				if ( currentVrm ) { currentVrm.update( clock.getDelta() ) }
+
 				renderer.render( scene, camera );
 
 			}
@@ -105,13 +106,13 @@
 			const mouseV2 = new THREE.Vector2();
 			const mouseRaycaster = new THREE.Raycaster();
 
-			window.addEventListener( 'mousemove', function( event ) {
+			window.addEventListener( 'mousemove', function ( event ) {
 
 				if ( currentVrm ) {
 
 					const range = CAMERA_Z * Math.tan( CAMERA_FOV / 360.0 * Math.PI );
 					const px = ( 2.0 * event.clientX - window.innerWidth ) / window.innerHeight * range;
-					const py = -( 2.0 * event.clientY - window.innerHeight ) / window.innerHeight * range;
+					const py = - ( 2.0 * event.clientY - window.innerHeight ) / window.innerHeight * range;
 
 					currentVrm.humanoid.getBoneNode( THREE_VRM.VRMHumanBoneName.Hips ).position.set( px, py, 0.0 );
 
