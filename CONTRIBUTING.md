@@ -64,12 +64,12 @@ class someClass {
 
   // 😖 bad
   public getCounter(): number {
-    return _counter++;
+    return _counter ++;
   }
 
   // 😃 preferable
   public get counter(): number {
-    return _counter++;
+    return _counter ++;
   }
 }
 ```
