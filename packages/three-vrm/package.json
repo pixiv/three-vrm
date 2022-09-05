@@ -35,7 +35,8 @@
     "build-types": "tsc --declaration --declarationDir ./types --emitDeclarationOnly && downlevel-dts types ts3.4/types",
     "docs": "typedoc --entryPoints ./src/index.ts --out docs",
     "test": "echo There is no test for three-vrm",
-    "lint": "eslint \"src/**/*.{ts,tsx}\" && eslint \"examples/**/*.{ts,tsx,js,html}\" &&  prettier \"src/**/*.{ts,tsx}\" --check",
+    "lint": "eslint \"src/**/*.{ts,tsx}\"  && yarn lint-examples &&  prettier \"src/**/*.{ts,tsx}\" --check",
+    "lint-examples": " eslint \"examples/**/*.{ts,tsx,js,html}\" --rule \"padded-blocks: error\"",
     "lint-fix": "eslint \"src/**/*.{ts,tsx}\" --fix && eslint \"examples/**/*.{ts,tsx,js,html}\" --fix &&  prettier \"src/**/*.{ts,tsx}\" --write"
   },
   "lint-staged": {
