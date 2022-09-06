@@ -1,6 +1,8 @@
-# three-vrm v1.0 - migration guide
+# Migration Guide `v0.6.x` -> `v1.0.0-beta.19`
 
-`v1.0.0-beta.19`
+`v0.6.x` -> `v1.0.0-beta.19`
+
+> test
 
 ## Overall
 
