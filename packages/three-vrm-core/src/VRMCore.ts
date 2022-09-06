@@ -24,7 +24,7 @@ export class VRMCore {
 
   /**
    * Contains {@link VRMHumanoid} of the VRM.
-   * You can control each bones using {@link VRMHumanoid.getBoneNode}.
+   * You can control each bones using {@link VRMHumanoid.getNormalizedBoneNode} or {@link VRMHumanoid.getRawBoneNode}.
    *
    * @TODO Add a link to VRM spec
    */

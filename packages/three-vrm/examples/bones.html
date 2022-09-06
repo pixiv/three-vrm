@@ -104,9 +104,9 @@
 
 					// tweak bones
 					const s = 0.25 * Math.PI * Math.sin( Math.PI * clock.elapsedTime );
-					currentVrm.humanoid.getBoneNode( THREE_VRM.VRMHumanBoneName.Neck ).rotation.y = s;
-					currentVrm.humanoid.getBoneNode( THREE_VRM.VRMHumanBoneName.LeftUpperArm ).rotation.z = s;
-					currentVrm.humanoid.getBoneNode( THREE_VRM.VRMHumanBoneName.RightUpperArm ).rotation.x = s;
+					currentVrm.humanoid.getNormalizedBoneNode( THREE_VRM.VRMHumanBoneName.Neck ).rotation.y = s;
+					currentVrm.humanoid.getNormalizedBoneNode( THREE_VRM.VRMHumanBoneName.LeftUpperArm ).rotation.z = s;
+					currentVrm.humanoid.getNormalizedBoneNode( THREE_VRM.VRMHumanBoneName.RightUpperArm ).rotation.x = s;
 
 					// update vrm
 					currentVrm.update( deltaTime );
