@@ -2,8 +2,6 @@
 
 `v0.6.x` -> `v1.0.0-beta.19`
 
-> test
-
 ## Overall
 
 ### It’s now a Loader Plugin
