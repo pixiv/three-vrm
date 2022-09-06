@@ -29,6 +29,7 @@
 		<script src="https://unpkg.com/three@0.140.2/examples/js/controls/OrbitControls.js"></script>
 		<script src="../lib/three-vrm-core.js"></script>
 		<script>
+			/* global THREE_VRM_CORE*/
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
 			renderer.setSize( window.innerWidth, window.innerHeight );
@@ -56,7 +57,7 @@
 
 			// lookat target
 			const lookAtTarget = new THREE.Object3D();
-			lookAtTarget.position.z = -1.0;
+			lookAtTarget.position.z = - 1.0;
 			camera.add( lookAtTarget );
 
 			// gltf and vrm
@@ -67,7 +68,7 @@
 
 			loader.register( ( parser ) => {
 
-				return new THREE_VRM_CORE.VRMCoreLoaderPlugin( parser, { helperRoot: scene ,autoUpdateHumanBones: true} );
+				return new THREE_VRM_CORE.VRMCoreLoaderPlugin( parser, { helperRoot: scene, autoUpdateHumanBones: true } );
 
 			} );
 
@@ -133,8 +134,8 @@
 			// mouse listener
 			window.addEventListener( 'mousemove', ( event ) => {
 
-				lookAtTarget.position.x =  10.0 * ( ( event.clientX - 0.5 * window.innerWidth ) / window.innerHeight );
-				lookAtTarget.position.y = -10.0 * ( ( event.clientY - 0.5 * window.innerHeight ) / window.innerHeight );
+				lookAtTarget.position.x = 10.0 * ( ( event.clientX - 0.5 * window.innerWidth ) / window.innerHeight );
+				lookAtTarget.position.y = - 10.0 * ( ( event.clientY - 0.5 * window.innerHeight ) / window.innerHeight );
 
 			} );
 		</script>

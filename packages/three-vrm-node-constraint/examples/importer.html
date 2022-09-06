@@ -26,6 +26,7 @@
 		<script src="https://unpkg.com/@0b5vr/tweakpane-plugin-rotation@0.1"></script>
 		<script src="../lib/three-vrm-node-constraint.js"></script>
 		<script>
+			/* global Tweakpane, TweakpaneRotationInputPlugin, THREE_VRM_NODE_CONSTRAINT */
 			// gui
 			const guiParams = {
 
@@ -95,7 +96,7 @@
 					( gltf ) => {
 
 						scene.add( gltf.scene );
-						console.log(scene);
+						console.log( scene );
 
 						console.log( gltf );
 
@@ -155,21 +156,31 @@
 			animate();
 
 			// dnd handler
-			window.addEventListener( 'dragover', function( event ) {
+			window.addEventListener( 'dragover', function ( event ) {
 
 				event.preventDefault();
 
 			} );
 
-			window.addEventListener( 'drop', function( event ) {
+			window.addEventListener( 'drop', function ( event ) {
 
 				event.preventDefault();
 
 				// read given file then convert it to blob url
 				const files = event.dataTransfer.files;
-				if ( !files ) { return; }
-				const file = files[0];
-				if ( !file ) { return; }
+				if ( ! files ) {
+			
+					return;
+			
+				}
+
+				const file = files[ 0 ];
+				if ( ! file ) {
+			
+					return;
+			
+				}
+
 				const blob = new Blob( [ file ], { type: "application/octet-stream" } );
 				const url = URL.createObjectURL( blob );
 				load( url );

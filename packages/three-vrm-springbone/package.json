@@ -31,8 +31,9 @@
     "build-types": "tsc --declaration --declarationDir ./types --emitDeclarationOnly && downlevel-dts types ts3.4/types",
     "docs": "typedoc --entryPoints ./src/index.ts --out docs",
     "test": "jest",
-    "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier \"src/**/*.{ts,tsx}\" --check",
-    "lint-fix": "eslint \"src/**/*.{ts,tsx}\" --fix && prettier \"src/**/*.{ts,tsx}\" --write"
+    "lint": "eslint \"src/**/*.{ts,tsx}\"  && yarn lint-examples &&  prettier \"src/**/*.{ts,tsx}\" --check",
+    "lint-examples": "eslint \"examples/**/*.{ts,tsx,js,html}\" --rule \"padded-blocks: error\"",
+    "lint-fix": "eslint \"src/**/*.{ts,tsx}\" --fix && eslint \"examples/**/*.{ts,tsx,js,html}\" --fix &&  prettier \"src/**/*.{ts,tsx}\" --write"
   },
   "lint-staged": {
     "./src/**/*.{ts,tsx}": [

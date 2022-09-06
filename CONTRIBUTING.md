@@ -30,6 +30,9 @@ We are utilizing `eslint` and `prettier` to ensure our syntax rules consistent.
 
 Some editors like [Visual Studio Code](https://code.visualstudio.com/) have extensions that enable us to see which part on the code is not syntactically incorrect or even fix such parts automatically.
 
+In the `/examples`, the [padded-blocks](https://eslint.org/docs/latest/rules/padded-blocks) is turned off because of problems with auto-formatting in inline scripts.
+Please follow the [Mr.doob's Code Style™#Blocks](https://github.com/mrdoob/three.js/wiki/Mr.doob%27s-Code-Style%E2%84%A2#blocks).
+
 ### `private` / `protected` members must start with `_`
 
 Every private (or protected) members of a class should have a leading underscore.

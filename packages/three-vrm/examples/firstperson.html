@@ -24,6 +24,7 @@
 		<script src="https://unpkg.com/three@0.140.2/examples/js/controls/OrbitControls.js"></script>
 		<script src="../lib/three-vrm.js"></script>
 		<script>
+			/* global THREE_VRM */
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
 			renderer.outputEncoding = THREE.sRGBEncoding;
@@ -108,48 +109,48 @@
 
 			}
 
-      animate();
+			animate();
 
-      // toggle layer
-      let isFirstPerson = false;
+			// toggle layer
+			let isFirstPerson = false;
 
-      function toggleLayer( set ) {
+			function toggleLayer( set ) {
 
-        if ( typeof set === 'boolean' )  {
+				if ( typeof set === 'boolean' ) {
 
-          isFirstPerson = set;
+					isFirstPerson = set;
 
-        } else {
+				} else {
 
-          isFirstPerson = !isFirstPerson;
+					isFirstPerson = ! isFirstPerson;
 
-        }
+				}
 
-        if ( currentVrm ) {
+				if ( currentVrm ) {
 
-          if ( isFirstPerson ) {
+					if ( isFirstPerson ) {
+			
+						camera.layers.enable( currentVrm.firstPerson.firstPersonOnlyLayer );
+						camera.layers.disable( currentVrm.firstPerson.thirdPersonOnlyLayer );
 
-            camera.layers.enable(currentVrm.firstPerson.firstPersonOnlyLayer);
-            camera.layers.disable(currentVrm.firstPerson.thirdPersonOnlyLayer);
+					} else {
 
-          } else {
+						camera.layers.disable( currentVrm.firstPerson.firstPersonOnlyLayer );
+						camera.layers.enable( currentVrm.firstPerson.thirdPersonOnlyLayer );
 
-            camera.layers.disable(currentVrm.firstPerson.firstPersonOnlyLayer);
-            camera.layers.enable(currentVrm.firstPerson.thirdPersonOnlyLayer);
+					}
 
-          }
+				}
 
-        }
+			}
 
-      }
+// mouse listener
 
-      // mouse listener
+window.addEventListener( 'keydown', () => {
 
-      window.addEventListener( 'keydown', () => {
+	toggleLayer();
 
-        toggleLayer();
-
-      } );
+} );
 		</script>
 	</body>
 </html>

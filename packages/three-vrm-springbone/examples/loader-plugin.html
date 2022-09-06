@@ -24,6 +24,7 @@
 		<script src="https://unpkg.com/three@0.140.2/examples/js/controls/OrbitControls.js"></script>
 		<script src="../lib/three-vrm-springbone.js"></script>
 		<script>
+			/* global THREE_VRM_SPRINGBONE */
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
 			renderer.setSize( window.innerWidth, window.innerHeight );
@@ -136,21 +137,31 @@
 			animate();
 
 			// dnd handler
-			window.addEventListener( 'dragover', function( event ) {
+			window.addEventListener( 'dragover', function ( event ) {
 
 				event.preventDefault();
 
 			} );
 
-			window.addEventListener( 'drop', function( event ) {
+			window.addEventListener( 'drop', function ( event ) {
 
 				event.preventDefault();
 
 				// read given file then convert it to blob url
 				const files = event.dataTransfer.files;
-				if ( !files ) { return; }
-				const file = files[0];
-				if ( !file ) { return; }
+				if ( ! files ) {
+			
+					return;
+			
+				}
+
+				const file = files[ 0 ];
+				if ( ! file ) {
+			
+					return;
+			
+				}
+
 				const blob = new Blob( [ file ], { type: "application/octet-stream" } );
 				const url = URL.createObjectURL( blob );
 				load( url );

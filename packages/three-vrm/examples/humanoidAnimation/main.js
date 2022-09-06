@@ -50,7 +50,6 @@ function loadVRM( modelUrl ) {
 	} );
 
 	loader.load(
-
 		// URL of the VRM you want to load
 		modelUrl,
 
@@ -77,8 +76,8 @@ function loadVRM( modelUrl ) {
 
 			}
 
-      // rotate if the VRM is VRM0.0
-      THREE_VRM.VRMUtils.rotateVRM0( vrm );
+			// rotate if the VRM is VRM0.0
+			THREE_VRM.VRMUtils.rotateVRM0( vrm );
 
 			console.log( vrm );
 
@@ -89,7 +88,6 @@ function loadVRM( modelUrl ) {
 
 		// called when loading has errors
 		( error ) => console.error( error ),
-
 	);
 
 }

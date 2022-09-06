@@ -24,6 +24,7 @@
 		<script src="https://unpkg.com/three@0.140.2/examples/js/controls/OrbitControls.js"></script>
 		<script src="../lib/three-vrm-core.js"></script>
 		<script>
+			/* global THREE_VRM_CORE*/
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
 			renderer.setSize( window.innerWidth, window.innerHeight );
@@ -112,8 +113,8 @@
 					humanoid.getNormalizedBoneNode( 'leftUpperArm' ).rotation.z = s;
 					humanoid.getNormalizedBoneNode( 'rightUpperArm' ).rotation.x = s;
 
+					vrmCore.update( deltaTime );
 
-					vrmCore.update(deltaTime);
 				}
 
 				renderer.render( scene, camera );
