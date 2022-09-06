@@ -167,10 +167,18 @@
 
 				// read given file then convert it to blob url
 				const files = event.dataTransfer.files;
-				if ( ! files ) { return }
+				if ( ! files ) {
+			
+					return;
+			
+				}
 
 				const file = files[ 0 ];
-				if ( ! file ) { return }
+				if ( ! file ) {
+			
+					return;
+			
+				}
 
 				const blob = new Blob( [ file ], { type: "application/octet-stream" } );
 				const url = URL.createObjectURL( blob );

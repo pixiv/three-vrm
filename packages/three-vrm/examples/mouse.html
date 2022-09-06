@@ -94,7 +94,11 @@
 
 				requestAnimationFrame( animate );
 
-				if ( currentVrm ) { currentVrm.update( clock.getDelta() ) }
+				if ( currentVrm ) {
+			
+					currentVrm.update( clock.getDelta() );
+			
+				}
 
 				renderer.render( scene, camera );
 
