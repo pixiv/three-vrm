@@ -106,6 +106,11 @@ export class VRMLookAt {
   protected _needsUpdate: boolean;
 
   /**
+   * World rotation of the head in its rest pose.
+   */
+  private _restHeadWorldQuaternion: THREE.Quaternion;
+
+  /**
    * @deprecated Use {@link getEuler} instead.
    */
   public get euler(): THREE.Euler {
@@ -127,6 +132,8 @@ export class VRMLookAt {
     this._yaw = 0.0;
     this._pitch = 0.0;
     this._needsUpdate = true;
+
+    this._restHeadWorldQuaternion = this.getLookAtWorldQuaternion(new THREE.Quaternion());
   }
 
   /**
@@ -190,7 +197,8 @@ export class VRMLookAt {
   }
 
   /**
-   * Get its LookAt orientation in world coordinate.
+   * Get its head rotation in world coordinate.
+   * Does NOT consider {@link faceFront}.
    *
    * @param target A target `THREE.Vector3`
    */
@@ -206,12 +214,18 @@ export class VRMLookAt {
    * @param target A target `THREE.Vector3`
    */
   public getFaceFrontQuaternion(target: THREE.Quaternion): THREE.Quaternion {
-    if (this.faceFront.distanceToSquared(VEC3_POSITIVE_Z) < 0.01) {
-      return target.identity();
-    }
+    const headWorldDirection = _v3B.copy(VEC3_POSITIVE_Z).applyQuaternion(this._restHeadWorldQuaternion);
 
+    const [headWorldDirAzimuth, headWorldDirAltitude] = calcAzimuthAltitude(headWorldDirection);
     const [faceFrontAzimuth, faceFrontAltitude] = calcAzimuthAltitude(this.faceFront);
-    _eulerA.set(0.0, 0.5 * Math.PI + faceFrontAzimuth, faceFrontAltitude, 'YZX');
+
+    _eulerA.set(
+      0.0,
+      faceFrontAzimuth - headWorldDirAzimuth,
+      faceFrontAltitude - headWorldDirAltitude,
+      'YZX',
+    );
+
     return target.setFromEuler(_eulerA);
   }
 
