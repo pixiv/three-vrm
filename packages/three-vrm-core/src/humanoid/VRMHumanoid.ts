@@ -87,8 +87,8 @@ export class VRMHumanoid {
    * @param humanBones A {@link VRMHumanBones} contains all the bones of the new humanoid
    * @param autoUpdateHumanBones Whether it copies pose from normalizedHumanBones to rawHumanBones on {@link update}. `true` by default.
    */
-  public constructor(humanBones: VRMHumanBones, autoUpdateHumanBones = true) {
-    this.autoUpdateHumanBones = autoUpdateHumanBones;
+  public constructor(humanBones: VRMHumanBones, options?: { autoUpdateHumanBones?: boolean }) {
+    this.autoUpdateHumanBones = options?.autoUpdateHumanBones ?? true;
     this._rawHumanBones = new VRMRig(humanBones);
     this._normalizedHumanBones = new VRMHumanoidRig(this._rawHumanBones);
   }
@@ -111,7 +111,7 @@ export class VRMHumanoid {
    * @returns Copied {@link VRMHumanoid}
    */
   public clone(): VRMHumanoid {
-    return new VRMHumanoid(this.humanBones, this.autoUpdateHumanBones).copy(this);
+    return new VRMHumanoid(this.humanBones, { autoUpdateHumanBones: this.autoUpdateHumanBones }).copy(this);
   }
 
   /**
