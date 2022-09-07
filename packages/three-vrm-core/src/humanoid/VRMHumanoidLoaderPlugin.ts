@@ -130,7 +130,9 @@ export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
       );
     }
 
-    const humanoid = new VRMHumanoid(this._ensureRequiredBonesExist(humanBones), this.autoUpdateHumanBones);
+    const humanoid = new VRMHumanoid(this._ensureRequiredBonesExist(humanBones), {
+      autoUpdateHumanBones: this.autoUpdateHumanBones,
+    });
     gltf.scene.add(humanoid.normalizedHumanBonesRoot);
 
     if (this.helperRoot) {
@@ -193,7 +195,9 @@ export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
       );
     }
 
-    const humanoid = new VRMHumanoid(this._ensureRequiredBonesExist(humanBones));
+    const humanoid = new VRMHumanoid(this._ensureRequiredBonesExist(humanBones), {
+      autoUpdateHumanBones: this.autoUpdateHumanBones,
+    });
     gltf.scene.add(humanoid.normalizedHumanBonesRoot);
 
     if (this.helperRoot) {
