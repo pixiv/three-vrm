@@ -22,7 +22,7 @@
     "eslint": "^7.12.1",
     "eslint-config-prettier": "^7.1.0",
     "husky": "^6.0.0",
-    "lerna": "^3.22.1",
+    "lerna": "^5.5.1",
     "prettier": "^2.1.2",
     "rimraf": "^3.0.2",
     "rollup": "^2.33.1",
