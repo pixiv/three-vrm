@@ -15,7 +15,7 @@ export class VRMSpringBoneManager {
    * @deprecated Use {@link joints} instead.
    */
   public get springBones(): Set<VRMSpringBoneJoint> {
-    console.warn('VRMLookAt: springBones is deprecated. use joints instead.');
+    console.warn('VRMSpringBoneManager: springBones is deprecated. use joints instead.');
 
     return this._joints;
   }
@@ -57,7 +57,7 @@ export class VRMSpringBoneManager {
    * @deprecated Use {@link addJoint} instead.
    */
   public addSpringBone(joint: VRMSpringBoneJoint): void {
-    console.warn('VRMLookAt: addSpringBone() is deprecated. use addJoint() instead.');
+    console.warn('VRMSpringBoneManager: addSpringBone() is deprecated. use addJoint() instead.');
 
     this.addJoint(joint);
   }
@@ -73,7 +73,7 @@ export class VRMSpringBoneManager {
    * @deprecated Use {@link deleteJoint} instead.
    */
   public deleteSpringBone(joint: VRMSpringBoneJoint): void {
-    console.warn('VRMLookAt: deleteSpringBone() is deprecated. use deleteJoint() instead.');
+    console.warn('VRMSpringBoneManager: deleteSpringBone() is deprecated. use deleteJoint() instead.');
 
     this.deleteJoint(joint);
   }
