@@ -171,4 +171,29 @@ describe('VRMLookAt', () => {
       });
     });
   });
+
+  describe('lookAt', () => {
+    it('updates its lookAt angles', () => {
+      lookAt.lookAt(new THREE.Vector3(0.0, 1.4, 5.0));
+
+      expect(lookAt.yaw).toBeCloseTo(0.0);
+      expect(lookAt.pitch).toBeCloseTo(0.0);
+    });
+
+    describe('when the head rotates', () => {
+      beforeEach(() => {
+        humanoid.getNormalizedBoneNode('head')!.quaternion.multiply(QUAT_Y_CCW90);
+        humanoid.update();
+        scene.updateMatrixWorld();
+      });
+
+
+      it('updates its lookAt angles', () => {
+        lookAt.lookAt(new THREE.Vector3(0.0, 1.4, 5.0));
+
+        expect(lookAt.yaw).toBeCloseTo(-90.0);
+        expect(lookAt.pitch).toBeCloseTo(0.0);
+      });
+    });
+  });
 });
