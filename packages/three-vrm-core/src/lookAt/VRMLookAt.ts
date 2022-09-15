@@ -14,6 +14,7 @@ const _v3C = new THREE.Vector3();
 const _quatA = new THREE.Quaternion();
 const _quatB = new THREE.Quaternion();
 const _quatC = new THREE.Quaternion();
+const _quatD = new THREE.Quaternion();
 const _eulerA = new THREE.Euler();
 
 /**
@@ -214,19 +215,10 @@ export class VRMLookAt {
    * @param target A target `THREE.Vector3`
    */
   public getFaceFrontQuaternion(target: THREE.Quaternion): THREE.Quaternion {
-    const headWorldDirection = _v3B.copy(VEC3_POSITIVE_Z).applyQuaternion(this._restHeadWorldQuaternion);
-
-    const [headWorldDirAzimuth, headWorldDirAltitude] = calcAzimuthAltitude(headWorldDirection);
     const [faceFrontAzimuth, faceFrontAltitude] = calcAzimuthAltitude(this.faceFront);
+    _eulerA.set(0.0, 0.5 * Math.PI + faceFrontAzimuth, faceFrontAltitude, 'YZX');
 
-    _eulerA.set(
-      0.0,
-      faceFrontAzimuth - headWorldDirAzimuth,
-      faceFrontAltitude - headWorldDirAltitude,
-      'YZX',
-    );
-
-    return target.setFromEuler(_eulerA);
+    return target.setFromEuler(_eulerA).premultiply(quatInvertCompat(_quatD.copy(this._restHeadWorldQuaternion)));
   }
 
   /**
@@ -253,9 +245,9 @@ export class VRMLookAt {
    */
   public lookAt(position: THREE.Vector3): void {
     // Look at direction in local coordinate
-    const headRotInv = quatInvertCompat(this.getLookAtWorldQuaternion(_quatA));
+    const headRotDiffInv = _quatA.copy(this._restHeadWorldQuaternion).multiply(quatInvertCompat(this.getLookAtWorldQuaternion(_quatB)));
     const headPos = this.getLookAtWorldPosition(_v3B);
-    const lookAtDir = _v3C.copy(position).sub(headPos).applyQuaternion(headRotInv).normalize();
+    const lookAtDir = _v3C.copy(position).sub(headPos).applyQuaternion(headRotDiffInv).normalize();
 
     // calculate angles
     const [azimuthFrom, altitudeFrom] = calcAzimuthAltitude(this.faceFront);
