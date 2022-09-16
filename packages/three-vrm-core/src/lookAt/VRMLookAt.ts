@@ -201,7 +201,7 @@ export class VRMLookAt {
    * Get its head rotation in world coordinate.
    * Does NOT consider {@link faceFront}.
    *
-   * @param target A target `THREE.Vector3`
+   * @param target A target `THREE.Quaternion`
    */
   public getLookAtWorldQuaternion(target: THREE.Quaternion): THREE.Quaternion {
     const head = this.humanoid.getRawBoneNode('head')!;
@@ -212,7 +212,7 @@ export class VRMLookAt {
   /**
    * Get a quaternion that rotates the +Z unit vector of the humanoid Head to the {@link faceFront} direction.
    *
-   * @param target A target `THREE.Vector3`
+   * @param target A target `THREE.Quaternion`
    */
   public getFaceFrontQuaternion(target: THREE.Quaternion): THREE.Quaternion {
     const [faceFrontAzimuth, faceFrontAltitude] = calcAzimuthAltitude(this.faceFront);
