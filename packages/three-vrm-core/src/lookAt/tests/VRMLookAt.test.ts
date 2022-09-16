@@ -174,7 +174,9 @@ describe('VRMLookAt', () => {
 
   describe('lookAt', () => {
     it('updates its lookAt angles', () => {
-      lookAt.lookAt(new THREE.Vector3(0.0, 1.4, 5.0));
+      const target = lookAt.getLookAtWorldPosition(new THREE.Vector3())
+        .add(new THREE.Vector3(0.0, 0.0, 5.0));
+      lookAt.lookAt(target);
 
       expect(lookAt.yaw).toBeCloseTo(0.0);
       expect(lookAt.pitch).toBeCloseTo(0.0);
@@ -189,7 +191,9 @@ describe('VRMLookAt', () => {
 
 
       it('updates its lookAt angles', () => {
-        lookAt.lookAt(new THREE.Vector3(0.0, 1.4, 5.0));
+        const target = lookAt.getLookAtWorldPosition(new THREE.Vector3())
+          .add(new THREE.Vector3(0.0, 0.0, 5.0));
+        lookAt.lookAt(target);
 
         expect(lookAt.yaw).toBeCloseTo(-90.0);
         expect(lookAt.pitch).toBeCloseTo(0.0);
