@@ -12,7 +12,7 @@ cd packages/three-vrm
 yarn dev
 ```
 
-Once you start the `yarn dev`, you can see examples at http://localhost:3000/examples/ .
+Once you start the `yarn dev`, you can see examples at http://localhost:10001/examples/ .
 
 ### Editing two packages at the same time
 
