@@ -4,7 +4,6 @@ import type { VRMLookAtApplier } from './VRMLookAtApplier';
 import { VRMLookAtRangeMap } from './VRMLookAtRangeMap';
 import { calcAzimuthAltitude } from './utils/calcAzimuthAltitude';
 import { getWorldQuaternionLite } from '../utils/getWorldQuaternionLite';
-import { quatInvertCompat } from '../utils/quatInvertCompat';
 
 const VEC3_POSITIVE_Z = new THREE.Vector3(0.0, 0.0, 1.0);
 
@@ -65,14 +64,14 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
   private _restQuatRightEye: THREE.Quaternion;
 
   /**
-   * The inverse of world-space rest quaternion of the parent of the humanoid LeftEye.
+   * The world-space rest quaternion of the parent of the humanoid LeftEye.
    */
-  private _restLeftEyeParentWorldQuatInv: THREE.Quaternion;
+  private _restLeftEyeParentWorldQuat: THREE.Quaternion;
 
   /**
-   * The inverse of world-space rest quaternion of the parent of the humanoid RightEye.
+   * The world-space rest quaternion of the parent of the humanoid RightEye.
    */
-  private _restRightEyeParentWorldQuatInv: THREE.Quaternion;
+  private _restRightEyeParentWorldQuat: THREE.Quaternion;
 
   /**
    * Create a new {@link VRMLookAtBoneApplier}.
@@ -102,20 +101,20 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
     // set rest quaternions
     this._restQuatLeftEye = new THREE.Quaternion();
     this._restQuatRightEye = new THREE.Quaternion();
-    this._restLeftEyeParentWorldQuatInv = new THREE.Quaternion();
-    this._restRightEyeParentWorldQuatInv = new THREE.Quaternion();
+    this._restLeftEyeParentWorldQuat = new THREE.Quaternion();
+    this._restRightEyeParentWorldQuat = new THREE.Quaternion();
 
     const leftEye = this.humanoid.getRawBoneNode('leftEye');
     const rightEye = this.humanoid.getRawBoneNode('leftEye');
 
     if (leftEye) {
       this._restQuatLeftEye.copy(leftEye.quaternion);
-      quatInvertCompat(getWorldQuaternionLite(leftEye.parent!, this._restLeftEyeParentWorldQuatInv));
+      getWorldQuaternionLite(leftEye.parent!, this._restLeftEyeParentWorldQuat);
     }
 
     if (rightEye) {
       this._restQuatRightEye.copy(rightEye.quaternion);
-      quatInvertCompat(getWorldQuaternionLite(rightEye.parent!, this._restRightEyeParentWorldQuatInv));
+      getWorldQuaternionLite(rightEye.parent!, this._restRightEyeParentWorldQuat);
     }
   }
 
@@ -152,13 +151,11 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
       // and _quatB is worldFaceFrontQuat
       leftEyeNormalized!.quaternion.copy(_quatB).multiply(_quatA).multiply(_quatB.invert());
 
-      // revert invert of _quatB and premultiply restLeftEyeParentWorld^-1
-      _quatB.invert().premultiply(this._restLeftEyeParentWorldQuatInv);
+      _quatA.copy(this._restLeftEyeParentWorldQuat);
 
-      // _quatB * _quatA * _quatB^-1 * restQuatLeftEye
-      // where _quatA is LookAt rotation
-      // and _quatB is restLeftEyeParentWorld^-1 * worldFaceFrontQuat
-      leftEye.quaternion.copy(_quatB).multiply(_quatA).multiply(_quatB.invert()).multiply(this._restQuatLeftEye);
+      // _quatA^-1 * leftEyeNormalized.quaternion * _quatA * restQuatLeftEye
+      // where _quatA is restLeftEyeParentWorldQuat
+      leftEye.quaternion.copy(leftEyeNormalized!.quaternion).multiply(_quatA).premultiply(_quatA.invert()).multiply(this._restQuatLeftEye);
     }
 
     // right
@@ -183,13 +180,11 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
       // and _quatB is worldFaceFrontQuat
       rightEyeNormalized!.quaternion.copy(_quatB).multiply(_quatA).multiply(_quatB.invert());
 
-      // revert invert of _quatB and premultiply restRightEyeParentWorld^-1
-      _quatB.invert().premultiply(this._restRightEyeParentWorldQuatInv);
+      _quatA.copy(this._restRightEyeParentWorldQuat);
 
-      // _quatB * _quatA * _quatB^-1 * restQuatRightEye
-      // where _quatA is LookAt rotation
-      // and _quatB is restRightEyeParentWorld^-1 * worldFaceFrontQuat
-      rightEye.quaternion.copy(_quatB).multiply(_quatA).multiply(_quatB.invert()).multiply(this._restQuatRightEye);
+      // _quatA^-1 * rightEyeNormalized.quaternion * _quatA * restQuatRightEye
+      // where _quatA is restRightEyeParentWorldQuat
+      rightEye.quaternion.copy(rightEyeNormalized!.quaternion).multiply(_quatA).premultiply(_quatA.invert()).multiply(this._restQuatRightEye);
     }
   }
 
