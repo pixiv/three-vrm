@@ -197,4 +197,6 @@ describe('VRMLookAt', () => {
       });
     });
   });
+
+  it.todo('Test when the faceFront is (0, 0, -1)');
 });

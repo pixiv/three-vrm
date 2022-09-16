@@ -137,4 +137,6 @@ describe('VRMLookAtBoneApplier', () => {
       expect(normalizedRightEye.quaternion).toBeCloseToQuaternion(expected);
     });
   });
+
+  it.todo('Test when the faceFront is (0, 0, -1)');
 });
