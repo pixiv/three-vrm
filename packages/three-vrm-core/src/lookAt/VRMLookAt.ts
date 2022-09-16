@@ -215,10 +215,14 @@ export class VRMLookAt {
    * @param target A target `THREE.Quaternion`
    */
   public getFaceFrontQuaternion(target: THREE.Quaternion): THREE.Quaternion {
+    if (this.faceFront.distanceToSquared(VEC3_POSITIVE_Z) < 0.01) {
+      return target.copy(this._restHeadWorldQuaternion).invert();
+    }
+
     const [faceFrontAzimuth, faceFrontAltitude] = calcAzimuthAltitude(this.faceFront);
     _eulerA.set(0.0, 0.5 * Math.PI + faceFrontAzimuth, faceFrontAltitude, 'YZX');
 
-    return target.setFromEuler(_eulerA).premultiply(quatInvertCompat(_quatD.copy(this._restHeadWorldQuaternion)));
+    return target.setFromEuler(_eulerA).premultiply(_quatD.copy(this._restHeadWorldQuaternion).invert());
   }
 
   /**

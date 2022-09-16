@@ -6,6 +6,8 @@ import { calcAzimuthAltitude } from './utils/calcAzimuthAltitude';
 import { getWorldQuaternionLite } from '../utils/getWorldQuaternionLite';
 import { quatInvertCompat } from '../utils/quatInvertCompat';
 
+const VEC3_POSITIVE_Z = new THREE.Vector3(0.0, 0.0, 1.0);
+
 const _quatA = new THREE.Quaternion();
 const _quatB = new THREE.Quaternion();
 const _eulerA = new THREE.Euler(0.0, 0.0, 0.0, 'YXZ');
@@ -219,6 +221,10 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
    * @param target A target `THREE.Quaternion`
    */
   private _getWorldFaceFrontQuat(target: THREE.Quaternion): THREE.Quaternion {
+    if (this.faceFront.distanceToSquared(VEC3_POSITIVE_Z) < 0.01) {
+      return target.identity();
+    }
+
     const [faceFrontAzimuth, faceFrontAltitude] = calcAzimuthAltitude(this.faceFront);
     _eulerA.set(0.0, 0.5 * Math.PI + faceFrontAzimuth, faceFrontAltitude, 'YZX');
 
