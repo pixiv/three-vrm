@@ -249,7 +249,9 @@ export class VRMLookAt {
    */
   public lookAt(position: THREE.Vector3): void {
     // Look at direction in local coordinate
-    const headRotDiffInv = _quatA.copy(this._restHeadWorldQuaternion).multiply(quatInvertCompat(this.getLookAtWorldQuaternion(_quatB)));
+    const headRotDiffInv = _quatA
+      .copy(this._restHeadWorldQuaternion)
+      .multiply(quatInvertCompat(this.getLookAtWorldQuaternion(_quatB)));
     const headPos = this.getLookAtWorldPosition(_v3B);
     const lookAtDir = _v3C.copy(position).sub(headPos).applyQuaternion(headRotDiffInv).normalize();
 

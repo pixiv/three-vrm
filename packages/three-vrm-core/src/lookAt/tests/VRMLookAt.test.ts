@@ -60,7 +60,7 @@ function createHumanoid(): VRMHumanoid {
   humanBones.rightEye!.node.quaternion.copy(QUAT_Y_CW90);
 
   // build hierarchy
-  Object.entries(humanBones).forEach(( [boneNameStr, bone] ) => {
+  Object.entries(humanBones).forEach(([boneNameStr, bone]) => {
     const boneNode = bone?.node;
     if (boneNode != null) {
       const boneName = boneNameStr as VRMHumanBoneName;
@@ -174,8 +174,7 @@ describe('VRMLookAt', () => {
 
   describe('lookAt', () => {
     it('updates its lookAt angles', () => {
-      const target = lookAt.getLookAtWorldPosition(new THREE.Vector3())
-        .add(new THREE.Vector3(0.0, 0.0, 5.0));
+      const target = lookAt.getLookAtWorldPosition(new THREE.Vector3()).add(new THREE.Vector3(0.0, 0.0, 5.0));
       lookAt.lookAt(target);
 
       expect(lookAt.yaw).toBeCloseTo(0.0);
@@ -189,10 +188,8 @@ describe('VRMLookAt', () => {
         scene.updateMatrixWorld();
       });
 
-
       it('updates its lookAt angles', () => {
-        const target = lookAt.getLookAtWorldPosition(new THREE.Vector3())
-          .add(new THREE.Vector3(0.0, 0.0, 5.0));
+        const target = lookAt.getLookAtWorldPosition(new THREE.Vector3()).add(new THREE.Vector3(0.0, 0.0, 5.0));
         lookAt.lookAt(target);
 
         expect(lookAt.yaw).toBeCloseTo(-90.0);

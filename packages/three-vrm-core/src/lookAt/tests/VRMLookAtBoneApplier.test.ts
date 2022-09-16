@@ -57,7 +57,7 @@ function createHumanoid(): VRMHumanoid {
   humanBones.rightEye!.node.quaternion.copy(QUAT_Y_CW90);
 
   // build hierarchy
-  Object.entries(humanBones).forEach(( [boneNameStr, bone] ) => {
+  Object.entries(humanBones).forEach(([boneNameStr, bone]) => {
     const boneNode = bone?.node;
     if (boneNode != null) {
       const boneName = boneNameStr as VRMHumanBoneName;
@@ -108,15 +108,14 @@ describe('VRMLookAtBoneApplier', () => {
       const expected = new THREE.Quaternion()
         .setFromEuler(new THREE.Euler(DEG2RAD * 2.5, DEG2RAD * 2.5, 0.0, 'YXZ'))
         .multiply(QUAT_Y_CW90);
-      expect(rawLeftEye.quaternion).toBeCloseToQuaternion(expected)
+      expect(rawLeftEye.quaternion).toBeCloseToQuaternion(expected);
     });
 
     it('makes the normalized left eye look toward the specified angle', () => {
       applier.applyYawPitch(15.0, 15.0);
 
       const normalizedLeftEye = humanoid.getNormalizedBoneNode('leftEye')!;
-      const expected = new THREE.Quaternion()
-        .setFromEuler(new THREE.Euler(DEG2RAD * 2.5, DEG2RAD * 2.5, 0.0, 'YXZ'));
+      const expected = new THREE.Quaternion().setFromEuler(new THREE.Euler(DEG2RAD * 2.5, DEG2RAD * 2.5, 0.0, 'YXZ'));
       expect(normalizedLeftEye.quaternion).toBeCloseToQuaternion(expected);
     });
 
@@ -127,15 +126,14 @@ describe('VRMLookAtBoneApplier', () => {
       const expected = new THREE.Quaternion()
         .setFromEuler(new THREE.Euler(DEG2RAD * 2.5, DEG2RAD * 2.5, 0.0, 'YXZ'))
         .multiply(QUAT_Y_CW90);
-      expect(rawRightEye.quaternion).toBeCloseToQuaternion(expected)
+      expect(rawRightEye.quaternion).toBeCloseToQuaternion(expected);
     });
 
     it('makes the normalized right eye look toward the specified angle', () => {
       applier.applyYawPitch(15.0, 15.0);
 
       const normalizedRightEye = humanoid.getNormalizedBoneNode('rightEye')!;
-      const expected = new THREE.Quaternion()
-        .setFromEuler(new THREE.Euler(DEG2RAD * 2.5, DEG2RAD * 2.5, 0.0, 'YXZ'));
+      const expected = new THREE.Quaternion().setFromEuler(new THREE.Euler(DEG2RAD * 2.5, DEG2RAD * 2.5, 0.0, 'YXZ'));
       expect(normalizedRightEye.quaternion).toBeCloseToQuaternion(expected);
     });
   });

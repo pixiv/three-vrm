@@ -150,9 +150,7 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
       // _quatB * _quatA * _quatB^-1
       // where _quatA is LookAt rotation
       // and _quatB is worldFaceFrontQuat
-      leftEyeNormalized!.quaternion.copy(_quatB)
-        .multiply(_quatA)
-        .multiply(_quatB.invert());
+      leftEyeNormalized!.quaternion.copy(_quatB).multiply(_quatA).multiply(_quatB.invert());
 
       // revert invert of _quatB and premultiply restLeftEyeParentWorld^-1
       _quatB.invert().premultiply(this._restLeftEyeParentWorldQuatInv);
@@ -160,10 +158,7 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
       // _quatB * _quatA * _quatB^-1 * restQuatLeftEye
       // where _quatA is LookAt rotation
       // and _quatB is restLeftEyeParentWorld^-1 * worldFaceFrontQuat
-      leftEye.quaternion.copy(_quatB)
-        .multiply(_quatA)
-        .multiply(_quatB.invert())
-        .multiply(this._restQuatLeftEye);
+      leftEye.quaternion.copy(_quatB).multiply(_quatA).multiply(_quatB.invert()).multiply(this._restQuatLeftEye);
     }
 
     // right
@@ -186,9 +181,7 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
       // _quatB * _quatA * _quatB^-1
       // where _quatA is LookAt rotation
       // and _quatB is worldFaceFrontQuat
-      rightEyeNormalized!.quaternion.copy(_quatB)
-        .multiply(_quatA)
-        .multiply(_quatB.invert());
+      rightEyeNormalized!.quaternion.copy(_quatB).multiply(_quatA).multiply(_quatB.invert());
 
       // revert invert of _quatB and premultiply restRightEyeParentWorld^-1
       _quatB.invert().premultiply(this._restRightEyeParentWorldQuatInv);
@@ -196,10 +189,7 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
       // _quatB * _quatA * _quatB^-1 * restQuatRightEye
       // where _quatA is LookAt rotation
       // and _quatB is restRightEyeParentWorld^-1 * worldFaceFrontQuat
-      rightEye.quaternion.copy(_quatB)
-        .multiply(_quatA)
-        .multiply(_quatB.invert())
-        .multiply(this._restQuatRightEye);
+      rightEye.quaternion.copy(_quatB).multiply(_quatA).multiply(_quatB.invert()).multiply(this._restQuatRightEye);
     }
   }
 
