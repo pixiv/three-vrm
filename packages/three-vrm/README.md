@@ -46,7 +46,7 @@ loader.register( ( parser ) => {
 loader.load(
 
 	// URL of the VRM you want to load
-	'/models/three-vrm-girl.vrm',
+	'/models/VRM1_Constraint_Twist_Sample.vrm',
 
 	// called when the resource is loaded
 	( gltf ) => {
@@ -101,7 +101,7 @@ loader.register( ( parser ) => {
 loader.load(
 
 	// URL of the VRM you want to load
-	'/models/three-vrm-girl.vrm',
+	'/models/VRM1_Constraint_Twist_Sample.vrm',
 
 	// called when the resource is loaded
 	( gltf ) => {
