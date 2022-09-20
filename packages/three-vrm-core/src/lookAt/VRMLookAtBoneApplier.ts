@@ -155,7 +155,11 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
 
       // _quatA^-1 * leftEyeNormalized.quaternion * _quatA * restQuatLeftEye
       // where _quatA is restLeftEyeParentWorldQuat
-      leftEye.quaternion.copy(leftEyeNormalized!.quaternion).multiply(_quatA).premultiply(_quatA.invert()).multiply(this._restQuatLeftEye);
+      leftEye.quaternion
+        .copy(leftEyeNormalized!.quaternion)
+        .multiply(_quatA)
+        .premultiply(_quatA.invert())
+        .multiply(this._restQuatLeftEye);
     }
 
     // right
@@ -184,7 +188,11 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
 
       // _quatA^-1 * rightEyeNormalized.quaternion * _quatA * restQuatRightEye
       // where _quatA is restRightEyeParentWorldQuat
-      rightEye.quaternion.copy(rightEyeNormalized!.quaternion).multiply(_quatA).premultiply(_quatA.invert()).multiply(this._restQuatRightEye);
+      rightEye.quaternion
+        .copy(rightEyeNormalized!.quaternion)
+        .multiply(_quatA)
+        .premultiply(_quatA.invert())
+        .multiply(this._restQuatRightEye);
     }
   }
 
