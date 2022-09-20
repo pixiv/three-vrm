@@ -14,6 +14,11 @@ import { VRMExpressionTextureTransformBind } from './VRMExpressionTextureTransfo
 import { GLTF as GLTFSchema } from '@gltf-transform/core';
 
 /**
+ * Possible spec versions it recognizes.
+ */
+const POSSIBLE_SPEC_VERSIONS = new Set(['1.0', '1.0-beta']);
+
+/**
  * A plugin of GLTFLoader that imports a {@link VRMExpressionManager} from a VRM extension of a GLTF.
  */
 export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
@@ -88,7 +93,8 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
     }
 
     const specVersion = extension.specVersion;
-    if (specVersion !== '1.0-beta') {
+    if (!POSSIBLE_SPEC_VERSIONS.has(specVersion)) {
+      console.warn(`VRMExpressionLoaderPlugin: Unknown VRMC_vrm specVersion "${specVersion}"`);
       return null;
     }
 

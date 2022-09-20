@@ -8,7 +8,7 @@ export interface VRMCVRM {
   /**
    * Specification version of VRMC_vrm
    */
-  specVersion: '1.0-beta';
+  specVersion: '1.0' | '1.0-beta';
 
   /**
    * Meta informations of the VRM model

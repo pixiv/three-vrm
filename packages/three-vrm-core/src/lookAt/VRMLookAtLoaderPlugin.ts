@@ -13,6 +13,11 @@ import { VRMLookAtRangeMap } from './VRMLookAtRangeMap';
 import { GLTF as GLTFSchema } from '@gltf-transform/core';
 
 /**
+ * Possible spec versions it recognizes.
+ */
+const POSSIBLE_SPEC_VERSIONS = new Set(['1.0', '1.0-beta']);
+
+/**
  * A plugin of GLTFLoader that imports a {@link VRMLookAt} from a VRM extension of a GLTF.
  */
 export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
@@ -44,9 +49,7 @@ export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
     if (vrmHumanoid === null) {
       return;
     } else if (vrmHumanoid === undefined) {
-      throw new Error(
-        'VRMFirstPersonLoaderPlugin: vrmHumanoid is undefined. VRMHumanoidLoaderPlugin have to be used first',
-      );
+      throw new Error('VRMLookAtLoaderPlugin: vrmHumanoid is undefined. VRMHumanoidLoaderPlugin have to be used first');
     }
 
     const vrmExpressionManager = gltf.userData.vrmExpressionManager as VRMExpressionManager | undefined;
@@ -55,7 +58,7 @@ export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
       return;
     } else if (vrmExpressionManager === undefined) {
       throw new Error(
-        'VRMFirstPersonLoaderPlugin: vrmExpressionManager is undefined. VRMExpressionLoaderPlugin have to be used first',
+        'VRMLookAtLoaderPlugin: vrmExpressionManager is undefined. VRMExpressionLoaderPlugin have to be used first',
       );
     }
 
@@ -110,7 +113,8 @@ export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
     }
 
     const specVersion = extension.specVersion;
-    if (specVersion !== '1.0-beta') {
+    if (!POSSIBLE_SPEC_VERSIONS.has(specVersion)) {
+      console.warn(`VRMLookAtLoaderPlugin: Unknown VRMC_vrm specVersion "${specVersion}"`);
       return null;
     }
 

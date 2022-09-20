@@ -177,7 +177,7 @@ export class VRMSpringBoneJoint {
       this._initialLocalChildPosition.copy(this.child.position);
     } else {
       // vrm0 requires a 7cm fixed bone length for the final node in a chain
-      // See: https://github.com/vrm-c/vrm-specification/tree/master/specification/VRMC_springBone-1.0-beta#about-spring-configuration
+      // See: https://github.com/vrm-c/vrm-specification/tree/master/specification/VRMC_springBone-1.0#about-spring-configuration
       this._initialLocalChildPosition.copy(this.bone.position).normalize().multiplyScalar(0.07);
     }
 

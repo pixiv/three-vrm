@@ -134,7 +134,7 @@
       },
       "extensions": {
         "VRMC_materials_mtoon": {
-          "specVersion": "1.0-beta",
+          "specVersion": "1.0",
           "shadeColorFactor": [
             0.5,
             0.25,
@@ -160,7 +160,7 @@
       ],
       "extensions": {
         "VRMC_materials_mtoon": {
-          "specVersion": "1.0-beta",
+          "specVersion": "1.0",
           "shadeColorFactor": [
             0,
             0,
@@ -189,7 +189,7 @@
           "emissiveStrength": 10
         },
         "VRMC_materials_mtoon": {
-          "specVersion": "1.0-beta",
+          "specVersion": "1.0",
           "shadeColorFactor": [
             0,
             0,

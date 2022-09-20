@@ -10,6 +10,11 @@ import { resolveURL } from '../utils/resolveURL';
 import { GLTF as GLTFSchema } from '@gltf-transform/core';
 
 /**
+ * Possible spec versions it recognizes.
+ */
+const POSSIBLE_SPEC_VERSIONS = new Set(['1.0', '1.0-beta']);
+
+/**
  * A plugin of GLTFLoader that imports a {@link VRM1Meta} from a VRM extension of a GLTF.
  */
 export class VRMMetaLoaderPlugin implements GLTFLoaderPlugin {
@@ -81,7 +86,8 @@ export class VRMMetaLoaderPlugin implements GLTFLoaderPlugin {
     }
 
     const specVersion = extension.specVersion;
-    if (specVersion !== '1.0-beta') {
+    if (!POSSIBLE_SPEC_VERSIONS.has(specVersion)) {
+      console.warn(`VRMMetaLoaderPlugin: Unknown VRMC_vrm specVersion "${specVersion}"`);
       return null;
     }
 

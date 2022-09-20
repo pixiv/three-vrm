@@ -9,6 +9,11 @@ import { VRMHumanoidHelper } from './helpers/VRMHumanoidHelper';
 import { VRMHumanoidLoaderPluginOptions } from './VRMHumanoidLoaderPluginOptions';
 
 /**
+ * Possible spec versions it recognizes.
+ */
+const POSSIBLE_SPEC_VERSIONS = new Set(['1.0', '1.0-beta']);
+
+/**
  * A map from old thumb bone names to new thumb bone names
  */
 const thumbBoneNameMap: { [key: string]: V1VRMSchema.HumanoidHumanBoneName | undefined } = {
@@ -83,7 +88,8 @@ export class VRMHumanoidLoaderPlugin implements GLTFLoaderPlugin {
     }
 
     const specVersion = extension.specVersion;
-    if (specVersion !== '1.0-beta') {
+    if (!POSSIBLE_SPEC_VERSIONS.has(specVersion)) {
+      console.warn(`VRMHumanoidLoaderPlugin: Unknown VRMC_vrm specVersion "${specVersion}"`);
       return null;
     }
 
