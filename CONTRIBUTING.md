@@ -12,7 +12,16 @@ cd packages/three-vrm
 yarn dev
 ```
 
-Once you start the `yarn dev`, you can see examples at http://localhost:3000/examples/ .
+Once you start the `yarn dev`, you can see examples at http://localhost:10001/examples/ .
+
+### Editing two packages at the same time
+
+You might want to watch two or more packages at the same time, but using `yarn dev` on multiple packages creates a port conflict of dev servers.
+In this case, you can specify different ports for each dev server by the environment variable `PORT` to avoid this conflict.
+
+```sh
+PORT=10002 yarn dev
+```
 
 ## Basic rules of the repository
 
