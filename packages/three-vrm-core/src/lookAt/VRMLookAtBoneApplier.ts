@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import type { VRMLookAtApplier } from './VRMLookAtApplier';
 import { VRMLookAtRangeMap } from './VRMLookAtRangeMap';
 import { calcAzimuthAltitude } from './utils/calcAzimuthAltitude';
+import { getWorldQuaternionLite } from '../utils/getWorldQuaternionLite';
 
 const VEC3_POSITIVE_Z = new THREE.Vector3(0.0, 0.0, 1.0);
 
@@ -63,6 +64,16 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
   private _restQuatRightEye: THREE.Quaternion;
 
   /**
+   * The world-space rest quaternion of the parent of the humanoid LeftEye.
+   */
+  private _restLeftEyeParentWorldQuat: THREE.Quaternion;
+
+  /**
+   * The world-space rest quaternion of the parent of the humanoid RightEye.
+   */
+  private _restRightEyeParentWorldQuat: THREE.Quaternion;
+
+  /**
    * Create a new {@link VRMLookAtBoneApplier}.
    *
    * @param humanoid A {@link VRMHumanoid}
@@ -90,16 +101,20 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
     // set rest quaternions
     this._restQuatLeftEye = new THREE.Quaternion();
     this._restQuatRightEye = new THREE.Quaternion();
+    this._restLeftEyeParentWorldQuat = new THREE.Quaternion();
+    this._restRightEyeParentWorldQuat = new THREE.Quaternion();
 
     const leftEye = this.humanoid.getRawBoneNode('leftEye');
     const rightEye = this.humanoid.getRawBoneNode('leftEye');
 
     if (leftEye) {
       this._restQuatLeftEye.copy(leftEye.quaternion);
+      getWorldQuaternionLite(leftEye.parent!, this._restLeftEyeParentWorldQuat);
     }
 
     if (rightEye) {
       this._restQuatRightEye.copy(rightEye.quaternion);
+      getWorldQuaternionLite(rightEye.parent!, this._restRightEyeParentWorldQuat);
     }
   }
 
@@ -129,11 +144,22 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
       }
 
       _quatA.setFromEuler(_eulerA);
-      this._getFaceFrontQuaternion(_quatB);
+      this._getWorldFaceFrontQuat(_quatB);
 
-      // quatB^-1 * quatA * quatB * restQuatLeftEye
-      leftEye.quaternion.copy(_quatB).premultiply(_quatA).premultiply(_quatB.invert()).multiply(this._restQuatLeftEye);
-      leftEyeNormalized!.quaternion.copy(_quatB).premultiply(_quatA).premultiply(_quatB.invert());
+      // _quatB * _quatA * _quatB^-1
+      // where _quatA is LookAt rotation
+      // and _quatB is worldFaceFrontQuat
+      leftEyeNormalized!.quaternion.copy(_quatB).multiply(_quatA).multiply(_quatB.invert());
+
+      _quatA.copy(this._restLeftEyeParentWorldQuat);
+
+      // _quatA^-1 * leftEyeNormalized.quaternion * _quatA * restQuatLeftEye
+      // where _quatA is restLeftEyeParentWorldQuat
+      leftEye.quaternion
+        .copy(leftEyeNormalized!.quaternion)
+        .multiply(_quatA)
+        .premultiply(_quatA.invert())
+        .multiply(this._restQuatLeftEye);
     }
 
     // right
@@ -151,15 +177,22 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
       }
 
       _quatA.setFromEuler(_eulerA);
-      this._getFaceFrontQuaternion(_quatB);
+      this._getWorldFaceFrontQuat(_quatB);
 
-      // quatB^-1 * quatA * quatB * restQuatRightEye
+      // _quatB * _quatA * _quatB^-1
+      // where _quatA is LookAt rotation
+      // and _quatB is worldFaceFrontQuat
+      rightEyeNormalized!.quaternion.copy(_quatB).multiply(_quatA).multiply(_quatB.invert());
+
+      _quatA.copy(this._restRightEyeParentWorldQuat);
+
+      // _quatA^-1 * rightEyeNormalized.quaternion * _quatA * restQuatRightEye
+      // where _quatA is restRightEyeParentWorldQuat
       rightEye.quaternion
-        .copy(_quatB)
-        .premultiply(_quatA)
-        .premultiply(_quatB.invert())
+        .copy(rightEyeNormalized!.quaternion)
+        .multiply(_quatA)
+        .premultiply(_quatA.invert())
         .multiply(this._restQuatRightEye);
-      rightEyeNormalized!.quaternion.copy(_quatB).premultiply(_quatA).premultiply(_quatB.invert());
     }
   }
 
@@ -176,17 +209,18 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
   }
 
   /**
-   * Get a quaternion that rotates the +Z unit vector of the humanoid Head to the {@link faceFront} direction.
+   * Get a quaternion that rotates the world-space +Z unit vector to the {@link faceFront} direction.
    *
-   * @param target A target `THREE.Vector3`
+   * @param target A target `THREE.Quaternion`
    */
-  private _getFaceFrontQuaternion(target: THREE.Quaternion): THREE.Quaternion {
+  private _getWorldFaceFrontQuat(target: THREE.Quaternion): THREE.Quaternion {
     if (this.faceFront.distanceToSquared(VEC3_POSITIVE_Z) < 0.01) {
       return target.identity();
     }
 
     const [faceFrontAzimuth, faceFrontAltitude] = calcAzimuthAltitude(this.faceFront);
     _eulerA.set(0.0, 0.5 * Math.PI + faceFrontAzimuth, faceFrontAltitude, 'YZX');
+
     return target.setFromEuler(_eulerA);
   }
 }
