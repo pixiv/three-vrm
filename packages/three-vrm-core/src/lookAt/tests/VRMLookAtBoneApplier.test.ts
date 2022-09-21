@@ -105,9 +105,12 @@ describe('VRMLookAtBoneApplier', () => {
       applier.applyYawPitch(15.0, 15.0);
 
       const rawLeftEye = humanoid.getRawBoneNode('leftEye')!;
+
+      // saturate( angle / rangeMap.inputMaxValue ) * rangeMap.outputScale = saturate( 15 / 30 ) * 5 = 2.5
       const expected = new THREE.Quaternion()
         .setFromEuler(new THREE.Euler(DEG2RAD * 2.5, DEG2RAD * 2.5, 0.0, 'YXZ'))
         .multiply(QUAT_Y_CW90);
+
       expect(rawLeftEye.quaternion).toBeCloseToQuaternion(expected);
     });
 
@@ -123,9 +126,12 @@ describe('VRMLookAtBoneApplier', () => {
       applier.applyYawPitch(15.0, 15.0);
 
       const rawRightEye = humanoid.getRawBoneNode('rightEye')!;
+
+      // saturate( angle / rangeMap.inputMaxValue ) * rangeMap.outputScale = saturate( 15 / 30 ) * 5 = 2.5
       const expected = new THREE.Quaternion()
         .setFromEuler(new THREE.Euler(DEG2RAD * 2.5, DEG2RAD * 2.5, 0.0, 'YXZ'))
         .multiply(QUAT_Y_CW90);
+
       expect(rawRightEye.quaternion).toBeCloseToQuaternion(expected);
     });
 
@@ -133,7 +139,10 @@ describe('VRMLookAtBoneApplier', () => {
       applier.applyYawPitch(15.0, 15.0);
 
       const normalizedRightEye = humanoid.getNormalizedBoneNode('rightEye')!;
+
+      // saturate( angle / rangeMap.inputMaxValue ) * rangeMap.outputScale = saturate( 15 / 30 ) * 5 = 2.5
       const expected = new THREE.Quaternion().setFromEuler(new THREE.Euler(DEG2RAD * 2.5, DEG2RAD * 2.5, 0.0, 'YXZ'));
+
       expect(normalizedRightEye.quaternion).toBeCloseToQuaternion(expected);
     });
   });
