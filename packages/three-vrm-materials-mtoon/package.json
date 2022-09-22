@@ -1,0 +1,55 @@
+{
+  "name": "@pixiv/three-vrm-materials-mtoon",
+  "version": "1.0.0-beta.19",
+  "description": "MToon (toon material) module for @pixiv/three-vrm",
+  "license": "MIT",
+  "author": "pixiv",
+  "files": [
+    "/lib/",
+    "/ts*/",
+    "/types/",
+    "LICENSE"
+  ],
+  "main": "lib/three-vrm-materials-mtoon.js",
+  "module": "lib/three-vrm-materials-mtoon.module.js",
+  "types": "types/index.d.ts",
+  "typesVersions": {
+    "<3.9": {
+      "*": [
+        "ts3.4/*"
+      ]
+    }
+  },
+  "scripts": {
+    "version": "yarn all",
+    "all": "yarn lint && yarn clean && yarn build && yarn docs",
+    "dev": "cross-env NODE_ENV=development rollup -w -c",
+    "clean": "rimraf docs/ lib/ ts*/ types/",
+    "build": "yarn build-dev && yarn build-prod && yarn build-types",
+    "build-dev": "cross-env NODE_ENV=development rollup -c",
+    "build-prod": "cross-env NODE_ENV=production rollup -c",
+    "build-types": "tsc --declaration --declarationDir ./types --emitDeclarationOnly && downlevel-dts types ts3.4/types",
+    "docs": "typedoc --entryPoints ./src/index.ts --out docs",
+    "lint": "eslint \"src/**/*.{ts,tsx}\"  && yarn lint-examples &&  prettier \"src/**/*.{ts,tsx}\" --check",
+    "lint-examples": "eslint \"examples/**/*.{ts,tsx,js,html}\" --rule \"padded-blocks: error\"",
+    "lint-fix": "eslint \"src/**/*.{ts,tsx}\" --fix && eslint \"examples/**/*.{ts,tsx,js,html}\" --fix &&  prettier \"src/**/*.{ts,tsx}\" --write"
+  },
+  "lint-staged": {
+    "./src/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "dependencies": {
+    "@pixiv/types-vrm-0.0": "1.0.0-beta.19",
+    "@pixiv/types-vrmc-materials-mtoon-1.0": "1.0.0-beta.19"
+  },
+  "devDependencies": {
+    "@types/three": "^0.140.0",
+    "three": "^0.140.2"
+  },
+  "peerDependencies": {
+    "@types/three": "^0.140.0",
+    "three": "^0.140.2"
+  }
+}

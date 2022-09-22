@@ -11,13 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Setup Node
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: '14'
     - name: Cache Deps
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: |
           node_modules
@@ -28,62 +28,18 @@ jobs:
     - name: Fetch Deps
       run: yarn install --frozen-lockfile
 
-  lint:
-    runs-on: ubuntu-latest
-    needs: fetch
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Setup Node
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'
-    - name: Cache Deps
-      uses: actions/cache@v2
-      with:
-        path: |
-          node_modules
-          packages/*/node_modules
-        key: ${{ runner.os }}-yarn-${{ hashFiles( 'yarn.lock' ) }}
-        restore-keys: |
-          ${{ runner.os }}-yarn-
-    - name: Lint
-      run: yarn lint
-
-  test:
-    runs-on: ubuntu-latest
-    needs: fetch
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Setup Node
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'
-    - name: Cache Deps
-      uses: actions/cache@v2
-      with:
-        path: |
-          node_modules
-          packages/*/node_modules
-        key: ${{ runner.os }}-yarn-${{ hashFiles( 'yarn.lock' ) }}
-        restore-keys: |
-          ${{ runner.os }}-yarn-
-    - name: Test
-      run: yarn test
-
   build:
     runs-on: ubuntu-latest
     needs: fetch
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Setup Node
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: '14'
     - name: Cache Deps
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: |
           node_modules
@@ -94,7 +50,7 @@ jobs:
     - name: Build
       run: yarn build
     - name: Upload Builds
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: build
         path: |
@@ -102,18 +58,18 @@ jobs:
           packages/*/types/
           packages/*/ts*/
 
-  docs:
+  lint:
     runs-on: ubuntu-latest
     needs: build
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Setup Node
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: '14'
     - name: Cache Deps
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: |
           node_modules
@@ -122,14 +78,68 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-yarn-
     - name: Download Builds
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
+      with:
+        name: build
+        path: packages
+    - name: Lint
+      run: yarn lint
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: '14'
+    - name: Cache Deps
+      uses: actions/cache@v3
+      with:
+        path: |
+          node_modules
+          packages/*/node_modules
+        key: ${{ runner.os }}-yarn-${{ hashFiles( 'yarn.lock' ) }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+    - name: Download Builds
+      uses: actions/download-artifact@v3
+      with:
+        name: build
+        path: packages
+    - name: Test
+      run: yarn test
+
+  docs:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: '14'
+    - name: Cache Deps
+      uses: actions/cache@v3
+      with:
+        path: |
+          node_modules
+          packages/*/node_modules
+        key: ${{ runner.os }}-yarn-${{ hashFiles( 'yarn.lock' ) }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+    - name: Download Builds
+      uses: actions/download-artifact@v3
       with:
         name: build
         path: packages
     - name: Build Docs
       run: yarn docs
     - name: Upload Docs
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: docs
         path: |
@@ -143,13 +153,13 @@ jobs:
     - docs
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Setup Node
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: '14'
     - name: Cache Deps
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: |
           node_modules
@@ -158,12 +168,12 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-yarn-
     - name: Download Builds
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: build
         path: public/packages
     - name: Download Docs
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: docs
         path: public/packages

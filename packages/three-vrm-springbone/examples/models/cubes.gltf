@@ -1,0 +1,330 @@
+{
+  "asset": {
+    "generator": "Handwritten",
+    "version": "2.0"
+  },
+  "buffers": [
+    {
+      "uri": "cube_mesh.bin",
+      "byteLength": 912
+    }
+  ],
+  "bufferViews": [
+    {
+      "name": "Cube Position",
+      "buffer": 0,
+      "byteOffset": 0,
+      "byteLength": 288,
+      "target": 34962
+    },
+    {
+      "name": "Cube Normal",
+      "buffer": 0,
+      "byteOffset": 288,
+      "byteLength": 288,
+      "target": 34962
+    },
+    {
+      "name": "Cube UV",
+      "buffer": 0,
+      "byteOffset": 576,
+      "byteLength": 192,
+      "target": 34962
+    },
+    {
+      "name": "Cube Indices",
+      "buffer": 0,
+      "byteOffset": 768,
+      "byteLength": 144,
+      "target": 34963
+    }
+  ],
+  "accessors": [
+    {
+      "name": "Cube Position",
+      "bufferView": 0,
+      "byteOffset": 0,
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 24,
+      "max": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "min": [
+        -0.5,
+        -0.5,
+        -0.5
+      ],
+      "normalized": false
+    },
+    {
+      "name": "Cube Normal",
+      "bufferView": 1,
+      "byteOffset": 0,
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 24,
+      "normalized": false
+    },
+    {
+      "name": "Cube UV",
+      "bufferView": 2,
+      "byteOffset": 0,
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 24,
+      "normalized": false
+    },
+    {
+      "name": "Cube Indices",
+      "bufferView": 3,
+      "byteOffset": 0,
+      "type": "SCALAR",
+      "componentType": 5125,
+      "count": 36,
+      "normalized": false
+    }
+  ],
+  "materials": [
+    {
+      "name": "Cube Material",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [ 1, 1, 1, 1 ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.5
+      },
+      "alphaMode": "OPAQUE",
+      "doubleSided": false
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Cube",
+      "primitives": [
+        {
+          "mode": 4,
+          "indices": 3,
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TEXCOORD_0": 2
+          },
+          "material": 0
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "name": "CubeA",
+      "children": [
+        1
+      ],
+      "translation": [
+        0,
+        2,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "mesh": 0,
+      "extras": {}
+    },
+    {
+      "name": "CubeB",
+      "children": [
+        2
+      ],
+      "translation": [
+        0,
+        -1,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "mesh": 0,
+      "extras": {}
+    },
+    {
+      "name": "CubeC",
+      "children": [
+        3
+      ],
+      "translation": [
+        0,
+        -1,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "mesh": 0,
+      "extras": {}
+    },
+    {
+      "name": "CubeD",
+      "children": [
+        4
+      ],
+      "translation": [
+        0,
+        -1,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "mesh": 0,
+      "extras": {}
+    },
+    {
+      "name": "CubeE",
+      "translation": [
+        0,
+        -1,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "mesh": 0,
+      "extras": {}
+    },
+    {
+      "name": "Collider",
+      "translation": [
+        0.5,
+        1,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "extras": {}
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0,
+        5
+      ]
+    }
+  ],
+  "extensionsUsed": [
+    "VRMC_springBone"
+  ],
+  "extensions": {
+    "VRMC_springBone": {
+      "specVersion": "1.0",
+      "colliders": [
+        {
+          "node": 5,
+          "shape": {
+            "sphere": {
+              "offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "radius": 0.5
+            }
+          }
+        }
+      ],
+      "colliderGroups": [
+        {
+          "colliders": [ 0 ]
+        }
+      ],
+      "springs": [
+        {
+          "joints": [
+            {
+              "node": 1,
+              "hitRadius": 0.02,
+              "stiffness": 1.0,
+              "gravityPower": 0.0,
+              "gravityDir": [ 0.0, -1.0, 0.0 ],
+              "dragForce": 0.4
+            },
+            {
+              "node": 2,
+              "hitRadius": 0.02,
+              "stiffness": 1.0,
+              "gravityPower": 0.0,
+              "gravityDir": [ 0.0, -1.0, 0.0 ],
+              "dragForce": 0.4
+            },
+            {
+              "node": 3,
+              "hitRadius": 0.02,
+              "stiffness": 1.0,
+              "gravityPower": 0.0,
+              "gravityDir": [ 0.0, -1.0, 0.0 ],
+              "dragForce": 0.4
+            },
+            {
+              "node": 4
+            }
+          ],
+          "colliderGroups": [ 0 ]
+        }
+      ]
+    }
+  },
+  "extras": {}
+}

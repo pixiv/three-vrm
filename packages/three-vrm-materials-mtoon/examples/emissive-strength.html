@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>three-vrm example</title>
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+		/>
+		<style>
+			body {
+				margin: 0;
+			}
+			canvas {
+				display: block;
+			}
+		</style>
+	</head>
+
+	<body>
+		<script src="https://unpkg.com/three@0.140.2/build/three.js"></script>
+		<script src="https://unpkg.com/three@0.140.2/examples/js/loaders/GLTFLoader.js"></script>
+		<script src="https://unpkg.com/three@0.140.2/examples/js/controls/OrbitControls.js"></script>
+		<script src="https://unpkg.com/three@0.140.2/examples/js/shaders/CopyShader.js"></script>
+		<script src="https://unpkg.com/three@0.140.2/examples/js/shaders/LuminosityHighPassShader.js"></script>
+		<script src="https://unpkg.com/three@0.140.2/examples/js/postprocessing/EffectComposer.js"></script>
+		<script src="https://unpkg.com/three@0.140.2/examples/js/postprocessing/ShaderPass.js"></script>
+		<script src="https://unpkg.com/three@0.140.2/examples/js/postprocessing/RenderPass.js"></script>
+		<script src="https://unpkg.com/three@0.140.2/examples/js/postprocessing/UnrealBloomPass.js"></script>
+		<script src="../lib/three-vrm-materials-mtoon.js"></script>
+		<script>
+			/* global THREE_VRM_MATERIALS_MTOON */
+			// renderer
+			const renderer = new THREE.WebGLRenderer();
+			renderer.outputEncoding = THREE.sRGBEncoding;
+			renderer.toneMapping = THREE.ACESFilmicToneMapping;
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			renderer.setPixelRatio( window.devicePixelRatio );
+			document.body.appendChild( renderer.domElement );
+
+			// camera
+			const camera = new THREE.PerspectiveCamera( 30.0, window.innerWidth / window.innerHeight, 0.1, 20.0 );
+			camera.position.set( 0.0, 0.0, 10.0 );
+
+			// camera controls
+			const controls = new THREE.OrbitControls( camera, renderer.domElement );
+			controls.screenSpacePanning = true;
+			controls.target.set( 0.0, 0.0, 0.0 );
+			controls.update();
+
+			// scene
+			const scene = new THREE.Scene();
+
+			// light
+			const light = new THREE.DirectionalLight( 0xffffff );
+			scene.add( light );
+
+			// gltf and vrm
+			let currentGltf = null;
+
+			const loader = new THREE.GLTFLoader();
+
+			loader.register( ( parser ) => {
+
+				const plugin = new THREE_VRM_MATERIALS_MTOON.MToonMaterialLoaderPlugin( parser );
+				return plugin;
+
+			} );
+
+			function load( url ) {
+
+				loader.crossOrigin = 'anonymous';
+				loader.load(
+
+					url,
+
+					( gltf ) => {
+
+						scene.add( gltf.scene );
+
+						console.log( gltf );
+
+						currentGltf = gltf;
+
+					},
+
+					( progress ) => console.log( 'Loading model...', 100.0 * ( progress.loaded / progress.total ), '%' ),
+
+					( error ) => console.error( error )
+
+				);
+
+			}
+
+			load( './models/khr-materials-emissive-strength-test.gltf' );
+
+			// helpers
+			const gridHelper = new THREE.GridHelper( 10, 10 );
+			scene.add( gridHelper );
+
+			const axesHelper = new THREE.AxesHelper( 5 );
+			scene.add( axesHelper );
+
+			// composer
+			const composer = new THREE.EffectComposer( renderer );
+
+			const renderPass = new THREE.RenderPass( scene, camera );
+			composer.addPass( renderPass );
+
+			const bloomPass = new THREE.UnrealBloomPass(
+
+				// resolution
+				new THREE.Vector2( window.innerWidth, window.innerHeight ),
+
+				// strength
+				1.5,
+
+				// radius
+				0.4,
+
+				// threshold
+				0.85,
+
+			);
+			composer.addPass( bloomPass );
+
+			// animate
+			const clock = new THREE.Clock();
+			clock.start();
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				const delta = clock.getDelta();
+
+				const theta = clock.elapsedTime;
+				const cosTheta = Math.cos( theta );
+				const sinTheta = Math.sin( theta );
+				light.position.set( cosTheta, 2.0, sinTheta ).normalize();
+
+				if ( currentGltf != null ) {
+
+					const mtoonMaterials = currentGltf.userData.vrmMToonMaterials;
+
+					for ( const material of mtoonMaterials ) {
+
+						material.update( delta );
+
+					}
+
+				}
+
+				composer.render();
+
+			}
+
+			animate();
+		</script>
+	</body>
+</html>

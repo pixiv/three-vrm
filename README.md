@@ -10,31 +10,21 @@ Use [VRM](https://vrm.dev/) on [three.js](https://threejs.org/)
 
 [Examples](https://pixiv.github.io/three-vrm/packages/three-vrm/examples)
 
-[Documentation](https://pixiv.github.io/three-vrm/packages/three-vrm/docs)
+[Documentations](https://github.com/pixiv/three-vrm/tree/dev/docs/README.md)
 
-## ⏭️ v1.0.0-beta ⏭️
+[API Reference](https://pixiv.github.io/three-vrm/packages/three-vrm/docs)
 
-We are developing three-vrm v1.0 which supports [VRM 1.0-beta specification](https://vrm.dev/en/vrm1/index).
+## v1
 
-**The beta preview of three-vrm v1.0 is released on [npm](https://www.npmjs.com/package/@pixiv/three-vrm/v/next).**
-It's almost stable but interfaces are still subject to change.
+**three-vrm v1 has been released!**
 
-[![@pixiv/three-vrm@next on npm](https://img.shields.io/npm/v/@pixiv/three-vrm/next)](https://www.npmjs.com/package/@pixiv/three-vrm/v/next)
+three-vrm v1 supports [VRM1.0](https://vrm.dev/vrm1/), which is a new version of VRM format (the previous version of VRM is also supported, don't worry!).
+It also adopts the GLTFLoader plugin system which is a relatively new feature of GLTFLoader.
 
-```sh
-npm install three-vrm@next
-```
+There are a lot of breaking changes!
+See [the migration guide](https://github.com/pixiv/three-vrm/blob/dev/docs/migration-guide-1.0.md) for more info.
 
-Check [Releases](https://github.com/pixiv/three-vrm/releases) for the latest release of v1.0.0-beta.
-
-We are working on the branch [`1.0`](https://github.com/pixiv/three-vrm/tree/1.0).
-You should see the README.md on that branch before use.
-
-We are planning to prepare a migration guide from v0 to v1 but it's not done yet. Sorry!
-
-We appreciate your feedback!
-
-## Usage
+## How to Use
 
 ### from HTML
 
@@ -43,8 +33,8 @@ You will need:
 - [Three.js build](https://github.com/mrdoob/three.js/blob/master/build/three.js)
 - [GLTFLoader](https://github.com/mrdoob/three.js/blob/master/examples/js/loaders/GLTFLoader.js)
 - [A build of @pixiv/three-vrm](https://unpkg.com/browse/@pixiv/three-vrm/lib/)
-	- `.module` ones are ESM, otherwise it's UMD and injects its modules into global `THREE`
-	- `.min` ones are minified (for production), otherwise it's not minified and it comes with source maps
+  - `.module` ones are ESM, otherwise it's UMD and injects its modules into global `THREE`
+  - `.min` ones are minified (for production), otherwise it's not minified and it comes with source maps
 
 Code like this:
 
@@ -54,37 +44,37 @@ Code like this:
 <script src="three-vrm.js"></script>
 
 <script>
-const scene = new THREE.Scene();
+  const scene = new THREE.Scene();
 
-const loader = new THREE.GLTFLoader();
-loader.load(
+  const loader = new THREE.GLTFLoader();
 
-	// URL of the VRM you want to load
-	'/models/three-vrm-girl.vrm',
+  // Install GLTFLoader plugin
+  loader.register((parser) => {
+    return new THREE_VRM.VRMLoaderPlugin(parser);
+  });
 
-	// called when the resource is loaded
-	( gltf ) => {
+  loader.load(
+    // URL of the VRM you want to load
+    '/models/VRM1_Constraint_Twist_Sample.vrm',
 
-		// generate a VRM instance from gltf
-		THREE.VRM.from( gltf ).then( ( vrm ) => {
+    // called when the resource is loaded
+    (gltf) => {
+      // retrieve a VRM instance from gltf
+      const vrm = gltf.userData.vrm;
 
-			// add the loaded vrm to the scene
-			scene.add( vrm.scene );
+      // add the loaded vrm to the scene
+      scene.add(vrm.scene);
 
-			// deal with vrm features
-			console.log( vrm );
+      // deal with vrm features
+      console.log(vrm);
+    },
 
-		} );
+    // called while loading is progressing
+    (progress) => console.log('Loading model...', 100.0 * (progress.loaded / progress.total), '%'),
 
-	},
-
-	// called while loading is progressing
-	( progress ) => console.log( 'Loading model...', 100.0 * ( progress.loaded / progress.total ), '%' ),
-
-	// called when loading has errors
-	( error ) => console.error( error )
-
-);
+    // called when loading has errors
+    (error) => console.error(error),
+  );
 </script>
 ```
 
@@ -101,38 +91,38 @@ Code like this:
 ```javascript
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { VRM } from '@pixiv/three-vrm';
+import { VRMLoaderPlugin } from '@pixiv/three-vrm';
 
 const scene = new THREE.Scene();
 
 const loader = new GLTFLoader();
+
+// Install GLTFLoader plugin
+loader.register((parser) => {
+  return new VRMLoaderPlugin(parser);
+});
+
 loader.load(
+  // URL of the VRM you want to load
+  '/models/VRM1_Constraint_Twist_Sample.vrm',
 
-	// URL of the VRM you want to load
-	'/models/three-vrm-girl.vrm',
+  // called when the resource is loaded
+  (gltf) => {
+    // retrieve a VRM instance from gltf
+    const vrm = gltf.userData.vrm;
 
-	// called when the resource is loaded
-	( gltf ) => {
+    // add the loaded vrm to the scene
+    scene.add(vrm.scene);
 
-		// generate a VRM instance from gltf
-		VRM.from( gltf ).then( ( vrm ) => {
+    // deal with vrm features
+    console.log(vrm);
+  },
 
-			// add the loaded vrm to the scene
-			scene.add( vrm.scene );
+  // called while loading is progressing
+  (progress) => console.log('Loading model...', 100.0 * (progress.loaded / progress.total), '%'),
 
-			// deal with vrm features
-			console.log( vrm );
-
-		} );
-
-	},
-
-	// called while loading is progressing
-	( progress ) => console.log( 'Loading model...', 100.0 * ( progress.loaded / progress.total ), '%' ),
-
-	// called when loading has errors
-	( error ) => console.error( error )
-
+  // called when loading has errors
+  (error) => console.error(error),
 );
 ```
 

@@ -19,13 +19,15 @@
 	</head>
 
 	<body>
-		<script src="https://unpkg.com/three@0.137.4/build/three.js"></script>
-		<script src="https://unpkg.com/three@0.137.4/examples/js/loaders/GLTFLoader.js"></script>
-		<script src="https://unpkg.com/three@0.137.4/examples/js/controls/OrbitControls.js"></script>
+		<script src="https://unpkg.com/three@0.140.2/build/three.js"></script>
+		<script src="https://unpkg.com/three@0.140.2/examples/js/loaders/GLTFLoader.js"></script>
+		<script src="https://unpkg.com/three@0.140.2/examples/js/controls/OrbitControls.js"></script>
 		<script src="../lib/three-vrm.js"></script>
 		<script>
+			/* global THREE_VRM */
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
+			renderer.outputEncoding = THREE.sRGBEncoding;
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			renderer.setPixelRatio( window.devicePixelRatio );
 			document.body.appendChild( renderer.domElement );
@@ -51,37 +53,42 @@
 			// gltf and vrm
 			let currentVrm = undefined;
 			const loader = new THREE.GLTFLoader();
+			loader.crossOrigin = 'anonymous';
+
+			loader.register( ( parser ) => {
+
+				return new THREE_VRM.VRMLoaderPlugin( parser );
+
+			} );
 
 			function load( url ) {
 
-				loader.crossOrigin = 'anonymous';
 				loader.load(
 
 					url,
 
 					( gltf ) => {
 
-						THREE.VRMUtils.removeUnnecessaryVertices( gltf.scene );
-						THREE.VRMUtils.removeUnnecessaryJoints( gltf.scene );
+						const vrm = gltf.userData.vrm;
 
-						THREE.VRM.from( gltf ).then( ( vrm ) => {
+						// calling these functions greatly improves the performance
+						THREE_VRM.VRMUtils.removeUnnecessaryVertices( gltf.scene );
+						THREE_VRM.VRMUtils.removeUnnecessaryJoints( gltf.scene );
 
-							if ( currentVrm ) {
+						if ( currentVrm ) {
 
-								scene.remove( currentVrm.scene );
-								currentVrm.dispose();
+							scene.remove( currentVrm.scene );
+							THREE_VRM.VRMUtils.deepDispose( currentVrm.scene );
 
-							}
+						}
 
-							currentVrm = vrm;
-							scene.add( vrm.scene );
+						currentVrm = vrm;
+						scene.add( vrm.scene );
 
-							vrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.Hips ).rotation.y = Math.PI;
-							vrm.springBoneManager.reset();
+						// rotate if the VRM is VRM0.0
+						THREE_VRM.VRMUtils.rotateVRM0( vrm );
 
-							console.log( vrm );
-
-						} );
+						console.log( vrm );
 
 					},
 
@@ -93,7 +100,7 @@
 
 			}
 
-			load( './models/three-vrm-girl.vrm' );
+			load( './models/VRM1_Constraint_Twist_Sample.vrm' );
 
 			// helpers
 			const gridHelper = new THREE.GridHelper( 10, 10 );
@@ -110,7 +117,12 @@
 
 				requestAnimationFrame( animate );
 
-				if ( currentVrm ) { currentVrm.update( clock.getDelta() ); }
+				if ( currentVrm ) {
+
+					currentVrm.update( clock.getDelta() );
+
+				}
+
 				renderer.render( scene, camera );
 
 			}
@@ -118,21 +130,31 @@
 			animate();
 
 			// dnd handler
-			window.addEventListener( 'dragover', function( event ) {
+			window.addEventListener( 'dragover', function ( event ) {
 
 				event.preventDefault();
 
 			} );
 
-			window.addEventListener( 'drop', function( event ) {
+			window.addEventListener( 'drop', function ( event ) {
 
 				event.preventDefault();
 
 				// read given file then convert it to blob url
 				const files = event.dataTransfer.files;
-				if ( !files ) { return; }
-				const file = files[0];
-				if ( !file ) { return; }
+				if ( ! files ) {
+
+					return;
+
+				}
+
+				const file = files[ 0 ];
+				if ( ! file ) {
+
+					return;
+
+				}
+
 				const blob = new Blob( [ file ], { type: "application/octet-stream" } );
 				const url = URL.createObjectURL( blob );
 				load( url );

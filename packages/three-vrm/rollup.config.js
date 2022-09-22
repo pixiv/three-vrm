@@ -4,6 +4,7 @@ import packageJson from './package.json';
 import serve from 'rollup-plugin-serve';
 import { string } from 'rollup-plugin-string';
 import { terser } from 'rollup-plugin-terser';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 
 // == constants ====================================================================================
@@ -17,13 +18,15 @@ const licenseName = 'MIT License';
 const licenseUri = 'https://github.com/pixiv/three-vrm/blob/release/LICENSE';
 
 /** output name of the module */
-const name = 'THREE_VRM';
+const globalName = 'THREE_VRM';
+
+/** filename of output */
+const filename = 'lib/three-vrm';
 
 // == envs =========================================================================================
 const NODE_ENV = process.env.NODE_ENV;
 const DEV = NODE_ENV === 'development';
-const ESM = process.env.ESM === '1';
-const SERVE = process.env.SERVE === '1';
+const WATCH = process.env.ROLLUP_WATCH === 'true';
 
 // == banner =======================================================================================
 const bannerTextDev = `/*!
@@ -44,26 +47,54 @@ const outro = `Object.assign(THREE, exports);`;
 // == serve ========================================================================================
 const serveOptions = {
   contentBase: '.',
+  port: process.env.PORT ?? 10001,
+};
+
+// == config =======================================================================================
+function createOutputOptions( { esm } ) {
+  let file = filename;
+  file += esm ? '.module' : '';
+  file += DEV ? '' : '.min';
+  file += '.js';
+
+  return {
+    file,
+    format: esm ? 'esm' : 'umd',
+    name: esm ? undefined : globalName,
+    banner: DEV ? bannerTextDev : bannerTextProd,
+    globals: esm ? undefined : { three: 'THREE' },
+    sourcemap: DEV ? 'inline' : false,
+    plugins: [
+      ...( DEV ? [] : [
+        terser(),
+      ] ),
+      ...( WATCH ? [
+        serve( serveOptions )
+      ] : [] ),
+    ],
+    outro: esm ? undefined : outro,
+  };
+}
+
+function createConfig( output ) {
+  return {
+    input: 'src/index.ts',
+    output,
+    external: [ 'three' ],
+    plugins: [
+      string({
+        include: ['**/*.frag', '**/*.vert'],
+      }),
+      typescript(),
+      nodeResolve(),
+    ],
+  };
 };
 
 // == output =======================================================================================
-export default {
-  input: 'src/index.ts',
-  output: {
-    format: ESM ? 'esm' : 'umd',
-    banner: DEV ? bannerTextDev : bannerTextProd,
-    sourcemap: DEV ? 'inline' : false,
-    globals: ESM ? undefined : { three: 'THREE' },
-    name: ESM ? undefined : name,
-    outro: ESM ? undefined : outro,
-  },
-  external: [ 'three' ],
-  plugins: [
-    string({
-      include: ['**/*.frag', '**/*.vert'],
-    }),
-    typescript(),
-    ...(DEV ? [] : [terser()]),
-    ...(SERVE ? [serve(serveOptions)] : []),
-  ],
-};
+export default [
+  createConfig( [
+    createOutputOptions( {} ),
+    createOutputOptions( { esm: true } ),
+  ] ),
+];
