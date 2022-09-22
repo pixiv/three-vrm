@@ -19,13 +19,15 @@
 	</head>
 
 	<body>
-		<script src="https://unpkg.com/three@0.137.4/build/three.js"></script>
-		<script src="https://unpkg.com/three@0.137.4/examples/js/loaders/GLTFLoader.js"></script>
-		<script src="https://unpkg.com/three@0.137.4/examples/js/controls/OrbitControls.js"></script>
+		<script src="https://unpkg.com/three@0.140.2/build/three.js"></script>
+		<script src="https://unpkg.com/three@0.140.2/examples/js/loaders/GLTFLoader.js"></script>
+		<script src="https://unpkg.com/three@0.140.2/examples/js/controls/OrbitControls.js"></script>
 		<script src="../lib/three-vrm.js"></script>
 		<script>
+			/* global THREE_VRM */
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
+			renderer.outputEncoding = THREE.sRGBEncoding;
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			renderer.setPixelRatio( window.devicePixelRatio );
 			document.body.appendChild( renderer.domElement );
@@ -49,30 +51,33 @@
 			scene.add( light );
 
 			// gltf and vrm
+			let currentVrm = undefined;
 			const loader = new THREE.GLTFLoader();
 			loader.crossOrigin = 'anonymous';
+
+			loader.register( ( parser ) => {
+
+				return new THREE_VRM.VRMLoaderPlugin( parser );
+
+			} );
+
 			loader.load(
 
 				// URL of the VRM you want to load
-				'./models/three-vrm-girl.vrm',
+				'./models/VRM1_Constraint_Twist_Sample.vrm',
 
 				// called when the resource is loaded
 				( gltf ) => {
 
+					const vrm = gltf.userData.vrm;
+
 					// calling these functions greatly improves the performance
-					THREE.VRMUtils.removeUnnecessaryVertices( gltf.scene );
-					THREE.VRMUtils.removeUnnecessaryJoints( gltf.scene );
+					THREE_VRM.VRMUtils.removeUnnecessaryVertices( gltf.scene );
+					THREE_VRM.VRMUtils.removeUnnecessaryJoints( gltf.scene );
 
-					// generate VRM instance from gltf
-					THREE.VRM.from( gltf ).then( ( vrm ) => {
-
-						console.log( vrm );
-						scene.add( vrm.scene );
-
-						vrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.Hips ).rotation.y = Math.PI;
-						vrm.springBoneManager.reset();
-
-					} );
+					currentVrm = vrm;
+					console.log( vrm );
+					scene.add( vrm.scene );
 
 				},
 
@@ -91,10 +96,22 @@
 			const axesHelper = new THREE.AxesHelper( 5 );
 			scene.add( axesHelper );
 
+			// animate
+			const clock = new THREE.Clock();
+			clock.start();
+
 			function animate() {
 
 				requestAnimationFrame( animate );
 
+				// update vrm components
+				if ( currentVrm ) {
+
+					currentVrm.update( clock.getDelta() );
+
+				}
+
+				// render
 				renderer.render( scene, camera );
 
 			}

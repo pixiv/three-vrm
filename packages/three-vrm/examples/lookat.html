@@ -19,13 +19,15 @@
 	</head>
 
 	<body>
-		<script src="https://unpkg.com/three@0.137.4/build/three.js"></script>
-		<script src="https://unpkg.com/three@0.137.4/examples/js/loaders/GLTFLoader.js"></script>
-		<script src="https://unpkg.com/three@0.137.4/examples/js/controls/OrbitControls.js"></script>
+		<script src="https://unpkg.com/three@0.140.2/build/three.js"></script>
+		<script src="https://unpkg.com/three@0.140.2/examples/js/loaders/GLTFLoader.js"></script>
+		<script src="https://unpkg.com/three@0.140.2/examples/js/controls/OrbitControls.js"></script>
 		<script src="../lib/three-vrm.js"></script>
 		<script>
+			/* global THREE_VRM */
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
+			renderer.outputEncoding = THREE.sRGBEncoding;
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			renderer.setPixelRatio( window.devicePixelRatio );
 			document.body.appendChild( renderer.domElement );
@@ -56,28 +58,30 @@
 			let currentVrm = undefined;
 			const loader = new THREE.GLTFLoader();
 			loader.crossOrigin = 'anonymous';
+
+			loader.register( ( parser ) => {
+
+				return new THREE_VRM.VRMLoaderPlugin( parser );
+
+			} );
+
 			loader.load(
 
-				'./models/three-vrm-girl.vrm',
+				'./models/VRM1_Constraint_Twist_Sample.vrm',
 
 				( gltf ) => {
 
-					THREE.VRMUtils.removeUnnecessaryVertices( gltf.scene );
-					THREE.VRMUtils.removeUnnecessaryJoints( gltf.scene );
+					const vrm = gltf.userData.vrm;
 
-					THREE.VRM.from( gltf ).then( ( vrm ) => {
+					THREE_VRM.VRMUtils.removeUnnecessaryVertices( gltf.scene );
+					THREE_VRM.VRMUtils.removeUnnecessaryJoints( gltf.scene );
 
-						scene.add( vrm.scene );
-						currentVrm = vrm;
+					scene.add( vrm.scene );
+					currentVrm = vrm;
 
-						vrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.Hips ).rotation.y = Math.PI;
-						vrm.springBoneManager.reset();
+					vrm.lookAt.target = lookAtTarget;
 
-						vrm.lookAt.target = lookAtTarget;
-
-						console.log( vrm );
-
-					} );
+					console.log( vrm );
 
 				},
 
@@ -119,8 +123,8 @@
 			// mouse listener
 			window.addEventListener( 'mousemove', ( event ) => {
 
-				lookAtTarget.position.x =  10.0 * ( ( event.clientX - 0.5 * window.innerWidth ) / window.innerHeight );
-				lookAtTarget.position.y = -10.0 * ( ( event.clientY - 0.5 * window.innerHeight ) / window.innerHeight );
+				lookAtTarget.position.x = 10.0 * ( ( event.clientX - 0.5 * window.innerWidth ) / window.innerHeight );
+				lookAtTarget.position.y = - 10.0 * ( ( event.clientY - 0.5 * window.innerHeight ) / window.innerHeight );
 
 			} );
 		</script>

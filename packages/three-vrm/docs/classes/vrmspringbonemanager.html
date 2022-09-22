@@ -65,13 +65,6 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-comment">
-				<div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>A class manages every spring bones on a VRM.</p>
-					</div>
-				</div>
-			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -90,20 +83,34 @@
 								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="vrmspringbonemanager.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section ">
+						<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="vrmspringbonemanager.html#collidergroups" class="tsd-kind-icon">collider<wbr>Groups</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="vrmspringbonemanager.html#springbonegrouplist" class="tsd-kind-icon">spring<wbr>Bone<wbr>Group<wbr>List</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="vrmspringbonemanager.html#_getdependencies" class="tsd-kind-icon">_get<wbr>Dependencies</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="vrmspringbonemanager.html#_joints" class="tsd-kind-icon">_joints</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="vrmspringbonemanager.html#_objectspringbonesmap" class="tsd-kind-icon">_object<wbr>Spring<wbr>Bones<wbr>Map</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="vrmspringbonemanager.html#_processspringbone" class="tsd-kind-icon">_process<wbr>Spring<wbr>Bone</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Accessors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="vrmspringbonemanager.html#collidergroups" class="tsd-kind-icon">collider<wbr>Groups</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="vrmspringbonemanager.html#colliders" class="tsd-kind-icon">colliders</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="vrmspringbonemanager.html#joints" class="tsd-kind-icon">joints</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="vrmspringbonemanager.html#springbones" class="tsd-kind-icon">spring<wbr>Bones</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="vrmspringbonemanager.html#_updateworldmatrix" class="tsd-kind-icon">_update<wbr>World<wbr>Matrix</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrmspringbonemanager.html#lateupdate" class="tsd-kind-icon">late<wbr>Update</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrmspringbonemanager.html#addjoint" class="tsd-kind-icon">add<wbr>Joint</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrmspringbonemanager.html#addspringbone" class="tsd-kind-icon">add<wbr>Spring<wbr>Bone</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrmspringbonemanager.html#deletejoint" class="tsd-kind-icon">delete<wbr>Joint</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrmspringbonemanager.html#deletespringbone" class="tsd-kind-icon">delete<wbr>Spring<wbr>Bone</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrmspringbonemanager.html#reset" class="tsd-kind-icon">reset</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrmspringbonemanager.html#setcenter" class="tsd-kind-icon">set<wbr>Center</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrmspringbonemanager.html#setinitstate" class="tsd-kind-icon">set<wbr>Init<wbr>State</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="vrmspringbonemanager.html#update" class="tsd-kind-icon">update</a></li>
 							</ul>
 						</section>
 					</div>
@@ -115,94 +122,193 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new VRMSpring<wbr>Bone<wbr>Manager<span class="tsd-signature-symbol">(</span>colliderGroups<span class="tsd-signature-symbol">: </span><a href="../interfaces/vrmspringbonecollidergroup.html" class="tsd-signature-type" data-tsd-kind="Interface">VRMSpringBoneColliderGroup</a><span class="tsd-signature-symbol">[]</span>, springBoneGroupList<span class="tsd-signature-symbol">: </span><a href="../modules.html#vrmspringbonegroup" class="tsd-signature-type" data-tsd-kind="Type alias">VRMSpringBoneGroup</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="vrmspringbonemanager.html" class="tsd-signature-type" data-tsd-kind="Class">VRMSpringBoneManager</a></li>
+						<li class="tsd-signature tsd-kind-icon">new VRMSpring<wbr>Bone<wbr>Manager<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="vrmspringbonemanager.html" class="tsd-signature-type" data-tsd-kind="Class">VRMSpringBoneManager</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/48019eb/packages/three-vrm/src/springbone/VRMSpringBoneManager.ts#L14">packages/three-vrm/src/springbone/VRMSpringBoneManager.ts:14</a></li>
-								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Create a new <a href="vrmspringbonemanager.html">VRMSpringBoneManager</a></p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>colliderGroups: <a href="../interfaces/vrmspringbonecollidergroup.html" class="tsd-signature-type" data-tsd-kind="Interface">VRMSpringBoneColliderGroup</a><span class="tsd-signature-symbol">[]</span></h5>
-								</li>
-								<li>
-									<h5>springBoneGroupList: <a href="../modules.html#vrmspringbonegroup" class="tsd-signature-type" data-tsd-kind="Type alias">VRMSpringBoneGroup</a><span class="tsd-signature-symbol">[]</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>An array of <a href="../modules.html#vrmspringbonegroup">VRMSpringBoneGroup</a></p>
-									</div>
-								</li>
-							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="vrmspringbonemanager.html" class="tsd-signature-type" data-tsd-kind="Class">VRMSpringBoneManager</a></h4>
 						</li>
 					</ul>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group ">
+			<section class="tsd-panel-group tsd-member-group tsd-is-private tsd-is-private-protected">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="collidergroups" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> collider<wbr>Groups</h3>
-					<div class="tsd-signature tsd-kind-icon">collider<wbr>Groups<span class="tsd-signature-symbol">:</span> <a href="../interfaces/vrmspringbonecollidergroup.html" class="tsd-signature-type" data-tsd-kind="Interface">VRMSpringBoneColliderGroup</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="_getdependencies" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _get<wbr>Dependencies</h3>
+					<div class="tsd-signature tsd-kind-icon">_get<wbr>Dependencies<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/48019eb/packages/three-vrm/src/springbone/VRMSpringBoneManager.ts#L13">packages/three-vrm/src/springbone/VRMSpringBoneManager.ts:13</a></li>
+							<li>Defined in packages/three-vrm-springbone/types/VRMSpringBoneManager.d.ts:46</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Return a set of objects that are dependant of given spring bone.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>param</dt>
+							<dd><p>A spring bone</p>
+							</dd>
+							<dt>returns</dt>
+							<dd><p>A set of objects that are dependant of given spring bone</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="_joints" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _joints</h3>
+					<div class="tsd-signature tsd-kind-icon">_joints<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in packages/three-vrm-springbone/types/VRMSpringBoneManager.d.ts:5</li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="springbonegrouplist" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> spring<wbr>Bone<wbr>Group<wbr>List</h3>
-					<div class="tsd-signature tsd-kind-icon">spring<wbr>Bone<wbr>Group<wbr>List<span class="tsd-signature-symbol">:</span> <a href="../modules.html#vrmspringbonegroup" class="tsd-signature-type" data-tsd-kind="Type alias">VRMSpringBoneGroup</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="_objectspringbonesmap" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _object<wbr>Spring<wbr>Bones<wbr>Map</h3>
+					<div class="tsd-signature tsd-kind-icon">_object<wbr>Spring<wbr>Bones<wbr>Map<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/48019eb/packages/three-vrm/src/springbone/VRMSpringBoneManager.ts#L14">packages/three-vrm/src/springbone/VRMSpringBoneManager.ts:14</a></li>
+							<li>Defined in packages/three-vrm-springbone/types/VRMSpringBoneManager.d.ts:13</li>
 						</ul>
 					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="_processspringbone" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _process<wbr>Spring<wbr>Bone</h3>
+					<div class="tsd-signature tsd-kind-icon">_process<wbr>Spring<wbr>Bone<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in packages/three-vrm-springbone/types/VRMSpringBoneManager.d.ts:40</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Update a spring bone.
+								If there are other spring bone that are dependant, it will try to update them recursively.
+								It updates matrixWorld of all ancestors and myself.
+							It might throw an error if there are circular dependencies.</p>
+						</div>
+						<p>Intended to be used in <a href="vrmspringbonemanager.html#update">update</a> and <a href="vrmspringbonemanager.html#_processspringbone">_processSpringBone</a> itself recursively.</p>
+						<dl class="tsd-comment-tags">
+							<dt>param</dt>
+							<dd><p>A springBone you want to update</p>
+							</dd>
+							<dt>param</dt>
+							<dd><p>Set of springBones that are already tried to be updated</p>
+							</dd>
+							<dt>param</dt>
+							<dd><p>Set of springBones that are already up to date</p>
+							</dd>
+							<dt>param</dt>
+							<dd><p>Set of object3D whose matrixWorld is updated</p>
+							</dd>
+						</dl>
+					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
-					<a name="_updateworldmatrix" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _update<wbr>World<wbr>Matrix</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
-						<li class="tsd-signature tsd-kind-icon">_update<wbr>World<wbr>Matrix<span class="tsd-signature-symbol">(</span>updatedObjectSet<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Set</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Object3D</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Event</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, node<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Object3D</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Event</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+				<h2>Accessors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+					<a name="collidergroups" class="tsd-anchor"></a>
+					<h3>collider<wbr>Groups</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> colliderGroups<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/vrmspringbonecollidergroup.html" class="tsd-signature-type" data-tsd-kind="Interface">VRMSpringBoneColliderGroup</a><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/48019eb/packages/three-vrm/src/springbone/VRMSpringBoneManager.ts#L75">packages/three-vrm/src/springbone/VRMSpringBoneManager.ts:75</a></li>
+									<li>Defined in packages/three-vrm-springbone/types/VRMSpringBoneManager.d.ts:11</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/vrmspringbonecollidergroup.html" class="tsd-signature-type" data-tsd-kind="Interface">VRMSpringBoneColliderGroup</a><span class="tsd-signature-symbol">[]</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+					<a name="colliders" class="tsd-anchor"></a>
+					<h3>colliders</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> colliders<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="vrmspringbonecollider.html" class="tsd-signature-type" data-tsd-kind="Class">VRMSpringBoneCollider</a><span class="tsd-signature-symbol">[]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in packages/three-vrm-springbone/types/VRMSpringBoneManager.d.ts:12</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <a href="vrmspringbonecollider.html" class="tsd-signature-type" data-tsd-kind="Class">VRMSpringBoneCollider</a><span class="tsd-signature-symbol">[]</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+					<a name="joints" class="tsd-anchor"></a>
+					<h3>joints</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> joints<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Set</span><span class="tsd-signature-symbol">&lt;</span><a href="vrmspringbonejoint.html" class="tsd-signature-type" data-tsd-kind="Class">VRMSpringBoneJoint</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in packages/three-vrm-springbone/types/VRMSpringBoneManager.d.ts:6</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Set</span><span class="tsd-signature-symbol">&lt;</span><a href="vrmspringbonejoint.html" class="tsd-signature-type" data-tsd-kind="Class">VRMSpringBoneJoint</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+					<a name="springbones" class="tsd-anchor"></a>
+					<h3>spring<wbr>Bones</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> springBones<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Set</span><span class="tsd-signature-symbol">&lt;</span><a href="vrmspringbonejoint.html" class="tsd-signature-type" data-tsd-kind="Class">VRMSpringBoneJoint</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in packages/three-vrm-springbone/types/VRMSpringBoneManager.d.ts:10</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Update worldMatrix of given object, respecting its ancestors.
-									called before update springbone.</p>
-								</div>
+								<dl class="tsd-comment-tags">
+									<dt>deprecated</dt>
+									<dd><p>Use <a href="vrmspringbonemanager.html#joints">joints</a> instead.</p>
+									</dd>
+								</dl>
 							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Set</span><span class="tsd-signature-symbol">&lt;</span><a href="vrmspringbonejoint.html" class="tsd-signature-type" data-tsd-kind="Class">VRMSpringBoneJoint</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="addjoint" class="tsd-anchor"></a>
+					<h3>add<wbr>Joint</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Joint<span class="tsd-signature-symbol">(</span>joint<span class="tsd-signature-symbol">: </span><a href="vrmspringbonejoint.html" class="tsd-signature-type" data-tsd-kind="Class">VRMSpringBoneJoint</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in packages/three-vrm-springbone/types/VRMSpringBoneManager.d.ts:14</li>
+								</ul>
+							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>updatedObjectSet: <span class="tsd-signature-type">Set</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Object3D</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Event</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Set of node which worldMatrix is updated.</p>
-									</div>
-								</li>
-								<li>
-									<h5>node: <span class="tsd-signature-type">Object3D</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Event</span><span class="tsd-signature-symbol">&gt;</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>target bone node.</p>
-									</div>
+									<h5>joint: <a href="vrmspringbonejoint.html" class="tsd-signature-type" data-tsd-kind="Class">VRMSpringBoneJoint</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -210,30 +316,82 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="lateupdate" class="tsd-anchor"></a>
-					<h3>late<wbr>Update</h3>
+					<a name="addspringbone" class="tsd-anchor"></a>
+					<h3>add<wbr>Spring<wbr>Bone</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">late<wbr>Update<span class="tsd-signature-symbol">(</span>delta<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Spring<wbr>Bone<span class="tsd-signature-symbol">(</span>joint<span class="tsd-signature-symbol">: </span><a href="vrmspringbonejoint.html" class="tsd-signature-type" data-tsd-kind="Class">VRMSpringBoneJoint</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/48019eb/packages/three-vrm/src/springbone/VRMSpringBoneManager.ts#L44">packages/three-vrm/src/springbone/VRMSpringBoneManager.ts:44</a></li>
+									<li>Defined in packages/three-vrm-springbone/types/VRMSpringBoneManager.d.ts:18</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Update every spring bone attached to this manager.</p>
-								</div>
+								<dl class="tsd-comment-tags">
+									<dt>deprecated</dt>
+									<dd><p>Use <a href="vrmspringbonemanager.html#addjoint">addJoint</a> instead.</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>delta: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>deltaTime</p>
-									</div>
+									<h5>joint: <a href="vrmspringbonejoint.html" class="tsd-signature-type" data-tsd-kind="Class">VRMSpringBoneJoint</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="deletejoint" class="tsd-anchor"></a>
+					<h3>delete<wbr>Joint</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">delete<wbr>Joint<span class="tsd-signature-symbol">(</span>joint<span class="tsd-signature-symbol">: </span><a href="vrmspringbonejoint.html" class="tsd-signature-type" data-tsd-kind="Class">VRMSpringBoneJoint</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in packages/three-vrm-springbone/types/VRMSpringBoneManager.d.ts:19</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>joint: <a href="vrmspringbonejoint.html" class="tsd-signature-type" data-tsd-kind="Class">VRMSpringBoneJoint</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="deletespringbone" class="tsd-anchor"></a>
+					<h3>delete<wbr>Spring<wbr>Bone</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">delete<wbr>Spring<wbr>Bone<span class="tsd-signature-symbol">(</span>joint<span class="tsd-signature-symbol">: </span><a href="vrmspringbonejoint.html" class="tsd-signature-type" data-tsd-kind="Class">VRMSpringBoneJoint</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in packages/three-vrm-springbone/types/VRMSpringBoneManager.d.ts:23</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<dl class="tsd-comment-tags">
+									<dt>deprecated</dt>
+									<dd><p>Use <a href="vrmspringbonemanager.html#deletejoint">deleteJoint</a> instead.</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>joint: <a href="vrmspringbonejoint.html" class="tsd-signature-type" data-tsd-kind="Class">VRMSpringBoneJoint</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -250,44 +408,47 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/48019eb/packages/three-vrm/src/springbone/VRMSpringBoneManager.ts#L58">packages/three-vrm/src/springbone/VRMSpringBoneManager.ts:58</a></li>
+									<li>Defined in packages/three-vrm-springbone/types/VRMSpringBoneManager.d.ts:25</li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Reset every spring bone attached to this manager.</p>
-								</div>
-							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="setcenter" class="tsd-anchor"></a>
-					<h3>set<wbr>Center</h3>
+					<a name="setinitstate" class="tsd-anchor"></a>
+					<h3>set<wbr>Init<wbr>State</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">set<wbr>Center<span class="tsd-signature-symbol">(</span>root<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Object3D</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Event</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Init<wbr>State<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pixiv/three-vrm/blob/48019eb/packages/three-vrm/src/springbone/VRMSpringBoneManager.ts#L31">packages/three-vrm/src/springbone/VRMSpringBoneManager.ts:31</a></li>
+									<li>Defined in packages/three-vrm-springbone/types/VRMSpringBoneManager.d.ts:24</li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Set all bones be calculated based on the space relative from this object.
-									If <code>null</code> is given, springbone will be calculated in world space.</p>
-								</div>
-							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="update" class="tsd-anchor"></a>
+					<h3>update</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">update<span class="tsd-signature-symbol">(</span>delta<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in packages/three-vrm-springbone/types/VRMSpringBoneManager.d.ts:26</li>
+								</ul>
+							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>root: <span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Object3D</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Event</span><span class="tsd-signature-symbol">&gt;</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Root object, or <code>null</code></p>
-									</div>
+									<h5>delta: <span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -314,23 +475,50 @@
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
 								<a href="vrmspringbonemanager.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="vrmspringbonemanager.html#_getdependencies" class="tsd-kind-icon">_get<wbr>Dependencies</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="vrmspringbonemanager.html#_joints" class="tsd-kind-icon">_joints</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="vrmspringbonemanager.html#_objectspringbonesmap" class="tsd-kind-icon">_object<wbr>Spring<wbr>Bones<wbr>Map</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="vrmspringbonemanager.html#_processspringbone" class="tsd-kind-icon">_process<wbr>Spring<wbr>Bone</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
 								<a href="vrmspringbonemanager.html#collidergroups" class="tsd-kind-icon">collider<wbr>Groups</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="vrmspringbonemanager.html#springbonegrouplist" class="tsd-kind-icon">spring<wbr>Bone<wbr>Group<wbr>List</a>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="vrmspringbonemanager.html#colliders" class="tsd-kind-icon">colliders</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
-								<a href="vrmspringbonemanager.html#_updateworldmatrix" class="tsd-kind-icon">_update<wbr>World<wbr>Matrix</a>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="vrmspringbonemanager.html#joints" class="tsd-kind-icon">joints</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="vrmspringbonemanager.html#springbones" class="tsd-kind-icon">spring<wbr>Bones</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="vrmspringbonemanager.html#lateupdate" class="tsd-kind-icon">late<wbr>Update</a>
+								<a href="vrmspringbonemanager.html#addjoint" class="tsd-kind-icon">add<wbr>Joint</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="vrmspringbonemanager.html#addspringbone" class="tsd-kind-icon">add<wbr>Spring<wbr>Bone</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="vrmspringbonemanager.html#deletejoint" class="tsd-kind-icon">delete<wbr>Joint</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="vrmspringbonemanager.html#deletespringbone" class="tsd-kind-icon">delete<wbr>Spring<wbr>Bone</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="vrmspringbonemanager.html#reset" class="tsd-kind-icon">reset</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="vrmspringbonemanager.html#setcenter" class="tsd-kind-icon">set<wbr>Center</a>
+								<a href="vrmspringbonemanager.html#setinitstate" class="tsd-kind-icon">set<wbr>Init<wbr>State</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="vrmspringbonemanager.html#update" class="tsd-kind-icon">update</a>
 							</li>
 						</ul>
 					</li>
@@ -352,25 +540,21 @@
 				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
 			</ul>
 			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+			</ul>
+			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
 			</ul>
 		</div>
 	</div>

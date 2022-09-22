@@ -1,0 +1,1 @@
+export { VRMMaterialsHDREmissiveMultiplierLoaderPlugin } from './VRMMaterialsHDREmissiveMultiplierLoaderPlugin';

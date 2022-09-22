@@ -19,13 +19,15 @@
 	</head>
 
 	<body>
-		<script src="https://unpkg.com/three@0.137.4/build/three.js"></script>
-		<script src="https://unpkg.com/three@0.137.4/examples/js/loaders/GLTFLoader.js"></script>
-		<script src="https://unpkg.com/three@0.137.4/examples/js/controls/OrbitControls.js"></script>
+		<script src="https://unpkg.com/three@0.140.2/build/three.js"></script>
+		<script src="https://unpkg.com/three@0.140.2/examples/js/loaders/GLTFLoader.js"></script>
+		<script src="https://unpkg.com/three@0.140.2/examples/js/controls/OrbitControls.js"></script>
 		<script src="../lib/three-vrm.js"></script>
 		<script>
+			/* global THREE_VRM */
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
+			renderer.outputEncoding = THREE.sRGBEncoding;
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			renderer.setPixelRatio( window.devicePixelRatio );
 			document.body.appendChild( renderer.domElement );
@@ -52,32 +54,34 @@
 			let currentVrm = undefined;
 			const loader = new THREE.GLTFLoader();
 			loader.crossOrigin = 'anonymous';
+
+			loader.register( ( parser ) => {
+
+				return new THREE.VRMLoaderPlugin( parser );
+
+			} );
+
 			loader.load(
 
-				'./models/three-vrm-girl.vrm',
+				'./models/VRM1_Constraint_Twist_Sample.vrm',
 
 				( gltf ) => {
 
-					THREE.VRMUtils.removeUnnecessaryVertices( gltf.scene );
-					THREE.VRMUtils.removeUnnecessaryJoints( gltf.scene );
+					const vrm = gltf.userData.vrm;
 
-					THREE.VRM.from( gltf ).then( ( vrm ) => {
+					THREE_VRM.VRMUtils.removeUnnecessaryVertices( gltf.scene );
+					THREE_VRM.VRMUtils.removeUnnecessaryJoints( gltf.scene );
 
-						scene.add( vrm.scene );
-            currentVrm = vrm;
+					scene.add( vrm.scene );
+					currentVrm = vrm;
 
-						vrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.Hips ).rotation.y = Math.PI;
-						vrm.springBoneManager.reset();
+					// generate firstperson mesh
+					vrm.firstPerson.setup();
 
-            // generate firstperson mesh
-            vrm.firstPerson.setup();
+					// set to first person layer mode
+					toggleLayer( true );
 
-            // set to first person layer mode
-            toggleLayer( true );
-
-						console.log( vrm );
-
-					} );
+					console.log( vrm );
 
 				},
 
@@ -105,48 +109,48 @@
 
 			}
 
-      animate();
+			animate();
 
-      // toggle layer
-      let isFirstPerson = false;
+			// toggle layer
+			let isFirstPerson = false;
 
-      function toggleLayer( set ) {
+			function toggleLayer( set ) {
 
-        if ( typeof set === 'boolean' )  {
+				if ( typeof set === 'boolean' ) {
 
-          isFirstPerson = set;
+					isFirstPerson = set;
 
-        } else {
+				} else {
 
-          isFirstPerson = !isFirstPerson;
+					isFirstPerson = ! isFirstPerson;
 
-        }
+				}
 
-        if ( currentVrm ) {
+				if ( currentVrm ) {
 
-          if ( isFirstPerson ) {
+					if ( isFirstPerson ) {
+			
+						camera.layers.enable( currentVrm.firstPerson.firstPersonOnlyLayer );
+						camera.layers.disable( currentVrm.firstPerson.thirdPersonOnlyLayer );
 
-            camera.layers.enable(currentVrm.firstPerson.firstPersonOnlyLayer);
-            camera.layers.disable(currentVrm.firstPerson.thirdPersonOnlyLayer);
+					} else {
 
-          } else {
+						camera.layers.disable( currentVrm.firstPerson.firstPersonOnlyLayer );
+						camera.layers.enable( currentVrm.firstPerson.thirdPersonOnlyLayer );
 
-            camera.layers.disable(currentVrm.firstPerson.firstPersonOnlyLayer);
-            camera.layers.enable(currentVrm.firstPerson.thirdPersonOnlyLayer);
+					}
 
-          }
+				}
 
-        }
+			}
 
-      }
+// mouse listener
 
-      // mouse listener
+window.addEventListener( 'keydown', () => {
 
-      window.addEventListener( 'keydown', () => {
+	toggleLayer();
 
-        toggleLayer();
-
-      } );
+} );
 		</script>
 	</body>
 </html>
