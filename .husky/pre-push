@@ -7,6 +7,7 @@ while read local_ref local_sha1 remote_ref remote_sha1
 do
   if [[ "${remote_ref##refs/heads/}" = $DEV ]]; then
     echo "[warn] Push to dev branch, continue? (y/N)"
+    exec < /dev/tty
     read answer
     case $answer in
         'y' | 'yes')  exit 0;;
@@ -14,6 +15,7 @@ do
     esac
   elif [[ "${remote_ref##refs/heads/}" = $TEST ]]; then
     echo "[warn] Push to dev branch, continue? (y/N)"
+    exec < /dev/tty
     read answer
     case $answer in
         'y' | 'yes')  exit 0;;
