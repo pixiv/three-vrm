@@ -1,5 +1,7 @@
 # `@pixiv/three-vrm`
 
+[![@pixiv/three-vrm on npm](https://img.shields.io/npm/v/@pixiv/three-vrm)](https://www.npmjs.com/package/@pixiv/three-vrm)
+
 Use [VRM](https://vrm.dev/) on [three.js](https://threejs.org/)
 
 ![three-vrm](https://github.com/pixiv/three-vrm/raw/dev/three-vrm.png)
@@ -8,11 +10,19 @@ Use [VRM](https://vrm.dev/) on [three.js](https://threejs.org/)
 
 [Examples](https://pixiv.github.io/three-vrm/packages/three-vrm/examples)
 
-[Documentation](docs/README.md)
-
-- > TODO: Fix URL
+[Documentations](https://github.com/pixiv/three-vrm/tree/dev/docs/README.md)
 
 [API Reference](https://pixiv.github.io/three-vrm/packages/three-vrm/docs)
+
+## v1
+
+**three-vrm v1 has been released!**
+
+three-vrm v1 supports [VRM1.0](https://vrm.dev/vrm1/), which is a new version of VRM format (the previous version of VRM is also supported, don't worry!).
+It also adopts the GLTFLoader plugin system which is a relatively new feature of GLTFLoader.
+
+There are a lot of breaking changes!
+See [the migration guide](https://github.com/pixiv/three-vrm/blob/dev/docs/migration-guide-1.0.md) for more info.
 
 ## How to Use
 
