@@ -17,7 +17,7 @@ export class VRMExpression extends THREE.Object3D {
   public weight = 0.0;
 
   /**
-   * Interpret non-zero values as 1.
+   * Interpret values greater than 0.5 as 1.0, ortherwise 0.0.
    */
   public isBinary = false;
 
@@ -109,7 +109,7 @@ export class VRMExpression extends THREE.Object3D {
      */
     multiplier?: number;
   }): void {
-    let actualWeight = this.isBinary ? (this.weight === 0.0 ? 0.0 : 1.0) : this.weight;
+    let actualWeight = this.isBinary ? (this.weight <= 0.5 ? 0.0 : 1.0) : this.weight;
     actualWeight *= options?.multiplier ?? 1.0;
 
     this._binds.forEach((bind) => bind.applyWeight(actualWeight));
