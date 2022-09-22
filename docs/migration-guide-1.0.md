@@ -1,6 +1,6 @@
-# Migration Guide `v0.6.x` -> `v1.0.0-beta.19`
+# Migration Guide `v0.6.x` -> `v1.0.0`
 
-`v0.6.x` -> `v1.0.0-beta.19`
+`v0.6.x` -> `v1.0.0`
 
 ## Overall
 
