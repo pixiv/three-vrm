@@ -29,12 +29,12 @@ export const VRMHumanBoneParentMap: { [bone in VRMHumanBoneName]: VRMHumanBoneNa
   rightFoot: 'rightLowerLeg',
   rightToes: 'rightFoot',
 
-  leftShoulder: 'chest',
+  leftShoulder: 'upperChest',
   leftUpperArm: 'leftShoulder',
   leftLowerArm: 'leftUpperArm',
   leftHand: 'leftLowerArm',
 
-  rightShoulder: 'chest',
+  rightShoulder: 'upperChest',
   rightUpperArm: 'rightShoulder',
   rightLowerArm: 'rightUpperArm',
   rightHand: 'rightLowerArm',
