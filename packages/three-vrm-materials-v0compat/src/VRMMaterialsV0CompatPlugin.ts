@@ -156,6 +156,7 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
     const giEqualizationFactor = giIntensityFactor ? 1.0 - giIntensityFactor : undefined;
 
     const matcapTextureIndex = materialProperties.textureProperties?.['_SphereAdd'];
+    const matcapFactor = matcapTextureIndex != null ? [1.0, 1.0, 1.0] : undefined;
     const matcapTexture =
       matcapTextureIndex != null
         ? {
@@ -233,6 +234,7 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
       shadingShiftFactor,
       shadingToonyFactor,
       giEqualizationFactor,
+      matcapFactor,
       matcapTexture,
       rimLightingMixFactor,
       rimMultiplyTexture,
