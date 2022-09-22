@@ -5,7 +5,7 @@ import { VRMHumanBoneName } from './VRMHumanBoneName';
 /**
  * An object that maps from {@link VRMHumanBoneName} to its parent {@link VRMHumanBoneName}.
  *
- * Ref: https://github.com/vrm-c/vrm-specification/blob/master/specification/VRMC_vrm-1.0-beta/humanoid.md
+ * Ref: https://github.com/vrm-c/vrm-specification/blob/master/specification/VRMC_vrm-1.0/humanoid.md
  */
 export const VRMHumanBoneParentMap: { [bone in VRMHumanBoneName]: VRMHumanBoneName | null } = {
   hips: null,

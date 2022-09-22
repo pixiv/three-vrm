@@ -269,7 +269,7 @@
   ],
   "extensions": {
     "VRMC_springBone": {
-      "specVersion": "1.0-beta",
+      "specVersion": "1.0",
       "colliders": [
         {
           "node": 5,

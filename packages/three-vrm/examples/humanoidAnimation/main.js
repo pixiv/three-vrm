@@ -25,7 +25,7 @@ const light = new THREE.DirectionalLight( 0xffffff );
 light.position.set( 1.0, 1.0, 1.0 ).normalize();
 scene.add( light );
 
-const defaultModelUrl = '../models/three-vrm-girl.vrm';
+const defaultModelUrl = '../models/VRM1_Constraint_Twist_Sample.vrm';
 
 // gltf and vrm
 let currentVrm = undefined;

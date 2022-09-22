@@ -13,6 +13,11 @@ import { VRMSpringBoneManager } from './VRMSpringBoneManager';
 import type { VRMSpringBoneJointSettings } from './VRMSpringBoneJointSettings';
 import { GLTF as GLTFSchema } from '@gltf-transform/core';
 
+/**
+ * Possible spec versions it recognizes.
+ */
+const POSSIBLE_SPEC_VERSIONS = new Set(['1.0', '1.0-beta']);
+
 export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
   public static readonly EXTENSION_NAME = 'VRMC_springBone';
 
@@ -88,7 +93,10 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
     }
 
     const specVersion = extension.specVersion;
-    if (specVersion !== '1.0-beta') {
+    if (!POSSIBLE_SPEC_VERSIONS.has(specVersion)) {
+      console.warn(
+        `VRMSpringBoneLoaderPlugin: Unknown ${VRMSpringBoneLoaderPlugin.EXTENSION_NAME} specVersion "${specVersion}"`,
+      );
       return null;
     }
 

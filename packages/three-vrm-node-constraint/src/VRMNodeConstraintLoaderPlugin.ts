@@ -9,6 +9,11 @@ import { GLTF as GLTFSchema } from '@gltf-transform/core';
 import { VRMAimConstraint } from './VRMAimConstraint';
 import { VRMRollConstraint } from './VRMRollConstraint';
 
+/**
+ * Possible spec versions it recognizes.
+ */
+const POSSIBLE_SPEC_VERSIONS = new Set(['1.0', '1.0-beta']);
+
 export class VRMNodeConstraintLoaderPlugin implements GLTFLoaderPlugin {
   public static readonly EXTENSION_NAME = 'VRMC_node_constraint';
 
@@ -67,7 +72,10 @@ export class VRMNodeConstraintLoaderPlugin implements GLTFLoaderPlugin {
       }
 
       const specVersion = extension.specVersion;
-      if (specVersion !== '1.0-beta') {
+      if (!POSSIBLE_SPEC_VERSIONS.has(specVersion)) {
+        console.warn(
+          `VRMNodeConstraintLoaderPlugin: Unknown ${VRMNodeConstraintLoaderPlugin.EXTENSION_NAME} specVersion "${specVersion}"`,
+        );
         return;
       }
 

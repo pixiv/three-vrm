@@ -225,7 +225,7 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
     const uvAnimationRotationSpeedFactor = materialProperties.floatProperties?.['_UvAnimRotation'];
 
     const mtoonExtension: V1MToonSchema.VRMCMaterialsMToon = {
-      specVersion: '1.0-beta',
+      specVersion: '1.0',
       transparentWithZWrite,
       renderQueueOffsetNumber,
       shadeColorFactor,
@@ -299,7 +299,7 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
 
     // use mtoon instead of unlit, since there might be VRM0.0 specific features that are not supported by gltf
     const mtoonExtension: V1MToonSchema.VRMCMaterialsMToon = {
-      specVersion: '1.0-beta',
+      specVersion: '1.0',
       transparentWithZWrite: isTransparentZWrite,
       renderQueueOffsetNumber,
       shadeColorFactor: baseColorFactor,

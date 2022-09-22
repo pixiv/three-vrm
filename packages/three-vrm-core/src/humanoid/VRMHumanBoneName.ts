@@ -3,7 +3,7 @@
 /**
  * The names of {@link VRMHumanoid} bone names.
  *
- * Ref: https://github.com/vrm-c/vrm-specification/blob/master/specification/VRMC_vrm-1.0-beta/humanoid.md
+ * Ref: https://github.com/vrm-c/vrm-specification/blob/master/specification/VRMC_vrm-1.0/humanoid.md
  */
 export const VRMHumanBoneName = {
   Hips: 'hips',

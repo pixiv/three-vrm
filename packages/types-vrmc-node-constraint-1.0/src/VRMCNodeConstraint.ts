@@ -7,7 +7,7 @@ export interface VRMCNodeConstraint {
   /**
    * Specification version of VRMC_node_constraint
    */
-  specVersion: '1.0-beta';
+  specVersion: '1.0' | '1.0-beta';
 
   constraint: Constraint;
 
