@@ -423,7 +423,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
         shadingShiftTextureScale: { value: null },
         shadingToonyFactor: { value: 0.9 },
         giEqualizationFactor: { value: 0.9 },
-        matcapFactor: { value: new THREE.Color(1.0, 1.0, 1.0) },
+        matcapFactor: { value: new THREE.Color(0.0, 0.0, 0.0) },
         matcapTexture: { value: null },
         matcapTextureUvTransform: { value: new THREE.Matrix3() },
         parametricRimColorFactor: { value: new THREE.Color(0.0, 0.0, 0.0) },
