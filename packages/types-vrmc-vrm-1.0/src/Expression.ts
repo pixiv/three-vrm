@@ -34,7 +34,7 @@ export interface Expression {
   textureTransformBinds?: ExpressionTextureTransformBind[];
 
   /**
-   * Interpret non-zero values as 1
+   * A value greater than 0.5 is 1.0, otherwise 0.0
    */
   isBinary?: boolean;
 
