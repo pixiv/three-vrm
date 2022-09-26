@@ -45,12 +45,12 @@
     "@pixiv/types-vrmc-node-constraint-1.0": "1.0.0"
   },
   "devDependencies": {
-    "@types/three": "^0.140.0",
+    "@types/three": "^0.144.0",
     "lint-staged": "10.5.4",
-    "three": "^0.140.2"
+    "three": "^0.144.0"
   },
   "peerDependencies": {
-    "@types/three": "^0.140.0",
-    "three": "^0.140.2"
+    "@types/three": "^0.144.0",
+    "three": "^0.144.0"
   }
 }

@@ -1611,10 +1611,17 @@
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-2.0.1.tgz#20f18294f797f2209b5f65c8e3b5c8e8261d127c"
   integrity sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==
 
-"@types/three@^0.140.0":
-  version "0.140.0"
-  resolved "https://registry.yarnpkg.com/@types/three/-/three-0.140.0.tgz#3b74a021a69a6e2cd0e2550def15aa4c1c20e924"
-  integrity sha512-YPJLSIY6uKUOp1k6BZYDq5GtEIdhfeK04UCbc9IPAVbdn/RNjkfrbnyd7smrsNkJhc0IFASLpd3AAYgwqgXKVQ==
+"@types/three@^0.144.0":
+  version "0.144.0"
+  resolved "https://registry.yarnpkg.com/@types/three/-/three-0.144.0.tgz#a154f40122dbc3668c5424a5373f3965c6564557"
+  integrity sha512-psvEs6q5rLN50jUYZ3D4pZMfxTbdt3A243blt0my7/NcL6chaCZpHe2csbCtx0SOD9fI/XnF3wnVUAYZGqCSYg==
+  dependencies:
+    "@types/webxr" "*"
+
+"@types/webxr@*":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@types/webxr/-/webxr-0.5.0.tgz#aae1cef3210d88fd4204f8c33385a0bbc4da07c9"
+  integrity sha512-IUMDPSXnYIbEO2IereEFcgcqfDREOgmbGqtrMpVPpACTU6pltYLwHgVkrnYv0XhWEcjio9sYEfIEzgn3c7nDqA==
 
 "@types/yargs-parser@*":
   version "20.2.1"
@@ -7720,10 +7727,10 @@ thenify-all@^1.0.0:
   dependencies:
     any-promise "^1.0.0"
 
-three@^0.140.2:
-  version "0.140.2"
-  resolved "https://registry.yarnpkg.com/three/-/three-0.140.2.tgz#ca0b7390d1ce4f7f2850e80afd00ef48fc244491"
-  integrity sha512-DdT/AHm/TbZXEhQKQpGt5/iSgBrmXpjU26FNtj1KhllVPTKj1eG4X/ShyD5W2fngE+I1s1wa4ttC4C3oCJt7Ag==
+three@^0.144.0:
+  version "0.144.0"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.144.0.tgz#2818517169f8ff94eea5f664f6ff1fcdcd436cc8"
+  integrity sha512-R8AXPuqfjfRJKkYoTQcTK7A6i3AdO9++2n8ubya/GTU+fEHhYKu1ZooRSCPkx69jbnzT7dD/xEo6eROQTt2lJw==
 
 throat@^5.0.0:
   version "5.0.0"
