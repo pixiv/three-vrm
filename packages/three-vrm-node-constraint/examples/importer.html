@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>three-vrm example</title>
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+		/>
+		<style>
+			body {
+				margin: 0;
+			}
+			canvas {
+				display: block;
+			}
+		</style>
+	</head>
+
+	<body>
+		<script src="https://unpkg.com/three@0.144.0/build/three.js"></script>
+		<script src="https://unpkg.com/three@0.144.0/examples/js/loaders/GLTFLoader.js"></script>
+		<script src="https://unpkg.com/three@0.144.0/examples/js/controls/OrbitControls.js"></script>
+		<script src="https://unpkg.com/tweakpane@3.0"></script>
+		<script src="https://unpkg.com/@0b5vr/tweakpane-plugin-rotation@0.1"></script>
+		<script src="../lib/three-vrm-node-constraint.js"></script>
+		<script>
+			/* global Tweakpane, TweakpaneRotationInputPlugin, THREE_VRM_NODE_CONSTRAINT */
+			// gui
+			const guiParams = {
+
+				source: { x: 0.0, y: 0.0, z: 0.0 },
+
+			};
+
+			const pane = new Tweakpane.Pane();
+			pane.registerPlugin( TweakpaneRotationInputPlugin );
+
+			pane.addInput( guiParams, 'source', {
+
+				view: 'rotation',
+				rotationMode: 'euler',
+				unit: 'deg',
+
+			} );
+
+			// renderer
+			const renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			renderer.setPixelRatio( window.devicePixelRatio );
+			document.body.appendChild( renderer.domElement );
+
+			// camera
+			const camera = new THREE.PerspectiveCamera( 30.0, window.innerWidth / window.innerHeight, 0.1, 20.0 );
+			camera.position.set( 0.0, 0.0, 10.0 );
+
+			// camera controls
+			const controls = new THREE.OrbitControls( camera, renderer.domElement );
+			controls.screenSpacePanning = true;
+			controls.target.set( 0.0, 0.0, 0.0 );
+			controls.update();
+
+			// scene
+			const scene = new THREE.Scene();
+
+			// light
+			const light = new THREE.DirectionalLight( 0xffffff );
+			light.position.set( 1.0, 2.0, 3.0 ).normalize();
+			scene.add( light );
+
+			// gltf and vrm
+			let currentGltf = null;
+
+			const loader = new THREE.GLTFLoader();
+
+			const pluginOptions = {
+
+				helperRoot: scene,
+
+			};
+
+			loader.register( ( parser ) => {
+
+				return new THREE_VRM_NODE_CONSTRAINT.VRMNodeConstraintLoaderPlugin( parser, pluginOptions );
+
+			} );
+
+			function load( url ) {
+
+				loader.crossOrigin = 'anonymous';
+				loader.load(
+
+					url,
+
+					( gltf ) => {
+
+						scene.add( gltf.scene );
+						console.log( scene );
+
+						console.log( gltf );
+
+						currentGltf = gltf;
+
+					},
+
+					( progress ) => console.log( 'Loading model...', 100.0 * ( progress.loaded / progress.total ), '%' ),
+
+					( error ) => console.error( error )
+
+				);
+
+			}
+
+			load( './models/cubes.gltf' );
+
+			// helpers
+			const gridHelper = new THREE.GridHelper( 10, 10 );
+			scene.add( gridHelper );
+
+			const axesHelper = new THREE.AxesHelper( 5 );
+			scene.add( axesHelper );
+
+			// animate
+			const clock = new THREE.Clock();
+			clock.start();
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				clock.getDelta();
+
+				if ( currentGltf ) {
+
+					const source = currentGltf.scene.children.find( ( node ) => node.name === 'CubeA' );
+
+					source.rotation.set(
+
+						THREE.MathUtils.DEG2RAD * guiParams.source.x,
+						THREE.MathUtils.DEG2RAD * guiParams.source.y,
+						THREE.MathUtils.DEG2RAD * guiParams.source.z,
+						'ZYX',
+
+					);
+
+					const constraintManager = currentGltf.userData.vrmNodeConstraintManager;
+					constraintManager.update();
+
+				}
+
+				renderer.render( scene, camera );
+
+			}
+
+			animate();
+
+			// dnd handler
+			window.addEventListener( 'dragover', function ( event ) {
+
+				event.preventDefault();
+
+			} );
+
+			window.addEventListener( 'drop', function ( event ) {
+
+				event.preventDefault();
+
+				// read given file then convert it to blob url
+				const files = event.dataTransfer.files;
+				if ( ! files ) {
+			
+					return;
+			
+				}
+
+				const file = files[ 0 ];
+				if ( ! file ) {
+			
+					return;
+			
+				}
+
+				const blob = new Blob( [ file ], { type: "application/octet-stream" } );
+				const url = URL.createObjectURL( blob );
+				load( url );
+
+			} );
+		</script>
+	</body>
+</html>

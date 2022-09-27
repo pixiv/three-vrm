@@ -23,6 +23,7 @@
 				position: absolute;
 				top: 0;
 				right: 0;
+				width: 128px;
 			}
 		</style>
 	</head>
@@ -30,13 +31,15 @@
 	<body>
 		<span id="meta"></span>
 		<img id="thumbnail" alt="thumbnail" />
-		<script src="https://unpkg.com/three@0.126.1/build/three.js"></script>
-		<script src="https://unpkg.com/three@0.126.1/examples/js/loaders/GLTFLoader.js"></script>
-		<script src="https://unpkg.com/three@0.126.1/examples/js/controls/OrbitControls.js"></script>
+		<script src="https://unpkg.com/three@0.144.0/build/three.js"></script>
+		<script src="https://unpkg.com/three@0.144.0/examples/js/loaders/GLTFLoader.js"></script>
+		<script src="https://unpkg.com/three@0.144.0/examples/js/controls/OrbitControls.js"></script>
 		<script src="../lib/three-vrm.js"></script>
 		<script>
+			/* global THREE_VRM */
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
+			renderer.outputEncoding = THREE.sRGBEncoding;
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			renderer.setPixelRatio( window.devicePixelRatio );
 			document.body.appendChild( renderer.domElement );
@@ -60,40 +63,39 @@
 			scene.add( light );
 
 			// gltf and vrm
+			let currentVrm = undefined;
 			const loader = new THREE.GLTFLoader();
 			loader.crossOrigin = 'anonymous';
+
+			loader.register( ( parser ) => {
+
+				return new THREE_VRM.VRMLoaderPlugin( parser );
+
+			} );
+
 			loader.load(
 
 				// URL of the VRM you want to load
-				'./models/three-vrm-girl.vrm',
+				'./models/VRM1_Constraint_Twist_Sample.vrm',
 
 				// called when the resource is loaded
 				( gltf ) => {
 
-					THREE.VRMUtils.removeUnnecessaryJoints( gltf.scene );
+					const vrm = gltf.userData.vrm;
 
-					// generate VRM instance from gltf
-					THREE.VRM.from( gltf ).then( ( vrm ) => {
+					THREE_VRM.VRMUtils.removeUnnecessaryVertices( gltf.scene );
+					THREE_VRM.VRMUtils.removeUnnecessaryJoints( gltf.scene );
 
-						console.log( vrm );
-						scene.add( vrm.scene );
+					currentVrm = vrm;
+					console.log( vrm );
+					scene.add( vrm.scene );
 
-						vrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.Hips ).rotation.y = Math.PI;
+					// print meta fields
+					const meta = gltf.userData.vrmMeta;
+					Object.keys( meta ).forEach( ( key ) => {
 
-						// print meta fields
-						Object.keys( vrm.meta ).forEach( ( key ) => {
-
-							document.getElementById( 'meta' ).innerText += key + ' : ' + vrm.meta[ key ] + '\n';
-
-						} );
-
-						// show thumbnail
-						THREE.VRMUtils.extractThumbnailBlob( renderer, vrm, 256 ).then( ( blob ) => {
-
-							const url = URL.createObjectURL( blob );
-							document.getElementById( 'thumbnail' ).src = url;
-
-						} );
+						document.getElementById( 'meta' ).innerText += key + ' : ' + meta[ key ] + '\n';
+						document.getElementById( 'thumbnail' ).src = meta.thumbnailImage.src;
 
 					} );
 
@@ -114,10 +116,22 @@
 			const axesHelper = new THREE.AxesHelper( 5 );
 			scene.add( axesHelper );
 
+			// animate
+			const clock = new THREE.Clock();
+			clock.start();
+
 			function animate() {
 
 				requestAnimationFrame( animate );
 
+				// update vrm components
+				if ( currentVrm ) {
+
+					currentVrm.update( clock.getDelta() );
+
+				}
+
+				// render
 				renderer.render( scene, camera );
 
 			}

@@ -1,0 +1,16 @@
+#!/bin/bash
+
+readonly DEV='dev'
+
+while read local_ref local_sha1 remote_ref remote_sha1
+do
+  if [[ "${remote_ref##refs/heads/}" = $DEV ]]; then
+    echo "[warn] Push to dev branch, continue? (y/N)"
+    exec < /dev/tty
+    read answer
+    case $answer in
+        'y' | 'yes')  exit 0;;
+        * ) exit 1;;
+    esac
+  fi
+done

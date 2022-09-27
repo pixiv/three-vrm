@@ -19,13 +19,15 @@
 	</head>
 
 	<body>
-		<script src="https://unpkg.com/three@0.126.1/build/three.js"></script>
-		<script src="https://unpkg.com/three@0.126.1/examples/js/loaders/GLTFLoader.js"></script>
-		<script src="https://unpkg.com/three@0.126.1/examples/js/controls/OrbitControls.js"></script>
+		<script src="https://unpkg.com/three@0.144.0/build/three.js"></script>
+		<script src="https://unpkg.com/three@0.144.0/examples/js/loaders/GLTFLoader.js"></script>
+		<script src="https://unpkg.com/three@0.144.0/examples/js/controls/OrbitControls.js"></script>
 		<script src="../lib/three-vrm.js"></script>
 		<script>
+			/* global THREE_VRM */
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
+			renderer.outputEncoding = THREE.sRGBEncoding;
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			renderer.setPixelRatio( window.devicePixelRatio );
 			document.body.appendChild( renderer.domElement );
@@ -43,35 +45,45 @@
 			// scene
 			const scene = new THREE.Scene();
 
+			// helperRoot
+			const helperRoot = new THREE.Group();
+			helperRoot.renderOrder = 10000;
+			scene.add( helperRoot );
+
 			// light
 			const light = new THREE.DirectionalLight( 0xffffff );
 			light.position.set( 1.0, 1.0, 1.0 ).normalize();
 			scene.add( light );
 
 			// gltf and vrm
-			let currentVrm;
-
+			let currentVrm = undefined;
 			const loader = new THREE.GLTFLoader();
 			loader.crossOrigin = 'anonymous';
+
+			loader.register( ( parser ) => {
+
+				// assigning `helperRoot` to options will make helpers appear
+				return new THREE_VRM.VRMLoaderPlugin( parser, { helperRoot } );
+
+			} );
+
 			loader.load(
 
 				// URL of the VRM you want to load
-				'./models/three-vrm-girl.vrm',
+				'./models/VRM1_Constraint_Twist_Sample.vrm',
 
 				// called when the resource is loaded
 				( gltf ) => {
 
-					// generate VRM instance from gltf
-					THREE.VRMDebug.from( gltf ).then( ( vrm ) => {
+					const vrm = gltf.userData.vrm;
 
-						console.log( vrm );
-						currentVrm = vrm;
+					// calling this function greatly improves the performance
+					THREE_VRM.VRMUtils.removeUnnecessaryVertices( gltf.scene );
+					THREE_VRM.VRMUtils.removeUnnecessaryJoints( gltf.scene );
 
-						scene.add( vrm.scene );
-
-						vrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.Hips ).rotation.y = Math.PI;
-
-					} );
+					currentVrm = vrm;
+					console.log( vrm );
+					scene.add( vrm.scene );
 
 				},
 
@@ -90,7 +102,7 @@
 			const axesHelper = new THREE.AxesHelper( 5 );
 			scene.add( axesHelper );
 
-			// update
+			// animate
 			const clock = new THREE.Clock();
 			clock.start();
 
@@ -98,7 +110,14 @@
 
 				requestAnimationFrame( animate );
 
-				if ( currentVrm ) { currentVrm.update( clock.getDelta() ); }
+				// update vrm components
+				if ( currentVrm ) {
+
+					currentVrm.update( clock.getDelta() );
+
+				}
+
+				// render
 				renderer.render( scene, camera );
 
 			}

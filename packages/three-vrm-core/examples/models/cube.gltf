@@ -1,0 +1,594 @@
+{
+  "asset": {
+    "generator": "Handwritten",
+    "version": "2.0"
+  },
+  "buffers": [
+    {
+      "uri": "cube_mesh.bin",
+      "byteLength": 912
+    },
+    {
+      "uri": "cube_mesh_morph_x.bin",
+      "byteLength": 288
+    },
+    {
+      "uri": "cube_mesh_morph_y.bin",
+      "byteLength": 288
+    }
+  ],
+  "bufferViews": [
+    {
+      "name": "Cube Position",
+      "buffer": 0,
+      "byteOffset": 0,
+      "byteLength": 288,
+      "target": 34962
+    },
+    {
+      "name": "Cube Normal",
+      "buffer": 0,
+      "byteOffset": 288,
+      "byteLength": 288,
+      "target": 34962
+    },
+    {
+      "name": "Cube UV",
+      "buffer": 0,
+      "byteOffset": 576,
+      "byteLength": 192,
+      "target": 34962
+    },
+    {
+      "name": "Cube Indices",
+      "buffer": 0,
+      "byteOffset": 768,
+      "byteLength": 144,
+      "target": 34963
+    },
+    {
+      "name": "Cube Position Morph X",
+      "buffer": 1,
+      "byteOffset": 0,
+      "byteLength": 288,
+      "target": 34962
+    },
+    {
+      "name": "Cube Position Morph Y",
+      "buffer": 2,
+      "byteOffset": 0,
+      "byteLength": 288,
+      "target": 34962
+    }
+  ],
+  "accessors": [
+    {
+      "name": "Cube Position",
+      "bufferView": 0,
+      "byteOffset": 0,
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 24,
+      "max": [
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "min": [
+        -0.0625,
+        -0.0625,
+        -0.0625
+      ],
+      "normalized": false
+    },
+    {
+      "name": "Cube Normal",
+      "bufferView": 1,
+      "byteOffset": 0,
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 24,
+      "normalized": false
+    },
+    {
+      "name": "Cube UV",
+      "bufferView": 2,
+      "byteOffset": 0,
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 24,
+      "normalized": false
+    },
+    {
+      "name": "Cube Indices",
+      "bufferView": 3,
+      "byteOffset": 0,
+      "type": "SCALAR",
+      "componentType": 5125,
+      "count": 36,
+      "normalized": false
+    },
+    {
+      "name": "Cube Position Morph X",
+      "bufferView": 4,
+      "byteOffset": 0,
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 24,
+      "max": [
+        0.0625,
+        0.0,
+        0.0
+      ],
+      "min": [
+        -0.0625,
+        -0.0,
+        -0.0
+      ],
+      "normalized": false
+    },
+    {
+      "name": "Cube Position Morph Y",
+      "bufferView": 5,
+      "byteOffset": 0,
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 24,
+      "max": [
+        0.0,
+        0.0625,
+        0.0
+      ],
+      "min": [
+        -0.0,
+        -0.0625,
+        -0.0
+      ],
+      "normalized": false
+    }
+  ],
+  "images": [
+    {
+      "uri": "thumbnail.png"
+    }
+  ],
+  "materials": [
+    {
+      "name": "Cube Material",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [ 1, 1, 1, 1 ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.5
+      },
+      "doubleSided": false
+    },
+    {
+      "name": "Cube Material (Eyes)",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [ 0, 0, 0, 1 ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.5
+      },
+      "doubleSided": false
+    },
+    {
+      "name": "Cube Material (Mouth)",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [ 1, 0, 0, 1 ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.5
+      },
+      "doubleSided": false
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Cube",
+      "primitives": [
+        {
+          "mode": 4,
+          "indices": 3,
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TEXCOORD_0": 2
+          },
+          "material": 0,
+          "targets": [
+            {
+              "POSITION": 4
+            },
+            {
+              "POSITION": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Cube (Eyes)",
+      "primitives": [
+        {
+          "mode": 4,
+          "indices": 3,
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TEXCOORD_0": 2
+          },
+          "material": 1,
+          "targets": [
+            {
+              "POSITION": 4
+            },
+            {
+              "POSITION": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Cube (Mouth)",
+      "primitives": [
+        {
+          "mode": 4,
+          "indices": 3,
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TEXCOORD_0": 2
+          },
+          "material": 2,
+          "targets": [
+            {
+              "POSITION": 4
+            },
+            {
+              "POSITION": 5
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "name": "Root",
+      "children": [ 1 ],
+      "translation": [ 0, 0, 0 ],
+      "rotation": [ 0, 0, 0, 1 ],
+      "scale": [ 1, 1, 1 ]
+    },
+    {
+      "name": "Hips",
+      "children": [ 2, 4, 7 ],
+      "translation": [ 0, 0.6, 0 ],
+      "rotation": [ 0, 0, 0, 1 ],
+      "scale": [ 1, 1, 1 ],
+      "mesh": 0
+    },
+    {
+      "name": "Spine",
+      "children": [ 3, 10, 13 ],
+      "translation": [ 0, 0.4, 0 ],
+      "rotation": [ 0, 0, 0, 1 ],
+      "scale": [ 1, 1, 1 ],
+      "mesh": 0
+    },
+    {
+      "name": "Head",
+      "children": [ 16, 17, 19, 21 ],
+      "translation": [ 0, 0.4, 0 ],
+      "rotation": [ 0, 0, 0, 1 ],
+      "scale": [ 1, 1, 1 ]
+    },
+    {
+      "name": "LeftUpperLeg",
+      "children": [ 5 ],
+      "translation": [ 0.2, 0, 0 ],
+      "rotation": [ 0, 0, 0, 1 ],
+      "scale": [ 1, 1, 1 ],
+      "mesh": 0
+    },
+    {
+      "name": "LeftLowerLeg",
+      "children": [ 6 ],
+      "translation": [ 0, -0.3, 0 ],
+      "rotation": [ 0, 0, 0, 1 ],
+      "scale": [ 1, 1, 1 ],
+      "mesh": 0
+    },
+    {
+      "name": "LeftFoot",
+      "translation": [ 0, -0.3, 0 ],
+      "rotation": [ 0, 0, 0, 1 ],
+      "scale": [ 1, 1, 1 ],
+      "mesh": 0
+    },
+    {
+      "name": "RightUpperLeg",
+      "children": [ 8 ],
+      "translation": [ -0.2, 0, 0 ],
+      "rotation": [ 0, 0, 0, 1 ],
+      "scale": [ 1, 1, 1 ],
+      "mesh": 0
+    },
+    {
+      "name": "RightLowerLeg",
+      "children": [ 9 ],
+      "translation": [ 0, -0.3, 0 ],
+      "rotation": [ 0, 0, 0, 1 ],
+      "scale": [ 1, 1, 1 ],
+      "mesh": 0
+    },
+    {
+      "name": "RightFoot",
+      "translation": [ 0, -0.3, 0 ],
+      "rotation": [ 0, 0, 0, 1 ],
+      "scale": [ 1, 1, 1 ],
+      "mesh": 0
+    },
+    {
+      "name": "LeftUpperArm",
+      "children": [ 11 ],
+      "translation": [ 0.2, 0.2, 0 ],
+      "rotation": [ 0, 0, 0, 1 ],
+      "scale": [ 1, 1, 1 ],
+      "mesh": 0
+    },
+    {
+      "name": "LeftLowerArm",
+      "children": [ 12 ],
+      "translation": [ 0.3, 0, 0 ],
+      "rotation": [ 0, 0, 0, 1 ],
+      "scale": [ 1, 1, 1 ],
+      "mesh": 0
+    },
+    {
+      "name": "LeftHand",
+      "translation": [ 0.3, 0, 0 ],
+      "rotation": [ 0, 0, 0, 1 ],
+      "scale": [ 1, 1, 1 ],
+      "mesh": 0
+    },
+    {
+      "name": "RightUpperArm",
+      "children": [ 14 ],
+      "translation": [ -0.2, 0.2, 0 ],
+      "rotation": [ 0, 0, 0, 1 ],
+      "scale": [ 1, 1, 1 ],
+      "mesh": 0
+    },
+    {
+      "name": "RightLowerArm",
+      "children": [ 15 ],
+      "translation": [ -0.3, 0, 0 ],
+      "rotation": [ 0, 0, 0, 1 ],
+      "scale": [ 1, 1, 1 ],
+      "mesh": 0
+    },
+    {
+      "name": "RightHand",
+      "translation": [ -0.3, 0, 0 ],
+      "rotation": [ 0, 0, 0, 1 ],
+      "scale": [ 1, 1, 1 ],
+      "mesh": 0
+    },
+    {
+      "name": "Face",
+      "translation": [ 0, 0.2, 0 ],
+      "rotation": [ 0, 0, 0, 1 ],
+      "scale": [ 3, 3, 0.5 ],
+      "mesh": 0
+    },
+    {
+      "name": "LeftEye",
+      "children": [ 18 ],
+      "translation": [ 0.1, 0.25, 0.0 ],
+      "rotation": [ 0, 0, 0, 1 ]
+    },
+    {
+      "name": "LeftEyeMesh",
+      "translation": [ 0.0, 0.0, 0.01 ],
+      "rotation": [ 0, 0, 0, 1 ],
+      "scale": [ 0.5, 0.5, 0.5 ],
+      "mesh": 1
+    },
+    {
+      "name": "RightEye",
+      "children": [ 20 ],
+      "translation": [ -0.1, 0.25, 0.0 ],
+      "rotation": [ 0, 0, 0, 1 ]
+    },
+    {
+      "name": "RightEyeMesh",
+      "translation": [ 0.0, 0.0, 0.01 ],
+      "rotation": [ 0, 0, 0, 1 ],
+      "scale": [ 0.5, 0.5, 0.5 ],
+      "mesh": 1
+    },
+    {
+      "name": "Mouth",
+      "translation": [ 0, 0.1, 0.01 ],
+      "rotation": [ 0, 0, 0, 1 ],
+      "scale": [ 1.5, 0.125, 0.5 ],
+      "mesh": 2
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "extensionsUsed": [
+    "VRMC_vrm"
+  ],
+  "extensions": {
+    "VRMC_vrm": {
+      "specVersion": "1.0",
+      "meta": {
+        "name": "Cube",
+        "version": "1.0.0",
+        "authors": [ "FMS_Cat" ],
+        "copyrightInformation": "pixiv Inc.",
+        "contactInformation": "https://github.com/pixiv/three-vrm",
+        "thumbnailImage": 0,
+        "licenseUrl": "https://vrm.dev/licenses/1.0/",
+        "avatarPermission": "everyone",
+        "allowExcessivelyViolentUsage": true,
+        "allowExcessivelySexualUsage": true,
+        "commercialUsage": "corporation",
+        "allowPoliticalOrReligiousUsage": true,
+        "allowAntisocialOrHateUsage": false,
+        "creditNotation": "unnecessary",
+        "allowRedistribution": true,
+        "modification": "allowModificationRedistribution"
+      },
+      "humanoid": {
+        "humanBones": {
+          "hips": {
+            "node": 1
+          },
+          "spine": {
+            "node": 2
+          },
+          "head": {
+            "node": 3
+          },
+          "leftUpperLeg": {
+            "node": 4
+          },
+          "leftLowerLeg": {
+            "node": 5
+          },
+          "leftFoot": {
+            "node": 6
+          },
+          "rightUpperLeg": {
+            "node": 7
+          },
+          "rightLowerLeg": {
+            "node": 8
+          },
+          "rightFoot": {
+            "node": 9
+          },
+          "leftUpperArm": {
+            "node": 10
+          },
+          "leftLowerArm": {
+            "node": 11
+          },
+          "leftHand": {
+            "node": 12
+          },
+          "rightUpperArm": {
+            "node": 13
+          },
+          "rightLowerArm": {
+            "node": 14
+          },
+          "rightHand": {
+            "node": 15
+          },
+          "leftEye": {
+            "node": 17
+          },
+          "rightEye": {
+            "node": 19
+          }
+        }
+      },
+      "expressions": {
+        "preset": {
+          "aa": {
+            "morphTargetBinds": [
+              {
+                "node": 21,
+                "index": 1,
+                "weight": 3
+              }
+            ]
+          },
+          "blink": {
+            "morphTargetBinds": [
+              {
+                "node": 18,
+                "index": 1,
+                "weight": -0.75
+              },
+              {
+                "node": 20,
+                "index": 1,
+                "weight": -0.75
+              }
+            ]
+          },
+          "blinkLeft": {
+            "morphTargetBinds": [
+              {
+                "node": 18,
+                "index": 1,
+                "weight": -0.75
+              }
+            ]
+          },
+          "blinkRight": {
+            "morphTargetBinds": [
+              {
+                "node": 20,
+                "index": 1,
+                "weight": -0.75
+              }
+            ]
+          }
+        }
+      },
+      "firstPerson": {
+        "meshAnnotations": [
+          {
+            "node": 16,
+            "type": "thirdPersonOnly"
+          },
+          {
+            "node": 18,
+            "type": "thirdPersonOnly"
+          },
+          {
+            "node": 20,
+            "type": "thirdPersonOnly"
+          },
+          {
+            "node": 21,
+            "type": "thirdPersonOnly"
+          }
+        ]
+      },
+      "lookAt": {
+        "offsetFromHeadBone": [ 0.0, 0.25, 0.01 ],
+        "type": "bone",
+        "rangeMapHorizontalInner": {
+          "inputMaxValue": 90.0,
+          "outputScale": 10.0
+        },
+        "rangeMapHorizontalOuter": {
+          "inputMaxValue": 90.0,
+          "outputScale": 10.0
+        },
+        "rangeMapVerticalDown": {
+          "inputMaxValue": 90.0,
+          "outputScale": 10.0
+        },
+        "rangeMapVerticalUp": {
+          "inputMaxValue": 90.0,
+          "outputScale": 10.0
+        }
+      }
+    }
+  },
+  "extras": {}
+}

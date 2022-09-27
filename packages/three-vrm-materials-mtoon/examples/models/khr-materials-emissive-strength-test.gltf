@@ -1,0 +1,376 @@
+{
+  "asset": {
+    "generator": "Handwritten",
+    "version": "2.0"
+  },
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Scene",
+      "nodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "mesh": 0,
+      "name": "Standard diffuse",
+      "translation": [
+        1.5,
+        0.75,
+        0
+      ]
+    },
+    {
+      "mesh": 1,
+      "name": "Standard emissive",
+      "translation": [
+        0,
+        0.75,
+        0
+      ]
+    },
+    {
+      "mesh": 2,
+      "name": "Standard HDR emissive",
+      "translation": [
+        -1.5,
+        0.75,
+        0
+      ]
+    },
+    {
+      "mesh": 3,
+      "name": "MToon diffuse",
+      "translation": [
+        1.5,
+        -0.75,
+        0
+      ]
+    },
+    {
+      "mesh": 4,
+      "name": "MToon emissive",
+      "translation": [
+        0,
+        -0.75,
+        0
+      ]
+    },
+    {
+      "mesh": 5,
+      "name": "MToon HDR emissive",
+      "translation": [
+        -1.5,
+        -0.75,
+        0
+      ]
+    }
+  ],
+  "materials": [
+    {
+      "name": "Standard diffuse",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          1,
+          0.5,
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "name": "Standard emissive",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      "emissiveFactor": [
+        1,
+        0.5,
+        0
+      ]
+    },
+    {
+      "name": "Standard HDR emissive",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      "emissiveFactor": [
+        1,
+        0.5,
+        0
+      ],
+      "extensions": {
+        "KHR_materials_emissive_strength": {
+          "emissiveStrength": 10
+        }
+      }
+    },
+    {
+      "name": "MToon diffuse",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          1,
+          0.5,
+          0,
+          1
+        ]
+      },
+      "extensions": {
+        "VRMC_materials_mtoon": {
+          "specVersion": "1.0",
+          "shadeColorFactor": [
+            0.5,
+            0.25,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "name": "MToon emissive",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      "emissiveFactor": [
+        1,
+        0.5,
+        0
+      ],
+      "extensions": {
+        "VRMC_materials_mtoon": {
+          "specVersion": "1.0",
+          "shadeColorFactor": [
+            0,
+            0,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "name": "MToon HDR emissive",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      "emissiveFactor": [
+        1,
+        0.5,
+        0
+      ],
+      "extensions": {
+        "KHR_materials_emissive_strength": {
+          "emissiveStrength": 10
+        },
+        "VRMC_materials_mtoon": {
+          "specVersion": "1.0",
+          "shadeColorFactor": [
+            0,
+            0,
+            0
+          ]
+        }
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Standard diffuse",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TEXCOORD_0": 2
+          },
+          "indices": 3,
+          "material": 0
+        }
+      ]
+    },
+    {
+      "name": "Standard emissive",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TEXCOORD_0": 2
+          },
+          "indices": 3,
+          "material": 1
+        }
+      ]
+    },
+    {
+      "name": "Standard HDR emissive",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TEXCOORD_0": 2
+          },
+          "indices": 3,
+          "material": 2
+        }
+      ]
+    },
+    {
+      "name": "MToon diffuse",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TEXCOORD_0": 2
+          },
+          "indices": 3,
+          "material": 3
+        }
+      ]
+    },
+    {
+      "name": "MToon emissive",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TEXCOORD_0": 2
+          },
+          "indices": 3,
+          "material": 4
+        }
+      ]
+    },
+    {
+      "name": "MToon HDR emissive",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TEXCOORD_0": 2
+          },
+          "indices": 3,
+          "material": 5
+        }
+      ]
+    }
+  ],
+  "accessors": [
+    {
+      "name": "Cube Position",
+      "bufferView": 0,
+      "byteOffset": 0,
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 24,
+      "max": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "min": [
+        -0.5,
+        -0.5,
+        -0.5
+      ],
+      "normalized": false
+    },
+    {
+      "name": "Cube Normal",
+      "bufferView": 1,
+      "byteOffset": 0,
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 24,
+      "normalized": false
+    },
+    {
+      "name": "Cube UV",
+      "bufferView": 2,
+      "byteOffset": 0,
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 24,
+      "normalized": false
+    },
+    {
+      "name": "Cube Indices",
+      "bufferView": 3,
+      "byteOffset": 0,
+      "type": "SCALAR",
+      "componentType": 5125,
+      "count": 36,
+      "normalized": false
+    }
+  ],
+  "bufferViews": [
+    {
+      "name": "Cube Position",
+      "buffer": 0,
+      "byteOffset": 0,
+      "byteLength": 288,
+      "target": 34962
+    },
+    {
+      "name": "Cube Normal",
+      "buffer": 0,
+      "byteOffset": 288,
+      "byteLength": 288,
+      "target": 34962
+    },
+    {
+      "name": "Cube UV",
+      "buffer": 0,
+      "byteOffset": 576,
+      "byteLength": 192,
+      "target": 34962
+    },
+    {
+      "name": "Cube Indices",
+      "buffer": 0,
+      "byteOffset": 768,
+      "byteLength": 144,
+      "target": 34963
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "cube_mesh.bin",
+      "byteLength": 912
+    }
+  ],
+  "extensionsUsed": [
+    "KHR_materials_emissive_strength",
+    "VRMC_materials_mtoon"
+  ]
+}

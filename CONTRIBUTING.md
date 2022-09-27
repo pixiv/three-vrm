@@ -12,7 +12,16 @@ cd packages/three-vrm
 yarn dev
 ```
 
-Once you start the `yarn dev`, you can see examples at http://localhost:3000/examples/ .
+Once you start the `yarn dev`, you can see examples at http://localhost:10001/examples/ .
+
+### Editing two packages at the same time
+
+You might want to watch two or more packages at the same time, but using `yarn dev` on multiple packages creates a port conflict of dev servers.
+In this case, you can specify different ports for each dev server by the environment variable `PORT` to avoid this conflict.
+
+```sh
+PORT=10002 yarn dev
+```
 
 ## Basic rules of the repository
 
@@ -29,6 +38,9 @@ Once you start the `yarn dev`, you can see examples at http://localhost:3000/exa
 We are utilizing `eslint` and `prettier` to ensure our syntax rules consistent.
 
 Some editors like [Visual Studio Code](https://code.visualstudio.com/) have extensions that enable us to see which part on the code is not syntactically incorrect or even fix such parts automatically.
+
+In the `/examples`, the [padded-blocks](https://eslint.org/docs/latest/rules/padded-blocks) is turned off because of problems with auto-formatting in inline scripts.
+Please follow the [Mr.doob's Code Style™#Blocks](https://github.com/mrdoob/three.js/wiki/Mr.doob%27s-Code-Style%E2%84%A2#blocks).
 
 ### `private` / `protected` members must start with `_`
 
@@ -107,6 +119,12 @@ function processSomeVector(v: THREE.Vector3): number {
 }
 ```
 
+## Typedef packages
+
+We also provide type definition packages (e.g. `@pixiv/types-vrmc-vrm-1.0` , `@pixiv/types-vrm-0.0` , ...)
+These branches should not include any implementations.
+These type definitions are authored manually by referencing the [vrm spec schema](https://github.com/vrm-c/vrm-specification).
+
 ## How to release
 
 - 1, Make sure you're on `dev` branch
@@ -114,8 +132,8 @@ function processSomeVector(v: THREE.Vector3): number {
 - 2, Run the following:
 
   ```sh
-  yarn lerna version <newversion> # will also automatically runs build scripts
-  yarn lerna publish from-git # will also automatically pushes some files into `gh-pages` branch
+  yarn lerna version <newversion> --exact --no-push # will also automatically runs build scripts
+  yarn lerna publish from-git --dist-tag latest
 
   git switch release
   git merge dev
@@ -125,8 +143,6 @@ function processSomeVector(v: THREE.Vector3): number {
 - 3, Add a release note to https://github.com/pixiv/three-vrm/releases
   - Do not forget to upload builds!
 
-## `typedefgen.js`
+## When you add a new package to the repository
 
-`typedefgen.js` ( can be run via `yarn typedefgen` of `packages/three-vrm` ) is a script that generates type definitions of GLTF and VRM schema automatically using [quicktype](https://quicktype.io/).
-However, names of each interfaces/enums are not good so you have to rename these names by your own hand.
-We usually don't have to generate these frequently.
+- Do not forget to add a cache path for the new package!

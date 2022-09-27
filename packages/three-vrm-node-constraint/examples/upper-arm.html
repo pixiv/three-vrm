@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>three-vrm-constraints example - upper-arm.html</title>
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+		/>
+		<style>
+			body {
+				margin: 0;
+			}
+			canvas {
+				display: block;
+			}
+		</style>
+	</head>
+
+	<body>
+		<script src="https://unpkg.com/three@0.144.0/build/three.js"></script>
+		<script src="https://unpkg.com/three@0.144.0/examples/js/controls/OrbitControls.js"></script>
+		<script src="https://unpkg.com/tweakpane@3.0"></script>
+		<script src="https://unpkg.com/@0b5vr/tweakpane-plugin-rotation@0.1"></script>
+		<script src="../lib/three-vrm-node-constraint.js"></script>
+		<script>
+			/* global Tweakpane, TweakpaneRotationInputPlugin, THREE_VRM_NODE_CONSTRAINT */
+			// gui
+			const guiParams = {
+
+				upperArm: { x: 0.0, y: 0.0, z: 0.0 },
+				lowerArm: { x: 0.0, y: 0.0, z: 0.0 },
+
+			};
+
+			const pane = new Tweakpane.Pane();
+			pane.registerPlugin( TweakpaneRotationInputPlugin );
+
+			pane.addInput( guiParams, 'upperArm', {
+
+				view: 'rotation',
+				rotationMode: 'euler',
+				unit: 'deg',
+
+			} );
+
+			pane.addInput( guiParams, 'lowerArm', {
+
+				view: 'rotation',
+				rotationMode: 'euler',
+				unit: 'deg',
+
+			} );
+
+			// renderer
+			const renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			renderer.setPixelRatio( window.devicePixelRatio );
+			document.body.appendChild( renderer.domElement );
+
+			// camera
+			const camera = new THREE.PerspectiveCamera( 30.0, window.innerWidth / window.innerHeight, 0.1, 20.0 );
+			camera.position.set( 0.0, 1.0, 10.0 );
+
+			// camera controls
+			const controls = new THREE.OrbitControls( camera, renderer.domElement );
+			controls.screenSpacePanning = true;
+			controls.target.set( 0.0, 1.0, 0.0 );
+			controls.update();
+
+			// scene
+			const scene = new THREE.Scene();
+
+			// light
+			const light = new THREE.DirectionalLight( 0xffffff );
+			light.position.set( 1.0, 2.0, 3.0 ).normalize();
+			scene.add( light );
+
+			// objects
+			const geometry = new THREE.ConeBufferGeometry( 0.25, 0.5, 5 );
+			const material = new THREE.MeshStandardMaterial( { color: 0xbbbbbb } );
+
+			const upperArm = new THREE.Object3D();
+			upperArm.name = 'upperArm';
+			scene.add( upperArm );
+
+			const lowerArm = new THREE.Mesh( geometry, material );
+			lowerArm.position.y = 2.0;
+			lowerArm.name = 'lowerArm';
+			upperArm.add( lowerArm );
+
+			const twistParent = new THREE.Object3D();
+			twistParent.name = 'twistParent';
+			scene.add( twistParent );
+
+			const twist1 = new THREE.Mesh( geometry, material );
+			twist1.name = 'twist1';
+			twistParent.add( twist1 );
+
+			const twist2 = new THREE.Mesh( geometry, material );
+			twist2.position.y = 1.0;
+			twist2.name = 'twist2';
+			twistParent.add( twist2 );
+
+			// helpers
+			const gridHelper = new THREE.GridHelper( 10, 10 );
+			scene.add( gridHelper );
+
+			const axesHelper = new THREE.AxesHelper( 5 );
+			scene.add( axesHelper );
+
+			// constraints
+			const constraintManager = new THREE_VRM_NODE_CONSTRAINT.VRMNodeConstraintManager( {
+
+				autoRemoveCircularDependency: true
+
+			} );
+
+			const aimConstraint = new THREE_VRM_NODE_CONSTRAINT.VRMAimConstraint( twistParent, lowerArm );
+			aimConstraint.aimAxis = '+Y';
+			constraintManager.addConstraint( aimConstraint );
+
+			const rollConstraint = new THREE_VRM_NODE_CONSTRAINT.VRMRollConstraint( twist2, upperArm );
+			rollConstraint.rollAxis = 'Y';
+			rollConstraint.weight = 0.5;
+			constraintManager.addConstraint( rollConstraint );
+
+			// constraint helpers
+			Array.from( constraintManager.constraints ).forEach( ( constraint ) => {
+
+				const helper = new THREE_VRM_NODE_CONSTRAINT.VRMNodeConstraintHelper( constraint );
+				scene.add( helper );
+
+			} );
+
+			// init constraints
+			scene.updateMatrixWorld();
+			constraintManager.setInitState();
+
+			// animate
+			const clock = new THREE.Clock();
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				upperArm.rotation.set(
+
+					THREE.MathUtils.DEG2RAD * guiParams.upperArm.x,
+					THREE.MathUtils.DEG2RAD * guiParams.upperArm.y,
+					THREE.MathUtils.DEG2RAD * guiParams.upperArm.z,
+					'ZYX',
+
+				);
+
+				lowerArm.rotation.set(
+
+					THREE.MathUtils.DEG2RAD * guiParams.lowerArm.x,
+					THREE.MathUtils.DEG2RAD * guiParams.lowerArm.y,
+					THREE.MathUtils.DEG2RAD * guiParams.lowerArm.z,
+					'ZYX',
+
+				);
+
+				constraintManager.update();
+
+				renderer.render( scene, camera );
+
+			}
+
+			animate();
+		</script>
+	</body>
+</html>
