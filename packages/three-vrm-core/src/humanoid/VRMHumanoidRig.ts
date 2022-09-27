@@ -132,7 +132,7 @@ export class VRMHumanoidRig extends VRMRig {
         // Move the mass center of the VRM
         if (boneName === 'hips') {
           const boneWorldPosition = rigBoneNode.getWorldPosition(_boneWorldPos);
-          boneNode.parent!.matrixWorld.multiplyMatrices(boneNode.parent!.parent!.matrixWorld, boneNode.parent!.matrix);
+          boneNode.parent!.updateWorldMatrix(true, false);
           const parentWorldMatrix = boneNode.parent!.matrixWorld;
           const localPosition = boneWorldPosition.applyMatrix4(parentWorldMatrix.invert());
           boneNode.position.copy(localPosition);
