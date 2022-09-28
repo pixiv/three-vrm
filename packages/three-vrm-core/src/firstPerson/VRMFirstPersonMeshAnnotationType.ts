@@ -7,4 +7,5 @@ export const VRMFirstPersonMeshAnnotationType = {
   FirstPersonOnly: 'firstPersonOnly',
 } as const;
 
-export type VRMFirstPersonMeshAnnotationType = typeof VRMFirstPersonMeshAnnotationType[keyof typeof VRMFirstPersonMeshAnnotationType];
+export type VRMFirstPersonMeshAnnotationType =
+  typeof VRMFirstPersonMeshAnnotationType[keyof typeof VRMFirstPersonMeshAnnotationType];

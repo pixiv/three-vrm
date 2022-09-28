@@ -6,4 +6,5 @@ export const MToonMaterialOutlineWidthMode = {
   ScreenCoordinates: 'screenCoordinates',
 } as const;
 
-export type MToonMaterialOutlineWidthMode = typeof MToonMaterialOutlineWidthMode[keyof typeof MToonMaterialOutlineWidthMode];
+export type MToonMaterialOutlineWidthMode =
+  typeof MToonMaterialOutlineWidthMode[keyof typeof MToonMaterialOutlineWidthMode];

@@ -12,9 +12,7 @@ const _boneWorldPos = new THREE.Vector3();
  * A class represents the normalized Rig of a VRM.
  */
 export class VRMHumanoidRig extends VRMRig {
-  protected static _setupTransforms(
-    modelRig: VRMRig,
-  ): {
+  protected static _setupTransforms(modelRig: VRMRig): {
     rigBones: VRMHumanBones;
     root: THREE.Object3D;
     parentWorldRotations: { [boneName in VRMHumanBoneName]?: THREE.Quaternion };
