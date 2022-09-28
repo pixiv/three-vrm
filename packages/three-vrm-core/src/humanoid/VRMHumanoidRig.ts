@@ -6,6 +6,7 @@ import { VRMRig } from './VRMRig';
 
 const _v3A = new THREE.Vector3();
 const _quatA = new THREE.Quaternion();
+const _boneWorldPos = new THREE.Vector3();
 
 /**
  * A class represents the normalized Rig of a VRM.
@@ -130,7 +131,8 @@ export class VRMHumanoidRig extends VRMRig {
 
         // Move the mass center of the VRM
         if (boneName === 'hips') {
-          const boneWorldPosition = rigBoneNode.getWorldPosition(new THREE.Vector3());
+          const boneWorldPosition = rigBoneNode.getWorldPosition(_boneWorldPos);
+          boneNode.parent!.updateWorldMatrix(true, false);
           const parentWorldMatrix = boneNode.parent!.matrixWorld;
           const localPosition = boneWorldPosition.applyMatrix4(parentWorldMatrix.invert());
           boneNode.position.copy(localPosition);
