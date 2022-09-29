@@ -9,7 +9,7 @@ import typescript from '@rollup/plugin-typescript';
 
 // == constants ====================================================================================
 /** copyright text */
-const copyright = '(c) 2019-2021 pixiv Inc.';
+const copyright = '(c) 2019-2022 pixiv Inc.';
 
 /** name of the license */
 const licenseName = 'MIT License';
