@@ -21,6 +21,7 @@ function loadMixamoAnimation( url, vrm ) {
 		const _quatA = new THREE.Quaternion();
 		const _vec3 = new THREE.Vector3();
 
+		// Adjust with reference to hips height.
 		const motionHipsHeight = asset.getObjectByName( 'mixamorigHips' ).position.y;
 		const vrmHipsY = vrm.humanoid?.getNormalizedBoneNode( 'hips' ).getWorldPosition( _vec3 ).y;
 		const vrmRootY = vrm.scene.getWorldPosition( _vec3 ).y;
