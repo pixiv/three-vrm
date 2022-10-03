@@ -3097,14 +3097,14 @@ dotenv@~10.0.0:
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-10.0.0.tgz#3d4227b8fb95f81096cdd2b66653fb2c7085ba81"
   integrity sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==
 
-downlevel-dts@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/downlevel-dts/-/downlevel-dts-0.7.0.tgz#155c24310dad8a4820ad077e64b15a8c461aa932"
-  integrity sha512-tcjGqElN0/oad/LJBlaxmZ3zOYEQOBbGuirKzif8s1jeRiWBdNX9H6OBFlRjOQkosXgV+qSjs4osuGCivyZ4Jw==
+downlevel-dts@^0.10.1:
+  version "0.10.1"
+  resolved "https://registry.yarnpkg.com/downlevel-dts/-/downlevel-dts-0.10.1.tgz#2f0a09f0e63f43c49da78897edb1bb292c8769cf"
+  integrity sha512-bwY63Y0Gfwotcly4vU6rB66m5txvfQzDGd1Gai9E9orqsDIswXKjkdR18Tm6TidnAk9+J5N68a5VMDO2bsQCKQ==
   dependencies:
     semver "^7.3.2"
     shelljs "^0.8.3"
-    typescript "^4.1.0-dev.20201026"
+    typescript next
 
 duplexer@^0.1.1:
   version "0.1.2"
@@ -7507,15 +7507,15 @@ typedoc@^0.22.18:
     minimatch "^5.1.0"
     shiki "^0.10.1"
 
-"typescript@^3 || ^4":
+"typescript@^3 || ^4", typescript@^4.0.5:
   version "4.8.4"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.8.4.tgz#c464abca159669597be5f96b8943500b238e60e6"
   integrity sha512-QCh+85mCy+h0IGff8r5XWzOVSbBO+KfeYrMQh7NJ58QujwcE22u+NUSmUxqF+un70P9GXKxa2HCNiTTMJknyjQ==
 
-typescript@^4.0.5, typescript@^4.1.0-dev.20201026:
-  version "4.1.5"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.1.5.tgz#123a3b214aaff3be32926f0d8f1f6e704eb89a72"
-  integrity sha512-6OSu9PTIzmn9TCDiovULTnET6BgXtDYL4Gg4szY+cGsc3JP1dQL8qvE8kShTRx1NIw4Q9IBHlwODjkjWEtMUyA==
+typescript@next:
+  version "4.9.0-dev.20221002"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.0-dev.20221002.tgz#565656e7287d28503adde73ead85087cf944384d"
+  integrity sha512-WX8aiDOo1NqR6/xssEOmMeFQAWuaRFQJsxFadQhAmctWXzQG0Z2WU9UEAa7heI9wjraOiJaLUTM1Ti8+WwJb/w==
 
 uglify-js@^3.1.4:
   version "3.17.2"
