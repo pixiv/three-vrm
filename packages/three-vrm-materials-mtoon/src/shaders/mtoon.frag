@@ -331,7 +331,7 @@ void main() {
     uv = uv + vec2( uvAnimationScrollXOffset, uvAnimationScrollYOffset ) * uvAnimMask;
     float uvRotCos = cos( uvAnimationRotationPhase * uvAnimMask );
     float uvRotSin = sin( uvAnimationRotationPhase * uvAnimMask );
-    uv = mat2( uvRotCos, uvRotSin, -uvRotSin, uvRotCos ) * ( uv - 0.5 ) + 0.5;
+    uv = mat2( uvRotCos, -uvRotSin, uvRotSin, uvRotCos ) * ( uv - 0.5 ) + 0.5;
   #endif
 
   #ifdef DEBUG_UV
