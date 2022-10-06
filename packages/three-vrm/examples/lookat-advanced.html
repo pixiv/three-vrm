@@ -139,9 +139,17 @@
 				( gltf ) => {
 
 					const vrm = gltf.userData.vrm;
-
+			
+					// calling these functions greatly improves the performance
 					THREE_VRM.VRMUtils.removeUnnecessaryVertices( gltf.scene );
 					THREE_VRM.VRMUtils.removeUnnecessaryJoints( gltf.scene );
+
+					// Disable frustum culling
+					vrm.scene.traverse( ( obj ) => {
+
+						obj.frustumCulled = false;
+
+					} );
 
 					// replace the lookAt to our extended one
 					const smoothLookAt = new VRMSmoothLookAt( vrm.humanoid, vrm.lookAt.applier );

@@ -69,6 +69,13 @@ function loadVRM( modelUrl ) {
 			currentVrm = vrm;
 			scene.add( vrm.scene );
 
+			// Disable frustum culling
+			vrm.scene.traverse( ( obj ) => {
+
+				obj.frustumCulled = false;
+
+			} );
+
 			if ( currentAnimationUrl ) {
 
 				loadFBX( currentAnimationUrl );
