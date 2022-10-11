@@ -54,7 +54,7 @@
     "@pixiv/three-vrm-springbone": "1.0.4"
   },
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^13.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.0",
     "@types/three": "^0.144.0",
     "lint-staged": "13.0.3",
     "three": "^0.144.0"
