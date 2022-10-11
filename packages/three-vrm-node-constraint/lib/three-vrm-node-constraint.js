@@ -1,5 +1,5 @@
 /*!
- * @pixiv/three-vrm-node-constraint v1.0.3
+ * @pixiv/three-vrm-node-constraint v1.0.4
  * Node constraint module for @pixiv/three-vrm
  *
  * Copyright (c) 2020-2022 pixiv Inc.

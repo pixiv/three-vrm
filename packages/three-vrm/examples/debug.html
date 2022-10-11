@@ -81,6 +81,13 @@
 					THREE_VRM.VRMUtils.removeUnnecessaryVertices( gltf.scene );
 					THREE_VRM.VRMUtils.removeUnnecessaryJoints( gltf.scene );
 
+					// Disable frustum culling
+					vrm.scene.traverse( ( obj ) => {
+
+						obj.frustumCulled = false;
+
+					} );
+
 					currentVrm = vrm;
 					console.log( vrm );
 					scene.add( vrm.scene );

@@ -82,6 +82,13 @@
 
 						}
 
+						// Disable frustum culling
+						vrm.scene.traverse( ( obj ) => {
+
+							obj.frustumCulled = false;
+
+						} );
+
 						currentVrm = vrm;
 						scene.add( vrm.scene );
 
