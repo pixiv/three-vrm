@@ -1,6 +1,6 @@
 {
   "name": "@pixiv/three-vrm-node-constraint",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Node constraint module for @pixiv/three-vrm",
   "license": "MIT",
   "author": "pixiv",
