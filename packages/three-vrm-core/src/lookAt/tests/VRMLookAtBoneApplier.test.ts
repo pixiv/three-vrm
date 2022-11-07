@@ -95,7 +95,6 @@ describe('VRMLookAtBoneApplier', () => {
 
     humanoid = createHumanoid();
     scene.add(humanoid.getRawBoneNode('hips')!);
-    scene.add(humanoid.normalizedHumanBonesRoot);
 
     applier = createBoneApplier(humanoid);
   });
@@ -144,6 +143,36 @@ describe('VRMLookAtBoneApplier', () => {
       const expected = new THREE.Quaternion().setFromEuler(new THREE.Euler(DEG2RAD * 2.5, DEG2RAD * 2.5, 0.0, 'YXZ'));
 
       expect(normalizedRightEye.quaternion).toBeCloseToQuaternion(expected);
+    });
+
+    describe('when leftEye and rightEye have different rest orientations', () => {
+      beforeEach(() => {
+        scene = new THREE.Scene();
+
+        humanoid = createHumanoid();
+        scene.add(humanoid.getRawBoneNode('hips')!);
+        humanoid.getRawBoneNode('rightEye')!.quaternion.copy(QUAT_Y_CCW90);
+
+        applier = createBoneApplier(humanoid);
+      });
+
+      it('makes each eye look toward the specified angle', () => {
+        applier.applyYawPitch(15.0, 15.0);
+
+        const rawLeftEye = humanoid.getRawBoneNode('leftEye')!;
+        const rawRightEye = humanoid.getRawBoneNode('rightEye')!;
+
+        // saturate( angle / rangeMap.inputMaxValue ) * rangeMap.outputScale = saturate( 15 / 30 ) * 5 = 2.5
+        const expectedLeft = new THREE.Quaternion()
+          .setFromEuler(new THREE.Euler(DEG2RAD * 2.5, DEG2RAD * 2.5, 0.0, 'YXZ'))
+          .multiply(QUAT_Y_CW90);
+        const expectedRight = new THREE.Quaternion()
+          .setFromEuler(new THREE.Euler(DEG2RAD * 2.5, DEG2RAD * 2.5, 0.0, 'YXZ'))
+          .multiply(QUAT_Y_CCW90);
+
+        expect(rawLeftEye.quaternion).toBeCloseToQuaternion(expectedLeft);
+        expect(rawRightEye.quaternion).toBeCloseToQuaternion(expectedRight);
+      });
     });
   });
 

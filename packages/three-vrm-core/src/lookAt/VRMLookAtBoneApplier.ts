@@ -105,7 +105,7 @@ export class VRMLookAtBoneApplier implements VRMLookAtApplier {
     this._restRightEyeParentWorldQuat = new THREE.Quaternion();
 
     const leftEye = this.humanoid.getRawBoneNode('leftEye');
-    const rightEye = this.humanoid.getRawBoneNode('leftEye');
+    const rightEye = this.humanoid.getRawBoneNode('rightEye');
 
     if (leftEye) {
       this._restQuatLeftEye.copy(leftEye.quaternion);
