@@ -1,6 +1,6 @@
 {
   "name": "@pixiv/three-vrm",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "VRM file loader for three.js.",
   "license": "MIT",
   "author": "pixiv",
@@ -46,7 +46,7 @@
     ]
   },
   "dependencies": {
-    "@pixiv/three-vrm-core": "1.0.4",
+    "@pixiv/three-vrm-core": "1.0.5",
     "@pixiv/three-vrm-materials-hdr-emissive-multiplier": "1.0.4",
     "@pixiv/three-vrm-materials-mtoon": "1.0.4",
     "@pixiv/three-vrm-materials-v0compat": "1.0.4",
