@@ -243,7 +243,10 @@ export class VRMLookAt {
 
   /**
    * Set its lookAt target position.
+   *
    * Note that its result will be instantly overwritten if {@link VRMLookAtHead.autoUpdate} is enabled.
+   *
+   * If you want to track an object continuously, you might want to use {@link target} instead.
    *
    * @param position A target position, in world space
    */
