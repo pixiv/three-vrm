@@ -351,12 +351,13 @@
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.3.tgz#555193ab2e3bb3b6adc3d551c9c030d9e860daf6"
   integrity sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==
 
-"@gltf-transform/core@^1.2.4":
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/@gltf-transform/core/-/core-1.2.4.tgz#676d23224fc5cdaf27f733c71ac36d829fa8e071"
-  integrity sha512-XAq++xwQg7ZPxHzRACf1uTuYntqJ7DTiE4IOWJa+ATvSk4hoHRCAFsMB0ziTKgEUObcKVrNvBwctxx5ABVrktA==
+"@gltf-transform/core@^2.4.7":
+  version "2.4.7"
+  resolved "https://registry.yarnpkg.com/@gltf-transform/core/-/core-2.4.7.tgz#96ddf79d9e63923458337b567a42d120aaa6712b"
+  integrity sha512-XIsbeKXdFdTO5UgVVKnGPUB5vQfQ3DoBVQcJd7tZzTia895Grs52AAtGEZhy3ja4p2J0OMq22kVUMvolKRbM5w==
   dependencies:
     gl-matrix "~3.4.3"
+    property-graph "^0.2.6"
 
 "@hutson/parse-repository-url@^3.0.0":
   version "3.0.2"
@@ -6316,6 +6317,11 @@ promzard@^0.3.0:
   integrity sha512-JZeYqd7UAcHCwI+sTOeUDYkvEU+1bQ7iE0UT1MgB/tERkAPkesW46MrpIySzODi+owTjZtiF8Ay5j9m60KmMBw==
   dependencies:
     read "1"
+
+property-graph@^0.2.6:
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/property-graph/-/property-graph-0.2.6.tgz#add988a436745936d4b2ae19f747f2556296c828"
+  integrity sha512-QiBHxNZlwIarbkxsqCY688aP1ANbwtoQFBYgTZopQ0Bvku6/EYp3H4KH0ygxkhWQbJv5DEONspLy1rHi5xIycg==
 
 proto-list@~1.2.1:
   version "1.2.4"
