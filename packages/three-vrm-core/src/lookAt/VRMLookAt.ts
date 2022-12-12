@@ -139,7 +139,7 @@ export class VRMLookAt {
 
   /**
    * Get its yaw-pitch angles as an `Euler`.
-   * Does NOT consider {@link faceFront}.
+   * Does NOT consider {@link faceFront}; it returns `Euler(0, 0, 0; "YXZ")` by default regardless of the faceFront value.
    *
    * @param target The target euler
    */
@@ -178,7 +178,7 @@ export class VRMLookAt {
   }
 
   /**
-   * Reset the lookAt direction to initial direction.
+   * Reset the lookAt direction (yaw and pitch) to the initial direction.
    */
   public reset(): void {
     this._yaw = 0.0;
@@ -187,7 +187,7 @@ export class VRMLookAt {
   }
 
   /**
-   * Get its head position in world coordinate.
+   * Get its lookAt position in world coordinate.
    *
    * @param target A target `THREE.Vector3`
    */
@@ -198,7 +198,7 @@ export class VRMLookAt {
   }
 
   /**
-   * Get its head rotation in world coordinate.
+   * Get its lookAt rotation in world coordinate.
    * Does NOT consider {@link faceFront}.
    *
    * @param target A target `THREE.Quaternion`
@@ -242,8 +242,11 @@ export class VRMLookAt {
   }
 
   /**
-   * Set its LookAt position.
+   * Set its lookAt target position.
+   *
    * Note that its result will be instantly overwritten if {@link VRMLookAtHead.autoUpdate} is enabled.
+   *
+   * If you want to track an object continuously, you might want to use {@link target} instead.
    *
    * @param position A target position, in world space
    */
@@ -270,7 +273,7 @@ export class VRMLookAt {
 
   /**
    * Update the VRMLookAtHead.
-   * If {@link VRMLookAtHead.autoUpdate} is disabled, it will do nothing.
+   * If {@link autoUpdate} is enabled, this will make it look at the {@link target}.
    *
    * @param delta deltaTime, it isn't used though. You can use the parameter if you want to use this in your own extended {@link VRMLookAt}.
    */
