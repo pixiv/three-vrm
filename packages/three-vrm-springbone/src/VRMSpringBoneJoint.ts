@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { getWorldPositionLite } from './utils/getWorldPositionLite';
 import { mat4InvertCompat } from './utils/mat4InvertCompat';
 import { Matrix4InverseCache } from './utils/Matrix4InverseCache';
 import type { VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';
@@ -76,7 +77,9 @@ export class VRMSpringBoneJoint {
   private _boneAxis = new THREE.Vector3();
 
   /**
-   * Length of the bone in world unit. Will be used for normalization in update loop.
+   * Length of the bone in world unit.
+   * Will be used for normalization in update loop, will be updated by {@link _calcWorldSpaceBoneLength}.
+   *
    * It's same as local unit length unless there are scale transformations in the world space.
    */
   private _worldSpaceBoneLength = 0.0;
@@ -188,11 +191,6 @@ export class VRMSpringBoneJoint {
 
     // set initial states that are related to local child position
     this._boneAxis.copy(this._initialLocalChildPosition).normalize();
-    this._worldSpaceBoneLength = _v3A
-      .copy(this._initialLocalChildPosition)
-      .applyMatrix4(this.bone.matrixWorld)
-      .sub(_v3B.setFromMatrixPosition(this.bone.matrixWorld))
-      .length();
   }
 
   /**
@@ -220,6 +218,9 @@ export class VRMSpringBoneJoint {
    */
   public update(delta: number): void {
     if (delta <= 0) return;
+
+    // Update the _worldSpaceBoneLength
+    this._calcWorldSpaceBoneLength();
 
     // Get bone position in center space
     _worldSpacePosition.setFromMatrixPosition(this.bone.matrixWorld);
@@ -304,6 +305,23 @@ export class VRMSpringBoneJoint {
         }
       });
     });
+  }
+
+  /**
+   * Calculate the {@link _worldSpaceBoneLength}.
+   * Intended to be used in {@link update}.
+   */
+  private _calcWorldSpaceBoneLength(): void {
+    getWorldPositionLite(this.bone, _v3A);
+
+    if (this.child) {
+      getWorldPositionLite(this.child, _v3B);
+    } else {
+      _v3B.copy(this._initialLocalChildPosition);
+      _v3B.applyMatrix4(this.bone.matrixWorld);
+    }
+
+    this._worldSpaceBoneLength = _v3A.sub(_v3B).length();
   }
 
   /**
