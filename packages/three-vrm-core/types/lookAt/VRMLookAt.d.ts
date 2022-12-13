@@ -83,7 +83,7 @@ export declare class VRMLookAt {
     constructor(humanoid: VRMHumanoid, applier: VRMLookAtApplier);
     /**
      * Get its yaw-pitch angles as an `Euler`.
-     * Does NOT consider {@link faceFront}.
+     * Does NOT consider {@link faceFront}; it returns `Euler(0, 0, 0; "YXZ")` by default regardless of the faceFront value.
      *
      * @param target The target euler
      */
@@ -103,17 +103,17 @@ export declare class VRMLookAt {
      */
     clone(): VRMLookAt;
     /**
-     * Reset the lookAt direction to initial direction.
+     * Reset the lookAt direction (yaw and pitch) to the initial direction.
      */
     reset(): void;
     /**
-     * Get its head position in world coordinate.
+     * Get its lookAt position in world coordinate.
      *
      * @param target A target `THREE.Vector3`
      */
     getLookAtWorldPosition(target: THREE.Vector3): THREE.Vector3;
     /**
-     * Get its head rotation in world coordinate.
+     * Get its lookAt rotation in world coordinate.
      * Does NOT consider {@link faceFront}.
      *
      * @param target A target `THREE.Quaternion`
@@ -132,15 +132,18 @@ export declare class VRMLookAt {
      */
     getLookAtWorldDirection(target: THREE.Vector3): THREE.Vector3;
     /**
-     * Set its LookAt position.
+     * Set its lookAt target position.
+     *
      * Note that its result will be instantly overwritten if {@link VRMLookAtHead.autoUpdate} is enabled.
+     *
+     * If you want to track an object continuously, you might want to use {@link target} instead.
      *
      * @param position A target position, in world space
      */
     lookAt(position: THREE.Vector3): void;
     /**
      * Update the VRMLookAtHead.
-     * If {@link VRMLookAtHead.autoUpdate} is disabled, it will do nothing.
+     * If {@link autoUpdate} is enabled, this will make it look at the {@link target}.
      *
      * @param delta deltaTime, it isn't used though. You can use the parameter if you want to use this in your own extended {@link VRMLookAt}.
      */
