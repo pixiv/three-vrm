@@ -1,5 +1,8 @@
 /* global THREE, THREE_VRM_CORE, loadMixamoAnimation */
 
+const inputTimeScale = document.getElementById( 'inputTimeScale' );
+const spanTimeScale = document.getElementById( 'spanTimeScale' );
+
 // renderer
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
@@ -111,6 +114,7 @@ function loadFBX( animationUrl ) {
 
 		// Apply the loaded animation to mixer and play
 		currentMixer.clipAction( clip ).play();
+		currentMixer.timeScale = parseFloat( inputTimeScale.value );
 
 	} );
 
@@ -183,6 +187,36 @@ window.addEventListener( 'drop', function ( event ) {
 	} else {
 
 		loadVRM( url );
+
+	}
+
+} );
+
+// time scale handler
+inputTimeScale.addEventListener( 'input', () => {
+
+	const value = parseFloat( inputTimeScale.value );
+	spanTimeScale.textContent = value.toFixed( 2 );
+
+	if ( currentMixer != null ) {
+
+		currentMixer.timeScale = value;
+
+	}
+
+} );
+
+inputTimeScale.addEventListener( 'dblclick', () => {
+
+	// double click to reset timeScale to 1.0
+
+	inputTimeScale.value = 1.0;
+	const value = 1.0;
+	spanTimeScale.textContent = value.toFixed( 2 );
+
+	if ( currentMixer != null ) {
+
+		currentMixer.timeScale = 1.0;
 
 	}
 
