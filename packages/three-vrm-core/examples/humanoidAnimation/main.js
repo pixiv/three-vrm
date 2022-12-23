@@ -1,4 +1,8 @@
-/* global THREE, THREE_VRM_CORE, loadMixamoAnimation */
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { VRMCoreLoaderPlugin } from '@pixiv/three-vrm-core';
+import { loadMixamoAnimation } from './loadMixamoAnimation.js';
 
 // renderer
 const renderer = new THREE.WebGLRenderer();
@@ -12,7 +16,7 @@ const camera = new THREE.PerspectiveCamera( 30.0, window.innerWidth / window.inn
 camera.position.set( 0.0, 1.0, 5.0 );
 
 // camera controls
-const controls = new THREE.OrbitControls( camera, renderer.domElement );
+const controls = new OrbitControls( camera, renderer.domElement );
 controls.screenSpacePanning = true;
 controls.target.set( 0.0, 1.0, 0.0 );
 controls.update();
@@ -38,14 +42,14 @@ scene.add( helperRoot );
 
 function loadVRM( modelUrl ) {
 
-	const loader = new THREE.GLTFLoader();
+	const loader = new GLTFLoader();
 	loader.crossOrigin = 'anonymous';
 
 	helperRoot.clear();
 
 	loader.register( ( parser ) => {
 
-		return new THREE_VRM_CORE.VRMCoreLoaderPlugin( parser, { helperRoot: helperRoot, autoUpdateHumanBones: true } );
+		return new VRMCoreLoaderPlugin( parser, { helperRoot: helperRoot, autoUpdateHumanBones: true } );
 
 	} );
 
