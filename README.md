@@ -39,18 +39,32 @@ You will need:
 Code like this:
 
 ```html
-<script src="three.js"></script>
-<script src="GLTFLoader.js"></script>
-<script src="three-vrm.js"></script>
+<!-- About import maps, see the Three.js official docs: -->
+<!-- https://threejs.org/docs/#manual/en/introduction/Installation -->
+<script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
 
-<script>
+<script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.146/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.146/examples/jsm/",
+      "@pixiv/three-vrm": "three-vrm.module.js"
+    }
+  }
+</script>
+
+<script type="module">
+  import * as THREE from 'three';
+  import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+  import { VRMLoaderPlugin } from '@pixiv/three-vrm';
+
   const scene = new THREE.Scene();
 
-  const loader = new THREE.GLTFLoader();
+  const loader = new GLTFLoader();
 
   // Install GLTFLoader plugin
   loader.register((parser) => {
-    return new THREE_VRM.VRMLoaderPlugin(parser);
+    return new VRMLoaderPlugin(parser);
   });
 
   loader.load(

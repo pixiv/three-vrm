@@ -1,4 +1,6 @@
-/* global THREE, mixamoVRMRigMap */
+import * as THREE from 'three';
+import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
+import { mixamoVRMRigMap } from './mixamoVRMRigMap.js';
 
 /**
  * Load Mixamo animation, convert for three-vrm use, and return it.
@@ -7,9 +9,9 @@
  * @param {VRM} vrm A target VRM
  * @returns {Promise<THREE.AnimationClip>} The converted AnimationClip
  */
-function loadMixamoAnimation( url, vrm ) {
+export function loadMixamoAnimation( url, vrm ) {
 
-	const loader = new THREE.FBXLoader(); // A loader which loads FBX
+	const loader = new FBXLoader(); // A loader which loads FBX
 	return loader.loadAsync( url ).then( ( asset ) => {
 
 		const clip = THREE.AnimationClip.findByName( asset.animations, 'mixamo.com' ); // extract the AnimationClip
