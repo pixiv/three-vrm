@@ -19,11 +19,25 @@
 	</head>
 
 	<body>
-		<script src="https://unpkg.com/three@0.146.0/build/three.js"></script>
-		<script src="https://unpkg.com/three@0.146.0/examples/js/loaders/GLTFLoader.js"></script>
-		<script src="https://unpkg.com/three@0.146.0/examples/js/controls/OrbitControls.js"></script>
-		<script src="../lib/three-vrm.js"></script>
-		<script>
+		<!-- Import maps polyfill -->
+		<!-- Remove this when import maps will be widely supported -->
+		<script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+
+		<script type="importmap">
+			{
+				"imports": {
+					"three": "https://unpkg.com/three@0.147/build/three.module.js",
+					"three/addons/": "https://unpkg.com/three@0.147/examples/jsm/",
+					"@pixiv/three-vrm": "../lib/three-vrm.module.js"
+				}
+			}
+		</script>
+
+		<script type="module">
+			import * as THREE from 'three';
+			import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+			import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
+
 			/* global THREE_VRM */
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
@@ -48,12 +62,12 @@
 
 			// gltf and vrm
 			let currentVrm = undefined;
-			const loader = new THREE.GLTFLoader();
+			const loader = new GLTFLoader();
 			loader.crossOrigin = 'anonymous';
 
 			loader.register( ( parser ) => {
 
-				return new THREE_VRM.VRMLoaderPlugin( parser );
+				return new VRMLoaderPlugin( parser );
 
 			} );
 
@@ -66,8 +80,8 @@
 					const vrm = gltf.userData.vrm;
 
 					// calling these functions greatly improves the performance
-					THREE_VRM.VRMUtils.removeUnnecessaryVertices( gltf.scene );
-					THREE_VRM.VRMUtils.removeUnnecessaryJoints( gltf.scene );
+					VRMUtils.removeUnnecessaryVertices( gltf.scene );
+					VRMUtils.removeUnnecessaryJoints( gltf.scene );
 
 					// Disable frustum culling
 					vrm.scene.traverse( ( obj ) => {
@@ -104,9 +118,9 @@
 				requestAnimationFrame( animate );
 
 				if ( currentVrm ) {
-			
+
 					currentVrm.update( clock.getDelta() );
-			
+
 				}
 
 				renderer.render( scene, camera );
@@ -127,7 +141,7 @@
 					const px = ( 2.0 * event.clientX - window.innerWidth ) / window.innerHeight * range;
 					const py = - ( 2.0 * event.clientY - window.innerHeight ) / window.innerHeight * range;
 
-					currentVrm.humanoid.getNormalizedBoneNode( THREE_VRM.VRMHumanBoneName.Hips ).position.set( px, py, 0.0 );
+					currentVrm.humanoid.getNormalizedBoneNode( 'hips' ).position.set( px, py, 0.0 );
 
 				}
 
