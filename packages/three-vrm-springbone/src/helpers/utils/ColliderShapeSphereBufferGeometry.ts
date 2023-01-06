@@ -3,6 +3,8 @@ import { VRMSpringBoneColliderShapeSphere } from '../../VRMSpringBoneColliderSha
 import { ColliderShapeBufferGeometry } from './ColliderShapeBufferGeometry';
 
 export class ColliderShapeSphereBufferGeometry extends THREE.BufferGeometry implements ColliderShapeBufferGeometry {
+  public worldScale = 1.0;
+
   private readonly _attrPos: THREE.BufferAttribute;
   private readonly _attrIndex: THREE.BufferAttribute;
   private readonly _shape: VRMSpringBoneColliderShapeSphere;
@@ -27,8 +29,9 @@ export class ColliderShapeSphereBufferGeometry extends THREE.BufferGeometry impl
   public update(): void {
     let shouldUpdateGeometry = false;
 
-    if (this._currentRadius !== this._shape.radius) {
-      this._currentRadius = this._shape.radius;
+    const radius = this._shape.radius / this.worldScale;
+    if (this._currentRadius !== radius) {
+      this._currentRadius = radius;
       shouldUpdateGeometry = true;
     }
 

@@ -2,9 +2,11 @@ import * as THREE from 'three';
 import { VRMSpringBoneColliderShapeCapsule } from '../../VRMSpringBoneColliderShapeCapsule';
 import { ColliderShapeBufferGeometry } from './ColliderShapeBufferGeometry';
 
-const _vecA = new THREE.Vector3();
+const _v3A = new THREE.Vector3();
 
 export class ColliderShapeCapsuleBufferGeometry extends THREE.BufferGeometry implements ColliderShapeBufferGeometry {
+  public worldScale = 1.0;
+
   private readonly _attrPos: THREE.BufferAttribute;
   private readonly _attrIndex: THREE.BufferAttribute;
   private readonly _shape: VRMSpringBoneColliderShapeCapsule;
@@ -30,8 +32,9 @@ export class ColliderShapeCapsuleBufferGeometry extends THREE.BufferGeometry imp
   public update(): void {
     let shouldUpdateGeometry = false;
 
-    if (this._currentRadius !== this._shape.radius) {
-      this._currentRadius = this._shape.radius;
+    const radius = this._shape.radius / this.worldScale;
+    if (this._currentRadius !== radius) {
+      this._currentRadius = radius;
       shouldUpdateGeometry = true;
     }
 
@@ -40,8 +43,9 @@ export class ColliderShapeCapsuleBufferGeometry extends THREE.BufferGeometry imp
       shouldUpdateGeometry = true;
     }
 
-    if (!this._currentTail.equals(this._shape.tail)) {
-      this._currentTail.copy(this._shape.tail);
+    const tail = _v3A.copy(this._shape.tail).divideScalar(this.worldScale);
+    if (this._currentTail.distanceToSquared(tail) > 1e-10) {
+      this._currentTail.copy(tail);
       shouldUpdateGeometry = true;
     }
 
@@ -51,8 +55,8 @@ export class ColliderShapeCapsuleBufferGeometry extends THREE.BufferGeometry imp
   }
 
   private _buildPosition(): void {
-    _vecA.copy(this._currentTail).sub(this._currentOffset);
-    const l = _vecA.length() / this._currentRadius;
+    _v3A.copy(this._currentTail).sub(this._currentOffset);
+    const l = _v3A.length() / this._currentRadius;
 
     for (let i = 0; i <= 16; i++) {
       const t = (i / 16.0) * Math.PI;
@@ -69,8 +73,8 @@ export class ColliderShapeCapsuleBufferGeometry extends THREE.BufferGeometry imp
       this._attrPos.setXYZ(100 + i, l, Math.sin(t), Math.cos(t));
     }
 
-    const theta = Math.atan2(_vecA.y, Math.sqrt(_vecA.x * _vecA.x + _vecA.z * _vecA.z));
-    const phi = -Math.atan2(_vecA.z, _vecA.x);
+    const theta = Math.atan2(_v3A.y, Math.sqrt(_v3A.x * _v3A.x + _v3A.z * _v3A.z));
+    const phi = -Math.atan2(_v3A.z, _v3A.x);
 
     this.rotateZ(theta);
     this.rotateY(phi);

@@ -6,6 +6,8 @@ import { ColliderShapeBufferGeometry } from './utils/ColliderShapeBufferGeometry
 import { ColliderShapeCapsuleBufferGeometry } from './utils/ColliderShapeCapsuleBufferGeometry';
 import { ColliderShapeSphereBufferGeometry } from './utils/ColliderShapeSphereBufferGeometry';
 
+const _v3A = new THREE.Vector3();
+
 export class VRMSpringBoneColliderHelper extends THREE.Group {
   public readonly collider: VRMSpringBoneCollider;
   private readonly _geometry: ColliderShapeBufferGeometry;
@@ -43,6 +45,11 @@ export class VRMSpringBoneColliderHelper extends THREE.Group {
     this.collider.updateWorldMatrix(true, false);
 
     this.matrix.copy(this.collider.matrixWorld);
+
+    const matrixWorldElements = this.matrix.elements;
+    this._geometry.worldScale = _v3A
+      .set(matrixWorldElements[0], matrixWorldElements[1], matrixWorldElements[2])
+      .length(); // calculate scale of x component
 
     this._geometry.update();
 
