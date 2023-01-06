@@ -3,9 +3,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { VRMCoreLoaderPlugin } from '@pixiv/three-vrm-core';
 import { loadMixamoAnimation } from './loadMixamoAnimation.js';
-
-const inputTimeScale = document.getElementById( 'inputTimeScale' );
-const spanTimeScale = document.getElementById( 'spanTimeScale' );
+import GUI from 'three/addons/libs/lil-gui.module.min.js';
 
 // renderer
 const renderer = new THREE.WebGLRenderer();
@@ -118,7 +116,7 @@ function loadFBX( animationUrl ) {
 
 		// Apply the loaded animation to mixer and play
 		currentMixer.clipAction( clip ).play();
-		currentMixer.timeScale = parseFloat( inputTimeScale.value );
+		currentMixer.timeScale = params.timeScale;
 
 	} );
 
@@ -160,6 +158,21 @@ function animate() {
 
 animate();
 
+// gui
+const gui = new GUI();
+
+const params = {
+
+	timeScale: 1.0,
+
+};
+
+gui.add( params, 'timeScale', 0.0, 2.0, 0.001 ).onChange( ( value ) => {
+
+	currentMixer.timeScale = value;
+
+} );
+
 // file input
 
 // dnd handler
@@ -191,36 +204,6 @@ window.addEventListener( 'drop', function ( event ) {
 	} else {
 
 		loadVRM( url );
-
-	}
-
-} );
-
-// time scale handler
-inputTimeScale.addEventListener( 'input', () => {
-
-	const value = parseFloat( inputTimeScale.value );
-	spanTimeScale.textContent = value.toFixed( 2 );
-
-	if ( currentMixer != null ) {
-
-		currentMixer.timeScale = value;
-
-	}
-
-} );
-
-inputTimeScale.addEventListener( 'dblclick', () => {
-
-	// double click to reset timeScale to 1.0
-
-	inputTimeScale.value = 1.0;
-	const value = 1.0;
-	spanTimeScale.textContent = value.toFixed( 2 );
-
-	if ( currentMixer != null ) {
-
-		currentMixer.timeScale = 1.0;
 
 	}
 
