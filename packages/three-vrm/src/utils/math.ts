@@ -11,29 +11,6 @@ export function saturate(value: number): number {
 
 const _position = new THREE.Vector3();
 const _scale = new THREE.Vector3();
-const _rotation = new THREE.Quaternion();
-
-/**
- * Extract world position of an object from its world space matrix, in cheaper way.
- *
- * @param object The object
- * @param out Target vector
- */
-export function getWorldPositionLite(object: THREE.Object3D, out: THREE.Vector3): THREE.Vector3 {
-  object.matrixWorld.decompose(out, _rotation, _scale);
-  return out;
-}
-
-/**
- * Extract world scale of an object from its world space matrix, in cheaper way.
- *
- * @param object The object
- * @param out Target vector
- */
-export function getWorldScaleLite(object: THREE.Object3D, out: THREE.Vector3): THREE.Vector3 {
-  object.matrixWorld.decompose(_position, _rotation, out);
-  return out;
-}
 
 /**
  * Extract world rotation of an object from its world space matrix, in cheaper way.
