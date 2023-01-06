@@ -1,7 +1,7 @@
 {
-  "name": "@pixiv/three-vrm-node-constraint",
+  "name": "@pixiv/three-vrm-utils",
   "version": "1.0.6",
-  "description": "Node constraint module for @pixiv/three-vrm",
+  "description": "Utility module for @pixiv/three-vrm. Primarily intended for internal use",
   "license": "MIT",
   "author": "pixiv",
   "files": [
@@ -10,8 +10,8 @@
     "/types/",
     "LICENSE"
   ],
-  "main": "lib/three-vrm-node-constraint.js",
-  "module": "lib/three-vrm-node-constraint.module.js",
+  "main": "lib/three-vrm-utils.js",
+  "module": "lib/three-vrm-utils.module.js",
   "types": "types/index.d.ts",
   "typesVersions": {
     "<3.9": {
@@ -22,28 +22,23 @@
   },
   "scripts": {
     "version": "yarn all",
-    "all": "yarn test && yarn lint && yarn clean && yarn build && yarn docs",
+    "all": "yarn lint && yarn clean && yarn build && yarn docs",
     "dev": "cross-env NODE_ENV=development rollup -w -c",
     "clean": "rimraf docs/ lib/ ts*/ types/",
     "build": "yarn build-dev && yarn build-prod && yarn build-types",
     "build-dev": "cross-env NODE_ENV=development rollup -c",
     "build-prod": "cross-env NODE_ENV=production rollup -c",
-    "build-types": "tsc --project ./tsconfig.build-types.json && downlevel-dts types ts3.4/types",
+    "build-types": "tsc --declaration --declarationDir ./types --emitDeclarationOnly && downlevel-dts types ts3.4/types",
     "docs": "typedoc --entryPoints ./src/index.ts --out docs",
     "test": "jest",
-    "lint": "eslint \"src/**/*.{ts,tsx}\"  && yarn lint-examples &&  prettier \"src/**/*.{ts,tsx}\" --check",
-    "lint-examples": "eslint \"examples/**/*.{ts,tsx,js,html}\" --rule \"padded-blocks: error\"",
-    "lint-fix": "eslint \"src/**/*.{ts,tsx}\" --fix && eslint \"examples/**/*.{ts,tsx,js,html}\" --fix &&  prettier \"src/**/*.{ts,tsx}\" --write"
+    "lint": "eslint \"src/**/*.{ts,tsx}\" &&  prettier \"src/**/*.{ts,tsx}\" --check",
+    "lint-fix": "eslint \"src/**/*.{ts,tsx}\" --fix &&  prettier \"src/**/*.{ts,tsx}\" --write"
   },
   "lint-staged": {
     "./src/**/*.{ts,tsx}": [
       "eslint --fix",
       "prettier --write"
     ]
-  },
-  "dependencies": {
-    "@pixiv/three-vrm-utils": "1.0.6",
-    "@pixiv/types-vrmc-node-constraint-1.0": "1.0.0"
   },
   "devDependencies": {
     "@types/three": "^0.146.0",

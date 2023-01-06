@@ -51,7 +51,8 @@
     "@pixiv/three-vrm-materials-mtoon": "1.0.6",
     "@pixiv/three-vrm-materials-v0compat": "1.0.6",
     "@pixiv/three-vrm-node-constraint": "1.0.6",
-    "@pixiv/three-vrm-springbone": "1.0.6"
+    "@pixiv/three-vrm-springbone": "1.0.6",
+    "@pixiv/three-vrm-utils": "1.0.6"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.0.1",

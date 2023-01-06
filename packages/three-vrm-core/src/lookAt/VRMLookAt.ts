@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import { VRMHumanoid } from '../humanoid';
-import { getWorldQuaternionLite } from '../utils/getWorldQuaternionLite';
-import { quatInvertCompat } from '../utils/quatInvertCompat';
+import { getWorldQuaternionLite, quatInvertCompat } from '@pixiv/three-vrm-utils';
 import { calcAzimuthAltitude } from './utils/calcAzimuthAltitude';
 import type { VRMLookAtApplier } from './VRMLookAtApplier';
 import { sanitizeAngle } from './utils/sanitizeAngle';

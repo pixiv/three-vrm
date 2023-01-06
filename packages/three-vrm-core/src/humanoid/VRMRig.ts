@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { quatInvertCompat } from '../utils/quatInvertCompat';
+import { quatInvertCompat } from '@pixiv/three-vrm-utils';
 import type { VRMHumanBone } from './VRMHumanBone';
 import type { VRMHumanBones } from './VRMHumanBones';
 import type { VRMHumanBoneName } from './VRMHumanBoneName';

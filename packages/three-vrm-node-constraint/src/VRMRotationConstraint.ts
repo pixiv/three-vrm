@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { quatInvertCompat } from './utils/quatInvertCompat';
+import { quatInvertCompat } from '@pixiv/three-vrm-utils';
 import { VRMNodeConstraint } from './VRMNodeConstraint';
 
 const _quatA = new THREE.Quaternion();

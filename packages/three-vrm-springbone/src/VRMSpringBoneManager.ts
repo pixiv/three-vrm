@@ -1,6 +1,6 @@
 import type * as THREE from 'three';
 import type { VRMSpringBoneJoint } from './VRMSpringBoneJoint';
-import { traverseAncestorsFromRoot } from './utils/traverseAncestorsFromRoot';
+import { traverseAncestorsFromRoot } from '@pixiv/three-vrm-utils';
 import type { VRMSpringBoneCollider } from './VRMSpringBoneCollider';
 import type { VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';
 import { traverseChildrenUntilConditionMet } from './utils/traverseChildrenUntilConditionMet';
