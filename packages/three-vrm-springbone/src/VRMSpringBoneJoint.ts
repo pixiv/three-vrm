@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { getWorldPositionLite } from './utils/getWorldPositionLite';
 import { mat4InvertCompat } from './utils/mat4InvertCompat';
 import { Matrix4InverseCache } from './utils/Matrix4InverseCache';
 import type { VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';
@@ -312,10 +311,10 @@ export class VRMSpringBoneJoint {
    * Intended to be used in {@link update}.
    */
   private _calcWorldSpaceBoneLength(): void {
-    getWorldPositionLite(this.bone, _v3A);
+    _v3A.setFromMatrixPosition(this.bone.matrixWorld); // get world position of this.bone
 
     if (this.child) {
-      getWorldPositionLite(this.child, _v3B);
+      _v3B.setFromMatrixPosition(this.child.matrixWorld); // get world position of this.child
     } else {
       _v3B.copy(this._initialLocalChildPosition);
       _v3B.applyMatrix4(this.bone.matrixWorld);
