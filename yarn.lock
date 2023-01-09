@@ -336,9 +336,9 @@
   integrity sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==
 
 "@gltf-transform/core@^2.4.7":
-  version "2.4.7"
-  resolved "https://registry.yarnpkg.com/@gltf-transform/core/-/core-2.4.7.tgz#96ddf79d9e63923458337b567a42d120aaa6712b"
-  integrity sha512-XIsbeKXdFdTO5UgVVKnGPUB5vQfQ3DoBVQcJd7tZzTia895Grs52AAtGEZhy3ja4p2J0OMq22kVUMvolKRbM5w==
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/@gltf-transform/core/-/core-2.5.1.tgz#d84ba1a02f956276ab055fc670cfb0771466e3fd"
+  integrity sha512-Ah4TVzQtlUpEOJPJovgobbviec7og7NaSo9f+Lg0kJCk3Wwjl++FuDHKCDYEB+CQL8CoLpfB62+8t+NH5buedg==
   dependencies:
     gl-matrix "~3.4.3"
     property-graph "^0.2.6"
