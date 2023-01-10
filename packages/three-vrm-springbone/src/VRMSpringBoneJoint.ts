@@ -1,6 +1,5 @@
 import * as THREE from 'three';
-import { mat4InvertCompat } from './utils/mat4InvertCompat';
-import { Matrix4InverseCache } from './utils/Matrix4InverseCache';
+import { mat4InvertCompat, Matrix4InverseCache } from '@pixiv/three-vrm-utils';
 import type { VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';
 import type { VRMSpringBoneJointSettings } from './VRMSpringBoneJointSettings';
 

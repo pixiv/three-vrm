@@ -1,5 +1,5 @@
 import { VRMExpressionPresetName } from './VRMExpressionPresetName';
-import { saturate } from '../utils/saturate';
+import { saturate } from '@pixiv/three-vrm-utils';
 import type { VRMExpression } from './VRMExpression';
 
 export class VRMExpressionManager {

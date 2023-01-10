@@ -1,4 +1,4 @@
-import { saturate } from '../utils/saturate';
+import { saturate } from '@pixiv/three-vrm-utils';
 
 export class VRMLookAtRangeMap {
   /**

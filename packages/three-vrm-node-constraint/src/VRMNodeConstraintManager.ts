@@ -1,6 +1,6 @@
 import type * as THREE from 'three';
 import type { VRMNodeConstraint } from './VRMNodeConstraint';
-import { traverseAncestorsFromRoot } from './utils/traverseAncestorsFromRoot';
+import { traverseAncestorsFromRoot } from '@pixiv/three-vrm-utils';
 
 export class VRMNodeConstraintManager {
   private _constraints = new Set<VRMNodeConstraint>();

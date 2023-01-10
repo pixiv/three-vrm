@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { decomposePosition } from './utils/decomposePosition';
 import { decomposeRotation } from './utils/decomposeRotation';
-import { quatInvertCompat } from './utils/quatInvertCompat';
+import { quatInvertCompat } from '@pixiv/three-vrm-utils';
 import { VRMNodeConstraint } from './VRMNodeConstraint';
 
 const _v3A = new THREE.Vector3();

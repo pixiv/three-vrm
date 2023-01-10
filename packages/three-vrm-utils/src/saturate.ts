@@ -1,5 +1,5 @@
 /**
- * Clamp the input value within [0.0 - 1.0].
+ * Clamp the input value within [0.0, 1.0].
  *
  * @param value The input value
  */
