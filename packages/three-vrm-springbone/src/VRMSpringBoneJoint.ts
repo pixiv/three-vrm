@@ -76,7 +76,9 @@ export class VRMSpringBoneJoint {
   private _boneAxis = new THREE.Vector3();
 
   /**
-   * Length of the bone in world unit. Will be used for normalization in update loop.
+   * Length of the bone in world unit.
+   * Will be used for normalization in update loop, will be updated by {@link _calcWorldSpaceBoneLength}.
+   *
    * It's same as local unit length unless there are scale transformations in the world space.
    */
   private _worldSpaceBoneLength = 0.0;
@@ -182,16 +184,12 @@ export class VRMSpringBoneJoint {
     }
 
     // copy the child position to tails
-    this.bone.localToWorld(this._currentTail.copy(this._initialLocalChildPosition));
+    const matrixWorldToCenter = this._getMatrixWorldToCenter(_matA);
+    this.bone.localToWorld(this._currentTail.copy(this._initialLocalChildPosition)).applyMatrix4(matrixWorldToCenter);
     this._prevTail.copy(this._currentTail);
 
     // set initial states that are related to local child position
     this._boneAxis.copy(this._initialLocalChildPosition).normalize();
-    this._worldSpaceBoneLength = _v3A
-      .copy(this._initialLocalChildPosition)
-      .applyMatrix4(this.bone.matrixWorld)
-      .sub(_v3B.setFromMatrixPosition(this.bone.matrixWorld))
-      .length();
   }
 
   /**
@@ -219,6 +217,9 @@ export class VRMSpringBoneJoint {
    */
   public update(delta: number): void {
     if (delta <= 0) return;
+
+    // Update the _worldSpaceBoneLength
+    this._calcWorldSpaceBoneLength();
 
     // Get bone position in center space
     _worldSpacePosition.setFromMatrixPosition(this.bone.matrixWorld);
@@ -303,6 +304,23 @@ export class VRMSpringBoneJoint {
         }
       });
     });
+  }
+
+  /**
+   * Calculate the {@link _worldSpaceBoneLength}.
+   * Intended to be used in {@link update}.
+   */
+  private _calcWorldSpaceBoneLength(): void {
+    _v3A.setFromMatrixPosition(this.bone.matrixWorld); // get world position of this.bone
+
+    if (this.child) {
+      _v3B.setFromMatrixPosition(this.child.matrixWorld); // get world position of this.child
+    } else {
+      _v3B.copy(this._initialLocalChildPosition);
+      _v3B.applyMatrix4(this.bone.matrixWorld);
+    }
+
+    this._worldSpaceBoneLength = _v3A.sub(_v3B).length();
   }
 
   /**

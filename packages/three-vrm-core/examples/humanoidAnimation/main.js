@@ -3,6 +3,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { VRMCoreLoaderPlugin } from '@pixiv/three-vrm-core';
 import { loadMixamoAnimation } from './loadMixamoAnimation.js';
+import GUI from 'three/addons/libs/lil-gui.module.min.js';
 
 // renderer
 const renderer = new THREE.WebGLRenderer();
@@ -115,6 +116,7 @@ function loadFBX( animationUrl ) {
 
 		// Apply the loaded animation to mixer and play
 		currentMixer.clipAction( clip ).play();
+		currentMixer.timeScale = params.timeScale;
 
 	} );
 
@@ -155,6 +157,21 @@ function animate() {
 }
 
 animate();
+
+// gui
+const gui = new GUI();
+
+const params = {
+
+	timeScale: 1.0,
+
+};
+
+gui.add( params, 'timeScale', 0.0, 2.0, 0.001 ).onChange( ( value ) => {
+
+	currentMixer.timeScale = value;
+
+} );
 
 // file input
 
