@@ -14,7 +14,6 @@ const _v3C = new THREE.Vector3();
 const _quatA = new THREE.Quaternion();
 const _quatB = new THREE.Quaternion();
 const _quatC = new THREE.Quaternion();
-const _quatD = new THREE.Quaternion();
 const _eulerA = new THREE.Euler();
 
 /**
@@ -107,9 +106,20 @@ export class VRMLookAt {
   protected _needsUpdate: boolean;
 
   /**
+   * World matrix without translation of the head in its rest pose.
+   * Intended to be used by {@link getLookAtWorldPosition}.
+   */
+  private readonly _invRestHeadWorldMatrixWithoutTranslation: THREE.Matrix4;
+
+  /**
    * World rotation of the head in its rest pose.
    */
-  private _restHeadWorldQuaternion: THREE.Quaternion;
+  private readonly _restHeadWorldQuaternion: THREE.Quaternion;
+
+  /**
+   * The inverse of {@link _restHeadWorldQuaternion}.
+   */
+  private readonly _invRestHeadWorldQuaternion: THREE.Quaternion;
 
   /**
    * @deprecated Use {@link getEuler} instead.
@@ -134,7 +144,15 @@ export class VRMLookAt {
     this._pitch = 0.0;
     this._needsUpdate = true;
 
-    this._restHeadWorldQuaternion = this.getLookAtWorldQuaternion(new THREE.Quaternion());
+    const head = this.humanoid.getRawBoneNode('head')!;
+
+    this._invRestHeadWorldMatrixWithoutTranslation = head.matrixWorld.clone().invert();
+    this._invRestHeadWorldMatrixWithoutTranslation.elements[12] = 0;
+    this._invRestHeadWorldMatrixWithoutTranslation.elements[13] = 0;
+    this._invRestHeadWorldMatrixWithoutTranslation.elements[14] = 0;
+
+    this._restHeadWorldQuaternion = getWorldQuaternionLite(head, new THREE.Quaternion());
+    this._invRestHeadWorldQuaternion = this._restHeadWorldQuaternion.clone().invert();
   }
 
   /**
@@ -194,7 +212,10 @@ export class VRMLookAt {
   public getLookAtWorldPosition(target: THREE.Vector3): THREE.Vector3 {
     const head = this.humanoid.getRawBoneNode('head')!;
 
-    return target.copy(this.offsetFromHeadBone).applyMatrix4(head.matrixWorld);
+    return target
+      .copy(this.offsetFromHeadBone)
+      .applyMatrix4(this._invRestHeadWorldMatrixWithoutTranslation)
+      .applyMatrix4(head.matrixWorld);
   }
 
   /**
@@ -216,13 +237,13 @@ export class VRMLookAt {
    */
   public getFaceFrontQuaternion(target: THREE.Quaternion): THREE.Quaternion {
     if (this.faceFront.distanceToSquared(VEC3_POSITIVE_Z) < 0.01) {
-      return target.copy(this._restHeadWorldQuaternion).invert();
+      return target.copy(this._invRestHeadWorldQuaternion);
     }
 
     const [faceFrontAzimuth, faceFrontAltitude] = calcAzimuthAltitude(this.faceFront);
     _eulerA.set(0.0, 0.5 * Math.PI + faceFrontAzimuth, faceFrontAltitude, 'YZX');
 
-    return target.setFromEuler(_eulerA).premultiply(_quatD.copy(this._restHeadWorldQuaternion).invert());
+    return target.setFromEuler(_eulerA).premultiply(this._invRestHeadWorldQuaternion);
   }
 
   /**
