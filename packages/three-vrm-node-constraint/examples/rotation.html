@@ -19,13 +19,25 @@
 	</head>
 
 	<body>
-		<script src="https://unpkg.com/three@0.146.0/build/three.js"></script>
-		<script src="https://unpkg.com/three@0.146.0/examples/js/controls/OrbitControls.js"></script>
-		<script src="https://unpkg.com/tweakpane@3.0"></script>
-		<script src="https://unpkg.com/@0b5vr/tweakpane-plugin-rotation@0.1"></script>
-		<script src="../lib/three-vrm-node-constraint.js"></script>
-		<script>
-			/* global Tweakpane, TweakpaneRotationInputPlugin, THREE_VRM_NODE_CONSTRAINT */
+		<script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+		<script type="importmap">
+			{
+			  "imports": {
+					"three": "https://unpkg.com/three@0.148.0/build/three.module.js",
+					"three/addons/": "https://unpkg.com/three@0.148.0/examples/jsm/",
+					"tweakpane": "https://unpkg.com/tweakpane@3.0",
+					"tweakpane-plugin-rotation": "https://unpkg.com/@0b5vr/tweakpane-plugin-rotation@0.1",
+					"@pixiv/three-vrm-node-constraint": "../lib/three-vrm-node-constraint.module.js"
+			  }
+			}
+		</script>
+		<script type="module">
+			import * as THREE from 'three';
+			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+			import 'tweakpane';
+			import 'tweakpane-plugin-rotation';
+			import { VRMNodeConstraintManager, VRMRotationConstraint, VRMNodeConstraintHelper } from '@pixiv/three-vrm-node-constraint';
+			/* global Tweakpane, TweakpaneRotationInputPlugin */
 			// gui
 			const guiParams = {
 
@@ -63,7 +75,7 @@
 			camera.position.set( 0.0, 1.0, 10.0 );
 
 			// camera controls
-			const controls = new THREE.OrbitControls( camera, renderer.domElement );
+			const controls = new OrbitControls( camera, renderer.domElement );
 			controls.screenSpacePanning = true;
 			controls.target.set( 0.0, 1.0, 0.0 );
 			controls.update();
@@ -98,19 +110,19 @@
 			scene.add( axesHelper );
 
 			// constraints
-			const constraintManager = new THREE_VRM_NODE_CONSTRAINT.VRMNodeConstraintManager( {
+			const constraintManager = new VRMNodeConstraintManager( {
 
 				autoRemoveCircularDependency: true
 
 			} );
 
-			const constraint = new THREE_VRM_NODE_CONSTRAINT.VRMRotationConstraint( destination, source );
+			const constraint = new VRMRotationConstraint( destination, source );
 			constraintManager.addConstraint( constraint );
 
 			// constraint helpers
 			Array.from( constraintManager.constraints ).forEach( ( constraint ) => {
 
-				const helper = new THREE_VRM_NODE_CONSTRAINT.VRMNodeConstraintHelper( constraint );
+				const helper = new VRMNodeConstraintHelper( constraint );
 				scene.add( helper );
 
 			} );

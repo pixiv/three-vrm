@@ -17,7 +17,7 @@
 				display: block;
 			}
 
-			div {
+			#divInfo {
 				padding: 8px;
 				position: fixed;
 				background: white;
@@ -26,18 +26,25 @@
 	</head>
 
 	<body>
-		<div>
-			drag and drop <a href="https://www.mixamo.com/" target="_blank" rel="noopener noreferrer">mixamo</a> animation (.fbx)
+		<div id="divInfo">
+			drag and drop <a href="https://www.mixamo.com/" target="_blank" rel="noopener noreferrer">mixamo</a> animation (.fbx)<br />
 		</div>
 
-		<script src="https://unpkg.com/three@0.146.0/build/three.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/fflate/umd/index.js"></script>
-		<script src="https://unpkg.com/three@0.146.0/examples/js/loaders/GLTFLoader.js"></script>
-		<script src="https://unpkg.com/three@0.146.0/examples/js/controls/OrbitControls.js"></script>
-		<script src="https://unpkg.com/three@0.146.0/examples/js/loaders/FBXLoader.js"></script>
-		<script src="../../lib/three-vrm.js"></script>
-		<script src="mixamoRigMap.js"></script>
-		<script src="loadMixamoAnimation.js"></script>
-		<script src="main.js""></script>
+		<!-- Import maps polyfill -->
+		<!-- Remove this when import maps will be widely supported -->
+		<script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+
+		<script type="importmap">
+			{
+				"imports": {
+					"fflate": "https://unpkg.com/fflate@0.7.4/esm/browser.js",
+					"three": "https://unpkg.com/three@0.148.0/build/three.module.js",
+					"three/addons/": "https://unpkg.com/three@0.148.0/examples/jsm/",
+					"@pixiv/three-vrm": "../../lib/three-vrm.module.js"
+				}
+			}
+		</script>
+
+		<script src="main.js" type="module"></script>
 	</body>
 </html>

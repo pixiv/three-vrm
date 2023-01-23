@@ -36,7 +36,9 @@ export declare class VRMSpringBoneJoint {
      */
     private _boneAxis;
     /**
-     * Length of the bone in world unit. Will be used for normalization in update loop.
+     * Length of the bone in world unit.
+     * Will be used for normalization in update loop, will be updated by {@link _calcWorldSpaceBoneLength}.
+     *
      * It's same as local unit length unless there are scale transformations in the world space.
      */
     private _worldSpaceBoneLength;
@@ -97,6 +99,11 @@ export declare class VRMSpringBoneJoint {
      * @param tail The tail you want to process
      */
     private _collision;
+    /**
+     * Calculate the {@link _worldSpaceBoneLength}.
+     * Intended to be used in {@link update}.
+     */
+    private _calcWorldSpaceBoneLength;
     /**
      * Create a matrix that converts center space into world space.
      * @param target Target matrix

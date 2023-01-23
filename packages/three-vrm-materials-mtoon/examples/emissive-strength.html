@@ -19,17 +19,27 @@
 	</head>
 
 	<body>
-		<script src="https://unpkg.com/three@0.146.0/build/three.js"></script>
-		<script src="https://unpkg.com/three@0.146.0/examples/js/loaders/GLTFLoader.js"></script>
-		<script src="https://unpkg.com/three@0.146.0/examples/js/controls/OrbitControls.js"></script>
-		<script src="https://unpkg.com/three@0.146.0/examples/js/shaders/CopyShader.js"></script>
-		<script src="https://unpkg.com/three@0.146.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
-		<script src="https://unpkg.com/three@0.146.0/examples/js/postprocessing/EffectComposer.js"></script>
-		<script src="https://unpkg.com/three@0.146.0/examples/js/postprocessing/ShaderPass.js"></script>
-		<script src="https://unpkg.com/three@0.146.0/examples/js/postprocessing/RenderPass.js"></script>
-		<script src="https://unpkg.com/three@0.146.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
-		<script src="../lib/three-vrm-materials-mtoon.js"></script>
-		<script>
+		<script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+
+		<script type="importmap">
+			{
+				"imports": {
+					"three": "https://unpkg.com/three@0.148.0/build/three.module.js",
+					"three/addons/": "https://unpkg.com/three@0.148.0/examples/jsm/",
+					"@pixiv/three-vrm-materials-mtoon": "../lib/three-vrm-materials-mtoon.module.js"
+				}
+			}
+		</script>
+
+		<script type="module">
+			import * as THREE from 'three';
+			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+			import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+			import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+			import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+			import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+			import { MToonMaterialLoaderPlugin } from '@pixiv/three-vrm-materials-mtoon';
+
 			/* global THREE_VRM_MATERIALS_MTOON */
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
@@ -44,7 +54,7 @@
 			camera.position.set( 0.0, 0.0, 10.0 );
 
 			// camera controls
-			const controls = new THREE.OrbitControls( camera, renderer.domElement );
+			const controls = new OrbitControls( camera, renderer.domElement );
 			controls.screenSpacePanning = true;
 			controls.target.set( 0.0, 0.0, 0.0 );
 			controls.update();
@@ -59,11 +69,11 @@
 			// gltf and vrm
 			let currentGltf = null;
 
-			const loader = new THREE.GLTFLoader();
+			const loader = new GLTFLoader();
 
 			loader.register( ( parser ) => {
 
-				const plugin = new THREE_VRM_MATERIALS_MTOON.MToonMaterialLoaderPlugin( parser );
+				const plugin = new MToonMaterialLoaderPlugin( parser );
 				return plugin;
 
 			} );
@@ -103,12 +113,12 @@
 			scene.add( axesHelper );
 
 			// composer
-			const composer = new THREE.EffectComposer( renderer );
+			const composer = new EffectComposer( renderer );
 
-			const renderPass = new THREE.RenderPass( scene, camera );
+			const renderPass = new RenderPass( scene, camera );
 			composer.addPass( renderPass );
 
-			const bloomPass = new THREE.UnrealBloomPass(
+			const bloomPass = new UnrealBloomPass(
 
 				// resolution
 				new THREE.Vector2( window.innerWidth, window.innerHeight ),

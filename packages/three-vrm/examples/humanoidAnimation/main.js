@@ -1,4 +1,9 @@
-/* global THREE, THREE_VRM, loadMixamoAnimation */
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
+import { loadMixamoAnimation } from './loadMixamoAnimation.js';
+import GUI from 'three/addons/libs/lil-gui.module.min.js';
 
 // renderer
 const renderer = new THREE.WebGLRenderer();
@@ -12,7 +17,7 @@ const camera = new THREE.PerspectiveCamera( 30.0, window.innerWidth / window.inn
 camera.position.set( 0.0, 1.0, 5.0 );
 
 // camera controls
-const controls = new THREE.OrbitControls( camera, renderer.domElement );
+const controls = new OrbitControls( camera, renderer.domElement );
 controls.screenSpacePanning = true;
 controls.target.set( 0.0, 1.0, 0.0 );
 controls.update();
@@ -38,14 +43,14 @@ scene.add( helperRoot );
 
 function loadVRM( modelUrl ) {
 
-	const loader = new THREE.GLTFLoader();
+	const loader = new GLTFLoader();
 	loader.crossOrigin = 'anonymous';
 
 	helperRoot.clear();
 
 	loader.register( ( parser ) => {
 
-		return new THREE_VRM.VRMLoaderPlugin( parser, { helperRoot: helperRoot, autoUpdateHumanBones: true } );
+		return new VRMLoaderPlugin( parser, { helperRoot: helperRoot, autoUpdateHumanBones: true } );
 
 	} );
 
@@ -62,7 +67,7 @@ function loadVRM( modelUrl ) {
 
 				scene.remove( currentVrm.scene );
 
-				THREE_VRM.VRMUtils.deepDispose( currentVrm.scene );
+				VRMUtils.deepDispose( currentVrm.scene );
 
 			}
 
@@ -84,7 +89,7 @@ function loadVRM( modelUrl ) {
 			}
 
 			// rotate if the VRM is VRM0.0
-			THREE_VRM.VRMUtils.rotateVRM0( vrm );
+			VRMUtils.rotateVRM0( vrm );
 
 			console.log( vrm );
 
@@ -114,6 +119,7 @@ function loadFBX( animationUrl ) {
 
 		// Apply the loaded animation to mixer and play
 		currentMixer.clipAction( clip ).play();
+		currentMixer.timeScale = params.timeScale;
 
 	} );
 
@@ -154,6 +160,21 @@ function animate() {
 }
 
 animate();
+
+// gui
+const gui = new GUI();
+
+const params = {
+
+	timeScale: 1.0,
+
+};
+
+gui.add( params, 'timeScale', 0.0, 2.0, 0.001 ).onChange( ( value ) => {
+
+	currentMixer.timeScale = value;
+
+} );
 
 // file input
 
