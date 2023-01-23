@@ -45,11 +45,11 @@
     "@pixiv/types-vrmc-materials-mtoon-1.0": "1.0.0"
   },
   "devDependencies": {
-    "@types/three": "^0.146.0",
-    "three": "^0.146.0"
+    "@types/three": "^0.148.0",
+    "three": "^0.148.0"
   },
   "peerDependencies": {
-    "@types/three": "^0.146.0",
-    "three": "^0.146.0"
+    "@types/three": "^0.148.0",
+    "three": "^0.148.0"
   }
 }
