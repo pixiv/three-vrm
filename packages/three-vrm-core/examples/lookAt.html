@@ -43,7 +43,8 @@
 			import * as THREE from 'three';
 			import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-			import { VRMCoreLoaderPlugin } from '@pixiv/three-vrm-core';
+			import { VRMCoreLoaderPlugin, VRMLookAtLoaderPlugin } from '@pixiv/three-vrm-core';
+			import GUI from 'three/addons/libs/lil-gui.module.min.js';
 
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
@@ -75,6 +76,11 @@
 			lookAtTarget.position.z = - 1.0;
 			camera.add( lookAtTarget );
 
+			// helper root
+			const helperRoot = new THREE.Group();
+			helperRoot.renderOrder = 10000;
+			scene.add( helperRoot );
+
 			// gltf and vrm
 			let currentGltf = undefined;
 
@@ -83,7 +89,9 @@
 
 			loader.register( ( parser ) => {
 
-				return new VRMCoreLoaderPlugin( parser, { helperRoot: scene, autoUpdateHumanBones: true } );
+				const lookAtPlugin = new VRMLookAtLoaderPlugin( parser, { helperRoot } );
+
+				return new VRMCoreLoaderPlugin( parser, { lookAtPlugin, autoUpdateHumanBones: true } );
 
 			} );
 
@@ -145,6 +153,21 @@
 			}
 
 			animate();
+
+			// gui
+			const gui = new GUI();
+
+			const params = {
+
+				showGizmo: true,
+
+			};
+
+			gui.add( params, 'showGizmo' ).onChange( ( value ) => {
+
+				helperRoot.visible = value;
+
+			} );
 
 			// mouse listener
 			window.addEventListener( 'mousemove', ( event ) => {
