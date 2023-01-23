@@ -1,6 +1,6 @@
 {
   "name": "@pixiv/three-vrm",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "VRM file loader for three.js.",
   "license": "MIT",
   "author": "pixiv",
@@ -46,12 +46,12 @@
     ]
   },
   "dependencies": {
-    "@pixiv/three-vrm-core": "1.0.6",
-    "@pixiv/three-vrm-materials-hdr-emissive-multiplier": "1.0.6",
-    "@pixiv/three-vrm-materials-mtoon": "1.0.6",
-    "@pixiv/three-vrm-materials-v0compat": "1.0.6",
-    "@pixiv/three-vrm-node-constraint": "1.0.6",
-    "@pixiv/three-vrm-springbone": "1.0.6"
+    "@pixiv/three-vrm-core": "1.0.7",
+    "@pixiv/three-vrm-materials-hdr-emissive-multiplier": "1.0.7",
+    "@pixiv/three-vrm-materials-mtoon": "1.0.7",
+    "@pixiv/three-vrm-materials-v0compat": "1.0.7",
+    "@pixiv/three-vrm-node-constraint": "1.0.7",
+    "@pixiv/three-vrm-springbone": "1.0.7"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.0.1",
