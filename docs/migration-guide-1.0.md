@@ -209,13 +209,22 @@ You might want to use `VRMLookAt.offsetFromHeadBone` instead.
 
 ## MToonMaterial
 
+### `VRM.materials` now only have MToonMaterials
+
+In three-vrm v0.x, we used to have not only `MToonMaterial`s but also other materials glTF supports, such as `MeshStandardMaterial`s and `MeshBasicMaterial`s.
+
+Starting from v1.0, `VRM.materials` only has `MToonMaterial`s.
+It's because materials that need to be managed by the class `VRM` are only `MToonMaterial`s, which need to call `MToonMaterial.update()` upon `VRM.update()`.
+
+You can use `gltf.parser.getDependencies('material')` instead, which lists every material loaded by the `GLTFLoader`.
+
 ### The interface must have been largely changed
 
 MToon has been largely reworked from the VRM0.0 one.
 
 Think like the VRM1.0 MToon is basically a totally different material.
 
-See the documentation: `TODO`
+See the API reference: [https://pixiv.github.io/three-vrm/packages/three-vrm/docs/classes/MToonMaterial.html](https://pixiv.github.io/three-vrm/packages/three-vrm/docs/classes/MToonMaterial.html)
 
 ### v0CompatShade
 
