@@ -227,7 +227,7 @@ export class VRMHumanoid {
    * Reset the normalized humanoid to its rest pose.
    */
   public resetNormalizedPose(): void {
-    return this._rawHumanBones.resetPose();
+    return this._normalizedHumanBones.resetPose();
   }
 
   /**
