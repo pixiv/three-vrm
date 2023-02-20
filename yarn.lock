@@ -335,13 +335,12 @@
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.3.tgz#555193ab2e3bb3b6adc3d551c9c030d9e860daf6"
   integrity sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==
 
-"@gltf-transform/core@^2.4.7":
-  version "2.4.7"
-  resolved "https://registry.yarnpkg.com/@gltf-transform/core/-/core-2.4.7.tgz#96ddf79d9e63923458337b567a42d120aaa6712b"
-  integrity sha512-XIsbeKXdFdTO5UgVVKnGPUB5vQfQ3DoBVQcJd7tZzTia895Grs52AAtGEZhy3ja4p2J0OMq22kVUMvolKRbM5w==
+"@gltf-transform/core@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@gltf-transform/core/-/core-3.0.1.tgz#9d15c61f9f55131f63333514d91e9e9c3a0f477a"
+  integrity sha512-IGBq5T2+Bei2aVdWqTj8lYSS86FEhlGvmn70Tc/8NYGwgcuti9wPDB1jX5CtsZmTifucFM36SlisSMLflY+OnQ==
   dependencies:
-    gl-matrix "~3.4.3"
-    property-graph "^0.2.6"
+    property-graph "^1.0.0"
 
 "@humanwhocodes/config-array@^0.5.0":
   version "0.5.0"
@@ -3865,11 +3864,6 @@ gitconfiglocal@^1.0.0:
   dependencies:
     ini "^1.3.2"
 
-gl-matrix@~3.4.3:
-  version "3.4.3"
-  resolved "https://registry.yarnpkg.com/gl-matrix/-/gl-matrix-3.4.3.tgz#fc1191e8320009fd4d20e9339595c6041ddc22c9"
-  integrity sha512-wcCp8vu8FT22BnvKVPjXa/ICBWRq/zjFfdofZy1WSpQZpphblv12/bOQLBC1rMM7SGOFS9ltVmKOHil5+Ml7gA==
-
 glob-parent@^5.1.1, glob-parent@^5.1.2, glob-parent@~5.1.2:
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/glob-parent/-/glob-parent-5.1.2.tgz#869832c58034fe68a4093c17dc15e8340d8401c4"
@@ -6395,10 +6389,10 @@ promzard@^0.3.0:
   dependencies:
     read "1"
 
-property-graph@^0.2.6:
-  version "0.2.6"
-  resolved "https://registry.yarnpkg.com/property-graph/-/property-graph-0.2.6.tgz#add988a436745936d4b2ae19f747f2556296c828"
-  integrity sha512-QiBHxNZlwIarbkxsqCY688aP1ANbwtoQFBYgTZopQ0Bvku6/EYp3H4KH0ygxkhWQbJv5DEONspLy1rHi5xIycg==
+property-graph@^1.0.0:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/property-graph/-/property-graph-1.0.3.tgz#b10d7578856fb187987f1fd765639edb6224b556"
+  integrity sha512-LhNLXmbUfWio8R6H+KEzhnQ9EYmo7/qe7v9jmZuvkZPgIdLhRNPSP1wrfUG0hJhamT9u0bRSfIKJxSKfotQ+zQ==
 
 proto-list@~1.2.1:
   version "1.2.4"
