@@ -458,11 +458,6 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     // == update shader stuff ======================================================================
     this.customProgramCacheKey = () =>
       [
-        this._ignoreVertexColor ? 'ignoreVertexColor' : '',
-        this._v0CompatShade ? 'v0CompatShade' : '',
-        this._debugMode !== 'none' ? `debugMode:${this._debugMode}` : '',
-        this._outlineWidthMode !== 'none' ? `outlineWidthMode:${this._outlineWidthMode}` : '',
-        this._isOutline ? 'isOutline' : '',
         ...Object.entries(this._generateDefines()).map(([token, macro]) => `${token}:${macro}`),
         this.matcapTexture ? `matcapTextureEncoding:${this.matcapTexture.encoding}` : '',
         this.shadeMultiplyTexture ? `shadeMultiplyTextureEncoding:${this.shadeMultiplyTexture.encoding}` : '',
