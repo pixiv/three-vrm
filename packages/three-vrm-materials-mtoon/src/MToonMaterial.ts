@@ -647,14 +647,15 @@ export class MToonMaterial extends THREE.ShaderMaterial {
       USE_SHADINGSHIFTTEXTURE: this.shadingShiftTexture !== null,
       USE_MATCAPTEXTURE: this.matcapTexture !== null,
       USE_RIMMULTIPLYTEXTURE: this.rimMultiplyTexture !== null,
-      USE_OUTLINEWIDTHMULTIPLYTEXTURE: this.outlineWidthMultiplyTexture !== null,
+      USE_OUTLINEWIDTHMULTIPLYTEXTURE: this._isOutline && this.outlineWidthMultiplyTexture !== null,
       USE_UVANIMATIONMASKTEXTURE: this.uvAnimationMaskTexture !== null,
       IGNORE_VERTEX_COLOR: this._ignoreVertexColor === true,
       DEBUG_NORMAL: this._debugMode === 'normal',
       DEBUG_LITSHADERATE: this._debugMode === 'litShadeRate',
       DEBUG_UV: this._debugMode === 'uv',
-      OUTLINE_WIDTH_WORLD: this._outlineWidthMode === MToonMaterialOutlineWidthMode.WorldCoordinates,
-      OUTLINE_WIDTH_SCREEN: this._outlineWidthMode === MToonMaterialOutlineWidthMode.ScreenCoordinates,
+      OUTLINE_WIDTH_WORLD: this._isOutline && this._outlineWidthMode === MToonMaterialOutlineWidthMode.WorldCoordinates,
+      OUTLINE_WIDTH_SCREEN:
+        this._isOutline && this._outlineWidthMode === MToonMaterialOutlineWidthMode.ScreenCoordinates,
     };
   }
 
