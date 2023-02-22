@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { VRMSpringBoneJoint } from '../VRMSpringBoneJoint';
 import { SpringBoneBufferGeometry } from './utils/SpringBoneBufferGeometry';
 
+const _v3A = new THREE.Vector3();
+
 export class VRMSpringBoneJointHelper extends THREE.Group {
   public readonly springBone: VRMSpringBoneJoint;
   private readonly _geometry: SpringBoneBufferGeometry;
@@ -33,6 +35,11 @@ export class VRMSpringBoneJointHelper extends THREE.Group {
     this.springBone.bone.updateWorldMatrix(true, false);
 
     this.matrix.copy(this.springBone.bone.matrixWorld);
+
+    const matrixWorldElements = this.matrix.elements;
+    this._geometry.worldScale = _v3A
+      .set(matrixWorldElements[0], matrixWorldElements[1], matrixWorldElements[2])
+      .length(); // calculate scale of x component
 
     this._geometry.update();
 

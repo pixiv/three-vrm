@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { VRMSpringBoneJoint } from '../../VRMSpringBoneJoint';
 
 export class SpringBoneBufferGeometry extends THREE.BufferGeometry {
+  public worldScale = 1.0;
+
   private readonly _attrPos: THREE.BufferAttribute;
   private readonly _attrIndex: THREE.BufferAttribute;
   private readonly _springBone: VRMSpringBoneJoint;
@@ -26,8 +28,9 @@ export class SpringBoneBufferGeometry extends THREE.BufferGeometry {
   public update(): void {
     let shouldUpdateGeometry = false;
 
-    if (this._currentRadius !== this._springBone.settings.hitRadius) {
-      this._currentRadius = this._springBone.settings.hitRadius;
+    const radius = this._springBone.settings.hitRadius / this.worldScale;
+    if (this._currentRadius !== radius) {
+      this._currentRadius = radius;
       shouldUpdateGeometry = true;
     }
 
