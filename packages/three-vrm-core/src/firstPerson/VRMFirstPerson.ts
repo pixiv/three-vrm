@@ -176,16 +176,28 @@ export class VRMFirstPerson {
 
     const geometry = dst.geometry;
 
-    const skinIndexAttr = geometry.getAttribute('skinIndex').array;
+    const skinIndexAttr = geometry.getAttribute('skinIndex');
+    const skinIndexAttrArray = skinIndexAttr instanceof THREE.GLBufferAttribute ? [] : skinIndexAttr.array;
     const skinIndex = [];
-    for (let i = 0; i < skinIndexAttr.length; i += 4) {
-      skinIndex.push([skinIndexAttr[i], skinIndexAttr[i + 1], skinIndexAttr[i + 2], skinIndexAttr[i + 3]]);
+    for (let i = 0; i < skinIndexAttrArray.length; i += 4) {
+      skinIndex.push([
+        skinIndexAttrArray[i],
+        skinIndexAttrArray[i + 1],
+        skinIndexAttrArray[i + 2],
+        skinIndexAttrArray[i + 3],
+      ]);
     }
 
-    const skinWeightAttr = geometry.getAttribute('skinWeight').array;
+    const skinWeightAttr = geometry.getAttribute('skinWeight');
+    const skinWeightAttrArray = skinWeightAttr instanceof THREE.GLBufferAttribute ? [] : skinWeightAttr.array;
     const skinWeight = [];
-    for (let i = 0; i < skinWeightAttr.length; i += 4) {
-      skinWeight.push([skinWeightAttr[i], skinWeightAttr[i + 1], skinWeightAttr[i + 2], skinWeightAttr[i + 3]]);
+    for (let i = 0; i < skinWeightAttrArray.length; i += 4) {
+      skinWeight.push([
+        skinWeightAttrArray[i],
+        skinWeightAttrArray[i + 1],
+        skinWeightAttrArray[i + 2],
+        skinWeightAttrArray[i + 3],
+      ]);
     }
 
     const index = geometry.getIndex();
