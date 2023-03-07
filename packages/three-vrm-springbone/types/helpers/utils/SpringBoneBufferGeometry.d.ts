@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { VRMSpringBoneJoint } from '../../VRMSpringBoneJoint';
 export declare class SpringBoneBufferGeometry extends THREE.BufferGeometry {
+    worldScale: number;
     private readonly _attrPos;
     private readonly _attrIndex;
     private readonly _springBone;

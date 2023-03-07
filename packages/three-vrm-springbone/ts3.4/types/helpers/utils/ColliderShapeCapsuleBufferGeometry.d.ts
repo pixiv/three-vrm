@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { VRMSpringBoneColliderShapeCapsule } from '../../VRMSpringBoneColliderShapeCapsule';
 import { ColliderShapeBufferGeometry } from './ColliderShapeBufferGeometry';
 export declare class ColliderShapeCapsuleBufferGeometry extends THREE.BufferGeometry implements ColliderShapeBufferGeometry {
+    worldScale: number;
     private readonly _attrPos;
     private readonly _attrIndex;
     private readonly _shape;
