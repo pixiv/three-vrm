@@ -267,7 +267,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     mesh.material = [surfaceMaterial]; // mesh.material is guaranteed to be a Material in GLTFLoader
 
     // duplicate the material for outline use
-    const outlineMaterial = surfaceMaterial.clone() as MToonMaterial;
+    const outlineMaterial = surfaceMaterial.clone();
     outlineMaterial.name += ' (Outline)';
     outlineMaterial.isOutline = true;
     outlineMaterial.side = THREE.BackSide;
