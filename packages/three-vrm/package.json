@@ -55,12 +55,12 @@
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.0.1",
-    "@types/three": "^0.149.0",
+    "@types/three": "^0.150.1",
     "lint-staged": "13.1.2",
-    "three": "^0.149.0"
+    "three": "^0.150.1"
   },
   "peerDependencies": {
-    "@types/three": "^0.149.0",
-    "three": "^0.149.0"
+    "@types/three": "^0.150.1",
+    "three": "^0.150.1"
   }
 }
