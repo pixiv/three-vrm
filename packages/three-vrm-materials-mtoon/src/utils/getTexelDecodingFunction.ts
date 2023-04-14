@@ -9,12 +9,20 @@ const RGBDEncoding = 3006;
 const GammaEncoding = 3007;
 /* eslint-enable @typescript-eslint/naming-convention */
 
+type TextureEncoding =
+  | THREE.TextureEncoding
+  | typeof RGBEEncoding
+  | typeof RGBM7Encoding
+  | typeof RGBM16Encoding
+  | typeof RGBDEncoding
+  | typeof GammaEncoding;
+
 /**
  * COMPAT: pre-r137
  *
  * Ref: https://github.com/mrdoob/three.js/blob/r136/src/renderers/webgl/WebGLProgram.js#L22
  */
-export const getEncodingComponents = (encoding: THREE.TextureEncoding): [string, string] => {
+export const getEncodingComponents = (encoding: TextureEncoding): [string, string] => {
   if (parseInt(THREE.REVISION, 10) >= 136) {
     switch (encoding) {
       case THREE.LinearEncoding:
@@ -55,7 +63,7 @@ export const getEncodingComponents = (encoding: THREE.TextureEncoding): [string,
  *
  * https://github.com/mrdoob/three.js/blob/r136/src/renderers/webgl/WebGLProgram.js#L52
  */
-export const getTexelDecodingFunction = (functionName: string, encoding: THREE.TextureEncoding): string => {
+export const getTexelDecodingFunction = (functionName: string, encoding: TextureEncoding): string => {
   const components = getEncodingComponents(encoding);
   return 'vec4 ' + functionName + '( vec4 value ) { return ' + components[0] + 'ToLinear' + components[1] + '; }';
 };
