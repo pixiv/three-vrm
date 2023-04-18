@@ -27,8 +27,7 @@ export class VRMHumanoidHelper extends THREE.Group {
 
       this.add(helper);
 
-      // TODO: type assertion is not needed in later versions of TypeScript
-      this._boneAxesMap.set(bone!, helper);
+      this._boneAxesMap.set(bone, helper);
     });
   }
 

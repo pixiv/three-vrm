@@ -38,6 +38,8 @@ export class VRMExpression extends THREE.Object3D {
 
   private _binds: VRMExpressionBind[] = [];
 
+  override readonly type: string | 'VRMExpression';
+
   /**
    * A value represents how much it should override blink expressions.
    * `0.0` == no override at all, `1.0` == completely block the expressions.
@@ -88,6 +90,7 @@ export class VRMExpression extends THREE.Object3D {
 
     // traverse 時の救済手段として Object3D ではないことを明示しておく
     this.type = 'VRMExpression';
+
     // 表示目的のオブジェクトではないので、負荷軽減のために visible を false にしておく。
     // これにより、このインスタンスに対する毎フレームの matrix 自動計算を省略できる。
     this.visible = false;

@@ -42,7 +42,7 @@ export class Matrix4InverseCache {
     this.matrix = matrix;
 
     const handler: ProxyHandler<number[]> = {
-      set: (obj, prop: number, newVal) => {
+      set: (obj, prop: any, newVal) => {
         this._shouldUpdateInverse = true;
         obj[prop] = newVal;
 
