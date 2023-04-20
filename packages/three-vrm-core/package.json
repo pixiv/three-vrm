@@ -50,12 +50,12 @@
     "@pixiv/types-vrmc-vrm-1.0": "1.0.0"
   },
   "devDependencies": {
-    "@types/three": "^0.150.1",
+    "@types/three": "^0.150.2",
     "lint-staged": "13.1.2",
-    "three": "^0.150.1"
+    "three": "^0.151.3"
   },
   "peerDependencies": {
-    "@types/three": "^0.150.1",
-    "three": "^0.150.1"
+    "@types/three": "^0.150.2",
+    "three": "^0.151.3"
   }
 }
