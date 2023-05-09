@@ -18,6 +18,12 @@ import { GLTF as GLTFSchema } from '@gltf-transform/core';
 const POSSIBLE_SPEC_VERSIONS = new Set(['1.0', '1.0-beta']);
 
 /**
+ * The minimum permitted value for {@link V1VRMSchema.LookAtRangeMap.inputMaxValue}.
+ * If the given value is smaller than this, the loader shows a warning and clamps up the value.
+ */
+const INPUT_MAX_VALUE_MINIMUM = 0.01;
+
+/**
  * A plugin of GLTFLoader that imports a {@link VRMLookAt} from a VRM extension of a GLTF.
  */
 export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
@@ -149,10 +155,20 @@ export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
     schemaRangeMap: V1VRMSchema.LookAtRangeMap | undefined,
     defaultOutputScale: number,
   ): VRMLookAtRangeMap {
-    return new VRMLookAtRangeMap(
-      schemaRangeMap?.inputMaxValue ?? 90.0,
-      schemaRangeMap?.outputScale ?? defaultOutputScale,
-    );
+    let inputMaxValue = schemaRangeMap?.inputMaxValue ?? 90.0;
+    const outputScale = schemaRangeMap?.outputScale ?? defaultOutputScale;
+
+    // It might cause NaN when `inputMaxValue` is too small
+    // which makes the mesh of the head disappear
+    // See: https://github.com/pixiv/three-vrm/issues/1201
+    if (inputMaxValue < INPUT_MAX_VALUE_MINIMUM) {
+      console.warn(
+        'VRMLookAtLoaderPlugin: inputMaxValue of a range map is too small. Consider reviewing the range map!',
+      );
+      inputMaxValue = INPUT_MAX_VALUE_MINIMUM;
+    }
+
+    return new VRMLookAtRangeMap(inputMaxValue, outputScale);
   }
 
   private async _v0Import(
@@ -219,7 +235,18 @@ export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
       console.warn('Curves of LookAtDegreeMap defined in VRM 0.0 are not supported');
     }
 
-    return new VRMLookAtRangeMap(schemaDegreeMap?.xRange ?? 90.0, schemaDegreeMap?.yRange ?? defaultOutputScale);
+    let xRange = schemaDegreeMap?.xRange ?? 90.0;
+    const yRange = schemaDegreeMap?.yRange ?? defaultOutputScale;
+
+    // It might cause NaN when `xRange` is too small
+    // which makes the mesh of the head disappear
+    // See: https://github.com/pixiv/three-vrm/issues/1201
+    if (xRange < INPUT_MAX_VALUE_MINIMUM) {
+      console.warn('VRMLookAtLoaderPlugin: xRange of a degree map is too small. Consider reviewing the degree map!');
+      xRange = INPUT_MAX_VALUE_MINIMUM;
+    }
+
+    return new VRMLookAtRangeMap(xRange, yRange);
   }
 
   private _importLookAt(humanoid: VRMHumanoid, applier: VRMLookAtApplier): VRMLookAt {
