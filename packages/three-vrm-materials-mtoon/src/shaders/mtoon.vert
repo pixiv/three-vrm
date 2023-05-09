@@ -11,10 +11,23 @@ varying vec3 vViewPosition;
 // #include <uv_pars_vertex>
 #ifdef MTOON_USE_UV
   varying vec2 vUv;
-  uniform mat3 uvTransform;
+
+  // COMPAT: pre-r151 uses a common uvTransform
+  #if THREE_VRM_THREE_REVISION < 151
+    uniform mat3 uvTransform;
+  #endif
 #endif
 
-#include <uv2_pars_vertex>
+// #include <uv2_pars_vertex>
+// COMAPT: pre-r151 uses uv2 for lightMap and aoMap
+#if THREE_VRM_THREE_REVISION < 151
+  #if defined( USE_LIGHTMAP ) || defined( USE_AOMAP )
+    attribute vec2 uv2;
+    varying vec2 vUv2;
+    uniform mat3 uv2Transform;
+  #endif
+#endif
+
 // #include <displacementmap_pars_vertex>
 // #include <envmap_pars_vertex>
 #include <color_pars_vertex>
@@ -36,10 +49,22 @@ void main() {
 
   // #include <uv_vertex>
   #ifdef MTOON_USE_UV
-    vUv = ( uvTransform * vec3( uv, 1 ) ).xy;
+    // COMPAT: pre-r151 uses a common uvTransform
+    #if THREE_VRM_THREE_REVISION >= 151
+      vUv = uv;
+    #else
+      vUv = ( uvTransform * vec3( uv, 1 ) ).xy;
+    #endif
   #endif
 
-  #include <uv2_vertex>
+  // #include <uv2_vertex>
+  // COMAPT: pre-r151 uses uv2 for lightMap and aoMap
+  #if THREE_VRM_THREE_REVISION < 151
+    #if defined( USE_LIGHTMAP ) || defined( USE_AOMAP )
+      vUv2 = ( uv2Transform * vec3( uv2, 1 ) ).xy;
+    #endif
+  #endif
+
   #include <color_vertex>
 
   #include <beginnormal_vertex>
