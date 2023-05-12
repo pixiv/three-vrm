@@ -8,6 +8,7 @@ The below should work:
 
 ```sh
 yarn
+yarn build
 cd packages/three-vrm
 yarn dev
 ```
