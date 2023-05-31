@@ -1,6 +1,6 @@
 {
   "name": "@pixiv/three-vrm-core",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "The implementation of core features of VRM, for @pixiv/three-vrm",
   "license": "MIT",
   "author": "pixiv",
