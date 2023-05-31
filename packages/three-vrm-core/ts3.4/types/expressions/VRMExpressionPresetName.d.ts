@@ -18,4 +18,4 @@ export declare const VRMExpressionPresetName: {
     readonly BlinkRight: "blinkRight";
     readonly Neutral: "neutral";
 };
-export declare type VRMExpressionPresetName = typeof VRMExpressionPresetName[keyof typeof VRMExpressionPresetName];
+export type VRMExpressionPresetName = typeof VRMExpressionPresetName[keyof typeof VRMExpressionPresetName];

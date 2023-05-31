@@ -1,1 +1,1 @@
-export declare type ExpressionOverrideType = 'none' | 'block' | 'blend';
+export type ExpressionOverrideType = 'none' | 'block' | 'blend';

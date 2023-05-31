@@ -3,4 +3,4 @@ export declare const VRMExpressionOverrideType: {
     readonly Block: "block";
     readonly Blend: "blend";
 };
-export declare type VRMExpressionOverrideType = typeof VRMExpressionOverrideType[keyof typeof VRMExpressionOverrideType];
+export type VRMExpressionOverrideType = typeof VRMExpressionOverrideType[keyof typeof VRMExpressionOverrideType];

@@ -1,1 +1,1 @@
-export declare type MaterialsMToonOutlineWidthMode = 'none' | 'worldCoordinates' | 'screenCoordinates';
+export type MaterialsMToonOutlineWidthMode = 'none' | 'worldCoordinates' | 'screenCoordinates';

@@ -19,6 +19,6 @@ import { VRMPoseTransform } from './VRMPoseTransform';
  * }
  * ```
  */
-export declare type VRMPose = {
+export type VRMPose = {
     [boneName in VRMHumanBoneName]?: VRMPoseTransform;
 };

@@ -122,7 +122,7 @@ export declare class MToonMaterial extends THREE.ShaderMaterial {
      *
      * See: https://github.com/mrdoob/three.js/blob/4f5236ac3d6f41d904aa58401b40554e8fbdcb15/src/renderers/webgl/WebGLPrograms.js#L190-L191
      */
-    normalMapType: THREE.NormalMapTypes;
+    normalMapType: 0;
     /**
      * When this is `true`, vertex colors will be ignored.
      * `true` by default.

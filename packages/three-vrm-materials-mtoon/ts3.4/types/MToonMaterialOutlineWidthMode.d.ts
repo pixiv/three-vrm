@@ -3,4 +3,4 @@ export declare const MToonMaterialOutlineWidthMode: {
     readonly WorldCoordinates: "worldCoordinates";
     readonly ScreenCoordinates: "screenCoordinates";
 };
-export declare type MToonMaterialOutlineWidthMode = typeof MToonMaterialOutlineWidthMode[keyof typeof MToonMaterialOutlineWidthMode];
+export type MToonMaterialOutlineWidthMode = typeof MToonMaterialOutlineWidthMode[keyof typeof MToonMaterialOutlineWidthMode];

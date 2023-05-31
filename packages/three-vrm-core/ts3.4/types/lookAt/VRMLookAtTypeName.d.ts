@@ -5,4 +5,4 @@ export declare const VRMLookAtTypeName: {
     Bone: string;
     Expression: string;
 };
-export declare type VRMLookAtTypeName = typeof VRMLookAtTypeName[keyof typeof VRMLookAtTypeName];
+export type VRMLookAtTypeName = typeof VRMLookAtTypeName[keyof typeof VRMLookAtTypeName];

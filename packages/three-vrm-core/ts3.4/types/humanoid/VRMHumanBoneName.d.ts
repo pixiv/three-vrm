@@ -60,4 +60,4 @@ export declare const VRMHumanBoneName: {
     readonly RightLittleIntermediate: "rightLittleIntermediate";
     readonly RightLittleDistal: "rightLittleDistal";
 };
-export declare type VRMHumanBoneName = typeof VRMHumanBoneName[keyof typeof VRMHumanBoneName];
+export type VRMHumanBoneName = typeof VRMHumanBoneName[keyof typeof VRMHumanBoneName];

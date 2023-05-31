@@ -3,6 +3,6 @@ import { HumanoidHumanBoneName } from './HumanoidHumanBoneName';
 /**
  * Represents a set of humanBones of a humanoid.
  */
-export declare type HumanoidHumanBones = {
+export type HumanoidHumanBones = {
     [key in HumanoidHumanBoneName]: HumanoidHumanBone;
 };

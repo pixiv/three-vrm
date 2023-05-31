@@ -28,6 +28,7 @@ export declare class VRMExpression extends THREE.Object3D {
      */
     overrideMouth: VRMExpressionOverrideType;
     private _binds;
+    readonly type: string | 'VRMExpression';
     /*
     * A value represents how much it should override blink expressions.
     * `0.0` == no override at all, `1.0` == completely block the expressions.

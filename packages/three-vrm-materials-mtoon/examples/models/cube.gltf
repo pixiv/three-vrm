@@ -116,7 +116,7 @@
       "uri": "uv-grid.png"
     },
     {
-      "uri": "normal-perlin.png"
+      "uri": "normal-perlin.jpg"
     }
   ],
   "samplers": [
@@ -160,7 +160,7 @@
       "alphaMode": "OPAQUE",
       "alphaCutoff": 0.5,
       "normalTexture": {
-        "scale": 0.1,
+        "scale": 1.0,
         "index": 3,
         "texCoord": 0
       },

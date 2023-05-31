@@ -21,4 +21,4 @@ export declare const MToonMaterialDebugMode: {
      */
     readonly UV: "uv";
 };
-export declare type MToonMaterialDebugMode = typeof MToonMaterialDebugMode[keyof typeof MToonMaterialDebugMode];
+export type MToonMaterialDebugMode = typeof MToonMaterialDebugMode[keyof typeof MToonMaterialDebugMode];

@@ -6,7 +6,7 @@ export declare const VRMExpressionMaterialColorType: {
     readonly RimColor: "rimColor";
     readonly OutlineColor: "outlineColor";
 };
-export declare type VRMExpressionMaterialColorType = typeof VRMExpressionMaterialColorType[keyof typeof VRMExpressionMaterialColorType];
+export type VRMExpressionMaterialColorType = typeof VRMExpressionMaterialColorType[keyof typeof VRMExpressionMaterialColorType];
 export declare const v0ExpressionMaterialColorMap: {
     [key: string]: VRMExpressionMaterialColorType | undefined;
 };
