@@ -61,7 +61,14 @@ uniform float uvAnimationRotationPhase;
   varying vec2 vUv;
 #endif
 
-#include <uv2_pars_fragment>
+// #include <uv2_pars_fragment>
+// COMAPT: pre-r151 uses uv2 for lightMap and aoMap
+#if THREE_VRM_THREE_REVISION < 151
+  #if defined( USE_LIGHTMAP ) || defined( USE_AOMAP )
+    varying vec2 vUv2;
+  #endif
+#endif
+
 #include <map_pars_fragment>
 
 #ifdef USE_MAP
@@ -88,9 +95,12 @@ uniform float uvAnimationRotationPhase;
 #include <fog_pars_fragment>
 
 // #include <bsdfs>
-vec3 BRDF_Lambert( const in vec3 diffuseColor ) {
-  return RECIPROCAL_PI * diffuseColor;
-}
+// COMPAT: pre-r151 doesn't have BRDF_Lambert in <common>
+#if THREE_VRM_THREE_REVISION < 151
+  vec3 BRDF_Lambert( const in vec3 diffuseColor ) {
+    return RECIPROCAL_PI * diffuseColor;
+  }
+#endif
 
 #include <lights_pars_begin>
 
@@ -161,7 +171,7 @@ vec3 getDiffuse(
 }
 
 void RE_Direct_MToon( const in IncidentLight directLight, const in GeometricContext geometry, const in MToonMaterial material, const in float shadow, inout ReflectedLight reflectedLight ) {
-  float dotNL = saturate( dot( geometry.normal, directLight.direction ) );
+  float dotNL = clamp( dot( geometry.normal, directLight.direction ), -1.0, 1.0 );
   vec3 irradiance = directLight.color;
 
   #if THREE_VRM_THREE_REVISION < 132
@@ -205,22 +215,47 @@ void RE_IndirectDiffuse_MToon( const in vec3 irradiance, const in GeometricConte
 
 #endif
 
-#ifdef OBJECTSPACE_NORMALMAP
+// COMPAT: USE_NORMALMAP_OBJECTSPACE used to be OBJECTSPACE_NORMALMAP in pre-r151
+#if defined( USE_NORMALMAP_OBJECTSPACE ) || defined( OBJECTSPACE_NORMALMAP )
 
   uniform mat3 normalMatrix;
 
 #endif
 
-#if ! defined ( USE_TANGENT ) && defined ( TANGENTSPACE_NORMALMAP )
+// COMPAT: USE_NORMALMAP_TANGENTSPACE used to be TANGENTSPACE_NORMALMAP in pre-r151
+#if ! defined ( USE_TANGENT ) && ( defined ( USE_NORMALMAP_TANGENTSPACE ) || defined ( TANGENTSPACE_NORMALMAP ) )
 
   // Per-Pixel Tangent Space Normal Mapping
   // http://hacksoflife.blogspot.ch/2009/11/per-pixel-tangent-space-normal-mapping.html
 
   // three-vrm specific change: it requires `uv` as an input in order to support uv scrolls
 
-  // Temporary compat against shader change @ Three.js r126
-  // See: #21205, #21307, #21299
-  #if THREE_VRM_THREE_REVISION >= 126
+  // Temporary compat against shader change @ Three.js r126, r151
+  #if THREE_VRM_THREE_REVISION >= 151
+
+    mat3 getTangentFrame( vec3 eye_pos, vec3 surf_norm, vec2 uv ) {
+
+      vec3 q0 = dFdx( eye_pos.xyz );
+      vec3 q1 = dFdy( eye_pos.xyz );
+      vec2 st0 = dFdx( uv.st );
+      vec2 st1 = dFdy( uv.st );
+
+      vec3 N = surf_norm;
+
+      vec3 q1perp = cross( q1, N );
+      vec3 q0perp = cross( N, q0 );
+
+      vec3 T = q1perp * st0.x + q0perp * st1.x;
+      vec3 B = q1perp * st0.y + q0perp * st1.y;
+
+      float det = max( dot( T, T ), dot( B, B ) );
+      float scale = ( det == 0.0 ) ? 0.0 : inversesqrt( det );
+
+      return mat3( T * scale, B * scale, N );
+
+    }
+
+  #elif THREE_VRM_THREE_REVISION >= 126
 
     vec3 perturbNormal2Arb( vec2 uv, vec3 eye_pos, vec3 surf_norm, vec3 mapN, float faceDirection ) {
 
@@ -375,7 +410,79 @@ void main() {
   #include <alphatest_fragment>
 
   // #include <specularmap_fragment>
-  #include <normal_fragment_begin>
+
+  // #include <normal_fragment_begin>
+  float faceDirection = gl_FrontFacing ? 1.0 : -1.0;
+
+  #ifdef FLAT_SHADED
+
+    vec3 fdx = dFdx( vViewPosition );
+    vec3 fdy = dFdy( vViewPosition );
+    vec3 normal = normalize( cross( fdx, fdy ) );
+
+  #else
+
+    vec3 normal = normalize( vNormal );
+
+    #ifdef DOUBLE_SIDED
+
+      normal *= faceDirection;
+
+    #endif
+
+  #endif
+
+  #ifdef USE_NORMALMAP
+
+    vec2 normalMapUv = ( normalMapUvTransform * vec3( uv, 1 ) ).xy;
+
+  #endif
+
+  #ifdef USE_NORMALMAP_TANGENTSPACE
+
+    #ifdef USE_TANGENT
+
+      mat3 tbn = mat3( normalize( vTangent ), normalize( vBitangent ), normal );
+
+    #else
+
+      mat3 tbn = getTangentFrame( - vViewPosition, normal, normalMapUv );
+
+    #endif
+
+    #if defined( DOUBLE_SIDED ) && ! defined( FLAT_SHADED )
+
+      tbn[0] *= faceDirection;
+      tbn[1] *= faceDirection;
+
+    #endif
+
+  #endif
+
+  #ifdef USE_CLEARCOAT_NORMALMAP
+
+    #ifdef USE_TANGENT
+
+      mat3 tbn2 = mat3( normalize( vTangent ), normalize( vBitangent ), normal );
+
+    #else
+
+      mat3 tbn2 = getTangentFrame( - vViewPosition, normal, vClearcoatNormalMapUv );
+
+    #endif
+
+    #if defined( DOUBLE_SIDED ) && ! defined( FLAT_SHADED )
+
+      tbn2[0] *= faceDirection;
+      tbn2[1] *= faceDirection;
+
+    #endif
+
+  #endif
+
+  // non perturbed normal for clearcoat among others
+
+  vec3 geometryNormal = normal;
 
   #ifdef OUTLINE
     normal *= -1.0;
@@ -383,9 +490,9 @@ void main() {
 
   // #include <normal_fragment_maps>
 
-  #ifdef OBJECTSPACE_NORMALMAP
+  // COMPAT: USE_NORMALMAP_OBJECTSPACE used to be OBJECTSPACE_NORMALMAP in pre-r151
+  #if defined( USE_NORMALMAP_OBJECTSPACE ) || defined( OBJECTSPACE_NORMALMAP )
 
-    vec2 normalMapUv = ( normalMapUvTransform * vec3( uv, 1 ) ).xy;
     normal = texture2D( normalMap, normalMapUv ).xyz * 2.0 - 1.0; // overrides both flatShading and attribute normals
 
     #ifdef FLIP_SIDED
@@ -412,20 +519,20 @@ void main() {
 
     normal = normalize( normalMatrix * normal );
 
-  #elif defined( TANGENTSPACE_NORMALMAP )
+  // COMPAT: USE_NORMALMAP_TANGENTSPACE used to be TANGENTSPACE_NORMALMAP in pre-r151
+  #elif defined( USE_NORMALMAP_TANGENTSPACE ) || defined( TANGENTSPACE_NORMALMAP )
 
-    vec2 normalMapUv = ( normalMapUvTransform * vec3( uv, 1 ) ).xy;
     vec3 mapN = texture2D( normalMap, normalMapUv ).xyz * 2.0 - 1.0;
     mapN.xy *= normalScale;
 
-    #ifdef USE_TANGENT
+    // COMPAT: pre-r151
+    #if THREE_VRM_THREE_REVISION >= 151 || defined( USE_TANGENT )
 
-      normal = normalize( vTBN * mapN );
+      normal = normalize( tbn * mapN );
 
     #else
 
-      // Temporary compat against shader change @ Three.js r126
-      // See: #21205, #21307, #21299
+      // pre-r126
       #if THREE_VRM_THREE_REVISION >= 126
 
         normal = perturbNormal2Arb( uv, -vViewPosition, normal, mapN, faceDirection );

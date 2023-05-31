@@ -46,8 +46,8 @@ Code like this:
 <script type="importmap">
   {
     "imports": {
-      "three": "https://unpkg.com/three@0.150.1/build/three.module.js",
-      "three/addons/": "https://unpkg.com/three@0.150.1/examples/jsm/",
+      "three": "https://unpkg.com/three@0.151.3/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.151.3/examples/jsm/",
       "@pixiv/three-vrm": "three-vrm.module.js"
     }
   }
