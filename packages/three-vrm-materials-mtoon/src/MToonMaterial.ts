@@ -6,6 +6,7 @@ import fragmentShader from './shaders/mtoon.frag';
 import { MToonMaterialDebugMode } from './MToonMaterialDebugMode';
 import { MToonMaterialOutlineWidthMode } from './MToonMaterialOutlineWidthMode';
 import type { MToonMaterialParameters } from './MToonMaterialParameters';
+import { getTextureColorSpace } from './utils/getTextureColorSpace';
 
 /**
  * MToon is a material specification that has various features.
@@ -457,9 +458,11 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.customProgramCacheKey = () =>
       [
         ...Object.entries(this._generateDefines()).map(([token, macro]) => `${token}:${macro}`),
-        this.matcapTexture ? `matcapTextureEncoding:${this.matcapTexture.encoding}` : '',
-        this.shadeMultiplyTexture ? `shadeMultiplyTextureEncoding:${this.shadeMultiplyTexture.encoding}` : '',
-        this.rimMultiplyTexture ? `rimMultiplyTextureEncoding:${this.rimMultiplyTexture.encoding}` : '',
+        this.matcapTexture ? `matcapTextureColorSpace:${getTextureColorSpace(this.matcapTexture)}` : '',
+        this.shadeMultiplyTexture
+          ? `shadeMultiplyTextureColorSpace:${getTextureColorSpace(this.shadeMultiplyTexture)}`
+          : '',
+        this.rimMultiplyTexture ? `rimMultiplyTextureColorSpace:${getTextureColorSpace(this.rimMultiplyTexture)}` : '',
       ].join(',');
 
     this.onBeforeCompile = (shader) => {
