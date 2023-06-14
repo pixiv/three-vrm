@@ -1,6 +1,6 @@
 {
   "name": "@pixiv/three-vrm-materials-hdr-emissive-multiplier",
-  "version": "1.0.10",
+  "version": "2.0.0-alpha.0",
   "description": "Support VRMC_hdr_emissiveMultiplier for @pixiv/three-vrm",
   "license": "MIT",
   "author": "pixiv",
