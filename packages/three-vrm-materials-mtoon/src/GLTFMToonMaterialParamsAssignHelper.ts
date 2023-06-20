@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MToonMaterialParameters } from './MToonMaterialParameters';
+import { setTextureColorSpace } from './utils/setTextureColorSpace';
 
 /**
  * MaterialParameters hates `undefined`. This helper automatically rejects assign of these `undefined`.
@@ -52,7 +53,7 @@ export class GLTFMToonMaterialParamsAssignHelper {
         await this._parser.assignTexture(this._materialParams, key, texture);
 
         if (isColorTexture) {
-          this._materialParams[key].encoding = THREE.sRGBEncoding;
+          setTextureColorSpace(this._materialParams[key], 'srgb');
         }
       }
     })();

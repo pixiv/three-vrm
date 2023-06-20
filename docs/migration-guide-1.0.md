@@ -30,13 +30,21 @@ return loader.loadAsync(modelUrl).then((gltf) => {
 
 ### Linear Workflows
 
-In VRM1.0, linear workflow is explicitly recommended, [as GLTFLoader recommends](https://threejs.org/docs/#examples/en/loaders/GLTFLoader).
+In VRM1.0, linear workflow is explicitly recommended,
+
+**Starting from Three.js r152, you no longer have to specify the color space explicitly.**
+See [three.js#25756](https://github.com/mrdoob/three.js/pull/25756) for details.
+
+<details>
+<summary>The previous guide before r152</summary>
 
 You should enable the linear workflow.
 
 ```jsx
 renderer.outputEncoding = THREE.sRGBEncoding;
 ```
+
+</details>
 
 ### VRMUtils.rotateVRM0
 

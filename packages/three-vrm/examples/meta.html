@@ -38,8 +38,8 @@
 		<script type="importmap">
 			{
 				"imports": {
-					"three": "https://unpkg.com/three@0.151.3/build/three.module.js",
-					"three/addons/": "https://unpkg.com/three@0.151.3/examples/jsm/",
+					"three": "https://unpkg.com/three@0.153.0/build/three.module.js",
+					"three/addons/": "https://unpkg.com/three@0.153.0/examples/jsm/",
 					"@pixiv/three-vrm": "../lib/three-vrm.module.js"
 				}
 			}
@@ -53,7 +53,6 @@
 
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
-			renderer.outputEncoding = THREE.sRGBEncoding;
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			renderer.setPixelRatio( window.devicePixelRatio );
 			document.body.appendChild( renderer.domElement );
