@@ -46,10 +46,10 @@
   },
   "devDependencies": {
     "@types/three": "^0.153.0",
-    "three": "^0.153.0"
+    "three": "^0.154.0"
   },
   "peerDependencies": {
     "@types/three": "^0.153.0",
-    "three": "^0.153.0"
+    "three": "^0.154.0"
   }
 }
