@@ -50,6 +50,7 @@ uniform float outlineLightingMixFactor;
 uniform float uvAnimationScrollXOffset;
 uniform float uvAnimationScrollYOffset;
 uniform float uvAnimationRotationPhase;
+uniform bool transparent;
 
 #include <common>
 #include <packing>
@@ -794,6 +795,6 @@ void main() {
     col = outlineColorFactor.rgb * mix( vec3( 1.0 ), col, outlineLightingMixFactor );
   #endif
 
-  gl_FragColor = vec4( col, diffuseColor.a );
+  gl_FragColor = vec4( col, transparent ? diffuseColor.a : 1.0 );
   postCorrection();
 }
