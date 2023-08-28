@@ -794,6 +794,10 @@ void main() {
     col = outlineColorFactor.rgb * mix( vec3( 1.0 ), col, outlineLightingMixFactor );
   #endif
 
+  #ifdef OPAQUE
+    diffuseColor.a = 1.0;
+  #endif
+
   gl_FragColor = vec4( col, diffuseColor.a );
   postCorrection();
 }
