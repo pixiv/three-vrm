@@ -56,7 +56,6 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     uvAnimationScrollXOffset: THREE.IUniform<number>;
     uvAnimationScrollYOffset: THREE.IUniform<number>;
     uvAnimationRotationPhase: THREE.IUniform<number>;
-    transparent: THREE.IUniform<boolean>;
   };
 
   public get color(): THREE.Color {
@@ -445,7 +444,6 @@ export class MToonMaterial extends THREE.ShaderMaterial {
         uvAnimationScrollXOffset: { value: 0.0 },
         uvAnimationScrollYOffset: { value: 0.0 },
         uvAnimationRotationPhase: { value: 0.0 },
-        transparent: { value: false },
       },
       parameters.uniforms,
     ]);
@@ -565,7 +563,6 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     // and cannot be overridden as an accessor,
     // We are going to update opacity here
     this.uniforms.opacity.value = this.opacity;
-    this.uniforms.transparent.value = this.transparent;
 
     // workaround: texture transforms are not updated automatically
     this._updateTextureMatrix(this.uniforms.map, this.uniforms.mapUvTransform);
