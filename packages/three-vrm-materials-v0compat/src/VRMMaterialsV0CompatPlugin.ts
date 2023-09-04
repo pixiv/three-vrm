@@ -336,7 +336,7 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
     const offset = [textureTransform?.[0] ?? 0.0, textureTransform?.[1] ?? 0.0];
     const scale = [textureTransform?.[2] ?? 1.0, textureTransform?.[3] ?? 1.0];
 
-    offset[1] = (1.0 - scale[1] - offset[1]) % 1.0;
+    offset[1] = 1.0 - scale[1] - offset[1];
 
     return {
       // eslint-disable-next-line @typescript-eslint/naming-convention
