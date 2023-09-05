@@ -373,6 +373,9 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
               if (materialPropertyName === '_MainTex_ST') {
                 const scale = new THREE.Vector2(materialValue.targetValue![0], materialValue.targetValue![1]);
                 const offset = new THREE.Vector2(materialValue.targetValue![2], materialValue.targetValue![3]);
+
+                offset.y = 1.0 - offset.y - scale.y;
+
                 expression.addBind(
                   new VRMExpressionTextureTransformBind({
                     material,
