@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { VRMHumanBoneName } from '@pixiv/three-vrm';
+import type { VRMHumanBoneName } from '@pixiv/three-vrm-core';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { createVRMAnimationClip } from './createVRMAnimationClip';
 

@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import { VRM, VRMExpressionManager, VRMHumanoid } from '@pixiv/three-vrm';
-import { VRMAnimation } from './VRMAnimation';
+import type { VRMCore, VRMExpressionManager, VRMHumanoid } from '@pixiv/three-vrm-core';
+import type { VRMAnimation } from './VRMAnimation';
 
 function createHumanoidTracks(
   vrmAnimation: VRMAnimation,
@@ -72,11 +72,11 @@ function createLookAtTrack(vrmAnimation: VRMAnimation, trackName: string): THREE
 /**
  * Create an AnimationClip out of the given VRMAnimation and the VRM.
  *
- * @param vrmAnimation An {@link VRMAnimation}.
- * @param vrm An {@link VRM}.
+ * @param vrmAnimation A {@link VRMAnimation}.
+ * @param vrm A {@link VRMCore}.
  * @returns An AnimationClip
  */
-export function createVRMAnimationClip(vrmAnimation: VRMAnimation, vrm: VRM): THREE.AnimationClip {
+export function createVRMAnimationClip(vrmAnimation: VRMAnimation, vrm: VRMCore): THREE.AnimationClip {
   const tracks: THREE.KeyframeTrack[] = [];
 
   tracks.push(...createHumanoidTracks(vrmAnimation, vrm.humanoid, vrm.meta.metaVersion));

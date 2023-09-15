@@ -2,7 +2,8 @@ import * as THREE from 'three';
 import { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
 import { GLTF as GLTFSchema } from '@gltf-transform/core';
 import { VRMCVRMAnimation } from '@pixiv/types-vrmc-vrm-animation-1.0';
-import { VRMHumanBoneName, VRMHumanBoneParentMap } from '@pixiv/three-vrm';
+import type { VRMHumanBoneName } from '@pixiv/three-vrm-core';
+import { VRMHumanBoneParentMap } from '@pixiv/three-vrm-core';
 import { VRMAnimation } from './VRMAnimation';
 import { arrayChunk } from './utils/arrayChunk';
 

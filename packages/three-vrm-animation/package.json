@@ -34,7 +34,6 @@
     "build-prod": "cross-env NODE_ENV=production rollup -c",
     "build-types": "tsc --declaration --declarationDir ./types --emitDeclarationOnly && downlevel-dts types ts3.4/types",
     "docs": "typedoc --entryPoints ./src/index.ts --out docs",
-    "test": "jest",
     "lint": "eslint \"src/**/*.{ts,tsx}\"  && yarn lint-examples &&  prettier \"src/**/*.{ts,tsx}\" --check",
     "lint-examples": "eslint \"examples/**/*.{ts,tsx,js,html}\" --rule \"padded-blocks: error\"",
     "lint-fix": "eslint \"src/**/*.{ts,tsx}\" --fix && eslint \"examples/**/*.{ts,tsx,js,html}\" --fix &&  prettier \"src/**/*.{ts,tsx}\" --write"
@@ -46,6 +45,7 @@
     ]
   },
   "dependencies": {
+    "@pixiv/three-vrm-core": "2.0.3",
     "@pixiv/types-vrmc-vrm-1.0": "2.0.3",
     "@pixiv/types-vrmc-vrm-animation-1.0": "0.0.1"
   },
