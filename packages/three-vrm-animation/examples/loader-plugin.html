@@ -41,108 +41,112 @@
 			import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
 			import { createVRMAnimationClip, VRMAnimationLoaderPlugin } from '@pixiv/three-vrm-animation';
 
-			// renderer
-			const renderer = new THREE.WebGLRenderer();
-			renderer.setSize( window.innerWidth, window.innerHeight );
-			renderer.setPixelRatio( window.devicePixelRatio );
-			document.body.appendChild( renderer.domElement );
+			( async () => {
 
-			// camera
-			const camera = new THREE.PerspectiveCamera( 30.0, window.innerWidth / window.innerHeight, 0.1, 20.0 );
-			camera.position.set( 0.0, 1.0, 5.0 );
+				// renderer
+				const renderer = new THREE.WebGLRenderer();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				document.body.appendChild( renderer.domElement );
 
-			// camera controls
-			const controls = new OrbitControls( camera, renderer.domElement );
-			controls.screenSpacePanning = true;
-			controls.target.set( 0.0, 1.0, 0.0 );
-			controls.update();
+				// camera
+				const camera = new THREE.PerspectiveCamera( 30.0, window.innerWidth / window.innerHeight, 0.1, 20.0 );
+				camera.position.set( 0.0, 1.0, 5.0 );
 
-			// scene
-			const scene = new THREE.Scene();
+				// camera controls
+				const controls = new OrbitControls( camera, renderer.domElement );
+				controls.screenSpacePanning = true;
+				controls.target.set( 0.0, 1.0, 0.0 );
+				controls.update();
 
-			// light
-			const light = new THREE.DirectionalLight( 0xffffff );
-			light.position.set( 1.0, 1.0, 1.0 ).normalize();
-			scene.add( light );
+				// scene
+				const scene = new THREE.Scene();
 
-			// gltf loader (which can be used to load both VRM and VRMA!)
-			const loader = new GLTFLoader();
-			loader.crossOrigin = 'anonymous';
+				// light
+				const light = new THREE.DirectionalLight( 0xffffff );
+				light.position.set( 1.0, 1.0, 1.0 ).normalize();
+				scene.add( light );
 
-			loader.register( ( parser ) => {
+				// gltf loader (which can be used to load both VRM and VRMA!)
+				const loader = new GLTFLoader();
+				loader.crossOrigin = 'anonymous';
 
-				return new VRMLoaderPlugin( parser );
+				loader.register( ( parser ) => {
 
-			} );
+					return new VRMLoaderPlugin( parser );
 
-			loader.register( ( parser ) => {
+				} );
 
-				return new VRMAnimationLoaderPlugin( parser );
+				loader.register( ( parser ) => {
 
-			} );
+					return new VRMAnimationLoaderPlugin( parser );
 
-			// load VRM
-			const gltfVrm = await loader.loadAsync( './models/VRM1_Constraint_Twist_Sample.vrm' );
-			const vrm = gltfVrm.userData.vrm;
+				} );
 
-			// calling these functions greatly improves the performance
-			VRMUtils.removeUnnecessaryVertices( vrm.scene );
-			VRMUtils.removeUnnecessaryJoints( vrm.scene );
+				// load VRM
+				const gltfVrm = await loader.loadAsync( './models/VRM1_Constraint_Twist_Sample.vrm' );
+				const vrm = gltfVrm.userData.vrm;
 
-			// Disable frustum culling
-			vrm.scene.traverse( ( obj ) => {
+				// calling these functions greatly improves the performance
+				VRMUtils.removeUnnecessaryVertices( vrm.scene );
+				VRMUtils.removeUnnecessaryJoints( vrm.scene );
 
-				obj.frustumCulled = false;
+				// Disable frustum culling
+				vrm.scene.traverse( ( obj ) => {
 
-			} );
+					obj.frustumCulled = false;
 
-			// Add look at target to the VRM; which is needed to play the look at animation
-			const lookAtTarget = new THREE.Object3D();
-			lookAtTarget.name = 'lookAtTarget';
-			vrm.scene.add( lookAtTarget );
-			vrm.lookAt.target = lookAtTarget;
+				} );
 
-			// Add VRM to the scene
-			console.log( vrm );
-			scene.add( vrm.scene );
+				// Add look at target to the VRM; which is needed to play the look at animation
+				const lookAtTarget = new THREE.Object3D();
+				lookAtTarget.name = 'lookAtTarget';
+				vrm.scene.add( lookAtTarget );
+				vrm.lookAt.target = lookAtTarget;
 
-			// load VRMA
-			const gltfVrma = await loader.loadAsync( './models/test.vrma' );
-			const vrmAnimation = gltfVrma.userData.vrmAnimations[ 0 ];
+				// Add VRM to the scene
+				console.log( vrm );
+				scene.add( vrm.scene );
 
-			// create animation clip
-			const clip = createVRMAnimationClip( vrmAnimation, vrm );
+				// load VRMA
+				const gltfVrma = await loader.loadAsync( './models/test.vrma' );
+				const vrmAnimation = gltfVrma.userData.vrmAnimations[ 0 ];
 
-			// play animation
-			const mixer = new THREE.AnimationMixer( vrm.scene );
-			mixer.clipAction( clip ).play();
+				// create animation clip
+				const clip = createVRMAnimationClip( vrmAnimation, vrm );
 
-			// helpers
-			const gridHelper = new THREE.GridHelper( 10, 10 );
-			scene.add( gridHelper );
+				// play animation
+				const mixer = new THREE.AnimationMixer( vrm.scene );
+				mixer.clipAction( clip ).play();
 
-			const axesHelper = new THREE.AxesHelper( 5 );
-			scene.add( axesHelper );
+				// helpers
+				const gridHelper = new THREE.GridHelper( 10, 10 );
+				scene.add( gridHelper );
 
-			// animate
-			const clock = new THREE.Clock();
-			clock.start();
+				const axesHelper = new THREE.AxesHelper( 5 );
+				scene.add( axesHelper );
 
-			function animate() {
+				// animate
+				const clock = new THREE.Clock();
+				clock.start();
 
-				requestAnimationFrame( animate );
+				function animate() {
 
-				const deltaTime = clock.getDelta();
+					requestAnimationFrame( animate );
 
-				mixer.update( deltaTime );
+					const deltaTime = clock.getDelta();
 
-				vrm.update( deltaTime );
+					mixer.update( deltaTime );
 
-				renderer.render( scene, camera );
+					vrm.update( deltaTime );
 
-			}
+					renderer.render( scene, camera );
 
-			animate();
+				}
+
+				animate();
+
+			} )();
 		</script>
 	</body>
 </html>
