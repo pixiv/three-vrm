@@ -3,6 +3,7 @@
 import packageJson from './package.json';
 import serve from 'rollup-plugin-serve';
 import { terser } from 'rollup-plugin-terser';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 
 // == constants ====================================================================================
@@ -81,6 +82,7 @@ function createConfig( output ) {
     external: [ 'three' ],
     plugins: [
       typescript(),
+      nodeResolve(),
     ],
   };
 };
