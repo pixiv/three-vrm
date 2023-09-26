@@ -8,6 +8,12 @@ on:
       version:
         description: 'Version to release'
         required: true
+        type: string
+      distTag:
+        description: 'Used as lerna publish --dist-tag'
+        default: 'latest'
+        required: true
+        type: string
 
 jobs:
   fetch:
@@ -49,7 +55,7 @@ jobs:
     - name: Set package version
       run: |
         yarn lerna version ${{ github.event.inputs.version }} --exact --no-push --yes
-        yarn lerna publish from-git --dist-tag latest
+        yarn lerna publish from-git --dist-tag ${{ github.event.inputs.distTag }}
       env:
         NPM_CONFIG_PROVENANCE: true
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
