@@ -51,7 +51,7 @@ jobs:
     - name: Set package version
       run: |
         yarn lerna version ${{ github.event.inputs.version }} --exact --no-push --yes
-        yarn lerna publish from-git --dist-tag ${{ github.event.inputs.distTag }}
+        yarn lerna publish from-git -y --dist-tag ${{ github.event.inputs.distTag }}
       env:
         NPM_CONFIG_PROVENANCE: true
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
