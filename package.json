@@ -3,6 +3,9 @@
   "workspaces": [
     "packages/*"
   ],
+  "publishConfig": {
+    "provenance": true
+  },
   "scripts": {
     "all": "yarn clean && yarn build && yarn test && yarn lint && yarn docs",
     "clean": "lerna run clean",
@@ -27,7 +30,7 @@
     "eslint-plugin-html": "^7.1.0",
     "husky": "^8.0.2",
     "jest": "^26.6.3",
-    "lerna": "^6.1.0",
+    "lerna": "^6.6.2",
     "prettier": "^2.1.2",
     "rimraf": "^3.0.2",
     "rollup": "^2.33.1",
