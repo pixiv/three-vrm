@@ -18,6 +18,11 @@
       ]
     }
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pixiv/three-vrm.git",
+    "directory": "packages/types-vrmc-vrm-1.0"
+  },
   "scripts": {
     "version": "yarn all",
     "all": "yarn lint && yarn clean && yarn build && yarn docs",
