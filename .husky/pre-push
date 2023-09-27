@@ -2,7 +2,7 @@
 
 readonly DEV='dev'
 
-if [[ -z "$CI" ]]; then
+if [[ "$CI" == "true" ]]; then
   echo "[info] skip confirm on CI"
   exit 0
 fi
