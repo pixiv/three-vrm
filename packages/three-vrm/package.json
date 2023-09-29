@@ -7,12 +7,11 @@
   "files": [
     "/lib/",
     "/ts*/",
-    "/types/",
     "LICENSE"
   ],
   "main": "lib/three-vrm.js",
   "module": "lib/three-vrm.module.js",
-  "types": "types/index.d.ts",
+  "types": "lib/three-vrm.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/pixiv/three-vrm.git",
@@ -26,7 +25,7 @@
     "build": "yarn build-dev && yarn build-prod && yarn build-types",
     "build-dev": "cross-env NODE_ENV=development rollup -c",
     "build-prod": "cross-env NODE_ENV=production rollup -c",
-    "build-types": "tsc --declaration --declarationDir ./types --emitDeclarationOnly",
+    "build-types": "tsc --declaration --declarationDir ./types --emitDeclarationOnly && api-extractor run && rimraf types",
     "docs": "typedoc --entryPoints ./src/index.ts --out docs",
     "test": "echo There is no test for three-vrm",
     "lint": "eslint \"src/**/*.{ts,tsx}\"  && yarn lint-examples &&  prettier \"src/**/*.{ts,tsx}\" --check",
@@ -39,15 +38,13 @@
       "prettier --write"
     ]
   },
-  "dependencies": {
+  "devDependencies": {
     "@pixiv/three-vrm-core": "2.0.6-alpha.2",
     "@pixiv/three-vrm-materials-hdr-emissive-multiplier": "2.0.6-alpha.2",
     "@pixiv/three-vrm-materials-mtoon": "2.0.6-alpha.2",
     "@pixiv/three-vrm-materials-v0compat": "2.0.6-alpha.2",
     "@pixiv/three-vrm-node-constraint": "2.0.6-alpha.2",
-    "@pixiv/three-vrm-springbone": "2.0.6-alpha.2"
-  },
-  "devDependencies": {
+    "@pixiv/three-vrm-springbone": "2.0.6-alpha.2",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@types/three": "^0.154.0",
     "lint-staged": "13.1.2",

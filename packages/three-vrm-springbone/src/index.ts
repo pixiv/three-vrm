@@ -6,5 +6,6 @@ export * from './VRMSpringBoneColliderShapeCapsule';
 export * from './VRMSpringBoneColliderShapeSphere';
 export * from './VRMSpringBoneJoint';
 export * from './VRMSpringBoneLoaderPlugin';
+export * from './VRMSpringBoneLoaderPluginOptions';
 export * from './VRMSpringBoneManager';
 export * from './VRMSpringBoneJointSettings';

@@ -8,3 +8,6 @@ export { VRMExpressionMorphTargetBind } from './VRMExpressionMorphTargetBind';
 export { VRMExpressionOverrideType } from './VRMExpressionOverrideType';
 export { VRMExpressionPresetName } from './VRMExpressionPresetName';
 export { VRMExpressionTextureTransformBind } from './VRMExpressionTextureTransformBind';
+
+import type * as V0VRM from '@pixiv/types-vrm-0.0';
+export type { V0VRM };

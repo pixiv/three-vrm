@@ -73,9 +73,6 @@ export class VRMLookAt {
     return this._yaw;
   }
 
-  /**
-   * Its current angle around Y axis, in degree.
-   */
   public set yaw(value: number) {
     this._yaw = value;
     this._needsUpdate = true;
@@ -93,16 +90,13 @@ export class VRMLookAt {
     return this._pitch;
   }
 
-  /**
-   * Its current angle around X axis, in degree.
-   */
   public set pitch(value: number) {
     this._pitch = value;
     this._needsUpdate = true;
   }
 
   /**
-   * Specifies that angles need to be applied to its [@link applier].
+   * Specifies that angles need to be applied to its {@link applier}.
    */
   protected _needsUpdate: boolean;
 

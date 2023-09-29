@@ -18,6 +18,7 @@
   },
   "devDependencies": {
     "@gltf-transform/core": "^2.4.7",
+    "@microsoft/api-extractor": "^7.37.0",
     "@rollup/plugin-typescript": "^11.0.0",
     "@types/jest": "^26.0.15",
     "@typescript-eslint/eslint-plugin": "^4.6.1",

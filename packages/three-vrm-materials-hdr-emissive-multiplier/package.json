@@ -7,12 +7,11 @@
   "files": [
     "/lib/",
     "/ts*/",
-    "/types/",
     "LICENSE"
   ],
   "main": "lib/three-vrm-materials-hdr-emissive-multiplier.js",
   "module": "lib/three-vrm-materials-hdr-emissive-multiplier.module.js",
-  "types": "types/index.d.ts",
+  "types": "lib/three-vrm-materials-hdr-emissive-multiplier.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/pixiv/three-vrm.git",
@@ -26,7 +25,7 @@
     "build": "yarn build-dev && yarn build-prod && yarn build-types",
     "build-dev": "cross-env NODE_ENV=development rollup -c",
     "build-prod": "cross-env NODE_ENV=production rollup -c",
-    "build-types": "tsc --declaration --declarationDir ./types --emitDeclarationOnly",
+    "build-types": "tsc --declaration --declarationDir ./types --emitDeclarationOnly && api-extractor run && rimraf types",
     "docs": "typedoc --entryPoints ./src/index.ts --out docs",
     "lint": "eslint \"src/**/*.{ts,tsx}\"  && yarn lint-examples &&  prettier \"src/**/*.{ts,tsx}\" --check",
     "lint-examples": "eslint \"examples/**/*.{ts,tsx,js,html}\" --rule \"padded-blocks: error\"",
@@ -38,10 +37,8 @@
       "prettier --write"
     ]
   },
-  "dependencies": {
-    "@pixiv/types-vrmc-materials-hdr-emissive-multiplier-1.0": "2.0.6-alpha.2"
-  },
   "devDependencies": {
+    "@pixiv/types-vrmc-materials-hdr-emissive-multiplier-1.0": "2.0.6-alpha.2",
     "@types/three": "^0.154.0",
     "three": "^0.154.0"
   },
