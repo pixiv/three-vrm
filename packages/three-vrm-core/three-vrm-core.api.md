@@ -10,6 +10,366 @@ import { GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import * as THREE_2 from 'three';
 
 // @public
+interface BlendShape {
+    // (undocumented)
+    blendShapeGroups?: BlendShapeGroup[];
+}
+
+// @public (undocumented)
+interface BlendShapeBind {
+    // (undocumented)
+    index?: number;
+
+    // (undocumented)
+    mesh?: number;
+
+    weight?: number;
+}
+
+// @public (undocumented)
+interface BlendShapeGroup {
+    binds?: BlendShapeBind[];
+
+    isBinary?: boolean;
+
+    materialValues?: BlendShapeMaterialbind[];
+
+    name?: string;
+
+    presetName?: BlendShapePresetName;
+}
+
+// @public (undocumented)
+interface BlendShapeMaterialbind {
+    // (undocumented)
+    materialName?: string;
+    // (undocumented)
+    propertyName?: string;
+    // (undocumented)
+    targetValue?: number[];
+}
+
+// @public
+type BlendShapePresetName =
+| 'a'
+| 'angry'
+| 'blink'
+| 'blink_l'
+| 'blink_r'
+| 'e'
+| 'fun'
+| 'i'
+| 'joy'
+| 'lookdown'
+| 'lookleft'
+| 'lookright'
+| 'lookup'
+| 'neutral'
+| 'o'
+| 'sorrow'
+| 'u'
+| 'unknown';
+
+// @public (undocumented)
+interface FirstPerson {
+    firstPersonBone?: number;
+
+    firstPersonBoneOffset?: Vector3;
+
+    // (undocumented)
+    lookAtHorizontalInner?: FirstPersonDegreeMap;
+
+    // (undocumented)
+    lookAtHorizontalOuter?: FirstPersonDegreeMap;
+
+    lookAtTypeName?: 'Bone' | 'BlendShape';
+
+    // (undocumented)
+    lookAtVerticalDown?: FirstPersonDegreeMap;
+
+    // (undocumented)
+    lookAtVerticalUp?: FirstPersonDegreeMap;
+
+    meshAnnotations?: FirstPersonMeshAnnotation[];
+}
+
+// @public
+interface FirstPersonDegreeMap {
+    curve?: number[];
+
+    xRange?: number;
+
+    yRange?: number;
+}
+
+// @public (undocumented)
+interface FirstPersonMeshAnnotation {
+    // (undocumented)
+    firstPersonFlag?: string;
+    // (undocumented)
+    mesh?: number;
+}
+
+// @public (undocumented)
+interface Humanoid {
+    armStretch?: number;
+
+    feetSpacing?: number;
+
+    hasTranslationDoF?: boolean;
+
+    // (undocumented)
+    humanBones?: HumanoidBone[];
+
+    legStretch?: number;
+
+    lowerArmTwist?: number;
+
+    lowerLegTwist?: number;
+
+    upperArmTwist?: number;
+
+    upperLegTwist?: number;
+}
+
+// @public (undocumented)
+interface HumanoidBone {
+    axisLength?: number;
+
+    bone?: HumanoidBoneName;
+
+    center?: Vector3;
+
+    max?: Vector3;
+
+    min?: Vector3;
+
+    node?: number;
+
+    useDefaultValues?: boolean;
+}
+
+// @public
+type HumanoidBoneName =
+| 'chest'
+| 'head'
+| 'hips'
+| 'jaw'
+| 'leftEye'
+| 'leftFoot'
+| 'leftHand'
+| 'leftIndexDistal'
+| 'leftIndexIntermediate'
+| 'leftIndexProximal'
+| 'leftLittleDistal'
+| 'leftLittleIntermediate'
+| 'leftLittleProximal'
+| 'leftLowerArm'
+| 'leftLowerLeg'
+| 'leftMiddleDistal'
+| 'leftMiddleIntermediate'
+| 'leftMiddleProximal'
+| 'leftRingDistal'
+| 'leftRingIntermediate'
+| 'leftRingProximal'
+| 'leftShoulder'
+| 'leftThumbDistal'
+| 'leftThumbIntermediate'
+| 'leftThumbProximal'
+| 'leftToes'
+| 'leftUpperArm'
+| 'leftUpperLeg'
+| 'neck'
+| 'rightEye'
+| 'rightFoot'
+| 'rightHand'
+| 'rightIndexDistal'
+| 'rightIndexIntermediate'
+| 'rightIndexProximal'
+| 'rightLittleDistal'
+| 'rightLittleIntermediate'
+| 'rightLittleProximal'
+| 'rightLowerArm'
+| 'rightLowerLeg'
+| 'rightMiddleDistal'
+| 'rightMiddleIntermediate'
+| 'rightMiddleProximal'
+| 'rightRingDistal'
+| 'rightRingIntermediate'
+| 'rightRingProximal'
+| 'rightShoulder'
+| 'rightThumbDistal'
+| 'rightThumbIntermediate'
+| 'rightThumbProximal'
+| 'rightToes'
+| 'rightUpperArm'
+| 'rightUpperLeg'
+| 'spine'
+| 'upperChest';
+
+// @public (undocumented)
+interface Material {
+    // (undocumented)
+    floatProperties?: { [key: string]: any };
+    // (undocumented)
+    keywordMap?: { [key: string]: any };
+    // (undocumented)
+    name?: string;
+    // (undocumented)
+    renderQueue?: number;
+    // (undocumented)
+    shader?: string;
+    // (undocumented)
+    tagMap?: { [key: string]: any };
+    // (undocumented)
+    textureProperties?: { [key: string]: any };
+    // (undocumented)
+    vectorProperties?: { [key: string]: any };
+}
+
+// @public (undocumented)
+interface Meta {
+    allowedUserName?: 'OnlyAuthor' | 'ExplicitlyLicensedPerson' | 'Everyone';
+
+    author?: string;
+
+    commercialUssageName?: 'Disallow' | 'Allow';
+
+    contactInformation?: string;
+
+    licenseName?:
+    | 'Redistribution_Prohibited'
+    | 'CC0'
+    | 'CC_BY'
+    | 'CC_BY_NC'
+    | 'CC_BY_SA'
+    | 'CC_BY_NC_SA'
+    | 'CC_BY_ND'
+    | 'CC_BY_NC_ND'
+    | 'Other';
+
+    otherLicenseUrl?: string;
+
+    otherPermissionUrl?: string;
+
+    reference?: string;
+
+    sexualUssageName?: 'Disallow' | 'Allow';
+
+    texture?: number;
+
+    title?: string;
+
+    version?: string;
+
+    violentUssageName?: 'Disallow' | 'Allow';
+}
+
+// @public
+interface SecondaryAnimation {
+    // (undocumented)
+    boneGroups?: SecondaryAnimationSpring[];
+    // (undocumented)
+    colliderGroups?: SecondaryAnimationColliderGroup[];
+}
+
+// @public (undocumented)
+interface SecondaryAnimationCollider {
+    offset?: Vector3;
+
+    radius?: number;
+}
+
+// @public (undocumented)
+interface SecondaryAnimationColliderGroup {
+    // (undocumented)
+    colliders?: SecondaryAnimationCollider[];
+
+    node?: number;
+}
+
+// @public (undocumented)
+interface SecondaryAnimationSpring {
+    bones?: number[];
+
+    center?: number;
+
+    colliderGroups?: number[];
+
+    comment?: string;
+
+    dragForce?: number;
+
+    gravityDir?: Vector3;
+
+    gravityPower?: number;
+
+    hitRadius?: number;
+
+    stiffiness?: number;
+}
+
+declare namespace V0VRM {
+    export {
+        BlendShape,
+        BlendShapeBind,
+        BlendShapeGroup,
+        BlendShapeMaterialbind,
+        BlendShapePresetName,
+        FirstPerson,
+        FirstPersonDegreeMap,
+        FirstPersonMeshAnnotation,
+        Humanoid,
+        HumanoidBone,
+        HumanoidBoneName,
+        Material,
+        Meta,
+        SecondaryAnimation,
+        SecondaryAnimationCollider,
+        SecondaryAnimationColliderGroup,
+        SecondaryAnimationSpring,
+        Vector3,
+        VRM
+    }
+}
+export { V0VRM }
+
+// @public (undocumented)
+interface Vector3 {
+    // (undocumented)
+    x?: number;
+    // (undocumented)
+    y?: number;
+    // (undocumented)
+    z?: number;
+}
+
+// @public
+interface VRM {
+    // (undocumented)
+    blendShapeMaster?: BlendShape;
+
+    exporterVersion?: string;
+
+    // (undocumented)
+    firstPerson?: FirstPerson;
+
+    // (undocumented)
+    humanoid?: Humanoid;
+
+    // (undocumented)
+    materialProperties?: Material[];
+
+    // (undocumented)
+    meta?: Meta;
+
+    // (undocumented)
+    secondaryAnimation?: SecondaryAnimation;
+
+    specVersion?: '0.0';
+}
+
+// @public
 export interface VRM0Meta {
     allowedUserName?: 'Everyone' | 'ExplicitlyLicensedPerson' | 'OnlyAuthor';
     author?: string;
@@ -154,8 +514,6 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
     get name(): string;
     // (undocumented)
     readonly parser: GLTFParser;
-    // Warning: (ae-forgotten-export) The symbol "V0VRM" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     static readonly v0v1PresetNameMap: {
         [v0Name in V0VRM.BlendShapePresetName]?: VRMExpressionPresetName;
@@ -572,7 +930,6 @@ export class VRMLookAtHelper extends THREE_2.Group {
 
 // @public
 export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
-    // Warning: (ae-forgotten-export) The symbol "VRMLookAtLoaderPluginOptions" needs to be exported by the entry point index.d.ts
     constructor(parser: GLTFParser, options?: VRMLookAtLoaderPluginOptions);
     // (undocumented)
     afterRoot(gltf: GLTF): Promise<void>;
@@ -581,6 +938,11 @@ export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
     get name(): string;
     // (undocumented)
     readonly parser: GLTFParser;
+}
+
+// @public (undocumented)
+export interface VRMLookAtLoaderPluginOptions {
+    helperRoot?: THREE.Object3D;
 }
 
 // @public (undocumented)

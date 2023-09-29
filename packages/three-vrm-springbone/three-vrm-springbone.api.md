@@ -111,7 +111,6 @@ export interface VRMSpringBoneJointSettings {
 
 // @public (undocumented)
 export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
-    // Warning: (ae-forgotten-export) The symbol "VRMSpringBoneLoaderPluginOptions" needs to be exported by the entry point index.d.ts
     constructor(parser: GLTFParser, options?: VRMSpringBoneLoaderPluginOptions);
     // (undocumented)
     afterRoot(gltf: GLTF): Promise<void>;
@@ -123,6 +122,12 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
     get name(): string;
     // (undocumented)
     readonly parser: GLTFParser;
+}
+
+// @public (undocumented)
+export interface VRMSpringBoneLoaderPluginOptions {
+    colliderHelperRoot?: THREE.Object3D;
+    jointHelperRoot?: THREE.Object3D;
 }
 
 // @public (undocumented)

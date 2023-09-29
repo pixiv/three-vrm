@@ -3,6 +3,8 @@ import { removeUnnecessaryJoints } from './removeUnnecessaryJoints';
 import { removeUnnecessaryVertices } from './removeUnnecessaryVertices';
 import { rotateVRM0 } from './rotateVRM0';
 
+export type { deepDispose, removeUnnecessaryJoints, removeUnnecessaryVertices, rotateVRM0 };
+
 export class VRMUtils {
   private constructor() {
     // this class is not meant to be instantiated

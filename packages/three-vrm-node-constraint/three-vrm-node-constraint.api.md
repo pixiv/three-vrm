@@ -10,6 +10,74 @@ import type { GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import * as THREE_2 from 'three';
 
 // @public
+interface AimConstraint {
+    aimAxis: 'PositiveX' | 'NegativeX' | 'PositiveY' | 'NegativeY' | 'PositiveZ' | 'NegativeZ';
+
+    // (undocumented)
+    extensions?: { [name: string]: any };
+
+    // (undocumented)
+    extras?: any;
+
+    source: number;
+
+    weight?: number;
+}
+
+// @public
+interface Constraint {
+    // (undocumented)
+    aim?: AimConstraint;
+    // (undocumented)
+    extensions?: { [name: string]: any };
+    // (undocumented)
+    extras?: any;
+    // (undocumented)
+    roll?: RollConstraint;
+    // (undocumented)
+    rotation?: RotationConstraint;
+}
+
+declare namespace ConstraintSchema {
+    export {
+        AimConstraint,
+        Constraint,
+        RollConstraint,
+        RotationConstraint,
+        VRMCNodeConstraint
+    }
+}
+export { ConstraintSchema }
+
+// @public
+interface RollConstraint {
+    // (undocumented)
+    extensions?: { [name: string]: any };
+
+    // (undocumented)
+    extras?: any;
+
+    rollAxis: 'X' | 'Y' | 'Z';
+
+    source: number;
+
+    weight?: number;
+}
+
+// @public
+interface RotationConstraint {
+    // (undocumented)
+    extensions?: { [name: string]: any };
+
+    // (undocumented)
+    extras?: any;
+
+    source: number;
+
+    weight?: number;
+}
+
+// @public
 export class VRMAimConstraint extends VRMNodeConstraint {
     constructor(destination: THREE_2.Object3D, source: THREE_2.Object3D);
     get aimAxis(): 'PositiveX' | 'NegativeX' | 'PositiveY' | 'NegativeY' | 'PositiveZ' | 'NegativeZ';
@@ -20,6 +88,20 @@ export class VRMAimConstraint extends VRMNodeConstraint {
     setInitState(): void;
     // (undocumented)
     update(): void;
+}
+
+// @public
+interface VRMCNodeConstraint {
+    // (undocumented)
+    constraint: Constraint;
+
+    // (undocumented)
+    extensions?: { [name: string]: any };
+
+    // (undocumented)
+    extras?: any;
+
+    specVersion: '1.0' | '1.0-beta';
 }
 
 // @public
@@ -45,7 +127,6 @@ export class VRMNodeConstraintHelper extends THREE_2.Group {
 
 // @public (undocumented)
 export class VRMNodeConstraintLoaderPlugin implements GLTFLoaderPlugin {
-    // Warning: (ae-forgotten-export) The symbol "VRMNodeConstraintLoaderPluginOptions" needs to be exported by the entry point index.d.ts
     constructor(parser: GLTFParser, options?: VRMNodeConstraintLoaderPluginOptions);
     // (undocumented)
     afterRoot(gltf: GLTF): Promise<void>;
@@ -55,8 +136,6 @@ export class VRMNodeConstraintLoaderPlugin implements GLTFLoaderPlugin {
     protected _import(gltf: GLTF): Promise<VRMNodeConstraintManager | null>;
     // (undocumented)
     protected _importAimConstraint(destination: THREE_2.Object3D, nodes: THREE_2.Object3D[], aimConstraintDef: ConstraintSchema.AimConstraint): VRMAimConstraint;
-    // Warning: (ae-forgotten-export) The symbol "ConstraintSchema" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     protected _importRollConstraint(destination: THREE_2.Object3D, nodes: THREE_2.Object3D[], rollConstraintDef: ConstraintSchema.RollConstraint): VRMRollConstraint;
     // (undocumented)
@@ -65,6 +144,11 @@ export class VRMNodeConstraintLoaderPlugin implements GLTFLoaderPlugin {
     get name(): string;
     // (undocumented)
     readonly parser: GLTFParser;
+}
+
+// @public (undocumented)
+export interface VRMNodeConstraintLoaderPluginOptions {
+    helperRoot?: THREE.Object3D;
 }
 
 // @public (undocumented)

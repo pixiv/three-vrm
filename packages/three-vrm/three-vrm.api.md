@@ -9,6 +9,20 @@ import { GLTFLoaderPlugin } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import * as THREE_2 from 'three';
 
+// @public (undocumented)
+export namespace ConstraintSchema {
+        {
+        AimConstraint,
+        Constraint,
+        RollConstraint,
+        RotationConstraint,
+        VRMCNodeConstraint
+    }
+}
+
+// @public (undocumented)
+export function deepDispose(object3D: THREE_2.Object3D): void;
+
 // @public
 export class MToonMaterial extends THREE_2.ShaderMaterial {
     constructor(parameters?: MToonMaterialParameters);
@@ -291,6 +305,40 @@ export interface MToonMaterialParameters extends THREE.ShaderMaterialParameters 
 }
 
 // @public
+export function removeUnnecessaryJoints(root: THREE_2.Object3D): void;
+
+// @public
+export function removeUnnecessaryVertices(root: THREE_2.Object3D): void;
+
+// @public
+export function rotateVRM0(vrm: VRM): void;
+
+// @public (undocumented)
+export namespace V0VRM {
+        {
+        BlendShape,
+        BlendShapeBind,
+        BlendShapeGroup,
+        BlendShapeMaterialbind,
+        BlendShapePresetName,
+        FirstPerson,
+        FirstPersonDegreeMap,
+        FirstPersonMeshAnnotation,
+        Humanoid,
+        HumanoidBone,
+        HumanoidBoneName,
+        Material,
+        Meta,
+        SecondaryAnimation,
+        SecondaryAnimationCollider,
+        SecondaryAnimationColliderGroup,
+        SecondaryAnimationSpring,
+        Vector3,
+        VRM
+    }
+}
+
+// @public
 export class VRM extends VRMCore {
     constructor(params: VRMParameters);
     readonly materials?: THREE_2.Material[];
@@ -457,8 +505,6 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
     get name(): string;
     // (undocumented)
     readonly parser: GLTFParser;
-    // Warning: (ae-forgotten-export) The symbol "V0VRM" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     static readonly v0v1PresetNameMap: {
         [v0Name in V0VRM.BlendShapePresetName]?: VRMExpressionPresetName;
@@ -821,8 +867,6 @@ export class VRMLoaderPlugin implements GLTFLoaderPlugin {
     //
     // (undocumented)
     readonly materialsHDREmissiveMultiplierPlugin: VRMMaterialsHDREmissiveMultiplierLoaderPlugin;
-    // Warning: (ae-forgotten-export) The symbol "VRMMaterialsV0CompatPlugin" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     readonly materialsV0CompatPlugin: VRMMaterialsV0CompatPlugin;
     // (undocumented)
@@ -946,7 +990,6 @@ export class VRMLookAtHelper extends THREE_2.Group {
 
 // @public
 export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
-    // Warning: (ae-forgotten-export) The symbol "VRMLookAtLoaderPluginOptions" needs to be exported by the entry point index.d.ts
     constructor(parser: GLTFParser, options?: VRMLookAtLoaderPluginOptions);
     // (undocumented)
     afterRoot(gltf: GLTF): Promise<void>;
@@ -955,6 +998,11 @@ export class VRMLookAtLoaderPlugin implements GLTFLoaderPlugin {
     get name(): string;
     // (undocumented)
     readonly parser: GLTFParser;
+}
+
+// @public (undocumented)
+export interface VRMLookAtLoaderPluginOptions {
+    helperRoot?: THREE.Object3D;
 }
 
 // @public (undocumented)
@@ -973,6 +1021,17 @@ export const VRMLookAtTypeName: {
 
 // @public (undocumented)
 export type VRMLookAtTypeName = typeof VRMLookAtTypeName[keyof typeof VRMLookAtTypeName];
+
+// @public (undocumented)
+export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
+    constructor(parser: GLTFParser);
+    // (undocumented)
+    beforeRoot(): Promise<void>;
+    // (undocumented)
+    get name(): string;
+    // (undocumented)
+    readonly parser: GLTFParser;
+}
 
 // @public
 export type VRMMeta = VRM0Meta | VRM1Meta;
@@ -1021,7 +1080,6 @@ export class VRMNodeConstraintHelper extends THREE_2.Group {
 
 // @public (undocumented)
 export class VRMNodeConstraintLoaderPlugin implements GLTFLoaderPlugin {
-    // Warning: (ae-forgotten-export) The symbol "VRMNodeConstraintLoaderPluginOptions" needs to be exported by the entry point index.d.ts
     constructor(parser: GLTFParser, options?: VRMNodeConstraintLoaderPluginOptions);
     // (undocumented)
     afterRoot(gltf: GLTF): Promise<void>;
@@ -1031,8 +1089,6 @@ export class VRMNodeConstraintLoaderPlugin implements GLTFLoaderPlugin {
     protected _import(gltf: GLTF): Promise<VRMNodeConstraintManager | null>;
     // (undocumented)
     protected _importAimConstraint(destination: THREE_2.Object3D, nodes: THREE_2.Object3D[], aimConstraintDef: ConstraintSchema.AimConstraint): VRMAimConstraint;
-    // Warning: (ae-forgotten-export) The symbol "ConstraintSchema" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     protected _importRollConstraint(destination: THREE_2.Object3D, nodes: THREE_2.Object3D[], rollConstraintDef: ConstraintSchema.RollConstraint): VRMRollConstraint;
     // (undocumented)
@@ -1041,6 +1097,11 @@ export class VRMNodeConstraintLoaderPlugin implements GLTFLoaderPlugin {
     get name(): string;
     // (undocumented)
     readonly parser: GLTFParser;
+}
+
+// @public (undocumented)
+export interface VRMNodeConstraintLoaderPluginOptions {
+    helperRoot?: THREE.Object3D;
 }
 
 // @public (undocumented)
@@ -1226,7 +1287,6 @@ export interface VRMSpringBoneJointSettings {
 
 // @public (undocumented)
 export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
-    // Warning: (ae-forgotten-export) The symbol "VRMSpringBoneLoaderPluginOptions" needs to be exported by the entry point index.d.ts
     constructor(parser: GLTFParser, options?: VRMSpringBoneLoaderPluginOptions);
     // (undocumented)
     afterRoot(gltf: GLTF): Promise<void>;
@@ -1238,6 +1298,12 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
     get name(): string;
     // (undocumented)
     readonly parser: GLTFParser;
+}
+
+// @public (undocumented)
+export interface VRMSpringBoneLoaderPluginOptions {
+    colliderHelperRoot?: THREE.Object3D;
+    jointHelperRoot?: THREE.Object3D;
 }
 
 // @public (undocumented)
@@ -1268,20 +1334,12 @@ export class VRMSpringBoneManager {
 
 // @public (undocumented)
 export class VRMUtils {
-    // Warning: (ae-forgotten-export) The symbol "deepDispose" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     static deepDispose: typeof deepDispose;
-    // Warning: (ae-forgotten-export) The symbol "removeUnnecessaryJoints" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     static removeUnnecessaryJoints: typeof removeUnnecessaryJoints;
-    // Warning: (ae-forgotten-export) The symbol "removeUnnecessaryVertices" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     static removeUnnecessaryVertices: typeof removeUnnecessaryVertices;
-    // Warning: (ae-forgotten-export) The symbol "rotateVRM0" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     static rotateVRM0: typeof rotateVRM0;
 }

@@ -418,7 +418,8 @@
       },
 
       "ae-forgotten-export": {
-        "logLevel": "error"
+        "logLevel": "error",
+        "addToApiReportFile": true
       }
 
       //
