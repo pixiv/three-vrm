@@ -19,9 +19,6 @@ export class VRMRollConstraint extends VRMNodeConstraint {
     return this._rollAxis;
   }
 
-  /**
-   * The roll axis of the constraint.
-   */
   public set rollAxis(rollAxis: 'X' | 'Y' | 'Z') {
     this._rollAxis = rollAxis;
     this._v3RollAxis.set(rollAxis === 'X' ? 1.0 : 0.0, rollAxis === 'Y' ? 1.0 : 0.0, rollAxis === 'Z' ? 1.0 : 0.0);

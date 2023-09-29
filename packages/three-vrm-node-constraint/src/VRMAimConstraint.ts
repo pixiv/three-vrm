@@ -24,9 +24,6 @@ export class VRMAimConstraint extends VRMNodeConstraint {
     return this._aimAxis;
   }
 
-  /**
-   * The aim axis of the constraint.
-   */
   public set aimAxis(aimAxis: 'PositiveX' | 'NegativeX' | 'PositiveY' | 'NegativeY' | 'PositiveZ' | 'NegativeZ') {
     this._aimAxis = aimAxis;
     this._v3AimAxis.set(

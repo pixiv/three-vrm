@@ -309,12 +309,6 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     return this._v0CompatShade;
   }
 
-  /**
-   * There is a line of the shader called "comment out if you want to PBR absolutely" in VRM0.0 MToon.
-   * When this is true, the material enables the line to make it compatible with the legacy rendering of VRM.
-   * Usually not recommended to turn this on.
-   * `false` by default.
-   */
   set v0CompatShade(v: boolean) {
     this._v0CompatShade = v;
 
@@ -333,12 +327,6 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     return this._debugMode;
   }
 
-  /**
-   * Debug mode for the material.
-   * You can visualize several components for diagnosis using debug mode.
-   *
-   * See: {@link MToonMaterialDebugMode}
-   */
   set debugMode(m: MToonMaterialDebugMode) {
     this._debugMode = m;
 
@@ -556,7 +544,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
 
   /**
    * Upload uniforms that need to upload but doesn't automatically because of reasons.
-   * Intended to be called via {@link constructor} and {@link update}.
+   * Intended to be called via {@link MToonMaterial}'s constructor and {@link update}.
    */
   private _uploadUniformsWorkaround(): void {
     // workaround: since opacity is defined as a property in THREE.Material
