@@ -506,7 +506,7 @@ void main() {
 
   // non perturbed normal for clearcoat among others
 
-  vec3 geometryNormal = normal;
+  vec3 nonPerturbedNormal = normal;
 
   #ifdef OUTLINE
     normal *= -1.0;
@@ -613,6 +613,7 @@ void main() {
 
   #if THREE_VRM_THREE_REVISION >= 157
     vec3 geometryPosition = - vViewPosition;
+    vec3 geometryNormal = normal;
     vec3 geometryViewDir = ( isOrthographic ) ? vec3( 0, 0, 1 ) : normalize( vViewPosition );
     
     vec3 geometryClearcoatNormal;
