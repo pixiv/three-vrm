@@ -774,14 +774,14 @@ void main() {
 
     vec3 irradiance = getAmbientLightIrradiance( ambientLightColor );
 
-    #if defined( USE_LIGHT_PROBES )
-      #if THREE_VRM_THREE_REVISION >= 157
+    #if THREE_VRM_THREE_REVISION >= 157
+      #if defined( USE_LIGHT_PROBES )
         irradiance += getLightProbeIrradiance( lightProbe, geometryNormal );
-      #elif THREE_VRM_THREE_REVISION >= 133
-        irradiance += getLightProbeIrradiance( lightProbe, geometry.normal );
-      #else
-        irradiance += getLightProbeIrradiance( lightProbe, geometry );
       #endif
+    #elif THREE_VRM_THREE_REVISION >= 133
+      irradiance += getLightProbeIrradiance( lightProbe, geometry.normal );
+    #else
+      irradiance += getLightProbeIrradiance( lightProbe, geometry );
     #endif
 
     #if ( NUM_HEMI_LIGHTS > 0 )
