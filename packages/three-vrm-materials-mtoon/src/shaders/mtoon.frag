@@ -51,10 +51,6 @@ uniform float uvAnimationScrollXOffset;
 uniform float uvAnimationScrollYOffset;
 uniform float uvAnimationRotationPhase;
 
-#if THREE_VRM_THREE_REVISION >= 157
-  uniform vec3 lightProbe[ 9 ];
-#endif
-
 #include <common>
 #include <packing>
 #include <dithering_pars_fragment>
@@ -777,12 +773,14 @@ void main() {
 
     vec3 irradiance = getAmbientLightIrradiance( ambientLightColor );
 
-    #if THREE_VRM_THREE_REVISION >= 157
-      irradiance += getLightProbeIrradiance( lightProbe, geometryNormal );
-    #elif THREE_VRM_THREE_REVISION >= 133
-      irradiance += getLightProbeIrradiance( lightProbe, geometry.normal );
-    #else
-      irradiance += getLightProbeIrradiance( lightProbe, geometry );
+    #if defined( USE_LIGHT_PROBES )
+      #if THREE_VRM_THREE_REVISION >= 157
+        irradiance += getLightProbeIrradiance( lightProbe, geometryNormal );
+      #elif THREE_VRM_THREE_REVISION >= 133
+        irradiance += getLightProbeIrradiance( lightProbe, geometry.normal );
+      #else
+        irradiance += getLightProbeIrradiance( lightProbe, geometry );
+      #endif
     #endif
 
     #if ( NUM_HEMI_LIGHTS > 0 )
