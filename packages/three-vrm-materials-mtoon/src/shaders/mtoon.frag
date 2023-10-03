@@ -621,7 +621,7 @@ void main() {
     
     vec3 geometryClearcoatNormal;
 
-    #ifdef CLEARCOAT
+    #ifdef USE_CLEARCOAT
 
       geometryClearcoatNormal = clearcoatNormal;
 
