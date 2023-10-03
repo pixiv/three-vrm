@@ -633,7 +633,7 @@ void main() {
     geometry.normal = normal;
     geometry.viewDir = ( isOrthographic ) ? vec3( 0, 0, 1 ) : normalize( vViewPosition );
 
-    #ifdef CLEARCOAT
+    #ifdef USE_CLEARCOAT
 
       geometry.clearcoatNormal = clearcoatNormal;
 
