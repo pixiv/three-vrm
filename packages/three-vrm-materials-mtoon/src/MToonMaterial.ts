@@ -480,6 +480,15 @@ export class MToonMaterial extends THREE.ShaderMaterial {
 
       // -- compat ---------------------------------------------------------------------------------
 
+      // COMPAT: pre-r154
+      // Three.js r154 renames the shader chunk <colorspace_fragment> to <encodings_fragment>
+      if (threeRevision < 154) {
+        shader.fragmentShader = shader.fragmentShader.replace(
+          '#include <colorspace_fragment>',
+          '#include <encodings_fragment>',
+        );
+      }
+
       // COMPAT: pre-r132
       // Three.js r132 introduces new shader chunks <normal_pars_fragment> and <alphatest_pars_fragment>
       if (threeRevision < 132) {
