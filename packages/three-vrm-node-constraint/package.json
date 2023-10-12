@@ -1,6 +1,6 @@
 {
   "name": "@pixiv/three-vrm-node-constraint",
-  "version": "2.0.6-alpha.2",
+  "version": "2.0.6",
   "description": "Node constraint module for @pixiv/three-vrm",
   "license": "MIT",
   "author": "pixiv",
@@ -47,7 +47,7 @@
     ]
   },
   "dependencies": {
-    "@pixiv/types-vrmc-node-constraint-1.0": "2.0.6-alpha.2"
+    "@pixiv/types-vrmc-node-constraint-1.0": "2.0.6"
   },
   "devDependencies": {
     "@types/three": "^0.154.0",

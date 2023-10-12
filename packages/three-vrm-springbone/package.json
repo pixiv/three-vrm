@@ -1,6 +1,6 @@
 {
   "name": "@pixiv/three-vrm-springbone",
-  "version": "2.0.6-alpha.2",
+  "version": "2.0.6",
   "description": "Spring bone module for @pixiv/three-vrm",
   "license": "MIT",
   "author": "pixiv",
@@ -47,8 +47,8 @@
     ]
   },
   "dependencies": {
-    "@pixiv/types-vrm-0.0": "2.0.6-alpha.2",
-    "@pixiv/types-vrmc-springbone-1.0": "2.0.6-alpha.2"
+    "@pixiv/types-vrm-0.0": "2.0.6",
+    "@pixiv/types-vrmc-springbone-1.0": "2.0.6"
   },
   "devDependencies": {
     "lint-staged": "13.1.2",
