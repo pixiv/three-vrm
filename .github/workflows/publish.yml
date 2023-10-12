@@ -59,7 +59,7 @@ jobs:
 
     - name: Git push version up commits
       run: |
-        git push origin ${{ github.ref_name }}
+        git push origin --tags ${{ github.ref_name }}
 
     - name: Upload Builds
       uses: actions/upload-artifact@v3
