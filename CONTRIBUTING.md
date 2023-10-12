@@ -128,21 +128,18 @@ These type definitions are authored manually by referencing the [vrm spec schema
 
 ## How to release
 
-- 1, Make sure you're on `dev` branch
+There is a GitHub Actions workflow called "Publish to npmjs".
+The workflow is defined in `.github/workflows/publish.yml`.
 
-- 2, Run the following:
+https://github.com/pixiv/three-vrm/actions/workflows/publish.yml
 
-  ```sh
-  yarn lerna version <newversion> --exact --no-push # will also automatically runs build scripts
-  yarn lerna publish from-git --dist-tag latest
+After the workflow done, don't forget to:
 
-  git switch release
-  git merge dev
-  git push
-  ```
-
-- 3, Add a release note to https://github.com/pixiv/three-vrm/releases
-  - Do not forget to upload builds!
+- Add a release note: https://github.com/pixiv/three-vrm/releases
+- Manage the milestone: https://github.com/pixiv/three-vrm/milestones
+  - Rename the existing `next` milestone to the version
+  - Close the milestone
+  - Open a new `next` milestone
 
 ## When you add a new package to the repository
 
