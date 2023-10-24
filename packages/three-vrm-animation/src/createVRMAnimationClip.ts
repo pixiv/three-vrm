@@ -1,13 +1,23 @@
 import * as THREE from 'three';
-import type { VRMCore, VRMExpressionManager, VRMHumanoid } from '@pixiv/three-vrm-core';
+import type {
+  VRMCore,
+  VRMExpressionManager,
+  VRMExpressionPresetName,
+  VRMHumanBoneName,
+  VRMHumanoid,
+} from '@pixiv/three-vrm-core';
 import type { VRMAnimation } from './VRMAnimation';
 
-function createHumanoidTracks(
+export function createVRMAnimationHumanoidTracks(
   vrmAnimation: VRMAnimation,
   humanoid: VRMHumanoid,
   metaVersion: '0' | '1',
-): THREE.KeyframeTrack[] {
-  const tracks: THREE.KeyframeTrack[] = [];
+): {
+  position: Map<VRMHumanBoneName, THREE.VectorKeyframeTrack>;
+  rotation: Map<VRMHumanBoneName, THREE.QuaternionKeyframeTrack>;
+} {
+  const position = new Map<VRMHumanBoneName, THREE.VectorKeyframeTrack>();
+  const rotation = new Map<VRMHumanBoneName, THREE.VectorKeyframeTrack>();
 
   for (const [name, origTrack] of vrmAnimation.humanoidTracks.rotation.entries()) {
     const nodeName = humanoid.getNormalizedBoneNode(name)?.name;
@@ -18,7 +28,7 @@ function createHumanoidTracks(
         origTrack.times,
         origTrack.values.map((v, i) => (metaVersion === '0' && i % 2 === 0 ? -v : v)),
       );
-      tracks.push(track);
+      rotation.set(name, track);
     }
   }
 
@@ -33,18 +43,18 @@ function createHumanoidTracks(
       const track = origTrack.clone();
       track.values = track.values.map((v, i) => (metaVersion === '0' && i % 3 !== 1 ? -v : v) * scale);
       track.name = `${nodeName}.position`;
-      tracks.push(track);
+      position.set(name, track);
     }
   }
 
-  return tracks;
+  return { position, rotation };
 }
 
-function createExpressionTracks(
+export function createVRMAnimationExpressionTracks(
   vrmAnimation: VRMAnimation,
   expressionManager: VRMExpressionManager,
-): THREE.KeyframeTrack[] {
-  const tracks: THREE.KeyframeTrack[] = [];
+): Map<string, THREE.NumberKeyframeTrack> {
+  const map = new Map<string, THREE.NumberKeyframeTrack>();
 
   for (const [name, origTrack] of vrmAnimation.expressionTracks.entries()) {
     const trackName = expressionManager.getExpressionTrackName(name);
@@ -52,14 +62,17 @@ function createExpressionTracks(
     if (trackName != null) {
       const track = origTrack.clone();
       track.name = trackName;
-      tracks.push(track);
+      map.set(name, track);
     }
   }
 
-  return tracks;
+  return map;
 }
 
-function createLookAtTrack(vrmAnimation: VRMAnimation, trackName: string): THREE.KeyframeTrack | null {
+export function createVRMAnimationLookAtTrack(
+  vrmAnimation: VRMAnimation,
+  trackName: string,
+): THREE.KeyframeTrack | null {
   if (vrmAnimation.lookAtTrack == null) {
     return null;
   }
@@ -79,10 +92,13 @@ function createLookAtTrack(vrmAnimation: VRMAnimation, trackName: string): THREE
 export function createVRMAnimationClip(vrmAnimation: VRMAnimation, vrm: VRMCore): THREE.AnimationClip {
   const tracks: THREE.KeyframeTrack[] = [];
 
-  tracks.push(...createHumanoidTracks(vrmAnimation, vrm.humanoid, vrm.meta.metaVersion));
+  const humanoidTracks = createVRMAnimationHumanoidTracks(vrmAnimation, vrm.humanoid, vrm.meta.metaVersion);
+  tracks.push(...humanoidTracks.position.values());
+  tracks.push(...humanoidTracks.rotation.values());
 
   if (vrm.expressionManager != null) {
-    tracks.push(...createExpressionTracks(vrmAnimation, vrm.expressionManager));
+    const expressionTracks = createVRMAnimationExpressionTracks(vrmAnimation, vrm.expressionManager);
+    tracks.push(...expressionTracks.values());
   }
 
   if (vrm.lookAt != null) {
@@ -98,7 +114,7 @@ export function createVRMAnimationClip(vrmAnimation: VRMAnimation, vrm: VRMCore)
         lookAtTarget.name = 'lookAtTarget';
       }
 
-      const track = createLookAtTrack(vrmAnimation, `${lookAtTarget.name}.position`);
+      const track = createVRMAnimationLookAtTrack(vrmAnimation, `${lookAtTarget.name}.position`);
 
       if (track != null) {
         tracks.push(track);
