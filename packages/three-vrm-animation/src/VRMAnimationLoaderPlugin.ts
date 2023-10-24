@@ -3,16 +3,18 @@ import { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/G
 import { GLTF as GLTFSchema } from '@gltf-transform/core';
 import { VRMCVRMAnimation } from '@pixiv/types-vrmc-vrm-animation-1.0';
 import type { VRMHumanBoneName } from '@pixiv/three-vrm-core';
-import { VRMHumanBoneParentMap } from '@pixiv/three-vrm-core';
+import { VRMExpressionPresetName, VRMHumanBoneParentMap } from '@pixiv/three-vrm-core';
 import { VRMAnimation } from './VRMAnimation';
 import { arrayChunk } from './utils/arrayChunk';
 
-const MAT4_IDENTITY = new THREE.Matrix4();
+const MAT4_IDENTITY = /*@__PURE__*/ new THREE.Matrix4();
 
-const _v3A = new THREE.Vector3();
-const _quatA = new THREE.Quaternion();
-const _quatB = new THREE.Quaternion();
-const _quatC = new THREE.Quaternion();
+const _v3A = /*@__PURE__*/ new THREE.Vector3();
+const _quatA = /*@__PURE__*/ new THREE.Quaternion();
+const _quatB = /*@__PURE__*/ new THREE.Quaternion();
+const _quatC = /*@__PURE__*/ new THREE.Quaternion();
+
+const vrmExpressionPresetNameSet: Set<string> = /*@__PURE__*/ new Set(Object.values(VRMExpressionPresetName));
 
 interface VRMAnimationLoaderPluginNodeMap {
   humanoidIndexToName: Map<number, VRMHumanBoneName>;
@@ -216,7 +218,12 @@ export class VRMAnimationLoaderPlugin implements GLTFLoaderPlugin {
           }
 
           const newTrack = new THREE.NumberKeyframeTrack(`${expressionName}.weight`, times as any, values as any);
-          result.expressionTracks.set(expressionName, newTrack);
+
+          if (vrmExpressionPresetNameSet.has(expressionName)) {
+            result.expressionTracks.preset.set(expressionName as VRMExpressionPresetName, newTrack);
+          } else {
+            result.expressionTracks.custom.set(expressionName, newTrack);
+          }
         } else {
           throw new Error(`Invalid path "${path}"`);
         }

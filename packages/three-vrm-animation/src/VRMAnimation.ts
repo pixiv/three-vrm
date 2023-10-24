@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import type { VRMHumanBoneName } from '@pixiv/three-vrm-core';
+import type { VRMExpressionPresetName, VRMHumanBoneName } from '@pixiv/three-vrm-core';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { createVRMAnimationClip } from './createVRMAnimationClip';
 
@@ -15,7 +15,10 @@ export class VRMAnimation {
     translation: Map<VRMHumanBoneName, THREE.VectorKeyframeTrack>;
     rotation: Map<VRMHumanBoneName, THREE.QuaternionKeyframeTrack>;
   };
-  public expressionTracks: Map<string, THREE.NumberKeyframeTrack>;
+  public expressionTracks: {
+    preset: Map<VRMExpressionPresetName, THREE.NumberKeyframeTrack>;
+    custom: Map<string, THREE.NumberKeyframeTrack>;
+  };
   public lookAtTrack: THREE.VectorKeyframeTrack | null;
 
   public constructor() {
@@ -27,7 +30,11 @@ export class VRMAnimation {
       rotation: new Map(),
     };
 
-    this.expressionTracks = new Map();
+    this.expressionTracks = {
+      preset: new Map(),
+      custom: new Map(),
+    };
+
     this.lookAtTrack = null;
   }
 }

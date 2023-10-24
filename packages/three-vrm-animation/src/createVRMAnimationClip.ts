@@ -53,20 +53,34 @@ export function createVRMAnimationHumanoidTracks(
 export function createVRMAnimationExpressionTracks(
   vrmAnimation: VRMAnimation,
   expressionManager: VRMExpressionManager,
-): Map<string, THREE.NumberKeyframeTrack> {
-  const map = new Map<string, THREE.NumberKeyframeTrack>();
+): {
+  preset: Map<VRMExpressionPresetName, THREE.NumberKeyframeTrack>;
+  custom: Map<string, THREE.NumberKeyframeTrack>;
+} {
+  const preset = new Map<VRMExpressionPresetName, THREE.NumberKeyframeTrack>();
+  const custom = new Map<string, THREE.NumberKeyframeTrack>();
 
-  for (const [name, origTrack] of vrmAnimation.expressionTracks.entries()) {
+  for (const [name, origTrack] of vrmAnimation.expressionTracks.preset.entries()) {
     const trackName = expressionManager.getExpressionTrackName(name);
 
     if (trackName != null) {
       const track = origTrack.clone();
       track.name = trackName;
-      map.set(name, track);
+      preset.set(name, track);
     }
   }
 
-  return map;
+  for (const [name, origTrack] of vrmAnimation.expressionTracks.custom.entries()) {
+    const trackName = expressionManager.getExpressionTrackName(name);
+
+    if (trackName != null) {
+      const track = origTrack.clone();
+      track.name = trackName;
+      custom.set(name, track);
+    }
+  }
+
+  return { preset, custom };
 }
 
 export function createVRMAnimationLookAtTrack(
@@ -98,7 +112,8 @@ export function createVRMAnimationClip(vrmAnimation: VRMAnimation, vrm: VRMCore)
 
   if (vrm.expressionManager != null) {
     const expressionTracks = createVRMAnimationExpressionTracks(vrmAnimation, vrm.expressionManager);
-    tracks.push(...expressionTracks.values());
+    tracks.push(...expressionTracks.preset.values());
+    tracks.push(...expressionTracks.custom.values());
   }
 
   if (vrm.lookAt != null) {
