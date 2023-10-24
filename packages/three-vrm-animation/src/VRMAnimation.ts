@@ -12,7 +12,7 @@ export class VRMAnimation {
   public restHipsPosition: THREE.Vector3;
 
   public humanoidTracks: {
-    translation: Map<VRMHumanBoneName, THREE.VectorKeyframeTrack>;
+    translation: Map<'hips', THREE.VectorKeyframeTrack>;
     rotation: Map<VRMHumanBoneName, THREE.QuaternionKeyframeTrack>;
   };
   public expressionTracks: {

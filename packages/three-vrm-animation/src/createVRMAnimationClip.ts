@@ -13,10 +13,10 @@ export function createVRMAnimationHumanoidTracks(
   humanoid: VRMHumanoid,
   metaVersion: '0' | '1',
 ): {
-  position: Map<VRMHumanBoneName, THREE.VectorKeyframeTrack>;
+  position: Map<'hips', THREE.VectorKeyframeTrack>;
   rotation: Map<VRMHumanBoneName, THREE.QuaternionKeyframeTrack>;
 } {
-  const position = new Map<VRMHumanBoneName, THREE.VectorKeyframeTrack>();
+  const position = new Map<'hips', THREE.VectorKeyframeTrack>();
   const rotation = new Map<VRMHumanBoneName, THREE.VectorKeyframeTrack>();
 
   for (const [name, origTrack] of vrmAnimation.humanoidTracks.rotation.entries()) {

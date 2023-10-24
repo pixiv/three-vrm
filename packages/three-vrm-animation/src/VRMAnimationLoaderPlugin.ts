@@ -172,16 +172,22 @@ export class VRMAnimationLoaderPlugin implements GLTFLoaderPlugin {
         parentBoneName ?? (parentBoneName = 'hipsParent');
 
         if (path === 'translation') {
-          const hipsParentWorldMatrix = worldMatrixMap.get('hipsParent')!;
+          if (boneName !== 'hips') {
+            console.warn(
+              `The loading animation contains a translation track for ${boneName}, which is not permitted in the VRMC_vrm_animation spec. ignoring the track`,
+            );
+          } else {
+            const hipsParentWorldMatrix = worldMatrixMap.get('hipsParent')!;
 
-          const trackValues = arrayChunk(origTrack.values, 3).flatMap((v) =>
-            _v3A.fromArray(v).applyMatrix4(hipsParentWorldMatrix).toArray(),
-          );
+            const trackValues = arrayChunk(origTrack.values, 3).flatMap((v) =>
+              _v3A.fromArray(v).applyMatrix4(hipsParentWorldMatrix).toArray(),
+            );
 
-          const track = origTrack.clone();
-          track.values = new Float32Array(trackValues);
+            const track = origTrack.clone();
+            track.values = new Float32Array(trackValues);
 
-          result.humanoidTracks.translation.set(boneName, track);
+            result.humanoidTracks.translation.set(boneName, track);
+          }
         } else if (path === 'rotation') {
           // a  = p^-1 * a' * p * c
           // a' = p * p^-1 * a' * p * c * c^-1 * p^-1
