@@ -13,10 +13,10 @@ export function createVRMAnimationHumanoidTracks(
   humanoid: VRMHumanoid,
   metaVersion: '0' | '1',
 ): {
-  position: Map<'hips', THREE.VectorKeyframeTrack>;
+  translation: Map<'hips', THREE.VectorKeyframeTrack>;
   rotation: Map<VRMHumanBoneName, THREE.QuaternionKeyframeTrack>;
 } {
-  const position = new Map<'hips', THREE.VectorKeyframeTrack>();
+  const translation = new Map<'hips', THREE.VectorKeyframeTrack>();
   const rotation = new Map<VRMHumanBoneName, THREE.VectorKeyframeTrack>();
 
   for (const [name, origTrack] of vrmAnimation.humanoidTracks.rotation.entries()) {
@@ -43,11 +43,11 @@ export function createVRMAnimationHumanoidTracks(
       const track = origTrack.clone();
       track.values = track.values.map((v, i) => (metaVersion === '0' && i % 3 !== 1 ? -v : v) * scale);
       track.name = `${nodeName}.position`;
-      position.set(name, track);
+      translation.set(name, track);
     }
   }
 
-  return { position, rotation };
+  return { translation, rotation };
 }
 
 export function createVRMAnimationExpressionTracks(
@@ -107,7 +107,7 @@ export function createVRMAnimationClip(vrmAnimation: VRMAnimation, vrm: VRMCore)
   const tracks: THREE.KeyframeTrack[] = [];
 
   const humanoidTracks = createVRMAnimationHumanoidTracks(vrmAnimation, vrm.humanoid, vrm.meta.metaVersion);
-  tracks.push(...humanoidTracks.position.values());
+  tracks.push(...humanoidTracks.translation.values());
   tracks.push(...humanoidTracks.rotation.values());
 
   if (vrm.expressionManager != null) {
