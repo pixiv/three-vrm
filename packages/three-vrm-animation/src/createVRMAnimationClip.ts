@@ -91,6 +91,13 @@ export function createVRMAnimationClip(vrmAnimation: VRMAnimation, vrm: VRMCore)
     if (lookAtTarget == null) {
       console.warn('`vrm.lookAt.target` of the given VRM is not defined. Skipping lookAt animation');
     } else {
+      if (lookAtTarget.name === '') {
+        console.warn(
+          '`vrm.lookAt.target.name` of the given VRM is empty. Setting the name `lookAtTarget` automatically',
+        );
+        lookAtTarget.name = 'lookAtTarget';
+      }
+
       const track = createLookAtTrack(vrmAnimation, `${lookAtTarget.name}.position`);
 
       if (track != null) {
