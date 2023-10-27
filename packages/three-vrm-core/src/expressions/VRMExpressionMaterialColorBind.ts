@@ -73,8 +73,8 @@ export class VRMExpressionMaterialColorBind implements VRMExpressionBind {
   public readonly targetAlpha: number;
 
   /**
-   * Its state.
-   * If it cannot find the target property in constructor, it will be null instead.
+   * Its binding state.
+   * If it cannot find the target property in the constructor, each property will be null instead.
    */
   private _state: BindState;
 
