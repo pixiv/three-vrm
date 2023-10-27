@@ -30,8 +30,10 @@ export class VRMExpressionMaterialColorBind implements VRMExpressionBind {
    * The first element stands for color channels, the second element stands for the alpha channel.
    * The second element can be null if the target property doesn't exist.
    */
+  // TODO: We might want to use the `satisfies` operator once we bump TS to 4.9 or higher
+  // See: https://github.com/pixiv/three-vrm/pull/1323#discussion_r1374020035
   private static _propertyNameMapMap: {
-    [distinguisher: string]: { [type in VRMExpressionMaterialColorType]?: [string, string | null] };
+    [distinguisher: string]: { [type in VRMExpressionMaterialColorType]?: readonly [string, string | null] };
   } = {
     isMeshStandardMaterial: {
       color: ['color', 'opacity'],
@@ -204,7 +206,9 @@ export class VRMExpressionMaterialColorBind implements VRMExpressionBind {
     return { propertyName, initialValue, deltaValue };
   }
 
-  private _getPropertyNameMap(): { [type in VRMExpressionMaterialColorType]?: [string, string | null] } | null {
+  private _getPropertyNameMap():
+    | { [type in VRMExpressionMaterialColorType]?: readonly [string, string | null] }
+    | null {
     return (
       Object.entries(VRMExpressionMaterialColorBind._propertyNameMapMap).find(([distinguisher]) => {
         return (this.material as any)[distinguisher] === true;
