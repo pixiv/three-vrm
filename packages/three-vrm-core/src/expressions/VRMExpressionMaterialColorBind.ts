@@ -195,6 +195,16 @@ export class VRMExpressionMaterialColorBind implements VRMExpressionBind {
     const propertyNameMap = this._getPropertyNameMap();
     const propertyName = propertyNameMap?.[type]?.[1] ?? null;
 
+    if (propertyName == null && targetAlpha !== 1.0) {
+      console.warn(
+        `Tried to add a material alpha bind to the material ${
+          material.name ?? '(no name)'
+        }, the type ${type} but the material or the type does not support alpha.`,
+      );
+
+      return null;
+    }
+
     if (propertyName == null) {
       return null;
     }
