@@ -202,6 +202,7 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
                   material,
                   type: bind.type,
                   targetValue: new THREE.Color().fromArray(bind.targetValue),
+                  targetAlpha: bind.targetValue[3],
                 }),
               );
             });
@@ -394,7 +395,8 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
                   new VRMExpressionMaterialColorBind({
                     material,
                     type: materialColorType,
-                    targetValue: new THREE.Color(...materialValue.targetValue!.slice(0, 3)),
+                    targetValue: new THREE.Color().fromArray(materialValue.targetValue!),
+                    targetAlpha: materialValue.targetValue![3],
                   }),
                 );
 
