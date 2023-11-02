@@ -55,9 +55,15 @@ export class VRMAnimationLoaderPlugin implements GLTFLoaderPlugin {
     const nodeMap = this._createNodeMap(defExtension);
     const worldMatrixMap = await this._createBoneWorldMatrixMap(gltf, defExtension);
 
-    const hipsNode = defExtension.humanoid.humanBones['hips']!.node;
-    const hips = (await gltf.parser.getDependency('node', hipsNode)) as THREE.Object3D;
-    const restHipsPosition = hips.getWorldPosition(new THREE.Vector3());
+    const hipsNode = defExtension.humanoid?.humanBones['hips']?.node;
+    const hips = hipsNode != null
+      ? (await gltf.parser.getDependency('node', hipsNode)) as THREE.Object3D
+      : null;
+
+    const restHipsPosition = new THREE.Vector3();
+    if (restHipsPosition != null) {
+      hips?.getWorldPosition(new THREE.Vector3());
+    }
 
     const clips = gltf.animations;
     const animations: VRMAnimation[] = clips.map((clip, iAnimation) => {
