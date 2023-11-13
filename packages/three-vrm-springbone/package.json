@@ -51,7 +51,7 @@
     "@pixiv/types-vrmc-springbone-1.0": "2.0.6"
   },
   "devDependencies": {
-    "lint-staged": "13.1.2",
+    "lint-staged": "15.1.0",
     "three": "^0.154.0"
   },
   "peerDependencies": {
