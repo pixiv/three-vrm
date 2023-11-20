@@ -7,6 +7,7 @@ import type {
   VRMHumanoid,
 } from '@pixiv/three-vrm-core';
 import type { VRMAnimation } from './VRMAnimation';
+import { VRMLookAtQuaternionProxy } from './VRMLookAtQuaternionProxy';
 
 export function createVRMAnimationHumanoidTracks(
   vrmAnimation: VRMAnimation,
@@ -117,23 +118,31 @@ export function createVRMAnimationClip(vrmAnimation: VRMAnimation, vrm: VRMCore)
   }
 
   if (vrm.lookAt != null) {
-    const lookAtTarget = vrm.lookAt.target;
+    // search VRMLookAtQuaternionProxy
+    let proxy = vrm.scene.children.find((obj) => obj instanceof VRMLookAtQuaternionProxy);
 
-    if (lookAtTarget == null) {
-      console.warn('`vrm.lookAt.target` of the given VRM is not defined. Skipping lookAt animation');
-    } else {
-      if (lookAtTarget.name === '') {
-        console.warn(
-          '`vrm.lookAt.target.name` of the given VRM is empty. Setting the name `lookAtTarget` automatically',
-        );
-        lookAtTarget.name = 'lookAtTarget';
-      }
+    if (proxy == null) {
+      // if not found, create a new one
+      console.warn(
+        'createVRMAnimationClip: VRMLookAtQuaternionProxy is not found. Creating a new one automatically. To suppress this warning, create a VRMLookAtQuaternionProxy manually',
+      );
 
-      const track = createVRMAnimationLookAtTrack(vrmAnimation, `${lookAtTarget.name}.position`);
+      proxy = new VRMLookAtQuaternionProxy(vrm.lookAt);
+      proxy.name = 'VRMLookAtQuaternionProxy';
+      vrm.scene.add(proxy);
+    } else if (proxy.name == null) {
+      // if found but name is not set, set the name automatically
+      console.warn(
+        'createVRMAnimationClip: VRMLookAtQuaternionProxy is found but its name is not set. Setting the name automatically. To suppress this warning, set the name manually',
+      );
 
-      if (track != null) {
-        tracks.push(track);
-      }
+      proxy.name = 'VRMLookAtQuaternionProxy';
+    }
+
+    // create a track
+    const track = createVRMAnimationLookAtTrack(vrmAnimation, `${proxy.name}.quaternion`);
+    if (track != null) {
+      tracks.push(track);
     }
   }
 

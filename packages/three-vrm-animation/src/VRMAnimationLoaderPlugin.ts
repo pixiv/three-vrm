@@ -56,9 +56,7 @@ export class VRMAnimationLoaderPlugin implements GLTFLoaderPlugin {
     const worldMatrixMap = await this._createBoneWorldMatrixMap(gltf, defExtension);
 
     const hipsNode = defExtension.humanoid?.humanBones['hips']?.node;
-    const hips = hipsNode != null
-      ? (await gltf.parser.getDependency('node', hipsNode)) as THREE.Object3D
-      : null;
+    const hips = hipsNode != null ? ((await gltf.parser.getDependency('node', hipsNode)) as THREE.Object3D) : null;
 
     const restHipsPosition = new THREE.Vector3();
     if (restHipsPosition != null) {
@@ -244,7 +242,7 @@ export class VRMAnimationLoaderPlugin implements GLTFLoaderPlugin {
 
       // lookAt
       if (node === nodeMap.lookAtIndex) {
-        if (path === 'translation') {
+        if (path === 'rotation') {
           result.lookAtTrack = origTrack;
         } else {
           throw new Error(`Invalid path "${path}"`);

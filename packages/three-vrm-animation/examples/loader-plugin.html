@@ -39,7 +39,7 @@
 			import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 			import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
-			import { createVRMAnimationClip, VRMAnimationLoaderPlugin } from '@pixiv/three-vrm-animation';
+			import { createVRMAnimationClip, VRMAnimationLoaderPlugin, VRMLookAtQuaternionProxy } from '@pixiv/three-vrm-animation';
 
 			( async () => {
 
@@ -98,11 +98,10 @@
 
 				} );
 
-				// Add look at target to the VRM; which is needed to play the look at animation
-				const lookAtTarget = new THREE.Object3D();
-				lookAtTarget.name = 'lookAtTarget';
-				vrm.scene.add( lookAtTarget );
-				vrm.lookAt.target = lookAtTarget;
+				// Add look at quaternion proxy to the VRM; which is needed to play the look at animation
+				const lookAtQuatProxy = new VRMLookAtQuaternionProxy( vrm.lookAt );
+				lookAtQuatProxy.name = 'lookAtQuaternionProxy';
+				vrm.scene.add( lookAtQuatProxy );
 
 				// Add VRM to the scene
 				console.log( vrm );

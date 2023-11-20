@@ -19,7 +19,7 @@ export class VRMAnimation {
     preset: Map<VRMExpressionPresetName, THREE.NumberKeyframeTrack>;
     custom: Map<string, THREE.NumberKeyframeTrack>;
   };
-  public lookAtTrack: THREE.VectorKeyframeTrack | null;
+  public lookAtTrack: THREE.QuaternionKeyframeTrack | null;
 
   public constructor() {
     this.duration = 0.0;

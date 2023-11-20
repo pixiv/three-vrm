@@ -40,7 +40,7 @@
 			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 			import GUI from 'three/addons/libs/lil-gui.module.min.js';
 			import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
-			import { createVRMAnimationClip, VRMAnimationLoaderPlugin } from '@pixiv/three-vrm-animation';
+			import { createVRMAnimationClip, VRMAnimationLoaderPlugin, VRMLookAtQuaternionProxy } from '@pixiv/three-vrm-animation';
 
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
@@ -107,12 +107,10 @@
 
 				}
 
-				// Add look at target
-				const lookAtTarget = new THREE.Object3D();
-				lookAtTarget.name = 'lookAtTarget';
-				vrm.scene.add( lookAtTarget );
-				vrm.lookAt.target = lookAtTarget;
-				vrm.lookAt.autoUpdate = false;
+				// Add look at quaternion proxy to the VRM; which is needed to play the look at animation
+				const lookAtQuatProxy = new VRMLookAtQuaternionProxy( vrm.lookAt );
+				lookAtQuatProxy.name = 'lookAtQuaternionProxy';
+				vrm.scene.add( lookAtQuatProxy );
 
 				// Disable frustum culling
 				vrm.scene.traverse( ( obj ) => {
