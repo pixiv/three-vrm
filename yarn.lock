@@ -336,9 +336,9 @@
   integrity sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==
 
 "@gltf-transform/core@^3.7.4":
-  version "3.7.4"
-  resolved "https://registry.yarnpkg.com/@gltf-transform/core/-/core-3.7.4.tgz#8c293ac989f5441562581ed565730b01715afdb3"
-  integrity sha512-mVa+XUzavVM4CU7lYF8J29+gRMNBvBBfuiAcHlg4HUTIEEjE2VPMDHa3kwXsGiwbxc4ghs03ylS213s1u9jY1g==
+  version "3.9.0"
+  resolved "https://registry.yarnpkg.com/@gltf-transform/core/-/core-3.9.0.tgz#c63d5d0a2cf2d00f2a5f8faa5c5c6c6187db06c2"
+  integrity sha512-sLIUFqPIx8ATPDRwC9G/TXh4C7Q+w9z7DzXVMiNNReSVsAemTmZACqwCYpDW4jkUm3pbmz5/h9I9HXokBHbJ2w==
   dependencies:
     property-graph "^1.3.1"
 
@@ -6907,14 +6907,7 @@ semver@7.3.8:
   dependencies:
     lru-cache "^6.0.0"
 
-semver@7.5.4, semver@^7.3.8:
-  version "7.5.4"
-  resolved "https://registry.yarnpkg.com/semver/-/semver-7.5.4.tgz#483986ec4ed38e1c6c48c34894a9182dbff68a6e"
-  integrity sha512-1bCSESV6Pv+i21Hvpxp3Dx+pSD8lIPt8uVjRrxAUt/nbswYc+tK6Y2btiULjd4+fnq15PX+nqQDC7Oft7WkwcA==
-  dependencies:
-    lru-cache "^6.0.0"
-
-semver@7.x, semver@^7.0.0, semver@^7.1.1, semver@^7.2.1, semver@^7.3.2, semver@^7.3.4, semver@^7.3.5, semver@^7.3.7:
+semver@7.5.4, semver@7.x, semver@^7.0.0, semver@^7.1.1, semver@^7.2.1, semver@^7.3.2, semver@^7.3.4, semver@^7.3.5, semver@^7.3.7, semver@^7.3.8:
   version "7.5.4"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.5.4.tgz#483986ec4ed38e1c6c48c34894a9182dbff68a6e"
   integrity sha512-1bCSESV6Pv+i21Hvpxp3Dx+pSD8lIPt8uVjRrxAUt/nbswYc+tK6Y2btiULjd4+fnq15PX+nqQDC7Oft7WkwcA==
