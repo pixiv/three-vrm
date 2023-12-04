@@ -7,6 +7,8 @@ import { VRMExpressionMaterialColorType } from './VRMExpressionMaterialColorType
 export declare class VRMExpressionMaterialColorBind implements VRMExpressionBind {
     /**
      * Mapping of property names from VRMC/materialColorBinds.type to three.js/Material.
+     * The first element stands for color channels, the second element stands for the alpha channel.
+     * The second element can be null if the target property doesn't exist.
      */
     private static _propertyNameMapMap;
     /**
@@ -22,11 +24,15 @@ export declare class VRMExpressionMaterialColorBind implements VRMExpressionBind
      */
     readonly targetValue: THREE.Color;
     /**
-     * Its state.
-     * If it cannot find the target property in constructor, it will be null instead.
+     * The target alpha.
+     */
+    readonly targetAlpha: number;
+    /**
+     * Its binding state.
+     * If it cannot find the target property in the constructor, each property will be null instead.
      */
     private _state;
-    constructor({ material, type, targetValue, }: {
+    constructor({ material, type, targetValue, targetAlpha, }: {
         /**
          * The target material.
          */
@@ -39,7 +45,14 @@ export declare class VRMExpressionMaterialColorBind implements VRMExpressionBind
          * The target color.
          */
         targetValue: THREE.Color;
+        /**
+         * The target alpha.
+         */
+        targetAlpha?: number;
     });
     applyWeight(weight: number): void;
     clearAppliedWeight(): void;
+    private _initColorBindState;
+    private _initAlphaBindState;
+    private _getPropertyNameMap;
 }
