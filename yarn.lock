@@ -1104,6 +1104,14 @@
   resolved "https://registry.yarnpkg.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz#a77ea742fab25775145434eb1d2328cf5013ac33"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
 
+"@pixiv/three-vrm-core@2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@pixiv/three-vrm-core/-/three-vrm-core-2.0.3.tgz#f24296820b77c4c38fccd77878234a7e3c169fcb"
+  integrity sha512-zFJwDvmkkjkt25U42nNrDO3uKbdG/PtRRfJD7yT8ZjQqiMWVwNOodRzz3Wabrj/7hWpFhHBUm02YX+N9O3ITCA==
+  dependencies:
+    "@pixiv/types-vrm-0.0" "2.0.3"
+    "@pixiv/types-vrmc-vrm-1.0" "2.0.3"
+
 "@rollup/plugin-node-resolve@^15.0.1":
   version "15.0.1"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-node-resolve/-/plugin-node-resolve-15.0.1.tgz#72be449b8e06f6367168d5b3cd5e2802e0248971"
