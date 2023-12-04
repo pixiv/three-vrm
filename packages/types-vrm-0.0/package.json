@@ -1,6 +1,6 @@
 {
   "name": "@pixiv/types-vrm-0.0",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "Type definitions of VRM 0.0 schema",
   "license": "MIT",
   "author": "pixiv",
