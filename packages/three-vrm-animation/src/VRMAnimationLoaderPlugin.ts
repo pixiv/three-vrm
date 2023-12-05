@@ -59,9 +59,7 @@ export class VRMAnimationLoaderPlugin implements GLTFLoaderPlugin {
     const hips = hipsNode != null ? ((await gltf.parser.getDependency('node', hipsNode)) as THREE.Object3D) : null;
 
     const restHipsPosition = new THREE.Vector3();
-    if (restHipsPosition != null) {
-      hips?.getWorldPosition(new THREE.Vector3());
-    }
+    hips?.getWorldPosition(restHipsPosition);
 
     const clips = gltf.animations;
     const animations: VRMAnimation[] = clips.map((clip, iAnimation) => {
