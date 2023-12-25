@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { VRMNodeConstraint } from '../VRMNodeConstraint';
 
 export class VRMMockedConstraint extends VRMNodeConstraint {
-  public dependencies: Set<THREE.Object3D<THREE.Event>>;
+  public dependencies: Set<THREE.Object3D>;
 
   public onSetInitState?: () => void;
   public onUpdate?: () => void;

@@ -54,9 +54,9 @@
     "@pixiv/types-vrmc-springbone-1.0": "2.0.7"
   },
   "devDependencies": {
-    "three": "^0.154.0"
+    "three": "^0.160.0"
   },
   "peerDependencies": {
-    "three": "^0.154.0"
+    "three": "^0.160.0"
   }
 }

@@ -445,8 +445,8 @@ export class MToonMaterial extends THREE.ShaderMaterial {
         uvAnimationScrollYOffset: { value: 0.0 },
         uvAnimationRotationPhase: { value: 0.0 },
       },
-      parameters.uniforms,
-    ]);
+      parameters.uniforms ?? {},
+    ]) as any;
 
     // == finally compile the shader program =======================================================
     this.setValues(parameters);
