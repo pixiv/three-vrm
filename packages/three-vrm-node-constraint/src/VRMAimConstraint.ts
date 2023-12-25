@@ -51,7 +51,7 @@ export class VRMAimConstraint extends VRMNodeConstraint {
    */
   private _dstRestQuat: THREE.Quaternion;
 
-  public get dependencies(): Set<THREE.Object3D<THREE.Event>> {
+  public get dependencies(): Set<THREE.Object3D> {
     const set = new Set<THREE.Object3D>([this.source]);
 
     if (this.destination.parent) {

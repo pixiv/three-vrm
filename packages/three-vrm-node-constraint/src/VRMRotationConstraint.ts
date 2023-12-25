@@ -21,7 +21,7 @@ export class VRMRotationConstraint extends VRMNodeConstraint {
    */
   private _invSrcRestQuat: THREE.Quaternion;
 
-  public get dependencies(): Set<THREE.Object3D<THREE.Event>> {
+  public get dependencies(): Set<THREE.Object3D> {
     return new Set([this.source]);
   }
 
