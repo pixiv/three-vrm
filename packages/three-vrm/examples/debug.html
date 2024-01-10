@@ -64,7 +64,7 @@
 			scene.add( helperRoot );
 
 			// light
-			const light = new THREE.DirectionalLight( 0xffffff );
+			const light = new THREE.DirectionalLight( 0xffffff, Math.PI );
 			light.position.set( 1.0, 1.0, 1.0 ).normalize();
 			scene.add( light );
 
