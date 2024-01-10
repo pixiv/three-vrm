@@ -170,16 +170,11 @@ vec3 getDiffuse(
   return col;
 }
 
+// COMPAT: pre-r156 uses a struct GeometricContext
 #if THREE_VRM_THREE_REVISION >= 157
   void RE_Direct_MToon( const in IncidentLight directLight, const in vec3 geometryPosition, const in vec3 geometryNormal, const in vec3 geometryViewDir, const in vec3 geometryClearcoatNormal, const in MToonMaterial material, const in float shadow, inout ReflectedLight reflectedLight ) {
     float dotNL = clamp( dot( geometryNormal, directLight.direction ), -1.0, 1.0 );
     vec3 irradiance = directLight.color;
-
-    #if THREE_VRM_THREE_REVISION < 132
-      #ifndef PHYSICALLY_CORRECT_LIGHTS
-        irradiance *= PI;
-      #endif
-    #endif
 
     // directSpecular will be used for rim lighting, not an actual specular
     reflectedLight.directSpecular += irradiance;
@@ -611,11 +606,12 @@ void main() {
   // Since we want to take shadows into account of shading instead of irradiance,
   // we had to modify the codes that multiplies the results of shadowmap into color of direct lights.
 
+  // COMPAT: pre-r156 uses a struct GeometricContext
   #if THREE_VRM_THREE_REVISION >= 157
     vec3 geometryPosition = - vViewPosition;
     vec3 geometryNormal = normal;
     vec3 geometryViewDir = ( isOrthographic ) ? vec3( 0, 0, 1 ) : normalize( vViewPosition );
-    
+
     vec3 geometryClearcoatNormal;
 
     #ifdef USE_CLEARCOAT
@@ -654,6 +650,7 @@ void main() {
 
       pointLight = pointLights[ i ];
 
+      // COMPAT: pre-r156 uses a struct GeometricContext
       #if THREE_VRM_THREE_REVISION >= 157
         getPointLightInfo( pointLight, geometryPosition, directLight );
       #elif THREE_VRM_THREE_REVISION >= 132
@@ -668,6 +665,7 @@ void main() {
       shadow = all( bvec2( directLight.visible, receiveShadow ) ) ? getPointShadow( pointShadowMap[ i ], pointLightShadow.shadowMapSize, pointLightShadow.shadowBias, pointLightShadow.shadowRadius, vPointShadowCoord[ i ], pointLightShadow.shadowCameraNear, pointLightShadow.shadowCameraFar ) : 1.0;
       #endif
 
+      // COMPAT: pre-r156 uses a struct GeometricContext
       #if THREE_VRM_THREE_REVISION >= 157
         RE_Direct( directLight, geometryPosition, geometryNormal, geometryViewDir, geometryClearcoatNormal, material, shadow, reflectedLight );
       #else
@@ -691,6 +689,7 @@ void main() {
 
       spotLight = spotLights[ i ];
 
+      // COMPAT: pre-r156 uses a struct GeometricContext
       #if THREE_VRM_THREE_REVISION >= 157
         getSpotLightInfo( spotLight, geometryPosition, directLight );
       #elif THREE_VRM_THREE_REVISION >= 132
@@ -705,6 +704,7 @@ void main() {
       shadow = all( bvec2( directLight.visible, receiveShadow ) ) ? getShadow( spotShadowMap[ i ], spotLightShadow.shadowMapSize, spotLightShadow.shadowBias, spotLightShadow.shadowRadius, vSpotShadowCoord[ i ] ) : 1.0;
       #endif
 
+      // COMPAT: pre-r156 uses a struct GeometricContext
       #if THREE_VRM_THREE_REVISION >= 157
         RE_Direct( directLight, geometryPosition, geometryNormal, geometryViewDir, geometryClearcoatNormal, material, shadow, reflectedLight );
       #else
@@ -728,6 +728,7 @@ void main() {
 
       directionalLight = directionalLights[ i ];
 
+      // COMPAT: pre-r156 uses a struct GeometricContext
       #if THREE_VRM_THREE_REVISION >= 157
         getDirectionalLightInfo( directionalLight, directLight );
       #elif THREE_VRM_THREE_REVISION >= 132
@@ -742,6 +743,7 @@ void main() {
       shadow = all( bvec2( directLight.visible, receiveShadow ) ) ? getShadow( directionalShadowMap[ i ], directionalLightShadow.shadowMapSize, directionalLightShadow.shadowBias, directionalLightShadow.shadowRadius, vDirectionalShadowCoord[ i ] ) : 1.0;
       #endif
 
+      // COMPAT: pre-r156 uses a struct GeometricContext
       #if THREE_VRM_THREE_REVISION >= 157
         RE_Direct( directLight, geometryPosition, geometryNormal, geometryViewDir, geometryClearcoatNormal, material, shadow, reflectedLight );
       #else
@@ -774,6 +776,8 @@ void main() {
 
     vec3 irradiance = getAmbientLightIrradiance( ambientLightColor );
 
+    // COMPAT: pre-r156 uses a struct GeometricContext
+    // COMPAT: pre-r156 doesn't have a define USE_LIGHT_PROBES
     #if THREE_VRM_THREE_REVISION >= 157
       #if defined( USE_LIGHT_PROBES )
         irradiance += getLightProbeIrradiance( lightProbe, geometryNormal );
@@ -789,6 +793,7 @@ void main() {
       #pragma unroll_loop_start
       for ( int i = 0; i < NUM_HEMI_LIGHTS; i ++ ) {
 
+        // COMPAT: pre-r156 uses a struct GeometricContext
         #if THREE_VRM_THREE_REVISION >= 157
           irradiance += getHemisphereLightIrradiance( hemisphereLights[ i ], geometryNormal );
         #elif THREE_VRM_THREE_REVISION >= 133
