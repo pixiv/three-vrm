@@ -27,7 +27,7 @@
 			{
 				"imports": {
 					"three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-					"three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
+					"three/examples/jsm/": "https://unpkg.com/three@0.160.0/examples/jsm/",
 					"@pixiv/three-vrm-materials-mtoon": "../lib/three-vrm-materials-mtoon.module.js"
 				}
 			}
@@ -35,11 +35,12 @@
 
 		<script type="module">
 			import * as THREE from 'three';
-			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-			import { MToonMaterial } from '@pixiv/three-vrm-materials-mtoon';
+			import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+			import WebGPURenderer from 'three/examples/jsm/renderers/webgpu/WebGPURenderer.js';
+			import { MToonNodeMaterial } from '@pixiv/three-vrm-materials-mtoon';
 
 			// renderer
-			const renderer = new THREE.WebGLRenderer();
+			const renderer = new WebGPURenderer();
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			renderer.setPixelRatio( window.devicePixelRatio );
 			document.body.appendChild( renderer.domElement );
@@ -276,7 +277,7 @@
 
 			].map( ( params, i ) => {
 
-				const material = new MToonMaterial( params );
+				const material = new MToonNodeMaterial( params );
 				const mesh = new THREE.Mesh( geometrySphere, material );
 
 				const x = ( i % 5 ) - 2.0;

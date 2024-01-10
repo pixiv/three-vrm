@@ -1,13 +1,13 @@
 import * as THREE from 'three';
 import * as V1MToonSchema from '@pixiv/types-vrmc-materials-mtoon-1.0';
 import type { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { MToonMaterial } from './MToonMaterial';
 import type { MToonMaterialParameters } from './MToonMaterialParameters';
 import { MToonMaterialOutlineWidthMode } from './MToonMaterialOutlineWidthMode';
 import { GLTFMToonMaterialParamsAssignHelper } from './GLTFMToonMaterialParamsAssignHelper';
 import { MToonMaterialLoaderPluginOptions } from './MToonMaterialLoaderPluginOptions';
 import type { MToonMaterialDebugMode } from './MToonMaterialDebugMode';
 import { GLTF as GLTFSchema } from '@gltf-transform/core';
+import { MToonNodeMaterial } from './nodes/MToonNodeMaterial';
 
 /**
  * Possible spec versions it recognizes.
@@ -46,7 +46,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
    * Loaded materials will be stored in this set.
    * Will be transferred into `gltf.userData.vrmMToonMaterials` in {@link afterRoot}.
    */
-  private readonly _mToonMaterialSet: Set<MToonMaterial>;
+  private readonly _mToonMaterialSet: Set<MToonNodeMaterial>;
 
   public get name(): string {
     return MToonMaterialLoaderPlugin.EXTENSION_NAME;
@@ -73,7 +73,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
   public getMaterialType(materialIndex: number): typeof THREE.Material | null {
     const v1Extension = this._getMToonExtension(materialIndex);
     if (v1Extension) {
-      return MToonMaterial;
+      return MToonNodeMaterial;
     }
 
     return null;
@@ -254,7 +254,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
 
     // make sure the material is mtoon
     const surfaceMaterial = mesh.material;
-    if (!(surfaceMaterial instanceof MToonMaterial)) {
+    if (!(surfaceMaterial instanceof MToonNodeMaterial)) {
       return;
     }
 
@@ -291,7 +291,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     }
 
     for (const material of materialSet) {
-      if (material instanceof MToonMaterial) {
+      if (material instanceof MToonNodeMaterial) {
         this._mToonMaterialSet.add(material);
       }
     }

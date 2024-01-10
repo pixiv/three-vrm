@@ -79,7 +79,10 @@ function createConfig( output ) {
   return {
     input: 'src/index.ts',
     output,
-    external: [ 'three' ],
+    external: [
+      'three',
+      'three/examples/jsm/nodes/Nodes.js',
+    ],
     plugins: [
       string({
         include: ['**/*.frag', '**/*.vert'],
