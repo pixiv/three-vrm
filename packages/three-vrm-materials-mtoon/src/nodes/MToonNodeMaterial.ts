@@ -110,7 +110,7 @@ export class MToonNodeMaterial extends Nodes.NodeMaterial {
     super();
 
     if (parameters.transparentWithZWrite) {
-      this.depthWrite = true;
+      parameters.depthWrite = true;
     }
     delete parameters.transparentWithZWrite;
 
