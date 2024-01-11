@@ -281,7 +281,7 @@ export class MToonNodeMaterial extends Nodes.NodeMaterial {
       this.positionNode ??= Nodes.positionLocal;
 
       if (this.outlineWidthMode === MToonMaterialOutlineWidthMode.WorldCoordinates) {
-        const worldNormalLength = Nodes.length(Nodes.modelNormalMatrix.mul(Nodes.normalLocal));
+        const worldNormalLength = Nodes.length(Nodes.modelNormalMatrix.mul(Nodes.normalLocal.normalize()));
         const outlineOffset = refOutlineWidthFactor.mul(worldNormalLength).mul(Nodes.normalLocal.normalize());
 
         this.positionNode = this.positionNode.add(outlineOffset);
