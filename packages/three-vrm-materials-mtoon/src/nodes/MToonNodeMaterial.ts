@@ -197,6 +197,15 @@ export class MToonNodeMaterial extends Nodes.NodeMaterial {
       this.colorNode = tempColorNode;
     }
 
+    // MToon must ignore vertex color by spec
+    // See: https://github.com/vrm-c/vrm-specification/blob/42c0a90e6b4b710352569978f14980e9fc94b25d/specification/VRMC_materials_mtoon-1.0/README.md#vertex-colors
+    if (this.vertexColors === true && builder.geometry.hasAttribute('color')) {
+      console.warn(
+        'MToonNodeMaterial: MToon ignores vertex colors. Consider using a model without vertex colors instead.',
+      );
+      this.vertexColors = false;
+    }
+
     // the ordinary diffuseColor setup
     super.setupDiffuseColor(builder);
 
