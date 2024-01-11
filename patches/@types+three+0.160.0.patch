@@ -233,7 +233,7 @@ index 353d957..1570c22 100644
 +    }
 +}
 diff --git a/node_modules/@types/three/examples/jsm/nodes/materials/NodeMaterial.d.ts b/node_modules/@types/three/examples/jsm/nodes/materials/NodeMaterial.d.ts
-index 90cf40b..a2504ec 100644
+index 90cf40b..e91fbed 100644
 --- a/node_modules/@types/three/examples/jsm/nodes/materials/NodeMaterial.d.ts
 +++ b/node_modules/@types/three/examples/jsm/nodes/materials/NodeMaterial.d.ts
 @@ -10,12 +10,14 @@ import {
@@ -304,7 +304,7 @@ index 90cf40b..a2504ec 100644
 +    build(builder: NodeBuilder): void;
 +    setup(builder: NodeBuilder): void;
 +    setupDepth(builder: NodeBuilder): void;
-+    setupPosition(builder: NodeBuilder): ModelViewProjectionNode;
++    setupPosition(builder: NodeBuilder): ShaderNodeObject<ModelViewProjectionNode>;
 +    setupDiffuseColor(builder: NodeBuilder): void;
 +    setupVariants(builder: NodeBuilder): void;
 +    setupNormal(builder: NodeBuilder): void;

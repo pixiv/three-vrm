@@ -272,7 +272,7 @@ export class MToonNodeMaterial extends Nodes.NodeMaterial {
     return ret;
   }
 
-  public setupPosition(builder: Nodes.NodeBuilder): Nodes.ModelViewProjectionNode {
+  public setupPosition(builder: Nodes.NodeBuilder): Nodes.ShaderNodeObject<Nodes.Node> {
     // we must apply outline position offset
     // this.positionNode will be used in super.setupPosition() so we temporarily replace it
     const tempPositionNode: Nodes.ShaderNodeObject<Nodes.Node> | null = this.positionNode;
@@ -281,12 +281,21 @@ export class MToonNodeMaterial extends Nodes.NodeMaterial {
       this.positionNode ??= Nodes.positionLocal;
 
       if (this.outlineWidthMode === MToonMaterialOutlineWidthMode.WorldCoordinates) {
-        this.positionNode = this.positionNode.add(Nodes.normalLocal.mul(refOutlineWidthFactor));
+        const worldNormalLength = Nodes.length(Nodes.modelNormalMatrix.mul(Nodes.normalLocal));
+        const outlineOffset = refOutlineWidthFactor.mul(worldNormalLength).mul(Nodes.normalLocal.normalize());
+
+        this.positionNode = this.positionNode.add(outlineOffset);
       }
+
+      this.positionNode ??= Nodes.positionLocal;
     }
 
     // the ordinary position setup
     const ret = super.setupPosition(builder);
+
+    // anti z-fighting
+    // TODO: We might want to address this via glPolygonOffset instead?
+    ret.z.add(ret.w.mul(1e-6));
 
     // revert the positionNode
     this.positionNode = tempPositionNode;
