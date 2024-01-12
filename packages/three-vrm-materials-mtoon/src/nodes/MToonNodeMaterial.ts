@@ -26,6 +26,7 @@ import {
   refOutlineColorFactor,
   refOutlineLightingMixFactor,
   refOutlineWidthFactor,
+  refOutlineWidthMultiplyTexture,
   refParametricRimColorFactor,
   refParametricRimFresnelPowerFactor,
   refParametricRimLiftFactor,
@@ -300,14 +301,27 @@ export class MToonNodeMaterial extends Nodes.NodeMaterial {
     // this.positionNode will be used in super.setupPosition() so we temporarily replace it
     const tempPositionNode: Nodes.ShaderNodeObject<Nodes.Node> | null = this.positionNode;
 
-    if (this.isOutline) {
+    if (this.isOutline && this.outlineWidthMode !== MToonMaterialOutlineWidthMode.None) {
       this.positionNode ??= Nodes.positionLocal;
 
-      if (this.outlineWidthMode === MToonMaterialOutlineWidthMode.WorldCoordinates) {
-        const worldNormalLength = Nodes.length(Nodes.modelNormalMatrix.mul(Nodes.normalLocal.normalize()));
-        const outlineOffset = refOutlineWidthFactor.mul(worldNormalLength).mul(Nodes.normalLocal.normalize());
+      const normalLocal = Nodes.normalLocal.normalize();
 
+      let width: Nodes.ShaderNodeObject<Nodes.Node> = refOutlineWidthFactor;
+
+      if (this.outlineWidthMultiplyTexture && this.outlineWidthMultiplyTexture.isTexture === true) {
+        const map = refOutlineWidthMultiplyTexture.context({ getUV: () => this._animatedUVNode });
+        width = width.mul(map);
+      }
+
+      const worldNormalLength = Nodes.length(Nodes.modelNormalMatrix.mul(normalLocal));
+      const outlineOffset = width.mul(worldNormalLength).mul(normalLocal);
+
+      if (this.outlineWidthMode === MToonMaterialOutlineWidthMode.WorldCoordinates) {
         this.positionNode = this.positionNode.add(outlineOffset);
+      } else if (this.outlineWidthMode === MToonMaterialOutlineWidthMode.ScreenCoordinates) {
+        const clipScale = Nodes.cameraProjectionMatrix.element(1).element(1);
+
+        this.positionNode = this.positionNode.add(outlineOffset.div(clipScale).mul(Nodes.positionView.z.negate()));
       }
 
       this.positionNode ??= Nodes.positionLocal;
