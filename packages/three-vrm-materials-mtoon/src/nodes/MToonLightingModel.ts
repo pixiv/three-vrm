@@ -115,7 +115,7 @@ export class MToonLightingModel extends Nodes.LightingModel {
       rim
         .add(matcap)
         .mul(rimMultiply)
-        .mul(Nodes.mix(Nodes.vec3(0.0), lightColor, rimLightingMix)),
+        .mul(Nodes.mix(Nodes.vec3(0.0), Nodes.BRDF_Lambert({ diffuseColor: lightColor }), rimLightingMix)),
     );
   }
 
