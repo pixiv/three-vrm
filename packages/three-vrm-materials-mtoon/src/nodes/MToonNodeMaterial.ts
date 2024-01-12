@@ -207,6 +207,11 @@ export class MToonNodeMaterial extends Nodes.NodeMaterial {
     // the ordinary diffuseColor setup
     super.setupDiffuseColor(builder);
 
+    // Set alpha to 1 if it is not transparent
+    if (this.transparent === false) {
+      Nodes.diffuseColor.a.assign(1.0);
+    }
+
     // revert the colorNode
     if (this.colorNode === tempColorNode) {
       this.colorNode = null;
