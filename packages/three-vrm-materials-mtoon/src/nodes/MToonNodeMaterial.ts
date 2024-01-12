@@ -289,7 +289,10 @@ export class MToonNodeMaterial extends Nodes.NodeMaterial {
   ): Nodes.ShaderNodeObject<Nodes.Node> {
     // mix or set outline color
     if (this.isOutline && this.outlineWidthMode !== MToonMaterialOutlineWidthMode.None) {
-      outputNode = Nodes.mix(refOutlineColorFactor, outputNode.mul(refOutlineColorFactor), refOutlineLightingMixFactor);
+      outputNode = Nodes.vec4(
+        Nodes.mix(refOutlineColorFactor, outputNode.xyz.mul(refOutlineColorFactor), refOutlineLightingMixFactor),
+        outputNode.w,
+      );
     }
 
     // the ordinary output setup
