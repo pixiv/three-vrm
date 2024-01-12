@@ -12,8 +12,6 @@ import {
   shadingShift,
   shadingToony,
   rimMultiply,
-  outlineColor,
-  outlineLightingMix,
 } from './immutableNodes';
 import {
   refColor,
@@ -216,8 +214,6 @@ export class MToonNodeMaterial extends Nodes.NodeMaterial {
   }
 
   public setupVariants({ stack }: Nodes.NodeBuilder): void {
-    stack.assign(outlineColor, this._setupOutlineColorNode());
-    stack.assign(outlineLightingMix, this._setupOutlineLightingMixNode());
     stack.assign(shadeColor, this._setupShadeColorNode());
     stack.assign(shadingShift, this._setupShadingShiftNode());
     stack.assign(shadingToony, this._setupShadingToonyNode());
@@ -279,6 +275,19 @@ export class MToonNodeMaterial extends Nodes.NodeMaterial {
     }
 
     return ret;
+  }
+
+  public setupOutput(
+    builder: Nodes.NodeBuilder,
+    outputNode: Nodes.ShaderNodeObject<Nodes.Node>,
+  ): Nodes.ShaderNodeObject<Nodes.Node> {
+    // mix or set outline color
+    if (this.isOutline && this.outlineWidthMode !== MToonMaterialOutlineWidthMode.None) {
+      outputNode = Nodes.mix(refOutlineColorFactor, outputNode.mul(refOutlineColorFactor), refOutlineLightingMixFactor);
+    }
+
+    // the ordinary output setup
+    return super.setupOutput(builder, outputNode);
   }
 
   public setupPosition(builder: Nodes.NodeBuilder): Nodes.ShaderNodeObject<Nodes.Node> {
@@ -363,22 +372,6 @@ export class MToonNodeMaterial extends Nodes.NodeMaterial {
     this.uvAnimationScrollXOffset += delta * this.uvAnimationScrollXSpeedFactor;
     this.uvAnimationScrollYOffset += delta * this.uvAnimationScrollYSpeedFactor;
     this.uvAnimationRotationPhase += delta * this.uvAnimationRotationSpeedFactor;
-  }
-
-  private _setupOutlineColorNode(): Nodes.Swizzable {
-    if (!this.isOutline || this.outlineWidthMode === MToonMaterialOutlineWidthMode.None) {
-      return Nodes.vec3(1.0);
-    }
-
-    return refOutlineColorFactor;
-  }
-
-  private _setupOutlineLightingMixNode(): Nodes.Node {
-    if (!this.isOutline || this.outlineWidthMode === MToonMaterialOutlineWidthMode.None) {
-      return Nodes.float(1.0);
-    }
-
-    return refOutlineLightingMixFactor;
   }
 
   private _setupShadeColorNode(): Nodes.Swizzable {

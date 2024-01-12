@@ -1,8 +1,6 @@
 import * as Nodes from 'three/examples/jsm/nodes/Nodes.js';
 import {
   matcap,
-  outlineColor,
-  outlineLightingMix,
   parametricRimColor,
   parametricRimFresnelPower,
   parametricRimLift,
@@ -79,13 +77,6 @@ const getParametricRim = Nodes.tslFn(() => {
   return rim.mul(parametricRimColor);
 });
 
-/**
- * Do the outline color modification.
- */
-const getOutlineColor = Nodes.tslFn(({ color }: { color: Nodes.ShaderNodeObject<Nodes.Node> }) => {
-  return Nodes.mix(outlineColor, color.mul(outlineColor), outlineLightingMix);
-});
-
 interface MToonLightingModelContext {
   lightDirection: Nodes.ShaderNodeObject<Nodes.Node>;
   lightColor: Nodes.ShaderNodeObject<Nodes.Node>;
@@ -118,12 +109,6 @@ export class MToonLightingModel extends Nodes.LightingModel {
       }),
     );
 
-    reflectedLight.directDiffuse.assign(
-      getOutlineColor({
-        color: reflectedLight.directDiffuse,
-      }),
-    );
-
     // rim
     const rim = getParametricRim();
     reflectedLight.directSpecular.addAssign(
@@ -131,12 +116,6 @@ export class MToonLightingModel extends Nodes.LightingModel {
         .add(matcap)
         .mul(rimMultiply)
         .mul(Nodes.mix(Nodes.vec3(0.0), lightColor, rimLightingMix)),
-    );
-
-    reflectedLight.directSpecular.assign(
-      getOutlineColor({
-        color: reflectedLight.directSpecular,
-      }),
     );
   }
 
@@ -149,12 +128,6 @@ export class MToonLightingModel extends Nodes.LightingModel {
         }),
       ),
     );
-
-    reflectedLight.indirectDiffuse.assign(
-      getOutlineColor({
-        color: reflectedLight.indirectDiffuse,
-      }),
-    );
   }
 
   indirectSpecular({ reflectedLight }: MToonLightingModelContext) {
@@ -165,12 +138,6 @@ export class MToonLightingModel extends Nodes.LightingModel {
         .add(matcap)
         .mul(rimMultiply)
         .mul(Nodes.mix(Nodes.vec3(1.0), Nodes.vec3(0.0), rimLightingMix)),
-    );
-
-    reflectedLight.indirectSpecular.assign(
-      getOutlineColor({
-        color: reflectedLight.indirectSpecular,
-      }),
     );
   }
 }
