@@ -74,7 +74,7 @@ const getParametricRim = Nodes.tslFn(() => {
   const viewDir = Nodes.modelViewPosition.normalize();
   const dotNV = Nodes.transformedNormalView.dot(viewDir.negate());
 
-  const rim = Nodes.float(1.0).sub(dotNV).clamp().add(parametricRimLift).pow(parametricRimFresnelPower);
+  const rim = Nodes.float(1.0).sub(dotNV).add(parametricRimLift).clamp().pow(parametricRimFresnelPower);
 
   return rim.mul(parametricRimColor);
 });
