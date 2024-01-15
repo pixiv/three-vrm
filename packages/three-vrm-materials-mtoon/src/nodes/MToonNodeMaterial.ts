@@ -101,10 +101,6 @@ export class MToonNodeMaterial extends Nodes.NodeMaterial {
 
     cacheKey += `isOutline:${this.isOutline},`;
 
-    if (this.isOutline) {
-      cacheKey += `outlineWidthMode:${this.outlineWidthMode},`;
-    }
-
     return cacheKey;
   }
 
