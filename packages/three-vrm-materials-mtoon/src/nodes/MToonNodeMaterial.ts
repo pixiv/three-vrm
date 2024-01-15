@@ -99,8 +99,11 @@ export class MToonNodeMaterial extends Nodes.NodeMaterial {
   public customProgramCacheKey(): string {
     let cacheKey = super.customProgramCacheKey();
 
-    cacheKey += `isOutline:${this.isOutline}`;
-    cacheKey += `outlineWidthMode:${this.outlineWidthMode}`;
+    cacheKey += `isOutline:${this.isOutline},`;
+
+    if (this.isOutline) {
+      cacheKey += `outlineWidthMode:${this.outlineWidthMode},`;
+    }
 
     return cacheKey;
   }
