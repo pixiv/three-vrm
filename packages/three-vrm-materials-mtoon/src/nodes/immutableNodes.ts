@@ -6,8 +6,4 @@ export const shadingToony = Nodes.nodeImmutable(Nodes.PropertyNode, 'float').tem
 export const rimLightingMix = Nodes.nodeImmutable(Nodes.PropertyNode, 'float').temp('RimLightingMix');
 export const rimMultiply = Nodes.nodeImmutable(Nodes.PropertyNode, 'vec3').temp('RimMultiply');
 export const matcap = Nodes.nodeImmutable(Nodes.PropertyNode, 'vec3').temp('matcap');
-export const parametricRimColor = Nodes.nodeImmutable(Nodes.PropertyNode, 'vec3').temp('ParametricRimColor');
-export const parametricRimLift = Nodes.nodeImmutable(Nodes.PropertyNode, 'float').temp('ParametricRimLift');
-export const parametricRimFresnelPower = Nodes.nodeImmutable(Nodes.PropertyNode, 'float').temp(
-  'ParametricRimFresnelPower',
-);
+export const parametricRim = Nodes.nodeImmutable(Nodes.PropertyNode, 'vec3').temp('ParametricRim');

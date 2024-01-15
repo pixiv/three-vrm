@@ -3,15 +3,13 @@ import * as Nodes from 'three/examples/jsm/nodes/Nodes.js';
 
 import { MToonLightingModel } from './MToonLightingModel';
 import {
-  parametricRimColor,
-  parametricRimFresnelPower,
-  parametricRimLift,
   rimLightingMix,
   matcap,
   shadeColor,
   shadingShift,
   shadingToony,
   rimMultiply,
+  parametricRim,
 } from './immutableNodes';
 import {
   refColor,
@@ -41,6 +39,7 @@ import {
 import { MToonAnimatedUVNode } from './MToonAnimatedUVNode';
 import { MToonMaterialOutlineWidthMode } from '../MToonMaterialOutlineWidthMode';
 import { MToonNodeMaterialParameters } from './MToonNodeMaterialParameters';
+import { mtoonParametricRim } from './mtoonParametricRim';
 // import phongLightingModel from 'three/addons/nodes/functions/PhongLightingModel.js';
 // import { float } from '../shadernode/ShaderNode.js';
 
@@ -225,9 +224,7 @@ export class MToonNodeMaterial extends Nodes.NodeMaterial {
     stack.assign(rimLightingMix, this._setupRimLightingMixNode());
     stack.assign(rimMultiply, this._setupRimMultiplyNode());
     stack.assign(matcap, this._setupMatcapNode());
-    stack.assign(parametricRimColor, this._setupParametricRimColorNode());
-    stack.assign(parametricRimLift, this._setupParametricRimLiftNode());
-    stack.assign(parametricRimFresnelPower, this._setupParametricRimFresnelPowerNode());
+    stack.assign(parametricRim, this._setupParametricRimNode());
   }
 
   public setupNormal(builder: Nodes.NodeBuilder): void {
@@ -467,27 +464,22 @@ export class MToonNodeMaterial extends Nodes.NodeMaterial {
     return Nodes.vec3(0.0);
   }
 
-  private _setupParametricRimColorNode(): Nodes.Swizzable {
-    if (this.parametricRimColorNode != null) {
-      return Nodes.vec3(this.parametricRimColorNode);
-    }
+  private _setupParametricRimNode(): Nodes.Swizzable {
+    const parametricRimColor =
+      this.parametricRimColorNode != null ? Nodes.vec3(this.parametricRimColorNode) : refParametricRimColorFactor;
 
-    return refParametricRimColorFactor;
-  }
+    const parametricRimLift =
+      this.parametricRimLiftNode != null ? Nodes.float(this.parametricRimLiftNode) : refParametricRimLiftFactor;
 
-  private _setupParametricRimLiftNode(): Nodes.Node {
-    if (this.parametricRimLiftNode != null) {
-      return Nodes.float(this.parametricRimLiftNode);
-    }
+    const parametricRimFresnelPower =
+      this.parametricRimFresnelPowerNode != null
+        ? Nodes.float(this.parametricRimFresnelPowerNode)
+        : refParametricRimFresnelPowerFactor;
 
-    return refParametricRimLiftFactor;
-  }
-
-  private _setupParametricRimFresnelPowerNode(): Nodes.Node {
-    if (this.parametricRimFresnelPowerNode != null) {
-      return Nodes.float(this.parametricRimFresnelPowerNode);
-    }
-
-    return refParametricRimFresnelPowerFactor;
+    return mtoonParametricRim({
+      parametricRimLift,
+      parametricRimFresnelPower,
+      parametricRimColor,
+    });
   }
 }

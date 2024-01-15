@@ -1,9 +1,7 @@
 import * as Nodes from 'three/examples/jsm/nodes/Nodes.js';
 import {
   matcap,
-  parametricRimColor,
-  parametricRimFresnelPower,
-  parametricRimLift,
+  parametricRim,
   rimLightingMix,
   rimMultiply,
   shadeColor,
@@ -65,18 +63,6 @@ const getDiffuse = Nodes.tslFn(
   },
 );
 
-/**
- * Do the rim lighting.
- */
-const getParametricRim = Nodes.tslFn(() => {
-  const viewDir = Nodes.modelViewPosition.normalize();
-  const dotNV = Nodes.transformedNormalView.dot(viewDir.negate());
-
-  const rim = Nodes.float(1.0).sub(dotNV).add(parametricRimLift).clamp().pow(parametricRimFresnelPower);
-
-  return rim.mul(parametricRimColor);
-});
-
 interface MToonLightingModelContext {
   lightDirection: Nodes.ShaderNodeObject<Nodes.Node>;
   lightColor: Nodes.ShaderNodeObject<Nodes.Node>;
@@ -110,9 +96,8 @@ export class MToonLightingModel extends Nodes.LightingModel {
     );
 
     // rim
-    const rim = getParametricRim();
     reflectedLight.directSpecular.addAssign(
-      rim
+      parametricRim
         .add(matcap)
         .mul(rimMultiply)
         .mul(Nodes.mix(Nodes.vec3(0.0), Nodes.BRDF_Lambert({ diffuseColor: lightColor }), rimLightingMix)),
@@ -132,9 +117,8 @@ export class MToonLightingModel extends Nodes.LightingModel {
 
   indirectSpecular({ reflectedLight }: MToonLightingModelContext) {
     // rim
-    const rim = getParametricRim();
     reflectedLight.indirectSpecular.addAssign(
-      rim
+      parametricRim
         .add(matcap)
         .mul(rimMultiply)
         .mul(Nodes.mix(Nodes.vec3(1.0), Nodes.vec3(0.0), rimLightingMix)),
