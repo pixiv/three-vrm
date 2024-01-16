@@ -233,7 +233,7 @@ index 353d957..1570c22 100644
 +    }
 +}
 diff --git a/node_modules/@types/three/examples/jsm/nodes/materials/NodeMaterial.d.ts b/node_modules/@types/three/examples/jsm/nodes/materials/NodeMaterial.d.ts
-index 90cf40b..e91fbed 100644
+index 90cf40b..88d4859 100644
 --- a/node_modules/@types/three/examples/jsm/nodes/materials/NodeMaterial.d.ts
 +++ b/node_modules/@types/three/examples/jsm/nodes/materials/NodeMaterial.d.ts
 @@ -10,12 +10,14 @@ import {
@@ -312,7 +312,7 @@ index 90cf40b..e91fbed 100644
 +    setupLights(builder: NodeBuilder): LightsNode;
 +    setupLightingModel(builder: NodeBuilder): void;
 +    setupLighting(builder: NodeBuilder): Node;
-+    setupOutput(builder: NodeBuilder): Node;
++    setupOutput(builder: NodeBuilder, outputNode: ShaderNodeObject<Node>): ShaderNodeObject<Node>;
 +    setupDefaultValues(material: Material): void;
  
      static fromMaterial(material: LineBasicMaterial): LineBasicNodeMaterial;
