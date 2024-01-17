@@ -23,8 +23,8 @@
 		<script type="importmap">
 			{
 			  "imports": {
-				"three": "https://unpkg.com/three@0.154.0/build/three.module.js",
-				"three/addons/": "https://unpkg.com/three@0.154.0/examples/jsm/",
+				"three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+				"three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
 				"@pixiv/three-vrm-springbone": "../lib/three-vrm-springbone.module.js"
 			  }
 			}
@@ -55,7 +55,7 @@
 			const scene = new THREE.Scene();
 
 			// light
-			const light = new THREE.DirectionalLight( 0xffffff );
+			const light = new THREE.DirectionalLight( 0xffffff, Math.PI );
 			light.position.set( 1.0, 1.0, 1.0 ).normalize();
 			scene.add( light );
 

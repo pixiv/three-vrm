@@ -23,8 +23,8 @@
 		<script type="importmap">
 			{
 			  "imports": {
-					"three": "https://unpkg.com/three@0.154.0/build/three.module.js",
-					"three/addons/": "https://unpkg.com/three@0.154.0/examples/jsm/",
+					"three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+					"three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
 					"tweakpane": "https://unpkg.com/tweakpane@3.0",
 					"tweakpane-plugin-rotation": "https://unpkg.com/@0b5vr/tweakpane-plugin-rotation@0.1",
 					"@pixiv/three-vrm-node-constraint": "../lib/three-vrm-node-constraint.module.js"
@@ -84,7 +84,7 @@
 			const scene = new THREE.Scene();
 
 			// light
-			const light = new THREE.DirectionalLight( 0xffffff );
+			const light = new THREE.DirectionalLight( 0xffffff, Math.PI );
 			light.position.set( 1.0, 2.0, 3.0 ).normalize();
 			scene.add( light );
 

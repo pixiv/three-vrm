@@ -1,6 +1,6 @@
 {
   "name": "@pixiv/types-vrmc-materials-hdr-emissive-multiplier-1.0",
-  "version": "2.0.6",
+  "version": "2.0.8",
   "description": "Type definitions of VRMC_materials_hdr_emissiveMultiplier 1.0 schema",
   "license": "MIT",
   "author": "pixiv",

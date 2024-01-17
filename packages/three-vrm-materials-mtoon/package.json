@@ -49,15 +49,15 @@
     ]
   },
   "dependencies": {
-    "@pixiv/types-vrm-0.0": "2.0.6",
-    "@pixiv/types-vrmc-materials-mtoon-1.0": "2.0.6"
+    "@pixiv/types-vrm-0.0": "2.0.8",
+    "@pixiv/types-vrmc-materials-mtoon-1.0": "2.0.8"
   },
   "devDependencies": {
-    "@types/three": "^0.154.0",
-    "three": "^0.154.0"
+    "@types/three": "^0.160.0",
+    "three": "^0.160.0"
   },
   "peerDependencies": {
-    "@types/three": "^0.154.0",
-    "three": "^0.154.0"
+    "@types/three": "^0.160.0",
+    "three": "^0.160.0"
   }
 }
