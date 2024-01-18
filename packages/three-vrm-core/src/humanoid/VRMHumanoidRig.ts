@@ -21,10 +21,11 @@ export class VRMHumanoidRig extends VRMRig {
     const root = new THREE.Object3D();
     root.name = 'VRMHumanoidRig';
 
-    // store boneWorldPositions and boneWorldRotations
+    // store boneWorldPositions, boneWorldRotations, and parentWorldRotations
     const boneWorldPositions: { [boneName in VRMHumanBoneName]?: THREE.Vector3 } = {};
     const boneWorldRotations: { [boneName in VRMHumanBoneName]?: THREE.Quaternion } = {};
     const boneRotations: { [boneName in VRMHumanBoneName]?: THREE.Quaternion } = {};
+    const parentWorldRotations: { [boneName in VRMHumanBoneName]?: THREE.Quaternion } = {};
 
     VRMHumanBoneList.forEach((boneName) => {
       const boneNode = modelRig.getBoneNode(boneName);
@@ -39,12 +40,14 @@ export class VRMHumanoidRig extends VRMRig {
         boneWorldPositions[boneName] = boneWorldPosition;
         boneWorldRotations[boneName] = boneWorldRotation;
         boneRotations[boneName] = boneNode.quaternion.clone();
+
+        const parentWorldRotation = new THREE.Quaternion();
+        boneNode.parent?.matrixWorld.decompose(_v3A, parentWorldRotation, _v3A);
+        parentWorldRotations[boneName] = parentWorldRotation;
       }
     });
 
     // build rig hierarchy + store parentWorldRotations
-    const parentWorldRotations: { [boneName in VRMHumanBoneName]?: THREE.Quaternion } = {};
-
     const rigBones: Partial<VRMHumanBones> = {};
     VRMHumanBoneList.forEach((boneName) => {
       const boneNode = modelRig.getBoneNode(boneName);
@@ -54,15 +57,13 @@ export class VRMHumanoidRig extends VRMRig {
 
         // see the nearest parent position
         let currentBoneName: VRMHumanBoneName | null = boneName;
-        let parentWorldPosition: THREE.Vector3 | undefined;
-        let parentWorldRotation: THREE.Quaternion | undefined;
-        while (parentWorldPosition == null) {
+        let parentBoneWorldPosition: THREE.Vector3 | undefined;
+        while (parentBoneWorldPosition == null) {
           currentBoneName = VRMHumanBoneParentMap[currentBoneName];
           if (currentBoneName == null) {
             break;
           }
-          parentWorldPosition = boneWorldPositions[currentBoneName];
-          parentWorldRotation = boneWorldRotations[currentBoneName];
+          parentBoneWorldPosition = boneWorldPositions[currentBoneName];
         }
 
         // add to hierarchy
@@ -73,14 +74,11 @@ export class VRMHumanoidRig extends VRMRig {
 
         parentRigBoneNode.add(rigBoneNode);
         rigBoneNode.position.copy(boneWorldPosition);
-        if (parentWorldPosition) {
-          rigBoneNode.position.sub(parentWorldPosition);
+        if (parentBoneWorldPosition) {
+          rigBoneNode.position.sub(parentBoneWorldPosition);
         }
 
         rigBones[boneName] = { node: rigBoneNode };
-
-        // store parentWorldRotation
-        parentWorldRotations[boneName] = parentWorldRotation ?? new THREE.Quaternion();
       }
     });
 
