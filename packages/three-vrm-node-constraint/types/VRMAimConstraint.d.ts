@@ -26,7 +26,7 @@ export declare class VRMAimConstraint extends VRMNodeConstraint {
      * The rest quaternion of the {@link destination}.
      */
     private _dstRestQuat;
-    get dependencies(): Set<THREE.Object3D<THREE.Event>>;
+    get dependencies(): Set<THREE.Object3D>;
     constructor(destination: THREE.Object3D, source: THREE.Object3D);
     setInitState(): void;
     update(): void;

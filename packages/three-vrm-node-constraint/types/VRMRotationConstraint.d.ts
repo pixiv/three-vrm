@@ -14,7 +14,7 @@ export declare class VRMRotationConstraint extends VRMNodeConstraint {
      * The inverse of the rest quaternion of the {@link source}.
      */
     private _invSrcRestQuat;
-    get dependencies(): Set<THREE.Object3D<THREE.Event>>;
+    get dependencies(): Set<THREE.Object3D>;
     constructor(destination: THREE.Object3D, source: THREE.Object3D);
     setInitState(): void;
     update(): void;

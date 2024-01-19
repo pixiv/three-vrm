@@ -33,7 +33,7 @@ export declare class VRMRollConstraint extends VRMNodeConstraint {
      * `srcRestQuat.invert() * dstRestQuat`.
      */
     private _invSrcRestQuatMulDstRestQuat;
-    readonly dependencies: Set<THREE.Object3D<THREE.Event>>;
+    readonly dependencies: Set<THREE.Object3D>;
     constructor(destination: THREE.Object3D, source: THREE.Object3D);
     setInitState(): void;
     update(): void;
