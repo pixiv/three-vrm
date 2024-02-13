@@ -130,8 +130,6 @@ export class VRMExpressionTextureTransformBind implements VRMExpressionBind {
 
       target.offset.add(_v2.copy(property.deltaOffset).multiplyScalar(weight));
       target.repeat.add(_v2.copy(property.deltaScale).multiplyScalar(weight));
-
-      target.needsUpdate = true;
     });
   }
 
@@ -144,8 +142,6 @@ export class VRMExpressionTextureTransformBind implements VRMExpressionBind {
 
       target.offset.copy(property.initialOffset);
       target.repeat.copy(property.initialScale);
-
-      target.needsUpdate = true;
     });
   }
 }
