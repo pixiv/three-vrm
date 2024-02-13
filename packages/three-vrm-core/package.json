@@ -1,6 +1,6 @@
 {
   "name": "@pixiv/three-vrm-core",
-  "version": "2.0.10",
+  "version": "2.1.0-beta.3",
   "description": "The implementation of core features of VRM, for @pixiv/three-vrm",
   "license": "MIT",
   "author": "pixiv",
@@ -50,8 +50,8 @@
     ]
   },
   "dependencies": {
-    "@pixiv/types-vrm-0.0": "2.0.10",
-    "@pixiv/types-vrmc-vrm-1.0": "2.0.10"
+    "@pixiv/types-vrm-0.0": "2.1.0-beta.3",
+    "@pixiv/types-vrmc-vrm-1.0": "2.1.0-beta.3"
   },
   "devDependencies": {
     "@types/three": "^0.160.0",
