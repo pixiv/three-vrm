@@ -28,7 +28,7 @@
 				"imports": {
 					"three": "https://unpkg.com/three@0.160.0/build/three.module.js",
 					"three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
-					"@pixiv/three-vrm": "https://unpkg.com/@pixiv/three-vrm@2.0.5/lib/three-vrm.module.js",
+					"@pixiv/three-vrm": "https://unpkg.com/@pixiv/three-vrm@2.0.8/lib/three-vrm.module.js",
 					"@pixiv/three-vrm-animation": "../lib/three-vrm-animation.module.js"
 				}
 			}
@@ -63,7 +63,7 @@
 				const scene = new THREE.Scene();
 
 				// light
-				const light = new THREE.DirectionalLight( 0xffffff );
+				const light = new THREE.DirectionalLight( 0xffffff, Math.PI );
 				light.position.set( 1.0, 1.0, 1.0 ).normalize();
 				scene.add( light );
 
