@@ -198,8 +198,10 @@ export class VRMAnimationLoaderPlugin implements GLTFLoaderPlugin {
           const worldMatrix = worldMatrixMap.get(boneName)!;
           const parentWorldMatrix = worldMatrixMap.get(parentBoneName)!;
 
-          _quatA.setFromRotationMatrix(worldMatrix).normalize().invert();
-          _quatB.setFromRotationMatrix(parentWorldMatrix).normalize();
+          worldMatrix.decompose(_v3A, _quatA, _v3A);
+          _quatA.invert();
+
+          parentWorldMatrix.decompose(_v3A, _quatB, _v3A);
 
           const trackValues = arrayChunk(origTrack.values, 4).flatMap((q) =>
             _quatC.fromArray(q).premultiply(_quatB).multiply(_quatA).toArray(),
