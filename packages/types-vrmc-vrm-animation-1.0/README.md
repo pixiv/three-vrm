@@ -1,7 +1,6 @@
 # @pixiv/types-vrmc-vrm-animation-1.0
 
-Type definitions of `VRM_vrm_animation` 1.0-draft schema.
-Note that the extension `VRM_vrm_animation` is still draft.
+Type definitions of `VRM_vrm_animation` 1.0 schema.
 
 https://github.com/vrm-c/vrm-specification/tree/master/specification/VRMC_vrm_animation-1.0
 

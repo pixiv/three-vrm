@@ -9,7 +9,7 @@ export interface VRMCVRMAnimation {
   /**
    * Specification version of VRMC_vrm_animation
    */
-  specVersion: '1.0-draft';
+  specVersion: '1.0' | '1.0-draft';
 
   /**
    * An object which describes about humanoid bones.

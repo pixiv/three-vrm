@@ -14,6 +14,11 @@ const _quatA = /*@__PURE__*/ new THREE.Quaternion();
 const _quatB = /*@__PURE__*/ new THREE.Quaternion();
 const _quatC = /*@__PURE__*/ new THREE.Quaternion();
 
+/**
+ * Possible spec versions it recognizes.
+ */
+const POSSIBLE_SPEC_VERSIONS = /*@__PURE__*/ new Set(['1.0', '1.0-draft']);
+
 const vrmExpressionPresetNameSet: Set<string> = /*@__PURE__*/ new Set(Object.values(VRMExpressionPresetName));
 
 interface VRMAnimationLoaderPluginNodeMap {
@@ -50,6 +55,17 @@ export class VRMAnimationLoaderPlugin implements GLTFLoaderPlugin {
 
     if (defExtension == null) {
       return;
+    }
+
+    const specVersion = defExtension.specVersion;
+    if (!POSSIBLE_SPEC_VERSIONS.has(specVersion)) {
+      console.warn(`VRMAnimationLoaderPlugin: Unknown VRMC_vrm_animation spec version: ${specVersion}`);
+      return;
+    }
+    if (specVersion === '1.0-draft') {
+      console.warn(
+        'VRMAnimationLoaderPlugin: Using a draft spec version: 1.0-draft. Some behaviors may be different. Consider updating the animation file.',
+      );
     }
 
     const nodeMap = this._createNodeMap(defExtension);
