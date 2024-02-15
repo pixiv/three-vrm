@@ -446,7 +446,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
         uvAnimationRotationPhase: { value: 0.0 },
       },
       parameters.uniforms ?? {},
-    ]) as any;
+    ]) as typeof MToonMaterial.prototype.uniforms;
 
     // == finally compile the shader program =======================================================
     this.setValues(parameters);

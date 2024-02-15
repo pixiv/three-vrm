@@ -1,0 +1,11 @@
+{
+	"root": true,
+	"plugins": [
+		"html"
+	],
+	"extends": "mdcs",
+	"rules": {
+		"padded-blocks":"off",
+		"no-unused-vars": "off"
+	}
+}
