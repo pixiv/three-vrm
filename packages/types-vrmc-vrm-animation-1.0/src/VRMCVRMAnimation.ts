@@ -14,7 +14,7 @@ export interface VRMCVRMAnimation {
   /**
    * An object which describes about humanoid bones.
    */
-  humanoid: Humanoid;
+  humanoid?: Humanoid;
 
   /**
    * An object which maps expressions to nodes.
