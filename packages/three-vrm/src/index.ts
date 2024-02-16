@@ -5,6 +5,7 @@ export type { VRMParameters } from './VRMParameters';
 
 export * from './VRMUtils';
 
+export * from '@pixiv/three-vrm-animation';
 export * from '@pixiv/three-vrm-core';
 export * from '@pixiv/three-vrm-materials-mtoon';
 export * from '@pixiv/three-vrm-node-constraint';
