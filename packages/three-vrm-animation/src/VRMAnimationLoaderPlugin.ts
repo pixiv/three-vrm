@@ -144,6 +144,10 @@ export class VRMAnimationLoaderPlugin implements GLTFLoaderPlugin {
 
     const worldMatrixMap: VRMAnimationLoaderPluginWorldMatrixMap = new Map();
 
+    if (defExtension.humanoid == null) {
+      return worldMatrixMap;
+    }
+
     for (const [boneName, humanBone] of Object.entries(defExtension.humanoid.humanBones)) {
       const node = humanBone?.node;
       if (node != null) {
