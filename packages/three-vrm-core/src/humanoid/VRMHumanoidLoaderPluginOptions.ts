@@ -1,3 +1,4 @@
+import type * as THREE from 'three';
 export interface VRMHumanoidLoaderPluginOptions {
   /**
    * Specify an Object3D to add {@link VRMHumanoidHelper}.

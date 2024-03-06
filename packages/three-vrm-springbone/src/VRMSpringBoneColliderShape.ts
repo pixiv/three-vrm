@@ -1,3 +1,5 @@
+import type * as THREE from 'three';
+
 /**
  * Represents a shape of a collider.
  */
