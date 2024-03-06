@@ -1,3 +1,5 @@
+import type * as THREE from 'three';
+
 /**
  * Traverse children of given object and execute given callback.
  * The given object itself wont be given to the callback.
