@@ -1,6 +1,6 @@
 {
   "name": "@pixiv/three-vrm-materials-mtoon",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "MToon (toon material) module for @pixiv/three-vrm",
   "license": "MIT",
   "author": "pixiv",
@@ -49,8 +49,8 @@
     ]
   },
   "dependencies": {
-    "@pixiv/types-vrm-0.0": "2.1.0",
-    "@pixiv/types-vrmc-materials-mtoon-1.0": "2.1.0"
+    "@pixiv/types-vrm-0.0": "2.1.1",
+    "@pixiv/types-vrmc-materials-mtoon-1.0": "2.1.1"
   },
   "devDependencies": {
     "@types/three": "^0.162.0",
