@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { VRMLookAtLoaderPluginOptions } from './VRMLookAtLoaderPluginOptions';
 /**

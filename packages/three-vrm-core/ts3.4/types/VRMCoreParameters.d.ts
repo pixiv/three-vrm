@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { VRMExpressionManager } from './expressions/VRMExpressionManager';
 import { VRMFirstPerson } from './firstPerson/VRMFirstPerson';
 import { VRMHumanoid } from './humanoid/VRMHumanoid';

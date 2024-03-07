@@ -1,3 +1,4 @@
+import type * as THREE from 'three';
 import type { MToonMaterialDebugMode } from './MToonMaterialDebugMode';
 import type { MToonMaterialOutlineWidthMode } from './MToonMaterialOutlineWidthMode';
 export interface MToonMaterialParameters extends THREE.ShaderMaterialParameters {

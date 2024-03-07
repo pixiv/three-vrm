@@ -1,3 +1,4 @@
+import type * as THREE from 'three';
 export interface VRMSpringBoneLoaderPluginOptions {
     /**
      * Specify an Object3D to add {@link VRMSpringBoneJointHelper} s.

@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { VRMExpressionLoaderPlugin } from './expressions/VRMExpressionLoaderPlugin';
 import { VRMFirstPersonLoaderPlugin } from './firstPerson/VRMFirstPersonLoaderPlugin';
 import { VRMHumanoidLoaderPlugin } from './humanoid/VRMHumanoidLoaderPlugin';

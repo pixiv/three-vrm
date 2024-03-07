@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 export interface VRMNodeConstraintLoaderPluginOptions {
     /**
      * Specify an Object3D to add {@link VRMNodeConstraintHelper} s.

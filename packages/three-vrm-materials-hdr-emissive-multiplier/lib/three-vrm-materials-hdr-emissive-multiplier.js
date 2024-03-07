@@ -1,5 +1,5 @@
 /*!
- * @pixiv/three-vrm-materials-hdr-emissive-multiplier v2.1.0
+ * @pixiv/three-vrm-materials-hdr-emissive-multiplier v2.1.1
  * Support VRMC_hdr_emissiveMultiplier for @pixiv/three-vrm
  *
  * Copyright (c) 2020-2024 pixiv Inc.

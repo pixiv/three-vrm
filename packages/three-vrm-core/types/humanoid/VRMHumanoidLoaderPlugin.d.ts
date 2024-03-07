@@ -1,3 +1,4 @@
+import type * as THREE from 'three';
 import type { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { VRMHumanoidLoaderPluginOptions } from './VRMHumanoidLoaderPluginOptions';
 /**

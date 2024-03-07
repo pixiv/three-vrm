@@ -1,3 +1,4 @@
+import type * as THREE from 'three';
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 /**
  * Extract primitives ( `THREE.Mesh[]` ) of a node from a loaded GLTF.
