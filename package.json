@@ -30,7 +30,7 @@
     "eslint-plugin-html": "^7.1.0",
     "husky": "^8.0.2",
     "jest": "^26.6.3",
-    "lerna": "^6.6.2",
+    "lerna": "^8.1.2",
     "lint-staged": "^15.1.0",
     "prettier": "^2.1.2",
     "rimraf": "^3.0.2",
