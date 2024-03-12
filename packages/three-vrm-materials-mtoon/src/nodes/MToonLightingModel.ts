@@ -63,40 +63,29 @@ const getDiffuse = Nodes.tslFn(
   },
 );
 
-interface MToonLightingModelContext {
-  lightDirection: Nodes.ShaderNodeObject<Nodes.Node>;
-  lightColor: Nodes.ShaderNodeObject<Nodes.Node>;
-  irradiance: Nodes.ShaderNodeObject<Nodes.Node>;
-  reflectedLight: {
-    directDiffuse: Nodes.ShaderNodeObject<Nodes.Node>;
-    directSpecular: Nodes.ShaderNodeObject<Nodes.Node>;
-    indirectDiffuse: Nodes.ShaderNodeObject<Nodes.Node>;
-    indirectSpecular: Nodes.ShaderNodeObject<Nodes.Node>;
-  };
-}
-
 export class MToonLightingModel extends Nodes.LightingModel {
   constructor() {
     super();
   }
 
-  direct({ lightDirection, lightColor, reflectedLight }: MToonLightingModelContext) {
+  direct({ lightDirection, lightColor, reflectedLight }: Nodes.LightingModelDirectInput) {
     const dotNL = Nodes.transformedNormalView.dot(lightDirection).clamp(-1.0, 1.0);
 
     // toon diffuse
+    // @ts-expect-error The `Type of property 'cache' circularly references itself ...` error (TS2615)
     const shading = getShading({
       dotNL,
     });
 
-    reflectedLight.directDiffuse.addAssign(
+    (reflectedLight.directDiffuse as Nodes.ShaderNodeObject<Nodes.Node>).addAssign(
       getDiffuse({
         shading,
-        lightColor,
+        lightColor: lightColor as Nodes.ShaderNodeObject<Nodes.Node>,
       }),
     );
 
     // rim
-    reflectedLight.directSpecular.addAssign(
+    (reflectedLight.directSpecular as Nodes.ShaderNodeObject<Nodes.Node>).addAssign(
       parametricRim
         .add(matcap)
         .mul(rimMultiply)
@@ -104,10 +93,10 @@ export class MToonLightingModel extends Nodes.LightingModel {
     );
   }
 
-  indirectDiffuse({ irradiance, reflectedLight }: MToonLightingModelContext) {
+  indirectDiffuse({ irradiance, reflectedLight }: Nodes.LightingModelIndirectInput) {
     // indirect irradiance
-    reflectedLight.indirectDiffuse.addAssign(
-      irradiance.mul(
+    (reflectedLight.indirectDiffuse as Nodes.ShaderNodeObject<Nodes.Node>).addAssign(
+      (irradiance as Nodes.ShaderNodeObject<Nodes.Node>).mul(
         Nodes.BRDF_Lambert({
           diffuseColor: Nodes.diffuseColor,
         }),
@@ -115,9 +104,9 @@ export class MToonLightingModel extends Nodes.LightingModel {
     );
   }
 
-  indirectSpecular({ reflectedLight }: MToonLightingModelContext) {
+  indirectSpecular({ reflectedLight }: Nodes.LightingModelIndirectInput) {
     // rim
-    reflectedLight.indirectSpecular.addAssign(
+    (reflectedLight.indirectSpecular as Nodes.ShaderNodeObject<Nodes.Node>).addAssign(
       parametricRim
         .add(matcap)
         .mul(rimMultiply)

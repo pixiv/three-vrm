@@ -292,7 +292,7 @@ export class MToonNodeMaterial extends Nodes.NodeMaterial {
     }
 
     // the ordinary output setup
-    return super.setupOutput(builder, outputNode);
+    return super.setupOutput(builder, outputNode) as Nodes.ShaderNodeObject<Nodes.Node>;
   }
 
   public setupPosition(builder: Nodes.NodeBuilder): Nodes.ShaderNodeObject<Nodes.Node> {
@@ -327,7 +327,7 @@ export class MToonNodeMaterial extends Nodes.NodeMaterial {
     }
 
     // the ordinary position setup
-    const ret = super.setupPosition(builder);
+    const ret = super.setupPosition(builder) as Nodes.ShaderNodeObject<Nodes.Node>;
 
     // anti z-fighting
     // TODO: We might want to address this via glPolygonOffset instead?
