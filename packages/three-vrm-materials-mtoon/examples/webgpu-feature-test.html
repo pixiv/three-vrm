@@ -11,6 +11,7 @@
 		<style>
 			body {
 				margin: 0;
+				background: #000;
 			}
 			canvas {
 				display: block;
@@ -36,10 +37,11 @@
 		<script type="module">
 			import * as THREE from 'three';
 			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-			import { MToonMaterial } from '@pixiv/three-vrm-materials-mtoon';
+			import WebGPURenderer from 'three/addons/renderers/webgpu/WebGPURenderer.js';
+			import { MToonNodeMaterial } from '@pixiv/three-vrm-materials-mtoon';
 
 			// renderer
-			const renderer = new THREE.WebGLRenderer();
+			const renderer = new WebGPURenderer();
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			renderer.setPixelRatio( window.devicePixelRatio );
 			document.body.appendChild( renderer.domElement );
@@ -276,7 +278,7 @@
 
 			].map( ( params, i ) => {
 
-				const material = new MToonMaterial( params );
+				const material = new MToonNodeMaterial( params );
 				const mesh = new THREE.Mesh( geometrySphere, material );
 
 				const x = ( i % 5 ) - 2.0;
@@ -317,7 +319,7 @@
 
 				}
 
-				renderer.render( scene, camera );
+				renderer.renderAsync( scene, camera );
 
 			}
 

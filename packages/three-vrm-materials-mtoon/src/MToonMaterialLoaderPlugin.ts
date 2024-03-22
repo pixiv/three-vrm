@@ -7,7 +7,7 @@ import { GLTFMToonMaterialParamsAssignHelper } from './GLTFMToonMaterialParamsAs
 import { MToonMaterialLoaderPluginOptions } from './MToonMaterialLoaderPluginOptions';
 import type { MToonMaterialDebugMode } from './MToonMaterialDebugMode';
 import { GLTF as GLTFSchema } from '@gltf-transform/core';
-import { MToonNodeMaterial } from './nodes/MToonNodeMaterial';
+import { MToonMaterial } from './MToonMaterial';
 
 /**
  * Possible spec versions it recognizes.
@@ -46,7 +46,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
    * Loaded materials will be stored in this set.
    * Will be transferred into `gltf.userData.vrmMToonMaterials` in {@link afterRoot}.
    */
-  private readonly _mToonMaterialSet: Set<MToonNodeMaterial>;
+  private readonly _mToonMaterialSet: Set<MToonMaterial>;
 
   public get name(): string {
     return MToonMaterialLoaderPlugin.EXTENSION_NAME;
@@ -73,7 +73,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
   public getMaterialType(materialIndex: number): typeof THREE.Material | null {
     const v1Extension = this._getMToonExtension(materialIndex);
     if (v1Extension) {
-      return MToonNodeMaterial;
+      return MToonMaterial;
     }
 
     return null;
@@ -254,7 +254,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
 
     // make sure the material is mtoon
     const surfaceMaterial = mesh.material;
-    if (!(surfaceMaterial instanceof MToonNodeMaterial)) {
+    if (!(surfaceMaterial instanceof MToonMaterial)) {
       return;
     }
 
@@ -291,7 +291,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     }
 
     for (const material of materialSet) {
-      if (material instanceof MToonNodeMaterial) {
+      if (material instanceof MToonMaterial) {
         this._mToonMaterialSet.add(material);
       }
     }

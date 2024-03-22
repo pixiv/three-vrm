@@ -1,4 +1,4 @@
-import * as Nodes from 'three/examples/jsm/nodes/Nodes.js';
+import * as Nodes from 'three/addons/nodes/Nodes.js';
 import {
   refUVAnimationMaskTexture,
   refUVAnimationRotationPhase,
@@ -19,16 +19,29 @@ export class MToonAnimatedUVNode extends Nodes.TempNode {
     let uvAnimationMask: Nodes.NodeRepresentation = 1.0;
 
     if (this.hasMaskTexture) {
-      uvAnimationMask = refUVAnimationMaskTexture.context({ getUV: () => Nodes.uv() }).r;
+      // @ts-expect-error The `Type of property 'cache' circularly references itself ...` error (TS2615)
+      uvAnimationMask = Nodes.vec4(refUVAnimationMaskTexture).context({ getUV: () => Nodes.uv() }).r;
     }
 
+    // @ts-expect-error The `Type of property 'cache' circularly references itself ...` error (TS2615)
     let uv: Nodes.ShaderNodeObject<Nodes.Swizzable> = Nodes.uv();
 
     // scroll
     const scroll = Nodes.vec2(refUVAnimationScrollXOffset, refUVAnimationScrollYOffset).mul(uvAnimationMask);
-    const phase = refUVAnimationRotationPhase.mul(uvAnimationMask);
     uv = uv.add(scroll);
-    uv = Nodes.rotateUV(uv, phase, Nodes.vec2(0.5, 0.5));
+
+    // rotate
+    const phase = refUVAnimationRotationPhase.mul(uvAnimationMask);
+
+    // WORKAROUND: Nodes.rotateUV causes an issue with the mask texture
+    // We are going to spin using a 100% organic handmade rotation matrix
+    // uv = Nodes.rotateUV(uv, phase, Nodes.vec2(0.5, 0.5));
+
+    const c = Nodes.cos(phase);
+    const s = Nodes.sin(phase);
+    uv = uv.sub(Nodes.vec2(0.5, 0.5));
+    uv = uv.mul(Nodes.mat2(c, s.negate(), s, c));
+    uv = uv.add(Nodes.vec2(0.5, 0.5));
 
     return uv.temp('AnimatedUV');
   }

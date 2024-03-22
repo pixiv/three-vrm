@@ -82,7 +82,7 @@ function createConfig( output ) {
     output,
     external: [
       'three',
-      'three/examples/jsm/nodes/Nodes.js',
+      'three/addons/nodes/Nodes.js',
     ],
     plugins: [
       string({

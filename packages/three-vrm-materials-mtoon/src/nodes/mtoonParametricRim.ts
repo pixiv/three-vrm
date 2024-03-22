@@ -1,4 +1,4 @@
-import * as Nodes from 'three/examples/jsm/nodes/Nodes.js';
+import * as Nodes from 'three/addons/nodes/Nodes.js';
 
 export const mtoonParametricRim = Nodes.tslFn(
   ({

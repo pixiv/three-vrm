@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import * as Nodes from 'three/examples/jsm/nodes/Nodes.js';
+import * as Nodes from 'three/addons/nodes/Nodes.js';
 
 import { MToonLightingModel } from './MToonLightingModel';
 import {

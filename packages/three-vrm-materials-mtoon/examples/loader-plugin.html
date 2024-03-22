@@ -35,13 +35,12 @@
 
 		<script type="module">
 			import * as THREE from 'three';
-			import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-			import WebGPURenderer from 'three/examples/jsm/renderers/webgpu/WebGPURenderer.js';
-			import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+			import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 			import { MToonMaterialLoaderPlugin } from '@pixiv/three-vrm-materials-mtoon';
 
 			// renderer
-			const renderer = new WebGPURenderer();
+			const renderer = new THREE.WebGLRenderer();
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			renderer.setPixelRatio( window.devicePixelRatio );
 			document.body.appendChild( renderer.domElement );
