@@ -40,7 +40,7 @@ export class MToonAnimatedUVNode extends Nodes.TempNode {
     const c = Nodes.cos(phase);
     const s = Nodes.sin(phase);
     uv = uv.sub(Nodes.vec2(0.5, 0.5));
-    uv = uv.mul(Nodes.mat2(c, s.negate(), s, c));
+    uv = uv.mul(Nodes.mat2(c, s, s.negate(), c));
     uv = uv.add(Nodes.vec2(0.5, 0.5));
 
     return uv.temp('AnimatedUV');
