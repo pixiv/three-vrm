@@ -1,13 +1,13 @@
 import * as THREE from 'three';
 import * as V1MToonSchema from '@pixiv/types-vrmc-materials-mtoon-1.0';
 import type { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { MToonMaterial } from './MToonMaterial';
 import type { MToonMaterialParameters } from './MToonMaterialParameters';
 import { MToonMaterialOutlineWidthMode } from './MToonMaterialOutlineWidthMode';
 import { GLTFMToonMaterialParamsAssignHelper } from './GLTFMToonMaterialParamsAssignHelper';
 import { MToonMaterialLoaderPluginOptions } from './MToonMaterialLoaderPluginOptions';
 import type { MToonMaterialDebugMode } from './MToonMaterialDebugMode';
 import { GLTF as GLTFSchema } from '@gltf-transform/core';
+import { MToonMaterial } from './MToonMaterial';
 
 /**
  * Possible spec versions it recognizes.
@@ -46,7 +46,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
    * Loaded materials will be stored in this set.
    * Will be transferred into `gltf.userData.vrmMToonMaterials` in {@link afterRoot}.
    */
-  private readonly _mToonMaterialSet: Set<MToonMaterial>;
+  private readonly _mToonMaterialSet: Set<THREE.Material>;
 
   public get name(): string {
     return MToonMaterialLoaderPlugin.EXTENSION_NAME;
@@ -146,7 +146,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     });
   }
 
-  private _getMToonExtension(materialIndex: number): V1MToonSchema.VRMCMaterialsMToon | undefined {
+  protected _getMToonExtension(materialIndex: number): V1MToonSchema.VRMCMaterialsMToon | undefined {
     const parser = this.parser;
     const json = parser.json as GLTFSchema.IGLTF;
 
@@ -252,14 +252,21 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     // Then we are going to create two geometry groups and refer same buffer but different material.
     // It's how we draw two materials at once using a single mesh.
 
-    // make sure the material is mtoon
+    // make sure the material is single
     const surfaceMaterial = mesh.material;
-    if (!(surfaceMaterial instanceof MToonMaterial)) {
+    if (!(surfaceMaterial instanceof THREE.Material)) {
       return;
     }
 
     // check whether we really have to prepare outline or not
-    if (surfaceMaterial.outlineWidthMode === 'none' || surfaceMaterial.outlineWidthFactor <= 0.0) {
+    // we might receive MToonNodeMaterial as well as MToonMaterial
+    // so we're gonna duck type to check if it's compatible with MToon type outlines
+    if (
+      typeof (surfaceMaterial as any).outlineWidthMode !== 'string' ||
+      (surfaceMaterial as any).outlineWidthMode === 'none' ||
+      typeof (surfaceMaterial as any).outlineWidthFactor !== 'number' ||
+      (surfaceMaterial as any).outlineWidthFactor <= 0.0
+    ) {
       return;
     }
 
@@ -269,7 +276,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     // duplicate the material for outline use
     const outlineMaterial = surfaceMaterial.clone();
     outlineMaterial.name += ' (Outline)';
-    outlineMaterial.isOutline = true;
+    (outlineMaterial as any).isOutline = true;
     outlineMaterial.side = THREE.BackSide;
     mesh.material.push(outlineMaterial);
 
@@ -291,9 +298,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     }
 
     for (const material of materialSet) {
-      if (material instanceof MToonMaterial) {
-        this._mToonMaterialSet.add(material);
-      }
+      this._mToonMaterialSet.add(material);
     }
   }
 

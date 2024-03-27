@@ -11,6 +11,7 @@
 		<style>
 			body {
 				margin: 0;
+				background: #000;
 			}
 			canvas {
 				display: block;
@@ -33,10 +34,11 @@
 			import * as THREE from 'three';
 			import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-			import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
+			import WebGPURenderer from 'three/addons/renderers/webgpu/WebGPURenderer.js';
+			import { VRMLoaderPlugin, MToonNodeMaterialLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
 
 			// renderer
-			const renderer = new THREE.WebGLRenderer();
+			const renderer = new WebGPURenderer();
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			renderer.setPixelRatio( window.devicePixelRatio );
 			document.body.appendChild( renderer.domElement );
@@ -66,40 +68,63 @@
 
 			loader.register( ( parser ) => {
 
-				return new VRMLoaderPlugin( parser );
+				const mtoonMaterialPlugin = new MToonNodeMaterialLoaderPlugin( parser );
+
+				return new VRMLoaderPlugin( parser, {
+
+					mtoonMaterialPlugin,
+
+				} );
 
 			} );
 
-			loader.load(
+			function load( url ) {
 
-				'./models/VRM1_Constraint_Twist_Sample.vrm',
+				loader.load(
 
-				( gltf ) => {
+					url,
 
-					const vrm = gltf.userData.vrm;
+					( gltf ) => {
 
-					// calling these functions greatly improves the performance
-					VRMUtils.removeUnnecessaryVertices( gltf.scene );
-					VRMUtils.removeUnnecessaryJoints( gltf.scene );
+						const vrm = gltf.userData.vrm;
 
-					// Disable frustum culling
-					vrm.scene.traverse( ( obj ) => {
+						// calling these functions greatly improves the performance
+						VRMUtils.removeUnnecessaryVertices( gltf.scene );
+						VRMUtils.removeUnnecessaryJoints( gltf.scene, { sameBoneCounts: true } );
 
-						obj.frustumCulled = false;
+						if ( currentVrm ) {
 
-					} );
+							scene.remove( currentVrm.scene );
+							VRMUtils.deepDispose( currentVrm.scene );
 
-					scene.add( vrm.scene );
-					currentVrm = vrm;
-					console.log( vrm );
+						}
 
-				},
+						// Disable frustum culling
+						vrm.scene.traverse( ( obj ) => {
 
-				( progress ) => console.log( 'Loading model...', 100.0 * ( progress.loaded / progress.total ), '%' ),
+							obj.frustumCulled = false;
 
-				( error ) => console.error( error )
+						} );
 
-			);
+						currentVrm = vrm;
+						scene.add( vrm.scene );
+
+						// rotate if the VRM is VRM0.0
+						VRMUtils.rotateVRM0( vrm );
+
+						console.log( vrm );
+
+					},
+
+					( progress ) => console.log( 'Loading model...', 100.0 * ( progress.loaded / progress.total ), '%' ),
+
+					( error ) => console.error( error )
+
+				);
+
+			}
+
+			load( './models/VRM1_Constraint_Twist_Sample.vrm' );
 
 			// helpers
 			const gridHelper = new THREE.GridHelper( 10, 10 );
@@ -110,31 +135,55 @@
 
 			// animate
 			const clock = new THREE.Clock();
+			clock.start();
 
 			function animate() {
 
 				requestAnimationFrame( animate );
 
-				const deltaTime = clock.getDelta();
-
 				if ( currentVrm ) {
 
-					// tweak bones
-					const s = 0.25 * Math.PI * Math.sin( Math.PI * clock.elapsedTime );
-					currentVrm.humanoid.getNormalizedBoneNode( 'neck' ).rotation.y = s;
-					currentVrm.humanoid.getNormalizedBoneNode( 'leftUpperArm' ).rotation.z = s;
-					currentVrm.humanoid.getNormalizedBoneNode( 'rightUpperArm' ).rotation.x = s;
-
-					// update vrm
-					currentVrm.update( deltaTime );
+					currentVrm.update( clock.getDelta() );
 
 				}
 
-				renderer.render( scene, camera );
+				renderer.renderAsync( scene, camera );
 
 			}
 
 			animate();
+
+			// dnd handler
+			window.addEventListener( 'dragover', function ( event ) {
+
+				event.preventDefault();
+
+			} );
+
+			window.addEventListener( 'drop', function ( event ) {
+
+				event.preventDefault();
+
+				// read given file then convert it to blob url
+				const files = event.dataTransfer.files;
+				if ( ! files ) {
+
+					return;
+
+				}
+
+				const file = files[ 0 ];
+				if ( ! file ) {
+
+					return;
+
+				}
+
+				const blob = new Blob( [ file ], { type: "application/octet-stream" } );
+				const url = URL.createObjectURL( blob );
+				load( url );
+
+			} );
 		</script>
 	</body>
 </html>
