@@ -19,16 +19,12 @@
 	</head>
 
 	<body>
-		<!-- Import maps polyfill -->
-		<!-- Remove this when import maps will be widely supported -->
-		<script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
-
 		<script type="importmap">
 			{
 				"imports": {
-					"three": "https://unpkg.com/three@0.162.0/build/three.module.js",
-					"three/addons/": "https://unpkg.com/three@0.162.0/examples/jsm/",
-					"@pixiv/three-vrm": "https://unpkg.com/@pixiv/three-vrm@2.1.0/lib/three-vrm.module.js",
+					"three": "https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.module.js",
+					"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.162.0/examples/jsm/",
+					"@pixiv/three-vrm": "https://cdn.jsdelivr.net/npm/@pixiv/three-vrm@2.1.0/lib/three-vrm.module.js",
 					"@pixiv/three-vrm-animation": "../lib/three-vrm-animation.module.js"
 				}
 			}
