@@ -1,9 +1,11 @@
 import * as THREE from 'three';
 import { VRMSpringBoneCollider } from '../VRMSpringBoneCollider';
 import { VRMSpringBoneColliderShapeCapsule } from '../VRMSpringBoneColliderShapeCapsule';
+import { VRMSpringBoneColliderShapePlane } from '../VRMSpringBoneColliderShapePlane';
 import { VRMSpringBoneColliderShapeSphere } from '../VRMSpringBoneColliderShapeSphere';
 import { ColliderShapeBufferGeometry } from './utils/ColliderShapeBufferGeometry';
 import { ColliderShapeCapsuleBufferGeometry } from './utils/ColliderShapeCapsuleBufferGeometry';
+import { ColliderShapePlaneBufferGeometry } from './utils/ColliderShapePlaneBufferGeometry';
 import { ColliderShapeSphereBufferGeometry } from './utils/ColliderShapeSphereBufferGeometry';
 
 const _v3A = new THREE.Vector3();
@@ -23,6 +25,8 @@ export class VRMSpringBoneColliderHelper extends THREE.Group {
       this._geometry = new ColliderShapeSphereBufferGeometry(this.collider.shape);
     } else if (this.collider.shape instanceof VRMSpringBoneColliderShapeCapsule) {
       this._geometry = new ColliderShapeCapsuleBufferGeometry(this.collider.shape);
+    } else if (this.collider.shape instanceof VRMSpringBoneColliderShapePlane) {
+      this._geometry = new ColliderShapePlaneBufferGeometry(this.collider.shape);
     } else {
       throw new Error('VRMSpringBoneColliderHelper: Unknown collider shape type detected');
     }

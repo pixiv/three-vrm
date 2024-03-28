@@ -3,6 +3,7 @@ export * from './VRMSpringBoneCollider';
 export * from './VRMSpringBoneColliderGroup';
 export * from './VRMSpringBoneColliderShape';
 export * from './VRMSpringBoneColliderShapeCapsule';
+export * from './VRMSpringBoneColliderShapePlane';
 export * from './VRMSpringBoneColliderShapeSphere';
 export * from './VRMSpringBoneJoint';
 export * from './VRMSpringBoneLoaderPlugin';

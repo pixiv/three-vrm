@@ -1,5 +1,6 @@
 import type * as V0VRM from '@pixiv/types-vrm-0.0';
 import type * as V1SpringBoneSchema from '@pixiv/types-vrmc-springbone-1.0';
+import type * as SpringBoneExtendedColliderSchema from '@pixiv/types-vrmc-springbone-extended-collider-1.0';
 import * as THREE from 'three';
 import type { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { VRMSpringBoneColliderHelper, VRMSpringBoneJointHelper } from './helpers';
@@ -12,11 +13,19 @@ import type { VRMSpringBoneLoaderPluginOptions } from './VRMSpringBoneLoaderPlug
 import { VRMSpringBoneManager } from './VRMSpringBoneManager';
 import type { VRMSpringBoneJointSettings } from './VRMSpringBoneJointSettings';
 import { GLTF as GLTFSchema } from '@gltf-transform/core';
+import { VRMSpringBoneColliderShapePlane } from './VRMSpringBoneColliderShapePlane';
+
+const EXTENSION_NAME_EXTENDED_COLLIDER = 'VRMC_springBone_extended_collider';
 
 /**
  * Possible spec versions it recognizes.
  */
 const POSSIBLE_SPEC_VERSIONS = new Set(['1.0', '1.0-beta']);
+
+/**
+ * Possible spec versions of `VRMC_springBone_extended_collider` it recognizes.
+ */
+const POSSIBLE_SPEC_VERSIONS_EXTENDED_COLLIDERS = new Set(['1.0']);
 
 export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
   public static readonly EXTENSION_NAME = 'VRMC_springBone';
@@ -35,6 +44,13 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
    */
   public colliderHelperRoot?: THREE.Object3D;
 
+  /**
+   * If true, load colliders defined in `VRMC_springBone_extended_collider`.
+   * Set to `false` to disable loading extended colliders and use the fallback behavior.
+   * `true` by default.
+   */
+  public useExtendedColliders: boolean;
+
   public readonly parser: GLTFParser;
 
   public get name(): string {
@@ -46,6 +62,7 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
 
     this.jointHelperRoot = options?.jointHelperRoot;
     this.colliderHelperRoot = options?.colliderHelperRoot;
+    this.useExtendedColliders = options?.useExtendedColliders ?? true;
   }
 
   public async afterRoot(gltf: GLTF): Promise<void> {
@@ -104,16 +121,53 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
       const node = threeNodes[schemaCollider.node!];
       const schemaShape = schemaCollider.shape!;
 
+      // TODO: separate into several functions
+
+      const schemaExCollider: SpringBoneExtendedColliderSchema.VRMCSpringBoneExtendedCollider | undefined =
+        schemaCollider.extensions?.[EXTENSION_NAME_EXTENDED_COLLIDER];
+
+      if (this.useExtendedColliders && schemaExCollider != null) {
+        const specVersionExCollider = schemaExCollider.specVersion;
+        if (!POSSIBLE_SPEC_VERSIONS_EXTENDED_COLLIDERS.has(specVersionExCollider)) {
+          console.warn(
+            `VRMSpringBoneLoaderPlugin: Unknown ${EXTENSION_NAME_EXTENDED_COLLIDER} specVersion "${specVersionExCollider}". Fallbacking to the ${VRMSpringBoneLoaderPlugin.EXTENSION_NAME} definition`,
+          );
+        } else {
+          const schemaExShape = schemaExCollider.shape!;
+          if (schemaExShape.sphere) {
+            return this._importSphereCollider(node, {
+              offset: new THREE.Vector3().fromArray(schemaExShape.sphere.offset ?? [0.0, 0.0, 0.0]),
+              radius: schemaExShape.sphere.radius ?? 0.0,
+              inside: schemaExShape.sphere.inside ?? false,
+            });
+          } else if (schemaExShape.capsule) {
+            return this._importCapsuleCollider(node, {
+              offset: new THREE.Vector3().fromArray(schemaExShape.capsule.offset ?? [0.0, 0.0, 0.0]),
+              radius: schemaExShape.capsule.radius ?? 0.0,
+              tail: new THREE.Vector3().fromArray(schemaExShape.capsule.tail ?? [0.0, 0.0, 0.0]),
+              inside: schemaExShape.capsule.inside ?? false,
+            });
+          } else if (schemaExShape.plane) {
+            return this._importPlaneCollider(node, {
+              offset: new THREE.Vector3().fromArray(schemaExShape.plane.offset ?? [0.0, 0.0, 0.0]),
+              normal: new THREE.Vector3().fromArray(schemaExShape.plane.normal ?? [0.0, 0.0, 1.0]),
+            });
+          }
+        }
+      }
+
       if (schemaShape.sphere) {
         return this._importSphereCollider(node, {
           offset: new THREE.Vector3().fromArray(schemaShape.sphere.offset ?? [0.0, 0.0, 0.0]),
           radius: schemaShape.sphere.radius ?? 0.0,
+          inside: false,
         });
       } else if (schemaShape.capsule) {
         return this._importCapsuleCollider(node, {
           offset: new THREE.Vector3().fromArray(schemaShape.capsule.offset ?? [0.0, 0.0, 0.0]),
           radius: schemaShape.capsule.radius ?? 0.0,
           tail: new THREE.Vector3().fromArray(schemaShape.capsule.tail ?? [0.0, 0.0, 0.0]),
+          inside: false,
         });
       }
 
@@ -240,6 +294,7 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
           return this._importSphereCollider(node, {
             offset,
             radius: schemaCollider.radius ?? 0.0,
+            inside: false,
           });
         });
 
@@ -335,11 +390,10 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
     params: {
       offset: THREE.Vector3;
       radius: number;
+      inside: boolean;
     },
   ): VRMSpringBoneCollider {
-    const { offset, radius } = params;
-
-    const shape = new VRMSpringBoneColliderShapeSphere({ offset, radius });
+    const shape = new VRMSpringBoneColliderShapeSphere(params);
 
     const collider = new VRMSpringBoneCollider(shape);
 
@@ -360,11 +414,32 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
       offset: THREE.Vector3;
       radius: number;
       tail: THREE.Vector3;
+      inside: boolean;
     },
   ): VRMSpringBoneCollider {
-    const { offset, radius, tail } = params;
+    const shape = new VRMSpringBoneColliderShapeCapsule(params);
 
-    const shape = new VRMSpringBoneColliderShapeCapsule({ offset, radius, tail });
+    const collider = new VRMSpringBoneCollider(shape);
+
+    destination.add(collider);
+
+    if (this.colliderHelperRoot) {
+      const helper = new VRMSpringBoneColliderHelper(collider);
+      this.colliderHelperRoot.add(helper);
+      helper.renderOrder = this.colliderHelperRoot.renderOrder;
+    }
+
+    return collider;
+  }
+
+  private _importPlaneCollider(
+    destination: THREE.Object3D,
+    params: {
+      offset: THREE.Vector3;
+      normal: THREE.Vector3;
+    },
+  ): VRMSpringBoneCollider {
+    const shape = new VRMSpringBoneColliderShapePlane(params);
 
     const collider = new VRMSpringBoneCollider(shape);
 

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>three-vrm-springbone example - inside-collider</title>
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+		/>
+		<style>
+			body {
+				margin: 0;
+			}
+			canvas {
+				display: block;
+			}
+		</style>
+	</head>
+
+	<body>
+		<script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+		<script type="importmap">
+			{
+			  "imports": {
+				"three": "https://unpkg.com/three@0.162.0/build/three.module.js",
+				"three/addons/": "https://unpkg.com/three@0.162.0/examples/jsm/",
+				"@pixiv/three-vrm-springbone": "../lib/three-vrm-springbone.module.js"
+			  }
+			}
+		</script>
+		<script type="module">
+			import * as THREE from 'three';
+			import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+			import {
+				VRMSpringBoneColliderShapeCapsule,
+				VRMSpringBoneColliderShapePlane,
+				VRMSpringBoneColliderShapeSphere,
+				VRMSpringBoneCollider,
+				VRMSpringBoneColliderHelper,
+				VRMSpringBoneManager,
+				VRMSpringBoneJoint,
+				VRMSpringBoneJointHelper
+			} from '@pixiv/three-vrm-springbone';
+
+			// renderer
+			const renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			renderer.setPixelRatio( window.devicePixelRatio );
+			document.body.appendChild( renderer.domElement );
+
+			// camera
+			const camera = new THREE.PerspectiveCamera( 30.0, window.innerWidth / window.innerHeight, 0.1, 20.0 );
+			camera.position.set( 0.0, 0.0, 5.0 );
+
+			// camera controls
+			const controls = new OrbitControls( camera, renderer.domElement );
+			controls.screenSpacePanning = true;
+			controls.target.set( 0.0, 0.0, 0.0 );
+			controls.update();
+
+			// scene
+			const scene = new THREE.Scene();
+
+			// light
+			const light = new THREE.DirectionalLight( 0xffffff, Math.PI );
+			light.position.set( 1.0, 2.0, 3.0 ).normalize();
+			scene.add( light );
+
+			// objects
+			const geometry = new THREE.BoxGeometry( 0.4, 0.4, 0.4 );
+			const material = new THREE.MeshStandardMaterial( { color: 0xbbbbbb } );
+
+			const cubeA = new THREE.Mesh( geometry, material );
+			cubeA.name = 'cubeA';
+			cubeA.position.set( 0.0, 0.5, 0.0 );
+			scene.add( cubeA );
+
+			const cubeB = new THREE.Mesh( geometry, material );
+			cubeB.name = 'cubeB';
+			cubeB.position.set( 0.0, - 0.5, 0.0 );
+			cubeA.add( cubeB );
+
+			const cubeC = new THREE.Mesh( geometry, material );
+			cubeC.name = 'cubeC';
+			cubeC.position.set( 0.0, - 0.5, 0.0 );
+			cubeB.add( cubeC );
+
+			// helpers
+			const gridHelper = new THREE.GridHelper( 10, 10 );
+			scene.add( gridHelper );
+
+			const axesHelper = new THREE.AxesHelper( 5 );
+			scene.add( axesHelper );
+
+			// collider
+			const colliders = [];
+
+			const colliderShape = new VRMSpringBoneColliderShapeSphere( {
+
+				offset: new THREE.Vector3( 0.0, 0.0, 0.0 ),
+				radius: 0.5,
+				inside: true,
+
+			} );
+
+			const collider = new VRMSpringBoneCollider( colliderShape );
+			collider.position.y = - 0.5;
+			scene.add( collider );
+
+			colliders.push( collider );
+
+			// collider helper
+			const colliderHelper = new VRMSpringBoneColliderHelper( collider );
+			scene.add( colliderHelper );
+
+			// spring bone
+			const springBoneManager = new VRMSpringBoneManager();
+
+			const springBone = new VRMSpringBoneJoint( cubeB, cubeC, { hitRadius: 0.2 } );
+			springBone.colliderGroups = [ { colliders } ];
+			springBoneManager.addSpringBone( springBone );
+
+			// helpers
+			springBoneManager.springBones.forEach( ( bone ) => {
+
+				const helper = new VRMSpringBoneJointHelper( bone );
+				scene.add( helper );
+
+			} );
+
+			// init spring bones
+			springBoneManager.setInitState();
+
+			// animate
+			const clock = new THREE.Clock();
+			let shouldReset = true;
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				const deltaTime = clock.getDelta();
+
+				cubeA.position.x = Math.sin( Math.PI * clock.elapsedTime );
+
+				collider.position.x = Math.sin( Math.PI * clock.elapsedTime );
+
+				if ( shouldReset ) {
+
+					shouldReset = false;
+					springBoneManager.reset();
+
+				}
+
+				springBoneManager.update( deltaTime );
+
+				renderer.render( scene, camera );
+
+			}
+
+			animate();
+		</script>
+	</body>
+</html>

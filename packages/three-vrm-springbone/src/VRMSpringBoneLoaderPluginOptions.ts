@@ -14,4 +14,11 @@ export interface VRMSpringBoneLoaderPluginOptions {
    * If `renderOrder` is set to the root, helpers will copy the same `renderOrder` .
    */
   colliderHelperRoot?: THREE.Object3D;
+
+  /**
+   * If true, load colliders defined in `VRMC_springBone_extended_collider`.
+   * Set to `false` to disable loading extended colliders and use the fallback behavior.
+   * `true` by default.
+   */
+  useExtendedColliders?: boolean;
 }
