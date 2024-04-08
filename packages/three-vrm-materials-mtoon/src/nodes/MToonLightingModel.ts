@@ -72,7 +72,6 @@ export class MToonLightingModel extends Nodes.LightingModel {
     const dotNL = Nodes.transformedNormalView.dot(lightDirection).clamp(-1.0, 1.0);
 
     // toon diffuse
-    // @ts-expect-error The `Type of property 'cache' circularly references itself ...` error (TS2615)
     const shading = getShading({
       dotNL,
     });

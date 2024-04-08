@@ -19,11 +19,9 @@ export class MToonAnimatedUVNode extends Nodes.TempNode {
     let uvAnimationMask: Nodes.NodeRepresentation = 1.0;
 
     if (this.hasMaskTexture) {
-      // @ts-expect-error The `Type of property 'cache' circularly references itself ...` error (TS2615)
       uvAnimationMask = Nodes.vec4(refUVAnimationMaskTexture).context({ getUV: () => Nodes.uv() }).r;
     }
 
-    // @ts-expect-error The `Type of property 'cache' circularly references itself ...` error (TS2615)
     let uv: Nodes.ShaderNodeObject<Nodes.Swizzable> = Nodes.uv();
 
     // scroll

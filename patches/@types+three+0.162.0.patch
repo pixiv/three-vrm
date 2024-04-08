@@ -21,7 +21,7 @@ index ef17737..0c16fe3 100644
 +export const materialNormal: ShaderNodeObject<MaterialNode>;
  export const materialRotation: ShaderNodeObject<MaterialNode>;
 diff --git a/node_modules/@types/three/examples/jsm/nodes/shadernode/ShaderNode.d.ts b/node_modules/@types/three/examples/jsm/nodes/shadernode/ShaderNode.d.ts
-index 812d23f..b7aee2e 100644
+index 812d23f..e250a7a 100644
 --- a/node_modules/@types/three/examples/jsm/nodes/shadernode/ShaderNode.d.ts
 +++ b/node_modules/@types/three/examples/jsm/nodes/shadernode/ShaderNode.d.ts
 @@ -40,6 +40,13 @@ export interface NodeElements {
@@ -38,3 +38,14 @@ index 812d23f..b7aee2e 100644
  }
  
  export function addNodeElement(name: string, nodeElement: unknown): void;
+@@ -53,8 +60,8 @@ export type Swizzable<T extends Node = Node> =
+ export type ShaderNodeObject<T extends Node> =
+     & T
+     & {
+-        [Key in keyof NodeElements]: NodeElements[Key] extends (node: T, ...args: infer Args) => infer R
+-            ? (...args: Args) => R
++        [Key in keyof NodeElements]: T extends { [K in Key]: infer M } ? M
++            : NodeElements[Key] extends (node: T, ...args: infer Args) => infer R ? (...args: Args) => R
+             : never;
+     }
+     & Swizzable<T>;
