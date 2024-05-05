@@ -1,9 +1,15 @@
 {
   "private": true,
   "type": "module",
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/@google/model-viewer",
+      "**/@google/model-viewer/**"
+    ]
+  },
   "publishConfig": {
     "provenance": true
   },

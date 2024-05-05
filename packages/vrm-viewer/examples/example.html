@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<title>three-vrm example</title>
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<style>
+		body {
+			margin: 0;
+		}
+
+		canvas {
+			display: block;
+		}
+
+		vrm-viewer {
+			width: 100vw;
+			height: 100vw;
+		}
+	</style>
+</head>
+
+<body>
+	<vrm-viewer camera-controls touch-action="pan-y" src="./models/VRM1_Constraint_Twist_Sample.vrm" />
+	<script type="importmap">
+		{
+			"imports": {
+				"three": "https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.module.js"
+			}
+		}
+	</script>
+	<script type="module" src="../lib/vrm-viewer.module.js"></script>
+</body>
+
+</html>
