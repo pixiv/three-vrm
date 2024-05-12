@@ -6,3 +6,6 @@
 /packages/*/ts*/
 /packages/*/types
 /tmp
+
+## macOS
+.DS_Store

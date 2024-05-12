@@ -3,6 +3,8 @@
   "include": ["./src"],
   "compilerOptions": {
     "module": "ESNext",
-    "experimentalDecorators": true
+    // https://lit.dev/docs/components/properties/#avoiding-issues-with-class-fields
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false
   }
 }
