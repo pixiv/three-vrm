@@ -11,6 +11,7 @@
 		<style>
 			body {
 				margin: 0;
+				background: #000;
 			}
 			canvas {
 				display: block;
@@ -33,10 +34,11 @@
 			import * as THREE from 'three';
 			import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-			import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
+			import WebGPURenderer from 'three/addons/renderers/webgpu/WebGPURenderer.js';
+			import { VRMLoaderPlugin, MToonNodeMaterialLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
 
 			// renderer
-			const renderer = new THREE.WebGLRenderer();
+			const renderer = new WebGPURenderer();
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			renderer.setPixelRatio( window.devicePixelRatio );
 			document.body.appendChild( renderer.domElement );
@@ -66,41 +68,63 @@
 
 			loader.register( ( parser ) => {
 
-				return new VRMLoaderPlugin( parser );
+				const mtoonMaterialPlugin = new MToonNodeMaterialLoaderPlugin( parser );
+
+				return new VRMLoaderPlugin( parser, {
+
+					mtoonMaterialPlugin,
+
+				} );
 
 			} );
 
-			loader.load(
+			function load( url ) {
 
-				'./models/VRM1_Constraint_Twist_Sample.vrm',
+				loader.load(
 
-				( gltf ) => {
+					url,
 
-					const vrm = gltf.userData.vrm;
+					( gltf ) => {
 
-					// calling these functions greatly improves the performance
-					VRMUtils.removeUnnecessaryVertices( gltf.scene );
-					VRMUtils.removeUnnecessaryJoints( gltf.scene );
+						const vrm = gltf.userData.vrm;
 
-					// Disable frustum culling
-					vrm.scene.traverse( ( obj ) => {
+						// calling these functions greatly improves the performance
+						VRMUtils.removeUnnecessaryVertices( gltf.scene );
+						VRMUtils.removeUnnecessaryJoints( gltf.scene, { sameBoneCounts: true } );
 
-						obj.frustumCulled = false;
+						if ( currentVrm ) {
 
-					} );
+							scene.remove( currentVrm.scene );
+							VRMUtils.deepDispose( currentVrm.scene );
 
-					scene.add( vrm.scene );
-					currentVrm = vrm;
+						}
 
-					console.log( vrm );
+						// Disable frustum culling
+						vrm.scene.traverse( ( obj ) => {
 
-				},
+							obj.frustumCulled = false;
 
-				( progress ) => console.log( 'Loading model...', 100.0 * ( progress.loaded / progress.total ), '%' ),
+						} );
 
-				( error ) => console.error( error )
+						currentVrm = vrm;
+						scene.add( vrm.scene );
 
-			);
+						// rotate if the VRM is VRM0.0
+						VRMUtils.rotateVRM0( vrm );
+
+						console.log( vrm );
+
+					},
+
+					( progress ) => console.log( 'Loading model...', 100.0 * ( progress.loaded / progress.total ), '%' ),
+
+					( error ) => console.error( error )
+
+				);
+
+			}
+
+			load( './models/VRM1_Constraint_Twist_Sample.vrm' );
 
 			// helpers
 			const gridHelper = new THREE.GridHelper( 10, 10 );
@@ -111,68 +135,53 @@
 
 			// animate
 			const clock = new THREE.Clock();
+			clock.start();
 
 			function animate() {
 
 				requestAnimationFrame( animate );
 
-				const deltaTime = clock.getDelta();
-
 				if ( currentVrm ) {
 
-					// update vrm
-					currentVrm.update( deltaTime );
+					currentVrm.update( clock.getDelta() );
 
 				}
 
-				renderer.render( scene, camera );
+				renderer.renderAsync( scene, camera );
 
 			}
 
 			animate();
 
-			// keyboard listener
-			function setMToonDebugMode( material, mode ) {
+			// dnd handler
+			window.addEventListener( 'dragover', function ( event ) {
 
-				if ( material.isMToonMaterial ) {
+				event.preventDefault();
 
-					material.debugMode = mode;
+			} );
 
-				}
+			window.addEventListener( 'drop', function ( event ) {
 
-			}
+				event.preventDefault();
 
-			let debugModeIndex = 0;
-
-			window.addEventListener( 'keydown', () => {
-
-				if ( ! currentVrm ) {
+				// read given file then convert it to blob url
+				const files = event.dataTransfer.files;
+				if ( ! files ) {
 
 					return;
 
 				}
 
-				debugModeIndex = ( debugModeIndex + 1 ) % 4;
+				const file = files[ 0 ];
+				if ( ! file ) {
 
-				const debugMode = [ 'none', 'normal', 'litShadeRate', 'uv' ][ debugModeIndex ];
+					return;
 
-				currentVrm.scene.traverse( ( object ) => {
+				}
 
-					if ( object.material ) {
-
-						if ( Array.isArray( object.material ) ) {
-
-							object.material.forEach( ( material ) => setMToonDebugMode( material, debugMode ) );
-
-						} else {
-
-							setMToonDebugMode( object.material, debugMode );
-
-						}
-
-					}
-
-				} );
+				const blob = new Blob( [ file ], { type: "application/octet-stream" } );
+				const url = URL.createObjectURL( blob );
+				load( url );
 
 			} );
 		</script>

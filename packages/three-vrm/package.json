@@ -60,10 +60,10 @@
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@types/three": "^0.164.0",
-    "three": "^0.164.0"
+    "three": "^0.164.1"
   },
   "peerDependencies": {
     "@types/three": "^0.164.0",
-    "three": "^0.164.0"
+    "three": "^0.164.1"
   }
 }
