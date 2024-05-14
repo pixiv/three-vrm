@@ -76,40 +76,51 @@ export class MToonLightingModel extends Nodes.LightingModel {
       dotNL,
     });
 
-    (reflectedLight.directDiffuse as Nodes.ShaderNodeObject<Nodes.Node>).addAssign(
-      getDiffuse({
-        shading,
-        lightColor: lightColor as Nodes.ShaderNodeObject<Nodes.Node>,
-      }),
+    // Unable to use `addAssign` in the current @types/three, we use `assign` and `add` instead
+    // TODO: Fix the `addAssign` issue from the `@types/three` side
+
+    (reflectedLight.directDiffuse as Nodes.ShaderNodeObject<Nodes.Node>).assign(
+      (reflectedLight.directDiffuse as Nodes.ShaderNodeObject<Nodes.Node>).add(
+        getDiffuse({
+          shading,
+          lightColor: lightColor as Nodes.ShaderNodeObject<Nodes.Node>,
+        }),
+      ),
     );
 
     // rim
-    (reflectedLight.directSpecular as Nodes.ShaderNodeObject<Nodes.Node>).addAssign(
-      parametricRim
-        .add(matcap)
-        .mul(rimMultiply)
-        .mul(Nodes.mix(Nodes.vec3(0.0), Nodes.BRDF_Lambert({ diffuseColor: lightColor }), rimLightingMix)),
+    (reflectedLight.directSpecular as Nodes.ShaderNodeObject<Nodes.Node>).assign(
+      (reflectedLight.directSpecular as Nodes.ShaderNodeObject<Nodes.Node>).add(
+        parametricRim
+          .add(matcap)
+          .mul(rimMultiply)
+          .mul(Nodes.mix(Nodes.vec3(0.0), Nodes.BRDF_Lambert({ diffuseColor: lightColor }), rimLightingMix)),
+      ),
     );
   }
 
   indirectDiffuse({ irradiance, reflectedLight }: Nodes.LightingModelIndirectInput) {
     // indirect irradiance
-    (reflectedLight.indirectDiffuse as Nodes.ShaderNodeObject<Nodes.Node>).addAssign(
-      (irradiance as Nodes.ShaderNodeObject<Nodes.Node>).mul(
-        Nodes.BRDF_Lambert({
-          diffuseColor: Nodes.diffuseColor,
-        }),
+    (reflectedLight.indirectDiffuse as Nodes.ShaderNodeObject<Nodes.Node>).assign(
+      (reflectedLight.indirectDiffuse as Nodes.ShaderNodeObject<Nodes.Node>).add(
+        (irradiance as Nodes.ShaderNodeObject<Nodes.Node>).mul(
+          Nodes.BRDF_Lambert({
+            diffuseColor: Nodes.diffuseColor,
+          }),
+        ),
       ),
     );
   }
 
   indirectSpecular({ reflectedLight }: Nodes.LightingModelIndirectInput) {
     // rim
-    (reflectedLight.indirectSpecular as Nodes.ShaderNodeObject<Nodes.Node>).addAssign(
-      parametricRim
-        .add(matcap)
-        .mul(rimMultiply)
-        .mul(Nodes.mix(Nodes.vec3(1.0), Nodes.vec3(0.0), rimLightingMix)),
+    (reflectedLight.indirectSpecular as Nodes.ShaderNodeObject<Nodes.Node>).assign(
+      (reflectedLight.indirectSpecular as Nodes.ShaderNodeObject<Nodes.Node>).add(
+        parametricRim
+          .add(matcap)
+          .mul(rimMultiply)
+          .mul(Nodes.mix(Nodes.vec3(1.0), Nodes.vec3(0.0), rimLightingMix)),
+      ),
     );
   }
 }

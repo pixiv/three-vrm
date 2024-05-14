@@ -14,8 +14,7 @@
     "lint": "lerna run lint",
     "lint-fix": "lerna run lint-fix",
     "docs": "lerna run docs",
-    "prepare": "husky install",
-    "postinstall": "patch-package"
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@gltf-transform/core": "^3.7.4",
@@ -33,7 +32,6 @@
     "jest": "^26.6.3",
     "lerna": "^6.6.2",
     "lint-staged": "^15.1.0",
-    "patch-package": "^8.0.0",
     "prettier": "^2.1.2",
     "rimraf": "^3.0.2",
     "rollup": "^2.33.1",
