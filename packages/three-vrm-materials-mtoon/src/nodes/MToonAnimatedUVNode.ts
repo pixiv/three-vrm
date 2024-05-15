@@ -24,10 +24,6 @@ export class MToonAnimatedUVNode extends Nodes.TempNode {
 
     let uv: Nodes.ShaderNodeObject<Nodes.Swizzable> = Nodes.uv();
 
-    // scroll
-    const scroll = Nodes.vec2(refUVAnimationScrollXOffset, refUVAnimationScrollYOffset).mul(uvAnimationMask);
-    uv = uv.add(scroll);
-
     // rotate
     const phase = refUVAnimationRotationPhase.mul(uvAnimationMask);
 
@@ -40,6 +36,10 @@ export class MToonAnimatedUVNode extends Nodes.TempNode {
     uv = uv.sub(Nodes.vec2(0.5, 0.5));
     uv = uv.mul(Nodes.mat2(c, s, s.negate(), c));
     uv = uv.add(Nodes.vec2(0.5, 0.5));
+
+    // scroll
+    const scroll = Nodes.vec2(refUVAnimationScrollXOffset, refUVAnimationScrollYOffset).mul(uvAnimationMask);
+    uv = uv.add(scroll);
 
     return uv.temp('AnimatedUV');
   }
