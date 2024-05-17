@@ -1,5 +1,5 @@
 /*!
- * @pixiv/three-vrm-springbone v2.1.1
+ * @pixiv/three-vrm-springbone v2.1.2
  * Spring bone module for @pixiv/three-vrm
  *
  * Copyright (c) 2020-2024 pixiv Inc.
