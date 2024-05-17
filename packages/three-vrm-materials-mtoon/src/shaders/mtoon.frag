@@ -389,10 +389,10 @@ void main() {
       uvAnimMask = texture2D( uvAnimationMaskTexture, uvAnimationMaskTextureUv ).b;
     #endif
 
-    uv = uv + vec2( uvAnimationScrollXOffset, uvAnimationScrollYOffset ) * uvAnimMask;
     float uvRotCos = cos( uvAnimationRotationPhase * uvAnimMask );
     float uvRotSin = sin( uvAnimationRotationPhase * uvAnimMask );
     uv = mat2( uvRotCos, -uvRotSin, uvRotSin, uvRotCos ) * ( uv - 0.5 ) + 0.5;
+    uv = uv + vec2( uvAnimationScrollXOffset, uvAnimationScrollYOffset ) * uvAnimMask;
   #endif
 
   #ifdef DEBUG_UV
