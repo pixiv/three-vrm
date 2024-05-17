@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 
 const colorSpaceEncodingMap: Record<'' | 'srgb', any> = {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   '': 3000,
   srgb: 3001,
 };
