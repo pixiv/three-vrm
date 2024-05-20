@@ -53,6 +53,10 @@
       {
         "selector": "enumMember",
         "format": ["PascalCase"]
+      },
+      {
+        "selector": "import",
+        "format": ["camelCase", "PascalCase", "UPPER_CASE"]
       }
     ],
     "@typescript-eslint/no-unused-vars": ["warn", { "args": "none" }], // we sometimes have to define unused arguments
