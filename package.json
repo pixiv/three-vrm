@@ -1,5 +1,6 @@
 {
   "private": true,
+  "type": "module",
   "workspaces": [
     "packages/*"
   ],
@@ -9,6 +10,7 @@
   "scripts": {
     "all": "yarn clean && yarn build && yarn test && yarn lint && yarn docs",
     "clean": "lerna run clean",
+    "dev": "cross-env NODE_ENV=development SERVE=1 node ./bin/build.mjs",
     "build": "lerna run build",
     "test": "lerna run test",
     "lint": "lerna run lint",
@@ -20,10 +22,12 @@
     "@gltf-transform/core": "^3.7.4",
     "@rollup/plugin-typescript": "^11.1.6",
     "@types/jest": "^29.5.12",
+    "@types/node": "^20.12.12",
     "@typescript-eslint/eslint-plugin": "^7.9.0",
     "@typescript-eslint/parser": "^7.9.0",
     "cross-env": "^7.0.2",
     "downlevel-dts": "^0.11.0",
+    "esbuild": "^0.21.3",
     "eslint": "8",
     "eslint-config-mdcs": "^5.0.0",
     "eslint-config-prettier": "^9.1.0",

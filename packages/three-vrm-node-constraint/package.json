@@ -10,8 +10,8 @@
     "/types/",
     "LICENSE"
   ],
-  "main": "lib/three-vrm-node-constraint.js",
-  "module": "lib/three-vrm-node-constraint.module.js",
+  "type": "module",
+  "main": "lib/three-vrm-node-constraint.mjs",
   "types": "types/index.d.ts",
   "typesVersions": {
     "<3.9": {
@@ -19,6 +19,14 @@
         "ts3.4/*"
       ]
     }
+  },
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "import": "./lib/three-vrm-node-constraint.min.mjs",
+      "require": "./lib/three-vrm-node-constraint.min.cjs"
+    },
+    "./package.json": "./package.json"
   },
   "repository": {
     "type": "git",
@@ -31,8 +39,9 @@
     "dev": "cross-env NODE_ENV=development rollup -w -c",
     "clean": "rimraf docs/ lib/ ts*/ types/",
     "build": "yarn build-dev && yarn build-prod && yarn build-types",
-    "build-dev": "cross-env NODE_ENV=development rollup -c",
-    "build-prod": "cross-env NODE_ENV=production rollup -c",
+    "build-js": "node ../../bin/build.mjs",
+    "build-dev": "cross-env NODE_ENV=development yarn build-js",
+    "build-prod": "cross-env NODE_ENV=production yarn build-js",
     "build-types": "tsc --project ./tsconfig.build-types.json && downlevel-dts types ts3.4/types",
     "docs": "typedoc --entryPoints ./src/index.ts --out docs",
     "test": "jest",
