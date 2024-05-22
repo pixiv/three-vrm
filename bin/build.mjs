@@ -28,7 +28,7 @@ async function buildPackage(absWorkingDir) {
 
   // == constants ====================================================================================
   /** copyright text */
-  const copyright = '(c) 2020-2024 pixiv Inc.';
+  const copyright = '(c) 2019-2024 pixiv Inc.';
 
   /** name of the license */
   const licenseName = 'MIT License';
