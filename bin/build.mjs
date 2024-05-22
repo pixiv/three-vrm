@@ -37,8 +37,7 @@ async function buildPackage(absWorkingDir) {
   const licenseUri = 'https://github.com/pixiv/three-vrm/blob/release/LICENSE';
 
   /** filename of output */
-  const suffix = DEV ? '' : '.min';
-  const filename = (packageJson.name.split('/').at(-1) || 'index') + suffix;
+  const filename = packageJson.name.split('/').at(-1) || 'index';
 
   // == banner =======================================================================================
   const bannerTextDev = `/*!
@@ -52,24 +51,24 @@ async function buildPackage(absWorkingDir) {
 
   const bannerTextProd = `/*! ${copyright} - ${licenseUri} */`;
 
-  const outExtension = {
-    esm: {
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      '.js': '.mjs',
-    },
-    cjs: {
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      '.js': '.cjs',
-    },
+  /**
+   * @param {'esm' | 'cjs'} format
+   */
+  const entryPoints = (format) => {
+    let outFilename = filename + (format === 'esm' ? '.module' : '');
+    outFilename += DEV ? '' : '.min';
+    return {
+      entryPoints: {
+        [outFilename]: 'src/index.ts',
+      },
+      format,
+    };
   };
 
   /**
    * @type {import('esbuild').BuildOptions}
    */
   const buildOptions = {
-    entryPoints: {
-      [filename]: 'src/index.ts',
-    },
     banner: {
       js: DEV ? bannerTextDev : bannerTextProd,
     },
@@ -89,9 +88,8 @@ async function buildPackage(absWorkingDir) {
   async function serve() {
     const esmContext = await esbuild.context({
       ...buildOptions,
-      format: 'esm',
+      ...entryPoints('esm'),
       outdir: 'lib',
-      outExtension: outExtension.esm,
       absWorkingDir,
     });
 
@@ -102,16 +100,18 @@ async function buildPackage(absWorkingDir) {
   async function build() {
     await esbuild.build({
       ...buildOptions,
-      format: 'esm',
+      ...entryPoints('esm'),
       outdir: 'lib',
-      outExtension: outExtension.esm,
     });
 
     await esbuild.build({
       ...buildOptions,
-      format: 'cjs',
+      ...entryPoints('cjs'),
       outdir: 'lib',
-      outExtension: outExtension.cjs,
+      outExtension: {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        '.js': '.cjs',
+      },
     });
   }
 

@@ -11,7 +11,7 @@
     "LICENSE"
   ],
   "type": "module",
-  "main": "lib/three-vrm-springbone.mjs",
+  "main": "lib/three-vrm-springbone.module.js",
   "types": "types/index.d.ts",
   "typesVersions": {
     "<3.9": {
@@ -23,7 +23,7 @@
   "exports": {
     ".": {
       "types": "./types/index.d.ts",
-      "import": "./lib/three-vrm-springbone.min.mjs",
+      "import": "./lib/three-vrm-springbone.module.min.js",
       "require": "./lib/three-vrm-springbone.min.cjs"
     },
     "./package.json": "./package.json"

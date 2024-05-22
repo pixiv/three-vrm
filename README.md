@@ -46,7 +46,7 @@ Code like this:
     "imports": {
       "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
       "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/",
-      "@pixiv/three-vrm": "three-vrm.mjs"
+      "@pixiv/three-vrm": "three-vrm.module.js"
     }
   }
 </script>
