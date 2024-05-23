@@ -9,6 +9,9 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/eslint-recommended"
   ],
+  "globals": {
+    "process": true
+  },
   "env": {
     "browser": true
   },
