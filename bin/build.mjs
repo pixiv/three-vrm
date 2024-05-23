@@ -8,6 +8,7 @@ const NODE_ENV = process.env.NODE_ENV;
 const DEV = NODE_ENV === 'development';
 const SERVE = process.env.SERVE === '1';
 const PORT = parseInt(process.env.PORT || '10001', 10);
+const minifySuffix = DEV ? '' : '.min';
 
 // == build =========================================================================================
 
@@ -17,12 +18,16 @@ await buildPackage(workDir);
 // == implement =====================================================================================
 
 /**
+ * @typedef {{ name: string, version: string, description: string, module: string }} PackageJson
+ */
+
+/**
  *
  * @param {string} absWorkingDir
  */
 async function buildPackage(absWorkingDir) {
   /**
-   * @type {{ name: string, version: string, description: string, module: string }}
+   * @type {PackageJson}
    */
   const packageJson = JSON.parse(await fs.readFile(path.join(absWorkingDir, './package.json'), 'utf-8'));
 
@@ -55,8 +60,8 @@ async function buildPackage(absWorkingDir) {
    * @param {'esm' | 'cjs'} format
    */
   const entryPoints = (format) => {
-    let outFilename = filename + (format === 'esm' ? '.module' : '');
-    outFilename += DEV ? '' : '.min';
+    const esmSuffix = format === 'esm' ? '.module' : '';
+    const outFilename = filename + esmSuffix + minifySuffix;
     return {
       entryPoints: {
         [outFilename]: 'src/index.ts',
@@ -78,6 +83,8 @@ async function buildPackage(absWorkingDir) {
     loader: { '.frag': 'text', '.vert': 'text' },
     sourcemap: DEV ? 'inline' : false,
     absWorkingDir,
+    outdir: 'lib',
+    tsconfig: path.join(absWorkingDir, 'tsconfig.json'),
     logLevel: 'info',
     color: true,
     minify: !DEV,
@@ -89,11 +96,15 @@ async function buildPackage(absWorkingDir) {
     const esmContext = await esbuild.context({
       ...buildOptions,
       ...entryPoints('esm'),
-      outdir: 'lib',
       absWorkingDir,
     });
 
-    await esmContext.watch();
+    const extraContext =
+      packageJson.name === '@pixiv/vrm-viewer'
+        ? (await esbuild.context(vrmViewOptions(buildOptions))).watch()
+        : Promise.resolve();
+
+    await Promise.all([esmContext.watch(), extraContext]);
     await esmContext.serve({ servedir: '.', port: PORT });
   }
 
@@ -101,20 +112,37 @@ async function buildPackage(absWorkingDir) {
     await esbuild.build({
       ...buildOptions,
       ...entryPoints('esm'),
-      outdir: 'lib',
     });
 
     await esbuild.build({
       ...buildOptions,
       ...entryPoints('cjs'),
-      outdir: 'lib',
       outExtension: {
         // eslint-disable-next-line @typescript-eslint/naming-convention
         '.js': '.cjs',
       },
     });
+
+    if (packageJson.name === '@pixiv/vrm-viewer') {
+      await esbuild.build(vrmViewOptions(buildOptions));
+    }
   }
 
   // == main =========================================================================================
   await (SERVE ? serve : build)();
+}
+
+/**
+ * @param {import('esbuild').BuildOptions} baseBuildOptions
+ * @returns {import('esbuild').BuildOptions}
+ */
+function vrmViewOptions(baseBuildOptions) {
+  return {
+    ...baseBuildOptions,
+    format: 'esm',
+    entryPoints: {
+      [`vrm-viewer${minifySuffix}`]: 'src/index.ts',
+    },
+    external: [], // include three
+  };
 }

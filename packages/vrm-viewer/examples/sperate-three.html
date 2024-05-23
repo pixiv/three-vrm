@@ -26,7 +26,15 @@
 <body>
 	<vrm-viewer camera-controls touch-action="pan-y" tone-mapping="neutral"
 		src="./models/VRM1_Constraint_Twist_Sample.vrm" />
-	<script type="module" src="../lib/vrm-viewer.js"></script>
+	<script type="importmap">
+		{
+			"imports": {
+				"three": "https://cdn.jsdelivr.net/npm/three@0.164.0/build/three.module.js",
+				"three/": "https://cdn.jsdelivr.net/npm/three@0.164.0/"
+			}
+		}
+	</script>
+	<script type="module" src="../lib/vrm-viewer.module.js"></script>
 </body>
 
 </html>
