@@ -15,7 +15,7 @@
   "types": "types/index.d.ts",
   "exports": {
     ".": {
-      "types": "./types/index.d.ts",
+      "types": "./types-shim/index.d.ts",
       "import": "./lib/vrm-viewer.module.min.js",
       "require": "./lib/vrm-viewer.min.cjs"
     },
@@ -35,7 +35,7 @@
     "build-js": "node ../../bin/build.mjs",
     "build-dev": "cross-env NODE_ENV=development yarn build-js",
     "build-prod": "cross-env NODE_ENV=production yarn build-js",
-    "build-types": "tsc --declaration --declarationDir ./types --emitDeclarationOnly",
+    "build-types": "echo skip building type until upstream support || tsc --declaration --declarationDir ./types --emitDeclarationOnly",
     "docs": "typedoc --entryPoints ./src/index.ts --out docs",
     "test": "echo There is no test for vrm-viewer",
     "lint": "eslint \"src/**/*.{ts,tsx}\"  && yarn lint-examples &&  prettier \"src/**/*.{ts,tsx}\" --check",
