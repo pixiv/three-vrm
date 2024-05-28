@@ -122,7 +122,7 @@ export class MToonNodeMaterial extends Nodes.NodeMaterial {
     this.emissiveMap = null;
     this.normalMap = null;
     this.normalScale = new THREE.Vector2(1.0, 1.0);
-    this.shadeColorFactor = new THREE.Color(0.97, 0.81, 0.86);
+    this.shadeColorFactor = new THREE.Color(0.0, 0.0, 0.0);
     this.shadeMultiplyTexture = null;
     this.shadingShiftFactor = 0.0;
     this.shadingShiftTexture = null;
