@@ -36,7 +36,7 @@
     "build-dev": "cross-env NODE_ENV=development yarn build-js",
     "build-prod": "cross-env NODE_ENV=production yarn build-js",
     "build-types": "echo skip building type until upstream support || tsc --declaration --declarationDir ./types --emitDeclarationOnly",
-    "docs": "typedoc --entryPoints ./src/index.ts --out docs",
+    "docs": "echo 'skip build docs until upstream support' || typedoc --entryPoints ./src/index.ts --out docs",
     "test": "echo There is no test for vrm-viewer",
     "lint": "eslint \"src/**/*.{ts,tsx}\"  && yarn lint-examples &&  prettier \"src/**/*.{ts,tsx}\" --check",
     "lint-examples": "eslint \"examples/**/*.{js,html}\" --rule \"padded-blocks: error\"",

@@ -1,4 +1,4 @@
-// we should remove this once upstream supports
+// we should remove this once upstream support
 /* eslint-disable @typescript-eslint/naming-convention */
 export declare const VRMViewerElement: {
   new (...args: any[]): import('./features/vrm-mixin').VRMInterface;
