@@ -135,6 +135,9 @@ async function buildPackage(absWorkingDir) {
 /**
  * @param {import('esbuild').BuildOptions} baseBuildOptions
  * @returns {import('esbuild').BuildOptions}
+ *
+ * NOTE: The main reason to separated this from the main config is that
+ * we want to include Three.js in the build but `external` is fixed per esbuild context
  */
 function vrmViewOptions(baseBuildOptions) {
   return {
