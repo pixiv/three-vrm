@@ -23,8 +23,8 @@
   "exports": {
     ".": {
       "types": "./types/index.d.ts",
-      "import": "./lib/three-vrm-node-constraint.module.min.js",
-      "require": "./lib/three-vrm-node-constraint.min.cjs"
+      "import": "./lib/three-vrm-node-constraint.module.js",
+      "require": "./lib/three-vrm-node-constraint.cjs"
     },
     "./package.json": "./package.json"
   },

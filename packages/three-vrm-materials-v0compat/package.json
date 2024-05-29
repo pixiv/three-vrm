@@ -23,8 +23,8 @@
   "exports": {
     ".": {
       "types": "./types/index.d.ts",
-      "import": "./lib/three-vrm-materials-v0compat.module.min.js",
-      "require": "./lib/three-vrm-materials-v0compat.min.cjs"
+      "import": "./lib/three-vrm-materials-v0compat.module.js",
+      "require": "./lib/three-vrm-materials-v0compat.cjs"
     },
     "./package.json": "./package.json"
   },

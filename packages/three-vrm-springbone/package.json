@@ -23,8 +23,8 @@
   "exports": {
     ".": {
       "types": "./types/index.d.ts",
-      "import": "./lib/three-vrm-springbone.module.min.js",
-      "require": "./lib/three-vrm-springbone.min.cjs"
+      "import": "./lib/three-vrm-springbone.module.js",
+      "require": "./lib/three-vrm-springbone.cjs"
     },
     "./package.json": "./package.json"
   },

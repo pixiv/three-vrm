@@ -23,8 +23,8 @@
   "exports": {
     ".": {
       "types": "./types/index.d.ts",
-      "import": "./lib/three-vrm-core.module.min.js",
-      "require": "./lib/three-vrm-core.min.cjs"
+      "import": "./lib/three-vrm-core.module.js",
+      "require": "./lib/three-vrm-core.cjs"
     },
     "./package.json": "./package.json"
   },
