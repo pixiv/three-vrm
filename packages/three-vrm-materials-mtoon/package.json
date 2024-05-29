@@ -23,8 +23,8 @@
   "exports": {
     ".": {
       "types": "./types/index.d.ts",
-      "import": "./lib/three-vrm-materials-mtoon.module.min.js",
-      "require": "./lib/three-vrm-materials-mtoon.min.cjs"
+      "import": "./lib/three-vrm-materials-mtoon.module.js",
+      "require": "./lib/three-vrm-materials-mtoon.cjs"
     },
     "./package.json": "./package.json"
   },

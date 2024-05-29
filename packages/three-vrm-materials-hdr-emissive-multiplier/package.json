@@ -23,8 +23,8 @@
   "exports": {
     ".": {
       "types": "./types/index.d.ts",
-      "import": "./lib/three-vrm-materials-hdr-emissive-multiplier.module.min.js",
-      "require": "./lib/three-vrm-materials-hdr-emissive-multiplier.min.cjs"
+      "import": "./lib/three-vrm-materials-hdr-emissive-multiplier.module.js",
+      "require": "./lib/three-vrm-materials-hdr-emissive-multiplier.cjs"
     },
     "./package.json": "./package.json"
   },
