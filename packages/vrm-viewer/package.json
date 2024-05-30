@@ -16,8 +16,8 @@
   "exports": {
     ".": {
       "types": "./types-shim/index.d.ts",
-      "import": "./lib/vrm-viewer.module.min.js",
-      "require": "./lib/vrm-viewer.min.cjs"
+      "import": "./lib/vrm-viewer.module.js",
+      "require": "./lib/vrm-viewer.cjs"
     },
     "./package.json": "./package.json"
   },
