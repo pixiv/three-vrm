@@ -23,8 +23,8 @@
   "exports": {
     ".": {
       "types": "./types/index.d.ts",
-      "import": "./lib/three-vrm-springbone.module.min.js",
-      "require": "./lib/three-vrm-springbone.min.cjs"
+      "import": "./lib/three-vrm-springbone.module.js",
+      "require": "./lib/three-vrm-springbone.cjs"
     },
     "./package.json": "./package.json"
   },
@@ -36,7 +36,7 @@
   "scripts": {
     "version": "yarn all",
     "all": "yarn lint && yarn clean && yarn build && yarn docs",
-    "dev": "cross-env NODE_ENV=development rollup -w -c",
+    "dev": "cross-env SERVE=1 yarn build-dev",
     "clean": "rimraf docs/ lib/ ts*/ types/",
     "build": "yarn build-dev && yarn build-prod && yarn build-types",
     "build-js": "node ../../bin/build.mjs",

@@ -22,7 +22,7 @@ export class VRMMetaLoaderPlugin implements GLTFLoaderPlugin {
 
   /**
    * If `false`, it won't load its thumbnail image ({@link VRM1Meta.thumbnailImage}).
-   * `true` by default.
+   * `false` by default.
    */
   public needThumbnailImage: boolean;
 
@@ -48,7 +48,7 @@ export class VRMMetaLoaderPlugin implements GLTFLoaderPlugin {
   public constructor(parser: GLTFParser, options?: VRMMetaLoaderPluginOptions) {
     this.parser = parser;
 
-    this.needThumbnailImage = options?.needThumbnailImage ?? true;
+    this.needThumbnailImage = options?.needThumbnailImage ?? false;
     this.acceptLicenseUrls = options?.acceptLicenseUrls ?? ['https://vrm.dev/licenses/1.0/'];
     this.acceptV0Meta = options?.acceptV0Meta ?? true;
   }
