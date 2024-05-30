@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>three-vrm example</title>
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+		/>
+		<style>
+			body {
+				margin: 0;
+				background: #000;
+			}
+			canvas {
+				display: block;
+			}
+		</style>
+	</head>
+
+	<body>
+		<script type="importmap">
+			{
+				"imports": {
+					"three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
+					"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/",
+					"@pixiv/three-vrm-materials-mtoon": "../lib/three-vrm-materials-mtoon.module.js"
+				}
+			}
+		</script>
+
+		<script type="module">
+			import * as THREE from 'three';
+			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+			import WebGPURenderer from 'three/addons/renderers/webgpu/WebGPURenderer.js';
+			import { MToonNodeMaterial } from '@pixiv/three-vrm-materials-mtoon';
+
+			// renderer
+			const renderer = new WebGPURenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			renderer.setPixelRatio( window.devicePixelRatio );
+			document.body.appendChild( renderer.domElement );
+
+			// camera
+			const camera = new THREE.PerspectiveCamera( 30.0, window.innerWidth / window.innerHeight, 0.1, 20.0 );
+			camera.position.set( 0.0, 0.0, 10.0 );
+
+			// camera controls
+			const controls = new OrbitControls( camera, renderer.domElement );
+			controls.screenSpacePanning = true;
+			controls.target.set( 0.0, 0.0, 0.0 );
+			controls.update();
+
+			// scene
+			const scene = new THREE.Scene();
+
+			// light
+			const light = new THREE.DirectionalLight( 0xffffff, Math.PI );
+			scene.add( light );
+
+			// test objects
+			const textureUVGrid = new THREE.TextureLoader().load( './models/uv-grid.png' );
+			textureUVGrid.wrapS = THREE.RepeatWrapping;
+			textureUVGrid.wrapT = THREE.RepeatWrapping;
+
+			const textureNormalPerlin = new THREE.TextureLoader().load( './models/normal-perlin.jpg' );
+			textureNormalPerlin.repeat.set( 2.0, 1.0 );
+			textureNormalPerlin.wrapS = THREE.RepeatWrapping;
+			textureNormalPerlin.wrapT = THREE.RepeatWrapping;
+
+			const textureBlind = new THREE.TextureLoader().load( './models/blind.png' );
+			textureBlind.repeat.set( 2.0, 1.0 );
+			textureBlind.wrapS = THREE.RepeatWrapping;
+			textureBlind.wrapT = THREE.RepeatWrapping;
+			textureBlind.magFilter = THREE.NearestFilter;
+			textureBlind.minFilter = THREE.NearestFilter;
+
+			const textureGrid = new THREE.TextureLoader().load( './models/grid.png' );
+			textureGrid.wrapS = THREE.RepeatWrapping;
+			textureGrid.wrapT = THREE.RepeatWrapping;
+			textureGrid.magFilter = THREE.NearestFilter;
+			textureGrid.minFilter = THREE.NearestFilter;
+
+			const textureBinaryHalf = new THREE.TextureLoader().load( './models/binary-half.png' );
+			textureBinaryHalf.repeat.set( 2.0, 1.0 );
+			textureBinaryHalf.wrapS = THREE.RepeatWrapping;
+			textureBinaryHalf.wrapT = THREE.RepeatWrapping;
+			textureBinaryHalf.magFilter = THREE.NearestFilter;
+			textureBinaryHalf.minFilter = THREE.NearestFilter;
+
+			const textureVroidRim = new THREE.TextureLoader().load( './models/vroid-rim.png' );
+
+			const geometrySphere = new THREE.SphereGeometry( 0.4 );
+
+			const meshes = [
+
+				// map
+				{
+
+					map: textureUVGrid,
+					shadeMultiplyTexture: textureUVGrid,
+
+				},
+
+				// lit-shade
+				{
+
+					color: 0xffffff,
+					shadeColorFactor: 0xff4488,
+
+				},
+
+				// cell shading
+				{
+
+					color: 0xddbbaa,
+					shadeColorFactor: 0x664422,
+					shadingToonyFactor: 1.0,
+
+				},
+
+				// lambert
+				{
+
+					color: 0xffffff,
+					shadeColorFactor: 0x000000,
+					shadingToonyFactor: 0.5,
+					shadingShiftFactor: - 0.5,
+
+				},
+
+				// half lambert
+				{
+
+					color: 0xffffff,
+					shadeColorFactor: 0x000000,
+					shadingToonyFactor: 0.0,
+					shadingShiftFactor: 0.0,
+
+				},
+
+				// map, uv scroll
+				{
+
+					map: textureUVGrid,
+					shadeMultiplyTexture: textureUVGrid,
+					uvAnimationScrollXSpeedFactor: 0.5,
+
+				},
+
+				// map, uv scroll with mask
+				{
+
+					map: textureUVGrid,
+					shadeMultiplyTexture: textureUVGrid,
+					uvAnimationScrollXSpeedFactor: 0.5,
+					uvAnimationMaskTexture: textureBlind,
+
+				},
+
+				// normal
+				{
+
+					color: 0x77bbee,
+					shadeColorFactor: 0x225577,
+					normalMap: textureNormalPerlin,
+
+				},
+
+				// map, normal
+				{
+
+					map: textureUVGrid,
+					shadeMultiplyTexture: textureUVGrid,
+					color: 0xffffff,
+					shadeColorFactor: 0x444444,
+					normalMap: textureNormalPerlin,
+
+				},
+
+				// map, normal, uv scroll with mask
+				{
+
+					map: textureUVGrid,
+					shadeMultiplyTexture: textureUVGrid,
+					color: 0xffffff,
+					shadeColorFactor: 0x444444,
+					normalMap: textureNormalPerlin,
+					uvAnimationScrollXSpeedFactor: 0.5,
+					uvAnimationMaskTexture: textureBlind,
+
+				},
+
+				// map, emissive
+				{
+
+					map: textureUVGrid,
+					shadeMultiplyTexture: textureUVGrid,
+					color: 0x444444,
+					shadeColorFactor: 0x222222,
+					emissiveMap: textureGrid,
+					emissive: 0xff8800,
+
+				},
+
+				// map, emissive, uv scroll with mask
+				{
+
+					map: textureUVGrid,
+					shadeMultiplyTexture: textureUVGrid,
+					color: 0x444444,
+					shadeColorFactor: 0x222222,
+					emissiveMap: textureGrid,
+					emissive: 0xff8800,
+					uvAnimationScrollXSpeedFactor: 0.5,
+					uvAnimationMaskTexture: textureBlind,
+
+				},
+
+				// map, normal, parametric rim
+				{
+
+					map: textureUVGrid,
+					shadeMultiplyTexture: textureUVGrid,
+					color: 0x444444,
+					shadeColorFactor: 0x222222,
+					normalMap: textureNormalPerlin,
+					parametricRimColorFactor: 0xff8800,
+					parametricRimFresnelPowerFactor: 3.0,
+
+				},
+
+				// map, normal, parametric rim with mask
+				{
+
+					map: textureUVGrid,
+					shadeMultiplyTexture: textureUVGrid,
+					color: 0x444444,
+					shadeColorFactor: 0x222222,
+					normalMap: textureNormalPerlin,
+					parametricRimColorFactor: 0xff8800,
+					parametricRimFresnelPowerFactor: 3.0,
+					rimMultiplyTexture: textureBinaryHalf,
+
+				},
+
+				// map, vroid style classic rim
+				{
+
+					map: textureUVGrid,
+					shadeMultiplyTexture: textureUVGrid,
+					color: 0x444444,
+					shadeColorFactor: 0x222222,
+					normalMap: textureNormalPerlin,
+					matcapFactor: 0xffffff,
+					matcapTexture: textureVroidRim,
+
+				},
+
+				// map, vroid style classic rim with mask
+				{
+
+					map: textureUVGrid,
+					shadeMultiplyTexture: textureUVGrid,
+					color: 0x444444,
+					shadeColorFactor: 0x222222,
+					normalMap: textureNormalPerlin,
+					matcapFactor: 0xffffff,
+					matcapTexture: textureVroidRim,
+					rimMultiplyTexture: textureBinaryHalf,
+
+				},
+
+			].map( ( params, i ) => {
+
+				const material = new MToonNodeMaterial( params );
+				const mesh = new THREE.Mesh( geometrySphere, material );
+
+				const x = ( i % 5 ) - 2.0;
+				const y = Math.floor( i / 5 ) - 2.0;
+				mesh.position.set( x, y, 0 );
+
+				scene.add( mesh );
+
+				return mesh;
+
+			} );
+
+			// helpers
+			const gridHelper = new THREE.GridHelper( 10, 10 );
+			scene.add( gridHelper );
+
+			const axesHelper = new THREE.AxesHelper( 5 );
+			scene.add( axesHelper );
+
+			// animate
+			const clock = new THREE.Clock();
+			clock.start();
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				const delta = clock.getDelta();
+
+				const theta = clock.elapsedTime;
+				const cosTheta = Math.cos( theta );
+				const sinTheta = Math.sin( theta );
+				light.position.set( cosTheta, 2.0, sinTheta ).normalize();
+
+				for ( const mesh of meshes ) {
+
+					mesh.material.update( delta );
+
+				}
+
+				renderer.renderAsync( scene, camera );
+
+			}
+
+			animate();
+		</script>
+	</body>
+</html>
