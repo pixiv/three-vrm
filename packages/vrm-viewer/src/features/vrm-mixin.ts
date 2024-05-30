@@ -24,6 +24,17 @@ export class ModelViewerVRMInstance extends ModelViewerGLTFInstance {
    */
   protected static [$prepare](source: GLTF): PreparedModelViewerGLTF {
     const prepared = super[$prepare](source) as PreparedModelViewerGLTF;
+
+    // FIXME: remove $correlatedSceneGraph for now as MToon does not work with scene-graph feature very well.
+    // TypeError: Cannot read properties of undefined (reading 'materials') at new PrimitiveNode
+    const $correlatedSceneGraph = Object.getOwnPropertySymbols(prepared).find(
+      (s) => s.description == 'correlatedSceneGraph',
+    );
+    if ($correlatedSceneGraph) {
+      // @ts-expect-error $correlatedSceneGraph is not exported
+      delete prepared[$correlatedSceneGraph];
+    }
+
     const vrm = prepared.userData.vrm;
 
     // calling these functions greatly improves the performance

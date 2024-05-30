@@ -35,6 +35,37 @@
 		}
 	</script>
 	<script type="module" src="../lib/vrm-viewer.module.js"></script>
+	<script type="module">
+		import * as THREE from 'three';
+		const vrmViewer = document.querySelector( 'vrm-viewer' );
+
+		// https://modelviewer.dev/docs/index.html#loading-events
+
+		vrmViewer.addEventListener( 'model-visibility', ( event ) => {
+
+			console.log( `model visibility: ${event.detail.visible}` );
+
+		} );
+
+		vrmViewer.addEventListener( 'before-render', ( _event ) => {
+
+			const mesh = new THREE.Mesh(
+				new THREE.SphereGeometry( 0.1 ),
+				new THREE.MeshStandardMaterial( { color: 0xff8800 } ),
+			);
+			mesh.position.set( 0.5, 1.5, 0 );
+
+			vrmViewer.vrm.scene.add( mesh );
+
+		} );
+
+		vrmViewer.addEventListener( 'error', ( event ) => {
+
+			console.error( 'load error', event );
+
+		} );
+
+	</script>
 </body>
 
 </html>
