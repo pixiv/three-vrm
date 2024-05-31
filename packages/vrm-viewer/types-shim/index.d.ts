@@ -1,4 +1,5 @@
 // we should remove this once upstream support
+// https://github.com/pixiv/three-vrm/pull/1395#discussion_r1621561490
 /* eslint-disable @typescript-eslint/naming-convention */
 export declare const VRMViewerElement: {
   new (...args: any[]): import('./features/vrm-mixin').VRMInterface;
