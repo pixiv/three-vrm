@@ -413,7 +413,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
         mapUvTransform: { value: new THREE.Matrix3() },
         colorAlpha: { value: 1.0 },
         normalMapUvTransform: { value: new THREE.Matrix3() },
-        shadeColorFactor: { value: new THREE.Color(0.97, 0.81, 0.86) },
+        shadeColorFactor: { value: new THREE.Color(0.0, 0.0, 0.0) },
         shadeMultiplyTexture: { value: null },
         shadeMultiplyTextureUvTransform: { value: new THREE.Matrix3() },
         shadingShiftFactor: { value: 0.0 },
@@ -422,21 +422,21 @@ export class MToonMaterial extends THREE.ShaderMaterial {
         shadingShiftTextureScale: { value: 1.0 },
         shadingToonyFactor: { value: 0.9 },
         giEqualizationFactor: { value: 0.9 },
-        matcapFactor: { value: new THREE.Color(0.0, 0.0, 0.0) },
+        matcapFactor: { value: new THREE.Color(1.0, 1.0, 1.0) },
         matcapTexture: { value: null },
         matcapTextureUvTransform: { value: new THREE.Matrix3() },
         parametricRimColorFactor: { value: new THREE.Color(0.0, 0.0, 0.0) },
         rimMultiplyTexture: { value: null },
         rimMultiplyTextureUvTransform: { value: new THREE.Matrix3() },
-        rimLightingMixFactor: { value: 0.0 },
-        parametricRimFresnelPowerFactor: { value: 1.0 },
+        rimLightingMixFactor: { value: 1.0 },
+        parametricRimFresnelPowerFactor: { value: 5.0 },
         parametricRimLiftFactor: { value: 0.0 },
         emissive: { value: new THREE.Color(0.0, 0.0, 0.0) },
         emissiveIntensity: { value: 1.0 },
         emissiveMapUvTransform: { value: new THREE.Matrix3() },
         outlineWidthMultiplyTexture: { value: null },
         outlineWidthMultiplyTextureUvTransform: { value: new THREE.Matrix3() },
-        outlineWidthFactor: { value: 0.5 },
+        outlineWidthFactor: { value: 0.0 },
         outlineColorFactor: { value: new THREE.Color(0.0, 0.0, 0.0) },
         outlineLightingMixFactor: { value: 1.0 },
         uvAnimationMaskTexture: { value: null },
@@ -606,6 +606,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     const useUvInVert = this.outlineWidthMultiplyTexture !== null;
     const useUvInFrag =
       this.map !== null ||
+      this.normalMap !== null ||
       this.emissiveMap !== null ||
       this.shadeMultiplyTexture !== null ||
       this.shadingShiftTexture !== null ||

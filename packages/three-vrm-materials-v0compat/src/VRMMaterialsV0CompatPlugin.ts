@@ -88,14 +88,14 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
 
     const isCutoff = materialProperties.keywordMap?.['_ALPHATEST_ON'] ?? false;
     const alphaMode = isTransparent ? 'BLEND' : isCutoff ? 'MASK' : 'OPAQUE';
-    const alphaCutoff = isCutoff ? materialProperties.floatProperties?.['_Cutoff'] : undefined;
+    const alphaCutoff = isCutoff ? materialProperties.floatProperties?.['_Cutoff'] ?? 0.5 : undefined;
 
     const cullMode = materialProperties.floatProperties?.['_CullMode'] ?? 2; // enum, { Off, Front, Back }
     const doubleSided = cullMode === 0;
 
     const textureTransformExt = this._portTextureTransform(materialProperties);
 
-    const baseColorFactor = materialProperties.vectorProperties?.['_Color']?.map(
+    const baseColorFactor = (materialProperties.vectorProperties?.['_Color'] ?? [1.0, 1.0, 1.0, 1.0]).map(
       (v: number, i: number) => (i === 3 ? v : gammaEOTF(v)), // alpha channel is stored in linear
     );
     const baseColorTextureIndex = materialProperties.textureProperties?.['_MainTex'];
@@ -109,7 +109,7 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
           }
         : undefined;
 
-    const normalTextureScale = materialProperties.floatProperties?.['_BumpScale'];
+    const normalTextureScale = materialProperties.floatProperties?.['_BumpScale'] ?? 1.0;
     const normalTextureIndex = materialProperties.textureProperties?.['_BumpMap'];
     const normalTexture =
       normalTextureIndex != null
@@ -122,7 +122,9 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
           }
         : undefined;
 
-    const emissiveFactor = materialProperties.vectorProperties?.['_EmissionColor']?.map(gammaEOTF);
+    const emissiveFactor = (materialProperties.vectorProperties?.['_EmissionColor'] ?? [0.0, 0.0, 0.0, 1.0]).map(
+      gammaEOTF,
+    );
     const emissiveTextureIndex = materialProperties.textureProperties?.['_EmissionMap'];
     const emissiveTexture =
       emissiveTextureIndex != null
@@ -134,7 +136,9 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
           }
         : undefined;
 
-    const shadeColorFactor = materialProperties.vectorProperties?.['_ShadeColor']?.map(gammaEOTF);
+    const shadeColorFactor = (materialProperties.vectorProperties?.['_ShadeColor'] ?? [0.97, 0.81, 0.86, 1.0]).map(
+      gammaEOTF,
+    );
     const shadeMultiplyTextureIndex = materialProperties.textureProperties?.['_ShadeTexture'];
     const shadeMultiplyTexture =
       shadeMultiplyTextureIndex != null
@@ -152,7 +156,7 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
     shadingToonyFactor = THREE.MathUtils.lerp(shadingToonyFactor, 1.0, 0.5 + 0.5 * shadingShiftFactor);
     shadingShiftFactor = -shadingShiftFactor - (1.0 - shadingToonyFactor);
 
-    const giIntensityFactor = materialProperties.floatProperties?.['_IndirectLightIntensity'];
+    const giIntensityFactor = materialProperties.floatProperties?.['_IndirectLightIntensity'] ?? 0.1;
     const giEqualizationFactor = giIntensityFactor ? 1.0 - giIntensityFactor : undefined;
 
     const matcapTextureIndex = materialProperties.textureProperties?.['_SphereAdd'];
@@ -164,7 +168,7 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
           }
         : undefined;
 
-    const rimLightingMixFactor = materialProperties.floatProperties?.['_RimLightingMix'];
+    const rimLightingMixFactor = materialProperties.floatProperties?.['_RimLightingMix'] ?? 0.0;
     const rimMultiplyTextureIndex = materialProperties.textureProperties?.['_RimTexture'];
     const rimMultiplyTexture =
       rimMultiplyTextureIndex != null
@@ -176,9 +180,11 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
           }
         : undefined;
 
-    const parametricRimColorFactor = materialProperties.vectorProperties?.['_RimColor']?.map(gammaEOTF);
-    const parametricRimFresnelPowerFactor = materialProperties.floatProperties?.['_RimFresnelPower'];
-    const parametricRimLiftFactor = materialProperties.floatProperties?.['_RimLift'];
+    const parametricRimColorFactor = (materialProperties.vectorProperties?.['_RimColor'] ?? [0.0, 0.0, 0.0, 1.0]).map(
+      gammaEOTF,
+    );
+    const parametricRimFresnelPowerFactor = materialProperties.floatProperties?.['_RimFresnelPower'] ?? 1.0;
+    const parametricRimLiftFactor = materialProperties.floatProperties?.['_RimLift'] ?? 0.0;
 
     const outlineWidthMode = ['none', 'worldCoordinates', 'screenCoordinates'][
       materialProperties.floatProperties?.['_OutlineWidthMode'] ?? 0
@@ -199,10 +205,12 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
           }
         : undefined;
 
-    const outlineColorFactor = materialProperties.vectorProperties?.['_OutlineColor']?.map(gammaEOTF);
-    const outlineColorMode = materialProperties.floatProperties?.['_OutlineColorMode']; // enum, { Fixed, Mixed }
+    const outlineColorFactor = (materialProperties.vectorProperties?.['_OutlineColor'] ?? [0.0, 0.0, 0.0]).map(
+      gammaEOTF,
+    );
+    const outlineColorMode = materialProperties.floatProperties?.['_OutlineColorMode'] ?? 0; // enum, { Fixed, Mixed }
     const outlineLightingMixFactor =
-      outlineColorMode === 1 ? materialProperties.floatProperties?.['_OutlineLightingMix'] : 0.0;
+      outlineColorMode === 1 ? materialProperties.floatProperties?.['_OutlineLightingMix'] ?? 1.0 : 0.0;
 
     const uvAnimationMaskTextureIndex = materialProperties.textureProperties?.['_UvAnimMaskTexture'];
     const uvAnimationMaskTexture =
@@ -215,15 +223,15 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
           }
         : undefined;
 
-    const uvAnimationScrollXSpeedFactor = materialProperties.floatProperties?.['_UvAnimScrollX'];
+    const uvAnimationScrollXSpeedFactor = materialProperties.floatProperties?.['_UvAnimScrollX'] ?? 0.0;
 
     // uvAnimationScrollYSpeedFactor will be opposite between V0 and V1
-    let uvAnimationScrollYSpeedFactor = materialProperties.floatProperties?.['_UvAnimScrollY'];
+    let uvAnimationScrollYSpeedFactor = materialProperties.floatProperties?.['_UvAnimScrollY'] ?? 0.0;
     if (uvAnimationScrollYSpeedFactor != null) {
       uvAnimationScrollYSpeedFactor = -uvAnimationScrollYSpeedFactor;
     }
 
-    const uvAnimationRotationSpeedFactor = materialProperties.floatProperties?.['_UvAnimRotation'];
+    const uvAnimationRotationSpeedFactor = materialProperties.floatProperties?.['_UvAnimRotation'] ?? 0.0;
 
     const mtoonExtension: V1MToonSchema.VRMCMaterialsMToon = {
       specVersion: '1.0',
@@ -283,11 +291,11 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
 
     const isCutoff = materialProperties.shader === 'VRM/UnlitCutout';
     const alphaMode = isTransparent ? 'BLEND' : isCutoff ? 'MASK' : 'OPAQUE';
-    const alphaCutoff = isCutoff ? materialProperties.floatProperties?.['_Cutoff'] : undefined;
+    const alphaCutoff = isCutoff ? materialProperties.floatProperties?.['_Cutoff'] ?? 0.5 : undefined;
 
     const textureTransformExt = this._portTextureTransform(materialProperties);
 
-    const baseColorFactor = materialProperties.vectorProperties?.['_Color']?.map(gammaEOTF);
+    const baseColorFactor = (materialProperties.vectorProperties?.['_Color'] ?? [1.0, 1.0, 1.0, 1.0]).map(gammaEOTF);
     const baseColorTextureIndex = materialProperties.textureProperties?.['_MainTex'];
     const baseColorTexture =
       baseColorTextureIndex != null

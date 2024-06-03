@@ -32,22 +32,20 @@ You will need:
 
 - [Three.js build](https://github.com/mrdoob/three.js/blob/master/build/three.js)
 - [GLTFLoader](https://github.com/mrdoob/three.js/blob/master/examples/js/loaders/GLTFLoader.js)
-- [A build of @pixiv/three-vrm](https://unpkg.com/browse/@pixiv/three-vrm/lib/)
+- [A build of @pixiv/three-vrm](https://www.jsdelivr.com/package/npm/@pixiv/three-vrm?tab=files&path=lib)
   - `.module` ones are ESM, otherwise it's UMD and injects its modules into global `THREE`
   - `.min` ones are minified (for production), otherwise it's not minified and it comes with source maps
+
+You can import all of them via CDN. See the example below.
 
 Code like this:
 
 ```html
-<!-- About import maps, see the Three.js official docs: -->
-<!-- https://threejs.org/docs/#manual/en/introduction/Installation -->
-<script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
-
 <script type="importmap">
   {
     "imports": {
-      "three": "https://unpkg.com/three@0.162.0/build/three.module.js",
-      "three/addons/": "https://unpkg.com/three@0.162.0/examples/jsm/",
+      "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/",
       "@pixiv/three-vrm": "three-vrm.module.js"
     }
   }
