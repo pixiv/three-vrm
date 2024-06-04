@@ -1,6 +1,9 @@
 import * as THREE from 'three';
 import { VRMSpringBoneColliderShape } from './VRMSpringBoneColliderShape';
 
+const _v3A = new THREE.Vector3();
+const _mat3A = new THREE.Matrix3();
+
 export class VRMSpringBoneColliderShapePlane extends VRMSpringBoneColliderShape {
   public get type(): 'plane' {
     return 'plane';
@@ -32,9 +35,11 @@ export class VRMSpringBoneColliderShapePlane extends VRMSpringBoneColliderShape 
     target.copy(this.offset).applyMatrix4(colliderMatrix); // transformed offset
     target.negate().add(objectPosition); // a vector from collider center to object position
 
-    const distance = target.dot(this.normal) - objectRadius;
+    _mat3A.getNormalMatrix(colliderMatrix); // convert the collider matrix to the normal matrix
+    _v3A.copy(this.normal).applyNormalMatrix(_mat3A).normalize(); // transformed normal
+    const distance = target.dot(_v3A) - objectRadius;
 
-    target.copy(this.normal); // convert the delta to the direction
+    target.copy(_v3A); // convert the delta to the direction
 
     return distance;
   }
