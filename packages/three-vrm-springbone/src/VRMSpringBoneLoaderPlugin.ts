@@ -25,7 +25,7 @@ const POSSIBLE_SPEC_VERSIONS = new Set(['1.0', '1.0-beta']);
 /**
  * Possible spec versions of `VRMC_springBone_extended_collider` it recognizes.
  */
-const POSSIBLE_SPEC_VERSIONS_EXTENDED_COLLIDERS = new Set(['1.0']);
+const POSSIBLE_SPEC_VERSIONS_EXTENDED_COLLIDERS = new Set(['1.0-draft']);
 
 export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
   public static readonly EXTENSION_NAME = 'VRMC_springBone';
