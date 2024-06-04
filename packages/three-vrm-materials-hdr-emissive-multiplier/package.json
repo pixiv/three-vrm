@@ -10,8 +10,8 @@
     "/types/",
     "LICENSE"
   ],
-  "main": "lib/three-vrm-materials-hdr-emissive-multiplier.js",
-  "module": "lib/three-vrm-materials-hdr-emissive-multiplier.module.js",
+  "type": "module",
+  "main": "lib/three-vrm-materials-hdr-emissive-multiplier.module.js",
   "types": "types/index.d.ts",
   "typesVersions": {
     "<3.9": {
@@ -19,6 +19,14 @@
         "ts3.4/*"
       ]
     }
+  },
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "import": "./lib/three-vrm-materials-hdr-emissive-multiplier.module.js",
+      "require": "./lib/three-vrm-materials-hdr-emissive-multiplier.cjs"
+    },
+    "./package.json": "./package.json"
   },
   "repository": {
     "type": "git",
@@ -28,11 +36,12 @@
   "scripts": {
     "version": "yarn all",
     "all": "yarn lint && yarn clean && yarn build && yarn docs",
-    "dev": "cross-env NODE_ENV=development rollup -w -c",
+    "dev": "cross-env SERVE=1 yarn build-dev",
     "clean": "rimraf docs/ lib/ ts*/ types/",
     "build": "yarn build-dev && yarn build-prod && yarn build-types",
-    "build-dev": "cross-env NODE_ENV=development rollup -c",
-    "build-prod": "cross-env NODE_ENV=production rollup -c",
+    "build-js": "node ../../bin/build.mjs",
+    "build-dev": "cross-env NODE_ENV=development yarn build-js",
+    "build-prod": "cross-env NODE_ENV=production yarn build-js",
     "build-types": "tsc --declaration --declarationDir ./types --emitDeclarationOnly && downlevel-dts types ts3.4/types",
     "docs": "typedoc --entryPoints ./src/index.ts --out docs",
     "lint": "eslint \"src/**/*.{ts,tsx}\"  && yarn lint-examples &&  prettier \"src/**/*.{ts,tsx}\" --check",
