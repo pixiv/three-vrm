@@ -34,7 +34,7 @@
     "build-js": "node ../../bin/build.mjs",
     "build-dev": "cross-env NODE_ENV=development yarn build-js",
     "build-prod": "cross-env NODE_ENV=production yarn build-js",
-    "build-types": "tsc --declaration --declarationDir ./types --emitDeclarationOnly",
+    "build-types": "tsc --project ./tsconfig.build-types.json",
     "docs": "typedoc --entryPoints ./src/index.ts --out docs",
     "test": "jest",
     "lint": "eslint \"src/**/*.{ts,tsx}\"  && yarn lint-examples &&  prettier \"src/**/*.{ts,tsx}\" --check",
