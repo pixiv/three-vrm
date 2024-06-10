@@ -65,4 +65,3 @@ jobs:
         path: |
           packages/*/lib/
           packages/*/types/
-          packages/*/ts*/
