@@ -14,16 +14,6 @@ Use [VRM](https://vrm.dev/) on [three.js](https://threejs.org/)
 
 [API Reference](https://pixiv.github.io/three-vrm/packages/three-vrm/docs)
 
-## v1
-
-**three-vrm v1 has been released!**
-
-three-vrm v1 supports [VRM1.0](https://vrm.dev/vrm1/), which is a new version of VRM format (the previous version of VRM is also supported, don't worry!).
-It also adopts the GLTFLoader plugin system which is a relatively new feature of GLTFLoader.
-
-There are a lot of breaking changes!
-See [the migration guide](https://github.com/pixiv/three-vrm/blob/dev/docs/migration-guide-1.0.md) for more info.
-
 ## How to Use
 
 ### from HTML
@@ -136,6 +126,32 @@ loader.load(
   // called when loading has errors
   (error) => console.error(error),
 );
+```
+
+### Use with WebGPURenderer
+
+Starting from v3, we provide a WebGPURenderer compatibility.
+For now, in order to use with WebGPURenderer, you need to specify a WebGPU compatible MToon loader plugin to the option `mtoonMaterialPlugin` of `VRMLoaderPlugin`.
+
+```js
+import { VRMLoaderPlugin, MToonNodeMaterialLoaderPlugin } from '@pixiv/three-vrm';
+
+// ...
+
+// Register a VRMLoaderPlugin
+loader.register((parser) => {
+
+  // create a WebGPU compatible MToon loader plugin
+  const mtoonMaterialPlugin = new MToonNodeMaterialLoaderPlugin(parser);
+
+  return new VRMLoaderPlugin(parser, {
+
+    // Specify the MToon loader plugin to use in the VRMLoaderPlugin instance
+    mtoonMaterialPlugin,
+
+  });
+
+});
 ```
 
 ## Contributing

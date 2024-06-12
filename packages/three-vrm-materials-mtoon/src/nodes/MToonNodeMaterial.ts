@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import * as Nodes from 'three/addons/nodes/Nodes.js';
 
+import type { MToonMaterial } from '../MToonMaterial';
 import { MToonLightingModel } from './MToonLightingModel';
 import {
   rimLightingMix,
@@ -43,6 +44,14 @@ import { mtoonParametricRim } from './mtoonParametricRim';
 // import phongLightingModel from 'three/addons/nodes/functions/PhongLightingModel.js';
 // import { float } from '../shadernode/ShaderNode.js';
 
+/**
+ * MToon is a material specification that has various features.
+ * The spec and implementation are originally founded for Unity engine and this is a port of the material.
+ *
+ * This material is a NodeMaterial variant of {@link MToonMaterial}.
+ *
+ * See: https://github.com/Santarh/MToon
+ */
 export class MToonNodeMaterial extends Nodes.NodeMaterial {
   public emissiveNode: Nodes.ShaderNodeObject<Nodes.Node> | null;
 

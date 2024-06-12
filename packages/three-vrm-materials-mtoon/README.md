@@ -7,3 +7,30 @@ MToon (toon material) module for @pixiv/three-vrm
 [Examples](https://pixiv.github.io/three-vrm/packages/three-vrm-materials-mtoon/examples)
 
 [Documentation](https://pixiv.github.io/three-vrm/packages/three-vrm-materials-mtoon/docs)
+
+## WebGPU Support
+
+This module supports [WebGPURenderer](https://github.com/mrdoob/three.js/blob/master/examples/jsm/renderers/webgpu/WebGPURenderer.js).
+
+To use with `VRMLoaderPlugin`, you need to specify a `MToonNodeMaterialLoaderPlugin` to the option `mtoonMaterialPlugin` of `VRMLoaderPlugin`.
+
+```js
+import { VRMLoaderPlugin, MToonNodeMaterialLoaderPlugin } from '@pixiv/three-vrm';
+
+// ...
+
+// Register a VRMLoaderPlugin
+loader.register((parser) => {
+
+  // create a WebGPU compatible MToon loader plugin
+  const mtoonMaterialPlugin = new MToonNodeMaterialLoaderPlugin(parser);
+
+  return new VRMLoaderPlugin(parser, {
+
+    // Specify the MToon loader plugin to use in the VRMLoaderPlugin instance
+    mtoonMaterialPlugin,
+
+  });
+
+});
+```
