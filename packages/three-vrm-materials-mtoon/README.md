@@ -12,7 +12,7 @@ MToon (toon material) module for @pixiv/three-vrm
 
 This module supports [WebGPURenderer](https://github.com/mrdoob/three.js/blob/master/examples/jsm/renderers/webgpu/WebGPURenderer.js).
 
-To use with `VRMLoaderPlugin`, you need to specify a `MToonNodeMaterialLoaderPlugin` to the option `mtoonMaterialPlugin` of `VRMLoaderPlugin`.
+To use MToon with `VRMLoaderPlugin` in WebGPURenderer, specify the WebGPU-compatible `MToonNodeMaterialLoaderPlugin` for the `mtoonMaterialPlugin` option of `VRMLoaderPlugin`.
 
 ```js
 import { VRMLoaderPlugin, MToonNodeMaterialLoaderPlugin } from '@pixiv/three-vrm';

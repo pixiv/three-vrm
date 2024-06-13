@@ -130,8 +130,8 @@ loader.load(
 
 ### Use with WebGPURenderer
 
-Starting from v3, we provide a WebGPURenderer compatibility.
-For now, in order to use with WebGPURenderer, you need to specify a WebGPU compatible MToon loader plugin to the option `mtoonMaterialPlugin` of `VRMLoaderPlugin`.
+Starting from v3, we provide [WebGPURenderer](https://github.com/mrdoob/three.js/blob/master/examples/jsm/renderers/webgpu/WebGPURenderer.js) compatibility.
+To use three-vrm with WebGPURenderer, specify the WebGPU-compatible `MToonNodeMaterialLoaderPlugin` for the `mtoonMaterialPlugin` option of `VRMLoaderPlugin`.
 
 ```js
 import { VRMLoaderPlugin, MToonNodeMaterialLoaderPlugin } from '@pixiv/three-vrm';
