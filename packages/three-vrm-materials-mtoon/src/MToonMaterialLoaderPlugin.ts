@@ -8,7 +8,7 @@ import { MToonMaterialLoaderPluginOptions } from './MToonMaterialLoaderPluginOpt
 import type { MToonMaterialDebugMode } from './MToonMaterialDebugMode';
 import { GLTF as GLTFSchema } from '@gltf-transform/core';
 import { MToonMaterial } from './MToonMaterial';
-import { MToonNodeMaterialLoaderPlugin } from './nodes/MToonNodeMaterialLoaderPlugin';
+import type { MToonNodeMaterialLoaderPlugin } from './nodes/MToonNodeMaterialLoaderPlugin';
 
 /**
  * Possible spec versions it recognizes.
