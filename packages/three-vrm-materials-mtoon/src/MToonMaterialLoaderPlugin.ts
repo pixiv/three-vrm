@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import * as V1MToonSchema from '@pixiv/types-vrmc-materials-mtoon-1.0';
-import type { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import type { GLTF, GLTFLoader, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import type { MToonMaterialParameters } from './MToonMaterialParameters';
 import { MToonMaterialOutlineWidthMode } from './MToonMaterialOutlineWidthMode';
 import { GLTFMToonMaterialParamsAssignHelper } from './GLTFMToonMaterialParamsAssignHelper';
@@ -8,12 +8,19 @@ import { MToonMaterialLoaderPluginOptions } from './MToonMaterialLoaderPluginOpt
 import type { MToonMaterialDebugMode } from './MToonMaterialDebugMode';
 import { GLTF as GLTFSchema } from '@gltf-transform/core';
 import { MToonMaterial } from './MToonMaterial';
+import type { MToonNodeMaterialLoaderPlugin } from './nodes/MToonNodeMaterialLoaderPlugin';
 
 /**
  * Possible spec versions it recognizes.
  */
 const POSSIBLE_SPEC_VERSIONS = new Set(['1.0', '1.0-beta']);
 
+/**
+ * A loader plugin of {@link GLTFLoader} for the extension `VRMC_materials_mtoon`.
+ *
+ * This plugin is for uses with WebGLRenderer.
+ * To use MToon in WebGPURenderer, use {@link MToonNodeMaterialLoaderPlugin} instead.
+ */
 export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
   public static EXTENSION_NAME = 'VRMC_materials_mtoon';
 

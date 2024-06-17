@@ -2,8 +2,8 @@ import type { MToonMaterialDebugMode } from './MToonMaterialDebugMode';
 
 export interface MToonMaterialLoaderPluginOptions {
   /**
-   * This value will be added to every meshes who have MaterialsMToon.
-   * The final renderOrder will be sum of this `renderOrderOffset` and `renderQueueOffsetNumber` for each materials.
+   * This value will be added to `renderOrder` of every meshes who have MToonMaterial.
+   * The final `renderOrder` will be sum of this `renderOrderOffset` and `renderQueueOffsetNumber` for each materials.
    * `0` by default.
    */
   renderOrderOffset?: number;
