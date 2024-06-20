@@ -219,6 +219,16 @@ export class MToonNodeMaterial extends Nodes.NodeMaterial {
     // the ordinary diffuseColor setup
     super.setupDiffuseColor(builder);
 
+    // COMPAT: pre-r166
+    // Set alpha to 1 if it is opaque
+    // Addressed in Three.js r166 but we leave it here for compatibility
+    // See: https://github.com/mrdoob/three.js/pull/28646
+    if (parseInt(THREE.REVISION, 10) < 166) {
+      if (this.transparent === false && this.blending === THREE.NormalBlending && this.alphaToCoverage === false) {
+        Nodes.diffuseColor.a.assign(1.0);
+      }
+    }
+
     // revert the colorNode
     if (this.colorNode === tempColorNode) {
       this.colorNode = null;
@@ -297,14 +307,6 @@ export class MToonNodeMaterial extends Nodes.NodeMaterial {
         Nodes.mix(refOutlineColorFactor, outputNode.xyz.mul(refOutlineColorFactor), refOutlineLightingMixFactor),
         outputNode.w,
       );
-    }
-
-    // Set alpha to 1 if it is opaque
-    // See: https://github.com/pixiv/three-vrm/pull/1384#discussion_r1609461685
-    const opaque =
-      this.transparent === false && this.blending === THREE.NormalBlending && this.alphaToCoverage === false;
-    if (opaque) {
-      outputNode.a.assign(1.0);
     }
 
     // the ordinary output setup
