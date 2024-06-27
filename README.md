@@ -92,7 +92,7 @@ Code like this:
 
 ```javascript
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { VRMLoaderPlugin } from '@pixiv/three-vrm';
 
 const scene = new THREE.Scene();
@@ -137,7 +137,8 @@ To use three-vrm with WebGPURenderer, specify the WebGPU-compatible `MToonNodeMa
 The NodeMaterial system of Three.js is still under development, so we may break compatibility with older versions of Three.js more frequently than other parts of three-vrm.
 
 ```js
-import { VRMLoaderPlugin, MToonNodeMaterialLoaderPlugin } from '@pixiv/three-vrm';
+import { VRMLoaderPlugin } from '@pixiv/three-vrm';
+import { MToonNodeMaterialLoaderPlugin } from '@pixiv/three-vrm/nodes';
 
 // ...
 

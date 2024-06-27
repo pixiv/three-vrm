@@ -1,5 +1,5 @@
 import type * as THREE from 'three';
-import type { GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
+import type { GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MToonMaterialLoaderPlugin } from '../MToonMaterialLoaderPlugin';
 import { MToonNodeMaterial } from './MToonNodeMaterial';
 import type { MToonNodeMaterialLoaderPluginOptions } from './MToonNodeMaterialLoaderPluginOptions';

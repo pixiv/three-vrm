@@ -17,7 +17,8 @@ To use three-vrm with WebGPURenderer, specify the WebGPU-compatible `MToonNodeMa
 The NodeMaterial system of Three.js is still under development, so we may break compatibility with older versions of Three.js more frequently than other parts of three-vrm.
 
 ```js
-import { VRMLoaderPlugin, MToonNodeMaterialLoaderPlugin } from '@pixiv/three-vrm';
+import { VRMLoaderPlugin } from '@pixiv/three-vrm';
+import { MToonNodeMaterialLoaderPlugin } from '@pixiv/three-vrm/nodes';
 
 // ...
 

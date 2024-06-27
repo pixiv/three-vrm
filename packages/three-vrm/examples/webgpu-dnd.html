@@ -25,7 +25,8 @@
 				"imports": {
 					"three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
 					"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/",
-					"@pixiv/three-vrm": "../lib/three-vrm.module.js"
+					"@pixiv/three-vrm": "../lib/three-vrm.module.js",
+					"@pixiv/three-vrm/nodes": "../lib/nodes/index.module.js"
 				}
 			}
 		</script>
@@ -35,7 +36,8 @@
 			import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 			import WebGPURenderer from 'three/addons/renderers/webgpu/WebGPURenderer.js';
-			import { VRMLoaderPlugin, MToonNodeMaterialLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
+			import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
+			import { MToonNodeMaterialLoaderPlugin } from '@pixiv/three-vrm/nodes';
 
 			// renderer
 			const renderer = new WebGPURenderer();
