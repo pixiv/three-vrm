@@ -2,13 +2,13 @@ import * as THREE from 'three';
 import * as V1MToonSchema from '@pixiv/types-vrmc-materials-mtoon-1.0';
 import type { GLTF, GLTFLoader, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import type { MToonMaterialParameters } from './MToonMaterialParameters';
-import { MToonMaterialOutlineWidthMode } from './MToonMaterialOutlineWidthMode';
+import type { MToonMaterialOutlineWidthMode } from './MToonMaterialOutlineWidthMode';
 import { GLTFMToonMaterialParamsAssignHelper } from './GLTFMToonMaterialParamsAssignHelper';
-import { MToonMaterialLoaderPluginOptions } from './MToonMaterialLoaderPluginOptions';
+import type { MToonMaterialLoaderPluginOptions } from './MToonMaterialLoaderPluginOptions';
 import type { MToonMaterialDebugMode } from './MToonMaterialDebugMode';
 import { GLTF as GLTFSchema } from '@gltf-transform/core';
 import { MToonMaterial } from './MToonMaterial';
-import type { MToonNodeMaterialLoaderPlugin } from './nodes/MToonNodeMaterialLoaderPlugin';
+import type { MToonNodeMaterial } from './nodes/MToonNodeMaterial';
 
 /**
  * Possible spec versions it recognizes.
@@ -18,16 +18,47 @@ const POSSIBLE_SPEC_VERSIONS = new Set(['1.0', '1.0-beta']);
 /**
  * A loader plugin of {@link GLTFLoader} for the extension `VRMC_materials_mtoon`.
  *
- * This plugin is for uses with WebGLRenderer.
- * To use MToon in WebGPURenderer, use {@link MToonNodeMaterialLoaderPlugin} instead.
+ * This plugin is for uses with WebGLRenderer by default.
+ * To use MToon in WebGPURenderer, set {@link materialType} to {@link MToonNodeMaterial}.
+ *
+ * @example to use with WebGPURenderer
+ * ```js
+ * import { MToonMaterialLoaderPlugin } from '@pixiv/three-vrm-materials-mtoon';
+ * import { MToonNodeMaterial } from '@pixiv/three-vrm-materials-mtoon/nodes';
+ *
+ * // ...
+ *
+ * // Register a MToonMaterialLoaderPlugin with MToonNodeMaterial
+ * loader.register((parser) => {
+ *
+ *   // create a WebGPU compatible MToonMaterialLoaderPlugin
+ *   return new MToonMaterialLoaderPlugin(parser, {
+ *
+ *     // set the material type to MToonNodeMaterial
+ *     materialType: MToonNodeMaterial,
+ *
+ *   });
+ *
+ * });
+ * ```
  */
 export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
   public static EXTENSION_NAME = 'VRMC_materials_mtoon';
 
   /**
+   * The type of the material that this plugin will generate.
+   *
+   * If you are using this plugin with WebGPU, set this to {@link MToonNodeMaterial}.
+   *
+   * @default MToonMaterial
+   */
+  public materialType: typeof THREE.Material;
+
+  /**
    * This value will be added to `renderOrder` of every meshes who have MaterialsMToon.
    * The final renderOrder will be sum of this `renderOrderOffset` and `renderQueueOffsetNumber` for each materials.
-   * `0` by default.
+   *
+   * @default 0
    */
   public renderOrderOffset: number;
 
@@ -35,7 +66,8 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
    * There is a line of the shader called "comment out if you want to PBR absolutely" in VRM0.0 MToon.
    * When this is true, the material enables the line to make it compatible with the legacy rendering of VRM.
    * Usually not recommended to turn this on.
-   * `false` by default.
+   *
+   * @default false
    */
   public v0CompatShade: boolean;
 
@@ -44,6 +76,8 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
    * You can visualize several components for diagnosis using debug mode.
    *
    * See: {@link MToonMaterialDebugMode}
+   *
+   * @default 'none'
    */
   public debugMode: MToonMaterialDebugMode;
 
@@ -62,6 +96,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
   public constructor(parser: GLTFParser, options: MToonMaterialLoaderPluginOptions = {}) {
     this.parser = parser;
 
+    this.materialType = options.materialType ?? MToonMaterial;
     this.renderOrderOffset = options.renderOrderOffset ?? 0;
     this.v0CompatShade = options.v0CompatShade ?? false;
     this.debugMode = options.debugMode ?? 'none';
@@ -80,7 +115,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
   public getMaterialType(materialIndex: number): typeof THREE.Material | null {
     const v1Extension = this._getMToonExtension(materialIndex);
     if (v1Extension) {
-      return MToonMaterial;
+      return this.materialType;
     }
 
     return null;
