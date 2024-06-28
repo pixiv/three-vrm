@@ -284,6 +284,22 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   /**
+   * Check whether the material should generate outline or not.
+   * @param surfaceMaterial The material to check
+   * @returns True if the material should generate outline
+   */
+  private _shouldGenerateOutline(surfaceMaterial: THREE.Material): boolean {
+    // we might receive MToonNodeMaterial as well as MToonMaterial
+    // so we're gonna duck type to check if it's compatible with MToon type outlines
+    return (
+      typeof (surfaceMaterial as any).outlineWidthMode === 'string' &&
+      (surfaceMaterial as any).outlineWidthMode !== 'none' &&
+      typeof (surfaceMaterial as any).outlineWidthFactor === 'number' &&
+      (surfaceMaterial as any).outlineWidthFactor > 0.0
+    );
+  }
+
+  /**
    * Generate outline for the given mesh, if it needs.
    *
    * @param mesh The target mesh
@@ -300,15 +316,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
       return;
     }
 
-    // check whether we really have to prepare outline or not
-    // we might receive MToonNodeMaterial as well as MToonMaterial
-    // so we're gonna duck type to check if it's compatible with MToon type outlines
-    if (
-      typeof (surfaceMaterial as any).outlineWidthMode !== 'string' ||
-      (surfaceMaterial as any).outlineWidthMode === 'none' ||
-      typeof (surfaceMaterial as any).outlineWidthFactor !== 'number' ||
-      (surfaceMaterial as any).outlineWidthFactor <= 0.0
-    ) {
+    if (!this._shouldGenerateOutline(surfaceMaterial)) {
       return;
     }
 
