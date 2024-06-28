@@ -131,6 +131,13 @@ export class MToonNodeMaterial extends Nodes.NodeMaterial {
     }
     delete parameters.transparentWithZWrite;
 
+    // `MToonMaterialLoaderPlugin` assigns these parameters to the material
+    // However, `MToonNodeMaterial` does not support these parameters
+    // so we delete them here to suppress warnings
+    delete (parameters as any).giEqualizationFactor;
+    delete (parameters as any).v0CompatShade;
+    delete (parameters as any).debugMode;
+
     this.emissiveNode = null;
 
     this.lights = true;
