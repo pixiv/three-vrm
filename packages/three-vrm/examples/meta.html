@@ -78,7 +78,10 @@
 
 			loader.register( ( parser ) => {
 
-				return new VRMLoaderPlugin( parser );
+				// enable thumbnail loading
+				const plugin = new VRMLoaderPlugin( parser );
+				plugin.metaPlugin.needThumbnailImage = true;
+				return plugin;
 
 			} );
 

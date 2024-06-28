@@ -79,7 +79,10 @@
 
 			loader.register( ( parser ) => {
 
-				return new VRMCoreLoaderPlugin( parser );
+				// enable thumbnail loading
+				const plugin = new VRMCoreLoaderPlugin( parser );
+				plugin.metaPlugin.needThumbnailImage = true;
+				return plugin;
 
 			} );
 
