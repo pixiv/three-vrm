@@ -112,6 +112,13 @@ export class MToonNodeMaterial extends Nodes.NodeMaterial {
     return cacheKey;
   }
 
+  /**
+   * Readonly boolean that indicates this is a {@link MToonNodeMaterial}.
+   */
+  public get isMToonNodeMaterial(): true {
+    return true;
+  }
+
   public constructor(parameters: MToonNodeMaterialParameters = {}) {
     super();
 
