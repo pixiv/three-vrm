@@ -78,24 +78,6 @@ async function buildPackage(absWorkingDir) {
   };
 
   /**
-   * Modify import handling.
-   * Currently this is used to avoid bundling MToonMaterialLoaderPlugin in three-vrm-materials-mtoon/src/nodes.
-   *
-   * @type {esbuild.Plugin}
-   */
-  const importPathPlugin = {
-    name: 'import-path',
-    setup(build) {
-      if (packageJson.name !== '@pixiv/three-vrm-materials-mtoon') return;
-      build.onResolve({ filter: /^\.\.\/MToonMaterialLoaderPlugin$/ }, (args) => {
-        if (args.importer.includes('three-vrm-materials-mtoon/src/nodes')) {
-          return { path: '@pixiv/three-vrm-materials-mtoon', external: true };
-        }
-      });
-    },
-  };
-
-  /**
    * @type {import('esbuild').BuildOptions}
    */
   const buildOptions = {
@@ -112,7 +94,6 @@ async function buildPackage(absWorkingDir) {
     color: true,
     minify: !DEV,
     external: ['three'],
-    plugins: [importPathPlugin],
   };
 
   // == serve ========================================================================================
