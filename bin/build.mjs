@@ -64,7 +64,8 @@ async function buildPackage(absWorkingDir) {
     };
     let outFilename = addSuffix(filename);
 
-    const extraEntryPoints = ['@pixiv/three-vrm', '@pixiv/three-vrm-materials-mtoon'].includes(packageJson.name)
+    const needsNodesBuild = ['@pixiv/three-vrm', '@pixiv/three-vrm-materials-mtoon'].includes(packageJson.name);
+    const extraEntryPoints = needsNodesBuild
       ? { [addSuffix('nodes/index')]: 'src/nodes/index.ts' }
       : {};
 
