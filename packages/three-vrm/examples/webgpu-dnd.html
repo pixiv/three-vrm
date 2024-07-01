@@ -36,8 +36,8 @@
 			import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 			import WebGPURenderer from 'three/addons/renderers/webgpu/WebGPURenderer.js';
-			import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
-			import { MToonNodeMaterialLoaderPlugin } from '@pixiv/three-vrm/nodes';
+			import { VRMLoaderPlugin, MToonMaterialLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
+			import { MToonNodeMaterial } from '@pixiv/three-vrm/nodes';
 
 			// renderer
 			const renderer = new WebGPURenderer();
@@ -70,7 +70,13 @@
 
 			loader.register( ( parser ) => {
 
-				const mtoonMaterialPlugin = new MToonNodeMaterialLoaderPlugin( parser );
+				// create a WebGPU compatible MToonMaterialLoaderPlugin
+				const mtoonMaterialPlugin = new MToonMaterialLoaderPlugin( parser, {
+
+					// set the material type to MToonNodeMaterial
+					materialType: MToonNodeMaterial,
+
+				} );
 
 				return new VRMLoaderPlugin( parser, {
 

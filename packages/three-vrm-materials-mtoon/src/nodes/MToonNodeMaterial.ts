@@ -112,6 +112,13 @@ export class MToonNodeMaterial extends Nodes.NodeMaterial {
     return cacheKey;
   }
 
+  /**
+   * Readonly boolean that indicates this is a {@link MToonNodeMaterial}.
+   */
+  public get isMToonNodeMaterial(): true {
+    return true;
+  }
+
   public constructor(parameters: MToonNodeMaterialParameters = {}) {
     super();
 
@@ -123,6 +130,13 @@ export class MToonNodeMaterial extends Nodes.NodeMaterial {
       parameters.depthWrite = true;
     }
     delete parameters.transparentWithZWrite;
+
+    // `MToonMaterialLoaderPlugin` assigns these parameters to the material
+    // However, `MToonNodeMaterial` does not support these parameters
+    // so we delete them here to suppress warnings
+    delete (parameters as any).giEqualizationFactor;
+    delete (parameters as any).v0CompatShade;
+    delete (parameters as any).debugMode;
 
     this.emissiveNode = null;
 
