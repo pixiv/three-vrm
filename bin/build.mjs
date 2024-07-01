@@ -56,7 +56,9 @@ async function buildPackage(absWorkingDir) {
    */
   const entryPoints = (format) => {
     /**
-     * @param {string} base
+     * Add suffix according to the format to the given basename of the output file.
+     * @param {string} base Basename of the output file
+     * @returns {string} `<base>[.module][.min]`
      */
     const addSuffix = (base) => {
       let outFilename = base + (format === 'esm' ? '.module' : '');
