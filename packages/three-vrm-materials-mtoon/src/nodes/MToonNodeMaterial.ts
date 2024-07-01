@@ -122,10 +122,6 @@ export class MToonNodeMaterial extends Nodes.NodeMaterial {
   public constructor(parameters: MToonNodeMaterialParameters = {}) {
     super();
 
-    if (parseInt(THREE.REVISION, 10) < 161) {
-      console.warn('MToonNodeMaterial requires Three.js r161 or higher. This would not work correctly.');
-    }
-
     if (parameters.transparentWithZWrite) {
       parameters.depthWrite = true;
     }
