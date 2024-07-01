@@ -55,11 +55,25 @@ async function buildPackage(absWorkingDir) {
    * @param {'esm' | 'cjs'} format
    */
   const entryPoints = (format) => {
-    let outFilename = filename + (format === 'esm' ? '.module' : '');
-    outFilename += DEV ? '' : '.min';
+    /**
+     * Add suffix according to the format to the given basename of the output file.
+     * @param {string} base Basename of the output file
+     * @returns {string} `<base>[.module][.min]`
+     */
+    const addSuffix = (base) => {
+      let outFilename = base + (format === 'esm' ? '.module' : '');
+      return outFilename + (DEV ? '' : '.min');
+    };
+
+    const needsNodesBuild = ['@pixiv/three-vrm', '@pixiv/three-vrm-materials-mtoon'].includes(packageJson.name);
+    const extraEntryPoints = needsNodesBuild
+      ? { [addSuffix('nodes/index')]: 'src/nodes/index.ts' }
+      : {};
+
     return {
       entryPoints: {
-        [outFilename]: 'src/index.ts',
+        [addSuffix(filename)]: 'src/index.ts',
+        ...extraEntryPoints,
       },
       format,
     };

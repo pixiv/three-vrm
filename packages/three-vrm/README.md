@@ -92,7 +92,7 @@ Code like this:
 
 ```javascript
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { VRMLoaderPlugin } from '@pixiv/three-vrm';
 
 const scene = new THREE.Scene();
@@ -131,25 +131,31 @@ loader.load(
 ### Use with WebGPURenderer
 
 Starting from v3, we provide [WebGPURenderer](https://github.com/mrdoob/three.js/blob/master/examples/jsm/renderers/webgpu/WebGPURenderer.js) compatibility.
-To use three-vrm with WebGPURenderer, specify the WebGPU-compatible `MToonNodeMaterialLoaderPlugin` for the `mtoonMaterialPlugin` option of `VRMLoaderPlugin`.
+To use three-vrm with WebGPURenderer, specify the WebGPU-compatible `MToonNodeMaterial` for the `materialType` option of `MToonMaterialLoaderPlugin`.
 
 `MToonNodeMaterial` only supports Three.js r161 or later.
 The NodeMaterial system of Three.js is still under development, so we may break compatibility with older versions of Three.js more frequently than other parts of three-vrm.
 
 ```js
-import { VRMLoaderPlugin, MToonNodeMaterialLoaderPlugin } from '@pixiv/three-vrm';
+import { VRMLoaderPlugin } from '@pixiv/three-vrm';
+import { MToonNodeMaterial } from '@pixiv/three-vrm/nodes';
 
 // ...
 
 // Register a VRMLoaderPlugin
 loader.register((parser) => {
 
-  // create a WebGPU compatible MToon loader plugin
-  const mtoonMaterialPlugin = new MToonNodeMaterialLoaderPlugin(parser);
+  // create a WebGPU compatible MToonMaterialLoaderPlugin
+  const mtoonMaterialPlugin = new MToonMaterialLoaderPlugin(parser, {
+
+    // set the material type to MToonNodeMaterial
+    materialType: MToonNodeMaterial,
+
+  });
 
   return new VRMLoaderPlugin(parser, {
 
-    // Specify the MToon loader plugin to use in the VRMLoaderPlugin instance
+    // Specify the MToonMaterialLoaderPlugin to use in the VRMLoaderPlugin instance
     mtoonMaterialPlugin,
 
   });

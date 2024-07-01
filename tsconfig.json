@@ -3,7 +3,7 @@
     "target": "es6",
     "module": "es6",
     "lib": ["es2018", "dom"],
-    "moduleResolution": "node",
+    "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "strict": true,
     "baseUrl": ".",

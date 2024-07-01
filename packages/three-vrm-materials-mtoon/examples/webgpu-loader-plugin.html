@@ -23,9 +23,10 @@
 		<script type="importmap">
 			{
 				"imports": {
-					"three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
-					"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/",
-					"@pixiv/three-vrm-materials-mtoon": "../lib/three-vrm-materials-mtoon.module.js"
+					"three": "https://cdn.jsdelivr.net/npm/three@0.164.0/build/three.module.js",
+					"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.0/examples/jsm/",
+					"@pixiv/three-vrm-materials-mtoon": "../lib/three-vrm-materials-mtoon.module.js",
+					"@pixiv/three-vrm-materials-mtoon/nodes": "../lib/nodes/index.module.js"
 				}
 			}
 		</script>
@@ -35,7 +36,8 @@
 			import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 			import WebGPURenderer from 'three/addons/renderers/webgpu/WebGPURenderer.js';
-			import { MToonNodeMaterialLoaderPlugin } from '@pixiv/three-vrm-materials-mtoon';
+			import { MToonMaterialLoaderPlugin } from '@pixiv/three-vrm-materials-mtoon';
+			import { MToonNodeMaterial } from '@pixiv/three-vrm-materials-mtoon/nodes';
 
 			// renderer
 			const renderer = new WebGPURenderer();
@@ -67,8 +69,14 @@
 
 			loader.register( ( parser ) => {
 
-				const plugin = new MToonNodeMaterialLoaderPlugin( parser );
-				return plugin;
+
+				// create a WebGPU compatible MToonMaterialLoaderPlugin
+				return new MToonMaterialLoaderPlugin( parser, {
+
+					// set the material type to MToonNodeMaterial
+					materialType: MToonNodeMaterial,
+
+				} );
 
 			} );
 

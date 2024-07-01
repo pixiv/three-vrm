@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { GLTF as GLTFSchema } from '@gltf-transform/core';
 import { VRMCVRMAnimation } from '@pixiv/types-vrmc-vrm-animation-1.0';
 import type { VRMHumanBoneName } from '@pixiv/three-vrm-core';

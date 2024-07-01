@@ -18,6 +18,11 @@
       "import": "./lib/three-vrm.module.js",
       "require": "./lib/three-vrm.cjs"
     },
+    "./nodes": {
+      "types": "./types/nodes/index.d.ts",
+      "import": "./lib/nodes/index.module.js",
+      "require": "./lib/nodes/index.cjs"
+    },
     "./package.json": "./package.json"
   },
   "repository": {
