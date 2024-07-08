@@ -17,7 +17,7 @@
     "prepare": "husky install"
   },
   "devDependencies": {
-    "@gltf-transform/core": "^3.7.4",
+    "@gltf-transform/core": "^4.0.4",
     "@rollup/plugin-typescript": "^11.0.0",
     "@types/jest": "^26.0.15",
     "@typescript-eslint/eslint-plugin": "^4.6.1",
