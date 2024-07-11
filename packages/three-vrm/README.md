@@ -20,15 +20,13 @@ Use [VRM](https://vrm.dev/) on [three.js](https://threejs.org/)
 
 You will need:
 
-- [Three.js build](https://github.com/mrdoob/three.js/blob/master/build/three.js)
-- [GLTFLoader](https://github.com/mrdoob/three.js/blob/master/examples/js/loaders/GLTFLoader.js)
-- [A build of @pixiv/three-vrm](https://www.jsdelivr.com/package/npm/@pixiv/three-vrm?tab=files&path=lib)
+- Three.js build
+- GLTFLoader
+- A build of @pixiv/three-vrm
   - `.module` ones are ESM, otherwise it's UMD and injects its modules into global `THREE`
   - `.min` ones are minified (for production), otherwise it's not minified and it comes with source maps
 
-You can import all of them via CDN. See the example below.
-
-Code like this:
+You can import all the dependencies via CDN like [jsDelivr](https://www.jsdelivr.com/).
 
 ```html
 <script type="importmap">
@@ -36,7 +34,7 @@ Code like this:
     "imports": {
       "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
       "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/",
-      "@pixiv/three-vrm": "three-vrm.module.js"
+      "@pixiv/three-vrm": "https://cdn.jsdelivr.net/npm/@pixiv/three-vrm@2.1.2/lib/three-vrm.module.min.js"
     }
   }
 </script>
@@ -46,11 +44,12 @@ Code like this:
   import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
   import { VRMLoaderPlugin } from '@pixiv/three-vrm';
 
-  const scene = new THREE.Scene();
+  // ... Setup renderer, camera, scene ...
 
+  // Create a GLTFLoader - The loader for loading VRM models
   const loader = new GLTFLoader();
 
-  // Install GLTFLoader plugin
+  // Install a GLTFLoader plugin that enables VRM support
   loader.register((parser) => {
     return new VRMLoaderPlugin(parser);
   });
@@ -77,8 +76,14 @@ Code like this:
     // called when loading has errors
     (error) => console.error(error),
   );
+
+  // ... Perform the render loop ...
 </script>
 ```
+
+See the Three.js document if you are not familiar with Three.js yet: https://threejs.org/docs/#manual/en/introduction/Creating-a-scene
+
+See the example for the complete code: https://github.com/pixiv/three-vrm/blob/release/packages/three-vrm/examples/basic.html
 
 ### via npm
 
@@ -86,46 +91,6 @@ Install [`three`](https://www.npmjs.com/package/three) and [`@pixiv/three-vrm`](
 
 ```sh
 npm install three @pixiv/three-vrm
-```
-
-Code like this:
-
-```javascript
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { VRMLoaderPlugin } from '@pixiv/three-vrm';
-
-const scene = new THREE.Scene();
-
-const loader = new GLTFLoader();
-
-// Install GLTFLoader plugin
-loader.register((parser) => {
-  return new VRMLoaderPlugin(parser);
-});
-
-loader.load(
-  // URL of the VRM you want to load
-  '/models/VRM1_Constraint_Twist_Sample.vrm',
-
-  // called when the resource is loaded
-  (gltf) => {
-    // retrieve a VRM instance from gltf
-    const vrm = gltf.userData.vrm;
-
-    // add the loaded vrm to the scene
-    scene.add(vrm.scene);
-
-    // deal with vrm features
-    console.log(vrm);
-  },
-
-  // called while loading is progressing
-  (progress) => console.log('Loading model...', 100.0 * (progress.loaded / progress.total), '%'),
-
-  // called when loading has errors
-  (error) => console.error(error),
-);
 ```
 
 ### Use with WebGPURenderer
@@ -140,7 +105,10 @@ The NodeMaterial system of Three.js is still under development, so we may break 
 import { VRMLoaderPlugin } from '@pixiv/three-vrm';
 import { MToonNodeMaterial } from '@pixiv/three-vrm/nodes';
 
-// ...
+// ... Setup renderer, camera, scene ...
+
+// Create a GLTFLoader
+const loader = new GLTFLoader();
 
 // Register a VRMLoaderPlugin
 loader.register((parser) => {
@@ -161,7 +129,11 @@ loader.register((parser) => {
   });
 
 });
+
+// ... Load the VRM and perform the render loop ...
 ```
+
+See the example for the complete code: https://github.com/pixiv/three-vrm/blob/release/packages/three-vrm/examples/webgpu-dnd.html
 
 ## Contributing
 
