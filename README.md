@@ -40,55 +40,17 @@ You can import all of them via CDN. See the example below.
 
 Code like this:
 
-```html
-<script type="importmap">
-  {
-    "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
-      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/",
-      "@pixiv/three-vrm": "three-vrm.module.js"
-    }
-  }
-</script>
+Import
 
-<script type="module">
-  import * as THREE from 'three';
-  import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-  import { VRMLoaderPlugin } from '@pixiv/three-vrm';
+https://github.com/pixiv/three-vrm/blob/9e16c3855a5b441cca0f11480c4003de25d2943c/packages/three-vrm/examples/basic.html#L22-L36
 
-  const scene = new THREE.Scene();
+Load VRM
 
-  const loader = new GLTFLoader();
+https://github.com/pixiv/three-vrm/blob/9e16c3855a5b441cca0f11480c4003de25d2943c/packages/three-vrm/examples/basic.html#L62-L106
 
-  // Install GLTFLoader plugin
-  loader.register((parser) => {
-    return new VRMLoaderPlugin(parser);
-  });
+Start render loop
+https://github.com/pixiv/three-vrm/blob/9e16c3855a5b441cca0f11480c4003de25d2943c/packages/three-vrm/examples/basic.html#L119-L135
 
-  loader.load(
-    // URL of the VRM you want to load
-    '/models/VRM1_Constraint_Twist_Sample.vrm',
-
-    // called when the resource is loaded
-    (gltf) => {
-      // retrieve a VRM instance from gltf
-      const vrm = gltf.userData.vrm;
-
-      // add the loaded vrm to the scene
-      scene.add(vrm.scene);
-
-      // deal with vrm features
-      console.log(vrm);
-    },
-
-    // called while loading is progressing
-    (progress) => console.log('Loading model...', 100.0 * (progress.loaded / progress.total), '%'),
-
-    // called when loading has errors
-    (error) => console.error(error),
-  );
-</script>
-```
 
 ### via npm
 
