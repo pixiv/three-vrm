@@ -540,6 +540,13 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.uniforms.uvAnimationScrollYOffset.value += delta * this.uvAnimationScrollYSpeedFactor;
     this.uniforms.uvAnimationRotationPhase.value += delta * this.uvAnimationRotationSpeedFactor;
 
+    // COMPAT workaround: starting from r132, alphaTest becomes a uniform instead of preprocessor value
+    const threeRevision = parseInt(THREE.REVISION, 10);
+
+    if (threeRevision >= 132) {
+      this.uniforms.alphaTest.value = this.alphaTest;
+    }
+
     this.uniformsNeedUpdate = true;
   }
 
