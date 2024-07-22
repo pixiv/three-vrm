@@ -539,6 +539,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.uniforms.uvAnimationScrollXOffset.value += delta * this.uvAnimationScrollXSpeedFactor;
     this.uniforms.uvAnimationScrollYOffset.value += delta * this.uvAnimationScrollYSpeedFactor;
     this.uniforms.uvAnimationRotationPhase.value += delta * this.uvAnimationRotationSpeedFactor;
+    this.uniforms.alphaTest.value = this.alphaTest;
 
     this.uniformsNeedUpdate = true;
   }
