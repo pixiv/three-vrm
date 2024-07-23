@@ -23,8 +23,9 @@
 		<script type="importmap">
 			{
 				"imports": {
-					"three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
-					"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/",
+					"three": "../node_modules/three/build/three.webgpu.js",
+					"three/webgpu": "../node_modules/three/build/three.webgpu.js",
+					"three/addons/": "../node_modules/three/examples/jsm/",
 					"@pixiv/three-vrm-materials-mtoon": "../lib/three-vrm-materials-mtoon.module.js",
 					"@pixiv/three-vrm-materials-mtoon/nodes": "../lib/nodes/index.module.js"
 				}
@@ -32,13 +33,12 @@
 		</script>
 
 		<script type="module">
-			import * as THREE from 'three';
+			import * as THREE from 'three/webgpu';
 			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-			import WebGPURenderer from 'three/addons/renderers/webgpu/WebGPURenderer.js';
 			import { MToonNodeMaterial } from '@pixiv/three-vrm-materials-mtoon/nodes';
 
 			// renderer
-			const renderer = new WebGPURenderer();
+			const renderer = new THREE.WebGPURenderer();
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			renderer.setPixelRatio( window.devicePixelRatio );
 			document.body.appendChild( renderer.domElement );
