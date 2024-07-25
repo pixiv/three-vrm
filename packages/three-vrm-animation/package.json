@@ -1,6 +1,6 @@
 {
   "name": "@pixiv/three-vrm-animation",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "The implementation of VRM Animation",
   "license": "MIT",
   "author": "pixiv",
@@ -46,9 +46,9 @@
     ]
   },
   "dependencies": {
-    "@pixiv/three-vrm-core": "2.1.2",
-    "@pixiv/types-vrmc-vrm-1.0": "2.1.2",
-    "@pixiv/types-vrmc-vrm-animation-1.0": "2.1.2"
+    "@pixiv/three-vrm-core": "2.1.3",
+    "@pixiv/types-vrmc-vrm-1.0": "2.1.3",
+    "@pixiv/types-vrmc-vrm-animation-1.0": "2.1.3"
   },
   "devDependencies": {
     "@types/three": "^0.164.0",
