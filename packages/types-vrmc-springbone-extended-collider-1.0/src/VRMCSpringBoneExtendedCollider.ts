@@ -7,7 +7,7 @@ export interface VRMCSpringBoneExtendedCollider {
   /**
    * Specification version of VRMC_springBone_extended_collider.
    */
-  specVersion: '1.0' | '1.0-beta';
+  specVersion: '1.0-draft';
 
   /**
    * The shape of the collider.
