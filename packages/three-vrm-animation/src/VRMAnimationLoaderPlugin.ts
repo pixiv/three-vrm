@@ -224,7 +224,11 @@ export class VRMAnimationLoaderPlugin implements GLTFLoaderPlugin {
           parentWorldMatrix.decompose(_v3A, _quatB, _v3A);
 
           const trackValues = arrayChunk(origTrack.values, 4).flatMap((q) =>
-            _quatC.fromArray(q).premultiply(_quatB).multiply(_quatA).toArray(),
+            _quatC
+              .fromArray(q as THREE.QuaternionTuple)
+              .premultiply(_quatB)
+              .multiply(_quatA)
+              .toArray(),
           );
 
           const track = origTrack.clone();
