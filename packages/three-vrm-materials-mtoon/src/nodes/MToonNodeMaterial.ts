@@ -255,7 +255,7 @@ export class MToonNodeMaterial extends THREE.NodeMaterial {
   public setupNormal(builder: THREE.NodeBuilder): void {
     // we must apply uv scroll to the normalMap
     // this.normalNode will be used in super.setupNormal() so we temporarily replace it
-    const tempNormalNode: THREE.ShaderNodeObject<THREE.Node> | null = this.normalNode;
+    const tempNormalNode = this.normalNode;
 
     if (this.normalNode == null) {
       this.normalNode = THREE.materialNormal;
@@ -266,7 +266,8 @@ export class MToonNodeMaterial extends THREE.NodeMaterial {
       }
 
       if (this.isOutline) {
-        this.normalNode = this.normalNode.negate();
+        // See about the type assertion: https://github.com/three-types/three-ts-types/pull/1123
+        this.normalNode = (this.normalNode as THREE.ShaderNodeObject<THREE.Node>).negate();
       }
     }
 
@@ -323,7 +324,7 @@ export class MToonNodeMaterial extends THREE.NodeMaterial {
   public setupPosition(builder: THREE.NodeBuilder): THREE.ShaderNodeObject<THREE.Node> {
     // we must apply outline position offset
     // this.positionNode will be used in super.setupPosition() so we temporarily replace it
-    const tempPositionNode: THREE.ShaderNodeObject<THREE.Node> | null = this.positionNode;
+    const tempPositionNode = this.positionNode;
 
     if (this.isOutline && this.outlineWidthMode !== MToonMaterialOutlineWidthMode.None) {
       this.positionNode ??= THREE.positionLocal;
@@ -341,11 +342,15 @@ export class MToonNodeMaterial extends THREE.NodeMaterial {
       const outlineOffset = width.mul(worldNormalLength).mul(normalLocal);
 
       if (this.outlineWidthMode === MToonMaterialOutlineWidthMode.WorldCoordinates) {
-        this.positionNode = this.positionNode.add(outlineOffset);
+        // See about the type assertion: https://github.com/three-types/three-ts-types/pull/1123
+        this.positionNode = (this.positionNode as THREE.ShaderNodeObject<THREE.Node>).add(outlineOffset);
       } else if (this.outlineWidthMode === MToonMaterialOutlineWidthMode.ScreenCoordinates) {
         const clipScale = THREE.cameraProjectionMatrix.element(1).element(1);
 
-        this.positionNode = this.positionNode.add(outlineOffset.div(clipScale).mul(THREE.positionView.z.negate()));
+        // See about the type assertion: https://github.com/three-types/three-ts-types/pull/1123
+        this.positionNode = (this.positionNode as THREE.ShaderNodeObject<THREE.Node>).add(
+          outlineOffset.div(clipScale).mul(THREE.positionView.z.negate()),
+        );
       }
 
       this.positionNode ??= THREE.positionLocal;
