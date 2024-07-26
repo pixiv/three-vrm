@@ -1,16 +1,15 @@
-import * as THREE from 'three';
-import * as Nodes from 'three/addons/nodes/Nodes.js';
+import * as THREE from 'three/webgpu';
 
 export interface MToonNodeMaterialParameters extends THREE.ShaderMaterialParameters {
   transparentWithZWrite?: boolean;
 
-  shadeColorNode?: Nodes.Swizzable | null;
-  shadingShiftNode?: Nodes.Node | null;
-  shadingToonyNode?: Nodes.Node | null;
-  rimLightingMixNode?: Nodes.Node | null;
-  rimMultiplyNode?: Nodes.Node | null;
-  matcapNode?: Nodes.Node | null;
-  parametricRimColorNode?: Nodes.Swizzable | null;
-  parametricRimLiftNode?: Nodes.Node | null;
-  parametricRimFresnelPowerNode?: Nodes.Node | null;
+  shadeColorNode?: THREE.Swizzable | null;
+  shadingShiftNode?: THREE.Node | null;
+  shadingToonyNode?: THREE.Node | null;
+  rimLightingMixNode?: THREE.Node | null;
+  rimMultiplyNode?: THREE.Node | null;
+  matcapNode?: THREE.Node | null;
+  parametricRimColorNode?: THREE.Swizzable | null;
+  parametricRimLiftNode?: THREE.Node | null;
+  parametricRimFresnelPowerNode?: THREE.Node | null;
 }

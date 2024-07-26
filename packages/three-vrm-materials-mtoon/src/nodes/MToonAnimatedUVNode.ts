@@ -1,4 +1,4 @@
-import * as Nodes from 'three/addons/nodes/Nodes.js';
+import * as THREE from 'three/webgpu';
 import {
   refUVAnimationMaskTexture,
   refUVAnimationRotationPhase,
@@ -6,7 +6,7 @@ import {
   refUVAnimationScrollYOffset,
 } from './materialReferences';
 
-export class MToonAnimatedUVNode extends Nodes.TempNode {
+export class MToonAnimatedUVNode extends THREE.TempNode {
   public readonly hasMaskTexture: boolean;
 
   public constructor(hasMaskTexture: boolean) {
@@ -15,30 +15,30 @@ export class MToonAnimatedUVNode extends Nodes.TempNode {
     this.hasMaskTexture = hasMaskTexture;
   }
 
-  public setup(): Nodes.ShaderNodeObject<Nodes.VarNode> {
-    let uvAnimationMask: Nodes.NodeRepresentation = 1.0;
+  public setup(): THREE.ShaderNodeObject<THREE.VarNode> {
+    let uvAnimationMask: THREE.NodeRepresentation = 1.0;
 
     if (this.hasMaskTexture) {
-      uvAnimationMask = Nodes.vec4(refUVAnimationMaskTexture).context({ getUV: () => Nodes.uv() }).r;
+      uvAnimationMask = THREE.vec4(refUVAnimationMaskTexture).context({ getUV: () => THREE.uv() }).r;
     }
 
-    let uv: Nodes.ShaderNodeObject<Nodes.Swizzable> = Nodes.uv();
+    let uv: THREE.ShaderNodeObject<THREE.Swizzable> = THREE.uv();
 
     // rotate
     const phase = refUVAnimationRotationPhase.mul(uvAnimationMask);
 
-    // WORKAROUND: Nodes.rotateUV causes an issue with the mask texture
+    // WORKAROUND: THREE.rotateUV causes an issue with the mask texture
     // We are going to spin using a 100% organic handmade rotation matrix
-    // uv = Nodes.rotateUV(uv, phase, Nodes.vec2(0.5, 0.5));
+    // uv = THREE.rotateUV(uv, phase, THREE.vec2(0.5, 0.5));
 
-    const c = Nodes.cos(phase);
-    const s = Nodes.sin(phase);
-    uv = uv.sub(Nodes.vec2(0.5, 0.5));
-    uv = uv.mul(Nodes.mat2(c, s, s.negate(), c));
-    uv = uv.add(Nodes.vec2(0.5, 0.5));
+    const c = THREE.cos(phase);
+    const s = THREE.sin(phase);
+    uv = uv.sub(THREE.vec2(0.5, 0.5));
+    uv = uv.mul(THREE.mat2(c, s, s.negate(), c));
+    uv = uv.add(THREE.vec2(0.5, 0.5));
 
     // scroll
-    const scroll = Nodes.vec2(refUVAnimationScrollXOffset, refUVAnimationScrollYOffset).mul(uvAnimationMask);
+    const scroll = THREE.vec2(refUVAnimationScrollXOffset, refUVAnimationScrollYOffset).mul(uvAnimationMask);
     uv = uv.add(scroll);
 
     return uv.temp('AnimatedUV');

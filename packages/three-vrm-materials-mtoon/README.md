@@ -13,7 +13,7 @@ MToon (toon material) module for @pixiv/three-vrm
 Starting from v3, we provide [WebGPURenderer](https://github.com/mrdoob/three.js/blob/master/examples/jsm/renderers/webgpu/WebGPURenderer.js) compatibility.
 To use MToon with WebGPURenderer, specify the WebGPU-compatible `MToonNodeMaterial` for the `materialType` option of `MToonMaterialLoaderPlugin`.
 
-`MToonNodeMaterial` only supports Three.js r161 or later.
+`MToonNodeMaterial` only supports Three.js r167 or later.
 The NodeMaterial system of Three.js is still under development, so we may break compatibility with older versions of Three.js more frequently than other parts of three-vrm.
 
 ```js
