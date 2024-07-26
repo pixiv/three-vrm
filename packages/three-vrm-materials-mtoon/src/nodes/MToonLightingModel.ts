@@ -99,6 +99,11 @@ export class MToonLightingModel extends THREE.LightingModel {
     );
   }
 
+  indirect(context: THREE.LightingModelIndirectInput) {
+    this.indirectDiffuse(context);
+    this.indirectSpecular(context);
+  }
+
   indirectDiffuse({ irradiance, reflectedLight }: THREE.LightingModelIndirectInput) {
     // indirect irradiance
     (reflectedLight.indirectDiffuse as THREE.ShaderNodeObject<THREE.Node>).assign(
