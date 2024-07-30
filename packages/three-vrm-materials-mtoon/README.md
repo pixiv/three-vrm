@@ -20,7 +20,10 @@ The NodeMaterial system of Three.js is still under development, so we may break 
 import { MToonMaterialLoaderPlugin } from '@pixiv/three-vrm-materials-mtoon';
 import { MToonNodeMaterial } from '@pixiv/three-vrm-materials-mtoon/nodes';
 
-// ...
+// ... Setup renderer, camera, scene ...
+
+// Create a GLTFLoader
+const loader = new GLTFLoader();
 
 // Register a MToonMaterialLoaderPlugin with MToonNodeMaterial
 loader.register((parser) => {
@@ -34,4 +37,8 @@ loader.register((parser) => {
   });
 
 });
+
+// ... Load the VRM and perform the render loop ...
 ```
+
+See the example for the complete code: https://github.com/pixiv/three-vrm/blob/release/packages/three-vrm-materials-mtoon/examples/webgpu-loader-plugin.html
