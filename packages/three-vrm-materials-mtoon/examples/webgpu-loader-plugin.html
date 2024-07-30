@@ -23,8 +23,9 @@
 		<script type="importmap">
 			{
 				"imports": {
-					"three": "https://cdn.jsdelivr.net/npm/three@0.164.0/build/three.module.js",
-					"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.0/examples/jsm/",
+					"three": "https://cdn.jsdelivr.net/npm/three@0.167.0/build/three.webgpu.js",
+					"three/webgpu": "https://cdn.jsdelivr.net/npm/three@0.167.0/build/three.webgpu.js",
+					"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.167.0/examples/jsm/",
 					"@pixiv/three-vrm-materials-mtoon": "../lib/three-vrm-materials-mtoon.module.js",
 					"@pixiv/three-vrm-materials-mtoon/nodes": "../lib/nodes/index.module.js"
 				}
@@ -32,15 +33,14 @@
 		</script>
 
 		<script type="module">
-			import * as THREE from 'three';
+			import * as THREE from 'three/webgpu';
 			import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-			import WebGPURenderer from 'three/addons/renderers/webgpu/WebGPURenderer.js';
 			import { MToonMaterialLoaderPlugin } from '@pixiv/three-vrm-materials-mtoon';
 			import { MToonNodeMaterial } from '@pixiv/three-vrm-materials-mtoon/nodes';
 
 			// renderer
-			const renderer = new WebGPURenderer();
+			const renderer = new THREE.WebGPURenderer();
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			renderer.setPixelRatio( window.devicePixelRatio );
 			document.body.appendChild( renderer.domElement );

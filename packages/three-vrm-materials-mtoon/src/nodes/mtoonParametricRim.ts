@@ -1,19 +1,19 @@
-import * as Nodes from 'three/addons/nodes/Nodes.js';
+import * as THREE from 'three/webgpu';
 
-export const mtoonParametricRim = Nodes.tslFn(
+export const mtoonParametricRim = THREE.tslFn(
   ({
     parametricRimLift,
     parametricRimFresnelPower,
     parametricRimColor,
   }: {
-    parametricRimLift: Nodes.NodeRepresentation;
-    parametricRimFresnelPower: Nodes.NodeRepresentation;
-    parametricRimColor: Nodes.NodeRepresentation;
+    parametricRimLift: THREE.NodeRepresentation;
+    parametricRimFresnelPower: THREE.NodeRepresentation;
+    parametricRimColor: THREE.NodeRepresentation;
   }) => {
-    const viewDir = Nodes.modelViewPosition.normalize();
-    const dotNV = Nodes.transformedNormalView.dot(viewDir.negate());
+    const viewDir = THREE.modelViewPosition.normalize();
+    const dotNV = THREE.transformedNormalView.dot(viewDir.negate());
 
-    const rim = Nodes.float(1.0).sub(dotNV).add(parametricRimLift).clamp().pow(parametricRimFresnelPower);
+    const rim = THREE.float(1.0).sub(dotNV).add(parametricRimLift).clamp().pow(parametricRimFresnelPower);
 
     return rim.mul(parametricRimColor);
   },

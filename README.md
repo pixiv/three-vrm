@@ -32,9 +32,9 @@ You can import all the dependencies via CDN like [jsDelivr](https://www.jsdelivr
 <script type="importmap">
   {
     "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
-      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/",
-      "@pixiv/three-vrm": "https://cdn.jsdelivr.net/npm/@pixiv/three-vrm@2.1.2/lib/three-vrm.module.min.js"
+      "three": "https://cdn.jsdelivr.net/npm/three@0.167.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.167.0/examples/jsm/",
+      "@pixiv/three-vrm": "https://cdn.jsdelivr.net/npm/@pixiv/three-vrm@3/lib/three-vrm.module.min.js"
     }
   }
 </script>
@@ -98,7 +98,7 @@ npm install three @pixiv/three-vrm
 Starting from v3, we provide [WebGPURenderer](https://github.com/mrdoob/three.js/blob/master/examples/jsm/renderers/webgpu/WebGPURenderer.js) compatibility.
 To use three-vrm with WebGPURenderer, specify the WebGPU-compatible `MToonNodeMaterial` for the `materialType` option of `MToonMaterialLoaderPlugin`.
 
-`MToonNodeMaterial` only supports Three.js r161 or later.
+`MToonNodeMaterial` only supports Three.js r167 or later.
 The NodeMaterial system of Three.js is still under development, so we may break compatibility with older versions of Three.js more frequently than other parts of three-vrm.
 
 ```js
