@@ -1,5 +1,5 @@
 export interface Vector3 {
-    x?: number;
-    y?: number;
-    z?: number;
+  x?: number;
+  y?: number;
+  z?: number;
 }

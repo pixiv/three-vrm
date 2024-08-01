@@ -1,1 +1,0 @@
-export { VRMCMaterialsHDREmissiveMultiplier } from './VRMCMaterialsHDREmissiveMultiplier';

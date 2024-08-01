@@ -1,1 +1,0 @@
-export { VRMHumanoidHelper } from './VRMHumanoidHelper';

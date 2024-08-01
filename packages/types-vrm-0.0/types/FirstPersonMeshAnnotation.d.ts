@@ -1,4 +1,4 @@
 export interface FirstPersonMeshAnnotation {
-    firstPersonFlag?: string;
-    mesh?: number;
+  firstPersonFlag?: string;
+  mesh?: number;
 }

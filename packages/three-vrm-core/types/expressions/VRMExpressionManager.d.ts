@@ -87,6 +87,10 @@ export declare class VRMExpressionManager {
      */
     setValue(name: VRMExpressionPresetName | string, weight: number): void;
     /**
+     * Reset weights of all expressions to `0.0`.
+     */
+    resetValues(): void;
+    /**
      * Get a track name of specified expression.
      * This track name is needed to manipulate its expression via keyframe animations.
      *

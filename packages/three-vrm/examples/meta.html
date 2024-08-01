@@ -34,8 +34,8 @@
 		<script type="importmap">
 			{
 				"imports": {
-					"three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
-					"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/",
+					"three": "https://cdn.jsdelivr.net/npm/three@0.167.0/build/three.module.js",
+					"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.167.0/examples/jsm/",
 					"@pixiv/three-vrm": "../lib/three-vrm.module.js"
 				}
 			}
@@ -78,7 +78,10 @@
 
 			loader.register( ( parser ) => {
 
-				return new VRMLoaderPlugin( parser );
+				// enable thumbnail loading
+				const plugin = new VRMLoaderPlugin( parser );
+				plugin.metaPlugin.needThumbnailImage = true;
+				return plugin;
 
 			} );
 

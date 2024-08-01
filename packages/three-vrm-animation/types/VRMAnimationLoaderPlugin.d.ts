@@ -1,4 +1,4 @@
-import { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader.js';
 /**
  * A plugin of GLTFLoader that imports {@link VRMAnimation}s from a `VRMC_vrm_animation` extension and gltf animations.
  */
