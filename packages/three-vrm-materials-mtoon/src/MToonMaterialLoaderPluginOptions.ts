@@ -1,10 +1,22 @@
+import type * as THREE from 'three';
 import type { MToonMaterialDebugMode } from './MToonMaterialDebugMode';
+import type { MToonNodeMaterial } from './nodes/MToonNodeMaterial';
 
 export interface MToonMaterialLoaderPluginOptions {
   /**
-   * This value will be added to every meshes who have MaterialsMToon.
-   * The final renderOrder will be sum of this `renderOrderOffset` and `renderQueueOffsetNumber` for each materials.
-   * `0` by default.
+   * The type of the material that the loader plugin will generate.
+   *
+   * If you are using this plugin with WebGPU, set this to {@link MToonNodeMaterial}.
+   *
+   * @default MToonMaterial
+   */
+  materialType?: typeof THREE.Material;
+
+  /**
+   * This value will be added to `renderOrder` of every meshes who have MToonMaterial.
+   * The final `renderOrder` will be sum of this `renderOrderOffset` and `renderQueueOffsetNumber` for each materials.
+   *
+   * @default 0
    */
   renderOrderOffset?: number;
 
@@ -12,7 +24,8 @@ export interface MToonMaterialLoaderPluginOptions {
    * There is a line of the shader called "comment out if you want to PBR absolutely" in VRM0.0 MToon.
    * When this is true, the material enables the line to make it compatible with the legacy rendering of VRM.
    * Usually not recommended to turn this on.
-   * `false` by default.
+   *
+   * @default false
    */
   v0CompatShade?: boolean;
 
@@ -21,6 +34,8 @@ export interface MToonMaterialLoaderPluginOptions {
    * You can visualize several components for diagnosis using debug mode.
    *
    * See: {@link MToonMaterialDebugMode}
+   *
+   * @default 'none'
    */
   debugMode?: MToonMaterialDebugMode;
 }

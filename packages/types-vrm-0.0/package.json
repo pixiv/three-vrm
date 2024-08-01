@@ -1,23 +1,15 @@
 {
   "name": "@pixiv/types-vrm-0.0",
-  "version": "2.1.3",
+  "version": "3.0.0-beta.2",
   "description": "Type definitions of VRM 0.0 schema",
   "license": "MIT",
   "author": "pixiv",
   "files": [
-    "/ts*/",
     "/types/",
     "LICENSE"
   ],
   "main": "",
   "types": "types/index.d.ts",
-  "typesVersions": {
-    "<3.9": {
-      "*": [
-        "ts3.4/*"
-      ]
-    }
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/pixiv/three-vrm.git",
@@ -26,14 +18,14 @@
   "scripts": {
     "version": "yarn all",
     "all": "yarn lint && yarn clean && yarn build && yarn docs",
-    "clean": "rimraf docs/ ts*/ types/",
-    "build": "tsc --declaration --declarationDir ./types --emitDeclarationOnly && downlevel-dts types ts3.4/types",
-    "docs": "typedoc --entryPoints ./src/index.ts --out docs",
-    "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier \"src/**/*.{ts,tsx}\" --check",
-    "lint-fix": "eslint \"src/**/*.{ts,tsx}\" --fix && prettier \"src/**/*.{ts,tsx}\" --write"
+    "clean": "rimraf docs/",
+    "build": "tsc --declaration --declarationDir ./types --emitDeclarationOnly",
+    "docs": "typedoc --entryPoints ./types/index.d.ts --out docs",
+    "lint": "eslint \"types/**/*.{ts,tsx}\" && prettier \"types/**/*.{ts,tsx}\" --check",
+    "lint-fix": "eslint \"types/**/*.{ts,tsx}\" --fix && prettier \"types/**/*.{ts,tsx}\" --write"
   },
   "lint-staged": {
-    "./src/**/*.{ts,tsx}": [
+    "./types/**/*.{ts,tsx}": [
       "eslint --fix",
       "prettier --write"
     ]
