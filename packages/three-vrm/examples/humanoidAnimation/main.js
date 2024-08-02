@@ -110,6 +110,7 @@ function loadFBX( animationUrl ) {
 
 	currentAnimationUrl = animationUrl;
 
+	currentVrm.humanoid.resetNormalizedPose();
 	// create AnimationMixer for VRM
 	currentMixer = new THREE.AnimationMixer( currentVrm.scene );
 
