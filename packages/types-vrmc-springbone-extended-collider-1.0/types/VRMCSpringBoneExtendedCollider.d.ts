@@ -1,4 +1,4 @@
-import type { SpringBoneExtendedColliderShape } from './SpringBoneExtendedColliderShape.js';
+import type { SpringBoneExtendedColliderShape } from './SpringBoneExtendedColliderShape';
 
 /**
  * An extended collider for VRMC_springBone.
