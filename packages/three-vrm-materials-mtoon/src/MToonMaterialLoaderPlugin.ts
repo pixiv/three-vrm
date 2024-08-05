@@ -1,26 +1,64 @@
 import * as THREE from 'three';
 import * as V1MToonSchema from '@pixiv/types-vrmc-materials-mtoon-1.0';
-import type { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { MToonMaterial } from './MToonMaterial';
+import type { GLTF, GLTFLoader, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import type { MToonMaterialParameters } from './MToonMaterialParameters';
-import { MToonMaterialOutlineWidthMode } from './MToonMaterialOutlineWidthMode';
+import type { MToonMaterialOutlineWidthMode } from './MToonMaterialOutlineWidthMode';
 import { GLTFMToonMaterialParamsAssignHelper } from './GLTFMToonMaterialParamsAssignHelper';
-import { MToonMaterialLoaderPluginOptions } from './MToonMaterialLoaderPluginOptions';
+import type { MToonMaterialLoaderPluginOptions } from './MToonMaterialLoaderPluginOptions';
 import type { MToonMaterialDebugMode } from './MToonMaterialDebugMode';
 import { GLTF as GLTFSchema } from '@gltf-transform/core';
+import { MToonMaterial } from './MToonMaterial';
+import type { MToonNodeMaterial } from './nodes/MToonNodeMaterial';
 
 /**
  * Possible spec versions it recognizes.
  */
 const POSSIBLE_SPEC_VERSIONS = new Set(['1.0', '1.0-beta']);
 
+/**
+ * A loader plugin of {@link GLTFLoader} for the extension `VRMC_materials_mtoon`.
+ *
+ * This plugin is for uses with WebGLRenderer by default.
+ * To use MToon in WebGPURenderer, set {@link materialType} to {@link MToonNodeMaterial}.
+ *
+ * @example to use with WebGPURenderer
+ * ```js
+ * import { MToonMaterialLoaderPlugin } from '@pixiv/three-vrm-materials-mtoon';
+ * import { MToonNodeMaterial } from '@pixiv/three-vrm-materials-mtoon/nodes';
+ *
+ * // ...
+ *
+ * // Register a MToonMaterialLoaderPlugin with MToonNodeMaterial
+ * loader.register((parser) => {
+ *
+ *   // create a WebGPU compatible MToonMaterialLoaderPlugin
+ *   return new MToonMaterialLoaderPlugin(parser, {
+ *
+ *     // set the material type to MToonNodeMaterial
+ *     materialType: MToonNodeMaterial,
+ *
+ *   });
+ *
+ * });
+ * ```
+ */
 export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
   public static EXTENSION_NAME = 'VRMC_materials_mtoon';
 
   /**
+   * The type of the material that this plugin will generate.
+   *
+   * If you are using this plugin with WebGPU, set this to {@link MToonNodeMaterial}.
+   *
+   * @default MToonMaterial
+   */
+  public materialType: typeof THREE.Material;
+
+  /**
    * This value will be added to `renderOrder` of every meshes who have MaterialsMToon.
    * The final renderOrder will be sum of this `renderOrderOffset` and `renderQueueOffsetNumber` for each materials.
-   * `0` by default.
+   *
+   * @default 0
    */
   public renderOrderOffset: number;
 
@@ -28,7 +66,8 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
    * There is a line of the shader called "comment out if you want to PBR absolutely" in VRM0.0 MToon.
    * When this is true, the material enables the line to make it compatible with the legacy rendering of VRM.
    * Usually not recommended to turn this on.
-   * `false` by default.
+   *
+   * @default false
    */
   public v0CompatShade: boolean;
 
@@ -37,6 +76,8 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
    * You can visualize several components for diagnosis using debug mode.
    *
    * See: {@link MToonMaterialDebugMode}
+   *
+   * @default 'none'
    */
   public debugMode: MToonMaterialDebugMode;
 
@@ -46,7 +87,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
    * Loaded materials will be stored in this set.
    * Will be transferred into `gltf.userData.vrmMToonMaterials` in {@link afterRoot}.
    */
-  private readonly _mToonMaterialSet: Set<MToonMaterial>;
+  private readonly _mToonMaterialSet: Set<THREE.Material>;
 
   public get name(): string {
     return MToonMaterialLoaderPlugin.EXTENSION_NAME;
@@ -55,6 +96,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
   public constructor(parser: GLTFParser, options: MToonMaterialLoaderPluginOptions = {}) {
     this.parser = parser;
 
+    this.materialType = options.materialType ?? MToonMaterial;
     this.renderOrderOffset = options.renderOrderOffset ?? 0;
     this.v0CompatShade = options.v0CompatShade ?? false;
     this.debugMode = options.debugMode ?? 'none';
@@ -73,7 +115,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
   public getMaterialType(materialIndex: number): typeof THREE.Material | null {
     const v1Extension = this._getMToonExtension(materialIndex);
     if (v1Extension) {
-      return MToonMaterial;
+      return this.materialType;
     }
 
     return null;
@@ -146,7 +188,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     });
   }
 
-  private _getMToonExtension(materialIndex: number): V1MToonSchema.VRMCMaterialsMToon | undefined {
+  protected _getMToonExtension(materialIndex: number): V1MToonSchema.VRMCMaterialsMToon | undefined {
     const parser = this.parser;
     const json = parser.json as GLTFSchema.IGLTF;
 
@@ -242,6 +284,22 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
   }
 
   /**
+   * Check whether the material should generate outline or not.
+   * @param surfaceMaterial The material to check
+   * @returns True if the material should generate outline
+   */
+  private _shouldGenerateOutline(surfaceMaterial: THREE.Material): boolean {
+    // we might receive MToonNodeMaterial as well as MToonMaterial
+    // so we're gonna duck type to check if it's compatible with MToon type outlines
+    return (
+      typeof (surfaceMaterial as any).outlineWidthMode === 'string' &&
+      (surfaceMaterial as any).outlineWidthMode !== 'none' &&
+      typeof (surfaceMaterial as any).outlineWidthFactor === 'number' &&
+      (surfaceMaterial as any).outlineWidthFactor > 0.0
+    );
+  }
+
+  /**
    * Generate outline for the given mesh, if it needs.
    *
    * @param mesh The target mesh
@@ -252,14 +310,13 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     // Then we are going to create two geometry groups and refer same buffer but different material.
     // It's how we draw two materials at once using a single mesh.
 
-    // make sure the material is mtoon
+    // make sure the material is single
     const surfaceMaterial = mesh.material;
-    if (!(surfaceMaterial instanceof MToonMaterial)) {
+    if (!(surfaceMaterial instanceof THREE.Material)) {
       return;
     }
 
-    // check whether we really have to prepare outline or not
-    if (surfaceMaterial.outlineWidthMode === 'none' || surfaceMaterial.outlineWidthFactor <= 0.0) {
+    if (!this._shouldGenerateOutline(surfaceMaterial)) {
       return;
     }
 
@@ -269,7 +326,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     // duplicate the material for outline use
     const outlineMaterial = surfaceMaterial.clone();
     outlineMaterial.name += ' (Outline)';
-    outlineMaterial.isOutline = true;
+    (outlineMaterial as any).isOutline = true;
     outlineMaterial.side = THREE.BackSide;
     mesh.material.push(outlineMaterial);
 
@@ -291,9 +348,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     }
 
     for (const material of materialSet) {
-      if (material instanceof MToonMaterial) {
-        this._mToonMaterialSet.add(material);
-      }
+      this._mToonMaterialSet.add(material);
     }
   }
 

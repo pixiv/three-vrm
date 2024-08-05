@@ -169,6 +169,15 @@ export class VRMExpressionManager {
   }
 
   /**
+   * Reset weights of all expressions to `0.0`.
+   */
+  public resetValues(): void {
+    this._expressions.forEach((expression) => {
+      expression.weight = 0.0;
+    });
+  }
+
+  /**
    * Get a track name of specified expression.
    * This track name is needed to manipulate its expression via keyframe animations.
    *

@@ -1,7 +1,7 @@
 /packages/*/docs/
 /packages/*/lib/
 /packages/*/node_modules/
-/packages/*/ts*/
 /packages/*/types/
+!/packages/types-*/types/
 
 jest.config.js

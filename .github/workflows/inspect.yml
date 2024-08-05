@@ -36,7 +36,6 @@ jobs:
         path: |
           packages/*/lib/
           packages/*/types/
-          packages/*/ts*/
 
   lint:
     runs-on: ubuntu-latest

@@ -9,6 +9,9 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/eslint-recommended"
   ],
+  "globals": {
+    "process": true
+  },
   "env": {
     "browser": true
   },
@@ -53,6 +56,10 @@
       {
         "selector": "enumMember",
         "format": ["PascalCase"]
+      },
+      {
+        "selector": "import",
+        "format": ["camelCase", "PascalCase", "UPPER_CASE"]
       }
     ],
     "@typescript-eslint/no-unused-vars": ["warn", { "args": "none" }], // we sometimes have to define unused arguments

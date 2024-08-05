@@ -388,19 +388,6 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     parameters.lights = true;
     parameters.clipping = true;
 
-    // COMPAT: pre-r129
-    // See: https://github.com/mrdoob/three.js/pull/21788
-    if (parseInt(THREE.REVISION, 10) < 129) {
-      (parameters as any).skinning = (parameters as any).skinning || false;
-    }
-
-    // COMPAT: pre-r131
-    // See: https://github.com/mrdoob/three.js/pull/22169
-    if (parseInt(THREE.REVISION, 10) < 131) {
-      (parameters as any).morphTargets = (parameters as any).morphTargets || false;
-      (parameters as any).morphNormals = (parameters as any).morphNormals || false;
-    }
-
     // == uniforms =================================================================================
     this.uniforms = THREE.UniformsUtils.merge([
       THREE.UniformsLib.common, // map
@@ -488,13 +475,6 @@ export class MToonMaterial extends THREE.ShaderMaterial {
           '#include <encodings_fragment>',
         );
       }
-
-      // COMPAT: pre-r132
-      // Three.js r132 introduces new shader chunks <normal_pars_fragment> and <alphatest_pars_fragment>
-      if (threeRevision < 132) {
-        shader.fragmentShader = shader.fragmentShader.replace('#include <normal_pars_fragment>', '');
-        shader.fragmentShader = shader.fragmentShader.replace('#include <alphatest_pars_fragment>', '');
-      }
     };
   }
 
@@ -559,6 +539,7 @@ export class MToonMaterial extends THREE.ShaderMaterial {
     this.uniforms.uvAnimationScrollXOffset.value += delta * this.uvAnimationScrollXSpeedFactor;
     this.uniforms.uvAnimationScrollYOffset.value += delta * this.uvAnimationScrollYSpeedFactor;
     this.uniforms.uvAnimationRotationPhase.value += delta * this.uvAnimationRotationSpeedFactor;
+    this.uniforms.alphaTest.value = this.alphaTest;
 
     this.uniformsNeedUpdate = true;
   }
@@ -586,13 +567,6 @@ export class MToonMaterial extends THREE.ShaderMaterial {
       this.uniforms.outlineWidthMultiplyTextureUvTransform,
     );
     this._updateTextureMatrix(this.uniforms.uvAnimationMaskTexture, this.uniforms.uvAnimationMaskTextureUvTransform);
-
-    // COMPAT workaround: starting from r132, alphaTest becomes a uniform instead of preprocessor value
-    const threeRevision = parseInt(THREE.REVISION, 10);
-
-    if (threeRevision >= 132) {
-      this.uniforms.alphaTest.value = this.alphaTest;
-    }
 
     this.uniformsNeedUpdate = true;
   }
