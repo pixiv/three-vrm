@@ -52,7 +52,8 @@
   },
   "dependencies": {
     "@pixiv/types-vrm-0.0": "3.0.0",
-    "@pixiv/types-vrmc-springbone-1.0": "3.0.0"
+    "@pixiv/types-vrmc-springbone-1.0": "3.0.0",
+    "@pixiv/types-vrmc-springbone-extended-collider-1.0": "3.0.0"
   },
   "devDependencies": {
     "@types/three": "^0.167.0",

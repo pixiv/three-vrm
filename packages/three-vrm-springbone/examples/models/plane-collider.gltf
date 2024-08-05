@@ -5,98 +5,170 @@
   },
   "buffers": [
     {
-      "uri": "cube_mesh.bin",
-      "byteLength": 912
+      "uri": "sphere_mesh.bin",
+      "byteLength": 2496
+    },
+    {
+      "uri": "plane_mesh.bin",
+      "byteLength": 140
     }
   ],
   "bufferViews": [
     {
-      "name": "Cube Position",
+      "name": "Sphere Position",
       "buffer": 0,
       "byteOffset": 0,
-      "byteLength": 288,
+      "byteLength": 756,
       "target": 34962
     },
     {
-      "name": "Cube Normal",
+      "name": "Sphere Normal",
       "buffer": 0,
-      "byteOffset": 288,
-      "byteLength": 288,
+      "byteOffset": 756,
+      "byteLength": 756,
       "target": 34962
     },
     {
-      "name": "Cube UV",
+      "name": "Sphere UV",
       "buffer": 0,
-      "byteOffset": 576,
-      "byteLength": 192,
+      "byteOffset": 1512,
+      "byteLength": 504,
       "target": 34962
     },
     {
-      "name": "Cube Indices",
+      "name": "Sphere Indices",
       "buffer": 0,
-      "byteOffset": 768,
-      "byteLength": 144,
+      "byteOffset": 2016,
+      "byteLength": 480,
+      "target": 34963
+    },
+    {
+      "name": "Plane Position",
+      "buffer": 1,
+      "byteOffset": 0,
+      "byteLength": 48,
+      "target": 34962
+    },
+    {
+      "name": "Plane Normal",
+      "buffer": 1,
+      "byteOffset": 48,
+      "byteLength": 48,
+      "target": 34962
+    },
+    {
+      "name": "Plane UV",
+      "buffer": 1,
+      "byteOffset": 96,
+      "byteLength": 32,
+      "target": 34962
+    },
+    {
+      "name": "Plane Indices",
+      "buffer": 1,
+      "byteOffset": 128,
+      "byteLength": 12,
       "target": 34963
     }
   ],
   "accessors": [
     {
-      "name": "Cube Position",
+      "name": "Sphere Position",
       "bufferView": 0,
-      "byteOffset": 0,
       "type": "VEC3",
       "componentType": 5126,
-      "count": 24,
+      "count": 63,
       "max": [
-        0.5,
-        0.5,
-        0.5
+        0.9510578513145447,
+        1,
+        0.9999999403953552
       ],
       "min": [
-        -0.5,
-        -0.5,
-        -0.5
-      ],
-      "normalized": false
+        -0.9510578513145447,
+        -1,
+        -0.9999999403953552
+      ]
     },
     {
-      "name": "Cube Normal",
+      "name": "Sphere Normal",
       "bufferView": 1,
-      "byteOffset": 0,
       "type": "VEC3",
       "componentType": 5126,
-      "count": 24,
-      "normalized": false
+      "count": 63
     },
     {
-      "name": "Cube UV",
+      "name": "Sphere UV",
       "bufferView": 2,
-      "byteOffset": 0,
       "type": "VEC2",
       "componentType": 5126,
-      "count": 24,
-      "normalized": false
+      "count": 63
     },
     {
-      "name": "Cube Indices",
+      "name": "Sphere Indices",
       "bufferView": 3,
-      "byteOffset": 0,
       "type": "SCALAR",
-      "componentType": 5125,
-      "count": 36,
-      "normalized": false
+      "componentType": 5123,
+      "count": 240
+    },
+    {
+      "name": "Plane Position",
+      "bufferView": 4,
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 4,
+      "max":[
+        0.9999999403953552,
+        1,
+        0
+      ],
+      "min":[
+        -0.9999999403953552,
+        -1,
+        0
+      ]
+    },
+    {
+      "name": "Plane Normal",
+      "bufferView": 5,
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 4
+    },
+    {
+      "name": "Plane UV",
+      "bufferView": 6,
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 4
+    },
+    {
+      "name": "Plane Indices",
+      "bufferView": 7,
+      "type": "SCALAR",
+      "componentType": 5123,
+      "count": 6
     }
   ],
   "materials": [
     {
-      "name": "Cube Material",
+      "name": "Sphere Material Yellow",
       "pbrMetallicRoughness": {
-        "baseColorFactor": [ 1, 1, 1, 1 ],
+        "baseColorFactor": [ 1, 1, 0.7, 1 ],
         "metallicFactor": 0,
         "roughnessFactor": 0.5
       },
       "alphaMode": "OPAQUE",
       "doubleSided": false
+    },
+    {
+      "name": "Plane Material Pink",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [ 1, 0.7, 1, 1 ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.5
+      },
+      "alphaMode": "OPAQUE",
+      "doubleSided": true
     }
   ],
   "meshes": [
@@ -114,11 +186,26 @@
           "material": 0
         }
       ]
+    },
+    {
+      "name": "Plane Pink",
+      "primitives": [
+        {
+          "mode": 4,
+          "indices": 7,
+          "attributes": {
+            "POSITION": 4,
+            "NORMAL": 5,
+            "TEXCOORD_0": 6
+          },
+          "material": 1
+        }
+      ]
     }
   ],
   "nodes": [
     {
-      "name": "CubeA",
+      "name": "Spring A",
       "children": [
         1
       ],
@@ -134,21 +221,21 @@
         1
       ],
       "scale": [
-        0.5,
-        0.5,
-        0.5
+        0.25,
+        0.25,
+        0.25
       ],
       "mesh": 0,
       "extras": {}
     },
     {
-      "name": "CubeB",
+      "name": "Spring B",
       "children": [
         2
       ],
       "translation": [
         0,
-        -1,
+        -2,
         0
       ],
       "rotation": [
@@ -166,13 +253,13 @@
       "extras": {}
     },
     {
-      "name": "CubeC",
+      "name": "Spring C",
       "children": [
         3
       ],
       "translation": [
         0,
-        -1,
+        -2,
         0
       ],
       "rotation": [
@@ -190,13 +277,13 @@
       "extras": {}
     },
     {
-      "name": "CubeD",
+      "name": "Spring D",
       "children": [
         4
       ],
       "translation": [
         0,
-        -1,
+        -2,
         0
       ],
       "rotation": [
@@ -214,10 +301,10 @@
       "extras": {}
     },
     {
-      "name": "CubeE",
+      "name": "Spring E",
       "translation": [
         0,
-        -1,
+        -2,
         0
       ],
       "rotation": [
@@ -237,21 +324,22 @@
     {
       "name": "Collider",
       "translation": [
-        0.5,
+        -0.25,
         1,
         0
       ],
       "rotation": [
         0,
+        0.70710678118,
         0,
-        0,
-        1
+        0.70710678118
       ],
       "scale": [
         1,
         1,
         1
       ],
+      "mesh": 1,
       "extras": {}
     }
   ],
@@ -265,7 +353,8 @@
     }
   ],
   "extensionsUsed": [
-    "VRMC_springBone"
+    "VRMC_springBone",
+    "VRMC_springBone_extended_collider"
   ],
   "extensions": {
     "VRMC_springBone": {
@@ -276,11 +365,25 @@
           "shape": {
             "sphere": {
               "offset": [
-                0.0,
+                -10000.0,
                 0.0,
                 0.0
               ],
-              "radius": 0.5
+              "radius": 10000.0
+            }
+          },
+          "extensions": {
+            "VRMC_springBone_extended_collider": {
+              "specVersion": "1.0-draft",
+              "shape": {
+                "plane": {
+                  "normal": [
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                }
+              }
             }
           }
         }
@@ -294,8 +397,16 @@
         {
           "joints": [
             {
+              "node": 0,
+              "hitRadius": 0.25,
+              "stiffness": 1.0,
+              "gravityPower": 0.0,
+              "gravityDir": [ 0.0, -1.0, 0.0 ],
+              "dragForce": 0.4
+            },
+            {
               "node": 1,
-              "hitRadius": 0.02,
+              "hitRadius": 0.25,
               "stiffness": 1.0,
               "gravityPower": 0.0,
               "gravityDir": [ 0.0, -1.0, 0.0 ],
@@ -303,7 +414,7 @@
             },
             {
               "node": 2,
-              "hitRadius": 0.02,
+              "hitRadius": 0.25,
               "stiffness": 1.0,
               "gravityPower": 0.0,
               "gravityDir": [ 0.0, -1.0, 0.0 ],
@@ -311,7 +422,7 @@
             },
             {
               "node": 3,
-              "hitRadius": 0.02,
+              "hitRadius": 0.25,
               "stiffness": 1.0,
               "gravityPower": 0.0,
               "gravityDir": [ 0.0, -1.0, 0.0 ],

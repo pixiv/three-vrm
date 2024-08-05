@@ -7,7 +7,7 @@ export class VRMSpringBoneColliderShapeSphere extends VRMSpringBoneColliderShape
   }
 
   /**
-   * The offset from the origin.
+   * The offset of the sphere from the origin in local space.
    */
   public offset: THREE.Vector3;
 
@@ -16,11 +16,17 @@ export class VRMSpringBoneColliderShapeSphere extends VRMSpringBoneColliderShape
    */
   public radius: number;
 
-  public constructor(params?: { radius?: number; offset?: THREE.Vector3 }) {
+  /**
+   * If true, the collider prevents spring bones from going outside of the sphere instead.
+   */
+  public inside: boolean;
+
+  public constructor(params?: { radius?: number; offset?: THREE.Vector3; inside?: boolean }) {
     super();
 
     this.offset = params?.offset ?? new THREE.Vector3(0.0, 0.0, 0.0);
     this.radius = params?.radius ?? 0.0;
+    this.inside = params?.inside ?? false;
   }
 
   public calculateCollision(
@@ -31,9 +37,16 @@ export class VRMSpringBoneColliderShapeSphere extends VRMSpringBoneColliderShape
   ): number {
     target.copy(this.offset).applyMatrix4(colliderMatrix); // transformed offset
     target.negate().add(objectPosition); // a vector from collider center to object position
-    const radius = objectRadius + this.radius;
-    const distance = target.length() - radius;
-    target.normalize();
+
+    const distance = this.inside
+      ? this.radius - objectRadius - target.length()
+      : target.length() - objectRadius - this.radius;
+
+    target.normalize(); // convert the delta to the direction
+    if (this.inside) {
+      target.negate(); // if inside, reverse the direction
+    }
+
     return distance;
   }
 }

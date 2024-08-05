@@ -1,0 +1,356 @@
+{
+  "asset": {
+    "generator": "Handwritten",
+    "version": "2.0"
+  },
+  "buffers": [
+    {
+      "uri": "sphere_mesh.bin",
+      "byteLength": 2496
+    }
+  ],
+  "bufferViews": [
+    {
+      "name": "Sphere Position",
+      "buffer": 0,
+      "byteOffset": 0,
+      "byteLength": 756,
+      "target": 34962
+    },
+    {
+      "name": "Sphere Normal",
+      "buffer": 0,
+      "byteOffset": 756,
+      "byteLength": 756,
+      "target": 34962
+    },
+    {
+      "name": "Sphere UV",
+      "buffer": 0,
+      "byteOffset": 1512,
+      "byteLength": 504,
+      "target": 34962
+    },
+    {
+      "name": "Sphere Indices",
+      "buffer": 0,
+      "byteOffset": 2016,
+      "byteLength": 480,
+      "target": 34963
+    }
+  ],
+  "accessors": [
+    {
+      "name": "Sphere Position",
+      "bufferView": 0,
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 63,
+      "max": [
+        0.9510578513145447,
+        1,
+        0.9999999403953552
+      ],
+      "min": [
+        -0.9510578513145447,
+        -1,
+        -0.9999999403953552
+      ]
+    },
+    {
+      "name": "Sphere Normal",
+      "bufferView": 1,
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 63
+    },
+    {
+      "name": "Sphere UV",
+      "bufferView": 2,
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 63
+    },
+    {
+      "name": "Sphere Indices",
+      "bufferView": 3,
+      "type": "SCALAR",
+      "componentType": 5123,
+      "count": 240
+    }
+  ],
+  "materials": [
+    {
+      "name": "Sphere Material Yellow",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [ 1, 1, 0.7, 1 ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.5
+      },
+      "alphaMode": "OPAQUE",
+      "doubleSided": false
+    },
+    {
+      "name": "Sphere Material Pink",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [ 1, 0.7, 1, 1 ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.5
+      },
+      "alphaMode": "OPAQUE",
+      "doubleSided": false
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Sphere Yellow",
+      "primitives": [
+        {
+          "mode": 4,
+          "indices": 3,
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TEXCOORD_0": 2
+          },
+          "material": 0
+        }
+      ]
+    },
+    {
+      "name": "Sphere Pink",
+      "primitives": [
+        {
+          "mode": 4,
+          "indices": 3,
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TEXCOORD_0": 2
+          },
+          "material": 1
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "name": "Spring A",
+      "children": [
+        1
+      ],
+      "translation": [
+        0,
+        2,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        0.25,
+        0.25,
+        0.25
+      ],
+      "mesh": 0,
+      "extras": {}
+    },
+    {
+      "name": "Spring B",
+      "children": [
+        2
+      ],
+      "translation": [
+        0,
+        -2,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "mesh": 0,
+      "extras": {}
+    },
+    {
+      "name": "Spring C",
+      "children": [
+        3
+      ],
+      "translation": [
+        0,
+        -2,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "mesh": 0,
+      "extras": {}
+    },
+    {
+      "name": "Spring D",
+      "children": [
+        4
+      ],
+      "translation": [
+        0,
+        -2,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "mesh": 0,
+      "extras": {}
+    },
+    {
+      "name": "Spring E",
+      "translation": [
+        0,
+        -2,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "mesh": 0,
+      "extras": {}
+    },
+    {
+      "name": "Collider",
+      "translation": [
+        0.75,
+        1,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "mesh": 1,
+      "extras": {}
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0,
+        5
+      ]
+    }
+  ],
+  "extensionsUsed": [
+    "VRMC_springBone"
+  ],
+  "extensions": {
+    "VRMC_springBone": {
+      "specVersion": "1.0",
+      "colliders": [
+        {
+          "node": 5,
+          "shape": {
+            "sphere": {
+              "offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "radius": 0.5
+            }
+          }
+        }
+      ],
+      "colliderGroups": [
+        {
+          "colliders": [ 0 ]
+        }
+      ],
+      "springs": [
+        {
+          "joints": [
+            {
+              "node": 0,
+              "hitRadius": 0.25,
+              "stiffness": 1.0,
+              "gravityPower": 0.0,
+              "gravityDir": [ 0.0, -1.0, 0.0 ],
+              "dragForce": 0.4
+            },
+            {
+              "node": 1,
+              "hitRadius": 0.25,
+              "stiffness": 1.0,
+              "gravityPower": 0.0,
+              "gravityDir": [ 0.0, -1.0, 0.0 ],
+              "dragForce": 0.4
+            },
+            {
+              "node": 2,
+              "hitRadius": 0.25,
+              "stiffness": 1.0,
+              "gravityPower": 0.0,
+              "gravityDir": [ 0.0, -1.0, 0.0 ],
+              "dragForce": 0.4
+            },
+            {
+              "node": 3,
+              "hitRadius": 0.25,
+              "stiffness": 1.0,
+              "gravityPower": 0.0,
+              "gravityDir": [ 0.0, -1.0, 0.0 ],
+              "dragForce": 0.4
+            },
+            {
+              "node": 4
+            }
+          ],
+          "colliderGroups": [ 0 ]
+        }
+      ]
+    }
+  },
+  "extras": {}
+}

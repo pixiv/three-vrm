@@ -7,7 +7,7 @@ defaults:
     shell: bash
 
 jobs:
-  fetch:
+  build:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -27,26 +27,6 @@ jobs:
           ${{ runner.os }}-yarn-
     - name: Fetch Deps
       run: yarn install --frozen-lockfile
-
-  build:
-    runs-on: ubuntu-latest
-    needs: fetch
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - name: Setup Node
-      uses: actions/setup-node@v4
-      with:
-        node-version-file: './.node-version'
-    - name: Cache Deps
-      uses: actions/cache@v4
-      with:
-        path: |
-          node_modules
-          packages/*/node_modules
-        key: ${{ runner.os }}-yarn-${{ hashFiles( 'yarn.lock' ) }}
-        restore-keys: |
-          ${{ runner.os }}-yarn-
     - name: Build
       run: yarn build
     - name: Upload Builds
@@ -76,6 +56,8 @@ jobs:
         key: ${{ runner.os }}-yarn-${{ hashFiles( 'yarn.lock' ) }}
         restore-keys: |
           ${{ runner.os }}-yarn-
+    - name: Fetch Deps
+      run: yarn install --frozen-lockfile
     - name: Download Builds
       uses: actions/download-artifact@v3
       with:
@@ -103,6 +85,8 @@ jobs:
         key: ${{ runner.os }}-yarn-${{ hashFiles( 'yarn.lock' ) }}
         restore-keys: |
           ${{ runner.os }}-yarn-
+    - name: Fetch Deps
+      run: yarn install --frozen-lockfile
     - name: Download Builds
       uses: actions/download-artifact@v3
       with:
@@ -130,6 +114,8 @@ jobs:
         key: ${{ runner.os }}-yarn-${{ hashFiles( 'yarn.lock' ) }}
         restore-keys: |
           ${{ runner.os }}-yarn-
+    - name: Fetch Deps
+      run: yarn install --frozen-lockfile
     - name: Download Builds
       uses: actions/download-artifact@v3
       with:
@@ -166,6 +152,8 @@ jobs:
         key: ${{ runner.os }}-yarn-${{ hashFiles( 'yarn.lock' ) }}
         restore-keys: |
           ${{ runner.os }}-yarn-
+    - name: Fetch Deps
+      run: yarn install --frozen-lockfile
     - name: Download Builds
       uses: actions/download-artifact@v3
       with:

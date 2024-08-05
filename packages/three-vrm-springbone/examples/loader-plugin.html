@@ -34,6 +34,7 @@
 			import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 			import { VRMSpringBoneLoaderPlugin } from "@pixiv/three-vrm-springbone";
+			import GUI from 'three/addons/libs/lil-gui.module.min.js';
 
 			// renderer
 			const renderer = new THREE.WebGLRenderer();
@@ -43,7 +44,7 @@
 
 			// camera
 			const camera = new THREE.PerspectiveCamera( 30.0, window.innerWidth / window.innerHeight, 0.1, 20.0 );
-			camera.position.set( 0.0, 1.0, 5.0 );
+			camera.position.set( 0.0, 1.0, 10.0 );
 
 			// camera controls
 			const controls = new OrbitControls( camera, renderer.domElement );
@@ -54,6 +55,9 @@
 			// scene
 			const scene = new THREE.Scene();
 
+			const helperRoot = new THREE.Group();
+			scene.add( helperRoot );
+
 			// light
 			const light = new THREE.DirectionalLight( 0xffffff, Math.PI );
 			light.position.set( 1.0, 1.0, 1.0 ).normalize();
@@ -61,14 +65,13 @@
 
 			// gltf and vrm
 			let currentGltf = null;
-			let currentSpringBoneManager = null;
 
 			const loader = new GLTFLoader();
 
 			const loaderPluginOptions = {
 
-				jointHelperRoot: scene,
-				colliderHelperRoot: scene,
+				jointHelperRoot: helperRoot,
+				colliderHelperRoot: helperRoot,
 
 			};
 
@@ -79,6 +82,13 @@
 			} );
 
 			function load( url ) {
+
+				if ( currentGltf != null ) {
+
+					scene.remove( currentGltf.scene );
+					helperRoot.clear();
+
+				}
 
 				loader.crossOrigin = 'anonymous';
 				loader.load(
@@ -92,7 +102,7 @@
 
 						currentGltf = gltf;
 
-						const springBoneManager = gltf.vrmSpringBoneManager;
+						clock.start();
 
 					},
 
@@ -104,7 +114,7 @@
 
 			}
 
-			load( './models/cubes.gltf' );
+			load( './models/sphere-collider.gltf' );
 
 			// helpers
 			const gridHelper = new THREE.GridHelper( 10, 10 );
@@ -146,6 +156,29 @@
 
 			animate();
 
+			// gui
+			const gui = new GUI();
+
+			const params = {
+
+				model: 'sphere-collider.gltf',
+
+			};
+
+			const availableModels = [
+
+				'sphere-collider.gltf',
+				'inside-collider.gltf',
+				'plane-collider.gltf',
+
+			];
+
+			gui.add( params, 'model', availableModels ).onChange( ( value ) => {
+
+				load( `./models/${ value }` );
+
+			} );
+
 			// dnd handler
 			window.addEventListener( 'dragover', function ( event ) {
 
@@ -160,16 +193,16 @@
 				// read given file then convert it to blob url
 				const files = event.dataTransfer.files;
 				if ( ! files ) {
-			
+
 					return;
-			
+
 				}
 
 				const file = files[ 0 ];
 				if ( ! file ) {
-			
+
 					return;
-			
+
 				}
 
 				const blob = new Blob( [ file ], { type: "application/octet-stream" } );

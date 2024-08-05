@@ -10,26 +10,32 @@ export class VRMSpringBoneColliderShapeCapsule extends VRMSpringBoneColliderShap
   }
 
   /**
-   * The offset of the head from the origin.
+   * The offset of the capsule head from the origin in local space.
    */
   public offset: THREE.Vector3;
 
   /**
-   * The offset of the tail from the origin.
+   * The offset of the capsule tail from the origin in local space.
    */
   public tail: THREE.Vector3;
 
   /**
-   * The radius.
+   * The radius of the capsule.
    */
   public radius: number;
 
-  public constructor(params?: { radius?: number; offset?: THREE.Vector3; tail?: THREE.Vector3 }) {
+  /**
+   * If true, the collider prevents spring bones from going outside of the capsule instead.
+   */
+  public inside: boolean;
+
+  public constructor(params?: { radius?: number; offset?: THREE.Vector3; tail?: THREE.Vector3; inside?: boolean }) {
     super();
 
     this.offset = params?.offset ?? new THREE.Vector3(0.0, 0.0, 0.0);
     this.tail = params?.tail ?? new THREE.Vector3(0.0, 0.0, 0.0);
     this.radius = params?.radius ?? 0.0;
+    this.inside = params?.inside ?? false;
   }
 
   public calculateCollision(
@@ -58,9 +64,15 @@ export class VRMSpringBoneColliderShapeCapsule extends VRMSpringBoneColliderShap
       target.sub(_v3B); // from the shaft point to object
     }
 
-    const radius = objectRadius + this.radius;
-    const distance = target.length() - radius;
-    target.normalize();
+    const distance = this.inside
+      ? this.radius - objectRadius - target.length()
+      : target.length() - objectRadius - this.radius;
+
+    target.normalize(); // convert the delta to the direction
+    if (this.inside) {
+      target.negate(); // if inside, reverse the direction
+    }
+
     return distance;
   }
 }
