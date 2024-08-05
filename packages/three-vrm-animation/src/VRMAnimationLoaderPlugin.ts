@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { GLTF as GLTFSchema } from '@gltf-transform/core';
 import { VRMCVRMAnimation } from '@pixiv/types-vrmc-vrm-animation-1.0';
 import type { VRMHumanBoneName } from '@pixiv/three-vrm-core';
@@ -224,7 +224,11 @@ export class VRMAnimationLoaderPlugin implements GLTFLoaderPlugin {
           parentWorldMatrix.decompose(_v3A, _quatB, _v3A);
 
           const trackValues = arrayChunk(origTrack.values, 4).flatMap((q) =>
-            _quatC.fromArray(q).premultiply(_quatB).multiply(_quatA).toArray(),
+            _quatC
+              .fromArray(q as THREE.QuaternionTuple)
+              .premultiply(_quatB)
+              .multiply(_quatA)
+              .toArray(),
           );
 
           const track = origTrack.clone();

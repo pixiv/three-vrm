@@ -21,7 +21,7 @@ export class Matrix4InverseCache {
   /**
    * The original of `matrix.elements`
    */
-  private readonly _originalElements: number[];
+  private readonly _originalElements: THREE.Matrix4Tuple;
 
   /**
    * Inverse of given matrix.
@@ -30,8 +30,7 @@ export class Matrix4InverseCache {
    */
   public get inverse(): THREE.Matrix4 {
     if (this._shouldUpdateInverse) {
-      this._inverseCache.copy(this.matrix);
-      mat4InvertCompat(this._inverseCache);
+      mat4InvertCompat(this._inverseCache.copy(this.matrix));
       this._shouldUpdateInverse = false;
     }
 
@@ -51,7 +50,7 @@ export class Matrix4InverseCache {
     };
 
     this._originalElements = matrix.elements;
-    matrix.elements = new Proxy(matrix.elements, handler);
+    matrix.elements = new Proxy<THREE.Matrix4Tuple>(matrix.elements, handler);
   }
 
   public revert(): void {
