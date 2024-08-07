@@ -374,7 +374,7 @@
           },
           "extensions": {
             "VRMC_springBone_extended_collider": {
-              "specVersion": "1.0-draft",
+              "specVersion": "1.0",
               "shape": {
                 "plane": {
                   "normal": [
