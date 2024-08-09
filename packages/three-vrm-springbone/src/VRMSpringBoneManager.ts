@@ -7,6 +7,8 @@ import { traverseChildrenUntilConditionMet } from './utils/traverseChildrenUntil
 
 export class VRMSpringBoneManager {
   private _joints = new Set<VRMSpringBoneJoint>();
+  private _hasWarnedCircularDependency = false;
+
   public get joints(): Set<VRMSpringBoneJoint> {
     return this._joints;
   }
@@ -132,7 +134,7 @@ export class VRMSpringBoneManager {
    * Update a spring bone.
    * If there are other spring bone that are dependant, it will try to update them recursively.
    * It updates matrixWorld of all ancestors and myself.
-   * It might throw an error if there are circular dependencies.
+   * It might log an warning message if there are any circular dependencies.
    *
    * Intended to be used in {@link update} and {@link _processSpringBone} itself recursively.
    *
@@ -153,7 +155,11 @@ export class VRMSpringBoneManager {
     }
 
     if (springBonesTried.has(springBone)) {
-      throw new Error('VRMSpringBoneManager: Circular dependency detected while updating springbones');
+      if (!this._hasWarnedCircularDependency) {
+        console.warn('VRMSpringBoneManager: Circular dependency detected while updating springbones');
+        this._hasWarnedCircularDependency = true;
+      }
+      return;
     }
     springBonesTried.add(springBone);
 
