@@ -8,10 +8,11 @@ import {
   shadingShift,
   shadingToony,
 } from './immutableNodes';
+import { FnCompat } from './utils/FnCompat';
 
 // TODO: 0% confidence about function types.
 
-const linearstep = THREE.tslFn(
+const linearstep = FnCompat(
   ({
     a,
     b,
@@ -30,7 +31,7 @@ const linearstep = THREE.tslFn(
 /**
  * Convert NdotL into toon shading factor using shadingShift and shadingToony
  */
-const getShading = THREE.tslFn(({ dotNL }: { dotNL: THREE.ShaderNodeObject<THREE.Node> }) => {
+const getShading = FnCompat(({ dotNL }: { dotNL: THREE.ShaderNodeObject<THREE.Node> }) => {
   const shadow = 1.0; // TODO
 
   const feather = THREE.float(1.0).sub(shadingToony);
@@ -48,7 +49,7 @@ const getShading = THREE.tslFn(({ dotNL }: { dotNL: THREE.ShaderNodeObject<THREE
 /**
  * Mix diffuseColor and shadeColor using shading factor and light color
  */
-const getDiffuse = THREE.tslFn(
+const getDiffuse = FnCompat(
   ({
     shading,
     lightColor,

@@ -1,6 +1,7 @@
 import * as THREE from 'three/webgpu';
+import { FnCompat } from './utils/FnCompat';
 
-export const mtoonParametricRim = THREE.tslFn(
+export const mtoonParametricRim = FnCompat(
   ({
     parametricRimLift,
     parametricRimFresnelPower,
