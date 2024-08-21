@@ -27,4 +27,4 @@ export const MToonMaterialDebugMode = {
   UV: 'uv',
 } as const;
 
-export type MToonMaterialDebugMode = typeof MToonMaterialDebugMode[keyof typeof MToonMaterialDebugMode];
+export type MToonMaterialDebugMode = (typeof MToonMaterialDebugMode)[keyof typeof MToonMaterialDebugMode];

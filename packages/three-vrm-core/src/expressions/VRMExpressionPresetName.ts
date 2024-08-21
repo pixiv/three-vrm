@@ -21,4 +21,4 @@ export const VRMExpressionPresetName = {
   Neutral: 'neutral',
 } as const;
 
-export type VRMExpressionPresetName = typeof VRMExpressionPresetName[keyof typeof VRMExpressionPresetName];
+export type VRMExpressionPresetName = (typeof VRMExpressionPresetName)[keyof typeof VRMExpressionPresetName];

@@ -18,4 +18,4 @@ export const VRMRequiredHumanBoneName = {
   RightHand: 'rightHand',
 } as const;
 
-export type VRMRequiredHumanBoneName = typeof VRMRequiredHumanBoneName[keyof typeof VRMRequiredHumanBoneName];
+export type VRMRequiredHumanBoneName = (typeof VRMRequiredHumanBoneName)[keyof typeof VRMRequiredHumanBoneName];

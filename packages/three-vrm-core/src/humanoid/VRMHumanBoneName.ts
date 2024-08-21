@@ -70,4 +70,4 @@ export const VRMHumanBoneName = {
   RightLittleDistal: 'rightLittleDistal',
 } as const;
 
-export type VRMHumanBoneName = typeof VRMHumanBoneName[keyof typeof VRMHumanBoneName];
+export type VRMHumanBoneName = (typeof VRMHumanBoneName)[keyof typeof VRMHumanBoneName];
