@@ -560,12 +560,12 @@
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.3.tgz#555193ab2e3bb3b6adc3d551c9c030d9e860daf6"
   integrity sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==
 
-"@gltf-transform/core@^3.7.4":
-  version "3.10.0"
-  resolved "https://registry.yarnpkg.com/@gltf-transform/core/-/core-3.10.0.tgz#854e7345f23971e4e7367a29183a2d1b62d45e46"
-  integrity sha512-NxVKhSWvH0j1tjZE8Yl461HUMyZLmYmqcbqHw0TOcQd5Q1SV7Y5w6W68XMt9/amRfMAiJLLNREE7kbr+Z0Ydbw==
+"@gltf-transform/core@^4.0.8":
+  version "4.0.8"
+  resolved "https://registry.yarnpkg.com/@gltf-transform/core/-/core-4.0.8.tgz#cf5699cb05e62a33bb68dbf9e1438186f992cac5"
+  integrity sha512-8oSLSw+t+wxPvKC2qm0n3EOoR6Ql2DMuagimjWjGz8sC4MtCqbo6kS6dCeissYrkgP2fj/k8dzRWiWQZRatGMg==
   dependencies:
-    property-graph "^1.3.1"
+    property-graph "^2.0.0"
 
 "@humanwhocodes/config-array@^0.11.14":
   version "0.11.14"
@@ -6026,10 +6026,10 @@ promzard@^0.3.0:
   dependencies:
     read "1"
 
-property-graph@^1.3.1:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/property-graph/-/property-graph-1.3.1.tgz#25fb2c8040ba9b15f04cda90a443f3f844505293"
-  integrity sha512-gei3N/bHWJdCItJ4blnlGWd9iauEZI+JZYj/A0D177XSI01+QhiJGAVscYBhe3Yywow3A2QJzVtsO2P+UgrRRQ==
+property-graph@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/property-graph/-/property-graph-2.0.0.tgz#aaf79cdd5fd05171c1d34c41367acdaac3cbac61"
+  integrity sha512-peDswWfLn7Lx+iPIxefhEUbLC7cs1KbfyKqOl5C5TF5F6urnyAORxzQ7JY21yjRzH7CpLa6+d1G+BemBr/lKyw==
 
 proto-list@~1.2.1:
   version "1.2.4"
