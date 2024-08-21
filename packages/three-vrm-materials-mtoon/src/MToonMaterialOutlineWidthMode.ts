@@ -7,4 +7,4 @@ export const MToonMaterialOutlineWidthMode = {
 } as const;
 
 export type MToonMaterialOutlineWidthMode =
-  typeof MToonMaterialOutlineWidthMode[keyof typeof MToonMaterialOutlineWidthMode];
+  (typeof MToonMaterialOutlineWidthMode)[keyof typeof MToonMaterialOutlineWidthMode];

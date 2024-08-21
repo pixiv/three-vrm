@@ -8,4 +8,4 @@ export const VRMFirstPersonMeshAnnotationType = {
 } as const;
 
 export type VRMFirstPersonMeshAnnotationType =
-  typeof VRMFirstPersonMeshAnnotationType[keyof typeof VRMFirstPersonMeshAnnotationType];
+  (typeof VRMFirstPersonMeshAnnotationType)[keyof typeof VRMFirstPersonMeshAnnotationType];
