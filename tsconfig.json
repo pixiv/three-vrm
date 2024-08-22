@@ -9,10 +9,10 @@
     "baseUrl": ".",
     "forceConsistentCasingInFileNames": true,
     "paths": {
-      "three/addons/*": ["node_modules/@types/three/examples/jsm/*"],
       "@pixiv/three-vrm": ["packages/three-vrm"],
       "@pixiv/three-vrm-constraints": ["packages/three-vrm-constraints"],
-      "@pixiv/types-vrm-constraints-1.0": ["packages/types-vrm-constraints-1.0"]
+      "@pixiv/types-vrm-constraints-1.0": ["packages/types-vrm-constraints-1.0"],
+      "three/addons/*": ["node_modules/@types/three/examples/jsm/*"]
     }
   }
 }
