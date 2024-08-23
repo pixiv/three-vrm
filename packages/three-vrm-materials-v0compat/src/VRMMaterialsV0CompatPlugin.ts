@@ -357,8 +357,12 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
    * This uses a map from v0 render queue to v1 compliant render queue offset which is generated in {@link _populateRenderQueueMap}.
    */
   private _v0ParseRenderQueue(materialProperties: V0Material): number {
-    const isTransparent = materialProperties.keywordMap?.['_ALPHABLEND_ON'] ?? false;
-    const enabledZWrite = materialProperties.floatProperties?.['_ZWrite'] === 1;
+    const isTransparentZWrite = materialProperties.shader === 'VRM/UnlitTransparentZWrite';
+    const isTransparent =
+      materialProperties.keywordMap?.['_ALPHABLEND_ON'] != undefined ||
+      materialProperties.shader === 'VRM/UnlitTransparent' ||
+      isTransparentZWrite;
+    const enabledZWrite = materialProperties.floatProperties?.['_ZWrite'] === 1 || isTransparentZWrite;
 
     let offset = 0;
 
@@ -394,8 +398,12 @@ export class VRMMaterialsV0CompatPlugin implements GLTFLoaderPlugin {
 
     // populate the render queue set
     materialPropertiesList.forEach((materialProperties) => {
-      const isTransparent = materialProperties.keywordMap?.['_ALPHABLEND_ON'] ?? false;
-      const enabledZWrite = materialProperties.floatProperties?.['_ZWrite'] === 1;
+      const isTransparentZWrite = materialProperties.shader === 'VRM/UnlitTransparentZWrite';
+      const isTransparent =
+        materialProperties.keywordMap?.['_ALPHABLEND_ON'] != undefined ||
+        materialProperties.shader === 'VRM/UnlitTransparent' ||
+        isTransparentZWrite;
+      const enabledZWrite = materialProperties.floatProperties?.['_ZWrite'] === 1 || isTransparentZWrite;
 
       if (isTransparent) {
         const v0Queue = materialProperties.renderQueue;
