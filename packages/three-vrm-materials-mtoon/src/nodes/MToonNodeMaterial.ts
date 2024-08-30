@@ -262,7 +262,7 @@ export class MToonNodeMaterial extends THREE.NodeMaterial {
 
       if (this.normalMap && this.normalMap.isTexture === true) {
         const map = refNormalMap.context({ getUV: () => this._animatedUVNode });
-        this.normalNode = map.normalMap(refNormalScale);
+        this.normalNode = THREE.normalMap(map, refNormalScale);
       }
 
       if (this.isOutline) {
