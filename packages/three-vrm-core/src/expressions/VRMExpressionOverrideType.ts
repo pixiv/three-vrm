@@ -6,4 +6,4 @@ export const VRMExpressionOverrideType = {
   Blend: 'blend',
 } as const;
 
-export type VRMExpressionOverrideType = typeof VRMExpressionOverrideType[keyof typeof VRMExpressionOverrideType];
+export type VRMExpressionOverrideType = (typeof VRMExpressionOverrideType)[keyof typeof VRMExpressionOverrideType];

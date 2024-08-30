@@ -1,5 +1,3 @@
-#!/bin/bash
-
 readonly DEV='dev'
 
 if [[ "$CI" == "true" ]]; then

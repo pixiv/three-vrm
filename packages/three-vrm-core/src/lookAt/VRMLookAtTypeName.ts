@@ -8,4 +8,4 @@ export const VRMLookAtTypeName = {
   Expression: 'expression',
 };
 
-export type VRMLookAtTypeName = typeof VRMLookAtTypeName[keyof typeof VRMLookAtTypeName];
+export type VRMLookAtTypeName = (typeof VRMLookAtTypeName)[keyof typeof VRMLookAtTypeName];

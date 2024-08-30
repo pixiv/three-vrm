@@ -10,7 +10,7 @@ export const VRMExpressionMaterialColorType = {
 } as const;
 
 export type VRMExpressionMaterialColorType =
-  typeof VRMExpressionMaterialColorType[keyof typeof VRMExpressionMaterialColorType];
+  (typeof VRMExpressionMaterialColorType)[keyof typeof VRMExpressionMaterialColorType];
 
 export const v0ExpressionMaterialColorMap: { [key: string]: VRMExpressionMaterialColorType | undefined } = {
   _Color: VRMExpressionMaterialColorType.Color,
