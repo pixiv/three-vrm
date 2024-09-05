@@ -252,7 +252,7 @@ export class MToonNodeMaterial extends THREE.NodeMaterial {
     parametricRim.assign(this._setupParametricRimNode());
   }
 
-  public setupNormal(builder: THREE.NodeBuilder): void {
+  public setupNormal(builder: THREE.NodeBuilder): THREE.ShaderNodeObject<THREE.Node> {
     // we must apply uv scroll to the normalMap
     // this.normalNode will be used in super.setupNormal() so we temporarily replace it
     const tempNormalNode = this.normalNode;
@@ -262,7 +262,7 @@ export class MToonNodeMaterial extends THREE.NodeMaterial {
 
       if (this.normalMap && this.normalMap.isTexture === true) {
         const map = refNormalMap.context({ getUV: () => this._animatedUVNode });
-        this.normalNode = map.normalMap(refNormalScale);
+        this.normalNode = THREE.normalMap(map, refNormalScale);
       }
 
       if (this.isOutline) {
@@ -271,11 +271,29 @@ export class MToonNodeMaterial extends THREE.NodeMaterial {
       }
     }
 
-    // the ordinary normal setup
-    super.setupNormal(builder);
+    // COMPAT r168: `setupNormal` now returns the normal node
+    // instead of assigning inside the `super.setupNormal`
+    // See: https://github.com/mrdoob/three.js/pull/29137
+    const threeRevision = parseInt(THREE.REVISION, 10);
+    if (threeRevision >= 168) {
+      const ret = this.normalNode as THREE.ShaderNodeObject<THREE.Node>;
 
-    // revert the normalNode
-    this.normalNode = tempNormalNode;
+      // revert the normalNode
+      this.normalNode = tempNormalNode;
+
+      return ret;
+    } else {
+      // pre-r168
+      // the ordinary normal setup
+      super.setupNormal(builder);
+
+      // revert the normalNode
+      this.normalNode = tempNormalNode;
+
+      // type workaround: pretend to return a valid value
+      // r167 doesn't use the return value anyway
+      return undefined as any;
+    }
   }
 
   public setupLighting(builder: THREE.NodeBuilder): THREE.Node {

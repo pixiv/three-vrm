@@ -52,9 +52,9 @@
     "@pixiv/types-vrmc-vrm-animation-1.0": "3.1.0"
   },
   "devDependencies": {
-    "@types/three": "^0.167.0",
+    "@types/three": "^0.168.0",
     "lint-staged": "15.2.9",
-    "three": "^0.167.0"
+    "three": "^0.168.0"
   },
   "peerDependencies": {
     "three": ">=0.137"
