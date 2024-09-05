@@ -252,7 +252,7 @@ export class MToonNodeMaterial extends THREE.NodeMaterial {
     parametricRim.assign(this._setupParametricRimNode());
   }
 
-  public setupNormal(builder: THREE.NodeBuilder): THREE.ShaderNodeObject<THREE.Node> | null | undefined {
+  public setupNormal(builder: THREE.NodeBuilder): THREE.ShaderNodeObject<THREE.Node> {
     // we must apply uv scroll to the normalMap
     // this.normalNode will be used in super.setupNormal() so we temporarily replace it
     const tempNormalNode = this.normalNode;
@@ -276,7 +276,7 @@ export class MToonNodeMaterial extends THREE.NodeMaterial {
     // See: https://github.com/mrdoob/three.js/pull/29137
     const threeRevision = parseInt(THREE.REVISION, 10);
     if (threeRevision >= 168) {
-      const ret = this.normalNode as THREE.ShaderNodeObject<THREE.Node> | null;
+      const ret = this.normalNode as THREE.ShaderNodeObject<THREE.Node>;
 
       // revert the normalNode
       this.normalNode = tempNormalNode;
@@ -289,6 +289,10 @@ export class MToonNodeMaterial extends THREE.NodeMaterial {
 
       // revert the normalNode
       this.normalNode = tempNormalNode;
+
+      // type workaround: pretend to return a valid value
+      // r167 doesn't use the return value anyway
+      return undefined as any;
     }
   }
 
