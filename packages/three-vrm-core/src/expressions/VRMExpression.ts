@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { VRMExpressionBind } from './VRMExpressionBind';
 import type { VRMExpressionOverrideType } from './VRMExpressionOverrideType';
+import type { VRMExpressionManager } from './VRMExpressionManager';
 
 // animationMixer の監視対象は、Scene の中に入っている必要がある。
 // そのため、表示オブジェクトではないけれど、Object3D を継承して Scene に投入できるようにする。
@@ -13,6 +14,10 @@ export class VRMExpression extends THREE.Object3D {
 
   /**
    * The current weight of the expression.
+   *
+   * You usually want to set the weight via {@link VRMExpressionManager.setValue}.
+   *
+   * It might also be controlled by the Three.js animation system.
    */
   public weight = 0.0;
 
@@ -46,9 +51,9 @@ export class VRMExpression extends THREE.Object3D {
    */
   public get overrideBlinkAmount(): number {
     if (this.overrideBlink === 'block') {
-      return 0.0 < this.weight ? 1.0 : 0.0;
+      return 0.0 < this.outputWeight ? 1.0 : 0.0;
     } else if (this.overrideBlink === 'blend') {
-      return this.weight;
+      return this.outputWeight;
     } else {
       return 0.0;
     }
@@ -60,9 +65,9 @@ export class VRMExpression extends THREE.Object3D {
    */
   public get overrideLookAtAmount(): number {
     if (this.overrideLookAt === 'block') {
-      return 0.0 < this.weight ? 1.0 : 0.0;
+      return 0.0 < this.outputWeight ? 1.0 : 0.0;
     } else if (this.overrideLookAt === 'blend') {
-      return this.weight;
+      return this.outputWeight;
     } else {
       return 0.0;
     }
@@ -74,12 +79,23 @@ export class VRMExpression extends THREE.Object3D {
    */
   public get overrideMouthAmount(): number {
     if (this.overrideMouth === 'block') {
-      return 0.0 < this.weight ? 1.0 : 0.0;
+      return 0.0 < this.outputWeight ? 1.0 : 0.0;
     } else if (this.overrideMouth === 'blend') {
-      return this.weight;
+      return this.outputWeight;
     } else {
       return 0.0;
     }
+  }
+
+  /**
+   * An output weight of this expression, considering the {@link isBinary}.
+   */
+  public get outputWeight(): number {
+    if (this.isBinary) {
+      return this.weight >= 0.5 ? 1.0 : 0.0;
+    }
+
+    return this.weight;
   }
 
   constructor(expressionName: string) {
@@ -112,8 +128,13 @@ export class VRMExpression extends THREE.Object3D {
      */
     multiplier?: number;
   }): void {
-    let actualWeight = this.isBinary ? (this.weight <= 0.5 ? 0.0 : 1.0) : this.weight;
+    let actualWeight = this.outputWeight;
     actualWeight *= options?.multiplier ?? 1.0;
+
+    // if the expression is binary, the override value must be also treated as binary
+    if (this.isBinary && actualWeight < 1.0) {
+      actualWeight = 0.0;
+    }
 
     this._binds.forEach((bind) => bind.applyWeight(actualWeight));
   }
