@@ -270,10 +270,56 @@
 
 				},
 
+				// outline world
+				{
+					map: textureUVGrid,
+					outlineWidthMode: 'worldCoordinates',
+					outlineWidthFactor: 0.05,
+					outlineColorFactor: 0x00ff00,
+				},
+
+				// outline world, masked, unlit
+				{
+					map: textureUVGrid,
+					outlineWidthMode: 'worldCoordinates',
+					outlineWidthFactor: 0.05,
+					outlineColorFactor: 0x00ff00,
+					outlineWidthMultiplyTexture: textureBinaryHalf,
+					outlineLightingMixFactor: 0.0,
+				},
+
+				// outline screen
+				{
+					map: textureUVGrid,
+					outlineWidthMode: 'screenCoordinates',
+					outlineWidthFactor: 0.05,
+					outlineColorFactor: 0xff0000,
+				},
+
 			].map( ( params, i ) => {
 
 				const material = new MToonMaterial( params );
 				const mesh = new THREE.Mesh( geometrySphere, material );
+
+				// if outline is enabled we need to duplicate the material and assign it to the mesh
+				if ( material.outlineWidthMode !== 'none' ) {
+
+					// duplicate the material for outline use
+					const materialOutline = mesh.material.clone();
+					materialOutline.isOutline = true;
+					materialOutline.side = THREE.BackSide;
+
+					mesh.material = [ mesh.material, materialOutline ];
+
+					// make two geometry groups out of a same buffer
+					const geometry = mesh.geometry; // mesh.geometry is guaranteed to be a BufferGeometry in GLTFLoader
+					const primitiveVertices = geometry.index ? geometry.index.count : geometry.attributes.position.count / 3;
+					geometry.addGroup( 0, primitiveVertices, 0 );
+					geometry.addGroup( 0, primitiveVertices, 1 );
+
+				}
+
+				console.log( mesh.material );
 
 				const x = ( i % 5 ) - 2.0;
 				const y = Math.floor( i / 5 ) - 2.0;
@@ -309,7 +355,20 @@
 
 				for ( const mesh of meshes ) {
 
-					mesh.material.update( delta );
+					// mesh.material can be either array or single material
+					if ( Array.isArray( mesh.material ) ) {
+
+						for ( const material of mesh.material ) {
+
+							material.update( delta );
+
+						}
+
+					} else {
+
+						mesh.material.update( delta );
+
+					}
 
 				}
 
