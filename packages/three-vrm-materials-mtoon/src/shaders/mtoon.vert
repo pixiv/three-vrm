@@ -92,26 +92,21 @@ void main() {
 
   vViewPosition = - mvPosition.xyz;
 
-  float outlineTex = 1.0;
-
   #ifdef OUTLINE
+    float worldNormalLength = length( transformedNormal );
+    vec3 outlineOffset = outlineWidthFactor * worldNormalLength * objectNormal;
+
     #ifdef USE_OUTLINEWIDTHMULTIPLYTEXTURE
       vec2 outlineWidthMultiplyTextureUv = ( outlineWidthMultiplyTextureUvTransform * vec3( vUv, 1 ) ).xy;
-      outlineTex = texture2D( outlineWidthMultiplyTexture, outlineWidthMultiplyTextureUv ).g;
-    #endif
-
-    #ifdef OUTLINE_WIDTH_WORLD
-      float worldNormalLength = length( transformedNormal );
-      vec3 outlineOffset = outlineWidthFactor * outlineTex * worldNormalLength * objectNormal;
-      gl_Position = projectionMatrix * modelViewMatrix * vec4( outlineOffset + transformed, 1.0 );
+      float outlineTex = texture2D( outlineWidthMultiplyTexture, outlineWidthMultiplyTextureUv ).g;
+      outlineOffset *= outlineTex;
     #endif
 
     #ifdef OUTLINE_WIDTH_SCREEN
-      vec3 clipNormal = ( projectionMatrix * modelViewMatrix * vec4( objectNormal, 0.0 ) ).xyz;
-      vec2 projectedNormal = normalize( clipNormal.xy );
-      projectedNormal.x *= projectionMatrix[ 0 ].x / projectionMatrix[ 1 ].y;
-      gl_Position.xy += 2.0 * outlineWidthFactor * outlineTex * projectedNormal.xy;
+      outlineOffset *= vViewPosition.z / projectionMatrix[ 1 ].y;
     #endif
+
+    gl_Position = projectionMatrix * modelViewMatrix * vec4( outlineOffset + transformed, 1.0 );
 
     gl_Position.z += 1E-6 * gl_Position.w; // anti-artifact magic
   #endif
