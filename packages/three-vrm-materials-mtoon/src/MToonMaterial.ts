@@ -606,7 +606,6 @@ export class MToonMaterial extends THREE.ShaderMaterial {
       DEBUG_NORMAL: this._debugMode === 'normal',
       DEBUG_LITSHADERATE: this._debugMode === 'litShadeRate',
       DEBUG_UV: this._debugMode === 'uv',
-      OUTLINE_WIDTH_WORLD: this._isOutline && this._outlineWidthMode === MToonMaterialOutlineWidthMode.WorldCoordinates,
       OUTLINE_WIDTH_SCREEN:
         this._isOutline && this._outlineWidthMode === MToonMaterialOutlineWidthMode.ScreenCoordinates,
     };
