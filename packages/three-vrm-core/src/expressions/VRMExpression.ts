@@ -46,9 +46,10 @@ export class VRMExpression extends THREE.Object3D {
    */
   public get overrideBlinkAmount(): number {
     if (this.overrideBlink === 'block') {
-      return 0.0 < this.weight ? 1.0 : 0.0;
+      const actualWeight = this.isBinary ? (this.weight <= 0.5 ? 0.0 : 1.0) : this.weight;
+      return 0.0 < actualWeight ? 1.0 : 0.0;
     } else if (this.overrideBlink === 'blend') {
-      return this.weight;
+      return this.isBinary ? (this.weight <= 0.5 ? 0.0 : 1.0) : this.weight;
     } else {
       return 0.0;
     }
@@ -60,9 +61,10 @@ export class VRMExpression extends THREE.Object3D {
    */
   public get overrideLookAtAmount(): number {
     if (this.overrideLookAt === 'block') {
-      return 0.0 < this.weight ? 1.0 : 0.0;
+      const actualWeight = this.isBinary ? (this.weight <= 0.5 ? 0.0 : 1.0) : this.weight;
+      return 0.0 < actualWeight ? 1.0 : 0.0;
     } else if (this.overrideLookAt === 'blend') {
-      return this.weight;
+      return this.isBinary ? (this.weight <= 0.5 ? 0.0 : 1.0) : this.weight;
     } else {
       return 0.0;
     }
@@ -74,9 +76,10 @@ export class VRMExpression extends THREE.Object3D {
    */
   public get overrideMouthAmount(): number {
     if (this.overrideMouth === 'block') {
-      return 0.0 < this.weight ? 1.0 : 0.0;
+      const actualWeight = this.isBinary ? (this.weight <= 0.5 ? 0.0 : 1.0) : this.weight;
+      return 0.0 < actualWeight ? 1.0 : 0.0;
     } else if (this.overrideMouth === 'blend') {
-      return this.weight;
+      return this.isBinary ? (this.weight <= 0.5 ? 0.0 : 1.0) : this.weight;
     } else {
       return 0.0;
     }
