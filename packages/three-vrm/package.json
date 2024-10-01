@@ -64,8 +64,8 @@
     "@pixiv/three-vrm-springbone": "3.1.1"
   },
   "devDependencies": {
-    "@types/three": "^0.168.0",
-    "three": "^0.168.0"
+    "@types/three": "^0.169.0",
+    "three": "^0.169.0"
   },
   "peerDependencies": {
     "three": ">=0.137"
