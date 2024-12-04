@@ -43,6 +43,10 @@ export declare class VRMSpringBoneJoint {
      */
     private _worldSpaceBoneLength;
     /**
+     * Set of dependencies that need to be updated before this joint.
+     */
+    get dependencies(): Set<THREE.Object3D>;
+    /**
      * This springbone will be calculated based on the space relative from this object.
      * If this is `null`, springbone will be calculated in world space.
      */
@@ -106,12 +110,10 @@ export declare class VRMSpringBoneJoint {
     private _calcWorldSpaceBoneLength;
     /**
      * Create a matrix that converts center space into world space.
-     * @param target Target matrix
      */
     private _getMatrixCenterToWorld;
     /**
      * Create a matrix that converts world space into center space.
-     * @param target Target matrix
      */
     private _getMatrixWorldToCenter;
 }

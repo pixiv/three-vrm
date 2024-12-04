@@ -62,6 +62,11 @@ function loadVRM( modelUrl ) {
 
 			const vrm = gltf.userData.vrm;
 
+			// calling this function greatly improves the performance
+			VRMUtils.removeUnnecessaryVertices( gltf.scene );
+			VRMUtils.combineSkeletons( gltf.scene );
+			VRMUtils.combineMorphs( vrm );
+
 			if ( currentVrm ) {
 
 				scene.remove( currentVrm.scene );

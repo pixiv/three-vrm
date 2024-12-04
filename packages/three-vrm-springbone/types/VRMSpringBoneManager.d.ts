@@ -1,9 +1,18 @@
-import type { VRMSpringBoneJoint } from './VRMSpringBoneJoint';
-import type { VRMSpringBoneCollider } from './VRMSpringBoneCollider';
-import type { VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';
+import type { VRMSpringBoneJoint } from './VRMSpringBoneJoint.js';
+import type { VRMSpringBoneCollider } from './VRMSpringBoneCollider.js';
+import type { VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup.js';
 export declare class VRMSpringBoneManager {
     private _joints;
+    private _sortedJoints;
     private _hasWarnedCircularDependency;
+    /**
+     * An ordered list of ancestors of all the SpringBone joints. Before the
+     * SpringBone joints can be updated, the world matrices of these ancestors
+     * must be calculated. The first element is the lowest common ancestor, for
+     * which not only its world matrix but its ancestors' world matrices are
+     * updated as well.
+     */
+    private _ancestors;
     get joints(): Set<VRMSpringBoneJoint>;
     /**
      * @deprecated Use {@link joints} instead.
@@ -12,6 +21,7 @@ export declare class VRMSpringBoneManager {
     get colliderGroups(): VRMSpringBoneColliderGroup[];
     get colliders(): VRMSpringBoneCollider[];
     private _objectSpringBonesMap;
+    constructor();
     addJoint(joint: VRMSpringBoneJoint): void;
     /**
      * @deprecated Use {@link addJoint} instead.
@@ -26,23 +36,9 @@ export declare class VRMSpringBoneManager {
     reset(): void;
     update(delta: number): void;
     /**
-     * Update a spring bone.
-     * If there are other spring bone that are dependant, it will try to update them recursively.
-     * It updates matrixWorld of all ancestors and myself.
-     * It might log an warning message if there are any circular dependencies.
-     *
-     * Intended to be used in {@link update} and {@link _processSpringBone} itself recursively.
-     *
-     * @param springBone A springBone you want to update
-     * @param springBonesTried Set of springBones that are already tried to be updated
-     * @param springBonesDone Set of springBones that are already up to date
-     * @param objectUpdated Set of object3D whose matrixWorld is updated
+     * Sorts the joints ensuring they are updated in the correct order taking dependencies into account.
      */
-    private _processSpringBone;
-    /**
-     * Return a set of objects that are dependant of given spring bone.
-     * @param springBone A spring bone
-     * @return A set of objects that are dependant of given spring bone
-     */
-    private _getDependencies;
+    private _sortJoints;
+    private _insertJointSort;
+    private _relevantChildrenUpdated;
 }

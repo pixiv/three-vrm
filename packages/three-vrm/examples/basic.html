@@ -83,6 +83,7 @@
 					// calling these functions greatly improves the performance
 					VRMUtils.removeUnnecessaryVertices( gltf.scene );
 					VRMUtils.combineSkeletons( gltf.scene );
+					VRMUtils.combineMorphs( vrm );
 
 					// Disable frustum culling
 					vrm.scene.traverse( ( obj ) => {

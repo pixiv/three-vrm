@@ -8,6 +8,10 @@ export declare abstract class VRMSpringBoneColliderShape {
      */
     abstract get type(): string;
     /**
+     * The offset to the shape.
+     */
+    offset?: THREE.Vector3;
+    /**
      * Calculate a distance and a direction from the collider to a target object.
      * It's hit if the distance is negative.
      * The direction will be contained in the given target vector.

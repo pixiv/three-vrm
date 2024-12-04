@@ -31,7 +31,14 @@ export declare class VRMExpression extends THREE.Object3D {
      * Specify how the expression overrides mouth expressions.
      */
     overrideMouth: VRMExpressionOverrideType;
+    /**
+     * Binds that this expression influences.
+     */
     private _binds;
+    /**
+     * Binds that this expression influences.
+     */
+    get binds(): readonly VRMExpressionBind[];
     readonly type: string | 'VRMExpression';
     /**
      * A value represents how much it should override blink expressions.
@@ -53,7 +60,18 @@ export declare class VRMExpression extends THREE.Object3D {
      */
     get outputWeight(): number;
     constructor(expressionName: string);
+    /**
+     * Add an expression bind to the expression.
+     *
+     * @param bind A bind to add
+     */
     addBind(bind: VRMExpressionBind): void;
+    /**
+     * Delete an expression bind from the expression.
+     *
+     * @param bind A bind to delete
+     */
+    deleteBind(bind: VRMExpressionBind): void;
     /**
      * Apply weight to every assigned blend shapes.
      * Should be called every frame.
