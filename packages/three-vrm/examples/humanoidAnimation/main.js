@@ -58,7 +58,7 @@ function loadVRM( modelUrl ) {
 		modelUrl,
 
 		// called when the resource is loaded
-		( gltf ) => {
+		async ( gltf ) => {
 
 			const vrm = gltf.userData.vrm;
 
@@ -83,6 +83,13 @@ function loadVRM( modelUrl ) {
 			vrm.scene.traverse( ( obj ) => {
 
 				obj.frustumCulled = false;
+
+			} );
+
+			// Precompile shaders to prevent the main thread from being blocked
+			await VRMUtils.precompileShaders( scene, camera, renderer, vrm.scene, ( progress ) => {
+
+				console.log( 'Compiling shaders...', 100.0 * ( progress.compiled / progress.total ), '%' );
 
 			} );
 
