@@ -27,6 +27,17 @@ async function timeSlice(generator: Generator<void>, budgetMs: number): Promise<
   }
 }
 
+function* generatorAwait(promise: Promise<unknown>) {
+  let finished = false;
+  promise.then(() => {
+    finished = true;
+  });
+
+  while (!finished) {
+    yield;
+  }
+}
+
 function* generatorInitMeshTexturesWebGL(renderer: THREE.WebGLRenderer, mesh: THREE.Mesh) {
   const textures: THREE.Texture[] = [];
 
@@ -108,11 +119,12 @@ function* generatorPrecompileShadersWebGL(
     const mesh = meshes[i];
 
     // Initialize textures
-    for (const _ of generatorInitMeshTexturesWebGL(renderer, mesh)) {
-      yield;
-    }
+    yield* generatorInitMeshTexturesWebGL(renderer, mesh);
 
-    // Precompile shaders
+    // Compile shaders with `KHR_parallel_shader_compile`
+    yield* generatorAwait(renderer.compileAsync(mesh, camera, scene));
+
+    // Draw once to compile the shader on the graphics API
     precompileMeshShadersWebGL(scene, camera, renderer, mesh);
 
     // Report the progress
