@@ -81,10 +81,12 @@ function precompileMeshShadersWebGL(
   // We will render each mesh onto the current render target
   const tempViewport = renderer.getViewport(_v4A);
   const tempAutoClear = renderer.autoClear;
+  const tempBackground = scene.background;
 
   // Set the viewport to zero to not draw anything on the target
   renderer.setViewport(0, 0, 0, 0);
   renderer.autoClear = false;
+  scene.background = null;
 
   // Clone the mesh, put it into the scene, and render it
   const meshClone = mesh.clone();
@@ -95,6 +97,7 @@ function precompileMeshShadersWebGL(
   // Restore the viewport and autoClear
   renderer.setViewport(tempViewport);
   renderer.autoClear = tempAutoClear;
+  scene.background = tempBackground;
 }
 
 function* generatorPrecompileShadersWebGL(
