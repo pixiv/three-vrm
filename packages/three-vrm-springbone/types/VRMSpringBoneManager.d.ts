@@ -21,6 +21,7 @@ export declare class VRMSpringBoneManager {
     get colliderGroups(): VRMSpringBoneColliderGroup[];
     get colliders(): VRMSpringBoneCollider[];
     private _objectSpringBonesMap;
+    private _isSortedJointsDirty;
     constructor();
     addJoint(joint: VRMSpringBoneJoint): void;
     /**
@@ -37,6 +38,9 @@ export declare class VRMSpringBoneManager {
     update(delta: number): void;
     /**
      * Sorts the joints ensuring they are updated in the correct order taking dependencies into account.
+     *
+     * This method updates {@link _sortedJoints} and {@link _ancestors}.
+     * Make sure to call this before using them.
      */
     private _sortJoints;
     private _insertJointSort;
