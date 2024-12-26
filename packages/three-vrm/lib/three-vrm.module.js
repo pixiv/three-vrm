@@ -1,5 +1,5 @@
 /*!
- * @pixiv/three-vrm v3.3.1
+ * @pixiv/three-vrm v3.3.2
  * VRM file loader for three.js.
  *
  * Copyright (c) 2019-2024 pixiv Inc.
@@ -6580,7 +6580,7 @@ export {
   VRMUtils
 };
 /*!
- * @pixiv/three-vrm-core v3.3.1
+ * @pixiv/three-vrm-core v3.3.2
  * The implementation of core features of VRM, for @pixiv/three-vrm
  *
  * Copyright (c) 2019-2024 pixiv Inc.
@@ -6588,7 +6588,7 @@ export {
  * https://github.com/pixiv/three-vrm/blob/release/LICENSE
  */
 /*!
- * @pixiv/three-vrm-materials-mtoon v3.3.1
+ * @pixiv/three-vrm-materials-mtoon v3.3.2
  * MToon (toon material) module for @pixiv/three-vrm
  *
  * Copyright (c) 2019-2024 pixiv Inc.
@@ -6596,7 +6596,7 @@ export {
  * https://github.com/pixiv/three-vrm/blob/release/LICENSE
  */
 /*!
- * @pixiv/three-vrm-materials-hdr-emissive-multiplier v3.3.1
+ * @pixiv/three-vrm-materials-hdr-emissive-multiplier v3.3.2
  * Support VRMC_hdr_emissiveMultiplier for @pixiv/three-vrm
  *
  * Copyright (c) 2019-2024 pixiv Inc.
@@ -6604,7 +6604,7 @@ export {
  * https://github.com/pixiv/three-vrm/blob/release/LICENSE
  */
 /*!
- * @pixiv/three-vrm-materials-v0compat v3.3.1
+ * @pixiv/three-vrm-materials-v0compat v3.3.2
  * VRM0.0 materials compatibility layer plugin for @pixiv/three-vrm
  *
  * Copyright (c) 2019-2024 pixiv Inc.
@@ -6612,7 +6612,7 @@ export {
  * https://github.com/pixiv/three-vrm/blob/release/LICENSE
  */
 /*!
- * @pixiv/three-vrm-node-constraint v3.3.1
+ * @pixiv/three-vrm-node-constraint v3.3.2
  * Node constraint module for @pixiv/three-vrm
  *
  * Copyright (c) 2019-2024 pixiv Inc.
@@ -6620,7 +6620,7 @@ export {
  * https://github.com/pixiv/three-vrm/blob/release/LICENSE
  */
 /*!
- * @pixiv/three-vrm-springbone v3.3.1
+ * @pixiv/three-vrm-springbone v3.3.2
  * Spring bone module for @pixiv/three-vrm
  *
  * Copyright (c) 2019-2024 pixiv Inc.
