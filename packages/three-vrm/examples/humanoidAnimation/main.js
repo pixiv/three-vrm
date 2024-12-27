@@ -49,7 +49,7 @@ function loadVRM( modelUrl ) {
 
 	loader.register( ( parser ) => {
 
-		return new VRMLoaderPlugin( parser, { helperRoot: helperRoot, autoUpdateHumanBones: true } );
+		return new VRMLoaderPlugin( parser, { autoUpdateHumanBones: true } );
 
 	} );
 
@@ -75,10 +75,6 @@ function loadVRM( modelUrl ) {
 
 			}
 
-			// put the model to the scene
-			currentVrm = vrm;
-			scene.add( vrm.scene );
-
 			// Disable frustum culling
 			vrm.scene.traverse( ( obj ) => {
 
@@ -92,6 +88,10 @@ function loadVRM( modelUrl ) {
 				console.log( 'Compiling shaders...', 100.0 * ( progress.compiled / progress.total ), '%' );
 
 			} );
+
+			// put the model to the scene
+			currentVrm = vrm;
+			scene.add( vrm.scene );
 
 			if ( currentAnimationUrl ) {
 
