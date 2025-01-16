@@ -1,5 +1,5 @@
 /*!
- * @pixiv/three-vrm-materials-mtoon v3.3.2
+ * @pixiv/three-vrm-materials-mtoon v3.3.3
  * MToon (toon material) module for @pixiv/three-vrm
  *
  * Copyright (c) 2019-2024 pixiv Inc.

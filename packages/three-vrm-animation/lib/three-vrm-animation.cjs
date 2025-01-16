@@ -1,5 +1,5 @@
 /*!
- * @pixiv/three-vrm-animation v3.3.2
+ * @pixiv/three-vrm-animation v3.3.3
  * The implementation of VRM Animation
  *
  * Copyright (c) 2019-2024 pixiv Inc.
@@ -2051,7 +2051,7 @@ var VRMAnimationLoaderPlugin = class {
   }
 };
 /*!
- * @pixiv/three-vrm-core v3.3.2
+ * @pixiv/three-vrm-core v3.3.3
  * The implementation of core features of VRM, for @pixiv/three-vrm
  *
  * Copyright (c) 2019-2024 pixiv Inc.
