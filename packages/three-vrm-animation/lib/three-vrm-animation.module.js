@@ -1,8 +1,8 @@
 /*!
- * @pixiv/three-vrm-animation v3.3.3
+ * @pixiv/three-vrm-animation v3.3.4
  * The implementation of VRM Animation
  *
- * Copyright (c) 2019-2024 pixiv Inc.
+ * Copyright (c) 2019-2025 pixiv Inc.
  * @pixiv/three-vrm-animation is distributed under MIT License
  * https://github.com/pixiv/three-vrm/blob/release/LICENSE
  */
@@ -2019,10 +2019,10 @@ export {
   createVRMAnimationLookAtTrack
 };
 /*!
- * @pixiv/three-vrm-core v3.3.3
+ * @pixiv/three-vrm-core v3.3.4
  * The implementation of core features of VRM, for @pixiv/three-vrm
  *
- * Copyright (c) 2019-2024 pixiv Inc.
+ * Copyright (c) 2019-2025 pixiv Inc.
  * @pixiv/three-vrm-core is distributed under MIT License
  * https://github.com/pixiv/three-vrm/blob/release/LICENSE
  */

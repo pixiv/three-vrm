@@ -1,8 +1,8 @@
 /*!
- * @pixiv/three-vrm-materials-mtoon v3.3.3
+ * @pixiv/three-vrm-materials-mtoon v3.3.4
  * MToon (toon material) module for @pixiv/three-vrm
  *
- * Copyright (c) 2019-2024 pixiv Inc.
+ * Copyright (c) 2019-2025 pixiv Inc.
  * @pixiv/three-vrm-materials-mtoon is distributed under MIT License
  * https://github.com/pixiv/three-vrm/blob/release/LICENSE
  */
