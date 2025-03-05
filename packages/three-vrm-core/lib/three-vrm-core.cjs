@@ -1,5 +1,5 @@
 /*!
- * @pixiv/three-vrm-core v3.3.4
+ * @pixiv/three-vrm-core v3.3.5
  * The implementation of core features of VRM, for @pixiv/three-vrm
  *
  * Copyright (c) 2019-2025 pixiv Inc.
