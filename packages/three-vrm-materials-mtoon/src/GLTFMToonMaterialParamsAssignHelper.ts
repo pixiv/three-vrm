@@ -52,7 +52,7 @@ export class GLTFMToonMaterialParamsAssignHelper {
       if (texture != null) {
         await this._parser.assignTexture(this._materialParams, key, texture);
 
-        if (isColorTexture) {
+        if (isColorTexture && this._materialParams[key] != null) {
           setTextureColorSpace(this._materialParams[key], 'srgb');
         }
       }
