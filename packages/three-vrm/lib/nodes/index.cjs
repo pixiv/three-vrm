@@ -1,5 +1,5 @@
 /*!
- * @pixiv/three-vrm v3.3.6
+ * @pixiv/three-vrm v3.3.7
  * VRM file loader for three.js.
  *
  * Copyright (c) 2019-2025 pixiv Inc.
@@ -522,7 +522,7 @@ var MToonNodeMaterial = class extends THREE8.NodeMaterial {
   }
 };
 /*!
- * @pixiv/three-vrm-materials-mtoon v3.3.6
+ * @pixiv/three-vrm-materials-mtoon v3.3.7
  * MToon (toon material) module for @pixiv/three-vrm
  *
  * Copyright (c) 2019-2025 pixiv Inc.
