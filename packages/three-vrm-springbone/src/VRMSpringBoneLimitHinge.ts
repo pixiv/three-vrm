@@ -2,13 +2,13 @@ import * as THREE from 'three';
 import { VRMSpringBoneLimit } from './VRMSpringBoneLimit';
 
 /**
- * Represents the cone limit of a spring bone defined in `VRMC_springBone_limit`.
+ * Represents the hinge limit of a spring bone defined in `VRMC_springBone_limit`.
  */
-export class VRMSpringBoneLimitCone extends VRMSpringBoneLimit {
+export class VRMSpringBoneLimitHinge extends VRMSpringBoneLimit {
   /**
-   * The angle of the cone limit in radians.
+   * The angle of the hinge limit in radians.
    * If the angle is set to π or greater, the angle will be interpreted as π by the implementation.
-   * When the angle is set to π, the cone shape becomes a sphere.
+   * When the angle is set to π, the hinge shape becomes a full disc.
    */
   public angle: number;
 
@@ -23,10 +23,16 @@ export class VRMSpringBoneLimitCone extends VRMSpringBoneLimit {
     // bring the direction into the local space of the limit
     tailDir.applyQuaternion(this._totalRotationInvCache);
 
+    // kill the x component and normalize the direction
+    let isLimited = false;
+    if (tailDir.x !== 0.0) {
+      tailDir.x = 0.0;
+      tailDir.normalize();
+    }
+
     // calculate the current angle of the tail
     const dryAngle = Math.acos(tailDir.y);
 
-    let isLimited = false;
     if (dryAngle > this.angle) {
       // now we have to apply the limit
       isLimited = true;
@@ -34,9 +40,8 @@ export class VRMSpringBoneLimitCone extends VRMSpringBoneLimit {
       // set the y component to the cos of the angle
       tailDir.y = Math.cos(this.angle);
 
-      // multiply the x and z components by the ratio of the sins of the angles
+      // multiply the z component by the ratio of the sins of the angles
       const ratio = Math.sin(this.angle) / Math.sin(dryAngle);
-      tailDir.x *= ratio;
       tailDir.z *= ratio;
 
       // normalize the direction just in case

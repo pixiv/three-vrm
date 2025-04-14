@@ -4,6 +4,8 @@ import { VRMSpringBoneJoint } from '../VRMSpringBoneJoint';
 import { VRMSpringBoneLimitCone } from '../VRMSpringBoneLimitCone';
 import { LimitConeBufferGeometry } from './utils/LimitConeBufferGeometry';
 import { LimitBufferGeometry } from './utils/LimitBufferGeometry';
+import { VRMSpringBoneLimitHinge } from '../VRMSpringBoneLimitHinge';
+import { LimitHingeBufferGeometry } from './utils/LimitHingeBufferGeometry';
 
 const _vec3WorldPosition = /*@__PURE__*/ new THREE.Vector3();
 const _vec3Scale = /*@__PURE__*/ new THREE.Vector3();
@@ -23,6 +25,8 @@ export class VRMSpringBoneLimitHelper extends THREE.Group {
 
     if (this.limit instanceof VRMSpringBoneLimitCone) {
       this._geometry = new LimitConeBufferGeometry(this.limit);
+    } else if (this.limit instanceof VRMSpringBoneLimitHinge) {
+      this._geometry = new LimitHingeBufferGeometry(this.limit);
     } else {
       throw new Error('VRMSpringBoneLimitHelper: Unknown limit type detected');
     }

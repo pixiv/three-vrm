@@ -9,6 +9,7 @@ export * from './VRMSpringBoneJoint';
 export * from './VRMSpringBoneJointSettings';
 export * from './VRMSpringBoneLimit';
 export * from './VRMSpringBoneLimitCone';
+export * from './VRMSpringBoneLimitHinge';
 export * from './VRMSpringBoneLoaderPlugin';
 export * from './VRMSpringBoneLoaderPluginOptions';
 export * from './VRMSpringBoneManager';
