@@ -1,0 +1,4 @@
+{
+  "name": "types-vrmc-springbone-limit-1.0",
+  "entryPoints": ["types/index.d.ts"]
+}
