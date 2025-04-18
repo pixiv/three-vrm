@@ -30,22 +30,19 @@ export class VRMSpringBoneLimitHinge extends VRMSpringBoneLimit {
       tailDir.normalize();
     }
 
-    // calculate the current angle of the tail
-    const dryAngle = Math.acos(tailDir.y);
+    // compare the y component with the cos of the angle
+    const cosAngle = Math.cos(this.angle);
 
-    if (dryAngle > this.angle) {
+    if (tailDir.y < cosAngle) {
       // now we have to apply the limit
       isLimited = true;
 
-      // set the y component to the cos of the angle
-      tailDir.y = Math.cos(this.angle);
-
       // multiply the z component by the ratio of the sins of the angles
-      const ratio = Math.sin(this.angle) / Math.sin(dryAngle);
+      const ratio = Math.sqrt((1.0 - cosAngle * cosAngle) / (1.0 - tailDir.y * tailDir.y));
       tailDir.z *= ratio;
 
-      // normalize the direction just in case
-      tailDir.normalize();
+      // set the y component to the cos of the angle
+      tailDir.y = cosAngle;
     }
 
     // change the direction back to the world space
