@@ -7,10 +7,6 @@
     {
       "uri": "sphere_mesh.bin",
       "byteLength": 2496
-    },
-    {
-      "uri": "plane_mesh.bin",
-      "byteLength": 140
     }
   ],
   "bufferViews": [
@@ -40,34 +36,6 @@
       "buffer": 0,
       "byteOffset": 2016,
       "byteLength": 480,
-      "target": 34963
-    },
-    {
-      "name": "Plane Position",
-      "buffer": 1,
-      "byteOffset": 0,
-      "byteLength": 48,
-      "target": 34962
-    },
-    {
-      "name": "Plane Normal",
-      "buffer": 1,
-      "byteOffset": 48,
-      "byteLength": 48,
-      "target": 34962
-    },
-    {
-      "name": "Plane UV",
-      "buffer": 1,
-      "byteOffset": 96,
-      "byteLength": 32,
-      "target": 34962
-    },
-    {
-      "name": "Plane Indices",
-      "buffer": 1,
-      "byteOffset": 128,
-      "byteLength": 12,
       "target": 34963
     }
   ],
@@ -109,44 +77,6 @@
       "type": "SCALAR",
       "componentType": 5123,
       "count": 240
-    },
-    {
-      "name": "Plane Position",
-      "bufferView": 4,
-      "type": "VEC3",
-      "componentType": 5126,
-      "count": 4,
-      "max":[
-        0.9999999403953552,
-        1,
-        0
-      ],
-      "min":[
-        -0.9999999403953552,
-        -1,
-        0
-      ]
-    },
-    {
-      "name": "Plane Normal",
-      "bufferView": 5,
-      "type": "VEC3",
-      "componentType": 5126,
-      "count": 4
-    },
-    {
-      "name": "Plane UV",
-      "bufferView": 6,
-      "type": "VEC2",
-      "componentType": 5126,
-      "count": 4
-    },
-    {
-      "name": "Plane Indices",
-      "bufferView": 7,
-      "type": "SCALAR",
-      "componentType": 5123,
-      "count": 6
     }
   ],
   "materials": [
@@ -159,16 +89,6 @@
       },
       "alphaMode": "OPAQUE",
       "doubleSided": false
-    },
-    {
-      "name": "Plane Material Pink",
-      "pbrMetallicRoughness": {
-        "baseColorFactor": [ 1, 0.7, 1, 1 ],
-        "metallicFactor": 0,
-        "roughnessFactor": 0.5
-      },
-      "alphaMode": "OPAQUE",
-      "doubleSided": true
     }
   ],
   "meshes": [
@@ -184,21 +104,6 @@
             "TEXCOORD_0": 2
           },
           "material": 0
-        }
-      ]
-    },
-    {
-      "name": "Plane Pink",
-      "primitives": [
-        {
-          "mode": 4,
-          "indices": 7,
-          "attributes": {
-            "POSITION": 4,
-            "NORMAL": 5,
-            "TEXCOORD_0": 6
-          },
-          "material": 1
         }
       ]
     }
@@ -320,79 +225,23 @@
       ],
       "mesh": 0,
       "extras": {}
-    },
-    {
-      "name": "Collider",
-      "translation": [
-        -0.25,
-        1,
-        0
-      ],
-      "rotation": [
-        0,
-        0.70710678118,
-        0,
-        0.70710678118
-      ],
-      "scale": [
-        1,
-        1,
-        1
-      ],
-      "mesh": 1,
-      "extras": {}
     }
   ],
   "scene": 0,
   "scenes": [
     {
       "nodes": [
-        0,
-        5
+        0
       ]
     }
   ],
   "extensionsUsed": [
     "VRMC_springBone",
-    "VRMC_springBone_extended_collider"
+    "VRMC_springBone_limit"
   ],
   "extensions": {
     "VRMC_springBone": {
       "specVersion": "1.0",
-      "colliders": [
-        {
-          "node": 5,
-          "shape": {
-            "sphere": {
-              "offset": [
-                -10000.0,
-                0.0,
-                0.0
-              ],
-              "radius": 10000.0
-            }
-          },
-          "extensions": {
-            "VRMC_springBone_extended_collider": {
-              "specVersion": "1.0",
-              "shape": {
-                "plane": {
-                  "normal": [
-                    0.0,
-                    0.0,
-                    1.0
-                  ]
-                }
-              }
-            }
-          }
-        }
-      ],
-      "colliderGroups": [
-        {
-          "colliders": [ 0 ]
-        }
-      ],
       "springs": [
         {
           "joints": [
@@ -402,7 +251,19 @@
               "stiffness": 1.0,
               "gravityPower": 0.0,
               "gravityDir": [ 0.0, -1.0, 0.0 ],
-              "dragForce": 0.4
+              "dragForce": 0.4,
+              "extensions": {
+                "VRMC_springBone_limit": {
+                  "specVersion": "1.0-draft",
+                  "limit": {
+                    "spherical": {
+                      "phi": 0.523599,
+                      "theta": 0.196350,
+                      "rotation": [ 0.0, 0.258819, 0.0, 0.965926 ]
+                    }
+                  }
+                }
+              }
             },
             {
               "node": 1,
@@ -410,7 +271,19 @@
               "stiffness": 1.0,
               "gravityPower": 0.0,
               "gravityDir": [ 0.0, -1.0, 0.0 ],
-              "dragForce": 0.4
+              "dragForce": 0.4,
+              "extensions": {
+                "VRMC_springBone_limit": {
+                  "specVersion": "1.0-draft",
+                  "limit": {
+                    "spherical": {
+                      "phi": 0.523599,
+                      "theta": 0.196350,
+                      "rotation": [ 0.0, 0.258819, 0.0, 0.965926 ]
+                    }
+                  }
+                }
+              }
             },
             {
               "node": 2,
@@ -418,7 +291,19 @@
               "stiffness": 1.0,
               "gravityPower": 0.0,
               "gravityDir": [ 0.0, -1.0, 0.0 ],
-              "dragForce": 0.4
+              "dragForce": 0.4,
+              "extensions": {
+                "VRMC_springBone_limit": {
+                  "specVersion": "1.0-draft",
+                  "limit": {
+                    "spherical": {
+                      "phi": 0.523599,
+                      "theta": 0.196350,
+                      "rotation": [ 0.0, 0.258819, 0.0, 0.965926 ]
+                    }
+                  }
+                }
+              }
             },
             {
               "node": 3,
@@ -426,13 +311,24 @@
               "stiffness": 1.0,
               "gravityPower": 0.0,
               "gravityDir": [ 0.0, -1.0, 0.0 ],
-              "dragForce": 0.4
+              "dragForce": 0.4,
+              "extensions": {
+                "VRMC_springBone_limit": {
+                  "specVersion": "1.0-draft",
+                  "limit": {
+                    "spherical": {
+                      "phi": 0.523599,
+                      "theta": 0.196350,
+                      "rotation": [ 0.0, 0.258819, 0.0, 0.965926 ]
+                    }
+                  }
+                }
+              }
             },
             {
               "node": 4
             }
-          ],
-          "colliderGroups": [ 0 ]
+          ]
         }
       ]
     }
