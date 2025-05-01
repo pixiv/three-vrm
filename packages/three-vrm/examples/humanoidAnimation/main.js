@@ -49,7 +49,7 @@ function loadVRM( modelUrl ) {
 
 	loader.register( ( parser ) => {
 
-		return new VRMLoaderPlugin( parser, { helperRoot: helperRoot, autoUpdateHumanBones: true } );
+		return new VRMLoaderPlugin( parser, { autoUpdateHumanBones: true } );
 
 	} );
 
@@ -58,7 +58,7 @@ function loadVRM( modelUrl ) {
 		modelUrl,
 
 		// called when the resource is loaded
-		( gltf ) => {
+		async ( gltf ) => {
 
 			const vrm = gltf.userData.vrm;
 
@@ -75,16 +75,23 @@ function loadVRM( modelUrl ) {
 
 			}
 
-			// put the model to the scene
-			currentVrm = vrm;
-			scene.add( vrm.scene );
-
 			// Disable frustum culling
 			vrm.scene.traverse( ( obj ) => {
 
 				obj.frustumCulled = false;
 
 			} );
+
+			// Precompile shaders to prevent the main thread from being blocked
+			await VRMUtils.precompileShaders( scene, camera, renderer, vrm.scene, ( progress ) => {
+
+				console.log( 'Compiling shaders...', 100.0 * ( progress.compiled / progress.total ), '%' );
+
+			} );
+
+			// put the model to the scene
+			currentVrm = vrm;
+			scene.add( vrm.scene );
 
 			if ( currentAnimationUrl ) {
 
