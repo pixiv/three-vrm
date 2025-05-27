@@ -1,4 +1,4 @@
-import * as THREE from 'three/webgpu';
+import * as THREE_TSL from 'three/tsl';
 /**
  * A compat function for `Fn()` / `tslFn()`.
  * `tslFn()` has been renamed to `Fn()` in r168.
@@ -6,4 +6,4 @@ import * as THREE from 'three/webgpu';
  *
  * See: https://github.com/mrdoob/three.js/pull/29064
  */
-export declare const FnCompat: typeof THREE.Fn;
+export declare const FnCompat: typeof THREE_TSL.Fn;

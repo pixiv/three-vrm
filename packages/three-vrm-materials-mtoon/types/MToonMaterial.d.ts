@@ -171,7 +171,7 @@ export declare class MToonMaterial extends THREE.ShaderMaterial {
     get isOutline(): boolean;
     set isOutline(b: boolean);
     /**
-     * Readonly boolean that indicates this is a [[MToonMaterial]].
+     * Readonly boolean that indicates this is a {@link MToonMaterial}.
      */
     get isMToonMaterial(): true;
     constructor(parameters?: MToonMaterialParameters);

@@ -25,7 +25,7 @@ export declare class VRM extends VRMCore {
     /**
      * Create a new VRM instance.
      *
-     * @param params [[VRMParameters]] that represents components of the VRM
+     * @param params {@link VRMParameters} that represents components of the VRM
      */
     constructor(params: VRMParameters);
     /**

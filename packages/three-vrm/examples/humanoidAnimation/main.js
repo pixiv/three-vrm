@@ -35,6 +35,7 @@ const defaultModelUrl = '../models/VRM1_Constraint_Twist_Sample.vrm';
 let currentVrm = undefined;
 let currentAnimationUrl = undefined;
 let currentMixer = undefined;
+let currentAction = undefined;
 
 const helperRoot = new THREE.Group();
 helperRoot.renderOrder = 10000;
@@ -79,6 +80,9 @@ function loadVRM( modelUrl ) {
 			currentVrm = vrm;
 			scene.add( vrm.scene );
 
+			// create AnimationMixer for VRM
+			currentMixer = new THREE.AnimationMixer( currentVrm.scene );
+
 			// Disable frustum culling
 			vrm.scene.traverse( ( obj ) => {
 
@@ -111,22 +115,27 @@ function loadVRM( modelUrl ) {
 loadVRM( defaultModelUrl );
 
 // mixamo animation
-function loadFBX( animationUrl ) {
+async function loadFBX( animationUrl ) {
 
 	currentAnimationUrl = animationUrl;
 
-	currentVrm.humanoid.resetNormalizedPose();
-	// create AnimationMixer for VRM
-	currentMixer = new THREE.AnimationMixer( currentVrm.scene );
+	if ( currentMixer ) {
 
-	// Load animation
-	loadMixamoAnimation( animationUrl, currentVrm ).then( ( clip ) => {
+		// Load animation
+		const clip = await loadMixamoAnimation( animationUrl, currentVrm );
 
-		// Apply the loaded animation to mixer and play
-		currentMixer.clipAction( clip ).play();
-		currentMixer.timeScale = params.timeScale;
+		const newAction = currentMixer.clipAction( clip );
+		newAction.reset().play();
 
-	} );
+		if ( currentAction && currentAction !== newAction ) {
+
+			currentAction.crossFadeTo( newAction, 0.5, false );
+
+		}
+
+		currentAction = newAction;
+
+	}
 
 }
 

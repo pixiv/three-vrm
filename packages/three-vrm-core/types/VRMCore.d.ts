@@ -44,7 +44,7 @@ export declare class VRMCore {
     /**
      * Create a new VRM instance.
      *
-     * @param params [[VRMParameters]] that represents components of the VRM
+     * @param params {@link VRMParameters} that represents components of the VRM
      */
     constructor(params: VRMCoreParameters);
     /**

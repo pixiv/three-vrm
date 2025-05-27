@@ -25,9 +25,7 @@ export function loadMixamoAnimation( url, vrm ) {
 
 		// Adjust with reference to hips height.
 		const motionHipsHeight = asset.getObjectByName( 'mixamorigHips' ).position.y;
-		const vrmHipsY = vrm.humanoid?.getNormalizedBoneNode( 'hips' ).getWorldPosition( _vec3 ).y;
-		const vrmRootY = vrm.scene.getWorldPosition( _vec3 ).y;
-		const vrmHipsHeight = Math.abs( vrmHipsY - vrmRootY );
+		const vrmHipsHeight = vrm.humanoid.normalizedRestPose.hips.position[ 1 ];
 		const hipsPositionScale = vrmHipsHeight / motionHipsHeight;
 
 		clip.tracks.forEach( ( track ) => {

@@ -3,7 +3,7 @@ import type { VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';
 import type { VRMSpringBoneJointSettings } from './VRMSpringBoneJointSettings';
 /**
  * A class represents a single joint of a spring bone.
- * It should be managed by a [[VRMSpringBoneManager]].
+ * It should be managed by a {@link VRMSpringBoneManager}.
  */
 export declare class VRMSpringBoneJoint {
     /**
@@ -87,12 +87,12 @@ export declare class VRMSpringBoneJoint {
     setInitState(): void;
     /**
      * Reset the state of this bone.
-     * You might want to call [[VRMSpringBoneManager.reset]] instead.
+     * You might want to call {@link VRMSpringBoneManager.reset} instead.
      */
     reset(): void;
     /**
      * Update the state of this bone.
-     * You might want to call [[VRMSpringBoneManager.update]] instead.
+     * You might want to call {@link VRMSpringBoneManager.update} instead.
      *
      * @param delta deltaTime
      */

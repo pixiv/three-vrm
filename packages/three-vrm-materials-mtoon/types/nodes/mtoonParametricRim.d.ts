@@ -1,6 +1,7 @@
 import * as THREE from 'three/webgpu';
-export declare const mtoonParametricRim: (args: THREE.ProxiedObject<{
-    parametricRimLift: THREE.NodeRepresentation;
-    parametricRimFresnelPower: THREE.NodeRepresentation;
-    parametricRimColor: THREE.NodeRepresentation;
-}>) => THREE.ShaderNodeObject<import("three/src/nodes/math/OperatorNode.js").default>;
+import { NodeRepresentation } from 'three/tsl';
+export declare const mtoonParametricRim: THREE.TSL.ShaderNodeFn<[THREE.TSL.ProxiedObject<{
+    parametricRimLift: NodeRepresentation;
+    parametricRimFresnelPower: NodeRepresentation;
+    parametricRimColor: NodeRepresentation;
+}>]>;

@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import type { VRMSpringBoneColliderShape } from './VRMSpringBoneColliderShape';
 /**
- * Represents a collider of a VRM.
+ * Represents a collider of a spring bone.
  */
 export declare class VRMSpringBoneCollider extends THREE.Object3D {
     /**

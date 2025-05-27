@@ -1,4 +1,5 @@
 import * as THREE from 'three/webgpu';
+import { ShaderNodeObject, Swizzable } from 'three/tsl';
 import { MToonLightingModel } from './MToonLightingModel';
 import { MToonMaterialOutlineWidthMode } from '../MToonMaterialOutlineWidthMode';
 import { MToonNodeMaterialParameters } from './MToonNodeMaterialParameters';
@@ -11,7 +12,7 @@ import { MToonNodeMaterialParameters } from './MToonNodeMaterialParameters';
  * See: https://github.com/Santarh/MToon
  */
 export declare class MToonNodeMaterial extends THREE.NodeMaterial {
-    emissiveNode: THREE.ShaderNodeObject<THREE.Node> | null;
+    emissiveNode: ShaderNodeObject<THREE.Node> | null;
     color: THREE.Color;
     map: THREE.Texture | null;
     emissive: THREE.Color;
@@ -41,13 +42,13 @@ export declare class MToonNodeMaterial extends THREE.NodeMaterial {
     uvAnimationScrollYSpeedFactor: number;
     uvAnimationRotationSpeedFactor: number;
     uvAnimationMaskTexture: THREE.Texture | null;
-    shadeColorNode: THREE.Swizzable | null;
+    shadeColorNode: Swizzable | null;
     shadingShiftNode: THREE.Node | null;
     shadingToonyNode: THREE.Node | null;
     rimLightingMixNode: THREE.Node | null;
     rimMultiplyNode: THREE.Node | null;
     matcapNode: THREE.Node | null;
-    parametricRimColorNode: THREE.Swizzable | null;
+    parametricRimColorNode: Swizzable | null;
     parametricRimLiftNode: THREE.Node | null;
     parametricRimFresnelPowerNode: THREE.Node | null;
     uvAnimationScrollXOffset: number;
@@ -65,10 +66,10 @@ export declare class MToonNodeMaterial extends THREE.NodeMaterial {
     setup(builder: THREE.NodeBuilder): void;
     setupDiffuseColor(builder: THREE.NodeBuilder): void;
     setupVariants(): void;
-    setupNormal(builder: THREE.NodeBuilder): THREE.ShaderNodeObject<THREE.Node>;
+    setupNormal(builder: THREE.NodeBuilder): ShaderNodeObject<THREE.Node>;
     setupLighting(builder: THREE.NodeBuilder): THREE.Node;
-    setupOutput(builder: THREE.NodeBuilder, outputNode: THREE.ShaderNodeObject<THREE.Node>): THREE.ShaderNodeObject<THREE.Node>;
-    setupPosition(builder: THREE.NodeBuilder): THREE.ShaderNodeObject<THREE.Node>;
+    setupOutput(builder: THREE.NodeBuilder, outputNode: ShaderNodeObject<THREE.Node>): ShaderNodeObject<THREE.Node>;
+    setupPosition(builder: THREE.NodeBuilder): ShaderNodeObject<THREE.Node>;
     copy(source: MToonNodeMaterial): this;
     update(delta: number): void;
     private _setupShadeColorNode;
