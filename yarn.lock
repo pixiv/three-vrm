@@ -643,9 +643,9 @@
     "@shikijs/vscode-textmate" "^10.0.2"
 
 "@gltf-transform/core@^4.0.8":
-  version "4.1.3"
-  resolved "https://registry.yarnpkg.com/@gltf-transform/core/-/core-4.1.3.tgz#905b9a04f515d1444ce41a62a4990080edc8cee0"
-  integrity sha512-N+73Vo9DTXV2QmsnetLRY4q3z0Q0oyH0i/ymvzEkgpgNEAq+RP73ZLY0HK+Ia0rTUMgFwQHFNyHDyFiENToBZA==
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/@gltf-transform/core/-/core-4.1.4.tgz#bcffc97eb128a2f1563ad6055ff461b4c7edacce"
+  integrity sha512-TE6MGzlmsFWR8mkWNDSM7KWUjAeySBYN6MchL8YIzDECLpkFzXeO69K2yLjhKFfPmL27ZYe17vgzqwlcGF+X3A==
   dependencies:
     property-graph "^3.0.0"
 
