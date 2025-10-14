@@ -1,5 +1,5 @@
 /*!
- * @pixiv/three-vrm v3.4.0
+ * @pixiv/three-vrm v3.4.3
  * VRM file loader for three.js.
  *
  * Copyright (c) 2019-2025 pixiv Inc.
@@ -6710,7 +6710,7 @@ VRMUtils.removeUnnecessaryJoints = removeUnnecessaryJoints;
 VRMUtils.removeUnnecessaryVertices = removeUnnecessaryVertices;
 VRMUtils.rotateVRM0 = rotateVRM0;
 /*!
- * @pixiv/three-vrm-core v3.4.0
+ * @pixiv/three-vrm-core v3.4.3
  * The implementation of core features of VRM, for @pixiv/three-vrm
  *
  * Copyright (c) 2019-2025 pixiv Inc.
@@ -6718,7 +6718,7 @@ VRMUtils.rotateVRM0 = rotateVRM0;
  * https://github.com/pixiv/three-vrm/blob/release/LICENSE
  */
 /*!
- * @pixiv/three-vrm-materials-mtoon v3.4.0
+ * @pixiv/three-vrm-materials-mtoon v3.4.3
  * MToon (toon material) module for @pixiv/three-vrm
  *
  * Copyright (c) 2019-2025 pixiv Inc.
@@ -6726,7 +6726,7 @@ VRMUtils.rotateVRM0 = rotateVRM0;
  * https://github.com/pixiv/three-vrm/blob/release/LICENSE
  */
 /*!
- * @pixiv/three-vrm-materials-hdr-emissive-multiplier v3.4.0
+ * @pixiv/three-vrm-materials-hdr-emissive-multiplier v3.4.3
  * Support VRMC_hdr_emissiveMultiplier for @pixiv/three-vrm
  *
  * Copyright (c) 2019-2025 pixiv Inc.
@@ -6734,7 +6734,7 @@ VRMUtils.rotateVRM0 = rotateVRM0;
  * https://github.com/pixiv/three-vrm/blob/release/LICENSE
  */
 /*!
- * @pixiv/three-vrm-materials-v0compat v3.4.0
+ * @pixiv/three-vrm-materials-v0compat v3.4.3
  * VRM0.0 materials compatibility layer plugin for @pixiv/three-vrm
  *
  * Copyright (c) 2019-2025 pixiv Inc.
@@ -6742,7 +6742,7 @@ VRMUtils.rotateVRM0 = rotateVRM0;
  * https://github.com/pixiv/three-vrm/blob/release/LICENSE
  */
 /*!
- * @pixiv/three-vrm-node-constraint v3.4.0
+ * @pixiv/three-vrm-node-constraint v3.4.3
  * Node constraint module for @pixiv/three-vrm
  *
  * Copyright (c) 2019-2025 pixiv Inc.
@@ -6750,7 +6750,7 @@ VRMUtils.rotateVRM0 = rotateVRM0;
  * https://github.com/pixiv/three-vrm/blob/release/LICENSE
  */
 /*!
- * @pixiv/three-vrm-springbone v3.4.0
+ * @pixiv/three-vrm-springbone v3.4.3
  * Spring bone module for @pixiv/three-vrm
  *
  * Copyright (c) 2019-2025 pixiv Inc.
