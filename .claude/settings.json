@@ -1,0 +1,81 @@
+{
+  "description": "Claude Code configuration for the three-vrm project",
+  "project": {
+    "name": "three-vrm",
+    "type": "library",
+    "language": "TypeScript",
+    "framework": "Three.js",
+    "buildTool": "esbuild",
+    "packageManager": "yarn",
+    "monorepo": true,
+    "monorepoTool": "lerna"
+  },
+  "preferences": {
+    "codeStyle": {
+      "linter": "eslint",
+      "formatter": "prettier",
+      "indentation": "spaces",
+      "indentSize": 2,
+      "semicolons": true,
+      "quotes": "single",
+      "trailingComma": "es5"
+    },
+    "testing": {
+      "framework": "jest",
+      "coverageThreshold": 80,
+      "testPattern": "**/*.test.ts"
+    },
+    "documentation": {
+      "generator": "typedoc",
+      "style": "jsdoc",
+      "includeExamples": true
+    }
+  },
+  "conventions": {
+    "privateMemberPrefix": "_",
+    "useAccessors": true,
+    "minimalInstantiation": true,
+    "examplesCodeStyle": "mr-doob",
+    "semanticVersioning": true,
+    "independentVersioning": true
+  },
+  "paths": {
+    "packages": "packages/",
+    "examples": "packages/*/examples/",
+    "tests": "packages/*/src/**/*.test.ts",
+    "build": "packages/*/lib/",
+    "types": "packages/*/types/"
+  },
+  "commands": {
+    "build": "yarn build",
+    "dev": "cd packages/three-vrm && yarn dev",
+    "test": "yarn test",
+    "lint": "yarn lint",
+    "clean": "yarn clean"
+  },
+  "git": {
+    "mainBranch": "dev",
+    "releaseBranch": "release",
+    "commitConvention": "conventional-commits",
+    "protectedBranches": ["release", "main"]
+  },
+  "publishing": {
+    "registry": "npm",
+    "scope": "@pixiv",
+    "provenance": true,
+    "access": "public"
+  },
+  "dependencies": {
+    "peer": {
+      "three": "^0.180.0"
+    },
+    "keywords": [
+      "three.js",
+      "vrm",
+      "3d",
+      "avatar",
+      "webgl",
+      "typescript"
+    ]
+  }
+}

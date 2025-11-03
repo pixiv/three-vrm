@@ -1,0 +1,7 @@
+{
+  "name": "test-coverage-enforcement",
+  "event": "user-prompt-submit",
+  "description": "Enforces minimum test coverage before committing",
+  "enabled": true,
+  "prompt": "Before git commit, check test coverage:\n\n```\n📊 TEST COVERAGE CHECK\n\nRunning coverage analysis...\n\nCurrent Coverage:\n• Statements: [X]%\n• Branches: [X]%\n• Functions: [X]%\n• Lines: [X]%\n\nThresholds:\n• Statements: >= 80%\n• Branches: >= 75%\n• Functions: >= 80%\n• Lines: >= 80%\n\nUncovered Files:\n[List files with coverage < threshold]\n\n⚠️  Coverage below threshold!\n\nActions required:\n1. Add tests for new code\n2. Cover edge cases\n3. Test error paths\n\nTo proceed anyway:\n• Skip this check (not recommended)\n• Commit with --no-verify\n• Update coverage threshold in config\n```"
+}

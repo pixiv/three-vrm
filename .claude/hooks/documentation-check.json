@@ -1,0 +1,7 @@
+{
+  "name": "documentation-check",
+  "event": "user-prompt-submit",
+  "description": "Ensures code changes include documentation updates",
+  "enabled": true,
+  "prompt": "When committing code changes, check for documentation:\n\n```\n📝 DOCUMENTATION CHECK\n\nFiles changed:\n[List of code files]\n\nDocumentation check:\n[ ] Public API changes documented?\n[ ] README updated if needed?\n[ ] JSDoc/docstrings added?\n[ ] CHANGELOG entry created?\n\nNew public functions without docs:\n[List functions missing documentation]\n\nRecommendations:\n1. Add inline documentation\n2. Update README for new features\n3. Add CHANGELOG entry\n4. Update API docs\n\nProceed without docs? (yes/no)\n```"
+}

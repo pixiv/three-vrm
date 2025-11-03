@@ -1,0 +1,7 @@
+{
+  "name": "code-complexity-warning",
+  "event": "user-prompt-submit",
+  "description": "Warns about high cyclomatic complexity",
+  "enabled": true,
+  "prompt": "Before commit, analyze code complexity:\n\n```\n⚠️  CODE COMPLEXITY WARNING\n\nHigh complexity detected in:\n\nFunction: [name]\nFile: [path]\nComplexity: [score] (threshold: 10)\n\nIssues:\n• Too many conditional branches\n• Deeply nested logic\n• Hard to test and maintain\n\nRecommendations:\n1. Extract helper functions\n2. Use early returns\n3. Simplify conditionals\n4. Consider strategy pattern\n\nRefactor before committing? (yes/no)\n```"
+}

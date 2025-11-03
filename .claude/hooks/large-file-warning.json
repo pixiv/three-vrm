@@ -1,0 +1,7 @@
+{
+  "name": "large-file-warning",
+  "event": "user-prompt-submit",
+  "description": "Warns about committing large files that should use Git LFS",
+  "enabled": true,
+  "prompt": "Before git add or git commit, check for large files:\n\n**Size Thresholds:**\n- Warning: Files > 10MB\n- Block: Files > 100MB\n\n**If Large File Detected:**\n\n```\n⚠️  LARGE FILE WARNING\n\nFile: [filename]\nSize: [size] MB\n\nIssues with large files in git:\n• Slows down clone/pull operations\n• Increases repo size permanently\n• GitHub has 100MB file limit\n• Poor performance for team\n\nRecommended solutions:\n\n1. Use Git LFS (Large File Storage):\n   git lfs install\n   git lfs track \"*.psd\"\n   git lfs track \"*.mp4\"\n   git add .gitattributes\n\n2. Store externally:\n   - Cloud storage (S3, GCS, Azure Blob)\n   - CDN for static assets\n   - Artifact repository\n\n3. Alternative approaches:\n   - Link to external location in README\n   - Use download script\n   - Store in release assets\n\nLarge file types to use LFS for:\n• Images: *.psd, *.ai, *.sketch\n• Videos: *.mp4, *.mov, *.avi\n• Archives: *.zip, *.tar.gz, *.7z\n• Binaries: *.exe, *.dll, *.so\n• Data files: *.csv, *.parquet (large ones)\n\nProceed with commit? (yes/no)\n```"
+}

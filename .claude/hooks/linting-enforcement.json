@@ -1,0 +1,7 @@
+{
+  "name": "linting-enforcement",
+  "event": "user-prompt-submit",
+  "description": "Runs linters before commits and blocks on errors",
+  "enabled": true,
+  "prompt": "Before git commit, run linting:\n\n```\n🔍 CODE QUALITY CHECK\n\nRunning linters...\n\n✓ ESLint: [X] files checked\n✓ Prettier: [X] files formatted\n✓ TypeScript: Type checking...\n\nErrors Found: [X]\nWarnings: [X]\n\n❌ LINT ERRORS BLOCK COMMIT\n\nErrors in [file]:\n  Line [X]: [error message]\n  Line [X]: [error message]\n\nAuto-fixable: [X] errors\nManual fix needed: [X] errors\n\nActions:\n1. Run: npm run lint:fix\n2. Fix remaining errors manually\n3. Commit again\n```"
+}

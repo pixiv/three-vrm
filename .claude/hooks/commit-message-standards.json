@@ -1,0 +1,7 @@
+{
+  "name": "commit-message-standards",
+  "event": "user-prompt-submit",
+  "description": "Enforces conventional commit message format",
+  "enabled": true,
+  "prompt": "Before git commit, validate commit message format:\n\n**Required Format:**\n```\n<type>(<scope>): <description>\n\n[optional body]\n\n[optional footer]\n```\n\n**Valid Types:**\n- feat: New feature\n- fix: Bug fix\n- docs: Documentation\n- style: Formatting\n- refactor: Code restructuring\n- perf: Performance improvement\n- test: Tests\n- chore: Maintenance\n\n**If Invalid:**\n```\n❌ INVALID COMMIT MESSAGE\n\nYour message: [message]\n\nIssues:\n• Missing type prefix\n• Description not descriptive enough\n• No scope specified\n\nExamples of good messages:\nfeat(auth): add OAuth2 login support\nfix(api): resolve memory leak in user service\ndocs(readme): update installation instructions\n\nPlease reformat and try again.\n```"
+}
