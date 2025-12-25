@@ -18,8 +18,15 @@ describe('VRMSpringBoneColliderShapeSphere', () => {
     expect(shape.offset).toBeCloseToVector3(new THREE.Vector3(0.0, 0.0, 0.0));
   });
 
+  describe('type', () => {
+    it('returns "sphere"', () => {
+      const shape = new VRMSpringBoneColliderShapeSphere();
+      expect(shape.type).toBe('sphere');
+    });
+  });
+
   describe('calculateCollision', () => {
-    it('must calculate a collision properly', () => {
+    it('calculates a collision (collided)', () => {
       const shape = new VRMSpringBoneColliderShapeSphere({
         radius: 1.0,
       });
@@ -29,10 +36,42 @@ describe('VRMSpringBoneColliderShapeSphere', () => {
       const objectRadius = 1.0;
 
       const dir = new THREE.Vector3();
-      const distSq = shape.calculateCollision(colliderMatrix, objectPosition, objectRadius, dir);
+      const dist = shape.calculateCollision(colliderMatrix, objectPosition, objectRadius, dir);
 
-      expect(distSq).toBeCloseTo(-0.585786); // sqrt(2) - 2
+      expect(dist).toBeCloseTo(-0.585786); // sqrt(2) - 2
       expect(dir).toBeCloseToVector3(new THREE.Vector3(1.0, 1.0, 0.0).normalize());
+    });
+
+    it('calculates a collision (not collided)', () => {
+      const shape = new VRMSpringBoneColliderShapeSphere({
+        radius: 1.0,
+      });
+
+      const colliderMatrix = new THREE.Matrix4().makeTranslation(1.0, 0.0, 0.0);
+      const objectPosition = new THREE.Vector3(4.0, 0.0, 0.0);
+      const objectRadius = 1.0;
+
+      const dir = new THREE.Vector3();
+      const dist = shape.calculateCollision(colliderMatrix, objectPosition, objectRadius, dir);
+
+      expect(dist).toBeCloseTo(1.0);
+    });
+
+    it('calculates a collision (inside collider, collided)', () => {
+      const shape = new VRMSpringBoneColliderShapeSphere({
+        radius: 1.5,
+        inside: true,
+      });
+
+      const colliderMatrix = new THREE.Matrix4().makeTranslation(1.0, 0.0, 0.0);
+      const objectPosition = new THREE.Vector3(1.0, -1.0, 0.0);
+      const objectRadius = 1.0;
+
+      const dir = new THREE.Vector3();
+      const dist = shape.calculateCollision(colliderMatrix, objectPosition, objectRadius, dir);
+
+      expect(dist).toBeCloseTo(-0.5);
+      expect(dir).toBeCloseToVector3(new THREE.Vector3(0.0, 1.0, 0.0).normalize());
     });
 
     it('must not modify the input values', () => {
@@ -53,7 +92,7 @@ describe('VRMSpringBoneColliderShapeSphere', () => {
       expect(objectPosition).toBeCloseToVector3(prevObjectPosition);
     });
 
-    it('must calculate a collision properly, with an offset', () => {
+    it('calculates a collision (with an offset)', () => {
       const shape = new VRMSpringBoneColliderShapeSphere({
         radius: 1.0,
         offset: new THREE.Vector3(0.0, 0.0, -1.0),
@@ -66,13 +105,13 @@ describe('VRMSpringBoneColliderShapeSphere', () => {
       const objectRadius = 1.0;
 
       const dir = new THREE.Vector3();
-      const distSq = shape.calculateCollision(colliderMatrix, objectPosition, objectRadius, dir);
+      const dist = shape.calculateCollision(colliderMatrix, objectPosition, objectRadius, dir);
 
-      expect(distSq).toBeCloseTo(-0.267949); // sqrt(3) - 2
+      expect(dist).toBeCloseTo(-0.267949); // sqrt(3) - 2
       expect(dir).toBeCloseToVector3(new THREE.Vector3(1.0, 1.0, 1.0).normalize());
     });
 
-    it('must calculate a collision properly, with an offset nad a rotation', () => {
+    it('calculates a collision, (with an offset and a rotation)', () => {
       const shape = new VRMSpringBoneColliderShapeSphere({
         radius: 1.0,
         offset: new THREE.Vector3(0.0, 1.0, 1.0),
@@ -85,9 +124,9 @@ describe('VRMSpringBoneColliderShapeSphere', () => {
       const objectRadius = 1.0;
 
       const dir = new THREE.Vector3();
-      const distSq = shape.calculateCollision(colliderMatrix, objectPosition, objectRadius, dir);
+      const dist = shape.calculateCollision(colliderMatrix, objectPosition, objectRadius, dir);
 
-      expect(distSq).toBeCloseTo(-1.0);
+      expect(dist).toBeCloseTo(-1.0);
       expect(dir).toBeCloseToVector3(new THREE.Vector3(-1.0, 0.0, 0.0).normalize());
     });
   });

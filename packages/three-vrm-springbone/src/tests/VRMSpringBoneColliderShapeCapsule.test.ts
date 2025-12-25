@@ -23,8 +23,15 @@ describe('VRMSpringBoneColliderShapeCapsule', () => {
     expect(shape.tail).toBeCloseToVector3(new THREE.Vector3(0.0, 0.0, 0.0));
   });
 
+  describe('type', () => {
+    it('returns "capsule"', () => {
+      const shape = new VRMSpringBoneColliderShapeCapsule();
+      expect(shape.type).toBe('capsule');
+    });
+  });
+
   describe('calculateCollision', () => {
-    it('must calculate a collision properly', () => {
+    it('calculates a collision (collided)', () => {
       const shape = new VRMSpringBoneColliderShapeCapsule({
         radius: 1.0,
       });
@@ -38,6 +45,38 @@ describe('VRMSpringBoneColliderShapeCapsule', () => {
 
       expect(dist).toBeCloseTo(-0.585786); // sqrt(2) - 2
       expect(dir).toBeCloseToVector3(new THREE.Vector3(1.0, 1.0, 0.0).normalize());
+    });
+
+    it('calculates a collision (not collided)', () => {
+      const shape = new VRMSpringBoneColliderShapeCapsule({
+        radius: 1.0,
+      });
+
+      const colliderMatrix = new THREE.Matrix4().makeTranslation(1.0, 0.0, 0.0);
+      const objectPosition = new THREE.Vector3(4.0, 0.0, 0.0);
+      const objectRadius = 1.0;
+
+      const dir = new THREE.Vector3();
+      const dist = shape.calculateCollision(colliderMatrix, objectPosition, objectRadius, dir);
+
+      expect(dist).toBeCloseTo(1.0);
+    });
+
+    it('calculates a collision (inside collider, collided)', () => {
+      const shape = new VRMSpringBoneColliderShapeCapsule({
+        radius: 1.5,
+        inside: true,
+      });
+
+      const colliderMatrix = new THREE.Matrix4().makeTranslation(1.0, 0.0, 0.0);
+      const objectPosition = new THREE.Vector3(1.0, 1.0, 0.0);
+      const objectRadius = 1.0;
+
+      const dir = new THREE.Vector3();
+      const dist = shape.calculateCollision(colliderMatrix, objectPosition, objectRadius, dir);
+
+      expect(dist).toBeCloseTo(-0.5);
+      expect(dir).toBeCloseToVector3(new THREE.Vector3(0.0, -1.0, 0.0).normalize());
     });
 
     it('must not modify the input values', () => {
