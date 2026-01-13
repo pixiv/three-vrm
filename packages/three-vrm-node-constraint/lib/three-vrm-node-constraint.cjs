@@ -1,8 +1,8 @@
 /*!
- * @pixiv/three-vrm-node-constraint v3.4.4
+ * @pixiv/three-vrm-node-constraint v3.4.5
  * Node constraint module for @pixiv/three-vrm
  *
- * Copyright (c) 2019-2025 pixiv Inc.
+ * Copyright (c) 2019-2026 pixiv Inc.
  * @pixiv/three-vrm-node-constraint is distributed under MIT License
  * https://github.com/pixiv/three-vrm/blob/release/LICENSE
  */

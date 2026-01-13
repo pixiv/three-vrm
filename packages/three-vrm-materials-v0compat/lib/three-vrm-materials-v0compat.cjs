@@ -1,8 +1,8 @@
 /*!
- * @pixiv/three-vrm-materials-v0compat v3.4.4
+ * @pixiv/three-vrm-materials-v0compat v3.4.5
  * VRM0.0 materials compatibility layer plugin for @pixiv/three-vrm
  *
- * Copyright (c) 2019-2025 pixiv Inc.
+ * Copyright (c) 2019-2026 pixiv Inc.
  * @pixiv/three-vrm-materials-v0compat is distributed under MIT License
  * https://github.com/pixiv/three-vrm/blob/release/LICENSE
  */

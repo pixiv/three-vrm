@@ -1,8 +1,8 @@
 /*!
- * @pixiv/three-vrm-core v3.4.4
+ * @pixiv/three-vrm-core v3.4.5
  * The implementation of core features of VRM, for @pixiv/three-vrm
  *
- * Copyright (c) 2019-2025 pixiv Inc.
+ * Copyright (c) 2019-2026 pixiv Inc.
  * @pixiv/three-vrm-core is distributed under MIT License
  * https://github.com/pixiv/three-vrm/blob/release/LICENSE
  */

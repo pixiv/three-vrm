@@ -38,6 +38,7 @@
 			const renderer = new THREE.WebGLRenderer();
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			renderer.setPixelRatio( window.devicePixelRatio );
+			renderer.shadowMap.enabled = true;
 			document.body.appendChild( renderer.domElement );
 
 			// camera
@@ -55,7 +56,16 @@
 
 			// light
 			const light = new THREE.DirectionalLight( 0xffffff, Math.PI );
+			light.castShadow = true;
 			scene.add( light );
+
+			// a plane to receive shadows
+			const planeGeometry = new THREE.PlaneGeometry( 10, 10 );
+			const planeMaterial = new THREE.MeshStandardMaterial( { color: 0x808080 } );
+			const planeMesh = new THREE.Mesh( planeGeometry, planeMaterial );
+			planeMesh.receiveShadow = true;
+			planeMesh.position.z = - 0.5;
+			scene.add( planeMesh );
 
 			// test objects
 			const textureUVGrid = new THREE.TextureLoader().load( './models/uv-grid.png' );
@@ -300,6 +310,7 @@
 
 				const material = new MToonMaterial( params );
 				const mesh = new THREE.Mesh( geometrySphere, material );
+				mesh.castShadow = true;
 
 				// if outline is enabled we need to duplicate the material and assign it to the mesh
 				if ( material.outlineWidthMode !== 'none' ) {
@@ -351,7 +362,7 @@
 				const theta = clock.elapsedTime;
 				const cosTheta = Math.cos( theta );
 				const sinTheta = Math.sin( theta );
-				light.position.set( cosTheta, 2.0, sinTheta ).normalize();
+				light.position.set( cosTheta, 1.0, sinTheta ).normalize().multiplyScalar( 3.0 );
 
 				for ( const mesh of meshes ) {
 
