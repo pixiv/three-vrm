@@ -891,7 +891,7 @@ void main() {
   #ifndef PHYSICALLY_CORRECT_LIGHTS
     reflectedLight.directSpecular /= PI;
   #endif
-  vec3 rimMix = mix( vec3( 1.0 ), reflectedLight.directSpecular, 1.0 );
+  vec3 rimMix = mix( vec3( 1.0 ), reflectedLight.directSpecular, rimLightingMixFactor );
 
   vec3 rim = parametricRimColorFactor * pow( saturate( 1.0 - dot( viewDir, normal ) + parametricRimLiftFactor ), parametricRimFresnelPowerFactor );
 
