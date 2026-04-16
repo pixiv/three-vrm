@@ -15,21 +15,21 @@ Issues and pull requests that do not follow the above guidelines may be closed w
 The below should work:
 
 ```sh
-yarn
-yarn build
+pnpm install
+pnpm build
 cd packages/three-vrm
-yarn dev
+pnpm dev
 ```
 
-Once you start the `yarn dev`, you can see examples at http://localhost:10001/examples/ .
+Once you start the `pnpm dev`, you can see examples at http://localhost:10001/examples/ .
 
 ### Editing two packages at the same time
 
-You might want to watch two or more packages at the same time, but using `yarn dev` on multiple packages creates a port conflict of dev servers.
+You might want to watch two or more packages at the same time, but using `pnpm dev` on multiple packages creates a port conflict of dev servers.
 In this case, you can specify different ports for each dev server by the environment variable `PORT` to avoid this conflict.
 
 ```sh
-PORT=10002 yarn dev
+PORT=10002 pnpm dev
 ```
 
 ## Basic rules of the repository
