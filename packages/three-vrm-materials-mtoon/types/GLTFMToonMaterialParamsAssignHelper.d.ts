@@ -13,7 +13,7 @@ export declare class GLTFMToonMaterialParamsAssignHelper {
     constructor(parser: GLTFParser, materialParams: MToonMaterialParameters);
     assignPrimitive<T extends keyof MToonMaterialParameters>(key: T, value: MToonMaterialParameters[T]): void;
     assignColor<T extends keyof MToonMaterialParameters>(key: T, value: number[] | undefined, convertSRGBToLinear?: boolean): void;
-    assignTexture<T extends keyof MToonMaterialParameters>(key: T, texture: {
+    assignTexture<T extends keyof MToonMaterialParameters>(key: T, schemaTexture: {
         index: number;
     } | undefined, isColorTexture: boolean): Promise<void>;
     assignTextureByIndex<T extends keyof MToonMaterialParameters>(key: T, textureIndex: number | undefined, isColorTexture: boolean): Promise<void>;
