@@ -47,8 +47,7 @@ export class VRMMaterialsHDREmissiveMultiplierLoaderPlugin implements GLTFLoader
     }
 
     const extension = materialDef.extensions?.[VRMMaterialsHDREmissiveMultiplierLoaderPlugin.EXTENSION_NAME] as
-      | HDREmissiveMultiplierSchema.VRMCMaterialsHDREmissiveMultiplier
-      | undefined;
+      HDREmissiveMultiplierSchema.VRMCMaterialsHDREmissiveMultiplier | undefined;
     if (extension == null) {
       return undefined;
     }

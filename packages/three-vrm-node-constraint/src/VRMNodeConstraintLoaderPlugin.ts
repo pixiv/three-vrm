@@ -64,8 +64,7 @@ export class VRMNodeConstraintLoaderPlugin implements GLTFLoaderPlugin {
 
       // check if the extension uses the extension
       const extension = schemaNode?.extensions?.[VRMNodeConstraintLoaderPlugin.EXTENSION_NAME] as
-        | ConstraintSchema.VRMCNodeConstraint
-        | undefined;
+        ConstraintSchema.VRMCNodeConstraint | undefined;
 
       if (extension == null) {
         return;

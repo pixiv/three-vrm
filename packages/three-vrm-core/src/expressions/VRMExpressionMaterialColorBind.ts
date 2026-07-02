@@ -217,8 +217,7 @@ export class VRMExpressionMaterialColorBind implements VRMExpressionBind {
   }
 
   private _getPropertyNameMap():
-    | { [type in VRMExpressionMaterialColorType]?: readonly [string, string | null] }
-    | null {
+    { [type in VRMExpressionMaterialColorType]?: readonly [string, string | null] } | null {
     return (
       Object.entries(VRMExpressionMaterialColorBind._propertyNameMapMap).find(([distinguisher]) => {
         return (this.material as any)[distinguisher] === true;
