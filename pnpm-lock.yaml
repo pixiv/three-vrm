@@ -21,7 +21,7 @@ importers:
         version: 9.39.4
       '@gltf-transform/core':
         specifier: ^4.2.1
-        version: 4.3.0
+        version: 4.4.0
       '@types/node':
         specifier: ^24.12.2
         version: 24.12.2
@@ -640,8 +640,8 @@ packages:
   '@gerrit0/mini-shiki@3.23.0':
     resolution: {integrity: sha512-bEMORlG0cqdjVyCEuU0cDQbORWX+kYCeo0kV1lbxF5bt4r7SID2l9bqsxJEM0zndaxpOUT7riCyIVEuqq/Ynxg==}
 
-  '@gltf-transform/core@4.3.0':
-    resolution: {integrity: sha512-ZeaQfszGJ9LYwELszu45CuDQCsE26lJNNe36FVmN8xclaT6WDdCj7fwGpQXo0/l/YgAVAHX+uO7YNBW75/SRYw==}
+  '@gltf-transform/core@4.4.0':
+    resolution: {integrity: sha512-cOPxOhHFFz5hwmix+li1+Nnq5qMV/QD3fTCsVlApxxFACtFdjkt2R/juseD4gvZ7D2c/yl6OilKH0pvI735YyQ==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -3036,8 +3036,8 @@ packages:
     resolution: {integrity: sha512-Ncd0vyS2eXGOjchIRg6PVCYKetJYrW1BSbbIo+bKdig61TB6nH2RQNF2uP+qMpsI73L/jURLWojcw8JNIKZ3gg==}
     engines: {node: ^18.17.0 || >=20.5.0}
 
-  property-graph@4.0.0:
-    resolution: {integrity: sha512-I0hojAJfTbSCZy3y6xyK29eayxo14v1bj1VPiDkHjTdz33SV6RdfMz2AHnf4ai62Vng2mN5GkaKahkooBIo9gA==}
+  property-graph@4.1.0:
+    resolution: {integrity: sha512-AvPcP7XECNWy4LGmFQ77k7un4lSKM4eS29PTvW4ck95uYeLxXPWJM7hLuBqK91FaHqCcgJvIUCuNJjjxKE7VKQ==}
 
   protocols@2.0.2:
     resolution: {integrity: sha512-hHVTzba3wboROl0/aWRRG9dMytgH6ow//STBZh43l/wQgmMhYhOFi0EHWAPtoCz9IAUymsyP0TSBHkhgMEGNnQ==}
@@ -3942,9 +3942,9 @@ snapshots:
       '@shikijs/types': 3.23.0
       '@shikijs/vscode-textmate': 10.0.2
 
-  '@gltf-transform/core@4.3.0':
+  '@gltf-transform/core@4.4.0':
     dependencies:
-      property-graph: 4.0.0
+      property-graph: 4.1.0
 
   '@humanfs/core@0.19.1': {}
 
@@ -6558,7 +6558,7 @@ snapshots:
     dependencies:
       read: 4.1.0
 
-  property-graph@4.0.0: {}
+  property-graph@4.1.0: {}
 
   protocols@2.0.2: {}
 
