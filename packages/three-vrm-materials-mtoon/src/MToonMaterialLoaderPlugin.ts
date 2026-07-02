@@ -202,8 +202,7 @@ export class MToonMaterialLoaderPlugin implements GLTFLoaderPlugin {
     }
 
     const extension = materialDef.extensions?.[MToonMaterialLoaderPlugin.EXTENSION_NAME] as
-      | V1MToonSchema.VRMCMaterialsMToon
-      | undefined;
+      V1MToonSchema.VRMCMaterialsMToon | undefined;
     if (extension == null) {
       return undefined;
     }
