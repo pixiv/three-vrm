@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { Matrix4InverseCache } from './utils/Matrix4InverseCache';
 import type { VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';
 import type { VRMSpringBoneJointSettings } from './VRMSpringBoneJointSettings';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { VRMSpringBoneManager } from './VRMSpringBoneManager';
 
 // based on
