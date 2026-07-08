@@ -103,7 +103,8 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
     const threeNodes: THREE.Object3D[] = await gltf.parser.getDependencies('node');
 
     const extension = json.extensions?.[VRMSpringBoneLoaderPlugin.EXTENSION_NAME] as
-      V1SpringBoneSchema.VRMCSpringBone | undefined;
+      | V1SpringBoneSchema.VRMCSpringBone
+      | undefined;
     if (!extension) {
       return null;
     }
@@ -208,6 +209,10 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
 
     extension.springs?.forEach((schemaSpring, iSpring) => {
       const schemaJoints = schemaSpring.joints;
+      if (schemaJoints == null) {
+        console.warn(`VRMSpringBoneLoaderPlugin: The spring #${iSpring} has no joints. Skipping the spring`);
+        return;
+      }
 
       // prepare colliders
       const colliderGroupsForSpring = schemaSpring.colliderGroups
