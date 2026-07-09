@@ -1,6 +1,6 @@
 {
   "name": "@pixiv/three-vrm-springbone",
-  "version": "3.5.4",
+  "version": "3.5.5",
   "description": "Spring bone module for @pixiv/three-vrm",
   "license": "MIT",
   "author": "pixiv",
