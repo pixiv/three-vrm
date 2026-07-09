@@ -1,5 +1,5 @@
 /*!
- * @pixiv/three-vrm-materials-v0compat v3.5.4
+ * @pixiv/three-vrm-materials-v0compat v3.5.5
  * VRM0.0 materials compatibility layer plugin for @pixiv/three-vrm
  *
  * Copyright (c) 2019-2026 pixiv Inc.
