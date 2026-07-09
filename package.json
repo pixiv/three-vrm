@@ -20,7 +20,7 @@
     "@eslint/eslintrc": "^3.3.5",
     "@eslint/js": "^9.39.4",
     "@gltf-transform/core": "^4.2.1",
-    "@types/node": "^24.12.2",
+    "@types/node": "^25.6.0",
     "@vitest/coverage-v8": "^4.1.2",
     "cross-env": "^10.1.0",
     "esbuild": "^0.28.0",
