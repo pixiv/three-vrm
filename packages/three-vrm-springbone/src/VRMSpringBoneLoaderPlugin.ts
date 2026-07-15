@@ -208,6 +208,10 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
 
     extension.springs?.forEach((schemaSpring, iSpring) => {
       const schemaJoints = schemaSpring.joints;
+      if (schemaJoints == null) {
+        console.warn(`VRMSpringBoneLoaderPlugin: The spring #${iSpring} has no joints. Skipping the spring`);
+        return;
+      }
 
       // prepare colliders
       const colliderGroupsForSpring = schemaSpring.colliderGroups
