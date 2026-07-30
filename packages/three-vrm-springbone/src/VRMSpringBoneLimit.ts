@@ -2,7 +2,9 @@ import * as THREE from 'three';
 import type { VRMSpringBoneJoint } from './VRMSpringBoneJoint';
 import type { VRMSpringBoneLimitHelper } from './helpers/VRMSpringBoneLimitHelper';
 
+const VEC3_POSITIVE_X = /*@__PURE__*/ new THREE.Vector3(1, 0, 0);
 const VEC3_POSITIVE_Y = /*@__PURE__*/ new THREE.Vector3(0, 1, 0);
+const VEC3_NEGATIVE_Y = /*@__PURE__*/ new THREE.Vector3(0, -1, 0);
 
 const _quatBoneAxis = /*@__PURE__*/ new THREE.Quaternion();
 
@@ -54,7 +56,13 @@ export abstract class VRMSpringBoneLimit {
    * @param boneAxis The initial axis of the child bone, in local unit
    */
   public internalPrecalcRotation(worldSpaceInitialMatrix: THREE.Matrix4, boneAxis: THREE.Vector3): void {
-    _quatBoneAxis.setFromUnitVectors(VEC3_POSITIVE_Y, boneAxis);
+    // When the bone axis is (0, -1, 0), rotate 180 degrees around the X axis, as the spec defines
+    if (boneAxis.equals(VEC3_NEGATIVE_Y)) {
+      _quatBoneAxis.setFromAxisAngle(VEC3_POSITIVE_X, Math.PI);
+    } else {
+      _quatBoneAxis.setFromUnitVectors(VEC3_POSITIVE_Y, boneAxis);
+    }
+
     this._totalRotationCache
       .setFromRotationMatrix(worldSpaceInitialMatrix)
       .normalize()
