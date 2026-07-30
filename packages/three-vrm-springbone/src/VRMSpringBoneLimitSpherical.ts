@@ -20,8 +20,8 @@ export class VRMSpringBoneLimitSpherical extends VRMSpringBoneLimit {
   public constructor(params?: { pitch?: number; yaw?: number; rotation?: THREE.Quaternion }) {
     super();
 
-    this.pitch = params?.pitch ?? Math.PI;
-    this.yaw = params?.yaw ?? Math.PI / 2.0;
+    this.pitch = THREE.MathUtils.clamp(params?.pitch ?? Math.PI, 0.0, Math.PI);
+    this.yaw = THREE.MathUtils.clamp(params?.yaw ?? Math.PI / 2.0, 0.0, Math.PI / 2.0);
     this.rotation = params?.rotation ?? new THREE.Quaternion();
   }
 
@@ -34,11 +34,13 @@ export class VRMSpringBoneLimitSpherical extends VRMSpringBoneLimit {
     let pitch = Math.atan2(tailDir.z, tailDir.y);
     let yaw = Math.asin(tailDir.x);
 
+    // Assume that `pitch` is within [0, π]
     if (Math.abs(pitch) > this.pitch) {
       isLimited = true;
       pitch = this.pitch * Math.sign(pitch);
     }
 
+    // Assume that `yaw` is within [0, π/2]
     if (Math.abs(yaw) > this.yaw) {
       isLimited = true;
       yaw = this.yaw * Math.sign(yaw);

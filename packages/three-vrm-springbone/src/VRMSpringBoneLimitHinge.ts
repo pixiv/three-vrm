@@ -15,7 +15,7 @@ export class VRMSpringBoneLimitHinge extends VRMSpringBoneLimit {
   public constructor(params?: { angle?: number; rotation?: THREE.Quaternion }) {
     super();
 
-    this.angle = params?.angle ?? Math.PI;
+    this.angle = THREE.MathUtils.clamp(params?.angle ?? Math.PI, 0.0, Math.PI);
     this.rotation = params?.rotation ?? new THREE.Quaternion();
   }
 
@@ -31,6 +31,7 @@ export class VRMSpringBoneLimitHinge extends VRMSpringBoneLimit {
     }
 
     // compare the y component with the cos of the angle
+    // Assume that `angle` is within [0, π]
     const cosAngle = Math.cos(this.angle);
 
     if (tailDir.y < cosAngle) {
