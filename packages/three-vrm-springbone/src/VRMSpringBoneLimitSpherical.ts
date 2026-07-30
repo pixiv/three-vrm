@@ -6,22 +6,22 @@ import { VRMSpringBoneLimit } from './VRMSpringBoneLimit';
  */
 export class VRMSpringBoneLimitSpherical extends VRMSpringBoneLimit {
   /**
-   * The phi angle of the spherical limit in radians.
-   * If the phi angle is set to π or greater, the angle will be interpreted as π by the implementation.
+   * The pitch angle of the spherical limit in radians.
+   * If the pitch angle is set to π or greater, the angle will be interpreted as π by the implementation.
    */
-  public phi: number;
+  public pitch: number;
 
   /**
-   * The theta angle of the spherical limit in radians.
-   * If the theta angle is set to π/2 or greater, the angle will be interpreted as π/2 by the implementation.
+   * The yaw angle of the spherical limit in radians.
+   * If the yaw angle is set to π/2 or greater, the angle will be interpreted as π/2 by the implementation.
    */
-  public theta: number;
+  public yaw: number;
 
-  public constructor(params?: { phi?: number; theta?: number; rotation?: THREE.Quaternion }) {
+  public constructor(params?: { pitch?: number; yaw?: number; rotation?: THREE.Quaternion }) {
     super();
 
-    this.phi = params?.phi ?? Math.PI;
-    this.theta = params?.theta ?? Math.PI / 2.0;
+    this.pitch = params?.pitch ?? Math.PI;
+    this.yaw = params?.yaw ?? Math.PI / 2.0;
     this.rotation = params?.rotation ?? new THREE.Quaternion();
   }
 
@@ -31,25 +31,25 @@ export class VRMSpringBoneLimitSpherical extends VRMSpringBoneLimit {
 
     // limit the angles
     let isLimited = false;
-    let phi = Math.atan2(tailDir.z, tailDir.y);
-    let theta = Math.asin(tailDir.x);
+    let pitch = Math.atan2(tailDir.z, tailDir.y);
+    let yaw = Math.asin(tailDir.x);
 
-    if (Math.abs(phi) > this.phi) {
+    if (Math.abs(pitch) > this.pitch) {
       isLimited = true;
-      phi = this.phi * Math.sign(phi);
+      pitch = this.pitch * Math.sign(pitch);
     }
 
-    if (Math.abs(theta) > this.theta) {
+    if (Math.abs(yaw) > this.yaw) {
       isLimited = true;
-      theta = this.theta * Math.sign(theta);
+      yaw = this.yaw * Math.sign(yaw);
     }
 
     // if the angles are limited, we have to recalculate the direction
     if (isLimited) {
-      const cosTheta = Math.cos(theta);
-      const sinTheta = Math.sin(theta);
+      const cosYaw = Math.cos(yaw);
+      const sinYaw = Math.sin(yaw);
 
-      tailDir.set(sinTheta, cosTheta * Math.cos(phi), cosTheta * Math.sin(phi));
+      tailDir.set(sinYaw, cosYaw * Math.cos(pitch), cosYaw * Math.sin(pitch));
     }
 
     // change the direction back to the world space

@@ -557,8 +557,8 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
   private _importLimitSpherical(
     joint: VRMSpringBoneJoint,
     params: {
-      phi: number;
-      theta: number;
+      pitch: number;
+      yaw: number;
       rotation?: THREE.Quaternion;
     },
   ): VRMSpringBoneLimitSpherical {
@@ -604,8 +604,8 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
           });
         } else if (schemaLimitLimit.spherical) {
           return this._importLimitSpherical(joint, {
-            phi: schemaLimitLimit.spherical.phi,
-            theta: schemaLimitLimit.spherical.theta,
+            pitch: schemaLimitLimit.spherical.pitch,
+            yaw: schemaLimitLimit.spherical.yaw,
             rotation: new THREE.Quaternion().fromArray(schemaLimitLimit.spherical.rotation ?? [0.0, 0.0, 0.0, 1.0]),
           });
         } else {

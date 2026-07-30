@@ -3,14 +3,14 @@
  */
 export interface SpringBoneLimitLimitSpherical {
   /**
-   * The phi angle of the spherical limit in radians. If the phi angle is set to π or greater, the angle will be interpreted as π by the implementation.
+   * The pitch angle of the spherical limit in radians. If the pitch angle is set to π or greater, the angle will be interpreted as π by the implementation.
    */
-  phi: number;
+  pitch: number;
 
   /**
-   * The theta angle of the spherical limit in radians. If the theta angle is set to π/2 or greater, the angle will be interpreted as π/2 by the implementation.
+   * The yaw angle of the spherical limit in radians. If the yaw angle is set to π/2 or greater, the angle will be interpreted as π/2 by the implementation.
    */
-  theta: number;
+  yaw: number;
 
   /**
    * The rotation from the default orientation of the spherical limit. The rotation is represented as a quaternion (x, y, z, w), where w is the scalar.

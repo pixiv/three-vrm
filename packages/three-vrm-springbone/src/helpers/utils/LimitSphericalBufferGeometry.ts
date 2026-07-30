@@ -8,8 +8,8 @@ export class LimitSphericalBufferGeometry extends THREE.BufferGeometry implement
   private readonly _attrPos: THREE.BufferAttribute;
   private readonly _attrIndex: THREE.BufferAttribute;
   private readonly _limit: VRMSpringBoneLimitSpherical;
-  private _currentPhi = 0;
-  private _currentTheta = 0;
+  private _currentPitch = 0;
+  private _currentYaw = 0;
 
   public constructor(limit: VRMSpringBoneLimitSpherical) {
     super();
@@ -29,13 +29,13 @@ export class LimitSphericalBufferGeometry extends THREE.BufferGeometry implement
   public update(): void {
     let shouldUpdateGeometry = false;
 
-    if (this._currentPhi !== this._limit.phi) {
-      this._currentPhi = this._limit.phi;
+    if (this._currentPitch !== this._limit.pitch) {
+      this._currentPitch = this._limit.pitch;
       shouldUpdateGeometry = true;
     }
 
-    if (this._currentTheta !== this._limit.theta) {
-      this._currentTheta = this._limit.theta;
+    if (this._currentYaw !== this._limit.yaw) {
+      this._currentYaw = this._limit.yaw;
       shouldUpdateGeometry = true;
     }
 
@@ -45,50 +45,40 @@ export class LimitSphericalBufferGeometry extends THREE.BufferGeometry implement
   }
 
   private _buildPosition(): void {
-    // y-z phi angle
+    // y-z pitch angle
     for (let i = 0; i < ARC_SEGMENTS; i++) {
-      const phi = this._currentPhi * (2.0 * (i / (ARC_SEGMENTS - 1)) - 1.0);
+      const pitch = this._currentPitch * (2.0 * (i / (ARC_SEGMENTS - 1)) - 1.0);
 
-      this._attrPos.setXYZ(i, 0, Math.cos(phi), Math.sin(phi));
+      this._attrPos.setXYZ(i, 0, Math.cos(pitch), Math.sin(pitch));
     }
 
-    // phi arc at edges
+    // pitch arc at edges
     {
-      const cosTheta = Math.cos(this._currentTheta);
-      const sinTheta = Math.sin(this._currentTheta);
+      const cosYaw = Math.cos(this._currentYaw);
+      const sinYaw = Math.sin(this._currentYaw);
 
       for (let i = 0; i < ARC_SEGMENTS - 1; i++) {
-        const phi = this._currentPhi * (2.0 * (i / (ARC_SEGMENTS - 1)) - 1.0);
-        const cosPhi = Math.cos(phi);
-        const sinPhi = Math.sin(phi);
+        const pitch = this._currentPitch * (2.0 * (i / (ARC_SEGMENTS - 1)) - 1.0);
+        const cosPitch = Math.cos(pitch);
+        const sinPitch = Math.sin(pitch);
 
-        this._attrPos.setXYZ(ARC_SEGMENTS + i, sinTheta, cosTheta * cosPhi, cosTheta * sinPhi);
-        this._attrPos.setXYZ(
-          ARC_SEGMENTS + 2 * (ARC_SEGMENTS - 1) + i,
-          -sinTheta,
-          cosTheta * cosPhi,
-          -cosTheta * sinPhi,
-        );
+        this._attrPos.setXYZ(ARC_SEGMENTS + i, sinYaw, cosYaw * cosPitch, cosYaw * sinPitch);
+        this._attrPos.setXYZ(ARC_SEGMENTS + 2 * (ARC_SEGMENTS - 1) + i, -sinYaw, cosYaw * cosPitch, -cosYaw * sinPitch);
       }
     }
 
-    // theta arc at edges
+    // yaw arc at edges
     {
-      const cosPhi = Math.cos(this._currentPhi);
-      const sinPhi = Math.sin(this._currentPhi);
+      const cosPitch = Math.cos(this._currentPitch);
+      const sinPitch = Math.sin(this._currentPitch);
 
       for (let i = 0; i < ARC_SEGMENTS - 1; i++) {
-        const theta = this._currentTheta * (2.0 * (i / (ARC_SEGMENTS - 1)) - 1.0);
-        const cosTheta = Math.cos(theta);
-        const sinTheta = Math.sin(theta);
+        const yaw = this._currentYaw * (2.0 * (i / (ARC_SEGMENTS - 1)) - 1.0);
+        const cosYaw = Math.cos(yaw);
+        const sinYaw = Math.sin(yaw);
 
-        this._attrPos.setXYZ(ARC_SEGMENTS + ARC_SEGMENTS - 1 + i, -sinTheta, cosTheta * cosPhi, cosTheta * sinPhi);
-        this._attrPos.setXYZ(
-          ARC_SEGMENTS + 3 * (ARC_SEGMENTS - 1) + i,
-          sinTheta,
-          cosTheta * cosPhi,
-          -cosTheta * sinPhi,
-        );
+        this._attrPos.setXYZ(ARC_SEGMENTS + ARC_SEGMENTS - 1 + i, -sinYaw, cosYaw * cosPitch, cosYaw * sinPitch);
+        this._attrPos.setXYZ(ARC_SEGMENTS + 3 * (ARC_SEGMENTS - 1) + i, sinYaw, cosYaw * cosPitch, -cosYaw * sinPitch);
       }
     }
 

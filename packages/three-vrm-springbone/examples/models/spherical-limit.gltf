@@ -257,8 +257,8 @@
                   "specVersion": "1.0-draft",
                   "limit": {
                     "spherical": {
-                      "phi": 0.523599,
-                      "theta": 0.196350,
+                      "pitch": 0.523599,
+                      "yaw": 0.196350,
                       "rotation": [ 0.0, 0.258819, 0.0, 0.965926 ]
                     }
                   }
@@ -277,8 +277,8 @@
                   "specVersion": "1.0-draft",
                   "limit": {
                     "spherical": {
-                      "phi": 0.523599,
-                      "theta": 0.196350,
+                      "pitch": 0.523599,
+                      "yaw": 0.196350,
                       "rotation": [ 0.0, 0.258819, 0.0, 0.965926 ]
                     }
                   }
@@ -297,8 +297,8 @@
                   "specVersion": "1.0-draft",
                   "limit": {
                     "spherical": {
-                      "phi": 0.523599,
-                      "theta": 0.196350,
+                      "pitch": 0.523599,
+                      "yaw": 0.196350,
                       "rotation": [ 0.0, 0.258819, 0.0, 0.965926 ]
                     }
                   }
@@ -317,8 +317,8 @@
                   "specVersion": "1.0-draft",
                   "limit": {
                     "spherical": {
-                      "phi": 0.523599,
-                      "theta": 0.196350,
+                      "pitch": 0.523599,
+                      "yaw": 0.196350,
                       "rotation": [ 0.0, 0.258819, 0.0, 0.965926 ]
                     }
                   }
