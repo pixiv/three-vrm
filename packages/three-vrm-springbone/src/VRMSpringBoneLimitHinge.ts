@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import { VRMSpringBoneLimit } from './VRMSpringBoneLimit';
 
+const SINGULARITY_EPSILON = Math.sqrt(Number.EPSILON);
+
 /**
  * Represents the hinge limit of a spring bone defined in `VRMC_springBone_limit`.
  */
@@ -23,27 +25,34 @@ export class VRMSpringBoneLimitHinge extends VRMSpringBoneLimit {
     // bring the direction into the local space of the limit
     tailDir.applyQuaternion(this._totalRotationInvCache);
 
-    // kill the x component and normalize the direction
     let isLimited = false;
-    if (tailDir.x !== 0.0) {
-      tailDir.x = 0.0;
-      tailDir.normalize();
-    }
 
-    // compare the y component with the cos of the angle
-    // Assume that `angle` is within [0, π]
-    const cosAngle = Math.cos(this.angle);
-
-    if (tailDir.y < cosAngle) {
-      // now we have to apply the limit
+    const projectedLengthSq = tailDir.y * tailDir.y + tailDir.z * tailDir.z;
+    if (projectedLengthSq < SINGULARITY_EPSILON) {
+      // The direction is either +X or -X, choose +Y
       isLimited = true;
+      tailDir.set(0.0, 1.0, 0.0);
+    } else {
+      // Map the direction to the YZ plane of the hinge
+      if (tailDir.x !== 0.0) {
+        isLimited = true;
 
-      // multiply the z component by the ratio of the sins of the angles
-      const ratio = Math.sqrt((1.0 - cosAngle * cosAngle) / (1.0 - tailDir.y * tailDir.y));
-      tailDir.z *= ratio;
+        const scale = 1.0 / Math.sqrt(projectedLengthSq);
+        tailDir.set(0.0, tailDir.y * scale, tailDir.z * scale);
+      }
 
-      // set the y component to the cos of the angle
-      tailDir.y = cosAngle;
+      // Assume that `angle` is within [0, π]
+      const cosLimitAngle = Math.cos(this.angle);
+      if (tailDir.y < cosLimitAngle) {
+        isLimited = true;
+
+        const sinLimitAngle = Math.sqrt(1.0 - cosLimitAngle * cosLimitAngle);
+
+        // When the direction is -Y, choose the +Z side
+        const zSign = tailDir.z < 0.0 ? -1.0 : 1.0;
+        tailDir.y = cosLimitAngle;
+        tailDir.z = sinLimitAngle * zSign;
+      }
     }
 
     // change the direction back to the world space

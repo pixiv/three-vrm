@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import { VRMSpringBoneLimit } from './VRMSpringBoneLimit';
 
+const SINGULARITY_EPSILON = Math.sqrt(Number.EPSILON);
+
 /**
  * Represents the spherical limit of a spring bone defined in `VRMC_springBone_limit`.
  */
@@ -29,30 +31,39 @@ export class VRMSpringBoneLimitSpherical extends VRMSpringBoneLimit {
     // bring the direction into the local space of the limit
     tailDir.applyQuaternion(this._totalRotationInvCache);
 
-    // limit the angles
     let isLimited = false;
-    let pitch = Math.atan2(tailDir.z, tailDir.y);
-    let yaw = Math.asin(tailDir.x);
 
+    // calculate the pitch / yaw of the direction
+    let pitch: number;
+    if (tailDir.y < -1.0 + SINGULARITY_EPSILON) {
+      // The direction is -Y, choose the +Z side
+      pitch = Math.PI;
+    } else if (Math.abs(tailDir.x) > 1.0 - SINGULARITY_EPSILON) {
+      // The direction is either +X or -X, choose the +Y side
+      pitch = 0.0;
+    } else {
+      pitch = Math.atan2(tailDir.z, tailDir.y);
+    }
+    let yaw = Math.asin(THREE.MathUtils.clamp(tailDir.x, -1.0, 1.0));
+
+    // limit the pitch angle
     // Assume that `pitch` is within [0, π]
     if (Math.abs(pitch) > this.pitch) {
       isLimited = true;
       pitch = this.pitch * Math.sign(pitch);
     }
 
+    // limit the yaw angle
     // Assume that `yaw` is within [0, π/2]
     if (Math.abs(yaw) > this.yaw) {
       isLimited = true;
       yaw = this.yaw * Math.sign(yaw);
     }
 
-    // if the angles are limited, we have to recalculate the direction
-    if (isLimited) {
-      const cosYaw = Math.cos(yaw);
-      const sinYaw = Math.sin(yaw);
-
-      tailDir.set(sinYaw, cosYaw * Math.cos(pitch), cosYaw * Math.sin(pitch));
-    }
+    // recalculate the direction using the limited pitch / yaw
+    const cosYaw = Math.cos(yaw);
+    const sinYaw = Math.sin(yaw);
+    tailDir.set(sinYaw, cosYaw * Math.cos(pitch), cosYaw * Math.sin(pitch));
 
     // change the direction back to the world space
     tailDir.applyQuaternion(this._totalRotationCache);

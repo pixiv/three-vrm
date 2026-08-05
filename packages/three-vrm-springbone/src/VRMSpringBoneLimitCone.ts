@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import { VRMSpringBoneLimit } from './VRMSpringBoneLimit';
 
+const SINGULARITY_EPSILON = Math.sqrt(Number.EPSILON);
+
 /**
  * Represents the cone limit of a spring bone defined in `VRMC_springBone_limit`.
  */
@@ -25,20 +27,29 @@ export class VRMSpringBoneLimitCone extends VRMSpringBoneLimit {
 
     // compare the y component with the cos of the angle
     // Assume that `angle` is within [0, π]
-    const cosAngle = Math.cos(this.angle);
+    const cosLimitAngle = Math.cos(this.angle);
 
     let isLimited = false;
-    if (tailDir.y < cosAngle) {
+
+    if (tailDir.y < cosLimitAngle) {
       // now we have to apply the limit
       isLimited = true;
 
-      // multiply the x and z components by the ratio of the sins of the angles
-      const ratio = Math.sqrt((1.0 - cosAngle * cosAngle) / (1.0 - tailDir.y * tailDir.y));
-      tailDir.x *= ratio;
-      tailDir.z *= ratio;
+      // Scale the x and z components of the direction using the ratio of the sin of the direction and the sin of the angle set in the limit
+      const horizontalLengthSq = 1.0 - tailDir.y * tailDir.y;
 
-      // set the y component to the cos of the angle
-      tailDir.y = cosAngle;
+      if (horizontalLengthSq < SINGULARITY_EPSILON) {
+        // The direction is -Y, choose the +Z side
+        tailDir.x = 0.0;
+        tailDir.z = Math.sqrt(1.0 - cosLimitAngle * cosLimitAngle);
+      } else {
+        const scale = Math.sqrt((1.0 - cosLimitAngle * cosLimitAngle) / horizontalLengthSq);
+        tailDir.x *= scale;
+        tailDir.z *= scale;
+      }
+
+      // Set the y component to the cos of the angle
+      tailDir.y = cosLimitAngle;
     }
 
     // change the direction back to the world space
