@@ -103,7 +103,7 @@
 
 						currentGltf = gltf;
 
-						clock.start();
+						timer.start();
 
 					},
 
@@ -125,20 +125,23 @@
 			scene.add( axesHelper );
 
 			// animate
-			const clock = new THREE.Clock();
+			const timer = new THREE.Timer();
 			let shouldReset = true; // reset in the very first frame
 
 			function animate() {
 
 				requestAnimationFrame( animate );
 
-				const delta = clock.getDelta();
+				timer.update();
+
+				const time = timer.getElapsed();
+				const delta = timer.getDelta();
 
 				if ( currentGltf ) {
 
 					const manager = currentGltf.userData.vrmSpringBoneManager;
 
-					currentGltf.scene.position.x = Math.sin( Math.PI * clock.elapsedTime );
+					currentGltf.scene.position.x = Math.sin( Math.PI * time );
 
 					if ( shouldReset ) {
 
@@ -162,9 +165,17 @@
 
 			const params = {
 
+				togglePlay: () => {
+
+					timer.setTimescale( 1.0 - timer.getTimescale() );
+
+				},
+
 				model: 'sphere-collider.gltf',
 
 			};
+
+			gui.add( params, 'togglePlay' ).name( 'Play / Pause' );
 
 			const availableModels = [
 
