@@ -609,7 +609,7 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
             rotation: new THREE.Quaternion().fromArray(schemaLimitLimit.spherical.rotation ?? [0.0, 0.0, 0.0, 1.0]),
           });
         } else {
-          console.warn(`VRMSpringBoneLoaderPlugin: Unknown limit type "${schemaLimitLimit}". Ignoring the limit`);
+          console.warn('VRMSpringBoneLoaderPlugin: Unknown limit type. Ignoring the limit');
           return undefined;
         }
       }
