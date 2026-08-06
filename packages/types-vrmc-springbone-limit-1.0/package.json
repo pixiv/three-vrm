@@ -16,7 +16,7 @@
     "directory": "packages/types-vrmc-springbone-limit-1.0"
   },
   "scripts": {
-    "version": "yarn clean",
+    "version": "pnpm clean",
     "clean": "rimraf docs/",
     "lint": "eslint \"types/**/*.{ts,tsx}\" && prettier \"types/**/*.{ts,tsx}\" --check",
     "lint-fix": "eslint \"types/**/*.{ts,tsx}\" --fix && prettier \"types/**/*.{ts,tsx}\" --write"
