@@ -13,18 +13,18 @@ const _quatBoneAxis = /*@__PURE__*/ new THREE.Quaternion();
  */
 export abstract class VRMSpringBoneLimit {
   /**
-   * The rotation from the default orientation of the cone limit.
+   * The rotation from the default orientation of the limit.
    */
   public rotation: THREE.Quaternion;
 
   /**
-   * The cache for the total rotation of the cone limit.
+   * The cache for the total rotation of the limit.
    * It will be calculated in {@link internalPrecalcRotation}.
    */
   protected _totalRotationCache: THREE.Quaternion;
 
   /**
-   * The cache for the total rotation of the cone limit.
+   * The cache for the total rotation of the limit.
    * It will be calculated in {@link internalPrecalcRotation}.
    *
    * This is a public property to use in {@link VRMSpringBoneLimitHelper}.
