@@ -43,7 +43,7 @@ export class LimitConeBufferGeometry extends THREE.BufferGeometry implements Lim
     const cos = Math.cos(this._currentAngle);
     const sin = Math.sin(this._currentAngle);
 
-    for (let i = 0; i <= ARC_SEGMENTS; i++) {
+    for (let i = 0; i < ARC_SEGMENTS; i++) {
       const t = 2.0 * Math.PI * (i / ARC_SEGMENTS);
 
       this._attrPos.setXYZ(i, sin * Math.cos(t), cos, sin * Math.sin(t));
