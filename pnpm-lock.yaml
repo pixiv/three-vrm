@@ -5,7 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 patchedDependencies:
-  '@types/three@0.180.0': 52dc1d3b9bfcd84c5bd9e09084d791897ef1036ea9c06dfc518d616d556beaf1
+  '@types/three@0.180.0':
+    hash: 52dc1d3b9bfcd84c5bd9e09084d791897ef1036ea9c06dfc518d616d556beaf1
+    path: patches/@types__three@0.180.0.patch
 
 importers:
 
