@@ -44,15 +44,17 @@ jobs:
         git config --local user.name "actions-user"
 
     - name: Set package version
-      run: |
-        pnpm lerna version ${{ github.event.inputs.version }} --exact --no-push --yes
-        pnpm lerna publish from-git -y --dist-tag ${{ github.event.inputs.distTag }}
       env:
+        RELEASE_VERSION: ${{ github.event.inputs.version }}
+        NPM_DIST_TAG: ${{ github.event.inputs.distTag }}
         NPM_CONFIG_PROVENANCE: true
+      run: |
+        pnpm lerna version "$RELEASE_VERSION" --exact --no-push --yes
+        pnpm lerna publish from-git -y --dist-tag "$NPM_DIST_TAG"
 
     - name: Git push version up commits
       run: |
-        git push origin --tags ${{ github.ref_name }}
+        git push origin --tags "$GITHUB_REF_NAME"
 
     - name: Upload Builds
       uses: actions/upload-artifact@v4
