@@ -4,6 +4,7 @@ import type { VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';
 import type { VRMSpringBoneJointSettings } from './VRMSpringBoneJointSettings';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { VRMSpringBoneManager } from './VRMSpringBoneManager';
+import { VRMSpringBoneLimit } from './VRMSpringBoneLimit';
 
 // based on
 // http://rocketjump.skr.jp/unity3d/109/
@@ -16,6 +17,18 @@ const _v3A = new THREE.Vector3();
 const _v3B = new THREE.Vector3();
 
 /**
+ * The initial local matrix in the current world space.
+ * A temporary variable which is used in `update`.
+ */
+const _worldSpaceInitialMatrix = new THREE.Matrix4();
+
+/**
+ * The inverse of {@link _worldSpaceInitialMatrix}.
+ * A temporary variable which is used in `update`.
+ */
+const _worldSpaceInitialMatrixInv = new THREE.Matrix4();
+
+/**
  * A temporary variable which is used in `update`
  */
 const _worldSpacePosition = new THREE.Vector3();
@@ -24,8 +37,6 @@ const _worldSpacePosition = new THREE.Vector3();
  * A temporary variable which is used in `update`
  */
 const _nextTail = new THREE.Vector3();
-
-const _matA = new THREE.Matrix4();
 
 /**
  * A class represents a single joint of a spring bone.
@@ -36,6 +47,11 @@ export class VRMSpringBoneJoint {
    * Settings of the bone.
    */
   public settings: VRMSpringBoneJointSettings;
+
+  /**
+   * Limit attached to this bone.
+   */
+  public limit: VRMSpringBoneLimit | null;
 
   /**
    * Collider groups attached to this bone.
@@ -64,17 +80,28 @@ export class VRMSpringBoneJoint {
   private _prevTail = new THREE.Vector3();
 
   /**
-   * Initial axis of the bone, in local unit.
+   * The initial axis of the child bone, in local unit.
    */
   private _boneAxis = new THREE.Vector3();
 
   /**
-   * Length of the bone in world unit.
+   * The length of the bone in world unit.
    * Will be used for normalization in update loop, will be updated by {@link _calcWorldSpaceBoneLength}.
    *
    * It's same as local unit length unless there are scale transformations in the world space.
    */
   private _worldSpaceBoneLength = 0.0;
+
+  /**
+   * The length of the bone in world unit.
+   *
+   * It's same as local unit length unless there are scale transformations in the world space.
+   *
+   * Intended to be used by helpers.
+   */
+  public get worldSpaceBoneLength(): number {
+    return this._worldSpaceBoneLength;
+  }
 
   /**
    * Set of dependencies that need to be updated before this joint.
@@ -136,6 +163,12 @@ export class VRMSpringBoneJoint {
    * Initial state of the position of its child.
    */
   private _initialLocalChildPosition = new THREE.Vector3();
+
+  /**
+   * Initial state of the position of its child.
+   *
+   * Intended to be used by helpers.
+   */
   public get initialLocalChildPosition(): THREE.Vector3 {
     return this._initialLocalChildPosition;
   }
@@ -174,6 +207,8 @@ export class VRMSpringBoneJoint {
       gravityDir: settings.gravityDir?.clone() ?? new THREE.Vector3(0.0, -1.0, 0.0),
       dragForce: settings.dragForce ?? 0.4,
     };
+
+    this.limit = null;
 
     this.colliderGroups = colliderGroups;
   }
@@ -234,11 +269,16 @@ export class VRMSpringBoneJoint {
     // Update the _worldSpaceBoneLength
     this._calcWorldSpaceBoneLength();
 
+    // Set temporary variables
+    _worldSpaceInitialMatrix.copy(this._parentMatrixWorld).multiply(this._initialLocalMatrix);
+    _worldSpaceInitialMatrixInv.copy(_worldSpaceInitialMatrix).invert();
+    _worldSpacePosition.setFromMatrixPosition(this.bone.matrixWorld);
+
+    // Precalc the rotation of the limit
+    this.limit?.internalPrecalcRotation?.(_worldSpaceInitialMatrix, this._boneAxis);
+
     // Get boneAxis in world space
-    const worldSpaceBoneAxis = _v3B
-      .copy(this._boneAxis)
-      .transformDirection(this._initialLocalMatrix)
-      .transformDirection(this._parentMatrixWorld);
+    const worldSpaceBoneAxis = _v3B.copy(this._boneAxis).transformDirection(_worldSpaceInitialMatrix);
 
     // verlet積分で次の位置を計算
     _nextTail
@@ -251,11 +291,12 @@ export class VRMSpringBoneJoint {
       .addScaledVector(worldSpaceBoneAxis, this.settings.stiffness * delta) // 親の回転による子ボーンの移動目標
       .addScaledVector(this.settings.gravityDir, this.settings.gravityPower * delta); // 外力による移動量
 
-    // normalize bone length
-    _worldSpacePosition.setFromMatrixPosition(this.bone.matrixWorld);
-    _nextTail.sub(_worldSpacePosition).normalize().multiplyScalar(this._worldSpaceBoneLength).add(_worldSpacePosition);
+    // Apply limit - 1st time
+    _nextTail.sub(_worldSpacePosition).normalize();
+    this.limit?.calculateLimit(_nextTail);
+    _nextTail.multiplyScalar(this._worldSpaceBoneLength).add(_worldSpacePosition);
 
-    // Collisionで移動
+    // Calculate collisions
     this._collision(_nextTail);
 
     // update prevTail and currentTail
@@ -264,11 +305,8 @@ export class VRMSpringBoneJoint {
 
     // Apply rotation, convert vector3 thing into actual quaternion
     // Original UniVRM is doing center unit calculus at here but we're gonna do this on local unit
-    const worldSpaceInitialMatrixInv = _matA
-      .multiplyMatrices(this._parentMatrixWorld, this._initialLocalMatrix)
-      .invert();
     this.bone.quaternion
-      .setFromUnitVectors(this._boneAxis, _v3A.copy(_nextTail).applyMatrix4(worldSpaceInitialMatrixInv).normalize())
+      .setFromUnitVectors(this._boneAxis, _v3A.copy(_nextTail).applyMatrix4(_worldSpaceInitialMatrixInv).normalize())
       .premultiply(this._initialLocalRotation);
 
     // We need to update its matrixWorld manually, since we tweaked the bone by our hand
@@ -291,10 +329,10 @@ export class VRMSpringBoneJoint {
           // hit
           tail.addScaledVector(_v3A, -dist);
 
-          // normalize bone length
-          tail.sub(_worldSpacePosition);
-          const length = tail.length();
-          tail.multiplyScalar(this._worldSpaceBoneLength / length).add(_worldSpacePosition);
+          // Apply limit
+          tail.sub(_worldSpacePosition).normalize();
+          this.limit?.calculateLimit(tail);
+          tail.multiplyScalar(this._worldSpaceBoneLength).add(_worldSpacePosition);
         }
       }
     }

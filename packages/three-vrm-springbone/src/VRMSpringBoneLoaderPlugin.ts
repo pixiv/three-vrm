@@ -1,6 +1,7 @@
 import type * as V0VRM from '@pixiv/types-vrm-0.0';
 import type * as V1SpringBoneSchema from '@pixiv/types-vrmc-springbone-1.0';
 import type * as SpringBoneExtendedColliderSchema from '@pixiv/types-vrmc-springbone-extended-collider-1.0';
+import type * as SpringBoneLimitSchema from '@pixiv/types-vrmc-springbone-limit-1.0';
 import * as THREE from 'three';
 import type { GLTF, GLTFLoaderPlugin, GLTFParser } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { VRMSpringBoneColliderHelper, VRMSpringBoneJointHelper } from './helpers';
@@ -14,8 +15,14 @@ import { VRMSpringBoneManager } from './VRMSpringBoneManager';
 import type { VRMSpringBoneJointSettings } from './VRMSpringBoneJointSettings';
 import { GLTF as GLTFSchema } from '@gltf-transform/core';
 import { VRMSpringBoneColliderShapePlane } from './VRMSpringBoneColliderShapePlane';
+import { VRMSpringBoneLimit } from './VRMSpringBoneLimit';
+import { VRMSpringBoneLimitCone } from './VRMSpringBoneLimitCone';
+import { VRMSpringBoneLimitHelper } from './helpers/VRMSpringBoneLimitHelper';
+import { VRMSpringBoneLimitHinge } from './VRMSpringBoneLimitHinge';
+import { VRMSpringBoneLimitSpherical } from './VRMSpringBoneLimitSpherical';
 
 const EXTENSION_NAME_EXTENDED_COLLIDER = 'VRMC_springBone_extended_collider';
+const EXTENSION_NAME_LIMIT = 'VRMC_springBone_limit';
 
 /**
  * Possible spec versions it recognizes.
@@ -26,6 +33,11 @@ const POSSIBLE_SPEC_VERSIONS = new Set(['1.0', '1.0-beta']);
  * Possible spec versions of `VRMC_springBone_extended_collider` it recognizes.
  */
 const POSSIBLE_SPEC_VERSIONS_EXTENDED_COLLIDERS = new Set(['1.0']);
+
+/**
+ * Possible spec versions of `VRMC_springBone_limit` it recognizes.
+ */
+const POSSIBLE_SPEC_VERSIONS_LIMIT = new Set(['1.0-draft']);
 
 export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
   public static readonly EXTENSION_NAME = 'VRMC_springBone';
@@ -38,11 +50,18 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
   public jointHelperRoot?: THREE.Object3D;
 
   /**
-   * Specify an Object3D to add {@link VRMSpringBoneJointHelper} s.
+   * Specify an Object3D to add {@link VRMSpringBoneColliderHelper} s.
    * If not specified, helper will not be created.
    * If `renderOrder` is set to the root, helpers will copy the same `renderOrder` .
    */
   public colliderHelperRoot?: THREE.Object3D;
+
+  /**
+   * Specify an Object3D to add {@link VRMSpringBoneLimitHelper} s.
+   * If not specified, helper will not be created.
+   * If `renderOrder` is set to the root, helpers will copy the same `renderOrder` .
+   */
+  public limitHelperRoot?: THREE.Object3D;
 
   /**
    * If true, load colliders defined in `VRMC_springBone_extended_collider`.
@@ -50,6 +69,13 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
    * `true` by default.
    */
   public useExtendedColliders: boolean;
+
+  /**
+   * If true, load limits defined in `VRMC_springBone_limit`.
+   * Set to `false` to disable loading limits and use the fallback behavior.
+   * `true` by default.
+   */
+  public useLimits: boolean;
 
   public readonly parser: GLTFParser;
 
@@ -62,7 +88,9 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
 
     this.jointHelperRoot = options?.jointHelperRoot;
     this.colliderHelperRoot = options?.colliderHelperRoot;
+    this.limitHelperRoot = options?.limitHelperRoot;
     this.useExtendedColliders = options?.useExtendedColliders ?? true;
+    this.useLimits = options?.useLimits ?? true;
   }
 
   public async afterRoot(gltf: GLTF): Promise<void> {
@@ -256,6 +284,12 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
           const joint = this._importJoint(node, child, setting, colliderGroupsForSpring);
           if (center) {
             joint.center = center;
+          }
+
+          // import limit
+          const limit = this._tryImportLimitFromSchema(joint, prevSchemaJoint);
+          if (limit) {
+            joint.limit = limit;
           }
 
           manager.addJoint(joint);
@@ -486,5 +520,103 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
     }
 
     return collider;
+  }
+
+  private _importLimitCone(
+    joint: VRMSpringBoneJoint,
+    params: {
+      angle: number;
+      rotation?: THREE.Quaternion;
+    },
+  ): VRMSpringBoneLimitCone {
+    const limit = new VRMSpringBoneLimitCone(params);
+
+    if (this.limitHelperRoot) {
+      const helper = new VRMSpringBoneLimitHelper(limit, joint);
+      this.limitHelperRoot.add(helper);
+      helper.renderOrder = this.limitHelperRoot.renderOrder;
+    }
+
+    return limit;
+  }
+
+  private _importLimitHinge(
+    joint: VRMSpringBoneJoint,
+    params: {
+      angle: number;
+      rotation?: THREE.Quaternion;
+    },
+  ): VRMSpringBoneLimitHinge {
+    const limit = new VRMSpringBoneLimitHinge(params);
+
+    if (this.limitHelperRoot) {
+      const helper = new VRMSpringBoneLimitHelper(limit, joint);
+      this.limitHelperRoot.add(helper);
+      helper.renderOrder = this.limitHelperRoot.renderOrder;
+    }
+
+    return limit;
+  }
+
+  private _importLimitSpherical(
+    joint: VRMSpringBoneJoint,
+    params: {
+      pitch: number;
+      yaw: number;
+      rotation?: THREE.Quaternion;
+    },
+  ): VRMSpringBoneLimitSpherical {
+    const limit = new VRMSpringBoneLimitSpherical(params);
+
+    if (this.limitHelperRoot) {
+      const helper = new VRMSpringBoneLimitHelper(limit, joint);
+      this.limitHelperRoot.add(helper);
+      helper.renderOrder = this.limitHelperRoot.renderOrder;
+    }
+
+    return limit;
+  }
+
+  private _tryImportLimitFromSchema(
+    joint: VRMSpringBoneJoint,
+    schemaJoint: V1SpringBoneSchema.SpringBoneJoint,
+  ): VRMSpringBoneLimit | undefined {
+    if (!this.useLimits) {
+      return undefined;
+    }
+
+    const schemaLimit: SpringBoneLimitSchema.VRMCSpringBoneLimit | undefined =
+      schemaJoint.extensions?.[EXTENSION_NAME_LIMIT];
+
+    if (schemaLimit != null) {
+      const specVersionLimit = schemaLimit.specVersion;
+      if (!POSSIBLE_SPEC_VERSIONS_LIMIT.has(specVersionLimit)) {
+        console.warn(
+          `VRMSpringBoneLoaderPlugin: Unknown ${EXTENSION_NAME_LIMIT} specVersion "${specVersionLimit}". Ignoring the limit`,
+        );
+      } else {
+        const schemaLimitLimit = schemaLimit.limit!;
+        if (schemaLimitLimit.cone) {
+          return this._importLimitCone(joint, {
+            angle: schemaLimitLimit.cone.angle,
+            rotation: new THREE.Quaternion().fromArray(schemaLimitLimit.cone.rotation ?? [0.0, 0.0, 0.0, 1.0]),
+          });
+        } else if (schemaLimitLimit.hinge) {
+          return this._importLimitHinge(joint, {
+            angle: schemaLimitLimit.hinge.angle,
+            rotation: new THREE.Quaternion().fromArray(schemaLimitLimit.hinge.rotation ?? [0.0, 0.0, 0.0, 1.0]),
+          });
+        } else if (schemaLimitLimit.spherical) {
+          return this._importLimitSpherical(joint, {
+            pitch: schemaLimitLimit.spherical.pitch,
+            yaw: schemaLimitLimit.spherical.yaw,
+            rotation: new THREE.Quaternion().fromArray(schemaLimitLimit.spherical.rotation ?? [0.0, 0.0, 0.0, 1.0]),
+          });
+        } else {
+          console.warn('VRMSpringBoneLoaderPlugin: Unknown limit type. Ignoring the limit');
+          return undefined;
+        }
+      }
+    }
   }
 }
