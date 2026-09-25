@@ -1,6 +1,6 @@
 {
   "name": "@pixiv/three-vrm-animation",
-  "version": "3.5.5",
+  "version": "3.6.0-beta.0",
   "description": "The implementation of VRM Animation",
   "license": "MIT",
   "author": "pixiv",

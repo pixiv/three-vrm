@@ -1,6 +1,6 @@
 {
   "name": "@pixiv/three-vrm",
-  "version": "3.5.5",
+  "version": "3.6.0-beta.0",
   "description": "VRM file loader for three.js.",
   "license": "MIT",
   "author": "pixiv",
