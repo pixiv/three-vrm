@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  '@types/three@0.186.0':
+    hash: 7c1c81c1eb36aaae9dc18f0d0148bc3d51a3195a623bccca529243dc2ba29a36
+    path: patches/@types__three@0.186.0.patch
+
 importers:
 
   .:
@@ -95,7 +100,7 @@ importers:
     devDependencies:
       '@types/three':
         specifier: ^0.186.0
-        version: 0.186.0
+        version: 0.186.0(patch_hash=7c1c81c1eb36aaae9dc18f0d0148bc3d51a3195a623bccca529243dc2ba29a36)
       three:
         specifier: ^0.186.0
         version: 0.186.0
@@ -114,7 +119,7 @@ importers:
     devDependencies:
       '@types/three':
         specifier: ^0.186.0
-        version: 0.186.0
+        version: 0.186.0(patch_hash=7c1c81c1eb36aaae9dc18f0d0148bc3d51a3195a623bccca529243dc2ba29a36)
       three:
         specifier: ^0.186.0
         version: 0.186.0
@@ -130,7 +135,7 @@ importers:
     devDependencies:
       '@types/three':
         specifier: ^0.186.0
-        version: 0.186.0
+        version: 0.186.0(patch_hash=7c1c81c1eb36aaae9dc18f0d0148bc3d51a3195a623bccca529243dc2ba29a36)
       three:
         specifier: ^0.186.0
         version: 0.186.0
@@ -143,7 +148,7 @@ importers:
     devDependencies:
       '@types/three':
         specifier: ^0.186.0
-        version: 0.186.0
+        version: 0.186.0(patch_hash=7c1c81c1eb36aaae9dc18f0d0148bc3d51a3195a623bccca529243dc2ba29a36)
       three:
         specifier: ^0.186.0
         version: 0.186.0
@@ -159,7 +164,7 @@ importers:
     devDependencies:
       '@types/three':
         specifier: ^0.186.0
-        version: 0.186.0
+        version: 0.186.0(patch_hash=7c1c81c1eb36aaae9dc18f0d0148bc3d51a3195a623bccca529243dc2ba29a36)
       three:
         specifier: ^0.186.0
         version: 0.186.0
@@ -175,7 +180,7 @@ importers:
     devDependencies:
       '@types/three':
         specifier: ^0.186.0
-        version: 0.186.0
+        version: 0.186.0(patch_hash=7c1c81c1eb36aaae9dc18f0d0148bc3d51a3195a623bccca529243dc2ba29a36)
       three:
         specifier: ^0.186.0
         version: 0.186.0
@@ -188,7 +193,7 @@ importers:
     devDependencies:
       '@types/three':
         specifier: ^0.186.0
-        version: 0.186.0
+        version: 0.186.0(patch_hash=7c1c81c1eb36aaae9dc18f0d0148bc3d51a3195a623bccca529243dc2ba29a36)
       three:
         specifier: ^0.186.0
         version: 0.186.0
@@ -207,7 +212,7 @@ importers:
     devDependencies:
       '@types/three':
         specifier: ^0.186.0
-        version: 0.186.0
+        version: 0.186.0(patch_hash=7c1c81c1eb36aaae9dc18f0d0148bc3d51a3195a623bccca529243dc2ba29a36)
       three:
         specifier: ^0.186.0
         version: 0.186.0
@@ -4479,7 +4484,7 @@ snapshots:
 
   '@types/stats.js@0.17.0': {}
 
-  '@types/three@0.186.0':
+  '@types/three@0.186.0(patch_hash=7c1c81c1eb36aaae9dc18f0d0148bc3d51a3195a623bccca529243dc2ba29a36)':
     dependencies:
       '@dimforge/rapier3d-compat': 0.12.0
       '@tweenjs/tween.js': 23.1.3

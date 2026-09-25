@@ -12,15 +12,10 @@ import {
   normalLocal,
   normalMap,
   positionLocal,
-  positionView,
-  ShaderNodeObject,
-  Swizzable,
-  uniform,
   vec3,
   vec4,
 } from 'three/tsl';
 
-import type { MToonMaterial } from '../MToonMaterial';
 import { MToonLightingModel } from './MToonLightingModel';
 import {
   rimLightingMix,
@@ -30,7 +25,7 @@ import {
   shadingToony,
   rimMultiply,
   parametricRim,
-} from './immutableNodes';
+} from './propertyNodes';
 import {
   refColor,
   refEmissive,
@@ -58,7 +53,8 @@ import {
 } from './materialReferences';
 import { MToonAnimatedUVNode } from './MToonAnimatedUVNode';
 import { MToonMaterialOutlineWidthMode } from '../MToonMaterialOutlineWidthMode';
-import { MToonNodeMaterialParameters } from './MToonNodeMaterialParameters';
+import type { MToonColorNode } from './MToonColorNode';
+import type { MToonNodeMaterialParameters } from './MToonNodeMaterialParameters';
 import { mtoonParametricRim } from './mtoonParametricRim';
 
 /**
@@ -70,7 +66,7 @@ import { mtoonParametricRim } from './mtoonParametricRim';
  * See: https://github.com/Santarh/MToon
  */
 export class MToonNodeMaterial extends THREE.NodeMaterial {
-  public emissiveNode: ShaderNodeObject<THREE.Node> | null;
+  public emissiveNode: THREE.Node | null;
 
   public color: THREE.Color;
   public map: THREE.Texture | null;
@@ -103,15 +99,15 @@ export class MToonNodeMaterial extends THREE.NodeMaterial {
   public uvAnimationRotationSpeedFactor: number;
   public uvAnimationMaskTexture: THREE.Texture | null;
 
-  public shadeColorNode: Swizzable | null;
-  public shadingShiftNode: THREE.Node | null;
-  public shadingToonyNode: THREE.Node | null;
-  public rimLightingMixNode: THREE.Node | null;
-  public rimMultiplyNode: THREE.Node | null;
-  public matcapNode: THREE.Node | null;
-  public parametricRimColorNode: Swizzable | null;
-  public parametricRimLiftNode: THREE.Node | null;
-  public parametricRimFresnelPowerNode: THREE.Node | null;
+  public shadeColorNode: MToonColorNode | null;
+  public shadingShiftNode: THREE.Node<'float'> | null;
+  public shadingToonyNode: THREE.Node<'float'> | null;
+  public rimLightingMixNode: THREE.Node<'float'> | null;
+  public rimMultiplyNode: MToonColorNode | null;
+  public matcapNode: MToonColorNode | null;
+  public parametricRimColorNode: MToonColorNode | null;
+  public parametricRimLiftNode: THREE.Node<'float'> | null;
+  public parametricRimFresnelPowerNode: THREE.Node<'float'> | null;
 
   public uvAnimationScrollXOffset: number;
   public uvAnimationScrollYOffset: number;
@@ -221,10 +217,10 @@ export class MToonNodeMaterial extends THREE.NodeMaterial {
   public setupDiffuseColor(builder: THREE.NodeBuilder): void {
     // we must apply uv scroll to the map
     // this.colorNode will be used in super.setupDiffuseColor() so we temporarily replace it
-    let tempColorNode: ShaderNodeObject<THREE.Node> | null = null;
+    let tempColorNode: THREE.Node<'vec4'> | null = null;
 
     if (this.colorNode == null) {
-      tempColorNode = refColor;
+      tempColorNode = vec4(refColor.rgb, 1.0);
 
       if (this.map && this.map.isTexture === true) {
         const map = refMap.context({ getUV: () => this._animatedUVNode });
@@ -272,9 +268,9 @@ export class MToonNodeMaterial extends THREE.NodeMaterial {
     parametricRim.assign(this._setupParametricRimNode());
   }
 
-  public setupNormal(): ShaderNodeObject<THREE.Node>;
-  public setupNormal(builder?: THREE.NodeBuilder): ShaderNodeObject<THREE.Node>;
-  public setupNormal(builder?: THREE.NodeBuilder): ShaderNodeObject<THREE.Node> {
+  public setupNormal(): THREE.Node<'vec3'>;
+  public setupNormal(builder?: THREE.NodeBuilder): THREE.Node<'vec3'>;
+  public setupNormal(builder?: THREE.NodeBuilder): THREE.Node<'vec3'> {
     // we must apply uv scroll to the normalMap
     // this.normalNode will be used in super.setupNormal() so we temporarily replace it
     const tempNormalNode = this.normalNode;
@@ -289,48 +285,29 @@ export class MToonNodeMaterial extends THREE.NodeMaterial {
 
       if (this.isOutline) {
         // See about the type assertion: https://github.com/three-types/three-ts-types/pull/1123
-        this.normalNode = (this.normalNode as ShaderNodeObject<THREE.Node>).negate();
+        this.normalNode = (this.normalNode as THREE.Node<'vec3'>).negate();
       }
     }
 
-    // COMPAT r168: `setupNormal` now returns the normal node
-    // instead of assigning inside the `super.setupNormal`
-    // See: https://github.com/mrdoob/three.js/pull/29137
-    const threeRevision = parseInt(THREE.REVISION, 10);
-    if (threeRevision >= 168) {
-      const ret = this.normalNode as ShaderNodeObject<THREE.Node>;
+    const ret = this.normalNode as THREE.Node<'vec3'>;
 
-      // revert the normalNode
-      this.normalNode = tempNormalNode;
+    // revert the normalNode
+    this.normalNode = tempNormalNode;
 
-      return ret;
-    } else {
-      // pre-r168
-      // the ordinary normal setup
-
-      // @ts-expect-error type workaround for pre-r168
-      super.setupNormal(builder);
-
-      // revert the normalNode
-      this.normalNode = tempNormalNode;
-
-      // type workaround: pretend to return a valid value
-      // r167 doesn't use the return value anyway
-      return undefined as any;
-    }
+    return ret;
   }
 
   public setupLighting(builder: THREE.NodeBuilder): THREE.Node {
     // we must apply uv scroll to the emissiveMap
     // this.emissiveNode will be used in super.setupLighting() so we temporarily replace it
-    let tempEmissiveNode: ShaderNodeObject<THREE.Node> | null = null;
+    let tempEmissiveNode: THREE.Node<'vec3'> | null = null;
 
     if (this.emissiveNode == null) {
-      tempEmissiveNode = refEmissive.mul(refEmissiveIntensity);
+      tempEmissiveNode = refEmissive.rgb.mul(refEmissiveIntensity);
 
       if (this.emissiveMap && this.emissiveMap.isTexture === true) {
         const map = refEmissiveMap.context({ getUV: () => this._animatedUVNode });
-        tempEmissiveNode = tempEmissiveNode.mul(map);
+        tempEmissiveNode = tempEmissiveNode.mul(map.rgb);
       }
 
       this.emissiveNode = tempEmissiveNode;
@@ -347,10 +324,7 @@ export class MToonNodeMaterial extends THREE.NodeMaterial {
     return ret;
   }
 
-  public setupOutput(
-    builder: THREE.NodeBuilder,
-    outputNode: ShaderNodeObject<THREE.Node>,
-  ): ShaderNodeObject<THREE.Node> {
+  public setupOutput(builder: THREE.NodeBuilder, outputNode: THREE.Node<'vec4'>): THREE.Node<'vec4'> {
     // mix or set outline color
     if (this.isOutline && this.outlineWidthMode !== MToonMaterialOutlineWidthMode.None) {
       outputNode = vec4(
@@ -360,10 +334,10 @@ export class MToonNodeMaterial extends THREE.NodeMaterial {
     }
 
     // the ordinary output setup
-    return super.setupOutput(builder, outputNode) as ShaderNodeObject<THREE.Node>;
+    return super.setupOutput(builder, outputNode) as THREE.Node<'vec4'>;
   }
 
-  public setupPosition(builder: THREE.NodeBuilder): ShaderNodeObject<THREE.Node> {
+  public setupPosition(builder: THREE.NodeBuilder): THREE.Node<'vec4'> {
     // we must apply outline position offset
     // this.positionNode will be used in super.setupPosition() so we temporarily replace it
     const tempPositionNode = this.positionNode;
@@ -373,11 +347,11 @@ export class MToonNodeMaterial extends THREE.NodeMaterial {
 
       const normalLocalNormalized = normalLocal.normalize();
 
-      let width: ShaderNodeObject<THREE.Node> = refOutlineWidthFactor;
+      let width: THREE.Node<'float'> = refOutlineWidthFactor;
 
       if (this.outlineWidthMultiplyTexture && this.outlineWidthMultiplyTexture.isTexture === true) {
         const map = refOutlineWidthMultiplyTexture.context({ getUV: () => this._animatedUVNode });
-        width = width.mul(map);
+        width = width.mul(map.r);
       }
 
       const worldNormalLength = length(modelNormalMatrix.mul(normalLocalNormalized));
@@ -385,9 +359,11 @@ export class MToonNodeMaterial extends THREE.NodeMaterial {
 
       if (this.outlineWidthMode === MToonMaterialOutlineWidthMode.WorldCoordinates) {
         // See about the type assertion: https://github.com/three-types/three-ts-types/pull/1123
-        this.positionNode = (this.positionNode as ShaderNodeObject<THREE.Node>).add(outlineOffset);
+        this.positionNode = (this.positionNode as THREE.Node<'vec3'>).add(outlineOffset);
       } else if (this.outlineWidthMode === MToonMaterialOutlineWidthMode.ScreenCoordinates) {
-        const clipScale = cameraProjectionMatrix.element(1).element(1);
+        const clipScale = (
+          cameraProjectionMatrix as unknown as THREE.Node<'mat4'> & { element(index: number): THREE.Node<'vec4'> }
+        ).element(1).y;
 
         // We can't use `positionView` in `setupPosition`
         // because using `positionView` here will make it calculate the `positionView` earlier
@@ -395,7 +371,7 @@ export class MToonNodeMaterial extends THREE.NodeMaterial {
         const tempPositionView = modelViewMatrix.mul(positionLocal);
 
         // See about the type assertion: https://github.com/three-types/three-ts-types/pull/1123
-        this.positionNode = (this.positionNode as ShaderNodeObject<THREE.Node>).add(
+        this.positionNode = (this.positionNode as THREE.Node<'vec3'>).add(
           outlineOffset.div(clipScale).mul(tempPositionView.z.negate()),
         );
       }
@@ -404,7 +380,7 @@ export class MToonNodeMaterial extends THREE.NodeMaterial {
     }
 
     // the ordinary position setup
-    const ret = super.setupPosition(builder) as ShaderNodeObject<THREE.Node>;
+    const ret = super.setupPosition(builder) as THREE.Node<'vec4'>;
 
     // anti z-fighting
     // TODO: We might want to address this via glPolygonOffset instead?
@@ -469,16 +445,16 @@ export class MToonNodeMaterial extends THREE.NodeMaterial {
     this.uvAnimationRotationPhase += delta * this.uvAnimationRotationSpeedFactor;
   }
 
-  private _setupShadeColorNode(): Swizzable {
+  private _setupShadeColorNode(): THREE.Node<'vec3'> {
     if (this.shadeColorNode != null) {
-      return vec3(this.shadeColorNode);
+      return this.shadeColorNode.rgb;
     }
 
-    let shadeColorNode: ShaderNodeObject<THREE.Node> = refShadeColorFactor;
+    let shadeColorNode: THREE.Node<'vec3'> = refShadeColorFactor.rgb;
 
     if (this.shadeMultiplyTexture && this.shadeMultiplyTexture.isTexture === true) {
       const map = refShadeMultiplyTexture.context({ getUV: () => this._animatedUVNode });
-      shadeColorNode = shadeColorNode.mul(map);
+      shadeColorNode = shadeColorNode.mul(map.rgb);
     }
 
     return shadeColorNode;
@@ -489,11 +465,11 @@ export class MToonNodeMaterial extends THREE.NodeMaterial {
       return float(this.shadingShiftNode);
     }
 
-    let shadingShiftNode: ShaderNodeObject<THREE.Node> = refShadingShiftFactor;
+    let shadingShiftNode: THREE.Node<'float'> = refShadingShiftFactor;
 
     if (this.shadingShiftTexture && this.shadingShiftTexture.isTexture === true) {
       const map = refShadeMultiplyTexture.context({ getUV: () => this._animatedUVNode });
-      shadingShiftNode = shadingShiftNode.add(map.mul(refShadeMultiplyTextureScale));
+      shadingShiftNode = shadingShiftNode.add(map.r.mul(refShadeMultiplyTextureScale));
     }
 
     return shadingShiftNode;
@@ -515,35 +491,37 @@ export class MToonNodeMaterial extends THREE.NodeMaterial {
     return refRimLightingMixFactor;
   }
 
-  private _setupRimMultiplyNode(): Swizzable {
+  private _setupRimMultiplyNode(): THREE.Node<'vec3'> {
     if (this.rimMultiplyNode != null) {
-      return vec3(this.rimMultiplyNode);
+      return this.rimMultiplyNode.rgb;
     }
 
     if (this.rimMultiplyTexture && this.rimMultiplyTexture.isTexture === true) {
       const map = refRimMultiplyTexture.context({ getUV: () => this._animatedUVNode });
-      return map;
+      return map.rgb;
     }
 
     return vec3(1.0);
   }
 
-  private _setupMatcapNode(): Swizzable {
+  private _setupMatcapNode(): THREE.Node<'vec3'> {
     if (this.matcapNode != null) {
-      return vec3(this.matcapNode);
+      return this.matcapNode.rgb;
     }
 
     if (this.matcapTexture && this.matcapTexture.isTexture === true) {
-      const map = refMatcapTexture.context({ getUV: () => matcapUV.mul(1.0, -1.0).add(0.0, 1.0) });
-      return map.mul(refMatcapFactor);
+      const map = refMatcapTexture.context({
+        getUV: () => (matcapUV as THREE.Node<'vec2'>).mul(1.0, -1.0).add(0.0, 1.0),
+      });
+      return map.rgb.mul(refMatcapFactor.rgb);
     }
 
     return vec3(0.0);
   }
 
-  private _setupParametricRimNode(): Swizzable {
+  private _setupParametricRimNode(): THREE.Node<'vec3'> {
     const parametricRimColor =
-      this.parametricRimColorNode != null ? vec3(this.parametricRimColorNode) : refParametricRimColorFactor;
+      this.parametricRimColorNode != null ? this.parametricRimColorNode.rgb : refParametricRimColorFactor.rgb;
 
     const parametricRimLift =
       this.parametricRimLiftNode != null ? float(this.parametricRimLiftNode) : refParametricRimLiftFactor;
@@ -560,6 +538,3 @@ export class MToonNodeMaterial extends THREE.NodeMaterial {
     });
   }
 }
-
-// TODO: Part of stuff that MToonMaterial depends on does not exist in three/webgpu (e.g. UniformsLib)
-// THREE.addNodeMaterial('MToonNodeMaterial', MToonNodeMaterial);
