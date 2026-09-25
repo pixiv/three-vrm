@@ -23,14 +23,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
     - name: Setup pnpm
-      uses: pnpm/action-setup@v5
+      uses: pnpm/action-setup@v6
       with:
         version: 10.33.0
         run_install: false
     - name: Setup Node
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v7
       with:
         node-version-file: './.node-version'
         registry-url: 'https://registry.npmjs.org'
@@ -57,7 +57,7 @@ jobs:
         git push origin --tags "$GITHUB_REF_NAME"
 
     - name: Upload Builds
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: build
         path: |
