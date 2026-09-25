@@ -4,11 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-patchedDependencies:
-  '@types/three@0.180.0':
-    hash: 52dc1d3b9bfcd84c5bd9e09084d791897ef1036ea9c06dfc518d616d556beaf1
-    path: patches/@types__three@0.180.0.patch
-
 importers:
 
   .:
@@ -99,11 +94,11 @@ importers:
         version: link:../three-vrm-springbone
     devDependencies:
       '@types/three':
-        specifier: ^0.180.0
-        version: 0.180.0(patch_hash=52dc1d3b9bfcd84c5bd9e09084d791897ef1036ea9c06dfc518d616d556beaf1)
+        specifier: ^0.186.0
+        version: 0.186.0
       three:
-        specifier: ^0.180.0
-        version: 0.180.0
+        specifier: ^0.186.0
+        version: 0.186.0
 
   packages/three-vrm-animation:
     dependencies:
@@ -118,11 +113,11 @@ importers:
         version: link:../types-vrmc-vrm-animation-1.0
     devDependencies:
       '@types/three':
-        specifier: ^0.180.0
-        version: 0.180.0(patch_hash=52dc1d3b9bfcd84c5bd9e09084d791897ef1036ea9c06dfc518d616d556beaf1)
+        specifier: ^0.186.0
+        version: 0.186.0
       three:
-        specifier: ^0.180.0
-        version: 0.180.0
+        specifier: ^0.186.0
+        version: 0.186.0
 
   packages/three-vrm-core:
     dependencies:
@@ -134,11 +129,11 @@ importers:
         version: link:../types-vrmc-vrm-1.0
     devDependencies:
       '@types/three':
-        specifier: ^0.180.0
-        version: 0.180.0(patch_hash=52dc1d3b9bfcd84c5bd9e09084d791897ef1036ea9c06dfc518d616d556beaf1)
+        specifier: ^0.186.0
+        version: 0.186.0
       three:
-        specifier: ^0.180.0
-        version: 0.180.0
+        specifier: ^0.186.0
+        version: 0.186.0
 
   packages/three-vrm-materials-hdr-emissive-multiplier:
     dependencies:
@@ -147,11 +142,11 @@ importers:
         version: link:../types-vrmc-materials-hdr-emissive-multiplier-1.0
     devDependencies:
       '@types/three':
-        specifier: ^0.180.0
-        version: 0.180.0(patch_hash=52dc1d3b9bfcd84c5bd9e09084d791897ef1036ea9c06dfc518d616d556beaf1)
+        specifier: ^0.186.0
+        version: 0.186.0
       three:
-        specifier: ^0.180.0
-        version: 0.180.0
+        specifier: ^0.186.0
+        version: 0.186.0
 
   packages/three-vrm-materials-mtoon:
     dependencies:
@@ -163,11 +158,11 @@ importers:
         version: link:../types-vrmc-materials-mtoon-1.0
     devDependencies:
       '@types/three':
-        specifier: ^0.180.0
-        version: 0.180.0(patch_hash=52dc1d3b9bfcd84c5bd9e09084d791897ef1036ea9c06dfc518d616d556beaf1)
+        specifier: ^0.186.0
+        version: 0.186.0
       three:
-        specifier: ^0.180.0
-        version: 0.180.0
+        specifier: ^0.186.0
+        version: 0.186.0
 
   packages/three-vrm-materials-v0compat:
     dependencies:
@@ -179,11 +174,11 @@ importers:
         version: link:../types-vrmc-materials-mtoon-1.0
     devDependencies:
       '@types/three':
-        specifier: ^0.180.0
-        version: 0.180.0(patch_hash=52dc1d3b9bfcd84c5bd9e09084d791897ef1036ea9c06dfc518d616d556beaf1)
+        specifier: ^0.186.0
+        version: 0.186.0
       three:
-        specifier: ^0.180.0
-        version: 0.180.0
+        specifier: ^0.186.0
+        version: 0.186.0
 
   packages/three-vrm-node-constraint:
     dependencies:
@@ -192,11 +187,11 @@ importers:
         version: link:../types-vrmc-node-constraint-1.0
     devDependencies:
       '@types/three':
-        specifier: ^0.180.0
-        version: 0.180.0(patch_hash=52dc1d3b9bfcd84c5bd9e09084d791897ef1036ea9c06dfc518d616d556beaf1)
+        specifier: ^0.186.0
+        version: 0.186.0
       three:
-        specifier: ^0.180.0
-        version: 0.180.0
+        specifier: ^0.186.0
+        version: 0.186.0
 
   packages/three-vrm-springbone:
     dependencies:
@@ -211,11 +206,11 @@ importers:
         version: link:../types-vrmc-springbone-extended-collider-1.0
     devDependencies:
       '@types/three':
-        specifier: ^0.180.0
-        version: 0.180.0(patch_hash=52dc1d3b9bfcd84c5bd9e09084d791897ef1036ea9c06dfc518d616d556beaf1)
+        specifier: ^0.186.0
+        version: 0.186.0
       three:
-        specifier: ^0.180.0
-        version: 0.180.0
+        specifier: ^0.186.0
+        version: 0.186.0
 
   packages/types-vrm-0.0: {}
 
@@ -1287,8 +1282,8 @@ packages:
   '@types/stats.js@0.17.0':
     resolution: {integrity: sha512-9w+a7bR8PeB0dCT/HBULU2fMqf6BAzvKbxFboYhmDtDkKPiyXYbjoe2auwsXlEFI7CFNMF1dCv3dFH5Poy9R1w==}
 
-  '@types/three@0.180.0':
-    resolution: {integrity: sha512-ykFtgCqNnY0IPvDro7h+9ZeLY+qjgUWv+qEvUt84grhenO60Hqd4hScHE7VTB9nOQ/3QM8lkbNE+4vKjEpUxKg==}
+  '@types/three@0.186.0':
+    resolution: {integrity: sha512-mxYSBpDC+D0pLfSP6sW4WZTcT+nrtmZcimMqnVmy36Hte3XpeYSrvgg4TRdaM1GemGog1AWzI5qL2VoIfMXbJQ==}
 
   '@types/unist@3.0.3':
     resolution: {integrity: sha512-ko/gIFJRv177XgZsZcBwnqJN5x/Gien8qNOn0D5bQU/zAzVf9Zt3BlcUiLqhV9y4ARk0GbT3tnUiPNgnTXzc/Q==}
@@ -1392,9 +1387,6 @@ packages:
 
   '@vitest/utils@4.1.11':
     resolution: {integrity: sha512-zTCVGpyFsGWBhllOyKlTw/vnr6D9qxsfSDyfbyZmTyjHw5N/VuvzHpHoQjm2ZJzn4RJgx5w4r7V0er69CmLgPQ==}
-
-  '@webgpu/types@0.1.44':
-    resolution: {integrity: sha512-JDpYJN5E/asw84LTYhKyvPpxGnD+bAKPtpW9Ilurf7cZpxaTbxkQcGwOd7jgB9BPBrTYQ+32ufo4HiuomTjHNQ==}
 
   '@yarnpkg/lockfile@1.1.0':
     resolution: {integrity: sha512-GpSwvyXOcOOlV70vbnzjj4fW5xW/FdUF6nQEt1ENy7m4ZCczi1+/buVUPAqmGfqznsORNFzUMjctTIp8a9tuCQ==}
@@ -1977,8 +1969,8 @@ packages:
       picomatch:
         optional: true
 
-  fflate@0.8.2:
-    resolution: {integrity: sha512-cPJU47OaAoCbg0pBvzsgpTPhmhqI5eJjh/JIu8tPj5q+T7iLvW/JAYUqmE7KOB4R1ZyEhzBaIQpQpardBF5z8A==}
+  fflate@0.8.3:
+    resolution: {integrity: sha512-tbZNuJrLwGUp3zshBtdy4W+ORxZuIh8a5ilyIEQDC5rY1f3U20JMry0Ll3WBzU58EZKsEuJFXhb5gwv8CsPvgA==}
 
   figures@3.2.0:
     resolution: {integrity: sha512-yaduQFRKLXYOGgEn6AZau90j3ggSOyiqXU0F9JZfeXYhNa+Jk4X+s45A2zg5jns87GAFa34BBm2kXw4XpNcbdg==}
@@ -2568,8 +2560,8 @@ packages:
   merge-stream@2.0.0:
     resolution: {integrity: sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w==}
 
-  meshoptimizer@0.22.0:
-    resolution: {integrity: sha512-IebiK79sqIy+E4EgOr+CAw+Ke8hAspXKzBd0JdgEmPHiAwmvEj2S4h1rfvo+o/BnfEYd/jAOg5IeeIjzlzSnDg==}
+  meshoptimizer@1.1.1:
+    resolution: {integrity: sha512-oRFNWJRDA/WTrVj7NWvqa5HqE1t9MYDj2VaWirQCzCCrAd2GHrqR/sQezCxiWATPNlKTcRaPRHPJwIRoPBAp5g==}
 
   mime-db@1.52.0:
     resolution: {integrity: sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==}
@@ -3259,8 +3251,8 @@ packages:
     resolution: {integrity: sha512-wiBrwC1EhBelW12Zy26JeOUkQ5mRu+5o8rpsJk5+2t+Y5vE7e842qtZDQ2g1NpX/29HdyFeJ4nSIhI47ENSxlQ==}
     engines: {node: '>=0.10'}
 
-  three@0.180.0:
-    resolution: {integrity: sha512-o+qycAMZrh+TsE01GqWUxUIKR1AL0S8pq7zDkYOQw8GqfX8b8VoCKYUoHbhiX5j+7hr8XsuHDVU6+gkQJQKg9w==}
+  three@0.186.0:
+    resolution: {integrity: sha512-cr/fIM2ddMSVbYVgkfD4jLJv7Fh/8ZTjvo+7gQeSVGUZHxpx9FDwoL5iC7hUz/LiRA8wMbqfnb90xKfm1/HHkQ==}
 
   through2@2.0.5:
     resolution: {integrity: sha512-/mrRod8xqpA+IHSLyGCQ2s8SPHiCDEeQJSep1jqLYeEUClOFG2Qsh+4FU6G9VeqpZnGW/Su8LQGc4YKni5rYSQ==}
@@ -4487,15 +4479,14 @@ snapshots:
 
   '@types/stats.js@0.17.0': {}
 
-  '@types/three@0.180.0(patch_hash=52dc1d3b9bfcd84c5bd9e09084d791897ef1036ea9c06dfc518d616d556beaf1)':
+  '@types/three@0.186.0':
     dependencies:
       '@dimforge/rapier3d-compat': 0.12.0
       '@tweenjs/tween.js': 23.1.3
       '@types/stats.js': 0.17.0
       '@types/webxr': 0.5.20
-      '@webgpu/types': 0.1.44
-      fflate: 0.8.2
-      meshoptimizer: 0.22.0
+      fflate: 0.8.3
+      meshoptimizer: 1.1.1
 
   '@types/unist@3.0.3': {}
 
@@ -4646,8 +4637,6 @@ snapshots:
       '@vitest/pretty-format': 4.1.11
       convert-source-map: 2.0.0
       tinyrainbow: 3.1.0
-
-  '@webgpu/types@0.1.44': {}
 
   '@yarnpkg/lockfile@1.1.0': {}
 
@@ -5259,7 +5248,7 @@ snapshots:
     optionalDependencies:
       picomatch: 4.0.5
 
-  fflate@0.8.2: {}
+  fflate@0.8.3: {}
 
   figures@3.2.0:
     dependencies:
@@ -5934,7 +5923,7 @@ snapshots:
 
   merge-stream@2.0.0: {}
 
-  meshoptimizer@0.22.0: {}
+  meshoptimizer@1.1.1: {}
 
   mime-db@1.52.0: {}
 
@@ -6715,7 +6704,7 @@ snapshots:
 
   text-extensions@1.9.0: {}
 
-  three@0.180.0: {}
+  three@0.186.0: {}
 
   through2@2.0.5:
     dependencies:
