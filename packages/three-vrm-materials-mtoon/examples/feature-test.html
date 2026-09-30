@@ -84,6 +84,13 @@
 			textureBlind.magFilter = THREE.NearestFilter;
 			textureBlind.minFilter = THREE.NearestFilter;
 
+			const textureBlindGradient = new THREE.TextureLoader().load( './models/blind-gradient.png' );
+			textureBlindGradient.repeat.set( 2.0, 1.0 );
+			textureBlindGradient.wrapS = THREE.RepeatWrapping;
+			textureBlindGradient.wrapT = THREE.RepeatWrapping;
+			textureBlindGradient.magFilter = THREE.NearestFilter;
+			textureBlindGradient.minFilter = THREE.NearestFilter;
+
 			const textureGrid = new THREE.TextureLoader().load( './models/grid.png' );
 			textureGrid.wrapS = THREE.RepeatWrapping;
 			textureGrid.wrapT = THREE.RepeatWrapping;
@@ -116,6 +123,16 @@
 
 					color: 0xffffff,
 					shadeColorFactor: 0xff4488,
+
+				},
+
+				// shading shift texture, scale 0.5
+				{
+
+					color: 0xccffaa,
+					shadeColorFactor: 0x883333,
+					shadingShiftTexture: textureBlindGradient,
+					shadingShiftTextureScale: 0.5,
 
 				},
 
