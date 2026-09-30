@@ -47,8 +47,9 @@ import {
   refRimMultiplyTexture,
   refShadeColorFactor,
   refShadeMultiplyTexture,
-  refShadeMultiplyTextureScale,
   refShadingShiftFactor,
+  refShadingShiftTexture,
+  refShadingShiftTextureScale,
   refShadingToonyFactor,
 } from './materialReferences';
 import { MToonAnimatedUVNode } from './MToonAnimatedUVNode';
@@ -468,8 +469,8 @@ export class MToonNodeMaterial extends THREE.NodeMaterial {
     let shadingShiftNode: THREE.Node<'float'> = refShadingShiftFactor;
 
     if (this.shadingShiftTexture && this.shadingShiftTexture.isTexture === true) {
-      const map = refShadeMultiplyTexture.context({ getUV: () => this._animatedUVNode });
-      shadingShiftNode = shadingShiftNode.add(map.r.mul(refShadeMultiplyTextureScale));
+      const map = refShadingShiftTexture.context({ getUV: () => this._animatedUVNode });
+      shadingShiftNode = shadingShiftNode.add(map.r.mul(refShadingShiftTextureScale));
     }
 
     return shadingShiftNode;
