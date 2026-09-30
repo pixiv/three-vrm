@@ -117,11 +117,20 @@
 			scene.add( axesHelper );
 
 			// animate
-			const clock = new THREE.Clock();
+			const timer = new THREE.Timer();
 
 			function animate() {
 
 				requestAnimationFrame( animate );
+
+				timer.update();
+				const deltaTime = timer.getDelta();
+
+				if ( currentVrm ) {
+
+					currentVrm.update( deltaTime );
+
+				}
 
 				renderer.render( scene, camera );
 

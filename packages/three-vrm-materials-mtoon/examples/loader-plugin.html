@@ -194,18 +194,18 @@
 			scene.add( axesHelper );
 
 			// animate
-			const clock = new THREE.Clock();
-			clock.start();
+			const timer = new THREE.Timer();
 
 			function animate() {
 
 				requestAnimationFrame( animate );
 
-				const delta = clock.getDelta();
+				timer.update();
+				const deltaTime = timer.getDelta();
+				const elapsedTime = timer.getElapsed();
 
-				const theta = clock.elapsedTime;
-				const cosTheta = Math.cos( theta );
-				const sinTheta = Math.sin( theta );
+				const cosTheta = Math.cos( elapsedTime );
+				const sinTheta = Math.sin( elapsedTime );
 				light.position.set( cosTheta, 2.0, sinTheta ).normalize();
 
 				if ( currentGltf != null ) {
@@ -214,7 +214,7 @@
 
 					for ( const material of mtoonMaterials ) {
 
-						material.update( delta );
+						material.update( deltaTime );
 
 					}
 

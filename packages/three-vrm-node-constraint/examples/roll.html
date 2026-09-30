@@ -147,11 +147,13 @@
 			constraintManager.setInitState();
 
 			// animate
-			const clock = new THREE.Clock();
+			const timer = new THREE.Timer();
 
 			function animate() {
 
 				requestAnimationFrame( animate );
+
+				timer.update();
 
 				lowerArm.rotation.set(
 

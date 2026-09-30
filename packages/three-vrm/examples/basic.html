@@ -114,17 +114,19 @@
 			scene.add( axesHelper );
 
 			// animate
-			const clock = new THREE.Clock();
-			clock.start();
+			const timer = new THREE.Timer();
 
 			function animate() {
 
 				requestAnimationFrame( animate );
 
+				timer.update();
+				const deltaTime = timer.getDelta();
+
 				// update vrm components
 				if ( currentVrm ) {
 
-					currentVrm.update( clock.getDelta() );
+					currentVrm.update( deltaTime );
 
 				}
 

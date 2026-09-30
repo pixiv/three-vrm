@@ -111,18 +111,20 @@
 			scene.add( axesHelper );
 
 			// animate
-			const clock = new THREE.Clock();
+			const timer = new THREE.Timer();
 
 			function animate() {
 
 				requestAnimationFrame( animate );
 
-				const deltaTime = clock.getDelta();
+				timer.update();
+				const deltaTime = timer.getDelta();
+				const elapsedTime = timer.getElapsed();
 
 				if ( currentVrm ) {
 
 					// tweak expressions
-					const s = Math.sin( Math.PI * clock.elapsedTime );
+					const s = Math.sin( Math.PI * elapsedTime );
 					currentVrm.expressionManager.setValue( 'aa', 0.5 + 0.5 * s );
 					currentVrm.expressionManager.setValue( 'blinkLeft', 0.5 - 0.5 * s );
 

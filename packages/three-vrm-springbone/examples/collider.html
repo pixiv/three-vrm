@@ -137,18 +137,20 @@
 			springBoneManager.setInitState();
 
 			// animate
-			const clock = new THREE.Clock();
+			const timer = new THREE.Timer();
 			let shouldReset = true;
 
 			function animate() {
 
 				requestAnimationFrame( animate );
 
-				const deltaTime = clock.getDelta();
+				timer.update();
+				const deltaTime = timer.getDelta();
+				const elapsedTime = timer.getElapsed();
 
-				cubes[ 0 ].position.x = Math.sin( Math.PI * clock.elapsedTime );
+				cubes[ 0 ].position.x = Math.sin( Math.PI * elapsedTime );
 
-				collider.position.x = Math.sin( clock.elapsedTime );
+				collider.position.x = Math.sin( elapsedTime );
 
 				if ( shouldReset ) {
 

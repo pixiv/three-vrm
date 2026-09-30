@@ -102,7 +102,7 @@
 
 						currentGltf = gltf;
 
-						clock.start();
+						timer.reset();
 
 					},
 
@@ -124,20 +124,22 @@
 			scene.add( axesHelper );
 
 			// animate
-			const clock = new THREE.Clock();
+			const timer = new THREE.Timer();
 			let shouldReset = true; // reset in the very first frame
 
 			function animate() {
 
 				requestAnimationFrame( animate );
 
-				const delta = clock.getDelta();
+				timer.update();
+				const deltaTime = timer.getDelta();
+				const elapsedTime = timer.getElapsed();
 
 				if ( currentGltf ) {
 
 					const manager = currentGltf.userData.vrmSpringBoneManager;
 
-					currentGltf.scene.position.x = Math.sin( Math.PI * clock.elapsedTime );
+					currentGltf.scene.position.x = Math.sin( Math.PI * elapsedTime );
 
 					if ( shouldReset ) {
 
@@ -146,7 +148,7 @@
 
 					}
 
-					manager.update( delta );
+					manager.update( deltaTime );
 
 				}
 
