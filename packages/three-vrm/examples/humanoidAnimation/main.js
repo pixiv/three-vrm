@@ -147,13 +147,14 @@ const axesHelper = new THREE.AxesHelper( 5 );
 scene.add( axesHelper );
 
 // animate
-const clock = new THREE.Clock();
+const timer = new THREE.Timer();
 
 function animate() {
 
 	requestAnimationFrame( animate );
 
-	const deltaTime = clock.getDelta();
+	timer.update();
+	const deltaTime = timer.getDelta();
 
 	// if animation is loaded
 	if ( currentMixer ) {

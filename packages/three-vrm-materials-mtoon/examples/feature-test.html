@@ -22,8 +22,8 @@
 		<script type="importmap">
 			{
 				"imports": {
-					"three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
-					"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+					"three": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.js",
+					"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.0/examples/jsm/",
 					"@pixiv/three-vrm-materials-mtoon": "../lib/three-vrm-materials-mtoon.module.js"
 				}
 			}
@@ -84,6 +84,13 @@
 			textureBlind.magFilter = THREE.NearestFilter;
 			textureBlind.minFilter = THREE.NearestFilter;
 
+			const textureBlindGradient = new THREE.TextureLoader().load( './models/blind-gradient.png' );
+			textureBlindGradient.repeat.set( 2.0, 1.0 );
+			textureBlindGradient.wrapS = THREE.RepeatWrapping;
+			textureBlindGradient.wrapT = THREE.RepeatWrapping;
+			textureBlindGradient.magFilter = THREE.NearestFilter;
+			textureBlindGradient.minFilter = THREE.NearestFilter;
+
 			const textureGrid = new THREE.TextureLoader().load( './models/grid.png' );
 			textureGrid.wrapS = THREE.RepeatWrapping;
 			textureGrid.wrapT = THREE.RepeatWrapping;
@@ -116,6 +123,16 @@
 
 					color: 0xffffff,
 					shadeColorFactor: 0xff4488,
+
+				},
+
+				// shading shift texture, scale 0.5
+				{
+
+					color: 0xccffaa,
+					shadeColorFactor: 0x883333,
+					shadingShiftTexture: textureBlindGradient,
+					shadingShiftTextureScale: 0.5,
 
 				},
 
@@ -350,18 +367,18 @@
 			scene.add( axesHelper );
 
 			// animate
-			const clock = new THREE.Clock();
-			clock.start();
+			const timer = new THREE.Timer();
 
 			function animate() {
 
 				requestAnimationFrame( animate );
 
-				const delta = clock.getDelta();
+				timer.update();
+				const deltaTime = timer.getDelta();
+				const elapsedTime = timer.getElapsed();
 
-				const theta = clock.elapsedTime;
-				const cosTheta = Math.cos( theta );
-				const sinTheta = Math.sin( theta );
+				const cosTheta = Math.cos( elapsedTime );
+				const sinTheta = Math.sin( elapsedTime );
 				light.position.set( cosTheta, 1.0, sinTheta ).normalize().multiplyScalar( 3.0 );
 
 				for ( const mesh of meshes ) {
@@ -371,13 +388,13 @@
 
 						for ( const material of mesh.material ) {
 
-							material.update( delta );
+							material.update( deltaTime );
 
 						}
 
 					} else {
 
-						mesh.material.update( delta );
+						mesh.material.update( deltaTime );
 
 					}
 

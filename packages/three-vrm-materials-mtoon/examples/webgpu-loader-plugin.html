@@ -23,10 +23,10 @@
 		<script type="importmap">
 			{
 				"imports": {
-					"three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.webgpu.js",
-					"three/webgpu": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.webgpu.js",
-					"three/tsl": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.tsl.js",
-					"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+					"three": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.webgpu.js",
+					"three/webgpu": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.webgpu.js",
+					"three/tsl": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.tsl.js",
+					"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.0/examples/jsm/",
 					"@pixiv/three-vrm-materials-mtoon": "../lib/three-vrm-materials-mtoon.module.js",
 					"@pixiv/three-vrm-materials-mtoon/nodes": "../lib/nodes/index.module.js"
 				}
@@ -205,18 +205,18 @@
 			scene.add( axesHelper );
 
 			// animate
-			const clock = new THREE.Clock();
-			clock.start();
+			const timer = new THREE.Timer();
 
 			function animate() {
 
 				requestAnimationFrame( animate );
 
-				const delta = clock.getDelta();
+				timer.update();
+				const deltaTime = timer.getDelta();
+				const elapsedTime = timer.getElapsed();
 
-				const theta = clock.elapsedTime;
-				const cosTheta = Math.cos( theta );
-				const sinTheta = Math.sin( theta );
+				const cosTheta = Math.cos( elapsedTime );
+				const sinTheta = Math.sin( elapsedTime );
 				light.position.set( cosTheta, 2.0, sinTheta ).normalize();
 
 				if ( currentGltf != null ) {
@@ -225,7 +225,7 @@
 
 					for ( const material of mtoonMaterials ) {
 
-						material.update( delta );
+						material.update( deltaTime );
 
 					}
 

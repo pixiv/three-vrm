@@ -34,8 +34,8 @@
 		<script type="importmap">
 			{
 				"imports": {
-					"three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
-					"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+					"three": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.js",
+					"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.0/examples/jsm/",
 					"@pixiv/three-vrm": "../lib/three-vrm.module.js"
 				}
 			}
@@ -138,17 +138,19 @@
 			scene.add( axesHelper );
 
 			// animate
-			const clock = new THREE.Clock();
-			clock.start();
+			const timer = new THREE.Timer();
 
 			function animate() {
 
 				requestAnimationFrame( animate );
 
+				timer.update();
+				const deltaTime = timer.getDelta();
+
 				// update vrm components
 				if ( currentVrm ) {
 
-					currentVrm.update( clock.getDelta() );
+					currentVrm.update( deltaTime );
 
 				}
 

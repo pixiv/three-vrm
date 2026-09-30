@@ -1,0 +1,50 @@
+diff --git a/src/nodes/accessors/MaterialReferenceNode.d.ts b/src/nodes/accessors/MaterialReferenceNode.d.ts
+index cdcd6aa5106a2f111f1af70a9bd6b6dbf96a7f5d..08dea2f6c607789e167c8b25f1b17dd93d614296 100644
+--- a/src/nodes/accessors/MaterialReferenceNode.d.ts
++++ b/src/nodes/accessors/MaterialReferenceNode.d.ts
+@@ -2,14 +2,26 @@ import { Material } from "../../materials/Material.js";
+ import { NodeOrType } from "../tsl/TSLCore.js";
+ import ReferenceNode from "./ReferenceNode.js";
+ 
+-export default class MaterialReferenceNode extends ReferenceNode<unknown, Material | null> {
++interface MaterialReferenceNodeInterface {
+     readonly isMaterialReferenceNode: true;
+-
+-    constructor(property: string, inputType: string, material?: Material | null);
+ }
+ 
+-export const materialReference: (
++declare const MaterialReferenceNode: {
++    new<TNodeType = unknown>(property: string, inputType: string, material?: Material | null): MaterialReferenceNode<TNodeType>;
++};
++
++type MaterialReferenceNode<TNodeType = unknown> = ReferenceNode<TNodeType, Material | null> &
++    MaterialReferenceNodeInterface;
++
++export default MaterialReferenceNode;
++
++export function materialReference<const TNodeType extends string>(
++    name: string,
++    nodeOrType: TNodeType,
++    material?: Material | null,
++): MaterialReferenceNode<TNodeType extends "texture" | "cubeTexture" ? "vec4" : string extends TNodeType ? unknown : TNodeType>;
++export function materialReference(
+     name: string,
+     nodeOrType: NodeOrType,
+     material?: Material | null,
+-) => MaterialReferenceNode;
++): MaterialReferenceNode;
+diff --git a/src/nodes/functions/BSDF/BRDF_Lambert.d.ts b/src/nodes/functions/BSDF/BRDF_Lambert.d.ts
+index 031c02c1ac856f7afade219882c8af3d1fd03ce6..77f2e65666c31fb2c7b0d4489da7e1e07e96d90e 100644
+--- a/src/nodes/functions/BSDF/BRDF_Lambert.d.ts
++++ b/src/nodes/functions/BSDF/BRDF_Lambert.d.ts
+@@ -1,6 +1,5 @@
+ import Node from "../../core/Node.js";
+-import OperatorNode from "../../math/OperatorNode.js";
+-
+-declare const BRDF_Lambert: (args: { diffuseColor: Node }) => OperatorNode;
++
++declare const BRDF_Lambert: <TNodeType extends "vec3" | "vec4" | "color">(args: { diffuseColor: Node<TNodeType> }) => Node<TNodeType>;
+-
++
+ export default BRDF_Lambert;
