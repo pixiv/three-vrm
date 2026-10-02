@@ -254,7 +254,7 @@
               "dragForce": 0.4,
               "extensions": {
                 "VRMC_springBone_limit": {
-                  "specVersion": "1.0-draft",
+                  "specVersion": "1.0",
                   "limit": {
                     "spherical": {
                       "pitch": 0.523599,
@@ -274,7 +274,7 @@
               "dragForce": 0.4,
               "extensions": {
                 "VRMC_springBone_limit": {
-                  "specVersion": "1.0-draft",
+                  "specVersion": "1.0",
                   "limit": {
                     "spherical": {
                       "pitch": 0.523599,
@@ -294,7 +294,7 @@
               "dragForce": 0.4,
               "extensions": {
                 "VRMC_springBone_limit": {
-                  "specVersion": "1.0-draft",
+                  "specVersion": "1.0",
                   "limit": {
                     "spherical": {
                       "pitch": 0.523599,
@@ -314,7 +314,7 @@
               "dragForce": 0.4,
               "extensions": {
                 "VRMC_springBone_limit": {
-                  "specVersion": "1.0-draft",
+                  "specVersion": "1.0",
                   "limit": {
                     "spherical": {
                       "pitch": 0.523599,

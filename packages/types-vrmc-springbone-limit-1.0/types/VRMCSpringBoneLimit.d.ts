@@ -7,7 +7,7 @@ export interface VRMCSpringBoneLimit {
   /**
    * Specification version of VRMC_springBone_limit.
    */
-  specVersion: '1.0-draft';
+  specVersion: '1.0' | '1.0-draft';
 
   /**
    * Describes a limit apply to the spring.

@@ -37,7 +37,7 @@ const POSSIBLE_SPEC_VERSIONS_EXTENDED_COLLIDERS = new Set(['1.0']);
 /**
  * Possible spec versions of `VRMC_springBone_limit` it recognizes.
  */
-const POSSIBLE_SPEC_VERSIONS_LIMIT = new Set(['1.0-draft']);
+const POSSIBLE_SPEC_VERSIONS_LIMIT = new Set(['1.0', '1.0-draft']);
 
 export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
   public static readonly EXTENSION_NAME = 'VRMC_springBone';
@@ -595,6 +595,12 @@ export class VRMSpringBoneLoaderPlugin implements GLTFLoaderPlugin {
           `VRMSpringBoneLoaderPlugin: Unknown ${EXTENSION_NAME_LIMIT} specVersion "${specVersionLimit}". Ignoring the limit`,
         );
       } else {
+        if (specVersionLimit === '1.0-draft') {
+          console.warn(
+            `VRMSpringBoneLoaderPlugin: Using a draft spec version of ${EXTENSION_NAME_LIMIT}: 1.0-draft. Some behaviors may be different. Consider updating the model file.`,
+          );
+        }
+
         const schemaLimitLimit = schemaLimit.limit!;
         if (schemaLimitLimit.cone) {
           return this._importLimitCone(joint, {

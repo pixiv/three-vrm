@@ -254,7 +254,7 @@
               "dragForce": 0.4,
               "extensions": {
                 "VRMC_springBone_limit": {
-                  "specVersion": "1.0-draft",
+                  "specVersion": "1.0",
                   "limit": {
                     "hinge": {
                       "angle": 0.785398,
@@ -273,7 +273,7 @@
               "dragForce": 0.4,
               "extensions": {
                 "VRMC_springBone_limit": {
-                  "specVersion": "1.0-draft",
+                  "specVersion": "1.0",
                   "limit": {
                     "hinge": {
                       "angle": 0.785398,
@@ -292,7 +292,7 @@
               "dragForce": 0.4,
               "extensions": {
                 "VRMC_springBone_limit": {
-                  "specVersion": "1.0-draft",
+                  "specVersion": "1.0",
                   "limit": {
                     "hinge": {
                       "angle": 0.785398,
@@ -311,7 +311,7 @@
               "dragForce": 0.4,
               "extensions": {
                 "VRMC_springBone_limit": {
-                  "specVersion": "1.0-draft",
+                  "specVersion": "1.0",
                   "limit": {
                     "hinge": {
                       "angle": 0.785398,
