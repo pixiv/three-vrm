@@ -8,13 +8,15 @@ export class LimitSphericalBufferGeometry extends THREE.BufferGeometry implement
   private readonly _attrPos: THREE.BufferAttribute;
   private readonly _attrIndex: THREE.BufferAttribute;
   private readonly _limit: VRMSpringBoneLimitSpherical;
-  private _currentPitch = 0;
-  private _currentYaw = 0;
+  private _currentPitch: number;
+  private _currentYaw: number;
 
   public constructor(limit: VRMSpringBoneLimitSpherical) {
     super();
 
     this._limit = limit;
+    this._currentPitch = limit.pitch;
+    this._currentYaw = limit.yaw;
 
     this._attrPos = new THREE.BufferAttribute(new Float32Array(3 * (ARC_SEGMENTS + 4 * (ARC_SEGMENTS - 1) + 1)), 3);
     this.setAttribute('position', this._attrPos);
@@ -23,7 +25,7 @@ export class LimitSphericalBufferGeometry extends THREE.BufferGeometry implement
     this.setIndex(this._attrIndex);
 
     this._buildIndex();
-    this.update();
+    this._buildPosition();
   }
 
   public update(): void {

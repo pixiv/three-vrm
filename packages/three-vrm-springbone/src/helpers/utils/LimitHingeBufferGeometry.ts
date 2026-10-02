@@ -8,12 +8,13 @@ export class LimitHingeBufferGeometry extends THREE.BufferGeometry implements Li
   private readonly _attrPos: THREE.BufferAttribute;
   private readonly _attrIndex: THREE.BufferAttribute;
   private readonly _limit: VRMSpringBoneLimitHinge;
-  private _currentAngle = 0;
+  private _currentAngle: number;
 
   public constructor(limit: VRMSpringBoneLimitHinge) {
     super();
 
     this._limit = limit;
+    this._currentAngle = limit.angle;
 
     this._attrPos = new THREE.BufferAttribute(new Float32Array(3 * (ARC_SEGMENTS + 1)), 3);
     this.setAttribute('position', this._attrPos);
@@ -22,7 +23,7 @@ export class LimitHingeBufferGeometry extends THREE.BufferGeometry implements Li
     this.setIndex(this._attrIndex);
 
     this._buildIndex();
-    this.update();
+    this._buildPosition();
   }
 
   public update(): void {
