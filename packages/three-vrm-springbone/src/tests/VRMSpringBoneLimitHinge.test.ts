@@ -5,7 +5,7 @@ import './matchers/toBeCloseToVector3';
 
 const SQRT3 = Math.sqrt(3.0);
 
-const IDENTITY_MATRIX = new THREE.Matrix4();
+const IDENTITY_ROTATION = new THREE.Quaternion();
 const POSITIVE_X = new THREE.Vector3(1.0, 0.0, 0.0);
 const NEGATIVE_X = new THREE.Vector3(-1.0, 0.0, 0.0);
 const POSITIVE_Y = new THREE.Vector3(0.0, 1.0, 0.0);
@@ -14,7 +14,7 @@ const NEGATIVE_Z = new THREE.Vector3(0.0, 0.0, -1.0);
 const QUAT_PX90 = new THREE.Quaternion(0.707, 0.0, 0.0, 0.707);
 
 function prepareLimit(limit: VRMSpringBoneLimitHinge, boneAxis = POSITIVE_Y): VRMSpringBoneLimitHinge {
-  limit.internalPrecalcRotation(IDENTITY_MATRIX, boneAxis);
+  limit.internalPrecalcRotation(IDENTITY_ROTATION, boneAxis);
   return limit;
 }
 

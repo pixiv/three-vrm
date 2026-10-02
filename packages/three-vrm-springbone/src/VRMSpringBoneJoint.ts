@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { Matrix4InverseCache } from './utils/Matrix4InverseCache';
+import { getWorldQuaternionLite } from './utils/getWorldQuaternionLite';
 import type { VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';
 import type { VRMSpringBoneJointSettings } from './VRMSpringBoneJointSettings';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -15,6 +16,7 @@ const IDENTITY_MATRIX4 = new THREE.Matrix4();
 // 計算中の一時保存用変数（一度インスタンスを作ったらあとは使い回す）
 const _v3A = new THREE.Vector3();
 const _v3B = new THREE.Vector3();
+const _worldSpaceInitialRotation = new THREE.Quaternion();
 
 /**
  * The initial local matrix in the current world space.
@@ -275,7 +277,16 @@ export class VRMSpringBoneJoint {
     _worldSpacePosition.setFromMatrixPosition(this.bone.matrixWorld);
 
     // Precalc the rotation of the limit
-    this.limit?.internalPrecalcRotation?.(_worldSpaceInitialMatrix, this._boneAxis);
+    if (this.limit) {
+      // calculate (parentWorldRotation * localSpaceInitialRotation)
+      if (this.bone.parent) {
+        getWorldQuaternionLite(this.bone.parent, _worldSpaceInitialRotation);
+      } else {
+        _worldSpaceInitialRotation.identity();
+      }
+      _worldSpaceInitialRotation.multiply(this._initialLocalRotation).normalize();
+      this.limit.internalPrecalcRotation(_worldSpaceInitialRotation, this._boneAxis);
+    }
 
     // Get boneAxis in world space
     const worldSpaceBoneAxis = _v3B.copy(this._boneAxis).transformDirection(_worldSpaceInitialMatrix);

@@ -52,10 +52,10 @@ export abstract class VRMSpringBoneLimit {
    * This is intended to be called from {@link VRMSpringBoneJoint.update}.
    * Do not touch this property as we might change the interface without notice.
    *
-   * @param worldSpaceInitialMatrix The initial local matrix in the current world space
+   * @param worldSpaceInitialRotation The initial local rotation in the current world space
    * @param boneAxis The initial axis of the child bone, in local unit
    */
-  public internalPrecalcRotation(worldSpaceInitialMatrix: THREE.Matrix4, boneAxis: THREE.Vector3): void {
+  public internalPrecalcRotation(worldSpaceInitialRotation: THREE.Quaternion, boneAxis: THREE.Vector3): void {
     // When the bone axis is (0, -1, 0), rotate 180 degrees around the X axis, as the spec defines
     if (boneAxis.equals(VEC3_NEGATIVE_Y)) {
       _quatBoneAxis.setFromAxisAngle(VEC3_POSITIVE_X, Math.PI);
@@ -63,11 +63,7 @@ export abstract class VRMSpringBoneLimit {
       _quatBoneAxis.setFromUnitVectors(VEC3_POSITIVE_Y, boneAxis);
     }
 
-    this._totalRotationCache
-      .setFromRotationMatrix(worldSpaceInitialMatrix)
-      .normalize()
-      .multiply(_quatBoneAxis)
-      .multiply(this.rotation);
+    this._totalRotationCache.copy(worldSpaceInitialRotation).multiply(_quatBoneAxis).multiply(this.rotation);
     this._totalRotationInvCache.copy(this._totalRotationCache).invert();
   }
 
