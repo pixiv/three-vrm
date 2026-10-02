@@ -209,6 +209,9 @@ importers:
       '@pixiv/types-vrmc-springbone-extended-collider-1.0':
         specifier: workspace:*
         version: link:../types-vrmc-springbone-extended-collider-1.0
+      '@pixiv/types-vrmc-springbone-limit-1.0':
+        specifier: workspace:*
+        version: link:../types-vrmc-springbone-limit-1.0
     devDependencies:
       '@types/three':
         specifier: ^0.180.0
@@ -228,6 +231,8 @@ importers:
   packages/types-vrmc-springbone-1.0: {}
 
   packages/types-vrmc-springbone-extended-collider-1.0: {}
+
+  packages/types-vrmc-springbone-limit-1.0: {}
 
   packages/types-vrmc-vrm-1.0: {}
 

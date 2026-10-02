@@ -51,7 +51,8 @@
   "dependencies": {
     "@pixiv/types-vrm-0.0": "workspace:*",
     "@pixiv/types-vrmc-springbone-1.0": "workspace:*",
-    "@pixiv/types-vrmc-springbone-extended-collider-1.0": "workspace:*"
+    "@pixiv/types-vrmc-springbone-extended-collider-1.0": "workspace:*",
+    "@pixiv/types-vrmc-springbone-limit-1.0": "workspace:*"
   },
   "devDependencies": {
     "@types/three": "^0.180.0",

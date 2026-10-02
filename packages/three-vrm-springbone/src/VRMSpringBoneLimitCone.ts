@@ -1,0 +1,60 @@
+import * as THREE from 'three';
+import { VRMSpringBoneLimit } from './VRMSpringBoneLimit';
+
+const SINGULARITY_EPSILON = Math.sqrt(Number.EPSILON);
+
+/**
+ * Represents the cone limit of a spring bone defined in `VRMC_springBone_limit`.
+ */
+export class VRMSpringBoneLimitCone extends VRMSpringBoneLimit {
+  /**
+   * The angle of the cone limit in radians.
+   * If the angle is set to π or greater, the angle will be interpreted as π by the implementation.
+   * When the angle is set to π, the cone shape becomes a sphere.
+   */
+  public angle: number;
+
+  public constructor(params?: { angle?: number; rotation?: THREE.Quaternion }) {
+    super();
+
+    this.angle = THREE.MathUtils.clamp(params?.angle ?? Math.PI, 0.0, Math.PI);
+    this.rotation = params?.rotation ?? new THREE.Quaternion();
+  }
+
+  public calculateLimit(tailDir: THREE.Vector3): boolean {
+    // bring the direction into the local space of the limit
+    tailDir.applyQuaternion(this._totalRotationInvCache);
+
+    // compare the y component with the cos of the angle
+    // Assume that `angle` is within [0, π]
+    const cosLimitAngle = Math.cos(this.angle);
+
+    let isLimited = false;
+
+    if (tailDir.y < cosLimitAngle) {
+      // now we have to apply the limit
+      isLimited = true;
+
+      // Scale the x and z components of the direction using the ratio of the sin of the direction and the sin of the angle set in the limit
+      const horizontalLengthSq = 1.0 - tailDir.y * tailDir.y;
+
+      if (horizontalLengthSq < SINGULARITY_EPSILON) {
+        // The direction is -Y, choose the +Z side
+        tailDir.x = 0.0;
+        tailDir.z = Math.sqrt(1.0 - cosLimitAngle * cosLimitAngle);
+      } else {
+        const scale = Math.sqrt((1.0 - cosLimitAngle * cosLimitAngle) / horizontalLengthSq);
+        tailDir.x *= scale;
+        tailDir.z *= scale;
+      }
+
+      // Set the y component to the cos of the angle
+      tailDir.y = cosLimitAngle;
+    }
+
+    // change the direction back to the world space
+    tailDir.applyQuaternion(this._totalRotationCache);
+
+    return isLimited;
+  }
+}
