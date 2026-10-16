@@ -38,7 +38,7 @@ const getShading = Fn(({ dotNL }: { dotNL: THREE.Node<'float'> }) => {
  * Mix diffuseColor and shadeColor using shading factor and light color
  */
 const getDiffuse = Fn(({ shading, lightColor }: { shading: THREE.Node<'float'>; lightColor: THREE.Node<'vec3'> }) => {
-  const feathered = mix(shadeColor, diffuseColor, shading);
+  const feathered = mix(shadeColor, diffuseColor.rgb, shading);
   const col = lightColor.mul(BRDF_Lambert({ diffuseColor: feathered }));
 
   return col;
@@ -84,7 +84,7 @@ export class MToonLightingModel extends THREE.LightingModel {
 
     // indirect irradiance
     (reflectedLight.indirectDiffuse as THREE.Node<'vec3'>).addAssign(
-      (irradiance as THREE.Node<'vec3'>).mul(BRDF_Lambert({ diffuseColor })),
+      (irradiance as THREE.Node<'vec3'>).mul(BRDF_Lambert({ diffuseColor: diffuseColor.rgb })),
     );
   }
 
