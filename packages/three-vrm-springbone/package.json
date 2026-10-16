@@ -54,8 +54,8 @@
     "@pixiv/types-vrmc-springbone-extended-collider-1.0": "workspace:*"
   },
   "devDependencies": {
-    "@types/three": "^0.180.0",
-    "three": "^0.180.0"
+    "@types/three": "^0.186.0",
+    "three": "^0.186.0"
   },
   "peerDependencies": {
     "three": ">=0.137"

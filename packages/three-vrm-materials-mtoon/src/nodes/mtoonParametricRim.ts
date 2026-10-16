@@ -1,16 +1,15 @@
 import * as THREE from 'three/webgpu';
-import { float, modelViewPosition, transformedNormalView } from 'three/tsl';
-import { FnCompat } from './utils/FnCompat';
+import { float, Fn, modelViewPosition, transformedNormalView } from 'three/tsl';
 
-export const mtoonParametricRim = FnCompat(
+export const mtoonParametricRim = Fn(
   ({
     parametricRimLift,
     parametricRimFresnelPower,
     parametricRimColor,
   }: {
-    parametricRimLift: THREE.TSL.OperatorNodeParameter;
-    parametricRimFresnelPower: THREE.TSL.OperatorNodeParameter;
-    parametricRimColor: THREE.TSL.OperatorNodeParameter;
+    parametricRimLift: THREE.Node<'float'>;
+    parametricRimFresnelPower: THREE.Node<'float'>;
+    parametricRimColor: THREE.Node<'vec3'>;
   }) => {
     const viewDir = modelViewPosition.normalize();
     const dotNV = transformedNormalView.dot(viewDir.negate());
