@@ -11,14 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
     - name: Setup pnpm
-      uses: pnpm/action-setup@v5
+      uses: pnpm/action-setup@v6
       with:
         version: 10.33.0
         run_install: false
     - name: Setup Node
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v7
       with:
         node-version-file: './.node-version'
         cache: 'pnpm'
@@ -27,7 +27,7 @@ jobs:
     - name: Build
       run: pnpm build
     - name: Upload Builds
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: build
         path: |
@@ -39,21 +39,21 @@ jobs:
     needs: build
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
     - name: Setup pnpm
-      uses: pnpm/action-setup@v5
+      uses: pnpm/action-setup@v6
       with:
         version: 10.33.0
         run_install: false
     - name: Setup Node
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v7
       with:
         node-version-file: './.node-version'
         cache: 'pnpm'
     - name: Fetch Deps
       run: pnpm install --frozen-lockfile
     - name: Download Builds
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: build
         path: packages
@@ -65,21 +65,21 @@ jobs:
     needs: build
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
     - name: Setup pnpm
-      uses: pnpm/action-setup@v5
+      uses: pnpm/action-setup@v6
       with:
         version: 10.33.0
         run_install: false
     - name: Setup Node
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v7
       with:
         node-version-file: './.node-version'
         cache: 'pnpm'
     - name: Fetch Deps
       run: pnpm install --frozen-lockfile
     - name: Download Builds
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: build
         path: packages
@@ -91,28 +91,28 @@ jobs:
     needs: build
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
     - name: Setup pnpm
-      uses: pnpm/action-setup@v5
+      uses: pnpm/action-setup@v6
       with:
         version: 10.33.0
         run_install: false
     - name: Setup Node
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v7
       with:
         node-version-file: './.node-version'
         cache: 'pnpm'
     - name: Fetch Deps
       run: pnpm install --frozen-lockfile
     - name: Download Builds
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: build
         path: packages
     - name: Build Docs
       run: pnpm run docs
     - name: Upload Docs
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: docs
         path: |
@@ -123,28 +123,28 @@ jobs:
     needs: build
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
     - name: Setup pnpm
-      uses: pnpm/action-setup@v5
+      uses: pnpm/action-setup@v6
       with:
         version: 10.33.0
         run_install: false
     - name: Setup Node
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v7
       with:
         node-version-file: './.node-version'
         cache: 'pnpm'
     - name: Fetch Deps
       run: pnpm install --frozen-lockfile
     - name: Download Builds
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: build
         path: packages
     - name: Build Docs
       run: DOCS_ROOT='https://pixiv.github.io/three-vrm/docs' pnpm run docs-legacy
     - name: Upload Docs
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: docs-legacy
         path: |
@@ -159,31 +159,31 @@ jobs:
     - docs-legacy
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
     - name: Setup pnpm
-      uses: pnpm/action-setup@v5
+      uses: pnpm/action-setup@v6
       with:
         version: 10.33.0
         run_install: false
     - name: Setup Node
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v7
       with:
         node-version-file: './.node-version'
         cache: 'pnpm'
     - name: Fetch Deps
       run: pnpm install --frozen-lockfile
     - name: Download Builds
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: build
         path: public/packages
     - name: Download Docs
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: docs
         path: public/docs
     - name: Download Docs (legacy)
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: docs-legacy
         path: public/packages
@@ -196,7 +196,7 @@ jobs:
           fi
         done
     - name: Deploy to gh-pages
-      uses: peaceiris/actions-gh-pages@v3
+      uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: public
