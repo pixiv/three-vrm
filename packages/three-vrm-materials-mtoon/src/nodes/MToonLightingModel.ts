@@ -1,5 +1,5 @@
 import * as THREE from 'three/webgpu';
-import { BRDF_Lambert, diffuseColor, float, mix, ShaderNodeObject, transformedNormalView, vec3 } from 'three/tsl';
+import { BRDF_Lambert, diffuseColor, float, mix, ShaderNodeObject, vec3 } from 'three/tsl';
 import {
   matcap,
   parametricRim,
@@ -10,6 +10,7 @@ import {
   shadingToony,
 } from './immutableNodes';
 import { FnCompat } from './utils/FnCompat';
+import { normalViewCompat } from './utils/normalViewCompat';
 
 // TODO: 0% confidence about function types.
 
@@ -69,7 +70,7 @@ export class MToonLightingModel extends THREE.LightingModel {
     lightColor,
     reflectedLight,
   }: THREE.LightingModelDirectInput & { lightDirection: THREE.Node; lightColor: THREE.Node }) {
-    const dotNL = transformedNormalView.dot(lightDirection).clamp(-1.0, 1.0);
+    const dotNL = normalViewCompat.dot(lightDirection).clamp(-1.0, 1.0);
 
     // toon diffuse
     const shading = getShading({
