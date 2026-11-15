@@ -95,7 +95,7 @@ npm install three @pixiv/three-vrm
 
 ### Use with WebGPURenderer
 
-Starting from v3, we provide [WebGPURenderer](https://github.com/mrdoob/three.js/blob/master/examples/jsm/renderers/webgpu/WebGPURenderer.js) compatibility.
+Starting from v3, we provide [WebGPURenderer](https://github.com/mrdoob/three.js/blob/master/src/renderers/webgpu/WebGPURenderer.js) compatibility.
 To use three-vrm with WebGPURenderer, specify the WebGPU-compatible `MToonNodeMaterial` for the `materialType` option of `MToonMaterialLoaderPlugin`.
 
 `MToonNodeMaterial` only supports Three.js r167 or later.
