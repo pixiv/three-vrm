@@ -172,6 +172,8 @@ export class VRMFirstPerson {
     const dst = new THREE.SkinnedMesh(src.geometry.clone(), src.material);
     dst.name = `${src.name}(erase)`;
     dst.frustumCulled = src.frustumCulled;
+    // Both views use the same morph targets, so expression weight updates must reach both meshes.
+    dst.morphTargetInfluences = src.morphTargetInfluences;
     dst.layers.set(this._firstPersonOnlyLayer);
 
     const geometry = dst.geometry;
