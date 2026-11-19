@@ -11,10 +11,10 @@ const DOCS_ROOT = process.env.DOCS_ROOT || '/docs';
  * @returns The new path
  */
 function replacePath(path) {
-  // Item pages
+  // Item and nested module pages
   // Before: /packages/three-vrm-animation/docs/classes/VRMAnimation.html
   // After: /docs/classes/three-vrm-materials-mtoon.MToonMaterial.html
-  const matchItems = path.match(/packages\/(.+)\/docs\/(classes|interfaces|functions|types|variables)\/(.+)/);
+  const matchItems = path.match(/packages\/(.+)\/docs\/(classes|interfaces|functions|types|variables|modules)\/(.+)/);
   if (matchItems != null) {
     const [_, packageName, kind, item] = matchItems;
     return `${DOCS_ROOT}/${kind}/${packageName}.${item}`;

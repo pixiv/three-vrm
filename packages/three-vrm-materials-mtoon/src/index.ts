@@ -1,3 +1,8 @@
+/**
+ * @module
+ * @mergeModuleWith <project>
+ */
+
 export { MToonMaterialLoaderPlugin } from './MToonMaterialLoaderPlugin';
 export type { MToonMaterialLoaderPluginOptions } from './MToonMaterialLoaderPluginOptions';
 export { MToonMaterial } from './MToonMaterial';
