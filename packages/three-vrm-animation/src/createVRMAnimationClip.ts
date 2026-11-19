@@ -24,11 +24,13 @@ export function createVRMAnimationHumanoidTracks(
     const nodeName = humanoid.getNormalizedBoneNode(name)?.name;
 
     if (nodeName != null) {
-      const track = new THREE.QuaternionKeyframeTrack(
-        `${nodeName}.quaternion`,
-        origTrack.times,
-        origTrack.values.map((v, i) => (metaVersion === '0' && i % 2 === 0 ? -v : v)),
-      );
+      const track = origTrack.clone();
+      track.name = `${nodeName}.quaternion`;
+      if (metaVersion === '0') {
+        for (let i = 0; i < track.values.length; i += 2) {
+          track.values[i] = -track.values[i];
+        }
+      }
       rotation.set(name, track);
     }
   }
