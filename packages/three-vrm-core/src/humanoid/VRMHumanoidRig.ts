@@ -6,6 +6,7 @@ import { VRMRig } from './VRMRig';
 
 const _v3A = new THREE.Vector3();
 const _quatA = new THREE.Quaternion();
+const _mat4A = new THREE.Matrix4();
 const _boneWorldPos = new THREE.Vector3();
 
 /**
@@ -129,8 +130,8 @@ export class VRMHumanoidRig extends VRMRig {
         if (boneName === 'hips') {
           const boneWorldPosition = rigBoneNode.getWorldPosition(_boneWorldPos);
           boneNode.parent!.updateWorldMatrix(true, false);
-          const parentWorldMatrix = boneNode.parent!.matrixWorld;
-          const localPosition = boneWorldPosition.applyMatrix4(parentWorldMatrix.invert());
+          const parentWorldMatrixInverse = _mat4A.copy(boneNode.parent!.matrixWorld).invert();
+          const localPosition = boneWorldPosition.applyMatrix4(parentWorldMatrixInverse);
           boneNode.position.copy(localPosition);
         }
       }
