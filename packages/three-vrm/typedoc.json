@@ -1,5 +1,5 @@
 
 {
   "name": "three-vrm",
-  "entryPoints": ["src/index.ts"]
+  "entryPoints": ["src/index.ts", "src/nodes/index.ts"]
 }

@@ -1,4 +1,4 @@
 {
   "name": "three-vrm-materials-mtoon",
-  "entryPoints": ["src/index.ts"]
+  "entryPoints": ["src/index.ts", "src/nodes/index.ts"]
 }
