@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { quatInvertCompat } from '../utils/quatInvertCompat';
 import type { VRMHumanBone } from './VRMHumanBone';
 import type { VRMHumanBones } from './VRMHumanBones';
 import type { VRMHumanBoneName } from './VRMHumanBoneName';
@@ -91,7 +90,7 @@ export class VRMRig {
         _v3A.fromArray(restState.position).negate();
       }
       if (restState?.rotation) {
-        quatInvertCompat(_quatA.fromArray(restState.rotation));
+        _quatA.fromArray(restState.rotation).invert();
       }
 
       // Get the position / rotation from the node

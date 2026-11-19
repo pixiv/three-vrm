@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import { VRMHumanoid } from '../humanoid';
 import { getWorldQuaternionLite } from '../utils/getWorldQuaternionLite';
-import { quatInvertCompat } from '../utils/quatInvertCompat';
 import { calcAzimuthAltitude } from './utils/calcAzimuthAltitude';
 import type { VRMLookAtApplier } from './VRMLookAtApplier';
 import { sanitizeAngle } from './utils/sanitizeAngle';
@@ -254,7 +253,7 @@ export class VRMLookAt {
     // Look at direction in local coordinate
     const headRotDiffInv = _quatA
       .copy(this._restHeadWorldQuaternion)
-      .multiply(quatInvertCompat(this.getLookAtWorldQuaternion(_quatB)));
+      .multiply(this.getLookAtWorldQuaternion(_quatB).invert());
     const headPos = this.getLookAtWorldPosition(_v3B);
     const lookAtDir = _v3C.copy(position).sub(headPos).applyQuaternion(headRotDiffInv).normalize();
 
