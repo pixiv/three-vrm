@@ -16,6 +16,7 @@ import {
   ShaderNodeObject,
   Swizzable,
   uniform,
+  vec2,
   vec3,
   vec4,
 } from 'three/tsl';
@@ -534,7 +535,9 @@ export class MToonNodeMaterial extends THREE.NodeMaterial {
     }
 
     if (this.matcapTexture && this.matcapTexture.isTexture === true) {
-      const map = refMatcapTexture.context({ getUV: () => matcapUV.mul(1.0, -1.0).add(0.0, 1.0) });
+      // Flip V only. `mul` and `add` are variadic in TSL (`a.mul(1.0, -1.0)` is `a * 1.0 * -1.0`),
+      // so per-component factors must be passed as vectors.
+      const map = refMatcapTexture.context({ getUV: () => matcapUV.mul(vec2(1.0, -1.0)).add(vec2(0.0, 1.0)) });
       return map.mul(refMatcapFactor);
     }
 
