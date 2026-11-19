@@ -9,7 +9,7 @@ describe('VRMFirstPerson', () => {
     const head = new THREE.Bone();
     const hips = new THREE.Bone();
     const humanBones = Object.fromEntries(
-      Object.values(VRMRequiredHumanBoneName).map((name) => [name, { node: new THREE.Bone() }]),
+      Object.values(VRMRequiredHumanBoneName).map((name) => [name, { node: new THREE.Object3D() }]),
     ) as VRMHumanBones;
     humanBones.head = { node: head };
     humanBones.hips = { node: hips };
