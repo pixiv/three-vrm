@@ -20,7 +20,8 @@ export class MToonAnimatedUVNode extends THREE.TempNode {
     let uvAnimationMask: THREE.TSL.OperatorNodeParameter = 1.0;
 
     if (this.hasMaskTexture) {
-      uvAnimationMask = vec4(refUVAnimationMaskTexture).context({ getUV: () => uv() }).r;
+      // The spec refers to the B channel of uvAnimationMaskTexture, as MToonMaterial does
+      uvAnimationMask = vec4(refUVAnimationMaskTexture).context({ getUV: () => uv() }).b;
     }
 
     let animatedUv: ShaderNodeObject<Swizzable> = uv();
