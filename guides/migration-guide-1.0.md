@@ -95,14 +95,23 @@ loader.register((parser) => {
 
 `VRMSchema` has been removed.
 
-Instead, we have a new package `@pixiv/types-vrm-0.0`, which provides the type definition of the VRM0.0 schema.
+Use `@pixiv/types-vrm-0.0` for the VRM 0.0 schema and `@pixiv/types-vrmc-vrm-1.0` for the VRM 1.0 schema.
+Both packages ship TypeScript declarations only. A runtime import of either package can produce a `Failed to resolve entry for package` error in Vite.
 
-Also, there are type definition packages of VRM1.0 schema such as `@pixiv/types-vrmc-vrm-1.0`.
+Use `import type` in TypeScript so the import is removed from the emitted JavaScript.
 
-```tsx
+```ts
+import type * as V0VRMSchema from '@pixiv/types-vrm-0.0';
 import type * as V1VRMSchema from '@pixiv/types-vrmc-vrm-1.0';
 
-const extension = json.extensions?.['VRMC_vrm'] as V1VRMSchema.VRMCVRM | undefined;
+const vrm0Extension = json.extensions?.['VRM'] as V0VRMSchema.VRM | undefined;
+const vrm1Extension = json.extensions?.['VRMC_vrm'] as V1VRMSchema.VRMCVRM | undefined;
+```
+
+In JavaScript, you can refer to the schema with a JSDoc type.
+
+```js
+const vrm0Extension = /** @type {import('@pixiv/types-vrm-0.0').VRM | undefined} */ (json.extensions?.['VRM']);
 ```
 
 ### GLTFSchema
