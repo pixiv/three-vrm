@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { mat4InvertCompat } from './mat4InvertCompat';
 
 export class Matrix4InverseCache {
   /**
@@ -30,7 +29,7 @@ export class Matrix4InverseCache {
    */
   public get inverse(): THREE.Matrix4 {
     if (this._shouldUpdateInverse) {
-      mat4InvertCompat(this._inverseCache.copy(this.matrix));
+      this._inverseCache.copy(this.matrix).invert();
       this._shouldUpdateInverse = false;
     }
 

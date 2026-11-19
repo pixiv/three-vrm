@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { quatInvertCompat } from './utils/quatInvertCompat';
 import { VRMNodeConstraint } from './VRMNodeConstraint';
 
 const _v3A = new THREE.Vector3();
@@ -69,8 +68,8 @@ export class VRMRollConstraint extends VRMNodeConstraint {
 
   public setInitState(): void {
     this._dstRestQuat.copy(this.destination.quaternion);
-    quatInvertCompat(this._invDstRestQuat.copy(this._dstRestQuat));
-    quatInvertCompat(this._invSrcRestQuatMulDstRestQuat.copy(this.source.quaternion)).multiply(this._dstRestQuat);
+    this._invDstRestQuat.copy(this._dstRestQuat).invert();
+    this._invSrcRestQuatMulDstRestQuat.copy(this.source.quaternion).invert().multiply(this._dstRestQuat);
   }
 
   public update(): void {
@@ -104,7 +103,7 @@ export class VRMRollConstraint extends VRMNodeConstraint {
      * What the quatFromTo is intended to be:
      *
      * ```ts
-     * const quatFromTo = _quatB.setFromUnitVectors( this._v3RollAxis, n1 ).inverse();
+     * const quatFromTo = _quatB.setFromUnitVectors( this._v3RollAxis, n1 ).invert();
      * ```
      */
     const quatFromTo = _quatB.setFromUnitVectors(n1, this._v3RollAxis);

@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import { decomposePosition } from './utils/decomposePosition';
 import { decomposeRotation } from './utils/decomposeRotation';
-import { quatInvertCompat } from './utils/quatInvertCompat';
 import { VRMNodeConstraint } from './VRMNodeConstraint';
 
 const _v3A = new THREE.Vector3();
@@ -84,7 +83,7 @@ export class VRMAimConstraint extends VRMNodeConstraint {
     const invDstParentWorldQuat = _quatB.identity();
     if (this.destination.parent) {
       decomposeRotation(this.destination.parent.matrixWorld, dstParentWorldQuat);
-      quatInvertCompat(invDstParentWorldQuat.copy(dstParentWorldQuat));
+      invDstParentWorldQuat.copy(dstParentWorldQuat).invert();
     }
 
     // calculate from-to vectors in world coord
