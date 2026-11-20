@@ -23,8 +23,8 @@
 		<script type="importmap">
 			{
 			  "imports": {
-				"three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
-				"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+				"three": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.js",
+				"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.0/examples/jsm/",
 				"@pixiv/three-vrm-springbone": "../lib/three-vrm-springbone.module.js"
 			  }
 			}
@@ -137,18 +137,20 @@
 			springBoneManager.setInitState();
 
 			// animate
-			const clock = new THREE.Clock();
+			const timer = new THREE.Timer();
 			let shouldReset = true;
 
 			function animate() {
 
 				requestAnimationFrame( animate );
 
-				const deltaTime = clock.getDelta();
+				timer.update();
+				const deltaTime = timer.getDelta();
+				const elapsedTime = timer.getElapsed();
 
-				cubes[ 0 ].position.x = Math.sin( Math.PI * clock.elapsedTime );
+				cubes[ 0 ].position.x = Math.sin( Math.PI * elapsedTime );
 
-				collider.position.x = Math.sin( clock.elapsedTime );
+				collider.position.x = Math.sin( elapsedTime );
 
 				if ( shouldReset ) {
 
