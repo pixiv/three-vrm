@@ -13,9 +13,21 @@ export interface VRMSpringBoneLoaderPluginOptions {
      */
     colliderHelperRoot?: THREE.Object3D;
     /**
+     * Specify an Object3D to add {@link VRMSpringBoneLimitHelper} s.
+     * If not specified, helper will not be created.
+     * If `renderOrder` is set to the root, helpers will copy the same `renderOrder` .
+     */
+    limitHelperRoot?: THREE.Object3D;
+    /**
      * If true, load colliders defined in `VRMC_springBone_extended_collider`.
      * Set to `false` to disable loading extended colliders and use the fallback behavior.
      * `true` by default.
      */
     useExtendedColliders?: boolean;
+    /**
+     * If true, load limits defined in `VRMC_springBone_limit`.
+     * Set to `false` to disable loading limits and use the fallback behavior.
+     * `true` by default.
+     */
+    useLimits?: boolean;
 }

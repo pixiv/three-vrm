@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import type { VRMSpringBoneColliderGroup } from './VRMSpringBoneColliderGroup';
 import type { VRMSpringBoneJointSettings } from './VRMSpringBoneJointSettings';
+import { VRMSpringBoneLimit } from './VRMSpringBoneLimit';
 /**
  * A class represents a single joint of a spring bone.
  * It should be managed by a {@link VRMSpringBoneManager}.
@@ -10,6 +11,10 @@ export declare class VRMSpringBoneJoint {
      * Settings of the bone.
      */
     settings: VRMSpringBoneJointSettings;
+    /**
+     * Limit attached to this bone.
+     */
+    limit: VRMSpringBoneLimit | null;
     /**
      * Collider groups attached to this bone.
      */
@@ -32,16 +37,24 @@ export declare class VRMSpringBoneJoint {
      */
     private _prevTail;
     /**
-     * Initial axis of the bone, in local unit.
+     * The initial axis of the child bone, in local unit.
      */
     private _boneAxis;
     /**
-     * Length of the bone in world unit.
+     * The length of the bone in world unit.
      * Will be used for normalization in update loop, will be updated by {@link _calcWorldSpaceBoneLength}.
      *
      * It's same as local unit length unless there are scale transformations in the world space.
      */
     private _worldSpaceBoneLength;
+    /**
+     * The length of the bone in world unit.
+     *
+     * It's same as local unit length unless there are scale transformations in the world space.
+     *
+     * Intended to be used by helpers.
+     */
+    get worldSpaceBoneLength(): number;
     /**
      * Set of dependencies that need to be updated before this joint.
      */
@@ -65,6 +78,11 @@ export declare class VRMSpringBoneJoint {
      * Initial state of the position of its child.
      */
     private _initialLocalChildPosition;
+    /**
+     * Initial state of the position of its child.
+     *
+     * Intended to be used by helpers.
+     */
     get initialLocalChildPosition(): THREE.Vector3;
     /**
      * Returns the world matrix of its parent object.

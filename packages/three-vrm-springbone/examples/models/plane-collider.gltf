@@ -173,7 +173,7 @@
   ],
   "meshes": [
     {
-      "name": "Cube",
+      "name": "Sphere",
       "primitives": [
         {
           "mode": 4,
@@ -205,7 +205,7 @@
   ],
   "nodes": [
     {
-      "name": "Spring A",
+      "name": "Spring 1",
       "children": [
         1
       ],
@@ -229,7 +229,7 @@
       "extras": {}
     },
     {
-      "name": "Spring B",
+      "name": "Spring 2",
       "children": [
         2
       ],
@@ -253,7 +253,7 @@
       "extras": {}
     },
     {
-      "name": "Spring C",
+      "name": "Spring 3",
       "children": [
         3
       ],
@@ -277,7 +277,7 @@
       "extras": {}
     },
     {
-      "name": "Spring D",
+      "name": "Spring 4",
       "children": [
         4
       ],
@@ -301,7 +301,7 @@
       "extras": {}
     },
     {
-      "name": "Spring E",
+      "name": "Spring 5",
       "translation": [
         0,
         -2,

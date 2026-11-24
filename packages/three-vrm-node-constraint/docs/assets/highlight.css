@@ -19,4 +19,4 @@
     --code-background: var(--dark-code-background);
 }
 
-pre, code { background: var(--code-background); }
+pre, code, math[display='block'] { background: var(--code-background); }
