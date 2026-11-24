@@ -29,6 +29,10 @@ interface VRMAnimationLoaderPluginNodeMap {
 
 type VRMAnimationLoaderPluginWorldMatrixMap = Map<VRMHumanBoneName | 'hipsParent', THREE.Matrix4>;
 
+type KeyframeTrackWithInterpolant = THREE.KeyframeTrack & {
+  createInterpolant: (result?: THREE.TypedArray) => THREE.Interpolant;
+};
+
 /**
  * A plugin of GLTFLoader that imports {@link VRMAnimation}s from a `VRMC_vrm_animation` extension and gltf animations.
  */
@@ -267,7 +271,11 @@ export class VRMAnimationLoaderPlugin implements GLTFLoaderPlugin {
             values[i] = origTrack.values[3 * i];
           }
 
-          const newTrack = new THREE.NumberKeyframeTrack(`${expressionName}.weight`, times as any, values as any);
+          const newTrack = new THREE.NumberKeyframeTrack(`${expressionName}.weight`, times, values);
+          // Reuse the loader's factory, including its custom glTF cubic spline interpolant.
+          (newTrack as KeyframeTrackWithInterpolant).createInterpolant = (
+            origTrack as KeyframeTrackWithInterpolant
+          ).createInterpolant;
 
           if (vrmExpressionPresetNameSet.has(expressionName)) {
             result.expressionTracks.preset.set(expressionName as VRMExpressionPresetName, newTrack);
