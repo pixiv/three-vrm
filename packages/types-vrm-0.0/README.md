@@ -4,7 +4,11 @@ Type definitions of VRM 0.0 schema.
 
 https://github.com/vrm-c/vrm-specification/tree/master/specification/0.0
 
-There should not be any implementation in this package. Just type definitions of the schema.
+This package ships TypeScript declarations only. Use a type-only import.
+
+```ts
+import type { VRM } from '@pixiv/types-vrm-0.0';
+```
 
 The extension root is named `VRM` .
 
