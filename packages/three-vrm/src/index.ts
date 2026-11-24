@@ -1,3 +1,8 @@
+/**
+ * @module
+ * @mergeModuleWith <project>
+ */
+
 export { VRM } from './VRM';
 export { VRMLoaderPlugin } from './VRMLoaderPlugin';
 export type { VRMLoaderPluginOptions } from './VRMLoaderPluginOptions';
