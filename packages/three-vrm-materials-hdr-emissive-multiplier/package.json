@@ -33,7 +33,7 @@
     "build-js": "node ../../bin/build.mjs",
     "build-dev": "cross-env NODE_ENV=development pnpm build-js",
     "build-prod": "cross-env NODE_ENV=production pnpm build-js",
-    "build-types": "tsc --declaration --declarationDir ./types --emitDeclarationOnly",
+    "build-types": "tsc --declaration --declarationDir ./types --emitDeclarationOnly && node ../../bin/fix-declaration-imports.mjs",
     "docs-legacy": "typedoc --plugin ../../typedoc-redirect-legacy-docs-plugin.mjs",
     "lint": "eslint \"src/**/*.{ts,tsx}\"  && pnpm lint-examples &&  prettier \"src/**/*.{ts,tsx}\" --check",
     "lint-examples": "eslint \"examples/**/*.{js,html}\" --rule \"padded-blocks: error\"",
