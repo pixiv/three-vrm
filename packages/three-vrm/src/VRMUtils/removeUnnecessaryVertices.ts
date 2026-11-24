@@ -268,7 +268,7 @@ function collectMorphAttributeGroups(
 
 /**
  * Rebuilds morph attributes based on the new-to-original index map.
- * If all morph attribute values are zero, all morph attributes will be discarded.
+ * If all relative morph deltas are zero, the morph attributes will be discarded.
  * @param newGeometry New geometry
  * @param morphAttributes Original morph attributes
  * @param newIndexOriginalIndexMap Map from new index to original index
@@ -327,8 +327,9 @@ function reorganizeMorphAttributes(
     newMorphAttributes[attributeName][morphIndex] = new BufferAttribute(newAttributeArray, itemSize, normalized);
   }
 
-  // discard morph attributes if all values are zero
-  newGeometry.morphAttributes = allMorphsAreZero ? {} : newMorphAttributes;
+  // Zero absolute targets still move vertices to the origin.
+  const discardMorphs = newGeometry.morphTargetsRelative && allMorphsAreZero;
+  newGeometry.morphAttributes = discardMorphs ? {} : newMorphAttributes;
 }
 
 /**
