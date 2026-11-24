@@ -262,8 +262,17 @@ export class VRMExpressionLoaderPlugin implements GLTFLoaderPlugin {
     await Promise.all(
       schemaBlendShapeGroups.map(async (schemaGroup) => {
         const v0PresetName = schemaGroup.presetName;
-        const v1PresetName =
-          (v0PresetName != null && VRMExpressionLoaderPlugin.v0v1PresetNameMap[v0PresetName]) || null;
+        // Match the VRM 0.x name identifier and UniVRM's preset migration for unknown groups.
+        const presetKey = v0PresetName === 'unknown' ? schemaGroup.name?.toLowerCase() : v0PresetName;
+        const presetMap = VRMExpressionLoaderPlugin.v0v1PresetNameMap;
+        let v1PresetName: VRMExpressionPresetName | undefined;
+
+        if (v0PresetName === 'unknown' && presetKey === 'surprised') {
+          v1PresetName = 'surprised';
+        } else if (presetKey != null && Object.prototype.hasOwnProperty.call(presetMap, presetKey)) {
+          v1PresetName = presetMap[presetKey as V0VRM.BlendShapePresetName];
+        }
+
         const name = v1PresetName ?? schemaGroup.name;
 
         if (name == null) {
