@@ -11,6 +11,8 @@ import { VRMSpringBoneLimit } from './VRMSpringBoneLimit';
 // http://rocketjump.skr.jp/unity3d/109/
 // https://github.com/dwango/UniVRM/blob/master/Scripts/SpringBone/VRMSpringBone.cs
 
+const centerInverseCaches = new WeakMap<THREE.Object3D, { cache: Matrix4InverseCache; jointCount: number }>();
+
 const IDENTITY_MATRIX4 = new THREE.Matrix4();
 
 // 計算中の一時保存用変数（一度インスタンスを作ったらあとは使い回す）
@@ -134,19 +136,27 @@ export class VRMSpringBoneJoint {
     return this._center;
   }
   public set center(center: THREE.Object3D | null) {
-    // uninstall inverse cache
-    if (this._center?.userData.inverseCacheProxy) {
-      (this._center.userData.inverseCacheProxy as Matrix4InverseCache).revert();
-      delete this._center.userData.inverseCacheProxy;
+    if (this._center === center) {
+      return;
     }
 
-    // change the center
+    if (this._center) {
+      const entry = centerInverseCaches.get(this._center)!;
+      entry.jointCount--;
+      if (entry.jointCount === 0) {
+        entry.cache.revert();
+        centerInverseCaches.delete(this._center);
+      }
+    }
+
     this._center = center;
 
-    // install inverse cache
-    if (this._center) {
-      if (!this._center.userData.inverseCacheProxy) {
-        this._center.userData.inverseCacheProxy = new Matrix4InverseCache(this._center.matrixWorld);
+    if (center) {
+      const entry = centerInverseCaches.get(center);
+      if (entry) {
+        entry.jointCount++;
+      } else {
+        centerInverseCaches.set(center, { cache: new Matrix4InverseCache(center.matrixWorld), jointCount: 1 });
       }
     }
   }
@@ -377,6 +387,6 @@ export class VRMSpringBoneJoint {
    * Create a matrix that converts world space into center space.
    */
   private _getMatrixWorldToCenter(): THREE.Matrix4 {
-    return this._center ? (this._center.userData.inverseCacheProxy as Matrix4InverseCache).inverse : IDENTITY_MATRIX4;
+    return this._center ? centerInverseCaches.get(this._center)!.cache.inverse : IDENTITY_MATRIX4;
   }
 }
