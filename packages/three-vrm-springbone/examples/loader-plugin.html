@@ -72,6 +72,7 @@
 
 				jointHelperRoot: helperRoot,
 				colliderHelperRoot: helperRoot,
+				limitHelperRoot: helperRoot,
 
 			};
 
@@ -102,8 +103,6 @@
 
 						currentGltf = gltf;
 
-						timer.reset();
-
 					},
 
 					( progress ) => console.log( 'Loading model...', 100.0 * ( progress.loaded / progress.total ), '%' ),
@@ -132,14 +131,15 @@
 				requestAnimationFrame( animate );
 
 				timer.update();
-				const deltaTime = timer.getDelta();
-				const elapsedTime = timer.getElapsed();
+
+				const time = timer.getElapsed();
+				const delta = timer.getDelta();
 
 				if ( currentGltf ) {
 
 					const manager = currentGltf.userData.vrmSpringBoneManager;
 
-					currentGltf.scene.position.x = Math.sin( Math.PI * elapsedTime );
+					currentGltf.scene.position.x = Math.sin( Math.PI * time );
 
 					if ( shouldReset ) {
 
@@ -148,7 +148,7 @@
 
 					}
 
-					manager.update( deltaTime );
+					manager.update( delta );
 
 				}
 
@@ -163,15 +163,26 @@
 
 			const params = {
 
+				togglePlay: () => {
+
+					timer.setTimescale( 1.0 - timer.getTimescale() );
+
+				},
+
 				model: 'sphere-collider.gltf',
 
 			};
+
+			gui.add( params, 'togglePlay' ).name( 'Play / Pause' );
 
 			const availableModels = [
 
 				'sphere-collider.gltf',
 				'inside-collider.gltf',
 				'plane-collider.gltf',
+				'cone-limit.gltf',
+				'hinge-limit.gltf',
+				'spherical-limit.gltf',
 
 			];
 
