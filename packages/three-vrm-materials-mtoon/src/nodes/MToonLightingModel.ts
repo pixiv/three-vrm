@@ -112,14 +112,16 @@ export class MToonLightingModel extends THREE.LightingModel {
   }
 
   indirectSpecular(context: THREE.LightingContext) {
-    const { reflectedLight } = context;
+    const { irradiance, reflectedLight } = context;
 
     // rim
+    // The indirect irradiance takes part in the rim lighting mix, as MToonMaterial does
+    // by adding it to `reflectedLight.directSpecular` in `RE_IndirectDiffuse_MToon`
     (reflectedLight.indirectSpecular as ShaderNodeObject<THREE.Node>).addAssign(
       parametricRim
         .add(matcap)
         .mul(rimMultiply)
-        .mul(mix(vec3(1.0), vec3(0.0), rimLightingMix)),
+        .mul(mix(vec3(1.0), BRDF_Lambert({ diffuseColor: irradiance }), rimLightingMix)),
     );
   }
 }
