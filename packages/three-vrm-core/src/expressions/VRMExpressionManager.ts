@@ -138,6 +138,7 @@ export class VRMExpressionManager {
     const index = this._expressions.indexOf(expression);
     if (index === -1) {
       console.warn('VRMExpressionManager: The specified expressions is not registered');
+      return;
     }
 
     this._expressions.splice(index, 1);
