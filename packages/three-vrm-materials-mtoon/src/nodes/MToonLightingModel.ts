@@ -19,9 +19,7 @@ const linearstep = Fn(({ a, b, t }: { a: THREE.Node<'float'>; b: THREE.Node<'flo
 /**
  * Convert NdotL into toon shading factor using shadingShift and shadingToony
  */
-const getShading = Fn(({ dotNL }: { dotNL: THREE.Node<'float'> }) => {
-  const shadow = 1.0; // TODO
-
+const getShading = Fn(({ dotNL, shadow }: { dotNL: THREE.Node<'float'>; shadow: THREE.Node<'float'> }) => {
   const feather = float(1.0).sub(shadingToony);
 
   let shading = dotNL.add(shadingShift);
@@ -44,23 +42,80 @@ const getDiffuse = Fn(({ shading, lightColor }: { shading: THREE.Node<'float'>; 
   return col;
 });
 
+/**
+ * The parts of three's `AnalyticLightNode` that hold its shadow. They aren't in `@types/three`.
+ */
+type AnalyticLightNodeWithShadow = THREE.AnalyticLightNode<THREE.Light> & {
+  colorNode: THREE.Node;
+  baseColorNode: THREE.Node | null;
+  shadowNode: THREE.Node | null;
+};
+
+/**
+ * Split the shadow off a direct light's color.
+ *
+ * When a light casts a shadow on the object, three multiplies the shadow into the light's color
+ * (`AnalyticLightNode.setupShadow`). MToon needs the two apart: the shadow goes into the toon shading,
+ * so a shadowed fragment shows the shade color under the full light, as `mtoon.frag` does.
+ * The color without the shadow comes from the light node's own `setupDirect`, run on its color before the shadow,
+ * so the spot cone, distance attenuation and projected maps are kept for any light type.
+ */
+function splitShadow(
+  lightNode: AnalyticLightNodeWithShadow | undefined,
+  lightColor: THREE.Node<'vec3'>,
+  builder: THREE.NodeBuilder,
+): { lightColor: THREE.Node<'vec3'>; shadow: THREE.Node<'float'> } {
+  const hasShadow =
+    lightNode != null &&
+    lightNode.shadowNode != null &&
+    lightNode.baseColorNode != null &&
+    lightNode.colorNode !== lightNode.baseColorNode && // the object receives the shadow
+    !(builder.context as { getShadow?: unknown }).getShadow; // a pass with its own shadow handling: leave it
+
+  if (!hasShadow) {
+    return { lightColor, shadow: float(1.0) };
+  }
+
+  const shadowedColorNode = lightNode.colorNode;
+  lightNode.colorNode = lightNode.baseColorNode!;
+  const unshadowed = lightNode.setupDirect(builder)?.lightColor as THREE.Node<'vec3'> | undefined;
+  lightNode.colorNode = shadowedColorNode;
+
+  if (unshadowed == null) {
+    return { lightColor, shadow: float(1.0) };
+  }
+
+  return { lightColor: unshadowed, shadow: lightNode.shadowNode as THREE.Node<'float'> };
+}
+
 export class MToonLightingModel extends THREE.LightingModel {
   constructor() {
     super();
   }
 
-  direct({ lightDirection, lightColor, reflectedLight }: THREE.LightingModelDirectInput) {
+  direct(
+    { lightDirection, lightColor: shadowedLightColor, lightNode, reflectedLight }: THREE.LightingModelDirectInput,
+    builder: THREE.NodeBuilder,
+  ) {
     const dotNL = transformedNormalView.dot(lightDirection as THREE.Node<'vec3'>).clamp(-1.0, 1.0);
+
+    // the shadow goes into the toon shading, not the light color
+    const { lightColor, shadow } = splitShadow(
+      lightNode as AnalyticLightNodeWithShadow | undefined,
+      shadowedLightColor as THREE.Node<'vec3'>,
+      builder,
+    );
 
     // toon diffuse
     const shading = getShading({
       dotNL,
+      shadow,
     });
 
     (reflectedLight.directDiffuse as THREE.Node<'vec3'>).addAssign(
       getDiffuse({
         shading,
-        lightColor: lightColor as THREE.Node<'vec3'>,
+        lightColor,
       }),
     );
 
@@ -69,7 +124,7 @@ export class MToonLightingModel extends THREE.LightingModel {
       parametricRim
         .add(matcap)
         .mul(rimMultiply)
-        .mul(mix(vec3(0.0), BRDF_Lambert({ diffuseColor: lightColor as THREE.Node<'vec3'> }), rimLightingMix)),
+        .mul(mix(vec3(0.0), BRDF_Lambert({ diffuseColor: lightColor }), rimLightingMix)),
     );
   }
 
