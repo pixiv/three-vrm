@@ -22,8 +22,8 @@
 		<script type="importmap">
 			{
 				"imports": {
-					"three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
-					"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+					"three": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.js",
+					"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.0/examples/jsm/",
 					"@pixiv/three-vrm": "../lib/three-vrm.module.js"
 				}
 			}
@@ -110,18 +110,20 @@
 			scene.add( axesHelper );
 
 			// animate
-			const clock = new THREE.Clock();
+			const timer = new THREE.Timer();
 
 			function animate() {
 
 				requestAnimationFrame( animate );
 
-				const deltaTime = clock.getDelta();
+				timer.update();
+				const deltaTime = timer.getDelta();
+				const elapsedTime = timer.getElapsed();
 
 				if ( currentVrm ) {
 
 					// tweak bones
-					const s = 0.25 * Math.PI * Math.sin( Math.PI * clock.elapsedTime );
+					const s = 0.25 * Math.PI * Math.sin( Math.PI * elapsedTime );
 					currentVrm.humanoid.getNormalizedBoneNode( 'neck' ).rotation.y = s;
 					currentVrm.humanoid.getNormalizedBoneNode( 'leftUpperArm' ).rotation.z = s;
 					currentVrm.humanoid.getNormalizedBoneNode( 'rightUpperArm' ).rotation.x = s;

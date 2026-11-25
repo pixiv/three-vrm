@@ -9,9 +9,10 @@ export const refEmissiveIntensity = materialReference('emissiveIntensity', 'floa
 export const refEmissiveMap = materialReference('emissiveMap', 'texture');
 
 export const refShadeColorFactor = materialReference('shadeColorFactor', 'color');
-export const refShadingShiftFactor = materialReference('shadingShiftFactor', 'float');
 export const refShadeMultiplyTexture = materialReference('shadeMultiplyTexture', 'texture');
-export const refShadeMultiplyTextureScale = materialReference('shadeMultiplyTextureScale', 'float');
+export const refShadingShiftFactor = materialReference('shadingShiftFactor', 'float');
+export const refShadingShiftTexture = materialReference('shadingShiftTexture', 'texture');
+export const refShadingShiftTextureScale = materialReference('shadingShiftTextureScale', 'float');
 export const refShadingToonyFactor = materialReference('shadingToonyFactor', 'float');
 export const refRimLightingMixFactor = materialReference('rimLightingMixFactor', 'float');
 export const refRimMultiplyTexture = materialReference('rimMultiplyTexture', 'texture');
